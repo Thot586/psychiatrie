@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Chosen Palette: Harmonie Sereine (Fonds neutres en pierre, accents de sarcelle et d'ambre) -->
-    <!-- Application Structure Plan: La structure reste un tableau de bord thématique. La section Ressources a été finalisée avec un glossaire exhaustif et une bibliographie complète et formatée en APA 7 pour une rigueur académique maximale. -->
+    <!-- Application Structure Plan: La structure reste un tableau de bord thématique. -->
     <!-- Visualization & Content Choices: 
-        - Ressources: Le glossaire a été étendu pour inclure tous les termes techniques clés. La liste de références a été remplacée par une bibliographie complète, exhaustive et formatée en APA 7, avec une logique de tri alphabétique implémentée en JS. -> Justification: Fournit à l'utilisateur un outil de référence complet et fiable, renforçant la crédibilité scientifique du document.
     -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <title>Analyse des Effets Contextuels en Médecine et Psychiatrie</title>
@@ -40,12 +39,21 @@
             <p class="text-lg text-slate-600 max-w-3xl mx-auto">Synthèse des mécanismes, implications cliniques et enjeux transculturels.</p>
         </header>
 
-        <nav class="flex justify-center border-b border-slate-200 mb-12 md:mb-16 flex-wrap" aria-label="Navigation principale">
-            <button data-target="introduction" class="nav-link active font-semibold py-4 px-6 text-slate-600 hover:text-teal-700">Introduction</button>
-            <button data-target="mechanisms" class="nav-link font-semibold py-4 px-6 text-slate-600 hover:text-teal-700">Mécanismes</button>
-            <button data-target="culture" class="nav-link font-semibold py-4 px-6 text-slate-600 hover:text-teal-700">Dimension Culturelle</button>
-            <button data-target="practice" class="nav-link font-semibold py-4 px-6 text-slate-600 hover:text-teal-700">Pratique Clinique</button>
-            <button data-target="resources" class="nav-link font-semibold py-4 px-6 text-slate-600 hover:text-teal-700">Ressources</button>
+        <nav class="relative flex justify-center border-b border-slate-200 mb-12 md:mb-16" aria-label="Navigation principale">
+            <div class="absolute left-0 inset-y-0 flex items-center">
+                <a href="https://thot586.github.io/psychiatrie/" aria-label="Retour à la page d'accueil" class="text-slate-500 hover:text-teal-700 transition-colors p-2 rounded-full hover:bg-slate-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                    </svg>
+                </a>
+            </div>
+            <div class="flex flex-wrap justify-center">
+                <button data-target="introduction" class="nav-link active font-semibold py-4 px-5 text-slate-600 hover:text-teal-700">Introduction</button>
+                <button data-target="mechanisms" class="nav-link font-semibold py-4 px-5 text-slate-600 hover:text-teal-700">Mécanismes</button>
+                <button data-target="culture" class="nav-link font-semibold py-4 px-5 text-slate-600 hover:text-teal-700">Dimension Culturelle</button>
+                <button data-target="practice" class="nav-link font-semibold py-4 px-5 text-slate-600 hover:text-teal-700">Pratique Clinique</button>
+                <button data-target="resources" class="nav-link font-semibold py-4 px-5 text-slate-600 hover:text-teal-700">Ressources</button>
+            </div>
         </nav>
 
         <main>
