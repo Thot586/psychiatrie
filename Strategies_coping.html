@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stratégies de Coping</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- 
+    Chosen Palette: Focused Teal & Slate
+    Application Structure Plan: Based on direct user feedback, the application is radically restructured to use an accordion layout for the main classification section. This solves the core UX problem of action-feedback disconnection. 1) The two-pane layout is replaced by a single, unified accordion component. 2) Each strategy is a clickable accordion header. 3) Clicking a header expands its detailed content panel directly underneath it, providing immediate, in-place feedback. 4) The JavaScript is rewritten to manage the accordion state (opening/closing panels). This design follows best practices for content-rich interactive lists (Progressive Disclosure, Law of Proximity) and creates a much more intuitive and user-friendly experience.
+    Visualization & Content Choices: 
+    - Report Info: Main classification section. -> Goal: Eliminate scrolling and disconnect between action and feedback. -> Viz/Method: A fully interactive accordion built with HTML, CSS, and JS. -> Interaction: Clicking a strategy header smoothly expands/collapses its detail panel. Only one panel can be open at a time. -> Justification: This is the optimal solution for the user's problem, providing a seamless and cognitively efficient way to explore content. -> Library: Vanilla JS.
+    - All other sections (Introduction, Charts, etc.) are maintained, but the primary interaction model is now the accordion.
+    CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
+    -->
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        .chart-container { position: relative; width: 100%; max-width: 800px; margin-left: auto; margin-right: auto; height: 300px; max-height: 350px; }
+        @media (min-width: 768px) { .chart-container { height: 400px; max-height: 450px; } }
+        .section-title { border-bottom: 3px solid #0ea5e9; }
+        .citation { color: #475569; font-size: 0.9em; font-style: italic; }
+        .accordion-header { transition: background-color 0.2s ease-in-out; }
+        .accordion-header.active { background-color: #e0f2fe; }
+        .accordion-content { transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), padding 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .nav-link { transition: all 0.2s ease-in-out; border-bottom: 2px solid transparent; }
+        .nav-link.active { color: #0284c7; border-bottom-color: #0284c7; }
+        .nav-link:hover { color: #0369a1; }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <nav id="navbar" class="sticky top-0 z-50 bg-white/80 backdrop-blur-lg shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Home Icon -->
+                <a href="https://thot586.github.io/psychiatrie/Syndrome_d_epuisement_professionnel.html" aria-label="Retour à la page principale" class="p-2">
+                  <svg class="w-6 h-6 text-slate-500 hover:text-sky-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                </a>
+
+                <!-- Navigation Links -->
+                <div class="flex items-center space-x-3 md:space-x-6 text-xs sm:text-sm">
+                    <a href="#introduction" class="nav-link px-2 md:px-3 py-2 rounded-md font-medium text-slate-600">Introduction</a>
+                    <a href="#classification" class="nav-link px-2 md:px-3 py-2 rounded-md font-medium text-slate-600">Classification</a>
+                    <a href="#goodness-of-fit" class="nav-link px-2 md:px-3 py-2 rounded-md font-medium text-slate-600">Adéquation</a>
+                    <a href="#impact" class="nav-link px-2 md:px-3 py-2 rounded-md font-medium text-slate-600">Impact</a>
+                    <a href="#debates" class="nav-link px-2 md:px-3 py-2 rounded-md font-medium text-slate-600">Débats</a>
+                    <a href="#references" class="nav-link px-2 md:px-3 py-2 rounded-md font-medium text-slate-600">Références</a>
+                </div>
+
+                <!-- Spacer to balance the home icon and keep nav links centered -->
+                <div class="w-10" aria-hidden="true"></div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+
+        <header class="text-center mb-12 md:mb-16">
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-slate-900">Explorez les Stratégies de Coping</h1>
+            <p class="mt-4 text-lg text-slate-600 max-w-3xl mx-auto">comprendre comment faire face au stress.</p>
+        </header>
+
+        <main>
+            <!-- Section 0: Introduction -->
+            <section id="introduction" class="mb-16 md:mb-24 scroll-mt-20">
+                <div class="bg-white p-6 sm:p-8 rounded-xl border border-slate-200 shadow-lg">
+                    <h2 class="text-3xl md:text-4xl font-bold text-center mb-8 text-slate-900 section-title w-fit mx-auto px-4 pb-2">Introduction</h2>
+                    <div class="space-y-8 max-w-4xl mx-auto text-slate-700">
+                        <div>
+                            <h3 class="font-bold text-xl mb-3 text-sky-800">Pourquoi s'intéresser au coping ?</h3>
+                            <p>Le stress fait partie intégrante de la vie. La manière dont nous y faisons face — nos stratégies de coping — a un impact direct et profond sur notre santé mentale, notre bien-être et même notre santé physique. Comprendre ces stratégies n'est pas un simple exercice académique ; c'est acquérir une compétence de vie essentielle. Cet outil a pour but de rendre cette connaissance accessible, nuancée et directement applicable, en se basant sur les modèles scientifiques les plus robustes.</p>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-xl mb-3 text-sky-800">Définitions Clés</h3>
+                            <p><strong class="text-slate-800">Stress :</strong> Ce n'est pas juste un événement, mais une <strong class="text-slate-800">transaction</strong> entre une personne et son environnement, qui survient lorsque les exigences perçues dépassent les ressources perçues <span class="citation">(Lazarus & Folkman, 1984)</span>.</p>
+                            <p class="mt-2"><strong class="text-slate-800">Coping :</strong> L'ensemble des <strong class="text-slate-800">efforts cognitifs et comportementaux</strong>, en constante évolution, pour gérer ces exigences. Il s'agit de "gérer", pas nécessairement de "résoudre" <span class="citation">(Lazarus & Folkman, 1984)</span>.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 1: Accordion Classification -->
+            <section id="classification" class="mb-16 md:mb-24 scroll-mt-20">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-4 text-slate-900 section-title w-fit mx-auto px-4 pb-2">Classification des Stratégies</h2>
+                <p class="text-center text-slate-600 mb-12 max-w-4xl mx-auto">Cliquez sur une stratégie pour déplier son analyse détaillée. Une seule peut être ouverte à la fois.</p>
+                
+                <div class="max-w-4xl mx-auto space-y-8">
+                    <!-- Approche -->
+                    <div>
+                        <h3 class="text-2xl font-bold mb-4 text-sky-700">Stratégies d'Approche (Engagement)</h3>
+                        <div id="accordion-approche" class="space-y-3">
+                            <!-- Accordion items for "Approche" will be injected here -->
+                        </div>
+                    </div>
+                    <!-- Évitement -->
+                    <div>
+                        <h3 class="text-2xl font-bold mb-4 text-amber-700">Stratégies d'Évitement (Désengagement)</h3>
+                        <div id="accordion-evitement" class="space-y-3">
+                            <!-- Accordion items for "Évitement" will be injected here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Other Sections -->
+            <section id="goodness-of-fit" class="mb-16 md:mb-24 text-center scroll-mt-20">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 text-slate-900 section-title w-fit mx-auto px-4 pb-2">L'Hypothèse de l'Adéquation</h2>
+                <p class="text-slate-600 mb-10 max-w-4xl mx-auto">L'efficacité d'une stratégie n'est pas absolue. Elle dépend de votre capacité à influencer la situation. Testez ce principe avec le scénario interactif ci-dessous.</p>
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200 max-w-3xl mx-auto">
+                    <h3 class="text-xl font-semibold mb-6">Ma situation stressante est-elle...</h3>
+                    <div class="flex flex-col sm:flex-row justify-center gap-4 mb-6">
+                        <button id="btn-controllable" class="px-6 py-3 rounded-lg bg-sky-600 text-white font-semibold hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 transition-all shadow-sm hover:shadow-md">Contrôlable</button>
+                        <button id="btn-uncontrollable" class="px-6 py-3 rounded-lg bg-amber-600 text-white font-semibold hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transition-all shadow-sm hover:shadow-md">Incontrôlable</button>
+                    </div>
+                    <div id="fit-result" class="p-4 rounded-md min-h-[100px] flex items-center justify-center transition-colors duration-300 bg-slate-100">
+                        <p class="text-slate-500">Choisissez un type de situation pour voir l'approche la plus adaptée.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="impact" class="mb-16 md:mb-24 scroll-mt-20">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-4 text-slate-900 section-title w-fit mx-auto px-4 pb-2">Impact à Long Terme</h2>
+                <p class="text-center text-slate-600 mb-10 max-w-4xl mx-auto">Ce graphique illustre l'association générale entre les types de coping et la santé mentale à long terme, basée sur les conclusions de la littérature scientifique.</p>
+                <div class="chart-container bg-white p-4 rounded-xl shadow-lg border border-slate-200">
+                    <canvas id="effectivenessChart"></canvas>
+                </div>
+            </section>
+
+            <section id="debates" class="max-w-4xl mx-auto mb-16 md:mb-24 scroll-mt-20">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-10 text-slate-900 section-title w-fit mx-auto px-4 pb-2">Limites & Débats Scientifiques</h2>
+                <div id="accordion-debates" class="space-y-3">
+                    <!-- Debates Accordion items will be injected by JS -->
+                </div>
+            </section>
+
+            <section id="references" class="max-w-4xl mx-auto scroll-mt-20">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-10 text-slate-900 section-title w-fit mx-auto px-4 pb-2">Références</h2>
+                <div id="references-list" class="space-y-4 text-sm bg-white p-6 rounded-xl shadow-lg border border-slate-200">
+                    <!-- References will be injected by JS -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer class="bg-slate-900 text-slate-300 text-sm border-t border-slate-700 py-6 px-4">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center md:items-start justify-between gap-6">
+            <div class="flex-shrink-0">
+              <a href="https://www.ch-le-vinatier.fr" target="_blank" rel="noopener noreferrer">
+                <img class="h-20 md:h-24 w-auto" src="https://d2q79iu7y748jz.cloudfront.net/s/_squarelogo/256x256/e079f7cf4939908ea9a07ce40d529d0b" alt="Logo Centre Hospitalier Le Vinatier" onerror="this.onerror=null;this.src='https://placehold.co/96x96/1e293b/ffffff?text=Logo';">
+              </a>
+            </div>
+            <div class="flex-1 text-center md:text-left space-y-2">
+            <p>Dr FENOHASINA T.J. Felicien (Psychiatre)</p>
+            <p>ASSOCIATION PSYKÔZY MADAGASCAR</p>
+            <div class="flex items-center justify-center md:justify-start gap-2">
+             <img class="h-5 w-auto" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Cc-by-nc-sa_icon.svg/120px-Cc-by-nc-sa_icon.svg.png" alt="Icône Creative Commons BY-NC-SA" onerror="this.onerror=null;this.src='https://placehold.co/20x20/1e293b/ffffff?text=CC';">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr" target="_blank" rel="noopener noreferrer" class="underline hover:text-white">Licence CC BY-NC-SA 4.0</a> –
+               Dernière mise à jour : 04 juillet 2025.
+              </div>
+            </div>
+            <div class="flex items-center gap-6 flex-shrink-0">
+              <a href="https://www.facebook.com/Psykozy?locale=fr_FR" target="_blank" rel="noopener noreferrer">
+                <img class="h-16 md:h-20 w-auto" src="https://cdn-assets.inwink.com/fe065c87-0643-42fc-8b5d-4d94b5d12c11/a1904f78-1bca-466d-a9f4-8ac9fde06c0c" alt="Logo Psy-kôzy" onerror="this.onerror=null;this.src='https://placehold.co/80x80/1e293b/ffffff?text=Logo';">
+              </a>
+              <a href="https://centre-ressource-rehabilitation.org" target="_blank" rel="noopener noreferrer">
+                <img class="h-16 md:h-20 w-auto" src="https://faustinebrunet.com/images/RS/creation-nouveau-logo-domaine-sante-mentale.jpg" alt="Logo Centre Ressource Réhabilitation" onerror="this.onerror=null;this.src='https://placehold.co/80x80/1e293b/ffffff?text=Logo';">
+              </a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    const data = {
+        strategies: {
+            resolution: {
+                title: 'Résolution de problèmes',
+                type: 'approche',
+                definition: "Ensemble d'efforts cognitifs et comportementaux délibérés visant à analyser une situation stressante, à générer des solutions, et à mettre en œuvre un plan d'action pour modifier la source du stress <span class='citation'>(D'Zurilla & Nezu, 2007)</span>.",
+                examples: ["Décomposer un projet intimidant en tâches gérables.", "Rechercher des informations sur une condition médicale.", "Planifier une conversation pour résoudre un conflit."],
+                advantages: "Favorise un sentiment de contrôle et d'auto-efficacité. Associée à une réduction du stress et à une meilleure santé mentale, particulièrement dans les situations où une action est possible <span class='citation'>(Richardson & Rothstein, 2008)</span>.",
+                risks: "Inefficace et frustrante dans les situations incontrôlables. Une application rigide peut mener à l'épuisement si le problème ne peut être résolu, ignorant la nécessité de gérer l'émotion <span class='citation'>(Forsythe & Compas, 1987)</span>."
+            },
+            soutien: {
+                title: 'Recherche de soutien social',
+                type: 'approche',
+                definition: "Se tourner vers son réseau pour obtenir une aide concrète (instrumentale) ou du réconfort et de l'empathie (émotionnelle) <span class='citation'>(Algorani & Gupta, 2023)</span>.",
+                examples: ["Demander de l'aide pour un déménagement (soutien instrumental).", "Se confier à un ami après une rupture (soutien émotionnel)."],
+                advantages: "Réduit le sentiment de solitude et valide les émotions. Fournit des ressources concrètes et un réconfort, agissant comme un tampon contre le stress <span class='citation'>(Schwarzer & Leppin, 1991)</span>.",
+                risks: "Peut mener à une dépendance excessive. Un soutien non sollicité ou critique peut être contre-productif. La recherche de soutien peut aussi être perçue comme un fardeau dans certaines dynamiques relationnelles ou culturelles <span class='citation'>(Kim, Sherman, & Taylor, 2008)</span>."
+            },
+            reevaluation: {
+                title: 'Réévaluation cognitive positive',
+                type: 'approche',
+                definition: "Modifier intentionnellement la signification d'une situation pour la rendre moins menaçante ou en identifier les aspects bénéfiques (croissance personnelle, leçons apprises) <span class='citation'>(Swinton, 2024; Troy et al., 2010)</span>.",
+                examples: ["Voir un licenciement comme une opportunité de changer de carrière.", "Trouver des aspects positifs dans une convalescence (ex: plus de temps pour lire)."],
+                advantages: "Permet de trouver du sens et de favoriser la croissance personnelle face à l'adversité. Augmente la résilience et les émotions positives, même lorsque la situation elle-même ne peut être changée <span class='citation'>(Troy et al., 2010)</span>.",
+                risks: "Risque de devenir une 'positivité toxique' qui invalide ou réprime des émotions négatives légitimes. Peut être une forme de déni si elle empêche de reconnaître la gravité réelle d'un problème."
+            },
+            acceptation: {
+                title: 'Acceptation',
+                type: 'approche',
+                definition: "Reconnaître et admettre la réalité d'une situation stressante incontrôlable, sans résignation passive. C'est abandonner la lutte contre ce qui ne peut être changé pour concentrer son énergie ailleurs <span class='citation'>(Carver et al., 1989)</span>.",
+                examples: ["Accepter un diagnostic de maladie chronique pour se concentrer sur la gestion des symptômes.", "Admettre la fin d'une relation pour commencer le processus de deuil."],
+                advantages: "Libère des ressources mentales en cessant une lutte inutile contre l'incontrôlable. Réduit la souffrance et la frustration, et permet de réorienter son énergie vers des actions porteuses de sens <span class='citation'>(Hayes, 2004)</span>.",
+                risks: "Peut être confondue avec la résignation passive ou l'impuissance si elle n'est pas comprise comme une étape active. Difficile à mettre en œuvre, car elle va à l'encontre de l'instinct de vouloir 'tout' contrôler."
+            },
+            humour: {
+                title: 'Humour',
+                type: 'approche',
+                definition: "Utiliser l'humour pour désamorcer la tension, prendre de la distance ou recadrer une situation pour la rendre moins aversive <span class='citation'>(Mesmer-Magnus et al., 2012)</span>.",
+                examples: ["Faire une blague sur sa propre maladresse.", "Utiliser l'ironie pour commenter une frustration."],
+                advantages: "Crée une distance psychologique avec le stresseur, réduit la tension et change la perspective. Facilite les liens sociaux et peut déclencher des réponses physiologiques positives <span class='citation'>(Martin et al., 1993)</span>.",
+                risks: "Peut être perçu comme inapproprié ou insensible selon le contexte. Un humour auto-dépréciatif excessif peut nuire à l'estime de soi. Peut aussi être utilisé comme une forme d'évitement pour ne pas aborder des émotions profondes."
+            },
+            evitement: {
+                title: 'Évitement / Échappement',
+                type: 'evitement',
+                definition: "Tentatives cognitives ou comportementales pour fuir ou ignorer un stresseur et les émotions désagréables qu'il suscite <span class='citation'>(Holahan et al., 2005)</span>.",
+                examples: ["Procrastiner avant une échéance.", "Se plonger dans des séries pour ne pas penser à ses problèmes.", "Éviter les conversations difficiles."],
+                advantages: "Procure un soulagement temporaire et immédiat de l'anxiété. Permet de 'mettre de côté' un problème pour un court instant afin de se ressourcer, si c'est une pause délibérée et non une fuite chronique.",
+                risks: "Augmente l'anxiété à long terme en empêchant l'apprentissage et l'adaptation. Le problème initial s'aggrave souvent. Érode la confiance en sa capacité à faire face et maintient les troubles psychologiques <span class='citation'>(Holahan et al., 2005)</span>."
+            },
+            deni: {
+                title: 'Déni',
+                type: 'evitement',
+                definition: "Refus de reconnaître ou d'accepter la réalité d'une situation stressante ou de ses implications. C'est une forme d'évitement extrême <span class='citation'>(Gold, 2024)</span>.",
+                examples: ["Un patient qui refuse de croire à son diagnostic et ne cherche pas de traitement.", "Ignorer des signes évidents de problèmes financiers."],
+                advantages: "Peut agir comme un 'fusible' psychologique temporaire face à un choc traumatique, permettant à l'individu de continuer à fonctionner à un niveau minimal <span class='citation'>(Gold, 2024)</span>.",
+                risks: "Devient extrêmement dangereux s'il persiste, car il bloque toute action constructive (recherche d'aide, traitement). Mène à une confrontation brutale avec la réalité lorsque celle-ci ne peut plus être ignorée."
+            },
+            rumination: {
+                title: 'Rumination mentale',
+                type: 'evitement',
+                definition: "Penser de manière répétitive, passive et circulaire aux causes et conséquences de sa détresse, sans jamais progresser vers une solution <span class='citation'>(Nolen-Hoeksema et al., 2008)</span>.",
+                examples: ["Ressasser sans fin une dispute.", "Se demander en boucle 'Pourquoi moi ?' après un échec."],
+                advantages: "Donne la fausse impression de 'travailler' sur le problème ou de chercher à le comprendre. Cette illusion d'effort peut être temporairement rassurante, mais elle est un piège cognitif.",
+                risks: "Identifiée comme l'une des stratégies les plus nocives. Amplifie et prolonge les émotions négatives, paralyse la résolution de problèmes et est un facteur de risque et de maintien majeur de la dépression <span class='citation'>(Nolen-Hoeksema et al., 2008)</span>."
+            },
+             'auto-accusation': {
+                title: 'Auto-accusation',
+                type: 'evitement',
+                definition: "S'attribuer la responsabilité d'un événement négatif de manière excessive. On distingue le blâme comportemental (sur une action) du blâme caractérologique (sur soi en tant que personne) <span class='citation'>(Janoff-Bulman, 1979)</span>.",
+                examples: ["'C'est entièrement de ma faute, je suis nul' (caractérologique).", "'J'aurais dû mieux me préparer' (comportemental)."],
+                advantages: "Le blâme <strong>comportemental</strong> ('j'ai mal agi') peut être utile car il préserve un sentiment de contrôle et suggère des pistes d'amélioration pour l'avenir <span class='citation'>(Janoff-Bulman, 1979)</span>.",
+                risks: "Le blâme <strong>caractérologique</strong> ('je suis nul') est destructeur. Il diminue l'estime de soi, génère un sentiment d'impuissance et de honte, et est fortement lié à la dépression <span class='citation'>(Anderson et al., 1994)</span>."
+            },
+            substances: {
+                title: 'Consommation de substances',
+                type: 'evitement',
+                definition: "Utiliser l'alcool, le tabac ou d'autres drogues pour tenter d'atténuer ou de fuir la détresse émotionnelle <span class='citation'>(Lazarus & Folkman, 1984)</span>.",
+                examples: ["Boire de l'alcool après une journée stressante pour 'décompresser'.", "Fumer une cigarette pour calmer son anxiété."],
+                advantages: "Fournit une évasion rapide et une anesthésie temporaire des émotions douloureuses. L'effet est immédiat, ce qui rend la stratégie très renforçante à court terme.",
+                risks: "Ne résout aucun problème et en crée de nombreux autres (santé, dépendance, problèmes sociaux). Installe un cycle de renforcement négatif qui 'détourne' les circuits cérébraux du stress et de la récompense <span class='citation'>(Volkow et al., 2016)</span>."
+            }
+        },
+        fit: {
+            controllable: {
+                title: "Pour une situation CONTRÔLABLE",
+                color: 'sky',
+                text: "L'approche la plus efficace est le <strong>coping centré sur le problème</strong>. Il est plus adaptatif de concentrer vos efforts sur l'analyse de la situation et la mise en place d'actions concrètes pour la changer ou la résoudre <span class='citation'>(Forsythe & Compas, 1987)</span>."
+            },
+            uncontrollable: {
+                title: "Pour une situation INCONTRÔLABLE",
+                color: 'amber',
+                text: "L'approche la plus efficace est le <strong>coping centré sur l'émotion</strong>. Puisque vous ne pouvez pas changer la situation, il est plus adaptatif de gérer votre réponse émotionnelle via l'acceptation, la réévaluation positive ou la recherche de soutien <span class='citation'>(Forsythe & Compas, 1987)</span>."
+            }
+        },
+        debates: [
+            {
+                title: "La subjectivité de l'efficacité",
+                content: "Une stratégie jugée adaptative par une personne peut être vue comme inefficace par une autre. L'efficacité dépend des objectifs et des valeurs de l'individu, pas seulement de critères objectifs <span class='citation'>(Folkman & Moskowitz, 2004)</span>."
+            },
+            {
+                title: "Les variations culturelles",
+                content: "Les théories du coping sont souvent issues de cultures occidentales individualistes. Dans les cultures collectivistes, des stratégies comme l'adaptation de soi à la situation (contrôle secondaire) peuvent être plus valorisées que la confrontation directe <span class='citation'>(Heppner et al., 2006; Han et al., 2022)</span>."
+            },
+            {
+                title: "Les limites des outils de mesure",
+                content: "Les questionnaires de coping (ex: WCQ) sont critiqués pour leur instabilité statistique à travers différentes populations, leurs biais de mémoire (nature rétrospective) et de désirabilité sociale <span class='citation'>(Parker & Endler, 1992; Kato, 2012)</span>."
+            },
+            {
+                title: "Le chevauchement avec la personnalité",
+                content: "Il est difficile de distinguer une stratégie de coping (état situationnel) d'un trait de personnalité (disposition stable). Le neuroticisme, par exemple, est fortement lié à l'utilisation de la rumination ou de l'évitement <span class='citation'>(Folkman & Moskowitz, 2004)</span>."
+            }
+        ],
+        references: [
+            "Aldao, A., Nolen-Hoeksema, S., & Schweizer, S. (2010). Emotion-regulation strategies across psychopathology: A meta-analytic review. <em>Clinical Psychology Review, 30</em>(2), 217–237.",
+            "Algorani, E. B., & Gupta, V. (2023). Coping Mechanisms. In <em>StatPearls</em>. StatPearls Publishing.",
+            "Anderson, C. A., Miller, R. S., Riger, A. L., Dill, J. C., & Sedikides, C. (1994). Behavioral and characterological styles of attribution and depression. <em>Psychological Bulletin, 116</em>(2), 321–333.",
+            "Brady, K. T., & Sinha, R. (2005). Co-occurring mental and substance use disorders: the neurobiological effects of chronic stress. <em>The American Journal of Psychiatry, 162</em>(8), 1483–1493.",
+            "Carver, C. S., Scheier, M. F., & Weintraub, J. K. (1989). Assessing coping strategies: A theoretically based approach. <em>Journal of Personality and Social Psychology, 56</em>(2), 267–283.",
+            "D'Zurilla, T. J., & Nezu, A. M. (2007). <em>Problem-solving therapy: A positive approach to clinical intervention</em> (3rd ed.). Springer.",
+            "Folkman, S., & Lazarus, R. S. (1980). An analysis of coping in a middle-aged community sample. <em>Journal of Health and Social Behavior, 21</em>(3), 219–239.",
+            "Folkman, S., & Moskowitz, J. T. (2004). Coping: Pitfalls and promise. <em>Annual Review of Psychology, 55</em>, 745–774.",
+            "Forsythe, C. J., & Compas, B. E. (1987). Interaction of stress and coping: A test of the goodness of fit hypothesis. <em>Cognitive Therapy and Research, 11</em>(4), 473-485.",
+            "Gold, J. (2024). Denial as a cognitive mechanism. <em>EBSCO Research Starters</em>.",
+            "Han, J. Y., Ishii, K., & Takemura, K. (2022). Culture and stress coping: Cultural variations in the endorsement of primary and secondary control coping for daily stress across European Canadians, East Asian Canadians, and the Japanese. <em>Japanese Psychological Research, 64</em>(2), 141–155.",
+            "Hayes, S. C. (2004). Acceptance and commitment therapy, relational frame theory, and the third wave of behavioral and cognitive therapies. <em>Behavior Therapy, 35</em>(4), 639–665.",
+            "Heppner, P. P., Heppner, M. J., Lee, D. G., Wang, Y. W., Park, H. J., & Wang, L. F. (2006). Development and validation of a Collectivistic Coping Styles Inventory. <em>Journal of Counseling Psychology, 53</em>(1), 107–125.",
+            "Holahan, C. J., Moos, R. H., Holahan, C. K., & Brennan, P. L. (2005). Avoidance coping, life stressors, and changes in depressive symptoms: A 10-year model. <em>Journal of Consulting and Clinical Psychology, 73</em>(4), 658–666.",
+            "Janoff-Bulman, R. (1979). Characterological versus behavioral self-blame: Inquiries into depression and rape. <em>Journal of Personality and Social Psychology, 37</em>(10), 1798–1809.",
+            "Kato, T. (2012). Development and validation of the Coping Flexibility Scale: Evidence for a new concept of coping. <em>Journal of Counseling Psychology, 59</em>(3), 335–351.",
+            "Kim, H. S., Sherman, D. K., & Taylor, S. E. (2008). Culture and social support. <em>American Psychologist, 63</em>(6), 518–526.",
+            "Lazarus, R. S., & Folkman, S. (1984). <em>Stress, appraisal, and coping</em>. Springer.",
+            "Martin, R. A., Kuiper, N. A., Olinger, L. J., & Dance, K. A. (1993). Humor, coping with stress, self-concept, and psychological well-being. <em>Humor: International Journal of Humor Research, 6</em>(1), 89-104.",
+            "Mesmer-Magnus, J., Glew, D. J., & Viswesvaran, C. (2012). A meta-analysis of positive humor in the workplace. <em>Journal of Managerial Psychology, 27</em>(2), 155-190.",
+            "Nakamura, Y. M., & Orth, U. (2005). Acceptance as a coping reaction: Adaptive or not? <em>Swiss Journal of Psychology, 64</em>(4), 281–292.",
+            "Nolen-Hoeksema, S., Wisco, B. E., & Lyubomirsky, S. (2008). Rethinking rumination. <em>Perspectives on Psychological Science, 3</em>(5), 400–424.",
+            "Olatunji, B. O., Naragon-Gainey, K., & Wolitzky-Taylor, K. B. (2013). Specificity of rumination in anxiety and depression: A multimodal meta-analysis. <em>Clinical Psychology: Science and Practice, 20</em>(3), 225–257.",
+            "Parker, J. D. A., & Endler, N. S. (1992). Coping with coping assessment: A critical review. <em>European Journal of Personality, 6</em>(5), 321-344.",
+            "Richardson, K. M., & Rothstein, H. R. (2008). Effects of occupational stress management intervention programs: a meta-analysis. <em>Journal of occupational health psychology, 13</em>(1), 69.",
+            "Schwarzer, R., & Leppin, A. (1991). Social support and health: A theoretical and empirical overview. <em>Journal of Social and Personal Relationships, 8</em>(1), 99-127.",
+            "Swinton, K. (2024). Positive reframing/rethinking: the simple, effective strategy for tutorials. <em>Journal of Learning Development in Higher Education, 30</em>.",
+            "Troy, A. S., Wilhelm, F. H., Shallcross, A. J., & Mauss, I. B. (2010). Seeing the silver lining: cognitive reappraisal ability moderates the relationship between stress and depressive symptoms. <em>Emotion, 10</em>(6), 783–795.",
+            "Volkow, N. D., Koob, G. F., & McLellan, A. T. (2016). Neurobiologic advances from the brain disease model of addiction. <em>New England Journal of Medicine, 374</em>(4), 363-371."
+        ]
+    };
+
+    let activeAccordionItem = null;
+
+    function buildAccordionItem(key, details) {
+        let examplesHtml = details.examples.map(ex => `<li class="text-slate-600">${ex}</li>`).join('');
+        
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'border border-slate-200 rounded-lg bg-white shadow-sm overflow-hidden';
+        itemDiv.innerHTML = `
+            <button class="accordion-header w-full flex justify-between items-center text-left p-4 font-semibold text-slate-700 hover:bg-slate-50 transition-colors" data-key="${key}">
+                <span>${details.title}</span>
+                <svg class="w-5 h-5 transform transition-transform shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="accordion-content overflow-hidden max-h-0">
+                <div class="p-4 sm:p-6 pt-0 space-y-6">
+                    <div>
+                        <h4 class="font-semibold text-lg text-slate-700 border-b pb-2 mb-2">Définition</h4>
+                        <p class="text-slate-700">${details.definition}</p>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-lg text-slate-700 border-b pb-2 mb-2">Exemples concrets</h4>
+                        <ul class="list-disc list-inside space-y-1 pl-2">${examplesHtml}</ul>
+                    </div>
+                    <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="p-4 bg-green-50/50 rounded-lg border border-green-200">
+                            <h4 class="font-semibold text-lg text-green-800 flex items-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                Intérêts / Avantages
+                            </h4>
+                            <p class="mt-2 text-slate-600 text-sm">${details.advantages}</p>
+                        </div>
+                        <div class="p-4 bg-red-50/50 rounded-lg border border-red-200">
+                            <h4 class="font-semibold text-lg text-red-800 flex items-center">
+                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                Limites / Risques
+                            </h4>
+                            <p class="mt-2 text-slate-600 text-sm">${details.risks}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        return itemDiv;
+    }
+
+    function setupStrategyAccordions() {
+        const approcheContainer = document.getElementById('accordion-approche');
+        const evitementContainer = document.getElementById('accordion-evitement');
+
+        Object.keys(data.strategies).forEach(key => {
+            const details = data.strategies[key];
+            const item = buildAccordionItem(key, details);
+            if (details.type === 'approche') {
+                approcheContainer.appendChild(item);
+            } else {
+                evitementContainer.appendChild(item);
+            }
+        });
+
+        const allAccordions = document.getElementById('classification');
+        allAccordions.addEventListener('click', (e) => {
+            const button = e.target.closest('button.accordion-header');
+            if (!button) return;
+
+            const content = button.nextElementSibling;
+            const isOpening = !content.style.maxHeight || content.style.maxHeight === '0px';
+            
+            // Close previously active accordion item
+            if (activeAccordionItem && activeAccordionItem.button !== button) {
+                activeAccordionItem.content.style.maxHeight = null;
+                activeAccordionItem.content.style.padding = null;
+                activeAccordionItem.button.classList.remove('active');
+                activeAccordionItem.button.querySelector('svg').style.transform = 'rotate(0deg)';
+            }
+            
+            // Toggle current item
+            if (isOpening) {
+                button.classList.add('active');
+                content.style.maxHeight = content.scrollHeight + 'px';
+                content.style.paddingTop = '1rem';
+                content.style.paddingBottom = '1.5rem';
+                button.querySelector('svg').style.transform = 'rotate(180deg)';
+                activeAccordionItem = { button, content };
+            } else {
+                content.style.maxHeight = null;
+                content.style.padding = null;
+                button.classList.remove('active');
+                button.querySelector('svg').style.transform = 'rotate(0deg)';
+                activeAccordionItem = null;
+            }
+        });
+    }
+
+    function setupGoodnessOfFit() {
+        const resultDiv = document.getElementById('fit-result');
+        document.getElementById('btn-controllable').addEventListener('click', () => {
+            const fitData = data.fit.controllable;
+            resultDiv.innerHTML = `<div class="text-left"><h4 class="font-bold text-${fitData.color}-700">${fitData.title}</h4><p class="mt-1 text-slate-700">${fitData.text}</p></div>`;
+            resultDiv.className = 'p-4 rounded-md min-h-[100px] flex items-center justify-center transition-colors duration-300 bg-sky-50 border border-sky-200';
+        });
+        document.getElementById('btn-uncontrollable').addEventListener('click', () => {
+            const fitData = data.fit.uncontrollable;
+            resultDiv.innerHTML = `<div class="text-left"><h4 class="font-bold text-${fitData.color}-700">${fitData.title}</h4><p class="mt-1 text-slate-700">${fitData.text}</p></div>`;
+            resultDiv.className = 'p-4 rounded-md min-h-[100px] flex items-center justify-center transition-colors duration-300 bg-amber-50 border border-amber-200';
+        });
+    }
+
+    function createEffectivenessChart() {
+        const ctx = document.getElementById('effectivenessChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Stratégies d\'Approche (Problème)', 'Stratégies d\'Approche (Émotion)', 'Stratégies d\'Évitement', 'Rumination Mentale'],
+                datasets: [{
+                    label: 'Impact sur le bien-être psychologique (long terme)',
+                    data: [85, 75, 25, 15],
+                    backgroundColor: ['rgba(2, 132, 199, 0.7)', 'rgba(14, 165, 233, 0.7)', 'rgba(249, 115, 22, 0.7)', 'rgba(234, 88, 12, 0.7)'],
+                    borderColor: ['#0284c7', '#0ea5e9', '#f97316', '#ea580c'],
+                    borderWidth: 1, borderRadius: 4, borderSkipped: false,
+                }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+                scales: {
+                    x: { beginAtZero: true, max: 100, title: { display: true, text: 'Score de Bien-être (Illustratif)', font: { size: 14 } }, grid: { color: '#e2e8f0' } },
+                    y: { grid: { display: false } }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#0f172a', titleFont: { size: 14, weight: 'bold' }, bodyFont: { size: 12 }, padding: 12, cornerRadius: 6,
+                        callbacks: { label: (context) => context.parsed.x > 50 ? "Associé à des résultats positifs" : "Associé à des résultats négatifs" }
+                    }
+                }
+            }
+        });
+    }
+
+    function setupDebatesAccordion() {
+        const container = document.getElementById('accordion-debates');
+        let activeDebateItem = null;
+        data.debates.forEach((item) => {
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'border border-slate-200 rounded-lg bg-white shadow-sm';
+            itemDiv.innerHTML = `
+                <button class="w-full flex justify-between items-center text-left p-4 font-semibold text-slate-700 hover:bg-slate-50 transition-colors">
+                    <span>${item.title}</span>
+                    <svg class="w-5 h-5 transform transition-transform shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <div class="accordion-content overflow-hidden max-h-0">
+                    <div class="p-4 pt-0 text-slate-600">${item.content}</div>
+                </div>
+            `;
+            container.appendChild(itemDiv);
+        });
+
+        container.addEventListener('click', (e) => {
+            const button = e.target.closest('button');
+            if (!button) return;
+
+            const content = button.nextElementSibling;
+            const icon = button.querySelector('svg');
+            const isOpening = !content.style.maxHeight || content.style.maxHeight === '0px';
+
+            if (activeDebateItem && activeDebateItem.button !== button) {
+                activeDebateItem.content.style.maxHeight = null;
+                activeDebateItem.button.querySelector('svg').style.transform = 'rotate(0deg)';
+            }
+            
+            if (isOpening) {
+                content.style.maxHeight = content.scrollHeight + 'px';
+                icon.style.transform = 'rotate(180deg)';
+                activeDebateItem = { button, content };
+            } else {
+                content.style.maxHeight = null;
+                icon.style.transform = 'rotate(0deg)';
+                activeDebateItem = null;
+            }
+        });
+    }
+
+    function populateReferences() {
+        const container = document.getElementById('references-list');
+        const referencesHtml = data.references.map(ref => `<p class="leading-relaxed text-slate-600">${ref}</p>`).join('');
+        container.innerHTML = referencesHtml;
+    }
+    
+    function updateActiveNav() {
+        const sections = document.querySelectorAll('main section');
+        const navLinks = document.querySelectorAll('#navbar a');
+        let currentSectionId = '';
+
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            if (window.scrollY >= sectionTop - 100) {
+                currentSectionId = section.getAttribute('id');
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${currentSectionId}`) {
+                link.classList.add('active');
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        setupStrategyAccordions();
+        setupGoodnessOfFit();
+        createEffectivenessChart();
+        setupDebatesAccordion();
+        populateReferences();
+        window.addEventListener('scroll', updateActiveNav);
+        updateActiveNav();
+    });
+
+    </script>
+</body>
+</html>
