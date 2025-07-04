@@ -46,7 +46,6 @@
                     <a href="#introduction" class="nav-link px-2 md:px-3 py-2 rounded-md font-medium text-slate-600">Introduction</a>
                     <a href="#classification" class="nav-link px-2 md:px-3 py-2 rounded-md font-medium text-slate-600">Classification</a>
                     <a href="#goodness-of-fit" class="nav-link px-2 md:px-3 py-2 rounded-md font-medium text-slate-600">Adéquation</a>
-                    <a href="#impact" class="nav-link px-2 md:px-3 py-2 rounded-md font-medium text-slate-600">Impact</a>
                     <a href="#debates" class="nav-link px-2 md:px-3 py-2 rounded-md font-medium text-slate-600">Débats</a>
                     <a href="#references" class="nav-link px-2 md:px-3 py-2 rounded-md font-medium text-slate-600">Références</a>
                 </div>
@@ -119,14 +118,6 @@
                     <div id="fit-result" class="p-4 rounded-md min-h-[100px] flex items-center justify-center transition-colors duration-300 bg-slate-100">
                         <p class="text-slate-500">Choisissez un type de situation pour voir l'approche la plus adaptée.</p>
                     </div>
-                </div>
-            </section>
-
-            <section id="impact" class="mb-16 md:mb-24 scroll-mt-20">
-                <h2 class="text-3xl md:text-4xl font-bold text-center mb-4 text-slate-900 section-title w-fit mx-auto px-4 pb-2">Impact à Long Terme</h2>
-                <p class="text-center text-slate-600 mb-10 max-w-4xl mx-auto">Ce graphique illustre l'association générale entre les types de coping et la santé mentale à long terme, basée sur les conclusions de la littérature scientifique.</p>
-                <div class="chart-container bg-white p-4 rounded-xl shadow-lg border border-slate-200">
-                    <canvas id="effectivenessChart"></canvas>
                 </div>
             </section>
 
@@ -423,37 +414,6 @@
             const fitData = data.fit.uncontrollable;
             resultDiv.innerHTML = `<div class="text-left"><h4 class="font-bold text-${fitData.color}-700">${fitData.title}</h4><p class="mt-1 text-slate-700">${fitData.text}</p></div>`;
             resultDiv.className = 'p-4 rounded-md min-h-[100px] flex items-center justify-center transition-colors duration-300 bg-amber-50 border border-amber-200';
-        });
-    }
-
-    function createEffectivenessChart() {
-        const ctx = document.getElementById('effectivenessChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['Stratégies d\'Approche (Problème)', 'Stratégies d\'Approche (Émotion)', 'Stratégies d\'Évitement', 'Rumination Mentale'],
-                datasets: [{
-                    label: 'Impact sur le bien-être psychologique (long terme)',
-                    data: [85, 75, 25, 15],
-                    backgroundColor: ['rgba(2, 132, 199, 0.7)', 'rgba(14, 165, 233, 0.7)', 'rgba(249, 115, 22, 0.7)', 'rgba(234, 88, 12, 0.7)'],
-                    borderColor: ['#0284c7', '#0ea5e9', '#f97316', '#ea580c'],
-                    borderWidth: 1, borderRadius: 4, borderSkipped: false,
-                }]
-            },
-            options: {
-                responsive: true, maintainAspectRatio: false, indexAxis: 'y',
-                scales: {
-                    x: { beginAtZero: true, max: 100, title: { display: true, text: 'Score de Bien-être (Illustratif)', font: { size: 14 } }, grid: { color: '#e2e8f0' } },
-                    y: { grid: { display: false } }
-                },
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        backgroundColor: '#0f172a', titleFont: { size: 14, weight: 'bold' }, bodyFont: { size: 12 }, padding: 12, cornerRadius: 6,
-                        callbacks: { label: (context) => context.parsed.x > 50 ? "Associé à des résultats positifs" : "Associé à des résultats négatifs" }
-                    }
-                }
-            }
         });
     }
 
