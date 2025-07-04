@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comprendre le Syndrome d'Épuisement Professionnel (Burnout)</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔥</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
+    <!-- Chosen Palette: Refined Calm Neutral & Slate with Teal Accent -->
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -86,21 +87,6 @@
             -webkit-column-break-inside: avoid;
             page-break-inside: avoid;
             break-inside: avoid;
-        }
-        .coping-button {
-        display: inline-block;
-        padding: 8px 16px;
-        background-color: #0d9488; /* teal-600 */
-        color: white;
-        text-decoration: none;
-        border-radius: 4px;
-        font-weight: bold;
-        transition: background-color 0.3s ease, transform 0.2s ease;
-        }
-
-        .coping-button:hover {
-         background-color: #0f766e; /* teal-700 */
-        transform: scale(1.02);
         }
     </style>
 </head>
@@ -288,7 +274,7 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-12">
                     <h2 class="text-3xl sm:text-4xl font-bold text-slate-900">Références</h2>
-                    <p class="mt-3 max-w-3xl mx-auto text-lg lg:text-xl text-slate-600">Liste des sources scientifiques citées dans cet article.</p>
+                    <p class="mt-3 max-w-3xl mx-auto text-lg lg:text-xl text-slate-600">Liste des sources scientifiques citées dans cette application.</p>
                 </div>
                 <div id="references-container" class="text-sm text-slate-600 space-y-4 md:columns-2 lg:columns-3 md:gap-x-8">
                     <!-- Les références seront injectées ici -->
@@ -313,8 +299,7 @@
     
         <!-- TEXTE CENTRAL -->
         <div class="flex-1 text-center md:text-left space-y-2">
-        <p>Dr FENOHASINA T.J. Felicien (Psychiatre)</p>
-        <p>ASSOCIATION PSYKÔZY MADAGASCAR</p>
+        <p>Dr FENOHASINA T.J. Felicien (Psychiatre - FFI) ;</p>
         <div class="flex items-center justify-center md:justify-start gap-2">
          <img class="h-5 w-auto"
                src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Cc-by-nc-sa_icon.svg/120px-Cc-by-nc-sa_icon.svg.png"
@@ -426,17 +411,30 @@
                     {
                         level: "Primaire", title: "Action sur l'Organisation",
                         description: "Vise à éliminer les risques à la source. C'est l'approche la plus efficace et durable (Guseva Canu et al., 2021).",
-                        examples: ["Ajuster la charge de travail", "Renforcer l'autonomie", "Promouvoir la reconnaissance", "Former les managers"]
+                        examples: [
+                            { text: "Ajuster la charge de travail" },
+                            { text: "Renforcer l'autonomie" },
+                            { text: "Promouvoir la reconnaissance" },
+                            { text: "Former les managers" }
+                        ]
                     },
                     {
                         level: "Secondaire", title: "Action sur l'Individu / Groupe",
                         description: "Vise à outiller les salariés pour mieux faire face au stress. Utile, mais insuffisant si les causes demeurent (Panagioti et al., 2017).",
-                        examples: ["Formation gestion du stress (mindfulness)", "Améliorer les stratégies de coping" <a href='https://thot586.github.io/psychiatrie/Strategies_coping.html' target='_blank' class='coping-button'>En savoir plus</a>", "Groupes de parole"]
+                        examples: [
+                            { text: "Formation gestion du stress (mindfulness)" },
+                            { text: "Améliorer les stratégies de coping", link: "https://thot586.github.io/psychiatrie/Strategies_coping.html" },
+                            { text: "Groupes de parole" }
+                        ]
                     },
                     {
                         level: "Tertiaire", title: "Prise en charge et Réparation",
                         description: "Vise à accompagner les individus déjà en état de burnout. Les approches combinées (individu + organisation) sont les plus performantes (Pijpker et al., 2020).",
-                        examples: ["Soutien psychologique/médical", "Aménagement du poste", "Programmes de retour à l'emploi"]
+                        examples: [
+                            { text: "Soutien psychologique/médical" },
+                            { text: "Aménagement du poste" },
+                            { text: "Programmes de retour à l'emploi" }
+                        ]
                     }
                 ],
                 debates: [
@@ -626,14 +624,23 @@
                 const card = document.createElement('div');
                 card.className = `p-8 rounded-xl shadow-lg border-t-4 ${borderColors[index]} ${colors[index]} flex flex-col`;
                 card.innerHTML = `
-                    <div>
+                    <div class="flex-grow">
                         <span class="inline-block px-3 py-1 text-xs font-semibold text-white bg-slate-700 rounded-full mb-4 tracking-wide">${item.level}</span>
                         <h3 class="text-2xl font-bold text-slate-900">${item.title}</h3>
                         <p class="mt-2 text-slate-600">${item.description}</p>
                     </div>
-                    <div class="flex-grow"></div>
-                    <ul class="mt-6 space-y-2 text-slate-700 list-disc list-inside">
-                        ${item.examples.map(ex => `<li>${ex}</li>`).join('')}
+                    <ul class="mt-6 space-y-4 text-slate-700">
+                        ${item.examples.map(ex => `
+                            <li class="flex flex-col items-start">
+                                <span class="list-item list-disc list-inside">${ex.text}</span>
+                                ${ex.link ? `
+                                    <a href="${ex.link}" target="_blank" rel="noopener noreferrer" class="mt-2 inline-flex items-center gap-2 text-sm font-semibold text-teal-700 bg-teal-100/60 hover:bg-teal-100 px-3 py-1 rounded-full transition-colors">
+                                        En savoir plus
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                                    </a>
+                                ` : ''}
+                            </li>
+                        `).join('')}
                     </ul>
                 `;
                 preventionContainer.appendChild(card);
@@ -694,4 +701,7 @@
     </script>
 </body>
 </html>
+```
 
+Enlevez cette partie : "Dr FENOHASINA T.J. Felicien (Psychiatre - FFI) ;" et "ASSOCIATION PSYKÔZY MADAGASCAR"
+et mettez à la place "Application créée par Dr FENOHASINA T.J. Felicien (Psychiatr
