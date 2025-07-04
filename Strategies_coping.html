@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stratégies de Coping</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧠</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,8 +20,6 @@
     -->
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
-        .chart-container { position: relative; width: 100%; max-width: 800px; margin-left: auto; margin-right: auto; height: 300px; max-height: 350px; }
-        @media (min-width: 768px) { .chart-container { height: 400px; max-height: 450px; } }
         .section-title { border-bottom: 3px solid #0ea5e9; }
         .citation { color: #475569; font-size: 0.9em; font-style: italic; }
         .accordion-header { transition: background-color 0.2s ease-in-out; }
@@ -37,8 +36,8 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <!-- Home Icon -->
-                <a href="https://thot586.github.io/psychiatrie/Syndrome_d_epuisement_professionnel.html" aria-label="Retour à la page principale" class="p-2">
-                  <svg class="w-6 h-6 text-slate-500 hover:text-sky-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                <a href="https://thot586.github.io/psychiatrie/Syndrome_d_epuisement_professionnel.html" target="_blank" rel="noopener noreferrer" title="Syndrome d'épuisement professionnel" aria-label="Lien vers Syndrome d'épuisement professionnel" class="p-2">
+                    <svg class="w-6 h-6 text-slate-500 hover:text-sky-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                 </a>
 
                 <!-- Navigation Links -->
@@ -59,8 +58,8 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
 
         <header class="text-center mb-12 md:mb-16">
-            <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-slate-900">Explorez les Stratégies de Coping</h1>
-            <p class="mt-4 text-lg text-slate-600 max-w-3xl mx-auto">comprendre comment faire face au stress.</p>
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-slate-900">Stratégies de Coping</h1>
+            <p class="mt-4 text-lg text-slate-600 max-w-3xl mx-auto">Un outil interactif pour comprendre comment nous faisons face au stress, basé sur la recherche scientifique.</p>
         </header>
 
         <main>
@@ -468,7 +467,7 @@
     
     function updateActiveNav() {
         const sections = document.querySelectorAll('main section');
-        const navLinks = document.querySelectorAll('#navbar a');
+        const navLinks = document.querySelectorAll('#navbar a.nav-link');
         let currentSectionId = '';
 
         sections.forEach(section => {
@@ -489,7 +488,6 @@
     document.addEventListener('DOMContentLoaded', () => {
         setupStrategyAccordions();
         setupGoodnessOfFit();
-        createEffectivenessChart();
         setupDebatesAccordion();
         populateReferences();
         window.addEventListener('scroll', updateActiveNav);
