@@ -9,10 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Chosen Palette: Refined Calm Neutral & Slate with Teal Accent -->
-    <!-- Structure Plan: La structure SPA à défilement vertical est maintenue pour sa fluidité. L'architecture a été améliorée avec une meilleure hiérarchie visuelle, des espacements plus généreux et une typographie responsive. L'ajout crucial est la section Références, qui ancre scientifiquement le contenu. Le parcours utilisateur reste logique : Définir -> Démystifier -> Analyser les causes/signes -> Mesurer l'impact -> Agir -> Approfondir avec les débats et les sources. -->
-    <!-- Visualization & Content Choices: Les choix de visualisation sont conservés (cartes, onglets, graphiques) mais leur design est amélioré. Le contenu textuel est enrichi avec des citations (Auteur, Année) pour chaque affirmation clé, renforçant la crédibilité. Le graphique d'impact a été mis à jour avec des données issues de méta-analyses récentes pour plus de précision. Une section Références complète et vérifiée est ajoutée pour la transparence et la vérifiabilité. -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -89,6 +86,21 @@
             -webkit-column-break-inside: avoid;
             page-break-inside: avoid;
             break-inside: avoid;
+        }
+        .coping-button {
+        display: inline-block;
+        padding: 8px 16px;
+        background-color: #0d9488; /* teal-600 */
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        font-weight: bold;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .coping-button:hover {
+         background-color: #0f766e; /* teal-700 */
+        transform: scale(1.02);
         }
     </style>
 </head>
@@ -419,7 +431,7 @@
                     {
                         level: "Secondaire", title: "Action sur l'Individu / Groupe",
                         description: "Vise à outiller les salariés pour mieux faire face au stress. Utile, mais insuffisant si les causes demeurent (Panagioti et al., 2017).",
-                        examples: ["Formation gestion du stress (mindfulness)", "Améliorer les stratégies de coping", "Groupes de parole"]
+                        examples: ["Formation gestion du stress (mindfulness)", "Améliorer les stratégies de coping" <a href='https://thot586.github.io/psychiatrie/Strategies_coping.html' target='_blank' class='coping-button'>En savoir plus</a>", "Groupes de parole"]
                     },
                     {
                         level: "Tertiaire", title: "Prise en charge et Réparation",
