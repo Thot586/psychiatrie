@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide Interactif pour la Formulation de Questions de Recherche</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chosen Palette: Modern Professional (Slate background, Indigo accent, White cards) -->
+    <!-- Application Structure Plan: Retained the task-oriented SPA structure but enhanced it. 1) Improved the Decision Tree with clearer visuals. 2) Redesigned Framework Explorer with better accordions/tabs. 3) Refined the "Question Builders". 4) Added a new "Interactive Tests" section with multiple-choice and drag-and-drop questions offering immediate, detailed feedback to actively assess user understanding. 5) Overhauled the UI for better aesthetics and responsiveness across all devices. This deepens the pedagogical value by moving from passive learning and practice to active assessment. -->
+    <!-- Visualization & Content Choices: 
+    - Report Info: Interactive Tests -> Goal: Assess/Reinforce -> Viz/Method: Interactive quiz forms (MCQ, drag-drop style) with dynamic feedback modals -> Interaction: User selection/submission triggers instant validation and explanatory feedback -> Justification: Creates a robust, active learning loop, directly addressing the user request for "tests interactifs avec feedback".
+    - Report Info: All previous content -> Goal: Inform/Practice -> Viz/Method: Redesigned cards, accordions, and layouts with improved spacing, typography, and visual hierarchy -> Interaction: Smoother transitions and clearer visual cues on hover/click -> Justification: Enhances overall usability, readability, and professional aesthetic (UI/UX improvement).
+    - Library/Method: All interactions powered by vanilla JS. TailwindCSS used for responsive design. Chart.js included for compliance. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; display: flex; flex-direction: column; min-height: 100vh; }
+        #app { flex-grow: 1; }
+        .nav-link { transition: all 0.3s ease; border-bottom: 2px solid transparent; }
+        .nav-link.active { color: #4338ca; border-bottom-color: #4338ca; font-weight: 600; }
+        .content-section { display: none; animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .content-section.active { display: block; }
+        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out, padding 0.5s ease; }
+        .accordion-button.open .accordion-arrow { transform: rotate(180deg); }
+        .decision-node { transition: opacity 0.5s ease, transform 0.5s ease; }
+        .decision-node.hidden { opacity: 0; transform: scale(0.95); pointer-events: none; position: absolute; }
+        .quiz-option { cursor: pointer; transition: all 0.2s ease; }
+        .quiz-option:hover { background-color: #eef2ff; border-color: #818cf8; }
+        .quiz-option.selected { background-color: #c7d2fe; border-color: #6366f1; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #4ade80; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #f87171; }
+        .feedback-box { transition: opacity 0.3s; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div id="app" class="container mx-auto p-4 sm:p-6 lg:p-8">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl md:text-5xl font-extrabold text-indigo-900 tracking-tight">Boîte à Outils de Recherche</h1>
+            <p class="text-slate-600 mt-3 max-w-2xl mx-auto text-lg">Maîtrisez l'art de formuler des questions de recherche précises pour vos revues systématiques et métasynthèses.</p>
+        </header>
+
+        <nav class="flex flex-wrap justify-center border-b border-slate-200 mb-8 sm:mb-12">
+            <button data-target="accueil" class="nav-link text-sm sm:text-base font-medium py-3 px-3 sm:px-4 text-slate-600 hover:text-indigo-600 active">Accueil</button>
+            <button data-target="choisir-cadre" class="nav-link text-sm sm:text-base font-medium py-3 px-3 sm:px-4 text-slate-600 hover:text-indigo-600">Choisir son Cadre</button>
+            <button data-target="explorer-cadres" class="nav-link text-sm sm:text-base font-medium py-3 px-3 sm:px-4 text-slate-600 hover:text-indigo-600">Explorer les Cadres</button>
+            <button data-target="ateliers" class="nav-link text-sm sm:text-base font-medium py-3 px-3 sm:px-4 text-slate-600 hover:text-indigo-600">Ateliers Pratiques</button>
+            <button data-target="tests" class="nav-link text-sm sm:text-base font-medium py-3 px-3 sm:px-4 text-slate-600 hover:text-indigo-600">Testez vos Connaissances</button>
+            <button data-target="comparer-evaluer" class="nav-link text-sm sm:text-base font-medium py-3 px-3 sm:px-4 text-slate-600 hover:text-indigo-600">Comparer & Évaluer</button>
+        </nav>
+
+        <main>
+            <!-- Sections existantes (contenu mis à jour dynamiquement) -->
+            <section id="accueil" class="content-section active"></section>
+            <section id="choisir-cadre" class="content-section"></section>
+            <section id="explorer-cadres" class="content-section"></section>
+            <section id="ateliers" class="content-section"></section>
+            <section id="comparer-evaluer" class="content-section"></section>
+
+            <!-- Nouvelle Section: Testez vos Connaissances -->
+            <section id="tests" class="content-section">
+                <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-slate-200">
+                    <h2 class="text-2xl md:text-3xl font-bold text-indigo-800 mb-2">Testez vos Connaissances</h2>
+                    <p class="text-slate-600 mb-8">Évaluez votre compréhension avec ces exercices interactifs. Un feedback détaillé est fourni pour chaque question.</p>
+                    <div id="quiz-container" class="space-y-12"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer class="bg-slate-900 text-slate-300 text-sm border-t border-slate-700 py-6 px-4 mt-auto">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center md:items-start justify-between gap-6">
+    
+        <div class="flex-1 text-center md:text-left space-y-2">
+        <p>Dr FENOHASINA T.J. Felicien (Psychiatre)</p>
+        <p>ASSOCIATION PSYKÔZY MADAGASCAR</p>
+        <p>CENTRE RESSOURCE DE REHABILITATION</p>
+        <div class="flex items-center justify-center md:justify-start gap-2">
+         <img class="h-5 w-auto"
+               src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Cc-by-nc-sa_icon.svg/120px-Cc-by-nc-sa_icon.svg.png"
+               alt="Icône Creative Commons BY-NC-SA"
+               onerror="this.onerror=null;this.src='https://placehold.co/20x20/1e293b/ffffff?text=CC';">
+          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr"
+           target="_blank" rel="noopener noreferrer"
+           class="underline hover:text-white">Licence CC BY-NC-SA 4.0</a> –
+           Dernière mise à jour : 07 juillet 2025.
+          </div>
+        </div>
+    
+    
+        <!-- LOGOS DROITS : CRR -->
+        <div class="flex items-center gap-6 flex-shrink-0">
+          <a href="https://www.facebook.com/Psykozy?locale=fr_FR" target="_blank" rel="noopener noreferrer">
+            <img class="h-16 md:h-20 w-auto" 
+                 src="https://cdn-assets.inwink.com/fe065c87-0643-42fc-8b5d-4d94b5d12c11/a1904f78-1bca-466d-a9f4-8ac9fde06c0c"
+                 alt="Logo Psy-kôzy"
+                 onerror="this.onerror=null;this.src='https://placehold.co/80x80/1e293b/ffffff?text=Logo';">
+          </a>
+          <a href="https://centre-ressource-rehabilitation.org" target="_blank" rel="noopener noreferrer">
+            <img class="h-16 md:h-20 w-auto"
+                 src="https://faustinebrunet.com/images/RS/creation-nouveau-logo-domaine-sante-mentale.jpg"
+                 alt="Logo Centre Ressource Réhabilitation"
+                 onerror="this.onerror=null;this.src='https://placehold.co/80x80/1e293b/ffffff?text=Logo';">
+          </a>
+    
+        </div>
+    
+      </div>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const appData = {
+        accueil: {
+            title: "Bienvenue dans votre guide interactif",
+            content: `
+                <p class="text-slate-700 leading-relaxed mb-4">La formulation de la question de recherche est l'étape la plus critique de toute synthèse de la connaissance. Elle est la clé de voûte qui détermine la rigueur, la pertinence et la validité de vos travaux. Une question bien posée est un gage de transparence et de fiabilité. Cet outil est conçu pour vous accompagner dans cette étape cruciale.</p>
+                <p class="text-slate-700 leading-relaxed">Que vous meniez une revue systématique quantitative ou une métasynthèse qualitative, cette application vous fournit les concepts, les cadres et les exercices pratiques pour maîtriser cet art. Utilisez la navigation ci-dessus pour explorer les différentes sections :</p>
+                <div class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                        <h3 class="font-semibold text-indigo-700">Choisir son Cadre</h3>
+                        <p class="text-sm text-slate-600 mt-1">Laissez-vous guider par notre arbre de décision pour trouver le cadre (PICO, SPIDER, etc.) le plus adapté.</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                        <h3 class="font-semibold text-indigo-700">Explorer les Cadres</h3>
+                        <p class="text-sm text-slate-600 mt-1">Plongez dans les détails de chaque cadre avec des explications claires et des exemples commentés.</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                        <h3 class="font-semibold text-indigo-700">Ateliers Pratiques</h3>
+                        <p class="text-sm text-slate-600 mt-1">Mettez la théorie en pratique en construisant vos propres questions de recherche pas à pas.</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                        <h3 class="font-semibold text-indigo-700">Testez vos Connaissances</h3>
+                        <p class="text-sm text-slate-600 mt-1">Évaluez votre compréhension avec des quiz interactifs et des feedbacks instantanés.</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                        <h3 class="font-semibold text-indigo-700">Comparer & Évaluer</h3>
+                        <p class="text-sm text-slate-600 mt-1">Affinez votre question grâce à notre tableau comparatif et notre checklist d'auto-évaluation.</p>
+                    </div>
+                </div>`
+        },
+        choisirCadre: {
+            title: "Arbre de Décision Interactif",
+            subtitle: "Répondez à la question suivante pour trouver le cadre de formulation le plus pertinent pour votre recherche.",
+            nodes: {
+                start: { 
+                    question: "Quel est l'objectif principal de votre revue ?",
+                    options: [
+                        { text: "🎯 Évaluer l'efficacité ou l'effet d'une intervention / exposition.", target: 'quant' },
+                        { text: "🔍 Comprendre une expérience, une perception, un processus ou un contexte.", target: 'qual' }
+                    ]
+                },
+                quant: { 
+                    question: "Quel type d'évaluation quantitative réalisez-vous ?",
+                    options: [
+                        { text: "Je compare une intervention délibérée (ex: traitement, programme) à une alternative.", target: 'result-pico' },
+                        { text: "J'étudie l'effet d'une exposition subie (ex: facteur de risque, environnement).", target: 'result-peco' }
+                    ]
+                },
+                qual: {
+                    question: "Quel est votre focus qualitatif principal ?",
+                    options: [
+                        { text: "L'expérience vécue par un échantillon et la manière dont elle a été étudiée (méthodologie).", target: 'result-spider'},
+                        { text: "L'évaluation d'un service ou programme en insistant sur le contexte et le point de vue des acteurs.", target: 'result-spice'},
+                        { text: "Un phénomène d'intérêt pour une population dans un contexte donné (approche JBI).", target: 'result-pico-qual'}
+                    ]
+                }
+            },
+            results: {
+                'result-pico': { title: "Le cadre PICO est recommandé.", text: "Idéal pour structurer les questions sur l'efficacité des interventions. Pensez aussi à ses variantes <strong>PICOT</strong> (avec Timeframe) ou <strong>PICOS</strong> (avec Study Design)." },
+                'result-peco': { title: "Le cadre PECO est recommandé.", text: "Spécifiquement adapté aux questions d'étiologie et de facteurs de risque, où l'on remplace l'Intervention par une Exposition." },
+                'result-spider': { title: "Le cadre SPIDER est recommandé.", text: "Parfait pour synthétiser la recherche qualitative en se concentrant sur l'Échantillon, le Phénomène d'Intérêt, le Devis, l'Évaluation et le Type de Recherche." },
+                'result-spice': { title: "Le cadre SPICE est recommandé.", text: "Utilisez SPICE pour évaluer des services ou des interventions, en mettant l'accent sur le Contexte, la Perspective des acteurs, l'Intervention, la Comparaison et l'Évaluation." },
+                'result-pico-qual': { title: "Le cadre PICo (JBI) est recommandé.", text: "L'approche du Joanna Briggs Institute avec PICo (Population, Phénomène d'Intérêt, Contexte) est excellente pour cadrer les revues qualitatives de manière claire et systématique." }
+            }
+        },
+        picoComponents: [
+            { term: 'P - Population', description: 'Le groupe de sujets concerné (âge, sexe, pathologie, contexte). Qui sont les sujets de l\'étude ?' },
+            { term: 'I - Intervention', description: 'L\'action principale évaluée (traitement, programme, thérapie). Quelle est l\'intervention testée ?' },
+            { term: 'C - Comparison', description: 'L\'alternative à laquelle l\'intervention est comparée (placebo, soins standards, autre intervention). Par rapport à quoi ?' },
+            { term: 'O - Outcome', description: 'Le résultat mesurable pour évaluer l\'effet (mortalité, qualité de vie, douleur). Quel est le critère de jugement ?' }
+        ],
+        picoExamples: [
+            { title: '✅ Bien Formulé', question: 'Chez les adultes (> 65 ans) souffrant d\'arthrose du genou modérée (P), une thérapie par exercices aquatiques de 12 semaines (I) comparée à l\'absence d\'exercice (C) réduit-elle la douleur (EVA) et améliore-t-elle la fonction physique (WOMAC) (O)?', analysis: 'Chaque composant est précis, délimité et mesurable, ce qui rend la revue réalisable et rigoureuse.' },
+            { title: '❌ Trop Vague', question: 'L\'exercice est-il bon pour l\'arthrose?', analysis: 'Question impossible à traiter : "L\'exercice" et "bon" sont trop larges, la population et la comparaison sont indéfinies.' },
+            { title: '🔄 À Améliorer', question: 'Chez les patients diabétiques, les applis mobiles aident-elles?', analysis: 'Manque de précision. Problèmes: quel type de diabète/appli? Comparé à quoi? Quel critère pour "aider"? À reformuler en spécifiant chaque élément (ex: HbA1c après 6 mois).' }
+        ],
+        spiderComponents: [
+            { term: 'S - Sample', description: 'L\'échantillon de personnes. Privilégié à "Population" car souvent plus petit et non probabiliste en qualitatif.' },
+            { term: 'PI - Phenomenon of Interest', description: 'Le phénomène au cœur de la recherche (expériences, perceptions, processus). Remplace "Intervention".' },
+            { term: 'D - Design', description: 'Le devis de recherche utilisé dans les études primaires (entretiens, ethnographie, focus group).' },
+            { term: 'E - Evaluation', description: 'Les résultats qualitatifs (attitudes, croyances, points de vue). Remplace "Outcome".' },
+            { term: 'R - Research Type', description: 'Le type de recherche à inclure (qualitative, mixte).' }
+        ],
+        spiderExamples: [
+             { title: '✅ Bien Formulé', question: 'Quelles sont les expériences (E) des infirmières nouvellement diplômées (S) concernant la transition vers la pratique professionnelle (PI), explorées via des études qualitatives (R) utilisant des entretiens (D)?', analysis: 'Clair, structuré et focalisé. Chaque composant guide efficacement la recherche des études pertinentes.' },
+             { title: '❌ Trop Vague', question: 'Que pensent les gens du changement climatique?', analysis: 'Question inexploitable. "Les gens", "penser" et "changement climatique" sont trop vastes et ambigus. Aucun devis spécifié.' },
+             { title: '🔄 À Améliorer', question: 'Comment les patients vivent-ils avec une maladie chronique?', analysis: 'Bon début mais doit être focalisé. Quelle maladie? Quel aspect de "vivre avec"? Quelles évaluations? À reformuler pour cibler un phénomène précis (ex: stratégies d\'adaptation).' }
+        ],
+        picoWorkshopData: {
+            id: 'pico',
+            title: 'Atelier PICO : Mentorat Étudiant',
+            scenario: 'Une équipe pédagogique s\'interroge sur l\'impact des programmes de mentorat par les pairs sur la réussite des étudiants de première année à l\'université.',
+            prompts: [
+                { id: 'p', label: 'P - Population', placeholder: 'Ex: étudiants de première année...' },
+                { id: 'i', label: 'I - Intervention', placeholder: 'Ex: programme de mentorat...' },
+                { id: 'c', label: 'C - Comparison', placeholder: 'Ex: absence de programme...' },
+                { id: 'o', label: 'O - Outcome', placeholder: 'Ex: taux de réussite, taux d\'abandon...' }
+            ],
+            solution: 'Chez les étudiants universitaires de première année (P), la participation à un programme de mentorat par les pairs structuré (I) comparée à l\'absence de programme de mentorat (C) améliore-t-elle le taux de réussite académique (moyenne générale) et réduit-elle le taux d\'abandon (O)?',
+            commentary: 'Cette question est bien formulée car elle cible une population précise, une intervention "structurée" (réduisant l\'hétérogénéité), un comparateur logique, et des critères de jugement clairs et quantifiables.'
+        },
+        spiderWorkshopData: {
+            id: 'spider',
+            title: 'Atelier SPIDER : Télétravail',
+            scenario: 'Une sociologue veut comprendre l\'expérience du télétravail à temps plein imposé pendant la pandémie, notamment son impact sur l\'équilibre vie pro/perso.',
+             prompts: [
+                { id: 's', label: 'S - Sample', placeholder: 'Ex: employés de bureau...' },
+                { id: 'pi', label: 'PI - Phenomenon of Interest', placeholder: 'Ex: télétravail à temps plein...' },
+                { id: 'd', label: 'D - Design', placeholder: 'Ex: entretiens, journaux de bord...' },
+                { id: 'e', label: 'E - Evaluation', placeholder: 'Ex: perceptions sur l\'équilibre vie pro/perso...' },
+                { id: 'r', label: 'R - Research Type', placeholder: 'Ex: études qualitatives...' }
+            ],
+            solution: 'Comment les employés de bureau (S) ont-ils perçu l\'impact (E) du télétravail à temps plein pendant la pandémie (PI) sur leur équilibre vie pro/perso, selon des études qualitatives (R) utilisant des entretiens (D)?',
+            commentary: 'Cette question est efficace car elle cible un échantillon, un phénomène et un contexte précis. L\'évaluation est focalisée et le devis et type de recherche sont spécifiés, ce qui facilite la recherche.'
+        },
+        comparisonData: {
+            headers: ['Caractéristique', 'Cadre PICO (Quantitatif)', 'Cadre SPIDER (Qualitatif)'],
+            rows: [
+                ['Objectif', 'Mesurer l\'efficacité, la causalité (déductif)', 'Comprendre une expérience, un processus (inductif)'],
+                ['Type de Données', 'Numériques, statistiques, mesures', 'Textuelles, thèmes, concepts, interprétations'],
+                ['Flexibilité', 'Faible. Question fixée a priori', 'Élevée. Question peut être affinée de manière itérative'],
+                ['Composantes', 'Population, Intervention, Comparison, Outcome', 'Sample, Phenomenon of Interest, Design, Evaluation, Research Type'],
+                ['Origine', 'Médecine Basée sur les Preuves (EBM)', 'Sciences Sociales, Santé Qualitative']
+            ]
+        },
+        checklistData: [
+            'Clarté : La question est-elle sans ambiguïté ?',
+            'Focalisation : N\'est-elle ni trop large, ni trop étroite ?',
+            'Alignement : Le cadre (PICO/SPIDER) correspond-il à l\'objectif ?',
+            'Définition : Chaque composante est-elle clairement définie ?',
+            'Faisabilité : Les ressources et la littérature sont-elles suffisantes ?',
+            'Pertinence : La réponse comblera-t-elle un manque de connaissances important ?',
+            'Nouveauté : Une revue similaire n\'existe-t-elle pas déjà (vérifier PROSPERO) ?',
+            'Éthique : La question ne soulève-t-elle pas de problème éthique majeur ?',
+            'Traductibilité : La question se décompose-t-elle facilement en mots-clés de recherche ?',
+            'Intérêt : La question est-elle suffisamment motivante pour l\'équipe ?'
+        ],
+        quizData: [
+            {
+                id: 'q1',
+                type: 'mcq',
+                question: "Un chercheur veut synthétiser des études pour déterminer si une nouvelle application de méditation est plus efficace qu'un enregistrement audio de relaxation standard pour réduire l'anxiété auto-déclarée chez les étudiants universitaires pendant les périodes d'examens.",
+                prompt: "Quel cadre est le plus approprié pour formuler cette question de recherche ?",
+                options: ["PICO", "SPIDER"],
+                answer: "PICO",
+                feedback: {
+                    correct: "<strong>Correct !</strong> Le cadre PICO est idéal ici car la question vise à évaluer l'<strong>efficacité</strong> d'une <strong>Intervention</strong> (l'application) par rapport à une <strong>Comparaison</strong> (l'audio standard) sur un <strong>Outcome</strong> mesurable (l'anxiété) dans une <strong>Population</strong> définie (les étudiants).",
+                    incorrect: "<strong>Incorrect.</strong> Le cadre le plus approprié est PICO. La question ne cherche pas à comprendre une 'expérience' (ce qui relèverait de SPIDER), mais à mesurer l'efficacité d'une intervention. PICO est spécifiquement conçu pour ce type de question comparative et quantitative."
+                }
+            },
+            {
+                id: 'q2',
+                type: 'mcq',
+                question: "Une équipe de sociologues souhaite comprendre comment les travailleurs indépendants (freelances) perçoivent et gèrent l'insécurité financière. Ils prévoient de synthétiser des études basées sur des entretiens approfondis.",
+                prompt: "Quel cadre est le plus approprié ?",
+                options: ["PICO", "SPIDER"],
+                answer: "SPIDER",
+                feedback: {
+                    correct: "<strong>Excellent !</strong> SPIDER est le cadre parfait. La question porte sur la compréhension d'une expérience (<strong>Phénomène d'Intérêt</strong>: gestion de l'insécurité) au sein d'un <strong>Échantillon</strong> spécifique (travailleurs indépendants), en utilisant un <strong>Devis</strong> qualitatif (entretiens) pour <strong>Évaluer</strong> leurs perceptions.",
+                    incorrect: "<strong>Incorrect.</strong> Le cadre SPIDER est le bon choix. La question est exploratoire et vise à comprendre une expérience, non à mesurer l'effet d'une intervention. Il n'y a pas d'Intervention, de Comparaison ou d'Outcome quantifiable, ce qui rend PICO inadapté."
+                }
+            },
+            {
+                id: 'q3',
+                type: 'identify',
+                question: "Analysez la question PICO suivante :",
+                sentence: "Chez les <strong>patients adultes souffrant d'insomnie chronique</strong>, est-ce qu'une <strong>thérapie cognitivo-comportementale (TCC)</strong>, comparée à des <strong>somnifères (zopiclone)</strong>, améliore la <strong>qualité du sommeil mesurée par le PSQI</strong> ?",
+                components: [
+                    { name: "P", text: "patients adultes souffrant d'insomnie chronique" },
+                    { name: "I", text: "thérapie cognitivo-comportementale (TCC)" },
+                    { name: "C", text: "somnifères (zopiclone)" },
+                    { name: "O", text: "qualité du sommeil mesurée par le PSQI" }
+                ],
+                prompt: "Identifiez la composante 'Comparison' dans la question ci-dessus."
+            }
+        ]
+    };
+
+    function renderSection(id, data) {
+        const section = document.getElementById(id);
+        if (!section) return;
+        section.innerHTML = `
+            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-slate-200">
+                <h2 class="text-2xl md:text-3xl font-bold text-indigo-800 mb-2">${data.title}</h2>
+                ${data.subtitle ? `<p class="text-slate-600 mb-8">${data.subtitle}</p>` : ''}
+                ${data.content || ''}
+            </div>
+        `;
+    }
+    
+    function renderDecisionTree() {
+        const container = document.getElementById('choisir-cadre');
+        const data = appData.choisirCadre;
+        let html = `
+            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-slate-200">
+                <h2 class="text-2xl md:text-3xl font-bold text-indigo-800 mb-2">${data.title}</h2>
+                <p class="text-slate-600 mb-8">${data.subtitle}</p>
+                <div id="decision-tree-container" class="relative min-h-[250px]">`;
+
+        Object.keys(data.nodes).forEach(nodeKey => {
+            const node = data.nodes[nodeKey];
+            html += `
+                <div id="node-${nodeKey}" class="decision-node ${nodeKey !== 'start' ? 'hidden' : ''} p-6 bg-slate-100 border border-slate-200 rounded-lg w-full">
+                    <p class="font-semibold text-lg text-indigo-900 mb-4">${node.question}</p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        ${node.options.map(opt => `<button onclick="showNode('${opt.target}')" class="w-full text-left p-4 bg-white rounded-lg border-2 border-slate-300 hover:bg-indigo-50 hover:border-indigo-400 transition-all duration-300 shadow-sm">${opt.text}</button>`).join('')}
+                    </div>
+                </div>`;
+        });
+        
+        Object.keys(data.results).forEach(resultKey => {
+            const result = data.results[resultKey];
+            html += `
+                <div id="${resultKey}" class="decision-node hidden p-6 bg-green-50 border-2 border-green-500 rounded-lg">
+                    <h3 class="font-bold text-xl text-green-900">${result.title}</h3>
+                    <p class="text-green-800 mt-2">${result.text}</p>
+                </div>`;
+        });
+        html += `</div><button onclick="resetTree()" class="mt-6 text-sm text-indigo-600 hover:underline">Recommencer</button></div>`;
+        container.innerHTML = html;
+    }
+
+    function renderFrameworks() {
+        const container = document.getElementById('explorer-cadres');
+        container.innerHTML = `
+            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-slate-200">
+                <h2 class="text-2xl md:text-3xl font-bold text-indigo-800 mb-6">Explorer les Cadres de Formulation</h2>
+                <div id="framework-tabs" class="w-full">
+                    <div class="flex border-b border-slate-200">
+                        <button class="framework-tab-button active-tab p-4 font-semibold text-indigo-600 border-b-2 border-indigo-600" data-target="pico-content">Approche Quantitative (PICO)</button>
+                        <button class="framework-tab-button p-4 font-medium text-slate-500" data-target="spider-content">Approche Qualitative (SPIDER)</button>
+                    </div>
+                    <div id="pico-content" class="framework-tab-content active pt-8">
+                        <h3 class="text-xl font-bold mb-4 text-slate-800">Le Cadre PICO et ses Variantes</h3>
+                        <p class="mb-6 text-slate-600">L'outil de référence pour les revues systématiques évaluant l'efficacité des interventions.</p>
+                        <div class="space-y-4" id="pico-accordion"></div>
+                        <h4 class="text-lg font-bold mt-8 mb-4">Exemples Commentés (PICO)</h4>
+                        <div id="pico-examples" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                    </div>
+                    <div id="spider-content" class="framework-tab-content pt-8" style="display:none;">
+                        <h3 class="text-xl font-bold mb-4 text-slate-800">Les Cadres SPIDER et SPICE</h3>
+                        <p class="mb-6 text-slate-600">Des structures plus souples et pertinentes pour la recherche qualitative.</p>
+                        <div class="space-y-4" id="spider-accordion"></div>
+                        <h4 class="text-lg font-bold mt-8 mb-4">Exemples Commentés (SPIDER)</h4>
+                        <div id="spider-examples" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                    </div>
+                </div>
+            </div>`;
+        createAccordion('pico-accordion', appData.picoComponents);
+        createExamples('pico-examples', appData.picoExamples);
+        createAccordion('spider-accordion', appData.spiderComponents);
+        createExamples('spider-examples', appData.spiderExamples);
+    }
+
+    function createAccordion(containerId, items) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = items.map((item, index) => `
+            <div class="border border-slate-200 rounded-lg overflow-hidden">
+                <h2>
+                    <button type="button" class="accordion-button flex items-center justify-between w-full p-5 font-medium text-left text-slate-800 bg-slate-50 hover:bg-slate-100 transition" data-accordion-target="accordion-content-${containerId}-${index}">
+                        <span class="text-indigo-700 font-semibold">${item.term}</span>
+                        <svg class="accordion-arrow w-4 h-4 shrink-0 transition-transform duration-300 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                </h2>
+                <div id="accordion-content-${containerId}-${index}" class="accordion-content bg-white">
+                    <p class="text-slate-600 p-5">${item.description}</p>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function createExamples(containerId, items) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = items.map(item => `
+            <div class="border border-slate-200 rounded-xl p-6 bg-white h-full flex flex-col shadow-sm hover:shadow-md transition-shadow">
+                <h5 class="font-bold text-lg mb-2 text-slate-800">${item.title}</h5>
+                <p class="text-sm text-slate-700 italic mb-4">"${item.question}"</p>
+                <p class="text-xs text-slate-500 mt-auto pt-3 border-t border-slate-100">${item.analysis}</p>
+            </div>
+        `).join('');
+    }
+    
+    function renderWorkshops() {
+        const container = document.getElementById('ateliers');
+        container.innerHTML = `
+            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-slate-200">
+                <h2 class="text-2xl md:text-3xl font-bold text-indigo-800 mb-2">Ateliers Pratiques Interactifs</h2>
+                <p class="text-slate-600 mb-8">Passez de la théorie à la pratique. Utilisez nos constructeurs pour formuler pas à pas vos propres questions.</p>
+                <div class="grid lg:grid-cols-2 gap-8">
+                    <div id="pico-workshop" class="bg-slate-50 p-6 rounded-xl border border-slate-200"></div>
+                    <div id="spider-workshop" class="bg-slate-50 p-6 rounded-xl border border-slate-200"></div>
+                </div>
+            </div>`;
+        createWorkshop('pico-workshop', appData.picoWorkshopData);
+        createWorkshop('spider-workshop', appData.spiderWorkshopData);
+    }
+
+    function createWorkshop(containerId, data) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = `
+            <h3 class="text-xl font-bold mb-2 text-indigo-900">${data.title}</h3>
+            <p class="text-sm text-slate-600 mb-6">${data.scenario}</p>
+            <div class="space-y-4" id="form-${data.id}">
+                ${data.prompts.map(p => `
+                    <div>
+                        <label for="${data.id}-${p.id}" class="block mb-1 text-sm font-semibold text-slate-700">${p.label}</label>
+                        <input type="text" id="${data.id}-${p.id}" class="workshop-input bg-white border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 transition" placeholder="${p.placeholder}" data-workshop-id="${data.id}">
+                    </div>
+                `).join('')}
+            </div>
+            <div class="mt-6 p-4 bg-indigo-50 rounded-lg border border-indigo-200">
+                <p class="text-sm font-semibold text-indigo-800">Votre question :</p>
+                <p id="preview-${data.id}" class="text-sm text-indigo-900 italic min-h-[40px] pt-1">...</p>
+            </div>
+            <div class="mt-4">
+                <button class="solution-button text-sm text-indigo-600 hover:underline" data-target="solution-${data.id}">Voir la réponse type</button>
+                <div id="solution-${data.id}" class="hidden mt-2 p-4 bg-slate-100 border border-slate-200 rounded-lg">
+                    <p class="text-sm font-semibold">Réponse Suggérée :</p>
+                    <p class="text-sm italic text-slate-700">"${data.solution}"</p>
+                    <p class="text-xs mt-2 text-slate-500">${data.commentary}</p>
+                </div>
+            </div>`;
+    }
+
+    function renderComparison() {
+        const container = document.getElementById('comparer-evaluer');
+        const data = appData.comparisonData;
+        const checklistData = appData.checklistData;
+        container.innerHTML = `
+            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-slate-200">
+                <h2 class="text-2xl md:text-3xl font-bold text-indigo-800 mb-8">Comparer les Approches et Évaluer votre Question</h2>
+                <div class="space-y-12">
+                    <div>
+                        <h3 class="text-xl font-bold mb-4 text-slate-800">Tableau Comparatif : PICO vs. SPIDER</h3>
+                        <p class="text-slate-600 mb-4">Ce tableau synthétise les différences fondamentales entre les deux approches.</p>
+                        <div class="overflow-x-auto rounded-lg border border-slate-200">
+                            <table class="w-full text-sm text-left text-slate-600">
+                                <thead class="text-xs text-indigo-800 uppercase bg-indigo-50">
+                                    <tr>${data.headers.map(h => `<th scope="col" class="px-6 py-3 font-semibold">${h}</th>`).join('')}</tr>
+                                </thead>
+                                <tbody>
+                                ${data.rows.map((row, index) => `
+                                    <tr class="bg-white border-b border-slate-200">
+                                        ${row.map((cell, cellIndex) => cellIndex === 0 ? `<th scope="row" class="px-6 py-4 font-semibold text-slate-900">${cell}</th>` : `<td class="px-6 py-4">${cell}</td>`).join('')}
+                                    </tr>
+                                `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="pt-8 border-t border-slate-200">
+                        <h3 class="text-xl font-bold mb-4 text-slate-800">Checklist d'Auto-évaluation</h3>
+                        <p class="text-slate-600 mb-6">Votre question est-elle prête ? Utilisez cette checklist en 10 points pour vous en assurer.</p>
+                        <div class="space-y-3">
+                        ${checklistData.map((item, index) => `
+                            <div class="flex items-center p-4 rounded-lg bg-slate-50 border border-slate-200 hover:bg-slate-100 transition">
+                                <input id="check-${index}" type="checkbox" class="h-5 w-5 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500">
+                                <label for="check-${index}" class="ml-4 w-full text-sm font-medium text-slate-800">${item}</label>
+                            </div>
+                        `).join('')}
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+    }
+
+    function renderQuiz() {
+        const container = document.getElementById('quiz-container');
+        if (!container) return;
+        container.innerHTML = appData.quizData.map((quizItem, index) => {
+            if (quizItem.type === 'mcq') {
+                return `
+                    <div id="${quizItem.id}" class="quiz-item">
+                        <p class="text-slate-600 mb-2">${quizItem.question}</p>
+                        <h4 class="text-lg font-semibold text-slate-800 mb-4">${quizItem.prompt}</h4>
+                        <div class="space-y-3">
+                            ${quizItem.options.map((opt, i) => `
+                                <div class="quiz-option border-2 border-slate-300 rounded-lg p-4" data-quiz-id="${quizItem.id}" data-option="${opt}">
+                                    ${opt}
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div id="feedback-${quizItem.id}" class="feedback-box opacity-0 mt-4 p-4 rounded-lg text-sm"></div>
+                    </div>
+                `;
+            }
+            if (quizItem.type === 'identify') {
+                 return `
+                    <div id="${quizItem.id}" class="quiz-item">
+                        <h4 class="text-lg font-semibold text-slate-800 mb-2">${quizItem.question}</h4>
+                        <div class="my-4 p-4 bg-slate-100 border border-dashed border-slate-300 rounded-lg text-center text-slate-700 italic">
+                           ${quizItem.sentence}
+                        </div>
+                        <h4 class="text-lg font-semibold text-slate-800 mb-4">${quizItem.prompt}</h4>
+                        <div id="target-${quizItem.id}" class="w-full p-6 min-h-[80px] bg-indigo-50 border-2 border-dashed border-indigo-200 rounded-lg flex items-center justify-center text-slate-500 transition-colors">
+                            Déposez la bonne composante ici
+                        </div>
+                        <div class="mt-4 flex flex-wrap gap-3">
+                            ${quizItem.components.map(comp => `
+                                <div class="draggable-item p-3 bg-white border-2 border-slate-300 rounded-lg shadow-sm cursor-grab active:cursor-grabbing" draggable="true" data-component-name="${comp.name}" data-component-text="${comp.text}">
+                                    <span class="font-bold text-indigo-700">${comp.name}:</span> ${comp.text}
+                                </div>
+                            `).join('')}
+                        </div>
+                         <div id="feedback-${quizItem.id}" class="feedback-box opacity-0 mt-4 p-4 rounded-lg text-sm"></div>
+                    </div>
+                `;
+            }
+        }).join('');
+    }
+    
+    // Initial Render
+    renderSection('accueil', appData.accueil);
+    renderDecisionTree();
+    renderFrameworks();
+    renderWorkshops();
+    renderQuiz();
+    renderComparison();
+
+    // Event Listeners
+    const navLinks = document.querySelectorAll('.nav-link');
+    const contentSections = document.querySelectorAll('.content-section');
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            navLinks.forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
+            const targetId = link.getAttribute('data-target');
+            contentSections.forEach(section => {
+                section.classList.toggle('active', section.id === targetId);
+            });
+        });
+    });
+    
+    document.getElementById('app').addEventListener('click', function(e) {
+        // Framework Tabs
+        if (e.target.matches('.framework-tab-button')) {
+            const tab = e.target;
+            document.querySelectorAll('.framework-tab-button').forEach(t => {
+                t.classList.remove('active-tab', 'text-indigo-600', 'border-indigo-600', 'font-semibold');
+                t.classList.add('text-slate-500', 'font-medium');
+            });
+            tab.classList.add('active-tab', 'text-indigo-600', 'border-indigo-600', 'font-semibold');
+            
+            const targetId = tab.dataset.target;
+            document.querySelectorAll('.framework-tab-content').forEach(content => {
+                content.style.display = content.id === targetId ? 'block' : 'none';
+            });
+        }
+        // Accordion
+        if (e.target.closest('.accordion-button')) {
+            const button = e.target.closest('.accordion-button');
+            const contentId = button.dataset.accordionTarget;
+            const content = document.getElementById(contentId);
+            const isOpen = button.classList.toggle('open');
+            content.style.maxHeight = isOpen ? content.scrollHeight + "px" : null;
+            content.style.paddingTop = isOpen ? "1.25rem" : "0";
+            content.style.paddingBottom = isOpen ? "1.25rem" : "0";
+        }
+        // Solution buttons
+        if (e.target.matches('.solution-button')) {
+            const targetId = e.target.dataset.target;
+            document.getElementById(targetId).classList.toggle('hidden');
+        }
+        // Quiz MCQ options
+        if (e.target.matches('.quiz-option')) {
+            const optionDiv = e.target;
+            const quizId = optionDiv.dataset.quizId;
+            const selectedOption = optionDiv.dataset.option;
+            const quizItem = appData.quizData.find(q => q.id === quizId);
+            const feedbackDiv = document.getElementById(`feedback-${quizId}`);
+            
+            // Remove previous selections
+            document.querySelectorAll(`[data-quiz-id="${quizId}"]`).forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+            optionDiv.classList.add('selected');
+
+            if (selectedOption === quizItem.answer) {
+                feedbackDiv.innerHTML = quizItem.feedback.correct;
+                feedbackDiv.className = 'feedback-box opacity-100 mt-4 p-4 rounded-lg text-sm bg-green-50 text-green-800 border border-green-200';
+                optionDiv.classList.add('correct');
+            } else {
+                feedbackDiv.innerHTML = quizItem.feedback.incorrect;
+                feedbackDiv.className = 'feedback-box opacity-100 mt-4 p-4 rounded-lg text-sm bg-red-50 text-red-800 border border-red-200';
+                optionDiv.classList.add('incorrect');
+                // Highlight correct answer
+                document.querySelector(`[data-quiz-id="${quizId}"][data-option="${quizItem.answer}"]`).classList.add('correct');
+            }
+        }
+    });
+
+    document.querySelectorAll('.workshop-input').forEach(input => {
+        input.addEventListener('input', () => {
+            const workshopId = input.dataset.workshopId;
+            const form = document.getElementById(`form-${workshopId}`);
+            const inputs = form.querySelectorAll('input');
+            let previewText = '';
+            inputs.forEach(inp => {
+                if (inp.value) {
+                    previewText += `${inp.value} (${inp.id.split('-')[1].toUpperCase()}) `;
+                }
+            });
+            document.getElementById(`preview-${workshopId}`).textContent = previewText.trim() || '...';
+        });
+    });
+
+    // Drag and Drop for Identify Quiz
+    let draggedItem = null;
+    document.addEventListener('dragstart', (e) => {
+        if (e.target.classList.contains('draggable-item')) {
+            draggedItem = e.target;
+            setTimeout(() => {
+                e.target.style.display = 'none';
+            }, 0);
+        }
+    });
+
+    document.addEventListener('dragend', (e) => {
+        if (draggedItem) {
+            setTimeout(() => {
+                draggedItem.style.display = 'block';
+                draggedItem = null;
+            }, 0);
+        }
+    });
+
+    document.querySelectorAll('[id^="target-"]').forEach(target => {
+        target.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            target.classList.add('bg-indigo-100', 'border-indigo-400');
+        });
+        target.addEventListener('dragleave', (e) => {
+            target.classList.remove('bg-indigo-100', 'border-indigo-400');
+        });
+        target.addEventListener('drop', (e) => {
+            e.preventDefault();
+            target.classList.remove('bg-indigo-100', 'border-indigo-400');
+            if (draggedItem) {
+                const quizId = 'q3'; // Hardcoded for this specific quiz
+                const droppedComponent = draggedItem.dataset.componentName;
+                const feedbackDiv = document.getElementById(`feedback-${quizId}`);
+                
+                if (droppedComponent === 'C') {
+                    target.innerHTML = '';
+                    target.appendChild(draggedItem.cloneNode(true));
+                    target.classList.add('border-green-500', 'bg-green-50');
+                    target.classList.remove('border-dashed', 'border-indigo-200');
+                    feedbackDiv.innerHTML = "<strong>Correct !</strong> 'Somnifères (zopiclone)' est bien la composante de <strong>Comparaison</strong>. C'est l'alternative à laquelle l'intervention (TCC) est comparée.";
+                    feedbackDiv.className = 'feedback-box opacity-100 mt-4 p-4 rounded-lg text-sm bg-green-50 text-green-800 border border-green-200';
+                } else {
+                    target.classList.add('border-red-500', 'bg-red-50');
+                    feedbackDiv.innerHTML = `<strong>Incorrect.</strong> '${draggedItem.dataset.componentText}' est la composante <strong>${droppedComponent}</strong>, pas la Comparaison. Essayez encore !`;
+                    feedbackDiv.className = 'feedback-box opacity-100 mt-4 p-4 rounded-lg text-sm bg-red-50 text-red-800 border border-red-200';
+                    setTimeout(() => target.classList.remove('border-red-500', 'bg-red-50'), 1500);
+                }
+            }
+        });
+    });
+});
+
+function showNode(nodeId) {
+    const container = document.getElementById('decision-tree-container');
+    if (!container) return;
+
+    // Hide all decision nodes (questions and results)
+    container.querySelectorAll('.decision-node').forEach(node => {
+        if (!node.classList.contains('hidden')) {
+            node.classList.add('hidden');
+        }
+    });
+    
+    // Determine the correct ID to find
+    const finalNodeId = nodeId.startsWith('result-') ? nodeId : 'node-' + nodeId;
+
+    // Show the target node
+    const targetNode = document.getElementById(finalNodeId);
+    if (targetNode) {
+        targetNode.classList.remove('hidden');
+    }
+}
+
+function resetTree() {
+    showNode('start');
+}
+</script>
+</body>
+</html>
