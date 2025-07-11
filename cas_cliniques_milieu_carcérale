@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sensibilisation Santé Mentale en Milieu Pénitentiaire</title>
+    
+    <!-- Inclusion de Tailwind CSS pour le style -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Inclusion de Lucide pour les icônes -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* S'assure que le footer reste en bas */
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            font-family: sans-serif;
+            background-color: #f8fafc; /* bg-slate-50 */
+        }
+        main {
+            flex-grow: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Le contenu de l'application sera injecté ici par JavaScript -->
+    <div id="app-root"></div>
+
+    <!-- Pied de page fixe -->
+    <footer class="bg-slate-900 text-slate-300 text-sm border-t border-slate-700 py-6 px-4">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center md:items-start justify-between gap-6">
+    
+            <!-- LOGO GAUCHE : VINATIER -->
+            <div class="flex-shrink-0">
+                <a href="https://www.ch-le-vinatier.fr" target="_blank" rel="noopener noreferrer">
+                    <img class="h-20 md:h-24 w-auto"
+                         src="https://www.interstices-auvergnerhonealpes.fr/images/2024/LEVINATIER_LOGO_CMJN_POSITIF.jpg"
+                         alt="Logo CH Le Vinatier"
+                         onerror="this.onerror=null;this.src='https://placehold.co/96x96/1e293b/ffffff?text=Logo';">
+                </a>
+            </div>
+    
+            <!-- TEXTE CENTRAL -->
+            <div class="flex-1 text-center md:text-left space-y-2">
+                <p>Dr FENOHASINA T.J. Felicien (Psychiatre)</p>
+                <p>ASSOCIATION PSYKÔZY MADAGASCAR</p>
+                <p>Dr FREDERIC Meunier (Psychiatre)</p>
+                <p>CH - LE VINATIER</p>
+                <div class="flex items-center justify-center md:justify-start gap-2">
+                    <img class="h-5 w-auto"
+                         src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Cc-by-nc-sa_icon.svg/120px-Cc-by-nc-sa_icon.svg.png"
+                         alt="Icône Creative Commons BY-NC-SA"
+                         onerror="this.onerror=null;this.src='https://placehold.co/20x20/1e293b/ffffff?text=CC';">
+                    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr"
+                       target="_blank" rel="noopener noreferrer"
+                       class="underline hover:text-white">Licence CC BY-NC-SA 4.0</a> –
+                    Dernière mise à jour : 04 juillet 2025.
+                </div>
+            </div>
+    
+            <!-- LOGOS DROITS : CRR -->
+            <div class="flex items-center gap-6 flex-shrink-0">
+                <a href="https://www.facebook.com/Psykozy?locale=fr_FR" target="_blank" rel="noopener noreferrer">
+                    <img class="h-16 md:h-20 w-auto"
+                         src="https://cdn-assets.inwink.com/fe065c87-0643-42fc-8b5d-4d94b5d12c11/a1904f78-1bca-466d-a9f4-8ac9fde06c0c"
+                         alt="Logo Psy-kôzy"
+                         onerror="this.onerror=null;this.src='https://placehold.co/80x80/1e293b/ffffff?text=Logo';">
+                </a>
+                <a href="https://centre-ressource-rehabilitation.org" target="_blank" rel="noopener noreferrer">
+                    <img class="h-16 md:h-20 w-auto"
+                         src="https://faustinebrunet.com/images/RS/creation-nouveau-logo-domaine-sante-mentale.jpg"
+                         alt="Logo Centre Ressource Réhabilitation"
+                         onerror="this.onerror=null;this.src='https://placehold.co/80x80/1e293b/ffffff?text=Logo';">
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- Données des cas cliniques ---
+        const caseData = {
+            internalized: {
+                id: 'internalized',
+                name: 'Koto',
+                title: 'Cas 1 : Le silence de Koto (Trouble Intériorisé)',
+                icon: '<i data-lucide="user" class="w-12 h-12 mx-auto text-blue-500"></i>',
+                description: `Koto, 35 ans, est incarcéré depuis deux ans. Connu pour être habituellement calme et respectueux, son comportement a changé ces derniers mois. Il reste prostré sur sa natte toute la journée, refuse de participer aux promenades et aux activités. Il a beaucoup maigri et néglige son hygiène. Quand on lui parle, il répond à peine, le regard vide. Il a confié à un co-détenu que "tout est fini" pour lui et qu'il ne reverra jamais sa famille.`,
+                warningSigns: ["Isolement social volontaire et retrait.", "Perte d'appétit et de poids visible.", "Négligence de l'hygiène personnelle.", "Tristesse profonde, regard vide, absence d'émotion (apathie).", "Discours pessimiste, idées noires, sentiment de désespoir.", "Grande fatigue, mouvements lents."],
+                discussionPoints: ["Avez-vous déjà observé un changement de comportement aussi radical chez un détenu ?", "Quelle est la différence entre une simple 'déprime' et ce que Koto semble vivre ?", "Quels facteurs dans l'environnement carcéral pourraient aggraver cet état ?", "Comment notre propre perception de la 'force mentale' peut-elle influencer notre réaction face à Koto ?"],
+                whatToDo: ["Tenter une approche calme et sans jugement. Ex: 'Koto, j'ai remarqué que tu n'allais pas bien ces temps-ci. Est-ce que tu veux en parler ?'", "Ne pas le forcer à parler, mais lui montrer qu'on est présent.", "Signaler systématiquement et précisément la situation à un supérieur et/ou au personnel médical, même si vous n'êtes pas soignant.", "Encourager les petites actions sans le forcer (ex: 'viens juste t'asseoir avec nous dehors').", "Ne jamais banaliser les propos sur le désespoir ou la mort."]
+            },
+            externalized: {
+                id: 'externalized',
+                name: 'Fara',
+                title: 'Cas 2 : La colère de Fara (Trouble Extériorisé)',
+                icon: '<i data-lucide="user" class="w-12 h-12 mx-auto text-red-500"></i>',
+                description: `Fara, 28 ans, est détenue depuis six mois. Elle a toujours eu un caractère 'difficile', mais son comportement est de plus en plus problématique. Pour des frustrations mineures (un objet déplacé, une remarque), elle entre dans des colères explosives et disproportionnées. Elle crie, insulte, et a déjà jeté son bol contre un mur. Ces crises sont intenses et soudaines. Après, elle semble parfois regretter, mais le cycle recommence rapidement, créant une tension permanente dans sa cellule.`,
+                warningSigns: ["Irritabilité constante et 'à fleur de peau'.", "Réactions de colère soudaines, intenses et disproportionnées par rapport au déclencheur.", "Agressivité verbale (insultes, menaces) ou physique (envers des objets ou des personnes).", "Difficulté ou incapacité à se calmer une fois la crise démarrée.", "Tension corporelle visible avant une explosion (poings serrés, mâchoire contractée).", "Répétition de ce schéma de crises."],
+                discussionPoints: ["Comment distinguer ce comportement d'un simple 'mauvais caractère' ou d'une provocation ?", "Quels peuvent être les déclencheurs de ces crises dans le quotidien de la prison ?", "Quel est l'impact de ce comportement sur la sécurité du personnel et des autres détenus ?", "Comment nos propres émotions (peur, colère) peuvent-elles influencer notre gestion de la situation ?"],
+                whatToDo: ["Garder son calme et ne pas répondre à la provocation. Parler d'une voix posée et basse.", "Assurer la sécurité : la sienne, celle des autres détenus. Si besoin, isoler la personne ou éloigner les autres.", "Utiliser des phrases courtes et claires. Ne pas argumenter pendant la crise.", "Une fois la crise passée, essayer de comprendre ce qui s'est passé (sans la juger).", "Signaler systématiquement chaque incident pour un suivi et une évaluation médicale ou psychologique."]
+            }
+        };
+
+        const appRoot = document.getElementById('app-root');
+
+        // --- Fonctions de rendu ---
+
+        function renderHomePage() {
+            appRoot.innerHTML = `
+                <main class="flex-grow p-4 sm:p-6 md:p-8">
+                    <div class="max-w-4xl mx-auto">
+                        <header class="text-center mb-10">
+                            <h1 class="text-3xl sm:text-4xl font-bold text-slate-800">Santé Mentale en Milieu Pénitentiaire</h1>
+                            <p class="text-lg text-slate-600 mt-2">Outil de sensibilisation pour le personnel</p>
+                        </header>
+                        <div class="text-center bg-white p-6 rounded-lg shadow-md border border-gray-200 mb-10">
+                            <p class="text-gray-700">
+                                Cet outil présente deux cas fictifs pour vous aider à mieux reconnaître les signes de souffrance psychique chez les personnes détenues et à initier la discussion sur les meilleures manières de réagir. Choisissez un cas pour commencer.
+                            </p>
+                        </div>
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div id="select-internalized" class="bg-white p-6 rounded-lg shadow-lg border border-transparent hover:border-blue-500 hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col text-center">
+                                ${caseData.internalized.icon}
+                                <h2 class="text-2xl font-bold text-blue-800 mt-4">${caseData.internalized.name}</h2>
+                                <p class="text-gray-600 mb-4">(Trouble Intériorisé)</p>
+                                <p class="flex-grow text-gray-700">Explorez le cas d'un détenu qui se replie sur lui-même, montrant des signes de dépression et de désespoir.</p>
+                                <button class="mt-6 w-full bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors">Voir le cas de ${caseData.internalized.name}</button>
+                            </div>
+                            <div id="select-externalized" class="bg-white p-6 rounded-lg shadow-lg border border-transparent hover:border-red-500 hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col text-center">
+                                ${caseData.externalized.icon}
+                                <h2 class="text-2xl font-bold text-red-800 mt-4">${caseData.externalized.name}</h2>
+                                <p class="text-gray-600 mb-4">(Trouble Extériorisé)</p>
+                                <p class="flex-grow text-gray-700">Analysez la situation d'une détenue ayant des réactions de colère explosives et une grande impulsivité.</p>
+                                <button class="mt-6 w-full bg-red-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-600 transition-colors">Voir le cas de ${caseData.externalized.name}</button>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            `;
+            // Ajout des écouteurs d'événements
+            document.getElementById('select-internalized').addEventListener('click', () => renderCasePage('internalized'));
+            document.getElementById('select-externalized').addEventListener('click', () => renderCasePage('externalized'));
+            lucide.createIcons(); // Transformer les balises <i> en icônes SVG
+        }
+
+        function renderCasePage(caseId) {
+            const caseInfo = caseData[caseId];
+            const colorClass = caseId === 'internalized' ? 'blue' : 'red';
+
+            const listToHtml = (items) => items.map(item => `<li class="list-disc list-inside">${item}</li>`).join('');
+
+            appRoot.innerHTML = `
+                <main class="flex-grow p-4 sm:p-6 md:p-8">
+                    <div class="max-w-3xl mx-auto bg-white rounded-xl shadow-lg p-6 sm:p-8 border border-gray-200">
+                        <button id="back-button" class="flex items-center text-sm font-medium text-blue-600 hover:text-blue-800 mb-6 transition-colors">
+                            <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
+                            Retour à la sélection
+                        </button>
+                        <header class="text-center mb-8">
+                            <h1 class="text-3xl font-bold text-${colorClass}-800">${caseInfo.title}</h1>
+                        </header>
+                        <section>
+                            <div class="mb-6 bg-slate-50 p-4 rounded-lg border border-slate-200">
+                                <p class="text-gray-800 leading-relaxed">${caseInfo.description}</p>
+                            </div>
+                            
+                            <div class="mb-6">
+                                <h3 class="text-xl font-semibold text-gray-800 flex items-center mb-3"><i data-lucide="alert-triangle" class="w-6 h-6 text-${colorClass}-600 mr-3"></i>Signes d'Alerte</h3>
+                                <ul class="space-y-2 text-gray-700">${listToHtml(caseInfo.warningSigns)}</ul>
+                            </div>
+                            
+                            <div class="mb-6">
+                                <h3 class="text-xl font-semibold text-gray-800 flex items-center mb-3"><i data-lucide="help-circle" class="w-6 h-6 text-gray-600 mr-3"></i>Pistes de Discussion</h3>
+                                <ul class="space-y-2 text-gray-700">${listToHtml(caseInfo.discussionPoints)}</ul>
+                            </div>
+
+                            <div>
+                                <h3 class="text-xl font-semibold text-gray-800 flex items-center mb-3"><i data-lucide="check-circle" class="w-6 h-6 text-green-600 mr-3"></i>Conduite à Tenir</h3>
+                                <ul class="space-y-2 text-gray-700">${listToHtml(caseInfo.whatToDo)}</ul>
+                            </div>
+                        </section>
+                    </div>
+                </main>
+            `;
+            // Ajout de l'écouteur d'événement pour le bouton retour
+            document.getElementById('back-button').addEventListener('click', renderHomePage);
+            lucide.createIcons(); // Transformer les balises <i> en icônes SVG
+        }
+
+        // --- Lancement de l'application ---
+        document.addEventListener('DOMContentLoaded', renderHomePage);
+
+    </script>
+
+</body>
+</html>
