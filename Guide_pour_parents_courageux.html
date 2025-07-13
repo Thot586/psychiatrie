@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Naviguer l'Adolescence : Guide pour Parents Courageux</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Harmony -->
+    <!-- Application Structure Plan: Conception d'une application à page unique (SPA) avec une navigation par onglets pour un accès non-linéaire. Cette structure de "tableau de bord" ou "boîte à outils" est choisie pour permettre aux parents stressés de trouver rapidement des solutions à leurs problèmes spécifiques (ex: écrans, sorties) sans avoir à lire un long document linéaire. Le flux est conçu pour passer de la compréhension (Pourquoi mon ado agit-il ainsi ?) à l'action (Que puis-je faire ?), avec des modules dédiés à l'auto-régulation du parent, la pose du cadre, et la gestion des conflits concrets. Cette architecture modulaire est plus digeste et orientée solution, ce qui est crucial pour le public cible. -->
+    <!-- Visualization & Content Choices: 
+        - Introduction: Texte simple pour définir le ton.
+        - Comprendre l'Ado (Cerveau): Diagramme HTML/CSS (divs colorées) pour représenter le cortex préfrontal et le système limbique. Objectif: simplifier un concept neuroscientifique complexe sans utiliser d'images ou de SVG. Interaction: hover pour afficher les détails.
+        - Comprendre l'Ado (Iceberg): Chart.js (graphique à barres empilées) pour visualiser le concept de l'iceberg. Objectif: transformer un tableau statique en un outil dynamique. Interaction: un menu déroulant permet de sélectionner un comportement, ce qui met à jour dynamiquement le graphique et le texte explicatif, rendant la connexion cause-conséquence plus évidente.
+        - Gérer mes Émotions: Cartes interactives (HTML/CSS/JS) qui se retournent ou s'ouvrent au clic pour révéler des conseils et des phrases types. Objectif: rendre l'auto-réflexion plus engageante.
+        - Poser le Cadre (Murs/Jardin): Diagramme visuel en HTML/CSS pour représenter le concept. Des zones cliquables distinctes pour "Les Murs" (non-négociables) et "Le Jardin" (négociables) affichent des exemples concrets. Objectif: clarifier une métaphore centrale du guide.
+        - Boîte à Outils: Système d'onglets ou d'accordéons pour les études de cas (écrans, sorties). Objectif: fournir des guides pas-à-pas clairs et actionnables.
+        - Alliance Parentale: Contenu textuel structuré avec des cartes pour les phrases-types. Objectif: présenter clairement les stratégies de communication.
+        - Justification: Tous les choix visent à fragmenter l'information, à la rendre interactive et moins intimidante, et à transformer les concepts théoriques en outils pratiques et visuels. L'utilisation de Chart.js est limitée à un seul graphique clé pour ne pas surcharger la page.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+        .nav-item { transition: all 0.3s ease; }
+        .nav-item.active {
+            background-color: #2563eb; /* bg-blue-700 */
+            color: #ffffff; /* text-white */
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .content-section { display: none; }
+        .content-section.active { display: block; }
+        .interactive-card { transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; border: 1px solid transparent; }
+        .interactive-card:hover { transform: translateY(-4px); box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); border-color: #93c5fd; }
+        .fade-in { animation: fadeIn 0.6s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        .outil-tab.active { border-color: #2563eb; color: #1e3a8a; }
+    </style>
+</head>
+<body class="bg-gray-100 text-slate-800">
+
+    <div class="container mx-auto px-4 py-8 sm:px-6 lg:px-8">
+        
+        <header class="text-center mb-10">
+            <h1 class="text-4xl md:text-5xl font-bold text-slate-900 tracking-tight">Naviguer l'Adolescence</h1>
+            <p class="mt-3 text-lg text-slate-600 max-w-2xl mx-auto">Un guide pratique et bienveillant pour parents courageux</p>
+        </header>
+
+        <nav class="flex flex-wrap justify-center gap-3 md:gap-4 mb-10">
+            <button data-target="intro" class="nav-item active font-medium py-2 px-5 rounded-full text-sm md:text-base">Introduction</button>
+            <button data-target="comprendre" class="nav-item font-medium py-2 px-5 rounded-full text-sm md:text-base bg-white hover:bg-blue-100 text-slate-700">Comprendre</button>
+            <button data-target="parent" class="nav-item font-medium py-2 px-5 rounded-full text-sm md:text-base bg-white hover:bg-blue-100 text-slate-700">Moi, Parent</button>
+            <button data-target="cadre" class="nav-item font-medium py-2 px-5 rounded-full text-sm md:text-base bg-white hover:bg-blue-100 text-slate-700">Le Cadre</button>
+            <button data-target="outils" class="nav-item font-medium py-2 px-5 rounded-full text-sm md:text-base bg-white hover:bg-blue-100 text-slate-700">Boîte à Outils</button>
+            <button data-target="alliance" class="nav-item font-medium py-2 px-5 rounded-full text-sm md:text-base bg-white hover:bg-blue-100 text-slate-700">Alliance</button>
+        </nav>
+
+        <main id="main-content" class="bg-white rounded-2xl shadow-xl p-6 sm:p-8 md:p-12">
+
+            <section id="intro" class="content-section active fade-in">
+                <div class="space-y-6">
+                    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-5 rounded-r-lg">
+                        <h3 class="font-bold text-yellow-800">Pour Sigolene R.</h3>
+                        <p class="mt-2 text-yellow-900">À l'occasion de ton anniversaire. Pour la femme intelligente, courageuse et battante que tu es, qui gère tant de choses avec une force admirable.</p>
+                    </div>
+
+                    <div class="bg-sky-50 border-l-4 border-sky-400 p-5 rounded-r-lg">
+                        <h3 class="font-bold text-sky-800">Avant de commencer...</h3>
+                        <p class="mt-2 text-sky-900 leading-relaxed">Naviguer l'adolescence est un parcours profondément personnel et complexe. Ce guide n'est pas une solution miracle ni une parole d'expert. C'est une humble boîte à outils, une collection de pistes de réflexion inspirées de la psychologie, conçue pour vous aider à trouver vos propres réponses et à préserver ce qui compte le plus : le lien avec votre enfant.</p>
+                    </div>
+                </div>
+
+                <div class="mt-8">
+                    <h2 class="text-3xl font-bold mb-5 text-blue-700">L'Objectif de ce Guide : Retrouver le Cap</h2>
+                    <div class="space-y-4 text-slate-700 leading-relaxed">
+                        <p>Cette période de "crise" n'est pas un échec, mais une transition normale. Le cerveau de votre adolescent est en plein remodelage : son moteur émotionnel est à fond, tandis que ses freins (le contrôle, la raison) sont encore en développement. C'est comme avoir une voiture de course avec des freins de vélo.</p>
+                        <p>Ce guide propose de voir les conflits non comme des échecs, mais comme des opportunités pour faire évoluer votre relation vers un modèle plus adulte. Il vise à vous offrir des outils concrets pour mieux comprendre, communiquer différemment et, surtout, préserver le lien qui vous unit.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="comprendre" class="content-section fade-in">
+                <h2 class="text-3xl font-bold mb-5 text-blue-700">Décoder le Message de l'Adolescent</h2>
+                <p class="mb-8 text-slate-600 leading-relaxed">Le comportement visible de votre adolescent n'est que la pointe d'un iceberg. Pour vraiment comprendre, il faut regarder ce qui se cache sous la surface : ses émotions et, plus profondément, ses besoins fondamentaux non satisfaits. Cette section vous aide à devenir un détective bienveillant.</p>
+
+                <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                    <h3 class="font-bold text-xl mb-4 text-slate-800">L'Iceberg des Comportements : Que se cache-t-il dessous ?</h3>
+                    <p class="mb-4 text-slate-600">Choisissez un comportement pour voir ce qu'il peut cacher.</p>
+                    <select id="iceberg-selector" class="w-full md:w-1/2 p-3 border border-slate-300 rounded-lg mb-6 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="insolence">Insolence / Agressivité</option>
+                        <option value="repli">Repli sur soi / Isolement</option>
+                        <option value="transgression">Transgression des règles</option>
+                        <option value="apathie">Apathie / "Paresse" scolaire</option>
+                    </select>
+
+                    <div class="lg:flex lg:gap-8 items-center">
+                        <div class="lg:w-1/2">
+                           <div class="w-full max-w-md mx-auto h-64 sm:h-80 lg:h-full">
+                                <canvas id="icebergChart"></canvas>
+                           </div>
+                        </div>
+                        <div id="iceberg-explanation" class="lg:w-1/2 mt-6 lg:mt-0 space-y-4">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="parent" class="content-section fade-in">
+                <h2 class="text-3xl font-bold mb-5 text-blue-700">Le Capitaine d'Abord : Gérer ses Propres Émotions</h2>
+                <p class="mb-8 text-slate-600 leading-relaxed">Avant de pouvoir calmer la tempête de votre ado, vous devez tenir la barre de votre propre navire. Votre colère cache souvent de la peur, de la tristesse ou un sentiment d'impuissance. Apprendre à faire une pause est votre super-pouvoir.</p>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="interactive-card bg-amber-50 p-6 rounded-xl border-amber-200">
+                        <h3 class="font-bold text-xl text-amber-800 mb-3">La Pause Stratégique</h3>
+                        <p class="mb-4 text-amber-900 leading-relaxed">Quand la tension monte, ne réagissez pas à chaud. Annoncez calmement votre besoin de faire une pause. Cela casse l'escalade et montre l'exemple.</p>
+                        <p class="font-semibold text-slate-700">Phrase-type à utiliser :</p>
+                        <blockquote class="border-l-4 border-amber-500 pl-4 py-3 bg-white rounded-r-lg mt-2 text-slate-800">"Là, je sens que je m'énerve. J'ai besoin de 5 minutes pour me calmer. On en reparle après."</blockquote>
+                    </div>
+                    <div class="interactive-card bg-sky-50 p-6 rounded-xl border-sky-200">
+                        <h3 class="font-bold text-xl text-sky-800 mb-3">Le Mantra du Parent-Phare</h3>
+                        <p class="mb-4 text-sky-900 leading-relaxed">Le comportement de votre ado n'est pas une attaque personnelle. C'est sa tentative, souvent maladroite, de construire sa propre identité.</p>
+                        <p class="font-semibold text-slate-700">Phrase-type à se dire :</p>
+                        <blockquote class="border-l-4 border-sky-500 pl-4 py-3 bg-white rounded-r-lg mt-2 text-slate-800">"Ce n'est pas contre moi. C'est pour lui. Mon rôle est d'être un phare stable dans sa tempête."</blockquote>
+                    </div>
+                </div>
+            </section>
+
+            <section id="cadre" class="content-section fade-in">
+                <h2 class="text-3xl font-bold mb-5 text-blue-700">Le Cadre : Allier Fermeté et Souplesse</h2>
+                <p class="mb-8 text-slate-600 leading-relaxed">Un cadre bienveillant est la clé : il est composé de murs solides (les non-négociables) et d'un grand jardin (la liberté). Les murs offrent la sécurité, le jardin nourrit l'autonomie. L'un ne va pas sans l'autre.</p>
+                
+                <div class="w-full bg-slate-50 rounded-xl p-6 border border-slate-200">
+                    <div id="murs-jardin" class="border-8 border-slate-800 rounded-lg p-3 md:p-5 bg-green-50" role="img" aria-label="Diagramme du Jardin et des Murs">
+                        <div class="text-center mb-3">
+                             <h3 class="font-bold text-slate-900 text-xl">LES MURS (Fermeté)</h3>
+                             <p class="text-sm text-slate-600">Principes non-négociables qui assurent la sécurité.</p>
+                        </div>
+                        <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 text-center text-xs sm:text-sm font-semibold text-white">
+                            <div class="bg-slate-700 p-3 rounded-md">Sécurité physique & morale</div>
+                            <div class="bg-slate-700 p-3 rounded-md">Santé & Hygiène</div>
+                            <div class="bg-slate-700 p-3 rounded-md">Respect fondamental</div>
+                            <div class="bg-slate-700 p-3 rounded-md">Obligations légales</div>
+                        </div>
+                        
+                        <div class="bg-green-100/70 rounded-lg m-2 md:m-4 p-4 sm:p-6">
+                             <div class="text-center mb-4">
+                                <h3 class="font-bold text-green-900 text-xl">LE JARDIN (Souplesse)</h3>
+                                <p class="text-sm text-green-800">Espace de liberté et de négociation pour grandir.</p>
+                            </div>
+                            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 text-center">
+                                <div class="interactive-card bg-white p-3 rounded-lg shadow-sm cursor-pointer text-green-900">Style vestimentaire</div>
+                                <div class="interactive-card bg-white p-3 rounded-lg shadow-sm cursor-pointer text-green-900">Choix musicaux</div>
+                                <div class="interactive-card bg-white p-3 rounded-lg shadow-sm cursor-pointer text-green-900">Déco de la chambre</div>
+                                <div class="interactive-card bg-white p-3 rounded-lg shadow-sm cursor-pointer text-green-900">Organisation loisirs</div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 text-center">
+                            <p class="font-semibold text-slate-700">Tenir bon sur un mur est sécurisant. Céder dans le jardin est reconnaissant.</p>
+                            <blockquote class="border-l-4 border-slate-500 pl-4 py-3 bg-slate-200 rounded-r-lg mt-3 text-left max-w-3xl mx-auto text-slate-800">
+                                <span class="font-bold">Pour tenir bon sur un mur :</span> "Je comprends ta frustration, mais sur ce point (ex: ta sécurité), ma décision est non. Ma responsabilité de parent est de te protéger, même si ça te déplaît."
+                            </blockquote>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+            
+            <section id="outils" class="content-section fade-in">
+                <h2 class="text-3xl font-bold mb-5 text-blue-700">Boîte à Outils : Gérer les Conflits Majeurs</h2>
+                <p class="mb-8 text-slate-600 leading-relaxed">Appliquons les principes vus précédemment à des situations concrètes. Voici des stratégies pour transformer les champs de bataille habituels en terrains de collaboration.</p>
+                <div class="border-b border-slate-200 mb-6">
+                    <nav class="-mb-px flex gap-6" aria-label="Tabs">
+                        <button class="outil-tab active whitespace-nowrap py-4 px-1 border-b-2 font-semibold text-base" data-target="outil-ecrans">Gestion des Écrans</button>
+                        <button class="outil-tab whitespace-nowrap py-4 px-1 border-b-2 border-transparent font-semibold text-slate-500 hover:text-slate-700 hover:border-slate-300 text-base" data-target="outil-sorties">Sorties & Permissions</button>
+                    </nav>
+                </div>
+
+                <div id="outil-ecrans" class="outil-content active space-y-6">
+                    <h3 class="text-2xl font-bold">De l'Imposition à la Co-construction</h3>
+                    <p class="leading-relaxed">Imposer des règles unilatérales mène à la guérilla. La meilleure approche est de co-construire une "charte" ensemble. L'objectif est de passer du contrôle à la collaboration.</p>
+                    <div class="bg-blue-50 p-6 rounded-xl border border-blue-200">
+                        <p class="font-semibold text-blue-800 mb-2">Phrase-type pour ouvrir le dialogue :</p>
+                        <blockquote class="border-l-4 border-blue-500 pl-4 py-3 bg-white rounded-r-lg text-slate-800">"Les écrans font partie de ta vie, je le comprends. J'ai besoin qu'on trouve ensemble un équilibre pour que ça ne nuise ni à ton sommeil, ni à tes études. Quelles sont tes propositions ?"</blockquote>
+                    </div>
+                     <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                        <h4 class="font-bold mb-3 text-slate-800">Règles claires à proposer lors de la discussion :</h4>
+                        <ul class="list-disc list-inside space-y-2 text-slate-700">
+                            <li><span class="font-semibold text-slate-800">Zones sans écrans :</span> Pas d'écrans à table.</li>
+                            <li><span class="font-semibold text-slate-800">Chargement nocturne :</span> Les téléphones chargent hors de la chambre la nuit (règle "mur" pour protéger le sommeil).</li>
+                            <li><span class="font-semibold text-slate-800">"Budget temps" :</span> Négocier un temps hebdomadaire pour les loisirs numériques qu'il gère en autonomie.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="outil-sorties" class="outil-content hidden space-y-6">
+                     <h3 class="text-2xl font-bold">Le Contrat de Confiance Progressive</h3>
+                    <p class="leading-relaxed">La confiance ne se décrète pas, elle se construit. Mettez en place un système de paliers clairs : si un petit engagement est respecté, l'autonomie est élargie.</p>
+                     <div class="bg-amber-50 p-6 rounded-xl border border-amber-200">
+                        <p class="font-semibold text-amber-800 mb-2">Phrase-type pour un premier palier :</p>
+                        <blockquote class="border-l-4 border-amber-500 pl-4 py-3 bg-white rounded-r-lg text-slate-800">"Pour cette soirée, l'heure de retour est fixée à 23h. Si tout se passe comme convenu (tu rentres à l'heure, tu réponds à mon SMS), alors pour la prochaine fois, nous pourrons discuter d'un horaire plus tardif."</blockquote>
+                    </div>
+                     <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                        <h4 class="font-bold mb-3 text-slate-800">En cas d'infraction au contrat :</h4>
+                         <p class="leading-relaxed text-slate-700">La conséquence doit être logique, non une punition. C'est l'application d'une clause du contrat.</p>
+                        <blockquote class="border-l-4 border-slate-500 pl-4 py-3 bg-white rounded-r-lg mt-2 text-slate-800">"Nous avions un accord qui n'a pas été respecté. Comme discuté, nous revenons donc au palier de confiance précédent. C'est à toi de me montrer que je peux à nouveau te faire confiance."</blockquote>
+                    </div>
+                </div>
+            </section>
+
+            <section id="alliance" class="content-section fade-in">
+                <h2 class="text-3xl font-bold mb-5 text-blue-700">Faire Équipe : L'Alliance Parentale</h2>
+                <p class="mb-8 text-slate-600 leading-relaxed">Le manque de cohérence entre parents est une source majeure d'instabilité pour l'adolescent. Il est crucial de présenter un front commun, même si vous n'êtes pas toujours d'accord. Les désaccords se règlent "en coulisses".</p>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="interactive-card bg-green-50 p-6 rounded-xl border-green-200">
+                        <h3 class="font-bold text-xl text-green-800 mb-3">La Règle des Coulisses</h3>
+                        <p class="mb-4 text-green-900 leading-relaxed">Si vous êtes en désaccord "à chaud", un parent doit temporiser. Ne vous contredisez jamais devant l'ado.</p>
+                        <p class="font-semibold text-slate-700">Phrase-type pour temporiser :</p>
+                        <blockquote class="border-l-4 border-green-500 pl-4 py-3 bg-white rounded-r-lg mt-2 text-slate-800">"J'entends la réponse de ton père/ta mère. Laisse-nous un moment pour en discuter. On te donnera notre décision commune."</blockquote>
+                    </div>
+                    <div class="interactive-card bg-sky-50 p-6 rounded-xl border-sky-200">
+                        <h3 class="font-bold text-xl text-sky-800 mb-3">Dialoguer avec son Partenaire</h3>
+                        <p class="mb-4 text-sky-900 leading-relaxed">Pour discuter du désaccord en privé, utilisez la Communication Non Violente (CNV) pour éviter les reproches.</p>
+                        <p class="font-semibold text-slate-700">Phrase-type pour initier le dialogue :</p>
+                        <blockquote class="border-l-4 border-sky-500 pl-4 py-3 bg-white rounded-r-lg mt-2 text-slate-800">"J'ai besoin qu'on soit une équipe. Quand tu as dit 'oui', je me suis senti(e) sapé(e). Pouvons-nous nous accorder avant de répondre à l'avenir ?"</blockquote>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <footer class="text-center mt-12 text-slate-500 text-sm">
+            <p>Cet outil est inspiré des principes de la psychologie du développement, de la thérapie systémique et de la Communication Non Violente.</p>
+            <p class="mt-1">L'objectif final n'est pas de "gagner" les batailles, mais de maintenir un lien de confiance et d'amour.</p>
+            <p class="mt-4 font-semibold text-slate-600">Felicien F.</p>
+        </footer>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const navItems = document.querySelectorAll('.nav-item');
+    const contentSections = document.querySelectorAll('.content-section');
+
+    navItems.forEach(item => {
+        item.addEventListener('click', () => {
+            const targetId = item.dataset.target;
+
+            navItems.forEach(nav => {
+                nav.classList.remove('active');
+                if (!nav.classList.contains('bg-white')) {
+                    nav.classList.add('bg-white', 'text-slate-700', 'hover:bg-blue-100');
+                }
+            });
+            item.classList.add('active');
+            item.classList.remove('bg-white', 'text-slate-700', 'hover:bg-blue-100');
+
+
+            contentSections.forEach(section => {
+                if (section.id === targetId) {
+                    section.classList.add('active');
+                    section.classList.add('fade-in');
+                } else {
+                    section.classList.remove('active');
+                    section.classList.remove('fade-in');
+                }
+            });
+            
+            // Scroll to the top of the main content for better UX on mobile
+            document.getElementById('main-content').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+
+    const outilTabs = document.querySelectorAll('.outil-tab');
+    const outilContents = document.querySelectorAll('.outil-content');
+
+    outilTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const targetClass = tab.dataset.target;
+
+            outilTabs.forEach(t => {
+                t.classList.remove('active', 'text-blue-700', 'border-blue-600');
+                t.classList.add('border-transparent', 'text-slate-500', 'hover:text-slate-700', 'hover:border-slate-300');
+            });
+            tab.classList.add('active', 'text-blue-700', 'border-blue-600');
+            tab.classList.remove('border-transparent', 'text-slate-500', 'hover:text-slate-700', 'hover:border-slate-300');
+
+            outilContents.forEach(content => {
+                content.classList.add('hidden');
+                content.classList.remove('active');
+                if (content.id === targetClass) {
+                    content.classList.remove('hidden');
+                    content.classList.add('active');
+                }
+            });
+        });
+    });
+
+    const icebergData = {
+        insolence: {
+            labels: ["Besoin d'Autonomie", "Sentiment d'injustice", "Insolence"],
+            explanation: `
+                <h4 class="font-bold text-lg text-slate-800">Derrière l'insolence :</h4>
+                <div class="space-y-2 leading-relaxed">
+                    <p><strong class="text-slate-600">Émotions/Pensées :</strong> Colère, frustration, sentiment d'être contrôlé. "On me traite comme un gamin."</p>
+                    <p><strong class="text-slate-600">Besoins Fondamentaux :</strong> Un grand <strong class="text-blue-600">besoin d'autonomie</strong>, de respect et de reconnaissance.</p>
+                    <p class="mt-4 font-semibold text-slate-700">Phrase-type d'écoute active :</p>
+                    <blockquote class="border-l-4 border-blue-500 pl-4 py-3 bg-white rounded-r-lg text-slate-800">"Je vois que tu es très en colère. J'ai l'impression que tu te sens contrôlé(e) et pas respecté(e). C'est ça ?"</blockquote>
+                </div>`
+        },
+        repli: {
+            labels: ["Besoin de Sécurité", "Peur / Tristesse", "Repli sur soi"],
+            explanation: `
+                <h4 class="font-bold text-lg text-slate-800">Derrière le repli :</h4>
+                 <div class="space-y-2 leading-relaxed">
+                    <p><strong class="text-slate-600">Émotions/Pensées :</strong> Tristesse, honte, anxiété, peur de l'échec. "Je suis nul(le)."</p>
+                    <p><strong class="text-slate-600">Besoins Fondamentaux :</strong> Un <strong class="text-blue-600">besoin de compétence</strong> (se sentir capable), de sécurité et d'acceptation.</p>
+                    <p class="mt-4 font-semibold text-slate-700">Phrase-type d'écoute active :</p>
+                    <blockquote class="border-l-4 border-blue-500 pl-4 py-3 bg-white rounded-r-lg text-slate-800">"J'ai l'impression que tu es vraiment triste en ce moment. Est-ce que tu as peur de ne pas être à la hauteur ?"</blockquote>
+                </div>`
+        },
+        transgression: {
+            labels: ["Besoin d'Appartenance", "Besoin d'impressionner", "Transgression"],
+            explanation: `
+                <h4 class="font-bold text-lg text-slate-800">Derrière la transgression :</h4>
+                 <div class="space-y-2 leading-relaxed">
+                    <p><strong class="text-slate-600">Émotions/Pensées :</strong> Excitation, défi, peur d'être exclu du groupe. "Je veux faire comme les autres."</p>
+                    <p><strong class="text-slate-600">Besoins Fondamentaux :</strong> Un immense <strong class="text-blue-600">besoin d'affiliation</strong> (appartenance au groupe), d'autonomie et d'exploration.</p>
+                    <p class="mt-4 font-semibold text-slate-700">Phrase-type d'écoute active :</p>
+                    <blockquote class="border-l-4 border-blue-500 pl-4 py-3 bg-white rounded-r-lg text-slate-800">"J'imagine que c'était très important pour toi d'être avec tes amis, et que tu avais peur d'être mis(e) à l'écart."</blockquote>
+                </div>`
+        },
+        apathie: {
+            labels: ["Besoin de Compétence", "Découragement", "Apathie scolaire"],
+            explanation: `
+                <h4 class="font-bold text-lg text-slate-800">Derrière l'apathie scolaire :</h4>
+                 <div class="space-y-2 leading-relaxed">
+                    <p><strong class="text-slate-600">Émotions/Pensées :</strong> Découragement, anxiété, ennui. "C'est trop dur, je n'y arriverai jamais."</p>
+                    <p><strong class="text-slate-600">Besoins Fondamentaux :</strong> Un <strong class="text-blue-600">besoin de compétence</strong> (se sentir efficace), mais aussi de sens et de stimulation.</p>
+                    <p class="mt-4 font-semibold text-slate-700">Phrase-type d'écoute active :</p>
+                    <blockquote class="border-l-4 border-blue-500 pl-4 py-3 bg-white rounded-r-lg text-slate-800">"On dirait que le travail scolaire te semble une montagne. Tu as l'impression que ça ne sert à rien ?"</blockquote>
+                </div>`
+        }
+    };
+
+    const icebergSelector = document.getElementById('iceberg-selector');
+    const icebergExplanation = document.getElementById('iceberg-explanation');
+    const ctx = document.getElementById('icebergChart').getContext('2d');
+    let icebergChart;
+
+    function createOrUpdateIcebergChart(behavior) {
+        const data = icebergData[behavior];
+        icebergExplanation.innerHTML = data.explanation;
+
+        if (icebergChart) {
+            icebergChart.destroy();
+        }
+
+        icebergChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [''],
+                datasets: [
+                    {
+                        label: data.labels[2], // Comportement
+                        data: [15],
+                        backgroundColor: '#64748b', 
+                        borderColor: '#475569',
+                        borderWidth: 2,
+                        borderRadius: 4
+                    },
+                    {
+                        label: data.labels[1], // Émotion/Pensée
+                        data: [35],
+                        backgroundColor: '#3b82f6',
+                        borderColor: '#2563eb',
+                        borderWidth: 2,
+                        borderRadius: 4
+                    },
+                    {
+                        label: data.labels[0], // Besoin
+                        data: [50],
+                        backgroundColor: '#0ea5e9',
+                        borderColor: '#0284c7',
+                        borderWidth: 2,
+                        borderRadius: 4
+                    }
+                ]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: { display: false },
+                    legend: { display: true, position: 'bottom', labels: { boxWidth: 15, padding: 20, font: { size: 12 } } },
+                    tooltip: {
+                        backgroundColor: '#1e293b',
+                        titleFont: { size: 14, weight: 'bold' },
+                        bodyFont: { size: 12 },
+                        padding: 10,
+                        cornerRadius: 4,
+                        callbacks: {
+                           label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ' + context.parsed.x + '%';
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: { stacked: true, display: false, max: 100 },
+                    y: { stacked: true, display: false }
+                },
+                layout: { padding: 5 }
+            }
+        });
+    }
+
+    icebergSelector.addEventListener('change', (e) => {
+        createOrUpdateIcebergChart(e.target.value);
+    });
+
+    if (document.querySelector('#comprendre').classList.contains('active')) {
+      createOrUpdateIcebergChart(icebergSelector.value);
+    }
+    
+    const observer = new MutationObserver((mutationsList) => {
+        for(let mutation of mutationsList) {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                if(mutation.target.id === 'comprendre' && mutation.target.classList.contains('active')) {
+                    if(!icebergChart) {
+                         createOrUpdateIcebergChart(icebergSelector.value);
+                    }
+                }
+            }
+        }
+    });
+
+    observer.observe(document.querySelector('#comprendre'), { attributes: true });
+});
+</script>
+
+</body>
+</html>
