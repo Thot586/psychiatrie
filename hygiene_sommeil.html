@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide d'Hygiène du Sommeil</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .checklist-item.checked {
+            text-decoration: line-through;
+            color: #6b7280;
+        }
+        .checklist-item.checked .checkbox-icon {
+            background-color: #3b82f6;
+            border-color: #3b82f6;
+        }
+        .checkbox-icon svg {
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        .checklist-item.checked .checkbox-icon svg {
+            opacity: 1;
+        }
+        .progress-bar-fill {
+            transition: width 0.5s ease-in-out;
+        }
+        
+        /* Styles for the success modal and animation */
+        #successModal {
+            transition: opacity 0.3s ease-in-out;
+        }
+        #modalContent {
+            transition: transform 0.3s ease-out, opacity 0.3s ease-in-out;
+        }
+        #successModal.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        #successModal.visible #modalContent {
+            transform: scale(1);
+            opacity: 1;
+        }
+        #successModal.visible #successIcon {
+            transform: scale(1);
+        }
+        #successIcon {
+            transform: scale(0); 
+            transition: transform 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28) 0.2s;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-4xl">
+
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-slate-900 mb-4">Retrouvez votre Sommeil, Boostez votre Concentration</h1>
+            <p class="text-lg text-slate-600">Un guide simple pour améliorer vos nuits et vos journées.</p>
+        </header>
+
+        <!-- Main Content -->
+        <main>
+            <!-- Introduction Section -->
+            <section id="intro" class="mb-16 bg-white p-6 sm:p-8 rounded-2xl shadow-sm">
+                <h2 class="text-2xl font-bold mb-4 text-blue-600">Qu'est-ce que l'hygiène du sommeil ?</h2>
+                <p class="text-slate-700 leading-relaxed">
+                    Imaginez l'hygiène du sommeil comme un ensemble de "bonnes habitudes" à adopter avant de dormir. Tout comme on se brosse les dents pour avoir une bonne hygiène dentaire, ces rituels préparent votre corps et votre esprit à un sommeil de qualité.
+                    <br><br>
+                    Quand le sommeil est mauvais, la concentration en journée est l'une des premières victimes. En améliorant ces habitudes, vous offrez à votre cerveau le repos dont il a besoin pour fonctionner de manière optimale.
+                </p>
+            </section>
+
+            <!-- Key Pillars Section -->
+            <section id="pillars" class="mb-16">
+                <h2 class="text-3xl font-bold text-center mb-10">Les 4 Piliers d'un Sommeil Réparateur</h2>
+                <div class="grid md:grid-cols-2 gap-6 md:gap-8">
+                    <!-- Pillars content remains the same -->
+                     <div class="card bg-white p-6 rounded-2xl shadow-sm">
+                        <h3 class="text-xl font-bold mb-3 text-blue-600">1. La Régularité</h3>
+                        <p class="text-slate-600">Votre corps aime les habitudes. Essayez de vous coucher et de vous lever à la même heure chaque jour, même le week-end. Cela aide à synchroniser votre horloge biologique interne.</p>
+                    </div>
+                    <div class="card bg-white p-6 rounded-2xl shadow-sm">
+                        <h3 class="text-xl font-bold mb-3 text-blue-600">2. L'Environnement</h3>
+                        <p class="text-slate-600">Votre chambre doit être un sanctuaire pour le sommeil. Gardez-la <span class="font-semibold">fraîche, sombre et silencieuse</span>. Évitez les écrans (TV, smartphone) au moins une heure avant de dormir.</p>
+                    </div>
+                    <div class="card bg-white p-6 rounded-2xl shadow-sm">
+                        <h3 class="text-xl font-bold mb-3 text-blue-600">3. Le Mode de Vie</h3>
+                        <p class="text-slate-600">Évitez la caféine et l'alcool en fin de journée. Une activité physique régulière est excellente, mais évitez les sports intenses juste avant de vous coucher. Un dîner léger aide aussi.</p>
+                    </div>
+                    <div class="card bg-white p-6 rounded-2xl shadow-sm">
+                        <h3 class="text-xl font-bold mb-3 text-blue-600">4. Le Rituel du Coucher</h3>
+                        <p class="text-slate-600">Créez une routine relaxante de 30 minutes avant de dormir : lecture, musique douce, méditation, tisane... C'est un signal pour votre corps qu'il est temps de ralentir.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Interactive Checklist Section -->
+            <section id="checklist-section" class="mb-16 bg-white p-6 sm:p-8 rounded-2xl shadow-sm">
+                <h2 class="text-2xl font-bold mb-2 text-blue-600">Votre Checklist Personnelle</h2>
+                
+                <!-- NOTE ADDED HERE -->
+                <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 p-4 my-6 rounded-r-lg" role="alert">
+                    <p class="font-bold">Une petite note avant de commencer</p>
+                    <p>C'est un peu ironique d'utiliser un écran pour apprendre à... ne plus en utiliser avant de dormir, n'est-ce pas ? 😊<br> L'idéal est de <strong class="font-semibold">noter cette checklist sur un carnet</strong> que vous garderez sur votre table de chevet. Cela vous aidera à vous déconnecter pour de bon.</p>
+                </div>
+
+                <p class="text-slate-600 mb-6">Cochez les habitudes que vous pensez pouvoir adopter dès ce soir.</p>
+                
+                <!-- Progress Bar -->
+                <div class="w-full bg-slate-200 rounded-full h-2.5 mb-6">
+                    <div id="progressBar" class="bg-blue-600 h-2.5 rounded-full progress-bar-fill" style="width: 0%"></div>
+                </div>
+
+                <div id="checklist-container" class="space-y-4">
+                    <!-- Checklist items will be injected here by JS -->
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="text-center mt-16 text-slate-500 text-sm leading-6">
+            <p>Dr. FENOHASINA - Centre Ressource de Réhabilitation</p>
+            <p>Dernière mise à jour : 20 juin 2025</p>
+            <p>
+                <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr" target="_blank" rel="noopener noreferrer" class="hover:text-blue-600 underline">
+                    Licence Creative Commons
+                </a>
+            </p>
+        </footer>
+    </div>
+    
+    <!-- Success Modal -->
+    <div id="successModal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none">
+        <div id="modalContent" class="bg-white rounded-2xl shadow-2xl p-8 text-center max-w-sm mx-auto transform scale-95 opacity-0">
+            <div class="mx-auto mb-4 w-16 h-16 rounded-full bg-green-100 flex items-center justify-center">
+                <svg id="successIcon" class="w-10 h-10 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+            </div>
+            <h3 class="text-2xl font-bold text-slate-800 mb-2">Félicitations !</h3>
+            <p class="text-slate-600 mb-6">Vous avez complété votre liste. C'est un grand pas vers de meilleures nuits.</p>
+            <button id="closeModal" class="bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-700 transition-colors">Continuer</button>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const checklistContainer = document.getElementById('checklist-container');
+            const progressBar = document.getElementById('progressBar');
+            const successModal = document.getElementById('successModal');
+            const closeModal = document.getElementById('closeModal');
+
+            // Reordered the checklist items
+            const checklistItems = [
+                { id: 'time', text: 'Me fixer une heure de coucher et de lever' },
+                { id: 'dark', text: 'Rendre ma chambre bien sombre' },
+                { id: 'quiet', text: 'Assurer le silence (bouchons d\'oreilles si besoin)' },
+                { id: 'no-caffeine', text: 'Pas de café ou de thé après 16h' },
+                { id: 'light-dinner', text: 'Manger un dîner léger' },
+                { id: 'relax', text: 'Créer un rituel de 30 min de détente (lecture, etc.)' },
+                { id: 'sport', text: 'Éviter le sport intense le soir' },
+                { id: 'no-screen', text: 'Pas d\'écrans 1h avant de dormir' } // Moved to the end
+            ];
+
+            let checkedCount = 0;
+
+            function triggerConfetti() {
+                confetti({
+                    particleCount: 150,
+                    spread: 90,
+                    origin: { y: 0.6 },
+                    colors: ['#3b82f6', '#10b981', '#f59e0b', '#ec4899']
+                });
+            }
+
+            function showSuccessModal() {
+                successModal.classList.add('visible');
+                triggerConfetti();
+            }
+
+            function hideSuccessModal() {
+                successModal.classList.remove('visible');
+            }
+
+            function updateProgressBar() {
+                const percentage = (checkedCount / checklistItems.length) * 100;
+                progressBar.style.width = percentage + '%';
+
+                if (checkedCount === checklistItems.length) {
+                    setTimeout(showSuccessModal, 500);
+                }
+            }
+            
+            checklistItems.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'checklist-item flex items-center p-3 sm:p-4 bg-slate-50 rounded-lg cursor-pointer transition-all duration-200';
+                div.innerHTML = `
+                    <div class="checkbox-icon w-6 h-6 mr-3 sm:mr-4 flex-shrink-0 border-2 border-slate-300 rounded-md flex items-center justify-center transition-all duration-200">
+                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    </div>
+                    <span class="flex-1 min-w-0">${item.text}</span>
+                `;
+                
+                div.addEventListener('click', () => {
+                    if(successModal.classList.contains('visible')) return;
+
+                    div.classList.toggle('checked');
+                    if (div.classList.contains('checked')) {
+                        checkedCount++;
+                    } else {
+                        checkedCount--;
+                    }
+                    updateProgressBar();
+                });
+
+                checklistContainer.appendChild(div);
+            });
+
+            closeModal.addEventListener('click', hideSuccessModal);
+        });
+    </script>
+</body>
+</html>
