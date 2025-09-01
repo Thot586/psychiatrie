@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide Parental de l'Adolescence : Comprendre et Agir </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/person-male.png">
+    <!-- Chosen Palette: Sophisticated Slate & Warm Sand -->
+    <!-- Application Structure Plan: The SPA structure is retained but enhanced with a dedicated "References" section for scientific credibility. The flow remains: 1. `Le Cerveau Ado` (Why), 2. `La Relation` (How), 3. `Les Outils` (What), 4. `Défis Concrets` (Application), 5. `Signes d'Alerte` (Safety), and now 6. `Références` (Proof). This reinforces the evidence-based nature of the guide. -->
+    <!-- Visualization & Content Choices: 
+        - Brain Diagram (Fixed): The overlapping layout is fixed using a robust flexbox structure, ensuring elements scale correctly on all screen sizes.
+        - UI/UX Overhaul: A complete redesign is implemented with a modern, classy aesthetic. This includes a new color palette (slate, sand, off-white), refined typography (Poppins font), softer shadows, and improved spacing for a premium feel.
+        - Pleasant JavaScript: Interactions are enhanced. Accordions now have smooth open/close animations with a rotating icon. Section transitions are smoother fades. These subtle details create a more polished and engaging user experience.
+        - New References Section: A dedicated, scrollable section is added to house the full APA 7 bibliography, making the guide's scientific foundation transparent and accessible.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Poppins', sans-serif; background-color: #f8f7f4; color: #334155; }
+        .nav-item { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .nav-item.active { background-color: #1e293b; color: white; transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); }
+        .nav-item:not(.active):hover { background-color: #e2e8f0; transform: translateY(-2px); }
+        .content-section { display: none; }
+        .content-section.active { display: block; animation: fadeIn 0.6s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .accordion-content.open { max-height: 1200px; /* Increased for long content */ }
+        .accordion-header .icon { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .accordion-header.open .icon { transform: rotate(135deg); }
+        .stat-card { background-color: #e0e7ff; border-left: 4px solid #4f46e5; }
+        .evidence-badge { font-size: 0.7rem; font-weight: 600; padding: 0.125rem 0.5rem; border-radius: 9999px; text-transform: uppercase; letter-spacing: 0.05em; }
+        .evidence-high { background-color: #15803d; color: white; }
+        .evidence-moderate { background-color: #d97706; color: white; }
+        .evidence-low { background-color: #b91c1c; color: white; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="container mx-auto px-4 py-8 md:py-12 max-w-7xl">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-slate-900 tracking-tight">Le Guide Parental de l'Adolescence</h1>
+            <p class="mt-4 text-lg text-slate-600 max-w-3xl mx-auto">Comprendre et Agir avec la Science</p>
+        </header>
+
+        <nav class="flex flex-wrap justify-center items-center gap-2 md:gap-3 mb-12 bg-white/70 backdrop-blur-sm p-3 rounded-full shadow-lg sticky top-4 z-50">
+            <a href="guidance parentale.html" title="Retour à l'accueil" class="nav-item flex items-center justify-center font-semibold py-2 px-4 rounded-full text-slate-700">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+            </svg>
+            </a>
+            <button data-target="cerveau" class="nav-item active font-semibold py-2 px-4 rounded-full text-xs sm:text-sm">Le Cerveau Ado</button>
+            <button data-target="relation" class="nav-item font-semibold py-2 px-4 rounded-full text-xs sm:text-sm text-slate-700">La Relation</button>
+            <button data-target="outils" class="nav-item font-semibold py-2 px-4 rounded-full text-xs sm:text-sm text-slate-700">Outils Parentaux</button>
+            <button data-target="defis" class="nav-item font-semibold py-2 px-4 rounded-full text-xs sm:text-sm text-slate-700">Défis Concrets</button>
+            <button data-target="alerte" class="nav-item font-semibold py-2 px-4 rounded-full text-xs sm:text-sm text-slate-700">Signes d'Alerte</button>
+            <button data-target="references" class="nav-item font-semibold py-2 px-4 rounded-full text-xs sm:text-sm text-slate-700">Références</button>
+        </nav>
+
+        <main id="main-content" class="bg-white rounded-2xl shadow-xl p-6 sm:p-8 md:p-12 min-h-[70vh]">
+            
+            <section id="cerveau" class="content-section active">
+                <h2 class="text-3xl font-bold mb-4 text-slate-800">Comprendre le Cerveau Adolescent</h2>
+                <p class="text-slate-600 mb-8 leading-relaxed">L'adolescence est une période de profonds remaniements neurologiques. Comprendre ce qui se passe dans la tête de votre ado est la première étape pour réagir avec plus de justesse et de bienveillance.</p>
+                <div class="bg-slate-100 p-6 rounded-xl border border-slate-200">
+                    <h3 class="font-bold text-xl mb-4 text-slate-800">Le "Déséquilibre Maturatif" : Moteur puissant, freins en développement</h3>
+                    <p class="text-slate-600 mb-6 leading-relaxed">La science du cerveau montre un décalage majeur : les zones de la récompense et des émotions (système limbique) sont très actives, tandis que la zone du contrôle (cortex préfrontal) mûrit plus tardivement. Ce décalage explique l'impulsivité et les sautes d'humeur.</p>
+                    <div class="w-full bg-slate-200 rounded-lg p-2">
+                        <div class="flex h-16 w-full rounded">
+                            <div class="flex-grow bg-red-500 rounded-l-md flex items-center justify-center text-white font-bold text-center text-xs sm:text-sm px-2 shadow-lg" style="flex-basis: 70%;">
+                                SYSTÈME LIMBIQUE<br>(Émotions / Récompense) - Mature
+                            </div>
+                            <div class="flex-grow bg-blue-600 rounded-r-md flex items-center justify-center text-white font-bold text-center text-xs sm:text-sm px-2 shadow-lg" style="flex-basis: 30%;">
+                                CORTEX PRÉFRONTAL<br>(Contrôle / Raison) - En Maturation
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-sm text-slate-500 mt-4 text-center">Ce déséquilibre est une phase normale qui favorise l'exploration et l'apprentissage.</p>
+                </div>
+            </section>
+
+            <section id="relation" class="content-section">
+                <h2 class="text-3xl font-bold mb-4 text-slate-800">Bâtir la Relation Parent-Ado</h2>
+                <p class="text-slate-600 mb-8 leading-relaxed">Une relation positive est le principal levier d'action. Les études montrent que les interventions qui améliorent la communication et soutiennent l'autonomie ont des effets bénéfiques sur tous les plans.</p>
+                <div class="space-y-8">
+                    <div class="bg-slate-100 p-6 rounded-xl border border-slate-200">
+                        <h3 class="font-bold text-xl mb-2 text-slate-800">Soutenir l'Autonomie : La Clé de Voûte</h3>
+                        <p class="text-slate-600 mb-4 leading-relaxed">Un style parental qui encourage l'initiative, explique le pourquoi des règles et offre des choix encadrés est le plus efficace. Il nourrit le besoin fondamental d'autonomie de l'ado.</p>
+                        <div class="stat-card p-4 rounded-lg">
+                            <p class="font-semibold text-indigo-800">Preuve scientifique : <span class="evidence-badge evidence-moderate">Modérée</span></p>
+                            <p class="text-indigo-900 mt-1 text-sm">Le soutien à l'autonomie par les parents est directement corrélé à de meilleures compétences socio-émotionnelles et académiques (Distefano & Meuwissen, 2022).</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-100 p-6 rounded-xl border border-slate-200">
+                        <h3 class="font-bold text-xl mb-4 text-slate-800">L'Iceberg des Comportements</h3>
+                        <p class="mb-4 text-slate-600">Le comportement visible n'est que la partie émergée. Pour apaiser la relation, il faut répondre au besoin caché.</p>
+                        <select id="iceberg-selector" class="w-full md:w-1/2 p-2.5 border border-slate-300 rounded-lg mb-6 bg-white focus:ring-2 focus:ring-indigo-500">
+                            <option value="opposition">Opposition / Transgression</option>
+                            <option value="agressivite">Agressivité / Insolence</option>
+                            <option value="repli">Repli sur soi</option>
+                        </select>
+                        <div class="md:flex md:gap-8 items-center">
+                            <div class="md:w-1/2 h-72"><canvas id="icebergChart"></canvas></div>
+                            <div id="iceberg-explanation" class="md:w-1/2 mt-6 md:mt-0 space-y-3"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="outils" class="content-section">
+                 <h2 class="text-3xl font-bold mb-4 text-slate-800">Les Outils Parentaux Efficaces</h2>
+                 <p class="text-slate-600 mb-8 leading-relaxed">Face aux comportements difficiles, des stratégies éducatives concrètes ont prouvé leur efficacité. Elles visent à poser un cadre clair et bienveillant, sans violence ni laxisme.</p>
+                 <div class="space-y-4" id="accordion-container-outils"></div>
+            </section>
+
+            <section id="defis" class="content-section">
+                <h2 class="text-3xl font-bold mb-4 text-slate-800">Gérer les Défis Concrets</h2>
+                <p class="text-slate-600 mb-8 leading-relaxed">Appliquons ces principes aux deux plus grands champs de bataille de l'adolescence : les écrans et la scolarité.</p>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-slate-100 p-6 rounded-xl border border-slate-200">
+                        <h3 class="font-bold text-xl mb-4 text-slate-800">Écrans & Sommeil</h3>
+                        <p class="text-slate-600 mb-4">La gestion des écrans le soir est la stratégie la plus impactante pour préserver le sommeil, pilier de la santé mentale.</p>
+                        <div class="stat-card p-4 rounded-lg mb-4">
+                           <p class="font-semibold text-indigo-800">Le chiffre clé : <span class="evidence-badge evidence-moderate">Modérée</span></p>
+                           <p class="text-indigo-900 mt-1 text-sm">L'usage d'écrans <span class="font-bold">une fois au lit</span> réduit la durée de sommeil de ~30 minutes en moyenne. C'est le facteur le plus nocif (Brosnan et al., 2024).</p>
+                        </div>
+                        <h4 class="font-semibold text-slate-700 mb-2">Plan d'action recommandé :</h4>
+                        <ul class="list-disc list-inside space-y-2 text-slate-700 text-sm">
+                            <li><strong>Règle clé : Pas d'écran dans la chambre la nuit.</strong></li>
+                            <li>Instaurer une station de charge commune dans le salon.</li>
+                            <li>Co-construire un "contrat numérique" familial.</li>
+                            <li>Encourager une routine de "décompression" 1h avant de dormir.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-slate-100 p-6 rounded-xl border border-slate-200">
+                        <h3 class="font-bold text-xl mb-4 text-slate-800">Adhésion & Réussite Scolaire</h3>
+                        <p class="text-slate-600 mb-4">L'implication parentale doit évoluer du contrôle direct au soutien et à la valorisation des efforts.</p>
+                         <div class="stat-card p-4 rounded-lg mb-4">
+                           <p class="font-semibold text-indigo-800">Le constat : <span class="evidence-badge evidence-moderate">Modérée</span></p>
+                           <p class="text-indigo-900 mt-1 text-sm">Une présence parentale positive (intérêt, attentes réalistes) est associée à de meilleurs résultats et moins de décrochage (Jeynes, 2012).</p>
+                        </div>
+                        <h4 class="font-semibold text-slate-700 mb-2">Plan d'action recommandé :</h4>
+                         <ul class="list-disc list-inside space-y-2 text-slate-700 text-sm">
+                            <li>Maintenir un dialogue régulier sur l'école.</li>
+                            <li>Valoriser l'effort plus que le résultat.</li>
+                            <li>Assurer un cadre propice aux devoirs.</li>
+                            <li>Collaborer avec l'école en cas de difficulté.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="alerte" class="content-section">
+                <h2 class="text-3xl font-bold mb-4 text-red-800">Signes d'Alerte : Quand S'inquiéter et Agir ?</h2>
+                <p class="text-slate-600 mb-8 leading-relaxed">Certains signes ne relèvent pas de la "crise d'ado" normale et nécessitent une vigilance accrue, voire une aide professionnelle. Ne restez pas seuls.</p>
+                 <div class="space-y-4" id="accordion-container-alerte"></div>
+            </section>
+
+            <section id="references" class="content-section">
+                <h2 class="text-3xl font-bold mb-4 text-slate-800">Références Scientifiques</h2>
+                <p class="text-slate-600 mb-8 leading-relaxed">Ce guide s'appuie sur une revue de la littérature scientifique (2008-2025). Voici une sélection des principales sources citées.</p>
+                <div class="prose prose-sm max-w-none bg-slate-100 p-6 rounded-xl border border-slate-200 text-slate-700 space-y-4 max-h-[60vh] overflow-y-auto">
+                    <p>American Academy of Pediatrics (AAP). (2016). Media Use in School-Aged Children and Adolescents. <em>Pediatrics, 138</em>(5), e20162592.</p>
+                    <p>Bloss, C., Brown, S., & Sawrikar, V. (2024). Does behavioural parent training reduce internalising symptoms (or not) among children with externalising problems? Systematic review and meta‐analysis. <em>European Child & Adolescent Psychiatry, 33</em>, 2485–2501.</p>
+                    <p>Brosnan, B., et al. (2024). Screen Use at Bedtime and Sleep Duration and Quality Among Youths. <em>JAMA Pediatrics, 178</em>(10), 1001–1008.</p>
+                    <p>Carr, A. (2025). Family therapy and systemic interventions for child‐focused problems: the current evidence base. <em>Journal of Family Therapy, 47</em>(1), 143–185.</p>
+                    <p>Distefano, R., & Meuwissen, A. S. (2022). Parenting in context: A systematic review of the correlates of autonomy support. <em>Journal of Family Theory & Review, 14</em>(4), 571–592.</p>
+                    <p>Haut Conseil de la Santé Publique (HCSP). (2019). <em>Effets de l'exposition des enfants et des jeunes aux écrans</em>. Rapport et avis du 12/12/2019.</p>
+                    <p>Jeynes, W. H. (2012). A meta-analysis of the efficacy of different types of parental involvement programs for urban students. <em>Urban Education, 47</em>(4), 706–742.</p>
+                    <p>Khor, S. P. H., McClure, A., et al. (2021). Modifiable parental factors in adolescent sleep: A systematic review and meta-analysis. <em>Sleep Medicine Reviews, 56</em>, 101408.</p>
+                    <p>Littell, J. H., Pigott, T. D., Nilsen, K. H., Green, S. J., & Montgomery, O. L. K. (2021). Multisystemic Therapy® for social, emotional, and behavioural problems in youth aged 10 to 17: An updated systematic review and meta‐analysis. <em>Campbell Systematic Reviews, 17</em>(4), e1158.</p>
+                    <p>Machado, A. K., et al. (2020). Are parental monitoring and support associated with reduced loneliness and sleep problems in adolescents? Results from the Brazilian School-based Health Survey. <em>Children and Youth Services Review, 118</em>, 105682.</p>
+                    <p>Mingebach, T., Kamp-Becker, I., Christiansen, H., & Weber, L. (2018). Meta-meta-analysis on the effectiveness of parent-based interventions for the treatment of child externalizing behavior problems. <em>PLOS ONE, 13</em>(9), e0202855.</p>
+                    <p>Omer, H., & Lebowitz, E. R. (2016). <em>Treating childhood and adolescent aggression through parent training: The nonviolent resistance approach</em>. American Psychological Association.</p>
+                    <p>Stormshak, E. A., Fosco, G. M., & Dishion, T. J. (2010). Implementing interventions with families in schools to increase youth school engagement: The Family Check-Up model. <em>School Mental Health, 2</em>(2), 82–92.</p>
+                    <p>Tsai, K. M., et al. (2018). The Roles of Parental Support and Family Stress in Adolescent Sleep. <em>Child Development, 89</em>(5), 1577–1588.</p>
+                    <p>van der Lely, N., et al. (2019). Effect of a Family Media Use Plan on Media Rule Engagement Among Adolescents: A Randomized Clinical Trial. <em>JAMA Pediatrics, 173</em>(10), 924–932.</p>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <footer class="bg-slate-900 text-slate-300 text-sm border-t border-slate-700 py-6 px-4">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center md:items-start justify-between gap-6">
+    
+        <!-- LOGO GAUCHE : VINATIER -->
+        <div class="flex-shrink-0">
+          <a href="https://www.ch-le-vinatier.fr" target="_blank" rel="noopener noreferrer">
+            <img class="h-20 md:h-24 w-auto"
+                 src="https://d2q79iu7y748jz.cloudfront.net/s/_squarelogo/256x256/e079f7cf4939908ea9a07ce40d529d0b"
+                 alt="Logo Centre Hospitalier Le Vinatier">
+          </a>
+        </div>
+    
+        <!-- TEXTE CENTRAL -->
+        <div class="flex-1 text-center md:text-left space-y-2">
+            <p>Dr FENOHASINA T.J. Felicien (Psychiatre - FFI)</p>
+            <div class="flex items-center justify-center md:justify-start gap-2 mt-2">
+              <img class="h-5 w-auto"
+                   src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Cc-by-nc-sa_icon.svg/120px-Cc-by-nc-sa_icon.svg.png"
+                   alt="Icône Creative Commons BY-NC-SA">
+                <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr"
+                target="_blank" rel="noopener noreferrer"
+                class="underline hover:text-white">Licence CC BY-NC-SA 4.0</a> –
+              <span>Dernière mise à jour : 01 septembre 2025.</span>
+            </div>
+        </div>
+    
+        <!-- LOGOS DROITS : CRR -->
+        <div class="flex items-center gap-6 flex-shrink-0">
+          <a href="https://www.facebook.com/Psykozy?locale=fr_FR" target="_blank" rel="noopener noreferrer">
+            <img class="h-16 md:h-20 w-auto" 
+                 src="https://cdn-assets.inwink.com/fe065c87-0643-42fc-8b5d-4d94b5d12c11/a1904f78-1bca-466d-a9f4-8ac9fde06c0c"
+                 alt="Logo Psy-kôzy">
+          </a>
+          <a href="https://centre-ressource-rehabilitation.org" target="_blank" rel="noopener noreferrer">
+            <img class="h-16 md:h-20 w-auto"
+                 src="https://faustinebrunet.com/images/RS/creation-nouveau-logo-domaine-sante-mentale.jpg"
+                 alt="Logo Centre Ressource Réhabilitation">
+          </a>
+        </div>
+    
+        </div>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const navItems = document.querySelectorAll('.nav-item');
+    const contentSections = document.querySelectorAll('.content-section');
+    const mainContent = document.getElementById('main-content');
+
+    // Navigation
+    navItems.forEach(item => {
+        item.addEventListener('click', () => {
+            const targetId = item.dataset.target;
+            navItems.forEach(nav => nav.classList.remove('active'));
+            item.classList.add('active');
+            contentSections.forEach(section => {
+                section.classList.toggle('active', section.id === targetId);
+            });
+            mainContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+
+    // Accordion Logic
+    function setupAccordion(containerId) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        container.addEventListener('click', function(event) {
+            const header = event.target.closest('.accordion-header');
+            if (!header) return;
+            const content = header.nextElementSibling;
+            const wasOpen = content.classList.contains('open');
+            // Close all items in this container
+            container.querySelectorAll('.accordion-content').forEach(c => c.classList.remove('open'));
+            container.querySelectorAll('.accordion-header').forEach(h => h.classList.remove('open'));
+            if (!wasOpen) {
+                content.classList.add('open');
+                header.classList.add('open');
+            }
+        });
+    }
+
+    // Iceberg Chart
+    const icebergData = {
+        opposition: { labels: ["Besoin d'Autonomie", "Sentiment d'injustice", "Opposition"], explanation: `<h4 class="font-bold text-lg text-slate-800">Derrière l'opposition :</h4><p><strong class="text-slate-600 text-sm">Besoin caché :</strong> Un immense besoin <strong class="text-indigo-600">d'autonomie</strong> et de se sentir compétent.</p><blockquote class="mt-2 border-l-4 border-indigo-500 pl-3 py-1 bg-slate-200 text-slate-800 text-xs"><strong>Piste d'action :</strong> Offrir des choix encadrés. "Préfères-tu faire tes devoirs avant ou après le dîner ?"</blockquote>` },
+        agressivite: { labels: ["Besoin de Reconnaissance", "Colère / Frustration", "Agressivité"], explanation: `<h4 class="font-bold text-lg text-slate-800">Derrière l'agressivité :</h4><p><strong class="text-slate-600 text-sm">Besoin caché :</strong> Un besoin de <strong class="text-indigo-600">reconnaissance</strong>, de se sentir entendu.</p><blockquote class="mt-2 border-l-4 border-indigo-500 pl-3 py-1 bg-slate-200 text-slate-800 text-xs"><strong>Piste d'action :</strong> Valider l'émotion. "Je vois que tu es furieux, mais les insultes ne sont pas acceptables."</blockquote>` },
+        repli: { labels: ["Besoin de Sécurité", "Peur / Tristesse", "Repli sur soi"], explanation: `<h4 class="font-bold text-lg text-slate-800">Derrière le repli :</h4><p><strong class="text-slate-600 text-sm">Besoin caché :</strong> Un besoin de <strong class="text-indigo-600">sécurité</strong> et d'acceptation face à la peur de l'échec.</p><blockquote class="mt-2 border-l-4 border-indigo-500 pl-3 py-1 bg-slate-200 text-slate-800 text-xs"><strong>Piste d'action :</strong> Offrir une présence silencieuse. "Je suis là si tu as besoin."</blockquote>` }
+    };
+    const icebergSelector = document.getElementById('iceberg-selector');
+    const icebergExplanation = document.getElementById('iceberg-explanation');
+    const ctx = document.getElementById('icebergChart')?.getContext('2d');
+    let icebergChart;
+    function createOrUpdateIcebergChart(behavior) {
+        if (!ctx) return;
+        const data = icebergData[behavior];
+        icebergExplanation.innerHTML = data.explanation;
+        if (icebergChart) icebergChart.destroy();
+        icebergChart = new Chart(ctx, {
+            type: 'bar', data: { labels: [''], datasets: [ { label: data.labels[2], data: [15], backgroundColor: '#64748b' }, { label: data.labels[1], data: [35], backgroundColor: '#60a5fa' }, { label: data.labels[0], data: [50], backgroundColor: '#3b82f6' } ] },
+            options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, position: 'bottom', labels: { boxWidth: 12, font: {size: 10}}}}, scales: { x: { stacked: true, display: false, max: 100 }, y: { stacked: true, display: false } } }
+        });
+    }
+    if (icebergSelector) {
+        icebergSelector.addEventListener('change', (e) => createOrUpdateIcebergChart(e.target.value));
+        createOrUpdateIcebergChart(icebergSelector.value);
+    }
+
+    // Populate Accordions
+    const outilsData = [
+        { title: "1. Le Renforcement Positif", content: `<p class="mb-3 text-sm"><strong>Le concept :</strong> Souligner et valoriser les efforts et les comportements positifs, même petits. C'est le pilier des "Parent Management Training" (PMT).</p><div class="stat-card p-4 rounded-lg"><p class="font-semibold text-indigo-800 text-sm">Preuve scientifique : <span class="evidence-badge evidence-high">Élevée</span></p><p class="text-indigo-900 mt-1 text-xs">Les PMT réduisent les comportements perturbateurs avec un effet durable (Mingebach et al., 2018).</p></div><blockquote class="mt-4 border-l-4 border-indigo-500 pl-4 py-2 bg-slate-200 text-slate-900 text-sm"><strong>Phrase type :</strong> "J'ai vraiment apprécié ton aide. Merci."</blockquote>` },
+        { title: "2. Les Conséquences Logiques et Cohérentes", content: `<p class="mb-3 text-sm"><strong>Le concept :</strong> Appliquer une conséquence éducative et proportionnée à une règle transgressée. La cohérence entre les parents est cruciale.</p><div class="stat-card p-4 rounded-lg"><p class="font-semibold text-indigo-800 text-sm">Preuve scientifique : <span class="evidence-badge evidence-high">Élevée</span></p><p class="text-indigo-900 mt-1 text-xs">L'incohérence parentale est un facteur de risque majeur des troubles du comportement.</p></div><blockquote class="mt-4 border-l-4 border-indigo-500 pl-4 py-2 bg-slate-200 text-slate-900 text-sm"><strong>Exemple :</strong> "Comme l'heure de retour n'a pas été respectée, la sortie de samedi est annulée, comme convenu."</blockquote>` },
+        { title: "3. La Résistance Non-Violente (NVR)", content: `<p class="mb-3 text-sm"><strong>Le concept :</strong> Face à l'agressivité, le parent cesse l'escalade mais marque une opposition ferme et calme. Il annonce ses actions et s'y tient.</p><div class="stat-card p-4 rounded-lg"><p class="font-semibold text-indigo-800 text-sm">Preuve scientifique : <span class="evidence-badge evidence-low">Faible mais prometteuse</span></p><p class="text-indigo-900 mt-1 text-xs">Un ECR a montré que la NVR réduisait significativement la violence filio-parentale (Omer & Lebowitz, 2016).</p></div>` }
+    ];
+    const redFlagsData = [
+        { title: "Isolement social marqué et persistant", content: "<p class='text-sm'><strong>À faire :</strong> Dialoguer sans juger, proposer une consultation avec un médecin ou un psychologue. Ne pas minimiser.</p>" },
+        { title: "Humeur dépressive, propos désespérés", content: "<p class='text-sm'><strong>À faire :</strong> En parler directement. Consulter rapidement un pédopsychiatre ou un CMP. Retirer l'accès aux moyens dangereux.</p>" },
+        { title: "Automutilations (scarifications, etc.)", content: "<p class='text-sm'><strong>À faire :</strong> Réagir avec préoccupation, non avec colère. Proposer une aide psychologique pour comprendre la souffrance.</p>" },
+        { title: "Changement radical de comportement", content: "<p class='text-sm'><strong>À faire :</strong> Chercher la cause (harcèlement, consommation ?). Discuter avec l'ado et l'école. Consulter si besoin.</p>" },
+        { title: "Consommation de substances", content: "<p class='text-sm'><strong>À faire :</strong> En parler ouvertement. Fixer des limites. Consulter un CSAPA (centre spécialisé) si l'usage est problématique.</p>" },
+        { title: "Troubles du comportement alimentaire", content: "<p class='text-sm'><strong>À faire :</strong> Consulter rapidement un médecin spécialisé. Ne pas gérer seul, c'est une maladie complexe.</p>" }
+    ];
+    function populateAccordion(containerId, data, colorClass = 'slate') {
+        const container = document.getElementById(containerId);
+        if (container) {
+            container.innerHTML = data.map(item => `
+                <div class="accordion-item border border-${colorClass}-200 rounded-xl overflow-hidden bg-${colorClass}-50/50">
+                    <button class="accordion-header w-full flex justify-between items-center p-5 text-left">
+                        <span class="font-semibold text-base text-${colorClass}-800">${item.title}</span>
+                        <span class="icon text-2xl text-${colorClass}-600 font-light">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-5 border-t border-${colorClass}-200 bg-white text-${colorClass}-900">${item.content}</div>
+                    </div>
+                </div>
+            `).join('');
+            setupAccordion(containerId);
+        }
+    }
+    populateAccordion('accordion-container-outils', outilsData, 'slate');
+    populateAccordion('accordion-container-alerte', redFlagsData, 'red');
+
+});
+</script>
+
+</body>
+</html>

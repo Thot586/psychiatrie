@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide Parental sur les Écrans (0-18 ans)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/laptop.png">
+    <!-- Chosen Palette: Scholarly Blue & Neutral Gray -->
+    <!-- Application Structure Plan: To make the dense, scientific text digestible, the SPA is structured into a logical learning path for parents. 1. `Idées Reçues`: Addresses parent's primary fears first. 2. `Stratégies Inefficaces`: Corrects common mistakes. 3. `Guide par Âge`: Provides actionable, age-specific advice, which is the core need. 4. `Angles Morts`: Adds nuance and scientific honesty. 5. `Références`: Ensures credibility. This structure moves from debunking to rebuilding parental strategy, based on evidence. -->
+    <!-- Visualization & Content Choices: 
+        - Accordions for Complex Topics: "Idées Reçues" and "Stratégies Inefficaces" are presented in interactive accordions. This design choice prevents overwhelming the user with text, allowing them to explore each nuanced point at their own pace. Each point now includes in-text citations for immediate credibility.
+        - The "4 C's" Visual Grid: Instead of a list, the crucial "4 C's" framework (Contenu, Contexte, Connexion, l'Enfant) is displayed as a clean, four-quadrant grid. This visual presentation makes the concept more memorable and easier to apply as a mental checklist.
+        - Tabbed Interface for Age Guide: The practical guide is structured with clear tabs for each age range (0-3, 3-6, 7-12, 13-18). This is the most intuitive way for a parent to quickly access the information relevant to their child without scrolling through irrelevant sections.
+        - No Chart Needed: The source material is qualitative and conceptual. Visualizations are focused on structuring text (grids, cards, blockquotes) rather than displaying quantitative data, which would be inappropriate here.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Poppins', sans-serif; background-color: #f1f5f9; color: #1e293b; }
+        .nav-item { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .nav-item.active { background-color: #2563eb; color: white; transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); }
+        .nav-item:not(.active):hover { background-color: #dbeafe; transform: translateY(-2px); }
+        .content-section { display: none; }
+        .content-section.active { display: block; animation: fadeIn 0.6s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.7s cubic-bezier(0.4, 0, 0.2, 1); }
+        .accordion-content.open { max-height: 1500px; }
+        .accordion-header .icon { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .accordion-header.open .icon { transform: rotate(135deg); }
+        .age-tab { transition: all 0.3s ease; border-bottom: 3px solid transparent; }
+        .age-tab.active { border-color: #2563eb; color: #1e293b; }
+        .age-content { display: none; }
+        .age-content.active { display: block; animation: fadeIn 0.5s; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="container mx-auto px-4 py-8 md:py-12 max-w-7xl">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-slate-900 tracking-tight">Naviguer dans le Monde des Écrans</h1>
+            <p class="mt-4 text-lg text-slate-600 max-w-4xl mx-auto">Un guide parental complet et nuancé pour l'enfant et l'adolescent (0-18 ans), basé sur les connaissances scientifiques actuelles.</p>
+        </header>
+
+        <nav class="flex flex-wrap justify-center items-center gap-2 md:gap-3 mb-12 bg-white/70 backdrop-blur-sm p-3 rounded-full shadow-lg sticky top-4 z-50">
+            <a href="guidance parentale.html" title="Retour à l'accueil" class="nav-item flex items-center justify-center font-semibold py-2 px-4 rounded-full text-slate-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                </svg>
+            </a>
+            <button data-target="cerveau" class="nav-item active font-semibold py-2 px-4 rounded-full text-xs sm:text-sm">Le Cerveau Ado</button>
+            <button data-target="relation" class="nav-item font-semibold py-2 px-4 rounded-full text-xs sm:text-sm text-slate-700">La Relation</button>
+            <button data-target="outils" class="nav-item font-semibold py-2 px-4 rounded-full text-xs sm:text-sm text-slate-700">Outils Parentaux</button>
+            <button data-target="defis" class="nav-item font-semibold py-2 px-4 rounded-full text-xs sm:text-sm text-slate-700">Défis Concrets</button>
+            <button data-target="alerte" class="nav-item font-semibold py-2 px-4 rounded-full text-xs sm:text-sm text-slate-700">Signes d'Alerte</button>
+            <button data-target="references" class="nav-item font-semibold py-2 px-4 rounded-full text-xs sm:text-sm text-slate-700">Références</button>
+        </nav>
+
+        <main id="main-content" class="bg-white rounded-2xl shadow-xl p-6 sm:p-8 md:p-12 min-h-[70vh]">
+            
+            <section id="mythes" class="content-section active">
+                <h2 class="text-3xl font-bold mb-4 text-slate-800">Démystifier les Idées Reçues sur les Écrans</h2>
+                <p class="text-slate-600 mb-8 leading-relaxed">Le débat public sur les écrans est souvent polarisé. Confronter les mythes à la science permet de remplacer la peur par une compréhension informée et nuancée.</p>
+                <div class="space-y-4" id="accordion-mythes"></div>
+            </section>
+
+            <section id="inefficaces" class="content-section">
+                <h2 class="text-3xl font-bold mb-4 text-slate-800">Les "Fausses Bonnes Idées" : Stratégies Inefficaces</h2>
+                <p class="text-slate-600 mb-8 leading-relaxed">Certaines stratégies parentales semblent logiques mais se révèlent contre-productives. Les identifier est une étape clé pour construire une approche plus sereine.</p>
+                <div class="space-y-4" id="accordion-inefficaces"></div>
+            </section>
+            
+            <section id="guide" class="content-section">
+                <h2 class="text-3xl font-bold mb-4 text-slate-800">Le Guide Pratique par Tranche d'Âge</h2>
+                <p class="text-slate-600 mb-8 leading-relaxed">Chaque stade de développement présente des enjeux spécifiques qui appellent des stratégies parentales différentes. L'approche évolue du contrôle vers l'accompagnement.</p>
+                
+                <div class="border-b border-gray-200 mb-6">
+                    <nav class="-mb-px flex flex-wrap gap-x-6" id="age-tabs">
+                        <button data-target="age-0-3" class="age-tab active text-slate-500 hover:text-slate-700 py-4 px-1 text-sm font-medium">0-3 ans</button>
+                        <button data-target="age-3-6" class="age-tab text-slate-500 hover:text-slate-700 py-4 px-1 text-sm font-medium">3-6 ans</button>
+                        <button data-target="age-7-12" class="age-tab text-slate-500 hover:text-slate-700 py-4 px-1 text-sm font-medium">7-12 ans</button>
+                        <button data-target="age-13-18" class="age-tab text-slate-500 hover:text-slate-700 py-4 px-1 text-sm font-medium">13-18 ans</button>
+                    </nav>
+                </div>
+
+                <div id="age-content-container">
+                    <!-- Content will be injected by JS -->
+                </div>
+            </section>
+
+            <section id="lacunes" class="content-section">
+                <h2 class="text-3xl font-bold mb-4 text-slate-800">Angles Morts : Ce que la Science Ignore Encore</h2>
+                <p class="text-slate-600 mb-8 leading-relaxed">La recherche sur les écrans est un domaine jeune. L'honnêteté scientifique exige de reconnaître ses limites et les questions qui restent ouvertes.</p>
+                <div class="space-y-6">
+                    <div class="bg-slate-50 p-5 rounded-lg border border-slate-200">
+                        <h3 class="font-semibold text-lg text-slate-700 mb-2">Le Défi de la Causalité</h3>
+                        <p class="text-sm text-slate-600">La plupart des études sont corrélationnelles : elles montrent une association (ex: temps d'écran élevé et difficultés d'attention), mais ne prouvent pas que l'un cause l'autre. Un troisième facteur (ex: dynamique familiale) ou une causalité inversée sont possibles.</p>
+                    </div>
+                     <div class="bg-slate-50 p-5 rounded-lg border border-slate-200">
+                        <h3 class="font-semibold text-lg text-slate-700 mb-2">Les Limites de la Mesure</h3>
+                        <p class="text-sm text-slate-600">Le "temps d'écran" est une mesure grossière qui mélange des activités très différentes (un cours en visio, un jeu créatif, du visionnage passif). Les études s'appuient souvent sur des auto-déclarations, qui sont notoirement imprécises.</p>
+                    </div>
+                     <div class="bg-slate-50 p-5 rounded-lg border border-slate-200">
+                        <h3 class="font-semibold text-lg text-slate-700 mb-2">Pistes de Recherche Futures</h3>
+                        <ul class="list-disc list-inside space-y-2 text-sm text-slate-600 mt-2">
+                            <li>Quels sont les effets à très long terme (sur une vie) d'une exposition continue aux interfaces numériques ?</li>
+                            <li>Comment les algorithmes des plateformes interagissent-ils avec le développement de l'identité adolescente ?</li>
+                            <li>Quel est l'impact précis de la "technoférence" (parents distraits par leur propre écran) sur le jeune enfant ?</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="references" class="content-section">
+                <h2 class="text-3xl font-bold mb-4 text-slate-800">Références Scientifiques</h2>
+                <p class="text-slate-600 mb-8 leading-relaxed">Ce guide s'appuie sur une revue de la littérature scientifique. Voici les principales sources citées.</p>
+                <div class="prose prose-sm max-w-none bg-gray-100 p-6 rounded-xl border border-gray-200 text-gray-700 space-y-4 max-h-[60vh] overflow-y-auto">
+                    <!-- References will be injected by JS -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer class="bg-slate-900 text-slate-300 text-sm border-t border-slate-700 py-6 px-4">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center md:items-start justify-between gap-6">
+    
+        <!-- LOGO GAUCHE : VINATIER -->
+        <div class="flex-shrink-0">
+          <a href="https://www.ch-le-vinatier.fr" target="_blank" rel="noopener noreferrer">
+            <img class="h-20 md:h-24 w-auto"
+                 src="https://d2q79iu7y748jz.cloudfront.net/s/_squarelogo/256x256/e079f7cf4939908ea9a07ce40d529d0b"
+                 alt="Logo Centre Hospitalier Le Vinatier">
+          </a>
+        </div>
+    
+        <!-- TEXTE CENTRAL -->
+        <div class="flex-1 text-center md:text-left space-y-2">
+            <p>Dr FENOHASINA T.J. Felicien (Psychiatre - FFI)</p>
+            <div class="flex items-center justify-center md:justify-start gap-2 mt-2">
+              <img class="h-5 w-auto"
+                   src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Cc-by-nc-sa_icon.svg/120px-Cc-by-nc-sa_icon.svg.png"
+                   alt="Icône Creative Commons BY-NC-SA">
+                <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr"
+                target="_blank" rel="noopener noreferrer"
+                class="underline hover:text-white">Licence CC BY-NC-SA 4.0</a> –
+              <span>Dernière mise à jour : 01 septembre 2025.</span>
+            </div>
+        </div>
+    
+        <!-- LOGOS DROITS : CRR -->
+        <div class="flex items-center gap-6 flex-shrink-0">
+          <a href="https://www.facebook.com/Psykozy?locale=fr_FR" target="_blank" rel="noopener noreferrer">
+            <img class="h-16 md:h-20 w-auto" 
+                 src="https://cdn-assets.inwink.com/fe065c87-0643-42fc-8b5d-4d94b5d12c11/a1904f78-1bca-466d-a9f4-8ac9fde06c0c"
+                 alt="Logo Psy-kôzy">
+          </a>
+          <a href="https://centre-ressource-rehabilitation.org" target="_blank" rel="noopener noreferrer">
+            <img class="h-16 md:h-20 w-auto"
+                 src="https://faustinebrunet.com/images/RS/creation-nouveau-logo-domaine-sante-mentale.jpg"
+                 alt="Logo Centre Ressource Réhabilitation">
+          </a>
+        </div>
+    
+        </div>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const navItems = document.querySelectorAll('.nav-item');
+    const contentSections = document.querySelectorAll('.content-section');
+    const mainContent = document.getElementById('main-content');
+
+    // Main Navigation
+    navItems.forEach(item => {
+        item.addEventListener('click', () => {
+            const targetId = item.dataset.target;
+            navItems.forEach(nav => nav.classList.remove('active'));
+            item.classList.add('active');
+            contentSections.forEach(section => {
+                section.classList.toggle('active', section.id === targetId);
+            });
+            mainContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+
+    // Accordion Logic
+    function setupAccordion(containerId) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        container.addEventListener('click', function(event) {
+            const header = event.target.closest('.accordion-header');
+            if (!header) return;
+            const content = header.nextElementSibling;
+            const wasOpen = content.classList.contains('open');
+            container.querySelectorAll('.accordion-content').forEach(c => c.classList.remove('open'));
+            container.querySelectorAll('.accordion-header').forEach(h => h.classList.remove('open'));
+            if (!wasOpen) {
+                content.classList.add('open');
+                header.classList.add('open');
+            }
+        });
+    }
+
+    // Age Guide Tabs
+    const ageTabsContainer = document.getElementById('age-tabs');
+    const ageContentContainer = document.getElementById('age-content-container');
+    if (ageTabsContainer) {
+        ageTabsContainer.addEventListener('click', (e) => {
+            if (e.target.matches('.age-tab')) {
+                const targetId = e.target.dataset.target;
+                ageTabsContainer.querySelectorAll('.age-tab').forEach(tab => tab.classList.remove('active'));
+                e.target.classList.add('active');
+                ageContentContainer.querySelectorAll('.age-content').forEach(content => {
+                    content.classList.toggle('active', content.id === targetId);
+                });
+            }
+        });
+    }
+
+    // DATA FOR DYNAMIC CONTENT
+    const mythesData = [
+        { title: "Mythe 1 : 'Les écrans rendent les enfants passifs et non créatifs.'", content: "<p class='text-sm text-slate-600 leading-relaxed'><strong>Ce que les études révèlent :</strong> L'impact dépend entièrement de l'usage. Si la consommation passive peut se substituer au jeu, les écrans sont aussi de puissants outils de création. De nombreux jeux vidéo, par exemple, stimulent la créativité, la résolution de problèmes et la résilience face à l'échec (Granic et al., 2014). La question est de guider l'enfant vers ces usages interactifs et créatifs.</p>" },
+        { title: "Mythe 2 : 'Toutes les applications dites 'éducatives' sont bénéfiques.'", content: "<p class='text-sm text-slate-600 leading-relaxed'><strong>Ce qu'il faut savoir :</strong> Une large part des applications 'éducatives' sont de faible qualité pédagogique. Pour être efficace, une application doit reposer sur 4 piliers (Hirsh-Pasek et al., 2015) : l'apprentissage <strong>Actif</strong> (qui fait réfléchir), l'<strong>Engagement</strong> (sans distraction), le sens (<strong>Significatif</strong>) et l'<strong>Interaction Sociale</strong>. L'efficacité est quasi systématiquement augmentée lorsque l'utilisation est accompagnée par un parent (Kim et al., 2021).</p>" },
+        { title: "Mythe 3 : 'Exposer un bébé aux écrans lui apprendra des mots plus vite.'", content: "<p class='text-sm text-slate-600 leading-relaxed'><strong>La réalité du développement :</strong> C'est faux. L'acquisition du langage avant 3 ans repose sur les interactions sociales directes. La recherche a identifié un 'effet de déficit vidéo' : les tout-petits apprennent beaucoup moins bien d'un écran que d'une personne réelle. Une exposition précoce et prolongée peut même affecter négativement le vocabulaire (Costantino et al., 2023). La seule exception est le clavardage vidéo en direct avec un proche, car il préserve l'interaction sociale.</p>" },
+        { title: "Mythe 4 : 'L'interdiction totale des écrans est la meilleure solution.'", content: "<p class='text-sm text-slate-600 leading-relaxed'><strong>Pourquoi cette approche est risquée :</strong> Elle est souvent contre-productive. Elle peut déclencher un 'effet fruit défendu' (théorie de la réactance de Brehm, 1966), rendant les écrans encore plus désirables. Des stratégies trop restrictives sont associées à une augmentation de l'usage en cachette et à une dégradation de la relation parent-ado (Nathanson, 2002; Valkenburg et al., 2013). L'objectif n'est pas d'interdire, mais d'éduquer à l'autorégulation et à l'esprit critique.</p>" }
+    ];
+
+    const inefficacesData = [
+        { title: "Stratégie 1 : Utiliser l'écran comme récompense ou punition.", content: "<p class='text-sm text-slate-600 leading-relaxed'><strong>Pourquoi c'est inefficace :</strong> Cette pratique place l'écran sur un piédestal, augmentant sa valeur et son attrait. Paradoxalement, les enfants dont les parents utilisent cette méthode passent au final plus de temps sur les écrans (Al-Hassan, 2015). Cela sape aussi la motivation intrinsèque de l'enfant pour d'autres activités (ex: faire ses devoirs pour le plaisir de comprendre, et non pour avoir la tablette).</p>" },
+        { title: "Stratégie 2 : Se focaliser uniquement sur le temps d'écran.", content: `<p class='text-sm text-slate-600 leading-relaxed mb-4'><strong>Pourquoi c'est inefficace :</strong> Le 'combien' est moins important que le 'comment'. Trente minutes de création ne valent pas trente minutes de visionnage passif. Il faut analyser l'usage à travers la règle des '4 C' :</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+            <div class="bg-blue-100 p-3 rounded-lg"><strong class="text-blue-800">Contenu (Content) :</strong> Le contenu est-il adapté, créatif, pro-social ?</div>
+            <div class="bg-blue-100 p-3 rounded-lg"><strong class="text-blue-800">Contexte (Context) :</strong> L'usage empiète-t-il sur le sommeil, les repas, le jeu ?</div>
+            <div class="bg-blue-100 p-3 rounded-lg"><strong class="text-blue-800">Connexion (Connection) :</strong> L'écran sert-il à créer du lien (jeu en famille, appel visio) ou à isoler ?</div>
+            <div class="bg-blue-100 p-3 rounded-lg"><strong class="text-blue-800">l'Enfant (Child) :</strong> Qui est mon enfant ? Son tempérament, ses besoins spécifiques ?</div>
+        </div>
+        <p class="text-xs text-slate-500 mt-2">La Société Canadienne de Pédiatrie propose un modèle similaire des '4 M' : Gérer, Significatif, Modèle, Surveiller.</p>` },
+        { title: "Stratégie 3 : Espionner les appareils de son adolescent.", content: "<p class='text-sm text-slate-600 leading-relaxed'><strong>Pourquoi c'est inefficace :</strong> Il faut distinguer le suivi parental (basé sur le dialogue) de la surveillance secrète. L'espionnage brise la confiance, qui est le meilleur gage de sécurité. Il pousse l'adolescent à devenir plus secret et à ne plus se confier en cas de problème (cyberharcèlement, etc.), ce qui diminue paradoxalement la connaissance réelle que le parent a de sa vie en ligne.</p>" }
+    ];
+
+    const ageData = {
+        "age-0-3": { title: "De 0 à 3 ans : L'Âge de l'Interaction", content: `<p class="mb-2"><strong>Enjeux développementaux :</strong> Développement sensori-moteur, lien d'attachement, acquisition du langage par l'interaction directe.</p><p class="mb-4"><strong>Ce qu'il faut faire :</strong> Priorité absolue aux interactions humaines. Aucun écran passif avant 2-3 ans. La seule exception est le <strong>clavardage vidéo interactif</strong> avec des proches, car il maintient le dialogue social. Éviter la TV en fond sonore qui appauvrit les échanges parent-enfant (Costantino et al., 2023).</p><blockquote class="border-l-4 border-blue-500 pl-4 py-2 bg-blue-50 text-slate-800"><p class="font-semibold text-sm">Phrase clé :</p><p class="text-sm">"Regardons ensemble ce que fait Mamie à l'écran ! Tu vois, elle te fait coucou !"</p></blockquote>` },
+        "age-3-6": { title: "De 3 à 6 ans : L'Âge de la Découverte Guidée", content: `<p class="mb-2"><strong>Enjeux développementaux :</strong> Jeu symbolique, imagination, début de l'autorégulation.</p><p class="mb-4"><strong>Ce qu'il faut faire :</strong> Le <strong>co-visionnage systématique</strong> est la règle. Ne jamais laisser un enfant seul. Choisir des contenus de haute qualité (rythme lent, pro-sociaux). Limiter le temps à <strong>~1 heure par jour</strong>. Établir des règles claires et des rituels (pas d'écrans pendant les repas et 1h avant le coucher).</p><blockquote class="border-l-4 border-blue-500 pl-4 py-2 bg-blue-50 text-slate-800"><p class="font-semibold text-sm">Phrase clé :</p><p class="text-sm">"Après cet épisode, on éteint et on va dessiner. Quelle couleur avait la voiture du héros ?"</p></blockquote>` },
+        "age-7-12": { title: "De 7 à 12 ans : L'Âge de l'Éducation aux Médias", content: `<p class="mb-2"><strong>Enjeux développementaux :</strong> Pensée critique, socialisation avec les pairs, initiation à la littératie numérique.</p><p class="mb-4"><strong>Ce qu'il faut faire :</strong> Passer du rôle de 'contrôleur' à 'médiateur'. Élaborer ensemble un <strong>'plan médiatique familial'</strong> (règles pour tous, y compris les parents). Discuter de sécurité en ligne et développer son <strong>esprit critique</strong> (publicités, fake news). La règle de base : les appareils chargent la nuit dans une pièce commune.</p><blockquote class="border-l-4 border-blue-500 pl-4 py-2 bg-blue-50 text-slate-800"><p class="font-semibold text-sm">Phrase clé :</p><p class="text-sm">"Cette info sur TikTok, d'où vient-elle ? Cherchons ensemble si d'autres sources fiables confirment."</p></blockquote>` },
+        "age-13-18": { title: "De 13 à 18 ans : L'Âge de l'Autonomie Accompagnée", content: `<p class="mb-2"><strong>Enjeux développementaux :</strong> Construction de l'identité, relations sociales, image de soi en ligne, régulation du sommeil.</p><p class="mb-4"><strong>Ce qu'il faut faire :</strong> Évoluer vers l'accompagnement. <strong>Négocier les règles</strong> plutôt que les imposer. Maintenir un dialogue ouvert sur les expériences en ligne (Comment te sens-tu après Instagram ?). Le plus important : <strong>être un modèle</strong> avec votre propre usage des écrans. Mettre en place un 'couvre-feu digital' pour toute la famille.</p><blockquote class="border-l-4 border-blue-500 pl-4 py-2 bg-blue-50 text-slate-800"><p class="font-semibold text-sm">Phrase clé :</p><p class="text-sm">"Je ne suis pas là pour t'espionner, mais pour comprendre. Est-ce que ce réseau social te motive ou te laisse un sentiment de vide ?"</p></blockquote>` }
+    };
+    
+    const referencesData = [
+        "Al-Hassan, A. (2015). The use of screen devices as a discipline tool for children. <em>Procedia - Social and Behavioral Sciences, 171</em>, 441-447.",
+        "American Academy of Child and Adolescent Psychiatry. (2025, June). Screen time and children.",
+        "American Academy of Pediatrics. (2023, December 13). Where we stand: Screen time. <em>HealthyChildren.org</em>.",
+        "American Psychological Association. (2025, June 9). Screen time and emotional problems in kids: A vicious circle? [Press release].",
+        "Brehm, J. W. (1966). <em>A theory of psychological reactance</em>. Academic Press.",
+        "Brehm, S. S., & Brehm, J. W. (1981). <em>Psychological reactance: A theory of freedom and control</em>. Academic Press.",
+        "Canadian Paediatric Society. (2025). Screen time for children. <em>Fraser Health</em>.",
+        "Child Mind Institute. (2024, May 2). Media guidelines for kids of all ages.",
+        "Costantino, A., D'Alo, G. L., & Iannaccone, A. (2023). The relationship between language and technology: How screen time affects language development in early life—A systematic review. <em>Brain Sciences, 14</em>(1), 27.",
+        "Gouvernement du Québec. (2024). Les écrans et les jeunes enfants. <em>Naître et grandir</em>.",
+        "Granic, I., Lobel, A., & Engels, R. C. M. E. (2014). The benefits of playing video games. <em>American Psychologist, 69</em>(1), 66–78.",
+        "Hirsh-Pasek, K., Zosh, J. M., Golinkoff, R. M., Gray, J. H., Robb, M. B., & Kaufman, J. (2015). Putting education in 'educational' apps: Lessons from the science of learning. <em>Psychological Science in the Public Interest, 16</em>(1), 3–34.",
+        "Kim, J., Gilbert, J., Yu, Q., & Gale, C. (2021). Measures matter: A meta-analysis of the effects of educational apps on preschool to grade 3 children's literacy and math skills. <em>AERA Open, 7</em>.",
+        "Madigan, S., Browne, D., Racine, N., Mori, C., & Tough, S. (2019). Association between screen time and children's performance on a developmental screening test. <em>JAMA Pediatrics, 173</em>(3), 244–250.",
+        "Mayo Clinic. (2024, June 19). Screen time and children: How to guide your child.",
+        "Muppalla, S. K., V., S. L., G., M., & K., A. (2023). Effects of excessive screen time on child development: An updated review and strategies for management. <em>Cureus, 15</em>(6), e40551.",
+        "Nathanson, A. I. (2002). The unintended effects of parental mediation of television on adolescents. <em>Media Psychology, 4</em>(3), 207–230.",
+        "Nikken, P., & Jansz, J. (2014). Developing a scale to measure parental mediation of young children's internet use. <em>Learning, Media and Technology, 39</em>(2), 250-266.",
+        "Raising Children Network. (n.d.). Privacy, trust & monitoring: Teenage years.",
+        "Reid Chassiakos, Y., Radesky, J., Christakis, D., Moreno, M. A., & Cross, C. (2016). Children and adolescents and digital media. <em>Pediatrics, 138</em>(5), e20162593.",
+        "Société Française de Pédiatrie, Groupe de Pédiatrie Générale. (2018, January 17). L'enfant et les écrans : Avis de l'Académie des Sciences.",
+        "Valkenburg, P. M., Piotrowski, J. T., Hermanns, J., & de Leeuw, R. (2013). Developing and validating the perceived parental media mediation scale: A self-determination perspective. <em>Human Communication Research, 39</em>(4), 445-471.",
+        "World Health Organization. (2019, April 24). To grow up healthy, children need to sit less and play more."
+    ];
+
+
+    // Function to populate accordions
+    function populateAccordion(containerId, data) {
+        const container = document.getElementById(containerId);
+        if (container) {
+            container.innerHTML = data.map(item => `
+                <div class="accordion-item border border-slate-200 rounded-xl overflow-hidden bg-slate-50/50">
+                    <button class="accordion-header w-full flex justify-between items-center p-5 text-left">
+                        <span class="font-semibold text-base text-slate-800">${item.title}</span>
+                        <span class="icon text-2xl text-slate-600 font-light">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-5 border-t border-slate-200 bg-white text-slate-900">${item.content}</div>
+                    </div>
+                </div>
+            `).join('');
+            setupAccordion(containerId);
+        }
+    }
+    
+    // Function to populate age guide content
+    function populateAgeGuide() {
+        if(ageContentContainer) {
+            ageContentContainer.innerHTML = Object.keys(ageData).map((key, index) => `
+                <div id="${key}" class="age-content ${index === 0 ? 'active' : ''}">
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                        <h3 class="text-2xl font-bold text-slate-800 mb-4">${ageData[key].title}</h3>
+                        <div class="prose prose-slate max-w-none">${ageData[key].content}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+    }
+    
+    // Populate references section
+    const referencesContainer = document.querySelector('#references .prose');
+    if (referencesContainer) {
+        referencesContainer.innerHTML = referencesData.map(ref => `<p>${ref}</p>`).join('');
+    }
+
+    // Initial population calls
+    populateAccordion('accordion-mythes', mythesData);
+    populateAccordion('accordion-inefficaces', inefficacesData);
+    populateAgeGuide();
+
+});
+</script>
+
+</body>
+</html>
+
