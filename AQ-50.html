@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quotient du Spectre Autistique (AQ-50) – Version Interactive</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+    :root{
+      --primary:#0f62fe; --primary-weak:#eef4ff; --text:#1f2937; --muted:#6b7280;
+      --bg:#f7f7fb; --paper:#ffffff; --border:#e5e7eb; --ok:#16a34a;
+      font-size:16px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto; background:var(--bg); color:var(--text); line-height:1.6; padding:1rem}
+    .container{max-width:54rem; margin:1rem auto; background:var(--paper); border:1px solid var(--border); border-radius:14px; box-shadow:0 8px 24px rgba(0,0,0,.06); overflow:hidden}
+    header{background:var(--primary); color:#fff; padding:1.1rem 1.5rem}
+    header h1{font-size:clamp(1.35rem,3.5vw,1.75rem); font-weight:700}
+    .toolbar{display:flex; gap:.6rem; flex-wrap:wrap; align-items:center; margin-top:.5rem}
+    .btn{background:#374151; color:#fff; border:none; padding:.55rem .9rem; border-radius:10px; cursor:pointer}
+    .btn[disabled]{opacity:.45; cursor:not-allowed}
+
+    .section{padding:1rem 1.5rem; border-top:1px solid var(--border)}
+    .instructions{background:var(--primary-weak); color:#0b3d91;}
+    .question{padding:1rem 0; border-bottom:1px solid var(--border)}
+    .qtext{font-weight:600; margin-bottom:.5rem}
+    .opts{display:grid; gap:.5rem; grid-template-columns:repeat(auto-fit,minmax(11rem,1fr))}
+    .opts input[type="radio"]{display:none}
+    .opts label{display:block; padding:.7rem 1rem; border:1px solid var(--border); border-radius:10px; text-align:center; cursor:pointer; transition:.15s}
+    .opts label:hover{border-color:var(--primary); background:var(--primary-weak)}
+    .opts input[type="radio"]:checked+label{background:var(--primary); color:#fff; border-color:var(--primary); box-shadow:0 6px 16px rgba(15,98,254,.25)}
+    .actions{display:flex; flex-wrap:wrap; gap:.75rem; align-items:center; justify-content:center; margin-top:.8rem}
+    button.primary{background:var(--ok); color:#fff; border:none; padding:.8rem 1.2rem; border-radius:10px; font-weight:700; cursor:pointer}
+    .validation{color:#b91c1c; text-align:center; font-weight:600; display:none}
+
+    /* Résultats */
+    #results{display:none}
+    .grid{display:grid; gap:1rem; grid-template-columns:1fr}
+    .panel{border:1px solid var(--border); border-radius:12px; padding:1rem}
+    .panel h3{font-size:1.05rem; margin-bottom:.25rem}
+    .bigscore{display:flex; align-items:baseline; gap:.5rem; font-weight:800; font-size:2.1rem}
+    .bigscore small{font-size:1rem; color:var(--muted); font-weight:600}
+    .barwrap{margin-top:.55rem}
+    .bar{height:.75rem; width:100%; background:#eef2f7; border-radius:999px; position:relative; overflow:hidden}
+    .fill{height:100%; background:linear-gradient(90deg, #9ab3ff, #0f62fe); width:0%; transition:width .6s ease; border-radius:999px}
+    .tick{position:absolute; top:-.35rem; width:2px; height:1.45rem; background:#111827; opacity:.65}
+    .tick-label{position:absolute; top:1rem; transform:translateX(-50%); font-size:.8rem; color:#111827; opacity:.7; white-space:nowrap}
+
+    /* Accordéons (details/summary) */
+    details.accordion{border:1px solid var(--border); border-radius:12px; padding:.5rem 1rem}
+    details.accordion summary{cursor:pointer; font-weight:700; list-style:none; outline:none}
+    details.accordion summary::-webkit-details-marker{display:none}
+    details.accordion summary::after{content:"▸"; float:right; transform:translateY(-1px); opacity:.7}
+    details.accordion[open] summary::after{content:"▾"}
+    details.accordion .content{padding-top:.6rem}
+
+    .subs{display:grid; gap:1rem; grid-template-columns:repeat(auto-fit,minmax(14rem,1fr))}
+    .subcard{border:1px solid var(--border); border-radius:12px; padding:.85rem}
+    .subname{font-weight:700; margin-bottom:.15rem}
+    .subdesc{color:#6b7280; font-size:.9rem; margin-bottom:.3rem}
+    .subscore{font-weight:800}
+
+    .consent{display:flex; gap:.6rem; align-items:flex-start; background:#fffbea; border:1px solid #fde68a; color:#92400e; padding:.55rem .8rem; border-radius:10px}
+    .note{color:#6b7280; font-size:.92rem; margin-top:.4rem}
+    .note strong{color:#374151}
+    .small{font-size:.9rem; color:#6b7280}
+
+    footer{padding:1rem 1.5rem; color:#6b7280; font-size:.9rem; background:#fafafa; border-top:1px solid var(--border)}
+    @media (max-width:640px){
+      body{padding:.5rem}
+      .section{padding:1rem 1rem}
+      header{padding:1.1rem 1.1rem}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Quotient du Spectre Autistique (AQ-50)</h1>
+      <div class="toolbar">
+        <label class="btn" for="file-import">Importer un résultat</label>
+        <input type="file" id="file-import" accept=".json" style="display:none"/>
+      </div>
+    </header>
+
+    <div class="section instructions">
+      <p>Indiquez votre degré d’accord pour chaque affirmation. <strong>Toutes les questions doivent être complétées</strong> pour calculer les scores. Outil de dépistage, non diagnostique.</p>
+    </div>
+
+    <form id="aq-form" class="section">
+      <div id="qwrap"></div>
+
+      <div class="actions">
+        <button type="submit" class="primary">Calculer les résultats</button>
+        <p id="valmsg" class="validation">Veuillez répondre à toutes les questions.</p>
+      </div>
+
+      <div id="results" class="section">
+        <div class="grid">
+          <div class="panel">
+            <h3>Score total</h3>
+            <div class="bigscore"><span id="totalscore">0</span><small>/ 50</small></div>
+            <div class="barwrap">
+              <div class="bar">
+                <div class="fill" id="fill"></div>
+                <div class="tick" style="left:52%"></div><div class="tick-label" style="left:52%">26</div>
+                <div class="tick" style="left:58%"></div><div class="tick-label" style="left:58%">29</div>
+                <div class="tick" style="left:64%"></div><div class="tick-label" style="left:64%">32</div>
+              </div>
+            </div>
+
+            <!-- Interprétations en accordéons -->
+            <details class="accordion" open style="margin-top:.8rem">
+              <summary>Interprétation — résumé</summary>
+              <div class="content">
+                <p id="interp"></p>
+                <p id="uncert-line" class="note"></p>
+              </div>
+            </details>
+
+            <details class="accordion" style="margin-top:.6rem">
+              <summary>Interprétation détaillée</summary>
+              <div class="content">
+                <p id="interp-long"></p>
+                <p id="prox-line" class="note"></p>
+                <div id="threshold-edu" class="note"></div>
+                <p class="note"><strong>Repères pratiques issus d’études :</strong> 26 (plutôt sensible), 29 (intermédiaire), 32 (plutôt spécifique). Ces valeurs aident à décider s’il faut approfondir ; elles ne posent pas un diagnostic.</p>
+              </div>
+            </details>
+          </div>
+
+          <!-- Domaines en accordéon (compétences) -->
+          <details class="accordion">
+            <summary>Domaines – interprétés en compétences (0–10, plus élevé = plus à l’aise)</summary>
+            <div class="content">
+              <p class="subdesc">Affichage pédagogique des compétences (10 − score de traits).</p>
+              <div class="subs">
+                <div class="subcard">
+                  <div class="subname">Compétences sociales</div>
+                  <div class="subdesc">Interactions, aisance sociale</div>
+                  <div class="subscore"><span id="comp-social">10</span> / 10</div>
+                </div>
+                <div class="subcard">
+                  <div class="subname">Flexibilité attentionnelle</div>
+                  <div class="subdesc">Changement de tâche, adaptation</div>
+                  <div class="subscore"><span id="comp-switch">10</span> / 10</div>
+                </div>
+                <div class="subcard">
+                  <div class="subname">Attention aux détails</div>
+                  <div class="subdesc">Équilibre global/détail</div>
+                  <div class="subscore"><span id="comp-detail">10</span> / 10</div>
+                </div>
+                <div class="subcard">
+                  <div class="subname">Communication</div>
+                  <div class="subdesc">Échanges verbaux/non verbaux</div>
+                  <div class="subscore"><span id="comp-comm">10</span> / 10</div>
+                </div>
+                <div class="subcard">
+                  <div class="subname">Imagination</div>
+                  <div class="subdesc">Jeu symbolique, perspective</div>
+                  <div class="subscore"><span id="comp-imag">10</span> / 10</div>
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <!-- Export sous les scores -->
+          <div class="panel">
+            <h3>Exporter votre résultat</h3>
+            <p class="small">Aucun stockage local n’est réalisé. Pour exporter, cochez la case de consentement puis cliquez sur « Exporter ».</p>
+            <label class="consent">
+              <input type="checkbox" id="consent"/>
+              <span>J’autorise, si je le souhaite, l’export de mes réponses au format JSON (à conserver par moi). Évitez d’y inclure des identifiants personnels.</span>
+            </label>
+            <div class="actions" style="justify-content:flex-start">
+              <button type="button" id="btn-export" class="btn" disabled>Exporter</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <footer>
+      <p>© Autism Research Centre (ARC), University of Cambridge. Règles de score d’après Baron-Cohen et al., 2001. Usage clinique/recherche non commercial avec attribution. Aucun stockage local.</p>
+      <p> Adapté en version interactive par Dr FENOHASINA Toto Jean Felicien (Psychiatre - FFI).</p>
+    </footer>
+  </div>
+
+  <script>
+    // -------------------------
+    // Items (FR) et réponses
+    // -------------------------
+    const questions = [
+      "Je préfère réaliser des activités avec d’autres personnes plutôt que seul(e).",
+      "Je préfère tout faire continuellement de la même manière.",
+      "Quand j’essaye d’imaginer quelque chose, il est très facile de m’en représenter une image mentalement.",
+      "Je suis fréquemment tellement absorbé(e) par une chose que je perds tout le reste de vue.",
+      "Mon attention est souvent attirée par des bruits discrets que les autres ne remarquent pas.",
+      "Je fais habituellement attention aux numéros de plaques d’immatriculation ou à d’autres types d’informations de ce genre.",
+      "Les gens me disent souvent que ce que j’ai dit était impoli, même quand je pense moi que c’était poli.",
+      "Quand je lis une histoire, je peux facilement imaginer à quoi les personnages pourraient ressembler.",
+      "Je suis fasciné(e) par les dates.",
+      "Au sein d’un groupe, je peux facilement suivre les conversations de plusieurs personnes à la fois.",
+      "Je trouve les situations de la vie en société faciles.",
+      "J’ai tendance à remarquer certains détails que les autres ne voient pas.",
+      "Je préfèrerais aller dans une bibliothèque plutôt qu’à une fête.",
+      "Je trouve facile d’inventer des histoires.",
+      "Je suis plus facilement attiré(e) par les gens que par les objets.",
+      "J’ai tendance à avoir des centres d’intérêt très importants. Je me tracasse lorsque je ne peux m’y consacrer.",
+      "J’apprécie le bavardage en société.",
+      "Quand je parle, il n’est pas toujours facile pour les autres de placer un mot.",
+      "Je suis fasciné(e) par les chiffres.",
+      "Quand je lis une histoire, je trouve qu’il est difficile de me représenter les intentions des personnages.",
+      "Je n’aime pas particulièrement lire des romans.",
+      "Je trouve qu’il est difficile de se faire de nouveaux amis.",
+      "Je remarque sans cesse des schémas réguliers dans les choses qui m’entourent.",
+      "Je préfèrerais aller au théâtre qu’au musée.",
+      "Cela ne me dérange pas si mes habitudes quotidiennes sont perturbées.",
+      "Je remarque souvent que je ne sais pas comment entretenir une conversation.",
+      "Je trouve qu’il est facile de « lire entre les lignes » lorsque quelqu’un me parle.",
+      "Je me concentre habituellement plus sur l’ensemble d’une image que sur les petits détails de celle-ci.",
+      "Je ne suis pas très doué(e) pour me souvenir des numéros de téléphone.",
+      "Je ne remarque habituellement pas les petits changements dans une situation ou dans l’apparence de quelqu’un.",
+      "Je sais m’en rendre compte quand mon interlocuteur s’ennuie.",
+      "Je trouve qu’il est facile de faire plus d’une chose à la fois.",
+      "Quand je parle au téléphone, je ne suis pas sûr(e) de savoir quand c’est à mon tour de parler.",
+      "J’aime faire les choses de manière spontanée.",
+      "Je suis souvent le(la) dernier(ère) à comprendre le sens d’une blague.",
+      "Je trouve qu’il est facile de décoder ce que les autres pensent ou ressentent juste en regardant leur visage.",
+      "Si je suis interrompu(e), je peux facilement revenir à ce que j’étais en train de faire.",
+      "Je suis doué(e) pour le bavardage en société.",
+      "Les gens me disent souvent que je répète continuellement les mêmes choses.",
+      "Quand j’étais enfant, j’aimais habituellement jouer à des jeux de rôle avec les autres.",
+      "J’aime collectionner des informations sur des catégories de choses (types de voitures, d’oiseaux, de trains, de plantes, ...).",
+      "Je trouve qu’il est difficile de s’imaginer dans la peau d’un autre.",
+      "J’aime planifier avec soin toute activité à laquelle je participe.",
+      "J’aime les événements sociaux.",
+      "Je trouve qu’il est difficile de décoder les intentions des autres.",
+      "Les nouvelles situations me rendent anxieux(se).",
+      "J’aime rencontrer de nouvelles personnes.",
+      "Je suis une personne qui a le sens de la diplomatie.",
+      "Je ne suis pas très doué(e) pour me souvenir des dates de naissance des gens.",
+      "Je trouve qu’il est très facile de jouer à des jeux de rôle avec des enfants."
+    ];
+    const responses = [
+      {label:'Tout à fait d’accord', value:'totally_agree'},
+      {label:'Plutôt d’accord', value:'slightly_agree'},
+      {label:'Plutôt pas d’accord', value:'slightly_disagree'},
+      {label:'Pas du tout d’accord', value:'totally_disagree'}
+    ];
+
+    // Clé binaire 0/1
+    const agreeScored = [2,4,5,6,7,9,12,13,16,18,19,20,21,22,23,26,33,35,39,41,42,43,45,46];
+    const disagreeScored = [1,3,8,10,11,14,15,17,24,25,27,28,29,30,31,32,34,36,37,38,40,44,47,48,49,50];
+
+    // Sous-échelles (scores de traits, 10 items chacune)
+    const SUBSCALES = {
+      social:      [1,11,13,15,22,36,44,45,47,48],
+      switching:   [2,4,10,16,25,32,34,37,43,46],
+      detail:      [5,6,9,12,19,23,28,29,30,49],
+      communication:[7,17,18,26,27,31,33,35,38,39],
+      imagination: [3,8,14,20,21,24,40,41,42,50]
+    };
+
+    // Génération du formulaire
+    const qwrap = document.getElementById('qwrap');
+    questions.forEach((t,i)=>{
+      const idx=i+1;
+      const div=document.createElement('div'); div.className='question';
+      const opts=responses.map(r=>`
+        <div>
+          <input type="radio" id="q${idx}_${r.value}" name="q${idx}" value="${r.value}"/>
+          <label for="q${idx}_${r.value}">${r.label}</label>
+        </div>`).join('');
+      div.innerHTML = `<div class="qtext">${idx}. ${t}</div><div class="opts">${opts}</div>`;
+      qwrap.appendChild(div);
+    });
+
+    // Utilitaires
+    function scoreItem(i, ans){
+      const isAgree = (ans==='totally_agree'||ans==='slightly_agree');
+      const isDisagree = !isAgree;
+      if (agreeScored.includes(i) && isAgree) return 1;
+      if (disagreeScored.includes(i) && isDisagree) return 1;
+      return 0;
+    }
+    function sumSubscale(subset, answers){ return subset.reduce((acc,i)=> acc + scoreItem(i, answers[`q${i}`]), 0); }
+
+    // Incertitude (qualitative)
+    function uncertaintyLabel(total){
+      const thresholds=[26,29,32];
+      const dmin = Math.min(...thresholds.map(t=>Math.abs(total - t)));
+      if (dmin <= 1) return {label:"Marge d’incertitude : élevée", hint:"score très proche d’une zone de bascule (26, 29 ou 32)."};
+      if (dmin <= 3) return {label:"Marge d’incertitude : moyenne", hint:"score assez proche d’une zone de bascule."};
+      return {label:"Marge d’incertitude : faible", hint:"score éloigné des zones de bascule."};
+    }
+
+    // Catégorisation simple du résumé
+    function probabilityCategory(total){
+      // <26 = faible ; 26–31 = modérée ; ≥32 = élevée
+      if (total < 26) return "faible";
+      if (total <= 31) return "modérée";
+      return "élevée";
+    }
+
+    // Interprétation longue
+    function interpretationLong(total){
+      if (total < 26){
+        return "Votre score est inférieur à 26. Dans la plupart des études, cette zone est associée à une probabilité plutôt faible de traits autistiques cliniquement significatifs. Cela n’exclut pas des difficultés spécifiques (anxiété sociale, sensorialité, fonctions exécutives). Si ces difficultés retentissent sur votre quotidien, un entretien clinique peut rester pertinent pour comprendre et orienter.";
+      } else if (total <= 28){
+        return "Votre score est entre 26 et 28, une zone choisie pour être sensible au repérage : on préfère rater le moins de situations possibles, quitte à avoir plus de ‘faux positifs’. Concrètement, on recommande souvent d’explorer le contexte (histoire développementale, retentissement, comorbidités possibles comme TDAH/TOC/anxiété) et de décider avec un professionnel s’il faut approfondir (entretien clinique structuré, questionnaires additionnels).";
+      } else if (total <= 31){
+        return "Votre score est entre 29 et 31. C’est un compromis entre sensibilité et spécificité. En pratique, l’interprétation dépend du contexte : en première ligne (où la prévalence est faible), on cherchera des indices cliniques convergents avant d’orienter ; en contexte spécialisé (prévalence plus élevée), on envisagera plus souvent un approfondissement. Dans tous les cas, le retentissement fonctionnel guide la décision.";
+      } else {
+        return "Votre score est ≥ 32. Cette zone est plus spécifique : il y a moins de ‘faux positifs’, mais on peut rater des personnes ayant des traits plus discrets (faux négatifs). Concrètement, si ce score s’accompagne d’un retentissement significatif, cela motive un entretien clinique et, si indiqué, une évaluation standardisée (p. ex. entretien développemental, observation clinique structurée) pour confirmer ou infirmer un TSA et discuter des besoins d’accompagnement.";
+      }
+    }
+
+    // Proximité d’un repère
+    function thresholdProximity(total){
+      const thresholds=[26,29,32];
+      let closest = thresholds[0];
+      for (const t of thresholds){ if (Math.abs(total-t) < Math.abs(closest-total)) closest = t; }
+      const d = Math.abs(total - closest);
+      if (d === 0) return `Proximité d’un repère : votre score correspond exactement au repère ${closest}. De petites variations de réponses peuvent changer la zone d’interprétation.`;
+      if (d === 1) return `Proximité d’un repère : votre score est à ±1 point du repère ${closest}. Une vérification clinique est utile si vous avez des questions.`;
+      if (d <= 3) return `Proximité d’un repère : votre score est à ${d} points du repère ${closest}. Selon vos besoins, un avis clinique peut aider à trancher.`;
+      return `Proximité d’un repère : votre score est éloigné (≥ 4 points) des repères immédiats.`;
+    }
+
+    // Bloc pédagogique sur 26/29/32
+    function buildThresholdEdu(total){
+      return `
+        <p><strong>Comprendre les repères 26 / 29 / 32</strong></p>
+        <p><em>26 (plutôt sensible)</em> : repère choisi pour <strong>repérer un maximum</strong> de situations potentiellement concernées. Avantage : moins de cas “manqués”. Limite : davantage de personnes auront un score élevé sans que cela corresponde forcément à un TSA (plus de <em>faux positifs</em>).</p>
+        <p><em>29 (intermédiaire)</em> : repère de <strong>compromis</strong> entre sensibilité et spécificité. Il réduit une partie des faux positifs par rapport à 26, au prix d’un peu plus de faux négatifs.</p>
+        <p><em>32 (plutôt spécifique)</em> : repère qui privilégie la <strong>spécificité</strong>. Avantage : moins de faux positifs. Limite : <strong>plus</strong> de faux négatifs (des personnes concernées peuvent rester sous le seuil, notamment si elles compensent/camouflent).</p>
+        <p><strong>Pour les patients — concrètement</strong> : si votre score est proche d’un repère, il est normal d’hésiter. Le plus utile est d’évaluer <em>le retentissement</em> (école/travail, relations, gestion sensorielle/routines). Si ce retentissement est significatif pour vous, un <strong>entretien clinique</strong> est indiqué, quel que soit le score.</p>
+        <p><strong>Pour les cliniciens — concrètement</strong> : choisissez le repère en fonction du <em>contexte</em> (prévalence attendue, coût d’erreurs). En première ligne (prévalence faible), on peut privilégier 32 pour améliorer la valeur prédictive positive ; en filière spécialisée (prévalence plus élevée) ou pour un tri large, 26 peut se discuter. Interprétez toujours avec l’<em>a priori clinique</em> et le retentissement, en gardant à l’esprit le camouflage (notamment chez certaines femmes/AFAB) et les comorbidités (anxiété, TDAH, TOC) qui modulent le score.</p>
+        <p class="small">Sensibilité = capacité à repérer les personnes concernées (réduit les faux négatifs). Spécificité = capacité à écarter les non-concernés (réduit les faux positifs). Ces repères guident le dépistage ; ils ne posent pas un diagnostic.</p>
+      `;
+    }
+
+    // Rendu / calcul factorisé
+    const form = document.getElementById('aq-form');
+    const valmsg = document.getElementById('valmsg');
+    const results = document.getElementById('results');
+    const totalscoreEl = document.getElementById('totalscore');
+    const fill = document.getElementById('fill');
+    const interp = document.getElementById('interp');
+    const uncertLine = document.getElementById('uncert-line');
+    const interpLong = document.getElementById('interp-long');
+    const proxLine = document.getElementById('prox-line');
+    const thresholdEdu = document.getElementById('threshold-edu');
+
+    const compSocial = document.getElementById('comp-social');
+    const compSwitch = document.getElementById('comp-switch');
+    const compDetail = document.getElementById('comp-detail');
+    const compComm   = document.getElementById('comp-comm');
+    const compImag   = document.getElementById('comp-imag');
+
+    function computeAndRender(answers){
+      // complétude
+      for (let i=1;i<=questions.length;i++){
+        if (!answers[`q${i}`]){ valmsg.style.display='block'; results.style.display='none'; return false; }
+      }
+      valmsg.style.display='none';
+
+      // total (traits)
+      let total=0;
+      for (let i=1;i<=questions.length;i++) total += scoreItem(i, answers[`q${i}`]);
+
+      // sous-scores (traits) -> compétences (10 - traits)
+      const s_social = sumSubscale(SUBSCALES.social, answers);
+      const s_switch = sumSubscale(SUBSCALES.switching, answers);
+      const s_detail = sumSubscale(SUBSCALES.detail, answers);
+      const s_comm   = sumSubscale(SUBSCALES.communication, answers);
+      const s_imag   = sumSubscale(SUBSCALES.imagination, answers);
+
+      compSocial.textContent = String(10 - s_social);
+      compSwitch.textContent = String(10 - s_switch);
+      compDetail.textContent = String(10 - s_detail);
+      compComm.textContent   = String(10 - s_comm);
+      compImag.textContent   = String(10 - s_imag);
+
+      // total + barre
+      totalscoreEl.textContent = String(total);
+      fill.style.width = Math.max(0, Math.min(100, (total/50)*100)) + '%';
+
+      // Résumé : "Score … / 50 : probabilité (faible/modérée/élevée)…"
+      const prob = probabilityCategory(total);
+      interp.textContent = `Score ${total} / 50 : probabilité ${prob} de traits autistiques cliniquement significatifs.`;
+
+      // Détail + incertitude + pédagogie repères
+      interpLong.textContent = interpretationLong(total);
+      const u = uncertaintyLabel(total);
+      uncertLine.textContent = `${u.label} — ${u.hint}`;
+      proxLine.textContent = thresholdProximity(total);
+      thresholdEdu.innerHTML = buildThresholdEdu(total);
+
+      results.style.display='block';
+      results.scrollIntoView({behavior:'smooth'});
+      // activer export après calcul
+      document.getElementById('btn-export').disabled = !document.getElementById('consent').checked;
+      return true;
+    }
+
+    // Submit
+    form.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const fd = new FormData(form);
+      const answers = {}; for (const [k,v] of fd.entries()) answers[k]=v;
+      computeAndRender(answers);
+    });
+
+    // Import (dès le début) + calcul immédiat
+    const fileImport = document.getElementById('file-import');
+    fileImport.addEventListener('change', (ev)=>{
+      const f = ev.target.files?.[0]; if(!f) return;
+      const reader = new FileReader();
+      reader.onload = (e)=>{
+        try{
+          const data = JSON.parse(e.target.result);
+          for (let i=1;i<=questions.length;i++){
+            const v = data[`q${i}`];
+            if (v){
+              const r = document.querySelector(`input[name="q${i}"][value="${v}"]`);
+              if (r) r.checked = true;
+            }
+          }
+          computeAndRender(data);
+        }catch{ alert("Fichier invalide."); }
+        finally{ ev.target.value=''; }
+      };
+      reader.readAsText(f);
+    });
+
+    // Export (en bas des scores)
+    const consent = document.getElementById('consent');
+    const btnExport = document.getElementById('btn-export');
+    consent.addEventListener('change', ()=>{
+      if (document.getElementById('results').style.display === 'block'){
+        btnExport.disabled = !consent.checked;
+      }
+    });
+    btnExport.addEventListener('click', ()=>{
+      if (!consent.checked) return;
+      const fd = new FormData(form);
+      const answers = {}; let any=false;
+      for (const [k,v] of fd.entries()){ answers[k]=v; any=true; }
+      if (!any){ alert("Veuillez d’abord calculer un résultat."); return; }
+      const blob = new Blob([JSON.stringify(answers,null,2)], {type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href=url; a.download='reponses_aq.json';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+    });
+
+    // Aucun stockage local
+  </script>
+</body>
+</html>
