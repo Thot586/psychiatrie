@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Urgences Psy – Trois cas types (dépression avec idées suicidaires)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--psy:#2563eb;--pat:#059669;--ctx:#f59e0b}
+    html{scroll-behavior:smooth}
+    body{font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,'Noto Sans'}
+    .role-psy{color:var(--psy)}
+    .role-pat{color:var(--pat)}
+    .role-ctx{color:var(--ctx)}
+    .badge{display:inline-flex;align-items:center;gap:.5rem;border-radius:9999px;padding:.25rem .75rem;font-weight:600;font-size:.75rem}
+    .badge-psy{background:rgba(37,99,235,.1);color:var(--psy)}
+    .badge-pat{background:rgba(5,150,105,.1);color:var(--pat)}
+    .badge-ctx{background:rgba(245,158,11,.12);color:var(--ctx)}
+    .pro{background:rgba(16,185,129,.12);color:#065f46}
+    .risk{background:rgba(244,63,94,.12);color:#9f1239}
+    .neutral{background:rgba(100,116,139,.12);color:#334155}
+    .card{border-radius:1rem;box-shadow:0 10px 20px rgba(2,6,23,.06),0 2px 6px rgba(2,6,23,.08);border:1px solid rgba(100,116,139,.12)}
+    .divider{height:1px;background-image:linear-gradient(to right,transparent,rgba(100,116,139,.25),transparent)}
+    details > summary{cursor:pointer;list-style:none}
+    details > summary::-webkit-details-marker{display:none}
+    .talk-line{display:grid;grid-template-columns: 110px 1fr;gap:.75rem;align-items:start;padding-top: .75rem; padding-bottom: .75rem;}
+    .talk-line:not(:last-child) { border-bottom: 1px solid #f1f5f9; }
+    @media (max-width:640px){.talk-line{grid-template-columns:1fr}}
+    .retour{margin-top:1rem;text-align:right;font-size:.8rem}
+    .retour a{color:#2563eb;text-decoration:underline}
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+  <header class="bg-white/70 backdrop-blur sticky top-0 z-10 border-b border-slate-200">
+    <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
+      <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900">Épisode dépressif avec idées suicidaires – Trois cas types (Urgences, France)</h1>
+      <nav class="text-sm font-semibold text-slate-600 flex gap-4">
+        <a href="#intro" class="hover:text-slate-900">Intro</a>
+        <a href="#cas-1" class="hover:text-slate-900">Cas 1</a>
+        <a href="#cas-2" class="hover:text-slate-900">Cas 2</a>
+        <a href="#cas-3" class="hover:text-slate-900">Cas 3</a>
+        <a href="#synthese" class="hover:text-slate-900">Synthèse</a>
+        <a href="#glossaire" class="hover:text-slate-900">Glossaire</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-4 py-8 space-y-10">
+    <section id="intro" class="card bg-white p-6">
+      <h2 class="text-lg sm:text-xl font-bold mb-2">Objectif pédagogique</h2>
+      <p class="text-slate-700">Ces vignettes illustrent la prise de décision aux urgences psychiatriques face à une dépression avec idées suicidaires. Chaque cas inclut présentation clinique, un dialogue étendu et détaillé (<span class="badge badge-psy">Psychiatre</span>, <span class="badge badge-pat">Patient</span>, <span class="badge badge-ctx">Contexte/observations</span>), puis un débriefing axé sur la <em>balance bénéfice–risque</em>, les <a href="#glossaire" class="text-blue-600 underline">facteurs de protection</a> et de <a href="#glossaire" class="text-blue-600 underline">vulnérabilité</a>, et la décision de soin qui en découle.</p>
+    </section>
+
+    <!-- CAS 1 -->
+    <section class="card bg-white p-6" id="cas-1">
+      <div class="flex items-center justify-between gap-4 flex-wrap">
+        <h2 class="text-lg sm:text-xl font-bold">Cas 1 — Idéation structurée avec intention, moyens accessibles, altération majeure</h2>
+        <span class="badge risk">Hospitalisation indiquée (immédiate)</span>
+      </div>
+      <div class="mt-4 text-sm text-slate-600">Homme 43 ans, amené par sa femme. Épisode dépressif sévère à caractéristiques <a href="#glossaire" class="text-blue-600 underline">mélancoliques</a>. <a href="#glossaire" class="text-blue-600 underline">Plan suicidaire</a> précis depuis 3 jours, moyens disponibles à domicile.</div>
+      <div class="divider my-6"></div>
+      <h3 class="font-semibold text-slate-900 mb-3">Dialogue simulé</h3>
+      <details open class="group rounded-lg border border-slate-200">
+        <summary class="px-4 py-3 font-medium cursor-pointer">Afficher / masquer l’entretien</summary>
+        <div class="px-4 pb-4 pt-1 space-y-2">
+          <div class="talk-line"><div class="font-semibold role-psy">Psychiatre</div><div>Bonjour Monsieur. Asseyez-vous. Votre femme, que j'ai vue juste avant, est très inquiète pour vous. Elle m'a dit que vous ne sortiez plus, que vous ne mangiez presque plus. Comment vous sentez-vous, vous, en ce moment ?</div></div>
+          <div class="talk-line"><div class="font-semibold role-pat">Patient</div><div class="italic text-slate-500">(Voix basse, sans regarder) Je suis fatigué. C'est tout. Elle s'inquiète pour rien. Je veux juste qu'on me laisse tranquille.</div></div>
+          <div class="talk-line"><div class="font-semibold role-psy">Psychiatre</div><div>Cette fatigue a l'air immense. Est-ce qu'il y a encore des choses qui vous apportent un peu de plaisir ? Un film, un repas, parler à un proche ?</div></div>
+          <div class="talk-line"><div class="font-semibold role-pat">Patient</div><div class="italic text-slate-500">(Léger temps de latence) Non. Rien. Tout a le même goût. Le goût de rien. Tout est gris. Je suis vide.</div></div>
+          <div class="talk-line"><div class="font-semibold role-psy">Psychiatre</div><div>C'est ce qu'on appelle une anhédonie, une perte totale de plaisir. C'est un symptôme très douloureux de la dépression. Quand on se sent si vide et si fatigué, il arrive que des idées noires apparaissent. L'idée que la seule façon que ça s'arrête, ce serait de ne plus être là. Est-ce que ce genre d'idées vous a traversé l'esprit ?</div></div>
+          <div class="talk-line"><div class="font-semibold role-pat">Patient</div><div class="italic text-slate-500">(Après un long silence, hoche la tête) Tout le temps. C'est la seule chose à laquelle je pense.</div></div>
+           <div class="talk-line"><div class="font-semibold role-psy">Psychiatre</div><div>Avez-vous été jusqu'à penser à une façon précise de le faire ? Un scénario ?</div></div>
+          <div class="talk-line"><div class="font-semibold role-pat">Patient</div><div class="italic text-slate-500">(Regard fixe) Oui. Ce soir. Une fois que ma femme dormira. Tout est prêt.</div></div>
+          <div class="talk-line"><div class="font-semibold role-psy">Psychiatre</div><div>Je comprends que c'est difficile d'en parler, et je vous remercie de votre confiance. Pour que je puisse bien évaluer le danger, pouvez-vous me dire ce que vous entendez par "tout est prêt" ? De quel moyen s'agit-il ?</div></div>
+          <div class="talk-line"><div class="font-semibold role-pat">Patient</div><div class="italic text-slate-500">Les médicaments que je prends d'habitude... J'ai mis de côté les boîtes depuis des semaines. J'ai écrit une lettre aussi, pour expliquer. Je ne veux pas être un poids. J'ai tout raté. Je suis un fardeau.</div></div>
+          <div class="talk-line"><div class="font-semibold role-psy">Psychiatre</div><div>Cette idée d'être un fardeau, c'est la maladie qui vous parle. Ce n'est pas la réalité. Mais je comprends que vous y croyiez. Y a-t-il, même infime, une petite partie de vous qui doute, qui se dit que peut-être il y a une autre solution ? Une part de vous qui voudrait continuer à vivre si cette souffrance disparaissait ?</div></div>
+          <div class="talk-line"><div class="font-semibold role-pat">Patient</div><div class="italic text-slate-500">(Ferme, secouant négativement la tête) Non. Plus maintenant. J'ai tout essayé. Il n'y a plus d'espoir. C'est la seule issue. C'est décidé.</div></div>
+          <div class="talk-line"><div class="font-semibold role-psy">Psychiatre</div><div>Vu la situation, l'intensité de votre souffrance et le caractère précis de votre projet, je ne peux pas prendre le risque de vous laisser repartir. Ma responsabilité est de vous protéger. Je vais devoir vous hospitaliser, pour vous mettre en sécurité le temps que nous trouvions des solutions pour apaiser cette douleur.</div></div>
+          <div class="talk-line"><div class="font-semibold role-ctx">Contexte</div><div>Le patient présente un <a href="#glossaire" class="text-amber-600 underline">ralentissement psychomoteur</a> majeur. Le discours est pauvre, le ton monocorde. L'absence totale d'ambivalence et la conviction délirante d'être un "fardeau" (idée d'indignité) sont des signes de gravité majeurs de la mélancolie. La décision d'hospitalisation est non négociable.</div></div>
+        </div>
+      </details>
+      <div class="divider my-6"></div>
+      <h3 class="font-semibold text-slate-900 mb-2">Débriefing</h3>
+      <p class="text-slate-700">L'<a href="#glossaire" class="text-blue-600 underline">intentionnalité</a> est maximale, la planification méticuleuse et le patient ne présente aucune <a href="#glossaire" class="text-blue-600 underline">ambivalence</a>. Le sentiment d'être un fardeau et l'absence d'espoir sont caractéristiques d'une dépression mélancolique. L'hospitalisation immédiate, éventuellement sans consentement, est indispensable pour assurer sa sécurité.</p>
+      <div class="retour"><a href="#intro">↑ Haut</a> | <a href="#glossaire">Glossaire</a></div>
+    </section>
+
+    <!-- CAS 2 -->
+    <section class="card bg-white p-6" id="cas-2">
+      <div class="flex items-center justify-between gap-4 flex-wrap">
+        <h2 class="text-lg sm:text-xl font-bold">Cas 2 — Idées passives fluctuantes, <a href="#glossaire" class="text-blue-600 underline">ambivalence</a> présente mais contexte défavorable</h2>
+        <span class="badge neutral">Hospitalisation motivée par le contexte</span>
+      </div>
+      <div class="mt-4 text-sm text-slate-600">Femme 28 ans, adressée par les urgences générales suite à une crise d'angoisse. Contexte de violences conjugales. Épisode dépressif modéré, <a href="#glossaire" class="text-blue-600 underline">idées suicidaires passives</a>.</div>
+      <div class="divider my-6"></div>
+      <h3 class="font-semibold text-slate-900 mb-3">Dialogue simulé</h3>
+      <details open class="group rounded-lg border border-slate-200">
+        <summary class="px-4 py-3 font-medium cursor-pointer">Afficher / masquer l’entretien</summary>
+        <div class="px-4 pb-4 pt-1 space-y-2">
+          <div class="talk-line"><div class="font-semibold role-psy">Psychiatre</div><div>Bonjour Madame. Le médecin des urgences m'a expliqué que vous aviez fait une crise de panique très forte. Vous tremblez encore. Prenez votre temps. Qu'est-ce qui a déclenché cette angoisse ?</div></div>
+          <div class="talk-line"><div class="font-semibold role-pat">Patient</div><div class="italic text-slate-500">(En larmes) C'est mon conjoint... On s'est encore disputé. Il a crié, il a claqué la porte... J'ai cru qu'il allait revenir, qu'il allait... J'arrivais plus à respirer. J'ai cru que j'allais mourir.</div></div>
+          <div class="talk-line"><div class="font-semibold role-psy">Psychiatre</div><div>C'est une situation de peur intense. Parfois, quand la peur et la tristesse sont trop grandes, on peut en arriver à souhaiter que tout s'arrête. Est-ce que ça vous arrive d'y penser ?</div></div>
+          <div class="talk-line"><div class="font-semibold role-pat">Patient</div><div class="italic text-slate-500">(Hoche la tête) Oui... Des fois, je me dis que si je mourais, au moins je n'aurais plus peur. Ce serait calme.</div></div>
+          <div class="talk-line"><div class="font-semibold role-psy">Psychiatre</div><div>Ce désir de calme est tout à fait compréhensible. Est-ce que cette idée de mourir est allée jusqu'à un plan, une idée de comment faire ?</div></div>
+          <div class="talk-line"><div class="font-semibold role-pat">Patient</div><div class="italic text-slate-500">Non, pas vraiment un plan... C'est plus une envie de m'endormir pour de bon. Mais quand il crie, quand j'ai peur, l'idée devient plus forte. Ça me semble la seule porte de sortie. Je me dis que je suis nulle, que je n'arriverai jamais à partir.</div></div>
+          <div class="talk-line"><div class="font-semibold role-psy">Psychiatre</div><div>Vous n'êtes pas nulle, vous êtes en danger. Ce soir, vous sentez-vous capable de rentrer chez vous ?</div></div>
+          <div class="talk-line"><div class="font-semibold role-pat">Patient</div><div class="italic text-slate-500">(Catégorique) Non. Impossible. J'ai trop peur. Mais je ne sais pas où aller. Je n'ai personne ici.</div></div>
+          <div class="talk-line"><div class="font-semibold role-psy">Psychiatre</div><div>D'accord. Alors la priorité absolue, c'est votre sécurité. Qu'est-ce qui vous raccroche à la vie, malgré tout ? Y a-t-il une chose, une personne, un projet, qui vous donne envie de vous battre ?</div></div>
+          <div class="talk-line"><div class="font-semibold role-pat">Patient</div><div class="italic text-slate-500">Ma petite sœur… Elle va se marier l'été prochain. J'aimerais être là. Mais c'est loin... J'ai honte de lui raconter tout ça.</div></div>
+          <div class="talk-line"><div class="font-semibold role-psy">Psychiatre</div><div>C'est un point d'ancrage très important, le mariage de votre sœur. Pour être là l'été prochain, il faut être en sécurité ce soir. Je vous propose une hospitalisation de quelques jours. Le but n'est pas de vous "soigner" de force, mais de vous offrir un lieu sûr, un abri. Pour souffler, dormir sans peur, et qu'on puisse, ensemble, contacter des associations et préparer la suite. Qu'en pensez-vous ?</div></div>
+          <div class="talk-line"><div class="font-semibold role-ctx">Contexte</div><div>La patiente est hypervigilante, sursautant au moindre bruit. Le téléphone, posé face cachée, vibre sans cesse. L'ambivalence est claire : le désir de mort est une stratégie d'échappement à la terreur. Le levier thérapeutique n'est pas le risque suicidaire intrinsèque (modéré) mais le danger externe (maximal).</div></div>
+        </div>
+      </details>
+      <div class="divider my-6"></div>
+      <h3 class="font-semibold text-slate-900 mb-2">Débriefing</h3>
+      <p class="text-slate-700">L'<a href="#glossaire" class="text-blue-600 underline">ambivalence</a> est forte : le désir de mort est une stratégie d'échappement à une situation de violence. Les <a href="#glossaire" class="text-blue-600 underline">facteurs de vulnérabilité</a> (violences, isolement) sont majeurs. L'hospitalisation est une mesure de protection et de mise à l'abri, permettant de rompre le cycle de la violence et de réinitier les soins.</p>
+      <div class="retour"><a href="#intro">↑ Haut</a> | <a href="#glossaire">Glossaire</a></div>
+    </section>
+
+    <!-- CAS 3 -->
+    <section class="card bg-white p-6" id="cas-3">
+      <div class="flex items-center justify-between gap-4 flex-wrap">
+        <h2 class="text-lg sm:text-xl font-bold">Cas 3 — Idées intrusives sans intention, protections solides et alliance</h2>
+        <span class="badge pro">Prise en charge ambulatoire</span>
+      </div>
+      <div class="mt-4 text-sm text-slate-600">Homme 35 ans, consultant accompagné de son frère. Épisode dépressif léger à modéré, idées suicidaires <a href="#glossaire" class="text-blue-600 underline">ego-dystoniques</a>, aucune intention, soutiens familiaux et <a href="#glossaire" class="text-blue-600 underline">alliance thérapeutique</a> possibles.</div>
+      <div class="divider my-6"></div>
+      <h3 class="font-semibold text-slate-900 mb-3">Dialogue simulé</h3>
+      <details open class="group rounded-lg border border-slate-200">
+        <summary class="px-4 py-3 font-medium cursor-pointer">Afficher / masquer l’entretien</summary>
+        <div class="px-4 pb-4 pt-1 space-y-2">
+          <div class="talk-line"><div class="font-semibold role-psy">Psychiatre</div><div>Bonjour Monsieur. Vous êtes venu avec votre frère. Qu'est-ce qui vous amène tous les deux aujourd'hui ?</div></div>
+          <div class="talk-line"><div class="font-semibold role-pat">Patient</div><div class="italic text-slate-500">(Visiblement anxieux) Bonjour. Ça ne va pas depuis quelques semaines... je dors mal, je suis irritable. Mais le pire, ce sont des pensées... des images horribles qui me viennent, sans que je le veuille.</div></div>
+          <div class="talk-line"><div class="font-semibold role-psy">Psychiatre</div><div>Pouvez-vous me donner un exemple de ces images ?</div></div>
+          <div class="talk-line"><div class="font-semibold role-pat">Patient</div><div class="italic text-slate-500">Hier, je coupais des légumes pour le dîner. D'un coup, j'ai eu un flash, une image de moi utilisant le couteau contre moi. Ça a duré une seconde, mais c'était si réel... Ça m'a terrifié. J'ai tout lâché et j'ai appelé mon frère en panique. Je ne veux pas mourir, je ne veux absolument pas ça. Ces pensées me font horreur.</div></div>
+          <div class="talk-line"><div class="font-semibold role-psy">Psychiatre</div><div>Je vous remercie de cette description très claire. Ce que vous décrivez est très angoissant, mais c'est un phénomène connu. Il est crucial de faire la différence entre une pensée intrusive, qui vous envahit et que vous rejetez avec force, et une réelle intention de mourir. Vous me dites bien que ces pensées sont à l'opposé de ce que vous voulez ?</div></div>
+          <div class="talk-line"><div class="font-semibold role-pat">Patient</div><div class="italic text-slate-500">Exactement ! C'est comme si mon cerveau me trahissait. Ma plus grande peur, c'est de finir par perdre le contrôle et de faire ce que l'image me montre.</div></div>
+          <div class="talk-line"><div class="font-semibold role-psy">Psychiatre</div><div>C'est une peur légitime. Le fait même que vous soyez terrifié et que vous ayez immédiatement cherché de l'aide montre que vous ne perdez pas le contrôle. Au contraire, vous vous protégez. (Au frère) Et vous, qu'en pensez-vous ?</div></div>
+          <div class="talk-line"><div class="font-semibold role-pat">Frère</div><div class="italic text-slate-500">Quand il m'a appelé, il était paniqué. Je suis venu tout de suite. Il m'a tout expliqué. On a rangé les couteaux de cuisine pour le rassurer. Je peux rester dormir chez lui quelques jours, le temps que ça aille mieux. On est très proches.</div></div>
+          <div class="talk-line"><div class="font-semibold role-psy">Psychiatre</div><div>C'est un excellent réflexe. Ce que vous avez fait spontanément, c'est le début d'un <a href="#glossaire" class="text-blue-600 underline">plan de sécurité</a>. C'est un outil qu'on va construire ensemble. On va lister précisément les signes qui annoncent que l'angoisse monte, ce que vous pouvez faire seul pour vous apaiser, qui appeler en premier - votre frère - puis en second, et enfin nos coordonnées ici aux urgences. Ça vous convient comme programme ?</div></div>
+          <div class="talk-line"><div class="font-semibold role-pat">Patient</div><div class="italic text-slate-500">(Visiblement soulagé) Oui. Ça me rassure de savoir quoi faire. De ne pas être seul avec ça.</div></div>
+          <div class="talk-line"><div class="font-semibold role-ctx">Contexte</div><div>L'alliance entre les deux frères est un facteur de protection majeur. Le patient est capable d'analyser ses pensées (insight) et sa peur est un moteur pour chercher des solutions. Il est un partenaire actif du soin. La démarche est collaborative et centrée sur l'autonomisation (empowerment).</div></div>
+        </div>
+      </details>
+      <div class="divider my-6"></div>
+      <h3 class="font-semibold text-slate-900 mb-2">Débriefing</h3>
+      <p class="text-slate-700">Les idées suicidaires sont clairement <a href="#glossaire" class="text-blue-600 underline">ego-dystoniques</a> et génèrent de l'angoisse. Les <a href="#glossaire" class="text-blue-600 underline">facteurs de protection</a> sont nombreux : forte <a href="#glossaire" class="text-blue-600 underline">alliance thérapeutique</a>, soutien familial efficace, capacité à demander de l'aide. La co-construction d'un plan de sécurité et un suivi ambulatoire rapproché sont la stratégie la plus adaptée.</p>
+      <div class="retour"><a href="#intro">↑ Haut</a> | <a href="#glossaire">Glossaire</a></div>
+    </section>
+
+    <section class="card bg-white p-6" id="synthese">
+      <h2 class="text-lg sm:text-xl font-bold mb-2">Synthèse décisionnelle</h2>
+      <p class="text-slate-700">La décision d'hospitaliser ou non repose sur l'évaluation de l'interaction complexe entre l'<a href="#glossaire" class="text-blue-600 underline">intentionnalité</a>, la <a href="#glossaire" class="text-blue-600 underline">planification</a>, l'accès aux moyens, l'<a href="#glossaire" class="text-blue-600 underline">ambivalence</a>, l'état mental (ex: <a href="#glossaire" class="text-blue-600 underline">mélancolie</a>), les <a href="#glossaire" class="text-blue-600 underline">facteurs de protection et de vulnérabilité</a>, et le <a href="#glossaire" class="text-blue-600 underline">contexte</a> global du patient.</p>
+    </section>
+
+    <section class="card bg-white p-6" id="glossaire">
+      <h2 class="text-lg sm:text-xl font-bold mb-4">Glossaire simplifié</h2>
+      <dl class="space-y-4 text-slate-700">
+        <div><dt class="font-semibold text-slate-800">Alliance thérapeutique</dt><dd>Relation de confiance et de collaboration entre le soignant et le patient, visant un objectif commun. C'est un facteur clé du soin.</dd></div>
+        <div><dt class="font-semibold text-slate-800">Ambivalence</dt><dd>Présence simultanée de désirs de vivre et de mourir. C'est un levier thérapeutique important.</dd></div>
+        <div><dt class="font-semibold text-slate-800">Contexte</dt><dd>Environnement social, matériel et relationnel du patient. Peut inclure des facteurs de vulnérabilité (isolement, violences) ou de protection.</dd></div>
+        <div><dt class="font-semibold text-slate-800">Ego-dystonique</dt><dd>Qualifie une pensée perçue par le sujet comme étant en contradiction avec son Moi et ses valeurs. La personne rejette cette pensée et en souffre.</dd></div>
+        <div><dt class="font-semibold text-slate-800">Épisode mélancolique</dt><dd>Forme sévère de dépression avec tristesse intense (douleur morale), perte de tout plaisir (anhédonie), <a href="#glossaire" class="text-blue-600 underline">ralentissement psychomoteur</a>, et idées de culpabilité ou d'indignité.</dd></div>
+        <div><dt class="font-semibold text-slate-800">Facteurs de protection / vulnérabilité</dt><dd><strong>Protection :</strong> Éléments qui réduisent le risque (soutien social, engagement dans les soins, projets).<br><strong>Vulnérabilité :</strong> Éléments qui augmentent le risque (isolement, antécédents, violences subies).</dd></div>
+        <div><dt class="font-semibold text-slate-800">Idées suicidaires passives vs actives</dt><dd><strong>Passives :</strong> Souhait de mourir sans scénario ("j'aimerais que ça s'arrête").<br><strong>Actives :</strong> Pensées concernant des moyens de se donner la mort, avec ou sans plan.</dd></div>
+        <div><dt class="font-semibold text-slate-800">Intentionnalité suicidaire</dt><dd>Volonté consciente et délibérée de mettre fin à ses jours. À distinguer des idées intrusives.</dd></div>
+        <div><dt class="font-semibold text-slate-800">Plan de sécurité</dt><dd>Outil co-construit listant signaux d'alerte, stratégies d'apaisement, personnes ressources et numéros d'urgence pour gérer une crise.</dd></div>
+        <div><dt class="font-semibold text-slate-800">Plan suicidaire</dt><dd>Description concrète de la méthode, du lieu et du moment envisagé. Sa précision est un indicateur de dangerosité.</dd></div>
+         <div><dt class="font-semibold text-slate-800">Ralentissement psychomoteur</dt><dd>Diminution marquée de la vitesse des pensées, de la parole et des mouvements. Symptôme fréquent de la dépression sévère.</dd></div>
+      </dl>
+    </section>
+
+    <footer class="bg-slate-900 text-slate-300 text-sm border-t border-slate-700 py-6 px-4">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center md:items-start justify-between gap-6">
+    
+        <!-- LOGO GAUCHE : VINATIER -->
+        <div class="flex-shrink-0">
+          <a href="https://www.ch-le-vinatier.fr" target="_blank" rel="noopener noreferrer">
+            <img class="h-20 md:h-24 w-auto"
+                 src="https://d2q79iu7y748jz.cloudfront.net/s/_squarelogo/256x256/e079f7cf4939908ea9a07ce40d529d0b"
+                 alt="Logo Centre Hospitalier Le Vinatier">
+          </a>
+        </div>
+    
+        <!-- TEXTE CENTRAL -->
+        <div class="flex-1 text-center md:text-left space-y-2">
+        <p>Dr FENOHASINA T. J. Felicien (Centre Ressource de Réhabilitation Psychosociale).</p>
+        <p>MOHAMAD-SAID Aman (ORSPERE SAMDARA)</p>
+       
+        <div class="flex items-center justify-center md:justify-start gap-2">
+         <img class="h-5 w-auto"
+               src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Cc-by-nc-sa_icon.svg/120px-Cc-by-nc-sa_icon.svg.png"
+               alt="Icône Creative Commons BY-NC-SA">
+          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr"
+          target="_blank" rel="noopener noreferrer"
+          class="underline hover:text-white">Licence CC BY-NC-SA 4.0</a> –
+         Dernière mise à jour : 10 septembre 2025.
+          </div>
+        </div>
+    
+    
+        <!-- LOGOS DROITS : ORSPERE + CRR -->
+        <div class="flex items-center gap-6 flex-shrink-0">
+          <a href="https://www.facebook.com/Psykozy?locale=fr_FR" target="_blank" rel="noopener noreferrer">
+            <img class="h-16 md:h-20 w-auto" 
+                 src="https://cdn-assets.inwink.com/fe065c87-0643-42fc-8b5d-4d94b5d12c11/a1904f78-1bca-466d-a9f4-8ac9fde06c0c"
+                 alt="Logo Psy-kôzy">
+          </a>
+            <a href="https://orspere-samdarra.com" target="_blank" rel="noopener noreferrer">
+            <img class="h-16 md:h-20 w-auto"
+                 src="https://media.licdn.com/dms/image/v2/D4E0BAQHvVartRaEsFw/company-logo_200_200/company-logo_200_200/0/1694161356679/orspere_samdarra_logo?e=2147483647&v=beta&t=TDUHIcZRTMlwdMY_Rm0mKvwnXTAG-MhWfnJzinVfywg"
+                 alt="Logo ORSPERE Samdarra">
+          </a>
+          <a href="https://centre-ressource-rehabilitation.org" target="_blank" rel="noopener noreferrer">
+            <img class="h-16 md:h-20 w-auto"
+                 src="https://faustinebrunet.com/images/RS/creation-nouveau-logo-domaine-sante-mentale.jpg"
+                 alt="Logo Centre Ressource Réhabilitation">
+          </a>
+    
+        </div>
+    
+      </div>
+    </footer>
+  </main>
+</body>
+</html>
+
