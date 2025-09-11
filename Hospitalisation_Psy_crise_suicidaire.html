@@ -29,20 +29,60 @@
     @media (max-width:640px){.talk-line{grid-template-columns:1fr}}
     .retour{margin-top:1rem;text-align:right;font-size:.8rem}
     .retour a{color:#2563eb;text-decoration:underline}
+    
+    @media print {
+      header, footer, details > summary, .retour, #print-button {
+        display: none !important;
+      }
+      body {
+        font-size: 11pt;
+        color: #000;
+      }
+      .card {
+        box-shadow: none;
+        border: 1px solid #ccc;
+        margin-bottom: 20px;
+        page-break-inside: avoid;
+      }
+      .text-slate-500, .text-slate-600, .text-slate-700, .text-slate-800, .text-slate-900 {
+        color: #000 !important;
+      }
+      .text-blue-600, .text-amber-600 {
+        color: #000 !important;
+        text-decoration: none;
+      }
+      details[open] {
+          page-break-inside: avoid;
+      }
+      .talk-line, .debriefing p {
+          page-break-inside: avoid;
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+    }
+
   </style>
 </head>
 <body class="bg-slate-50 text-slate-800">
   <header class="bg-white/70 backdrop-blur sticky top-0 z-10 border-b border-slate-200">
-    <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
+    <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between gap-4">
       <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900">Épisode dépressif avec idées suicidaires – Trois cas types (Urgences, France)</h1>
-      <nav class="text-sm font-semibold text-slate-600 flex gap-4">
-        <a href="#intro" class="hover:text-slate-900">Intro</a>
-        <a href="#cas-1" class="hover:text-slate-900">Cas 1</a>
-        <a href="#cas-2" class="hover:text-slate-900">Cas 2</a>
-        <a href="#cas-3" class="hover:text-slate-900">Cas 3</a>
-        <a href="#synthese" class="hover:text-slate-900">Synthèse</a>
-        <a href="#glossaire" class="hover:text-slate-900">Glossaire</a>
-      </nav>
+      <div class="flex items-center gap-4">
+        <nav class="text-sm font-semibold text-slate-600 hidden sm:flex gap-4">
+          <a href="#intro" class="hover:text-slate-900">Intro</a>
+          <a href="#cas-1" class="hover:text-slate-900">Cas 1</a>
+          <a href="#cas-2" class="hover:text-slate-900">Cas 2</a>
+          <a href="#cas-3" class="hover:text-slate-900">Cas 3</a>
+          <a href="#synthese" class="hover:text-slate-900">Synthèse</a>
+          <a href="#glossaire" class="hover:text-slate-900">Glossaire</a>
+        </nav>
+        <button id="print-button" class="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold text-sm px-3 py-1.5 rounded-md transition-colors" title="Imprimer le document">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-printer"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+          <span class="hidden md:inline">Imprimer</span>
+        </button>
+      </div>
     </div>
   </header>
 
@@ -223,6 +263,12 @@
       </div>
     </footer>
   </main>
+  <script>
+    document.getElementById('print-button').addEventListener('click', function() {
+      window.print();
+    });
+  </script>
 </body>
 </html>
+
 
