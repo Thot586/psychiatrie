@@ -1,0 +1,933 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide d'Intervention de Crise TP - Équipe Mobile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .content-section {
+            display: none; 
+        }
+        .content-section.active {
+            display: block; 
+        }
+        .nav-link {
+            cursor: pointer;
+            padding: 0.85rem 1.25rem; 
+            border-radius: 0.375rem; /* rounded-md */
+            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+            display: block; 
+            margin-bottom: 0.25rem; 
+        }
+        .nav-link:hover {
+            background-color: #334155; /* bg-slate-700 for hover */
+            color: #ffffff;
+        }
+        .nav-link.active {
+            background-color: #0ea5e9; /* bg-sky-500 for active */
+            color: #ffffff;
+            font-weight: 600;
+        }
+        .submenu .nav-link {
+            padding-left: 2rem; 
+            font-size: 0.9rem;
+        }
+        .submenu .nav-link.active {
+             background-color: #0369a1; /* sky-700 for active submenu */
+        }
+
+        .alert-box, .recommendation-box, .idea-box {
+            padding: 1.25rem; 
+            margin-top: 1.25rem;
+            margin-bottom: 1.25rem;
+            border-radius: 0.5rem; /* rounded-lg */
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -1px rgba(0,0,0,0.04);
+        }
+        .alert-box { 
+            background-color: #fee2e2; 
+            border-left: 5px solid #ef4444; 
+            color: #991b1b; 
+        }
+        .recommendation-box { 
+            background-color: #dcfce7; 
+            border-left: 5px solid #22c55e; 
+            color: #14532d; 
+        }
+        .idea-box { 
+            background-color: #fef9c3; 
+            border-left: 5px solid #eab308; 
+            color: #713f12; 
+        }
+        .alert-box h4, .recommendation-box h4, .idea-box h4 {
+            font-weight: 700; 
+            margin-bottom: 0.75rem;
+            font-size: 1.125rem; /* text-lg */
+            color: inherit; 
+        }
+        .alert-box ul, .recommendation-box ul, .idea-box ul {
+            list-style-position: inside;
+            padding-left: 0.5rem;
+        }
+        .alert-box li, .recommendation-box li, .idea-box li {
+            margin-bottom: 0.375rem;
+        }
+        .icon {
+            margin-right: 0.75rem; 
+            font-size: 1.1em;
+        }
+
+        #sidebar::-webkit-scrollbar { width: 8px; }
+        #sidebar::-webkit-scrollbar-track { background: #0f172a; }
+        #sidebar::-webkit-scrollbar-thumb { background: #38bdf8; border-radius: 4px; }
+        #sidebar::-webkit-scrollbar-thumb:hover { background: #0ea5e9; }
+        #main-content::-webkit-scrollbar { width: 10px; }
+        #main-content::-webkit-scrollbar-track { background: #e2e8f0; }
+        #main-content::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 5px; }
+        #main-content::-webkit-scrollbar-thumb:hover { background: #64748b; }
+
+        h1.guide-title { color: #ffffff; }
+        h2 { margin-top: 1.5rem; margin-bottom: 1rem; font-size: 1.75rem; font-weight: 700; color: #0c4a6e; border-bottom: 2px solid #e0f2fe; padding-bottom: 0.5rem; } 
+        h3 { margin-top: 1.25rem; margin-bottom: 0.75rem; font-size: 1.5rem; font-weight: 600; color: #0369a1; } 
+        h4 { margin-top: 1rem; margin-bottom: 0.5rem; font-size: 1.25rem; font-weight: 600; color: #075985; } 
+        
+        @media (min-width: 768px) { /* md breakpoint */
+            h2 { font-size: 2.25rem; margin-top: 2rem; margin-bottom: 1.25rem;}
+            h3 { font-size: 1.875rem; margin-top: 1.75rem; margin-bottom: 1rem;}
+            h4 { font-size: 1.5rem; margin-top: 1.5rem; margin-bottom: 0.75rem;}
+        }
+
+        .content-section p { margin-bottom: 1rem; line-height: 1.7; font-size: 0.95rem; } 
+         @media (min-width: 768px) { 
+            .content-section p { font-size: 1rem; }
+        }
+        .content-section ul, .content-section ol { margin-bottom: 1rem; padding-left: 1.75rem; }
+        .content-section li { margin-bottom: 0.5rem; line-height: 1.7; }
+        .content-section cite { font-style: normal; } 
+        .content-section a { color: #0ea5e9; text-decoration: none; font-weight: 500; }
+        .content-section a:hover { color: #0369a1; text-decoration: underline; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        th, td { border: 1px solid #e2e8f0; padding: 0.75rem 1rem; text-align: left; }
+        th { background-color: #f1f5f9; font-weight: 600; color: #1e293b; }
+
+        .accordion-item {
+            border: 1px solid #cbd5e1; 
+            border-radius: 0.5rem; 
+            margin-bottom: 0.75rem;
+            background-color: #ffffff; 
+            box-shadow: 0 1px 3px 0 rgba(0,0,0,0.07), 0 1px 2px 0 rgba(0,0,0,0.04);
+        }
+        .accordion-header {
+            background-color: #f1f5f9; 
+            color: #1e3a8a; 
+            padding: 1rem 1.25rem;
+            cursor: pointer;
+            border-radius: 0.5rem 0.5rem 0 0; 
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.2s ease;
+        }
+        .accordion-header:hover {
+            background-color: #e2e8f0; 
+        }
+        .accordion-header.open {
+             border-bottom: 1px solid #cbd5e1; 
+             border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .accordion-content {
+            padding: 1.25rem;
+            border-top: none;
+            border-radius: 0 0 0.5rem 0.5rem; 
+            background-color: #ffffff; 
+        }
+        .accordion-content.hidden {
+            display: none;
+        }
+        .accordion-header .fas {
+            transition: transform 0.3s ease;
+        }
+        .accordion-header.open .fas {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-700 flex flex-col min-h-screen">
+
+    <button id="mobile-menu-button" class="md:hidden fixed top-4 left-4 z-50 p-2 bg-slate-800 text-white rounded-md shadow-lg">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="flex flex-col md:flex-row flex-1"> 
+        <nav id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 sm:w-72 bg-slate-800 text-slate-100 shadow-lg p-4 md:p-6 space-y-1 overflow-y-auto transform -translate-x-full md:relative md:translate-x-0 md:w-1/4 lg:w-1/5 transition-transform duration-300 ease-in-out">
+            <button id="close-sidebar-button" class="md:hidden absolute top-4 right-4 text-slate-300 hover:text-white">
+                <i class="fas fa-times text-2xl"></i>
+            </button>
+            <h1 class="guide-title text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-center md:text-left pt-8 md:pt-0">Guide de Crise TP</h1>
+            <a class="nav-link" onclick="showSection('section-home'); closeSidebar();"><i class="fas fa-home icon"></i>Accueil</a>
+            <a class="nav-link" onclick="showSection('section-introduction-guide-tp'); closeSidebar();"><i class="fas fa-info-circle icon"></i>Objectif du Guide</a>
+            
+            <div>
+                <a class="nav-link font-semibold" onclick="toggleSubmenu(this)"><i class="fas fa-clipboard-list icon"></i>Plan d'Intervention de Crise <i class="fas fa-chevron-down float-right mt-1 text-xs"></i></a>
+                <div class="submenu ml-2 mt-1 space-y-px">
+                    <a class="nav-link" onclick="showSection('section-crise-phase1'); closeSidebar();">Phase 1: Évaluation (J1-J3)</a>
+                    <a class="nav-link" onclick="showSection('section-crise-phase2'); closeSidebar();">Phase 2: Stabilisation (J4-J10)</a>
+                    <a class="nav-link" onclick="showSection('section-crise-phase3'); closeSidebar();">Phase 3: Consolidation (J11+)</a>
+                </div>
+            </div>
+
+            <div>
+                <a class="nav-link font-semibold" onclick="toggleSubmenu(this)"><i class="fas fa-tools icon"></i>Boîte à Outils Thérapeutiques <i class="fas fa-chevron-down float-right mt-1 text-xs"></i></a>
+                <div class="submenu hidden ml-2 mt-1 space-y-px">
+                    <a class="nav-link" onclick="showSection('section-tp-principes-alliance'); closeSidebar();">Alliance & Validation</a>
+                    <a class="nav-link" onclick="showSection('section-tp-principes-reparentage'); closeSidebar();">Reparentage Limité</a>
+                    <a class="nav-link" onclick="showSection('section-tp-crise-intervenir'); closeSidebar();">Protocole de Désescalade</a>
+                     <a class="nav-link" onclick="showSection('section-tp-crise-securite'); closeSidebar();">Le Plan de Sécurité</a>
+                    <a class="nav-link" onclick="showSection('section-tp-therapies-tcd'); closeSidebar();">Compétences de Crise (TCD)</a>
+                </div>
+            </div>
+
+             <div>
+                <a class="nav-link font-semibold" onclick="toggleSubmenu(this)"><i class="fas fa-book-open icon"></i>Fondamentaux (Théorie) <i class="fas fa-chevron-down float-right mt-1 text-xs"></i></a>
+                <div class="submenu hidden ml-2 mt-1 space-y-px">
+                    <a class="nav-link" onclick="showSection('section-tp-compreprendre-origines'); closeSidebar();">Origines : Schémas</a>
+                    <a class="nav-link" onclick="showSection('section-tp-compreprendre-modes'); closeSidebar();">Modes & Stratégies</a>
+                    <a class="nav-link" onclick="showSection('section-tp-compreprendre-entourage'); closeSidebar();">Impact sur l'Entourage</a>
+                    <a class="nav-link" onclick="showSection('section-tp-therapies-ts'); closeSidebar();">Principes de la Thérapie TS</a>
+                </div>
+            </div>
+            
+            <a class="nav-link" onclick="showSection('section-tp-roles-recap'); closeSidebar();"><i class="fas fa-users-cog icon"></i>Rôles de l'Équipe en Crise</a>
+            <a class="nav-link" onclick="showSection('section-tp-phrases-utiles'); closeSidebar();"><i class="fas fa-comments icon"></i>Phrases Utiles en Crise</a>
+
+            <div>
+                <a class="nav-link font-semibold" onclick="toggleSubmenu(this)"><i class="fas fa-chalkboard-teacher icon"></i>Psychoéducation <i class="fas fa-chevron-down float-right mt-1 text-xs"></i></a>
+                <div class="submenu hidden ml-2 mt-1 space-y-px">
+                    <a class="nav-link" onclick="showSection('section-tp-psychoed-patient'); closeSidebar();">Pour la Personne</a>
+                    <a class="nav-link" onclick="showSection('section-tp-psychoed-entourage'); closeSidebar();">Pour l'Entourage</a>
+                </div>
+            </div>
+            <a class="nav-link" onclick="showSection('section-tp-glossaire'); closeSidebar();"><i class="fas fa-book icon"></i>Glossaire</a>
+            <a class="nav-link" onclick="showSection('section-tp-references'); closeSidebar();"><i class="fas fa-link icon"></i>Références</a>
+        </nav>
+
+        <div id="sidebar-backdrop" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden md:hidden" onclick="closeSidebar()"></div>
+
+        <main id="main-content" class="flex-1 p-4 md:p-8 lg:p-10 overflow-y-auto">
+            <div id="section-home" class="content-section">
+                <h2>Guide d'Intervention de Crise pour les Troubles de la Personnalité</h2>
+                <p>Ce guide est un outil opérationnel pour les équipes mobiles de psychiatrie intervenant en <strong>alternative à l'hospitalisation</strong>. Il est structuré pour guider l'action de l'équipe, de la gestion de la crise aiguë jusqu'à la stabilisation et le relais.</p>
+                <p>L'approche est centrée sur la Thérapie des Schémas et s'inspire des principes des équipes de résolution de crise à domicile (Crisis Resolution and Home Treatment - CRT).</p>
+                <div class="idea-box">
+                    <h4><i class="fas fa-lightbulb icon"></i> Comment utiliser ce guide :</h4>
+                    <ul>
+                        <li>La section principale est le <strong>Plan d'Intervention de Crise</strong>. Elle propose un déroulé chronologique des actions à mener.</li>
+                        <li>La <strong>Boîte à Outils Thérapeutiques</strong> détaille les techniques spécifiques à utiliser à chaque phase.</li>
+                        <li>Les autres sections (Fondamentaux, Rôles, etc.) fournissent le contexte et les connaissances nécessaires pour appliquer le plan d'intervention.</li>
+                        <li>Utilisez ce guide comme support pour vos réunions d'équipe afin de planifier et coordonner les visites.</li>
+                    </ul>
+                </div>
+                <p>L'objectif est de fournir un cadre clair et partagé pour que chaque membre de l'équipe sache quoi faire, quand et pourquoi, afin d'offrir une prise en charge sécurisante, collaborative et efficace.</p>
+            </div>
+
+            <div id="section-introduction-guide-tp" class="content-section">
+                <h2>Objectif de ce Guide Opérationnel</h2>
+                <p>La prise en charge en équipe mobile d'une personne avec un trouble de la personnalité en état de crise aiguë est une intervention intensive visant à éviter ou raccourcir une hospitalisation. Cette mission requiert une approche hautement structurée, coordonnée et réactive, en accord avec les principes de la réhabilitation psychosociale et de l'autodétermination.</p>
+                <p>Ce guide s'inspire du modèle des équipes de résolution de crise à domicile (Crisis Resolution and Home Treatment - CRT) (<cite>Lloyd-Evans et al., 2016</cite>), qui privilégie le maintien dans le milieu de vie, l'implication active de la personne et de son réseau, et une intervention rapide et focalisée.</p>
+                <p>Il a pour but de fournir un <strong>protocole d'intervention par phases</strong>, définissant pour chaque étape : la temporalité des visites, les objectifs prioritaires, et les actions clés de chaque membre de l'équipe.</p>
+                <p>Le fil rouge de notre approche est de considérer la crise non pas comme un échec, mais comme une <strong>opportunité de comprendre le fonctionnement des schémas de la personne "à chaud"</strong> et de commencer le travail thérapeutique de renforcement de son "Adulte Sain" pour mieux gérer sa détresse.</p>
+                
+                 <div class="idea-box">
+                    <h4><i class="fas fa-lightbulb icon"></i> Notre mission en trois temps :</h4>
+                    <ol class="list-decimal ml-5">
+                        <li><strong>Contenir :</strong> Assurer la sécurité et apaiser la détresse immédiate, en partenariat avec la personne.</li>
+                        <li><strong>Comprendre :</strong> Donner un sens à la crise avec la personne, en tant qu'experte de son vécu.</li>
+                        <li><strong>Transmettre :</strong> Stabiliser la situation pour permettre un relais efficace vers une structure de soin de fond, choisi avec la personne.</li>
+                    </ol>
+                </div>
+                <div class="alert-box">
+                    <h4><i class="fas fa-exclamation-triangle icon"></i> Important : Sécurité et Supervision</h4>
+                    <p>Ce protocole ne remplace pas le jugement clinique. La sécurité de la personne et de l'équipe prime toujours. Une supervision clinique régulière est indispensable pour soutenir l'équipe face à l'intensité de ces interventions.</p>
+                </div>
+            </div>
+            
+            <!-- PLAN D'INTERVENTION -->
+            <div id="section-crise-phase1" class="content-section">
+                <h2>Plan d'Intervention de Crise</h2>
+                <h3>Phase 1 : Évaluation, Sécurisation et Alliance (Jours 1 à 3)</h3>
+                <div class="idea-box">
+                    <h4><strong>Objectif Principal :</strong> Abaisser le niveau de détresse, assurer la sécurité et créer une alliance de travail solide, en partenariat avec la personne.</h4>
+                </div>
+                <h4>Temporalité des visites :</h4>
+                <p><strong>Très haute fréquence.</strong> L'objectif est de "saturer" le champ relationnel de la personne avec une présence fiable pour contrer le schéma d'abandon.</p>
+                <ul class="list-disc ml-5">
+                    <li><strong>Infirmier·ère :</strong> Visite quotidienne (voire bi-quotidienne à J1 si nécessaire). Un contact téléphonique bref peut être proposé entre les visites.</li>
+                    <li><strong>Psychiatre :</strong> Visite à J1 pour évaluation médicale, puis disponible rapidement.</li>
+                    <li><strong>Ensemble de l'équipe :</strong> Un point de synthèse téléphonique quotidien est fortement recommandé pour assurer la cohérence des interventions.</li>
+                </ul>
+
+                <h4>Actions Clés par Objectif :</h4>
+                <div class="accordion-item">
+                    <button class="accordion-header">1. Assurer la sécurité <i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-content hidden">
+                        <p><strong>Qui :</strong> Toute l'équipe, leader psychiatre.</p>
+                        <ul class="list-disc ml-5">
+                            <li><strong>Évaluation initiale du risque suicidaire :</strong> Systématique, directe, documentée, menée de manière collaborative.</li>
+                            <li><strong>Co-construction immédiate d'un Plan de Sécurité simple :</strong> (Voir <a href="#" onclick="showSection('section-tp-crise-securite')">détails dans la boîte à outils</a>). Que peut-on faire ensemble si l'envie monte ? Qui la personne souhaite-t-elle appeler ?</li>
+                            <li><strong>Gestion du traitement :</strong> Le psychiatre discute avec la personne de la pertinence d'un traitement anxiolytique bref pour "casser" le pic de détresse. L'infirmier(e) soutient l'observance en expliquant les bénéfices attendus.</li>
+                             <li><strong>Mobilisation du réseau :</strong> Avec l'accord de la personne, prendre contact avec un proche ressource pour l'informer et l'impliquer dans la sécurisation.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">2. Créer l'alliance par la validation <i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-content hidden">
+                        <p><strong>Qui :</strong> Principalement l'infirmier·ère lors des visites, mais aussi toute l'équipe.</p>
+                        <ul class="list-disc ml-5">
+                            <li><strong>Validation radicale de la souffrance :</strong> Utiliser des phrases comme "Je vois que c'est insupportable pour vous en ce moment". (Voir <a href="#" onclick="showSection('section-tp-phrases-utiles')">Phrases Utiles</a>).</li>
+                            <li><strong>Fiabilité absolue :</strong> Respecter les horaires annoncés. Chaque visite est une expérience correctrice du schéma d'abandon.</li>
+                            <li><strong>Posture de non-jugement :</strong> Le comportement de crise est vu comme une stratégie de survie, pas une manipulation.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">3. Introduire les compétences de crise <i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-content hidden">
+                        <p><strong>Qui :</strong> Infirmier·ère, psychologue, pair-aidant.</p>
+                        <ul class="list-disc ml-5">
+                            <li><strong>Coaching des compétences TCD :</strong> Pratiquer PENDANT la visite des techniques simples de tolérance à la détresse (ex: TIPP, ancrage sensoriel). (Voir <a href="#" onclick="showSection('section-tp-therapies-tcd')">détails dans la boîte à outils</a>).</li>
+                            <li>L'objectif n'est pas de "résoudre" mais de "survivre" à la vague émotionnelle.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="section-crise-phase2" class="content-section">
+                <h2>Plan d'Intervention de Crise</h2>
+                <h3>Phase 2 : Stabilisation et Compréhension (Jours 4 à 10)</h3>
+                <div class="idea-box">
+                    <h4><strong>Objectif Principal :</strong> Maintenir la sécurité, commencer à donner un sens à la crise avec la personne et renforcer ses stratégies d'adaptation saines.</h4>
+                </div>
+                <h4>Temporalité des visites :</h4>
+                <p><strong>Haute fréquence, mais en diminuant progressivement avec l'accord de la personne.</strong> L'objectif est de tester et renforcer sa capacité à tolérer la détresse entre les visites.</p>
+                <ul class="list-disc ml-5">
+                    <li><strong>Infirmier·ère :</strong> Espacement progressif des visites (ex: 1 jour sur 2).</li>
+                    <li><strong>Psychologue :</strong> 1 à 2 entretiens dans la semaine pour l'analyse collaborative de la crise.</li>
+                    <li><strong>Travailleur Social / Ergothérapeute / Pair-Aidant :</strong> Première visite pour évaluation et prise de contact.</li>
+                    <li><strong>Psychiatre :</strong> Au moins une visite de suivi médical.</li>
+                </ul>
+
+                <h4>Actions Clés par Objectif :</h4>
+                <div class="accordion-item">
+                    <button class="accordion-header">1. Donner un sens à la crise <i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-content hidden">
+                        <p><strong>Qui :</strong> Psychologue, infirmier·ère.</p>
+                        <ul class="list-disc ml-5">
+                            <li><strong>Analyse de la chaîne comportementale :</strong> A distance de la crise, décortiquer avec la personne le déclencheur, le schéma activé, les pensées/émotions et les conséquences.</li>
+                            <li><strong>Psychoéducation sur les schémas/modes :</strong> Introduire le modèle de manière simple. "Est-ce que ça vous parle si on dit que c'est comme si un 'bouton sensible' avait été appuyé, réveillant une partie de vous en grande panique ?".</li>
+                        </ul>
+                    </div>
+                </div>
+                 <div class="accordion-item">
+                    <button class="accordion-header">2. Renforcer l'Adulte Sain <i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-content hidden">
+                        <p><strong>Qui :</strong> Toute l'équipe.</p>
+                        <ul class="list-disc ml-5">
+                            <li><strong>Identifier et valoriser :</strong> Repérer et nommer chaque utilisation d'une compétence. "Là, c'est votre partie adulte et saine qui a choisi d'appeler plutôt que de..."</li>
+                            <li><strong>Soutien à l'autonomie :</strong> L'ergothérapeute et l'aide-soignant(e) soutiennent la reprise des routines (courses, ménage), vues comme des actions de l'Adulte Sain.</li>
+                            <li><strong>Soutien social :</strong> Le travailleur social explore avec la personne les leviers (logement, finances) qui peuvent sécuriser l'environnement et donc apaiser les schémas.</li>
+                        </ul>
+                    </div>
+                </div>
+                 <div class="accordion-item">
+                    <button class="accordion-header">3. Consolider le Plan de Sécurité <i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-content hidden">
+                        <p><strong>Qui :</strong> Infirmier·ère, en partenariat avec la personne.</p>
+                        <ul class="list-disc ml-5">
+                            <li><strong>Mise à jour du plan :</strong> L'enrichir avec les nouvelles compétences apprises et les nouvelles compréhensions issues de l'analyse de la crise.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="section-crise-phase3" class="content-section">
+                <h2>Plan d'Intervention de Crise</h2>
+                <h3>Phase 3 : Consolidation et Préparation du Relais (Jours 11 et +)</h3>
+                <div class="idea-box">
+                    <h4><strong>Objectif Principal :</strong> Consolider les acquis, rendre la personne plus autonome dans sa gestion de la détresse et organiser une transition sécurisée.</h4>
+                </div>
+                <h4>Temporalité des visites :</h4>
+                <p><strong>Fréquence de suivi de droit commun.</strong></p>
+                <ul class="list-disc ml-5">
+                    <li><strong>Infirmier·ère / Référent de cas :</strong> Visite hebdomadaire.</li>
+                    <li><strong>Autres intervenants :</strong> Selon les objectifs du plan de soin co-construit.</li>
+                    <li><strong>Ensemble de l'équipe :</strong> Réunion de synthèse hebdomadaire, incluant la préparation active du relais.</li>
+                </ul>
+
+                <h4>Actions Clés par Objectif :</h4>
+                 <div class="accordion-item">
+                    <button class="accordion-header">1. Favoriser l'autonomie dans la gestion de la détresse <i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-content hidden">
+                        <p><strong>Qui :</strong> Toute l'équipe.</p>
+                        <ul class="list-disc ml-5">
+                            <li><strong>Coaching à distance :</strong> Encourager la personne à utiliser son plan de sécurité et ses compétences *avant* d'appeler l'équipe.</li>
+                            <li><strong>Analyse des "presque-crises" :</strong> Valoriser les moments où la personne a senti la crise monter mais a réussi à la gérer seule. Analyser ce qui a fonctionné.</li>
+                            <li><strong>Investissement occupationnel :</strong> L'ergothérapeute aide à (ré)investir des activités qui ont du sens, qui nourrissent l'Adulte Sain et réduisent la vulnérabilité émotionnelle.</li>
+                        </ul>
+                    </div>
+                </div>
+                 <div class="accordion-item">
+                    <button class="accordion-header">2. Préparer activement le relais <i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-content hidden">
+                        <p><strong>Qui :</strong> Toute l'équipe, en lien avec les partenaires.</p>
+                        <ul class="list-disc ml-5">
+                            <li><strong>Identifier la structure de relais avec la personne :</strong> CMP, psychologue libéral, hôpital de jour...</li>
+                            <li><strong>Organiser une rencontre de transition :</strong> Idéalement, une rencontre commune entre la personne, un membre de l'équipe mobile et un membre de l'équipe de relais pour assurer la continuité.</li>
+                            <li><strong>Synthèse écrite :</strong> Préparer une transmission claire, formulée en termes de schémas/modes, avec le plan de crise et les stratégies qui ont fonctionné.</li>
+                            <li><strong>Aborder la fin de l'intervention :</strong> Parler ouvertement de la fin du suivi intensif pour anticiper et travailler la réactivation possible du schéma d'abandon.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sections: Comprendre les TP -->
+            <div id="section-tp-compreprendre-origines" class="content-section">
+                <h2>Fondamentaux</h2>
+                <h3>Origines : Besoins Émotionnels et Schémas Précoces Inadaptés</h3>
+                <p>La Thérapie des Schémas postule que tout être humain a des besoins émotionnels fondamentaux durant l'enfance. Lorsque ces besoins ne sont pas satisfaits de manière adéquate, des "Schémas Précoces Inadaptés" (SPI) se développent. Un SPI est une croyance profonde et stable sur soi-même et le monde, qui est vécue comme une vérité absolue (<cite>Young et al., 2003</cite>).</p>
+                <h4>Les 5 Besoins Émotionnels Fondamentaux :</h4>
+                <ol class="list-decimal ml-5">
+                    <li><strong>Attachement sécurisant :</strong> Sécurité, stabilité, soin, acceptation.</li>
+                    <li><strong>Autonomie, compétence et sens de l'identité.</strong></li>
+                    <li><strong>Liberté d'exprimer ses besoins et émotions.</strong></li>
+                    <li><strong>Spontanéité et jeu.</strong></li>
+                    <li><strong>Limites réalistes et autodiscipline.</strong></li>
+                </ol>
+                <p>Un trouble de la personnalité peut être vu comme la conséquence de la non-satisfaction chronique d'un ou plusieurs de ces besoins.</p>
+                
+                <h4>Exemples de Schémas Précoces Inadaptés (SPI) courants :</h4>
+                <div class="idea-box">
+                    <h4><i class="fas fa-lightbulb icon"></i> Les Schémas ne sont pas des pensées passagères, mais des filtres à travers lesquels la personne voit le monde.</h4>
+                    <ul>
+                        <li><strong>Abandon/Instabilité :</strong> "Les gens que j'aime finiront par me quitter ou mourir."</li>
+                        <li><strong>Méfiance/Abus :</strong> "On ne peut faire confiance à personne, les autres vont me blesser ou profiter de moi."</li>
+                        <li><strong>Manque affectif :</strong> "Personne ne pourra jamais vraiment m'aimer, me comprendre ou prendre soin de moi."</li>
+                        <li><strong>Imperfection/Honte :</strong> "Il y a quelque chose de fondamentalement mauvais chez moi. Si les autres le voyaient, ils me rejetteraient."</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="section-tp-compreprendre-modes" class="content-section">
+                <h2>Fondamentaux</h2>
+                <h3>Modes et Stratégies d'Adaptation Dysfonctionnelles</h3>
+                <p>Quand un schéma est activé par une situation de vie, il déclenche une douleur émotionnelle intense. Pour gérer cette douleur, la personne entre dans un "mode schématique". Un mode est un état émotionnel et comportemental qui domine à un instant T. Les comportements qui font souffrir l'entourage sont souvent des manifestations de ces modes (<cite>Young et al., 2003</cite>).</p>
+                
+                <h4>Principaux Modes Schématiques :</h4>
+                <div class="idea-box">
+                     <h4><i class="fas fa-lightbulb icon"></i> Les modes expliquent pourquoi la personne peut changer si radicalement d'état.</h4>
+                    <ul>
+                         <li><strong>Mode Enfant Vulnérable :</strong> Se sent seul, triste, impuissant, défectueux. C'est le mode où la douleur du schéma est ressentie à l'état pur.</li>
+                         <li><strong>Mode Parent Punitif/Critique :</strong> La voix intérieure qui dit "Tu es nul", "C'est de ta faute".</li>
+                         <li><strong>Mode Protecteur Détaché (Évitement) :</strong> La personne se coupe de ses émotions, se sent vide, peut consommer des substances ou se dissocier.</li>
+                         <li><strong>Mode Surcompensateur (Compensation) :</strong> Se montre arrogant, agressif, perfectionniste pour masquer sa vulnérabilité.</li>
+                         <li><strong>Mode Adulte Sain (le but de la thérapie) :</strong> La partie capable de prendre du recul, de valider l'Enfant Vulnérable et de prendre des décisions équilibrées.</li>
+                     </ul>
+                </div>
+            </div>
+
+            <div id="section-tp-compreprendre-entourage" class="content-section">
+                <h2>Fondamentaux</h2>
+                <h3>L'Impact sur l'Entourage</h3>
+                <p>Les stratégies d'adaptation dysfonctionnelles, bien qu'ayant une fonction de survie pour la personne, sont souvent la source principale des difficultés relationnelles. L'entourage est confronté à des comportements qui peuvent être déroutants, douloureux et épuisants.</p>
+                <div class="alert-box">
+                    <h4><i class="fas fa-exclamation-triangle icon"></i> Le cercle vicieux de l'entourage</h4>
+                    <p>Souvent, la réaction de l'entourage (ex: exaspération, retrait, critique) vient confirmer le schéma initial de la personne (ex: "Tu vois, tu m'abandonnes !", "Tu me critiques, donc je suis bien nul(e)"). Cela renforce le schéma et les stratégies dysfonctionnelles, créant un cycle difficile à briser sans aide extérieure.</p>
+                </div>
+                 <div class="recommendation-box">
+                    <h4><i class="fas fa-check-circle icon"></i> Rôle de l'équipe auprès de l'entourage :</h4>
+                     <p>Le soutien à l'entourage est crucial. Il ne s'agit pas de trouver un "coupable", mais d'aider les proches à comprendre, déculpabiliser, et apprendre à communiquer en validant l'émotion tout en posant des limites sur le comportement.</p>
+                </div>
+            </div>
+            
+            <!-- Sections: Principes Généraux / Boite à outils -->
+            <div id="section-tp-principes-alliance" class="content-section">
+                <h2>Boîte à Outils : Alliance Thérapeutique et Validation</h2>
+                <p>L'alliance est la base de tout. Pour une personne dont les schémas sont "Méfiance/Abus" ou "Abandon", faire confiance à un soignant est un défi immense. L'alliance se construit sur la constance, la fiabilité, l'authenticité et la validation.</p>
+                <p><strong>La validation</strong> est l'acte de communiquer à la personne que son émotion est compréhensible, compte tenu de son histoire et de ses schémas. <strong>Valider une émotion ne signifie pas approuver un comportement dysfonctionnel.</strong> C'est la première étape pour pouvoir ensuite travailler au changement.</p>
+                 <div class="recommendation-box">
+                    <h4><i class="fas fa-check-circle icon"></i> Exemples de validation :</h4>
+                    <ul>
+                        <li>"Étant donné votre histoire où les gens vous ont souvent laissé tomber, il est tout à fait normal que mon retard de 5 minutes ait déclenché une telle angoisse chez vous."</li>
+                        <li>"Je comprends que lorsque votre chef vous a fait cette remarque, vous ayez ressenti une honte immense, comme si votre schéma 'Imperfection' s'était allumé en grosses lettres."</li>
+                    </ul>
+                </div>
+                 <div class="alert-box">
+                    <h4><i class="fas fa-exclamation-triangle icon"></i> À éviter :</h4>
+                    <ul>
+                        <li>L'invalidation : "Vous exagérez", "Ce n'est pas si grave", "Arrêtez de penser comme ça".</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="section-tp-principes-reparentage" class="content-section">
+                <h2>Boîte à Outils : Le Reparentage Limité</h2>
+                <p>Le "reparentage limité" est un concept central de la Thérapie des Schémas. Il s'agit pour l'équipe soignante de répondre aux besoins émotionnels fondamentaux du patient qui n'ont pas été comblés dans l'enfance, mais <strong>dans les limites claires et éthiques de la relation professionnelle</strong> (<cite>Young et al., 2003</cite>).</p>
+                <div class="idea-box">
+                    <h4><i class="fas fa-lightbulb icon"></i> Comment chaque professionnel peut appliquer le reparentage limité :</h4>
+                    <ul>
+                        <li><strong>Fiabilité et constance :</strong> Arriver à l'heure, respecter ses engagements. Cela soigne le schéma d'abandon.</li>
+                        <li><strong>Chaleur et bienveillance :</strong> Montrer un intérêt sincère, être encourageant. Cela soigne le schéma de manque affectif.</li>
+                        <li><strong>Pose de limites fermes mais bienveillantes :</strong> "Je tiens à vous et je veux vous aider, et c'est précisément pour cela que je ne peux pas accepter que vous me parliez de cette façon."</li>
+                    </ul>
+                </div>
+                 <div class="alert-box">
+                    <h4><i class="fas fa-exclamation-triangle icon"></i> Les limites sont cruciales</h4>
+                    <p>Le reparentage n'est pas une amitié. Il est essentiel de maintenir des frontières professionnelles strictes. La supervision d'équipe est indispensable pour gérer ces dynamiques.</p>
+                </div>
+            </div>
+
+            <!-- Sections: Gestion des Crises / Boite à outils -->
+            <div id="section-tp-crise-intervenir" class="content-section">
+                <h2>Boîte à Outils : Protocole de Désescalade en Crise</h2>
+                <p>L'intervention en pleine crise vise avant tout la <strong>sécurité et la désescalade</strong>. Ce n'est pas le moment de faire de la thérapie de fond. L'objectif est de "traverser la tempête" avec le patient.</p>
+                <div class="recommendation-box">
+                    <h4><i class="fas fa-check-circle icon"></i> Protocole d'intervention en crise :</h4>
+                    <ol class="list-decimal ml-5 space-y-2">
+                        <li><strong>Assurer la sécurité :</strong> La sécurité de la personne et de l'équipe est la priorité absolue. Évaluez l'environnement. Si le risque est trop élevé, ne restez pas seul(e) et appelez du renfort ou les services d'urgence compétents.</li>
+                        <li><strong>Valider l'émotion radicalement :</strong> Connectez-vous à la détresse de la personne, pas à son comportement. Adoptez une posture calme, non menaçante. Parlez lentement.</li>
+                        <li><strong>Identifier le besoin ou le mode :</strong> Essayez de nommer ce qui se passe. "J'ai l'impression que c'est l'enfant terrifié en vous qui a pris le dessus."</li>
+                        <li><strong>Coacher les compétences de tolérance à la détresse :</strong> Guidez la personne vers des techniques simples pour faire baisser la tension (TIPP, ancrage sensoriel).</li>
+                        <li><strong>Reporter l'analyse à plus tard :</strong> Concluez par : "C'était une tempête terrible. Nous en reparlerons au calme pour comprendre."</li>
+                    </ol>
+                </div>
+                 <div class="alert-box">
+                    <h4><i class="fas fa-exclamation-triangle icon"></i> À ne pas faire pendant la crise :</h4>
+                    <ul>
+                        <li>Argumenter, raisonner, moraliser.</li>
+                        <li>Menacer ou poser des ultimatums.</li>
+                        <li>Minimiser ("Calmez-vous, ce n'est rien").</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="section-tp-crise-securite" class="content-section">
+                <h2>Boîte à Outils : Le Plan de Sécurité (ou Plan de Crise)</h2>
+                <p>Le plan de sécurité est un document <strong>co-construit avec la personne pendant une période de calme</strong>. C'est sa "boîte à outils" personnelle pour faire face aux futures crises.</p>
+                <div class="recommendation-box">
+                    <h4><i class="fas fa-check-circle icon"></i> Éléments d'un plan de sécurité :</h4>
+                    <ol class="list-decimal ml-5 space-y-2">
+                        <li><strong>Mes signaux d'alerte</strong> (pensées, émotions, sensations qui préviennent de la crise).</li>
+                        <li><strong>Mes stratégies de coping internes</strong> (ce que je peux faire seul pour m'apaiser).</li>
+                        <li><strong>Les personnes et lieux ressources</strong> (pour se distraire ou demander de l'aide).</li>
+                        <li><strong>Les professionnels à contacter</strong> (numéro de l'équipe, etc.).</li>
+                        <li><strong>Les services d'urgence</strong> (SAMU, Urgences).</li>
+                        <li><strong>Comment rendre mon environnement plus sûr</strong>.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- Sections: Approches Thérapeutiques / Fondamentaux et Boite a outils -->
+             <div id="section-tp-therapies-ts" class="content-section">
+                <h2>Fondamentaux : Principes de la Thérapie des Schémas (TS)</h2>
+                <p>La Thérapie des Schémas, développée par Jeffrey Young (<cite>Young et al., 2003</cite>), est l'approche centrale de ce guide.</p>
+                <h4>Objectifs de la Thérapie des Schémas :</h4>
+                <ul class="list-disc ml-5">
+                    <li>Aider le patient à <strong>identifier ses schémas et ses modes</strong> et à comprendre leurs origines.</li>
+                    <li><strong>Guérir l'Enfant Vulnérable</strong> en lui offrant validation et sécurité.</li>
+                    <li><strong>Combattre et réduire l'influence des modes Parent Punitif/Exigeant.</strong></li>
+                    <li><strong>Remplacer les modes de coping dysfonctionnels</strong> par des stratégies plus saines.</li>
+                    <li><strong>Construire et renforcer le mode Adulte Sain.</strong></li>
+                </ul>
+            </div>
+            
+            <div id="section-tp-therapies-tcd" class="content-section">
+                <h2>Boîte à Outils : Compétences de Crise (issues de la TCD)</h2>
+                <p>La TCD de Marsha Linehan (<cite>1993a</cite>) offre des outils concrets, parfaits pour la gestion de crise. Ce sont les compétences que l'Adulte Sain peut utiliser pour gérer la détresse.</p>
+                <div class="idea-box">
+                    <h4><i class="fas fa-lightbulb icon"></i> La TCD est la "boîte à outils" de l'Adulte Sain.</h4>
+                </div>
+                <h4>Compétences de Tolérance à la Détresse :</h4>
+                 <div class="accordion-item">
+                    <button class="accordion-header">Technique TIPP <i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-content hidden">
+                        <p>Pour faire baisser très vite l'intensité émotionnelle (action sur le système nerveux parasympathique).</p>
+                        <ul class="list-disc ml-5">
+                           <li><strong>T</strong>empérature : Mettre le visage dans de l'eau très froide pendant 30s.</li>
+                           <li><strong>I</strong>ntense exercice : Faire une activité physique intense pendant un court instant (sprinter sur place).</li>
+                           <li><strong>P</strong>aced Breathing : Ralentir la respiration (inspirer sur 4s, expirer sur 6s).</li>
+                           <li><strong>P</strong>rogressive Muscle Relaxation : Contracter et relâcher les muscles.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Techniques de Distraction (ACCEPTS) <i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-content hidden">
+                        <p>Pour occuper l'esprit le temps que la vague émotionnelle passe.</p>
+                        <ul class="list-disc ml-5">
+                           <li><strong>A</strong>ctivités, <strong>C</strong>ontribuer, <strong>C</strong>omparaisons, <strong>É</strong>motions opposées, <strong>P</strong>ousser au loin, pensées au<strong>T</strong>reS (<strong>S</strong>ensations).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sections: Rôles & Responsabilités -->
+            <div id="section-tp-roles-recap" class="content-section">
+                 <h2>Rôles de l'Équipe en Crise</h2>
+                <p>En situation de crise, la clarté des rôles est essentielle pour une action coordonnée et non-redondante.</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Professionnel</th>
+                            <th>Rôle Prioritaire en Crise</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Psychiatre</strong></td>
+                            <td>Leader clinique : Évalue le risque, décide du cadre (maintien à domicile vs hospit.), discute de la pharmacologie de crise, soutient l'équipe.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Infirmier·ère</strong></td>
+                            <td>Intervenant de première ligne : Assure la présence à haute fréquence, applique le protocole de désescalade, coache les compétences, suit le plan de sécurité.</td>
+                        </tr>
+                         <tr>
+                            <td><strong>Psychologue</strong></td>
+                            <td>Analyste de la crise : Aide la personne et l'équipe à donner un sens à la crise (à distance), mène les entretiens d'analyse de la chaîne.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Travailleur Social</strong></td>
+                            <td>Sécurisation de l'environnement : Agit rapidement sur les stresseurs sociaux (logement, finances) qui alimentent la crise, en lien avec la personne.</td>
+                        </tr>
+                         <tr>
+                            <td><strong>Ergothérapeute & Aide-Soignant·e</strong></td>
+                            <td>(Ré)structuration du quotidien : Aident à réintroduire des routines simples et des activités apaisantes pour sortir du chaos de la crise.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Pair-Aidant</strong></td>
+                            <td>Porteur d'espoir et modèle : Incarne la possibilité de survivre à la crise, valide la souffrance, peut partager une compétence qui l'a aidé.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Sections: Outils Pratiques -->
+            <div id="section-tp-phrases-utiles" class="content-section">
+                <h2>Exemples de Phrases Utiles en Crise</h2>
+                <p>(Ces phrases sont des exemples à adapter. L'authenticité et l'écoute active sont primordiales.)</p>
+                <div class="accordion-item">
+                    <button class="accordion-header">Pour Valider et Créer le Contact <i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-content hidden">
+                        <ul class="list-disc">
+                            <li>"Je vois que vous êtes dans une souffrance absolument terrible en ce moment."</li>
+                            <li>"C'est insupportable ce que vous ressentez, n'est-ce pas ?"</li>
+                            <li>"Je suis là avec vous. Restez avec moi."</li>
+                            <li>"Votre réaction est intense, mais compte tenu de [schéma/histoire], je comprends pourquoi ça vous touche à ce point."</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Pour Coacher les Compétences <i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-content hidden">
+                        <ul class="list-disc">
+                            <li>"Cette vague est immense. Notre seul but maintenant est de la surfer sans tomber. Essayons la technique de l'eau froide."</li>
+                            <li>"Votre esprit est en boucle. Trouvons quelque chose pour le distraire juste 5 minutes. Dites-moi 5 choses bleues dans cette pièce."</li>
+                            <li>"Respirons ensemble. Inspirez... Expirez plus lentement..."</li>
+                        </ul>
+                    </div>
+                </div>
+                 <div class="accordion-item">
+                    <button class="accordion-header">Pour Poser une Limite <i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-content hidden">
+                        <ul class="list-disc">
+                            <li>"Je comprends votre colère, mais je ne peux pas continuer si vous criez. Pouvons-nous baisser la voix pour que je puisse mieux vous aider ?"</li>
+                             <li>"Notre objectif est de vous aider à traverser cette crise. Pour l'instant, nous allons nous concentrer uniquement sur votre sécurité."</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="section-tp-psychoed-patient" class="content-section">
+                 <h2>Modules de Psychoéducation</h2>
+                <h3>Pour la Personne</h3>
+                <p>(À dispenser progressivement, en utilisant des métaphores et des exemples concrets.)</p>
+                <div class="accordion-item">
+                    <button class="accordion-header">1. Comprendre mes "boutons sensibles" (Les Schémas) <i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-content hidden">
+                        <p><strong>But :</strong> Comprendre pourquoi certaines situations déclenchent des réactions si intenses.</p>
+                        <p><strong>Contenu :</strong> Expliquer les besoins émotionnels de l'enfance et comment des "croyances de survie" (schémas) se sont formées. Identifier avec le patient 1 ou 2 de ses schémas principaux.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">2. Reconnaître les "personnages" en moi (Les Modes) <i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-content hidden">
+                         <p><strong>But :</strong> Mettre des mots sur les différents états internes et se dé-identifier d'eux.</p>
+                         <p><strong>Contenu :</strong> Présenter les différents modes (Enfant, Parent, Protecteur, Adulte Sain) avec des images ou des métaphores. Aider le patient à nommer ses propres modes ("Mon Gendarme intérieur", "Ma Tortue qui se cache").</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">3. Ma boîte à outils pour les tempêtes (Compétences TCD) <i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-content hidden">
+                        <p><strong>But :</strong> Apprendre des techniques concrètes pour gérer la détresse aiguë.</p>
+                        <p><strong>Contenu :</strong> Enseigner et pratiquer les techniques de Tolérance à la Détresse (TIPP, distraction, etc.). Co-construire le plan de crise.</p>
+                    </div>
+                </div>
+                 <div class="accordion-item">
+                    <button class="accordion-header">4. Devenir un bon parent pour moi-même (Renforcer l'Adulte Sain) <i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-content hidden">
+                        <p><strong>But :</strong> Développer la capacité à s'auto-apaiser et à prendre des décisions saines.</p>
+                        <p><strong>Contenu :</strong> Apprendre à identifier les besoins de l'Enfant Vulnérable et à y répondre. Apprendre à confronter le Parent Punitif. Pratiquer la prise de décision depuis l'Adulte Sain.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="section-tp-psychoed-entourage" class="content-section">
+                <h2>Modules de Psychoéducation</h2>
+                <h3>Pour l'Entourage (Famille, Proches)</h3>
+                <p>(Avec l'accord de la personne. Vise à donner des clés de compréhension et des outils concrets.)</p>
+                 <div class="accordion-item">
+                    <button class="accordion-header">1. Comprendre les "blessures invisibles" de votre proche <i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-content hidden">
+                        <p><strong>But :</strong> Déstigmatiser et donner un sens aux comportements.</p>
+                        <p><strong>Contenu :</strong> Expliquer le modèle des schémas. "Le comportement qui vous fait souffrir est une tentative maladroite de votre proche pour ne pas ressentir une douleur ancienne et insupportable."</p>
+                    </div>
+                </div>
+                 <div class="accordion-item">
+                    <button class="accordion-header">2. La validation : La clé pour désamorcer les conflits <i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-content hidden">
+                        <p><strong>But :</strong> Apprendre à communiquer de manière à apaiser l'émotion.</p>
+                        <p><strong>Contenu :</strong> Enseigner la différence entre valider une émotion et approuver un comportement. "Je comprends que tu sois terrifié(e) [validation de l'émotion], mais je ne peux pas accepter que tu m'insultes [limite sur le comportement]."</p>
+                    </div>
+                </div>
+                 <div class="accordion-item">
+                    <button class="accordion-header">3. Poser des limites pour se protéger et protéger la relation <i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-content hidden">
+                        <p><strong>But :</strong> Prévenir l'épuisement et sortir des cercles vicieux.</p>
+                        <p><strong>Contenu :</strong> Aider les proches à identifier leurs propres limites et à les communiquer de manière claire, calme et non-agressive.</p>
+                    </div>
+                </div>
+                 <div class="accordion-item">
+                    <button class="accordion-header">4. Prendre soin de soi pour mieux aider <i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-content hidden">
+                        <p><strong>But :</strong> Lutter contre la culpabilité et l'épuisement.</p>
+                        <p><strong>Contenu :</strong> Souligner que leur bien-être est essentiel. Les orienter vers des ressources (groupes de parole pour familles, etc.).</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="section-tp-glossaire" class="content-section">
+                <h2>Glossaire Pédagogique des Concepts Clés</h2>
+                <p>(Cliquez sur chaque terme pour afficher/masquer sa définition.)</p>
+                <div class="accordion-item">
+                    <button class="accordion-header">Schéma Précoce Inadapté (SPI) <i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-content hidden"><p>Croyance profonde et durable sur soi et le monde, formée dans l'enfance suite à la non-satisfaction de besoins émotionnels, qui guide la perception et le comportement (<cite>Young et al., 2003</cite>).</p></div>
+                </div>
+                 <div class="accordion-item">
+                    <button class="accordion-header">Mode Schématique <i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-content hidden"><p>État émotionnel et comportemental (ex: Enfant Vulnérable, Parent Punitif, Protecteur Détaché) qui s'active lorsqu'un schéma est déclenché (<cite>Young et al., 2003</cite>).</p></div>
+                </div>
+                 <div class="accordion-item">
+                    <button class="accordion-header">Reparentage Limité <i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-content hidden"><p>Posture du soignant qui répond aux besoins émotionnels non comblés du patient de manière chaleureuse, empathique et fiable, tout en maintenant des limites professionnelles strictes.</p></div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Adulte Sain (Mode) <i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-content hidden"><p>La partie fonctionnelle et équilibrée de la personnalité, capable de nurturing, de protection et de prise de décision rationnelle. Le but de la thérapie est de le renforcer.</p></div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Validation <i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-content hidden"><p>Communiquer à une personne que son expérience émotionnelle est compréhensible et sensée dans son contexte (son histoire, ses schémas), sans nécessairement approuver ses comportements.</p></div>
+                </div>
+                 <div class="accordion-item">
+                    <button class="accordion-header">Tolérance à la Détresse <i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-content hidden"><p>Ensemble de compétences (issues de la TCD) visant à survivre aux crises émotionnelles intenses sans recourir à des comportements dysfonctionnels (ex: automutilation, impulsivité).</p></div>
+                </div>
+            </div>
+
+            <div id="section-tp-references" class="content-section">
+                <h2>Références</h2>
+                <ul class="list-disc text-sm space-y-3">
+                    <li>Arntz, A., & Jacob, G. (2012). <em>Schema therapy in practice: An introductory guide to the schema mode approach</em>. Wiley-Blackwell.</li>
+                    <li>Linehan, M. M. (1993a). <em>Cognitive-behavioral treatment of borderline personality disorder</em>. Guilford Press.</li>
+                    <li>Linehan, M. M. (1993b). <em>Skills training manual for treating borderline personality disorder</em>. Guilford Press.</li>
+                    <li>Lloyd-Evans, B., Bond, G. R., Ruud, T., Ivanecka, A., Gray, R., Osborn, D., ... & Johnson, S. (2016). Development of a measure of model fidelity for mental health crisis resolution teams. <em>BMC Psychiatry, 16</em>(1), 427. <a href="https://doi.org/10.1186/s12888-016-1139-3" target="_blank" class="break-all">https://doi.org/10.1186/s12888-016-1139-3</a></li>
+                    <li>Young, J. E., Klosko, J. S., & Weishaar, M. E. (2003). <em>Schema therapy: A practitioner's guide</em>. Guilford Press.</li>
+                </ul>
+            </div>
+        </main>
+    </div>
+    
+    <footer class="mt-16 bg-slate-900 text-slate-300 text-sm border-t border-slate-700 py-6 px-4">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center md:items-start justify-between gap-6">
+            <!-- LOGO GAUCHE : VINATIER -->
+            <div class="flex-shrink-0">
+                <a href="https://www.ch-le-vinatier.fr" target="_blank" rel="noopener noreferrer">
+                    <img class="h-20 md:h-24 w-auto" 
+                         src="https://d2q79iu7y748jz.cloudfront.net/s/_squarelogo/256x256/e079f7cf4939908ea9a07ce40d529d0b" 
+                         alt="Logo Centre Hospitalier Le Vinatier">
+                </a>
+            </div>
+            <!-- TEXTE CENTRAL -->
+            <div class="flex-1 text-center md:text-left space-y-2">
+                <p>Dr <strong>FENOHASINA </strong>T.J. Felicien (Psychiatre - FFI)</p>
+		<p>Equipe Mobile - <strong>Pôle Centre</strong> Rive Gauche</p>
+		<p>Chef de Pôle: Prof. Nicolas <strong>FRANCK</strong></p>
+		<p>CH - Le <strong>Vinatier.</strong></p>
+                <div class="flex items-center justify-center md:justify-start gap-2 mt-2">
+                    <img class="h-5 w-auto" 
+                         src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Cc-by-nc-sa_icon.svg/120px-Cc-by-nc-sa_icon.svg.png" 
+                         alt="Icône Creative Commons BY-NC-SA">
+                    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr" 
+                       target="_blank" rel="noopener noreferrer" 
+                       class="underline hover:text-white">Licence CC BY-NC-SA 4.0</a> –
+                    <span>Dernière mise à jour : 14 septembre 2025.</span>
+                </div>
+            </div>
+            <!-- LOGOS DROITS : CRR -->
+            <div class="flex items-center gap-6 flex-shrink-0">
+                <a href="https://www.facebook.com/Psykozy?locale=fr_FR" target="_blank" rel="noopener noreferrer">
+                    <img class="h-16 md:h-20 w-auto" 
+                         src="https://cdn-assets.inwink.com/fe065c87-0643-42fc-8b5d-4d94b5d12c11/a1904f78-1bca-466d-a9f4-8ac9fde06c0c" 
+                         alt="Logo Psy-kôzy">
+                </a>
+                <a href="https://centre-ressource-rehabilitation.org" target="_blank" rel="noopener noreferrer">
+                    <img class="h-16 md:h-20 w-auto" 
+                         src="https://faustinebrunet.com/images/RS/creation-nouveau-logo-domaine-sante-mentale.jpg" 
+                         alt="Logo Centre Ressource Réhabilitation">
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const closeSidebarButton = document.getElementById('close-sidebar-button');
+        const sidebarBackdrop = document.getElementById('sidebar-backdrop');
+        const mainContent = document.getElementById('main-content');
+
+        function openSidebar() {
+            sidebar.classList.remove('-translate-x-full');
+            sidebar.classList.add('translate-x-0');
+            sidebarBackdrop.classList.remove('hidden');
+        }
+
+        function closeSidebar() {
+            sidebar.classList.remove('-translate-x-0');
+            sidebar.classList.add('-translate-x-full');
+            sidebarBackdrop.classList.add('hidden');
+        }
+
+        mobileMenuButton.addEventListener('click', (e) => {
+            e.stopPropagation(); 
+            openSidebar();
+        });
+        closeSidebarButton.addEventListener('click', closeSidebar);
+        sidebarBackdrop.addEventListener('click', closeSidebar);
+
+
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => section.classList.remove('active'));
+
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+                // We defer the scroll action to ensure the layout is updated by the browser first.
+                requestAnimationFrame(() => {
+                    mainContent.scrollTop = 0;
+                });
+            }
+
+            const navLinks = document.querySelectorAll('#sidebar .nav-link');
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                const isDirectMatch = link.getAttribute('onclick') && link.getAttribute('onclick').includes(`showSection('${sectionId}')`);
+                let isInSubmenuOfActiveParent = false;
+                
+                const submenu = link.nextElementSibling;
+                if (submenu && submenu.classList.contains('submenu')) {
+                    const submenuLinks = submenu.querySelectorAll('.nav-link');
+                    submenuLinks.forEach(sl => {
+                         sl.classList.remove('active'); 
+                        if (sl.getAttribute('onclick') && sl.getAttribute('onclick').includes(`showSection('${sectionId}')`)) {
+                            isInSubmenuOfActiveParent = true;
+                            sl.classList.add('active'); 
+                        }
+                    });
+                }
+
+                if (isDirectMatch || isInSubmenuOfActiveParent) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        function toggleSubmenu(element) {
+            const submenu = element.nextElementSibling;
+            const icon = element.querySelector('i.fa-chevron-down, i.fa-chevron-up');
+            if (submenu && submenu.classList.contains('submenu')) {
+                submenu.classList.toggle('hidden');
+                if (icon) {
+                    icon.classList.toggle('fa-chevron-down');
+                    icon.classList.toggle('fa-chevron-up');
+                }
+            }
+        }
+        
+        function initializeAccordions() {
+            const accordionHeaders = document.querySelectorAll('.accordion-header');
+            accordionHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const content = header.nextElementSibling;
+                    const icon = header.querySelector('.fas.fa-chevron-down, .fas.fa-chevron-up');
+                    
+                    content.classList.toggle('hidden');
+                    header.classList.toggle('open'); 
+                    
+                    if (icon) { 
+                        if (content.classList.contains('hidden')) {
+                            icon.classList.remove('fa-chevron-up');
+                            icon.classList.add('fa-chevron-down');
+                        } else {
+                            icon.classList.remove('fa-chevron-down');
+                            icon.classList.add('fa-chevron-up');
+                        }
+                    }
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Start on the first page of the crisis plan
+            showSection('section-crise-phase1');
+            
+            // Open the parent submenu for the crisis plan
+            const crisisPlanParentLink = Array.from(document.querySelectorAll('a.nav-link.font-semibold')).find(el => el.textContent.includes("Plan d'Intervention de Crise"));
+            if(crisisPlanParentLink) {
+                const submenu = crisisPlanParentLink.nextElementSibling;
+                const icon = crisisPlanParentLink.querySelector('i.fa-chevron-down');
+                 if (submenu && submenu.classList.contains('submenu') && icon) {
+                    submenu.classList.remove('hidden');
+                    icon.classList.remove('fa-chevron-down');
+                    icon.classList.add('fa-chevron-up');
+                }
+            }
+            
+            initializeAccordions(); 
+        });
+    </script>
+
+</body>
+</html>
+
+
+
+
+
