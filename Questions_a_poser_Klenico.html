@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rapport Klenico — Analyse critique</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --ink: #0f172a;
+      --muted: #475569;
+      --primary: #0ea5b7;
+      --accent: #7c3aed;
+      --ok: #0f766e;
+      --warn: #b45309;
+      --risk: #b91c1c;
+      --border: #e5e7eb;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Inter", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.6;
+    }
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white;
+      padding: 2rem;
+      text-align: center;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+    }
+    header p {
+      margin: 0.4rem 0 0;
+      font-size: 1rem;
+    }
+    main {
+      max-width: 900px;
+      margin: auto;
+      padding: 1.5rem;
+    }
+    h2 {
+      color: var(--primary);
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 0.3rem;
+      margin-top: 2rem;
+    }
+    p {
+      text-align: justify;
+      margin: 0.8rem 0;
+    }
+    ul {
+      margin: 0.5rem 0 1rem 1.2rem;
+    }
+    .callout {
+      border-left: 5px solid var(--primary);
+      background: #ecfeff;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 0.5rem;
+    }
+    .warn {
+      border-left-color: var(--warn);
+      background: #fff7ed;
+    }
+    .risk {
+      border-left-color: var(--risk);
+      background: #fef2f2;
+    }
+    footer {
+      margin-top: 2rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+      text-align: center;
+      padding: 1rem;
+    }
+    @media (max-width: 640px) {
+      header h1 { font-size: 1.4rem; }
+      main { padding: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Rapport — Analyse critique de Klenico</h1>
+    <p>Document pour Monsieur Levoivenel</p>
+  </header>
+  <main>
+    <section>
+      <h2>1. Fonctionnalités intéressantes</h2>
+      <p>Le dispositif <strong>Klenico</strong> propose un auto-questionnaire numérique couvrant 21 domaines de troubles, suivi d’une validation clinique semi-structurée. En termes simples : le patient remplit un questionnaire en ligne, les réponses sont organisées et synthétisées, puis le médecin peut vérifier et compléter lors de son entretien. L’outil génère aussi une carte visuelle des symptômes et propose des pistes diagnostiques selon la CIM-10 (classification internationale des maladies).</p>
+      <div class="callout">
+        <ul>
+          <li><strong>Gain de temps diagnostique :</strong> standardisation des premières évaluations.</li>
+          <li><strong>Support au raisonnement clinique :</strong> meilleure vision des comorbidités (plusieurs troubles en même temps) et appui au plan thérapeutique.</li>
+          <li><strong>Meilleure acceptabilité patient :</strong> restitution graphique facilitant la compréhension et favorisant l’adhésion aux soins.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>2. Points de vigilance</h2>
+      <div class="warn">
+        <ul>
+          <li><strong>Protection des données :</strong> savoir où les données sont stockées, qui peut y accéder, et garantir leur suppression si nécessaire (RGPD).</li>
+          <li><strong>Intégration au système hospitalier :</strong> vérifier que les résultats peuvent s’intégrer automatiquement dans notre dossier patient informatisé.</li>
+          <li><strong>Responsabilités cliniques :</strong> définir clairement la marche à suivre si le patient signale des idées suicidaires ou des risques aigus.</li>
+          <li><strong>Validité en français :</strong> demander des preuves que le questionnaire fonctionne aussi bien en français que dans les versions originales.</li>
+          <li><strong>Dépendance au fournisseur :</strong> attention aux coûts récurrents et aux risques de dépendance commerciale.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>3. Fonctionnalités qui pourraient être intéressantes à ajouter</h2>
+      <div class="callout">
+        <ul>
+          <li><strong>Suivi dans le temps :</strong> graphiques simples pour montrer l’évolution des symptômes, avec alertes si aggravation.</li>
+          <li><strong>Mode téléconsultation :</strong> permettre l’utilisation du questionnaire pendant une consultation vidéo, avec partage en direct entre patient et soignant.</li>
+          <li><strong>Exports enrichis :</strong> produire automatiquement un résumé clair pour les réunions cliniques et l’intégration dans le dossier patient.</li>
+          <li><strong>Tableaux de bord qualité :</strong> indicateurs simples pour le service (temps moyen de passation, taux de complétion, délai entre évaluation et prise en charge).</li>
+          <li><strong>Module administratif :</strong> suivi des usages, traçabilité et lien avec la facturation hospitalière.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>4. Questions à poser</h2>
+      <ol>
+        <li>Où sont hébergées les données et quelles garanties concrètes offrez-vous en matière de confidentialité ?</li>
+        <li>Disposez-vous d’une version validée en français ? Quels résultats de fiabilité et de précision ?</li>
+        <li>Le dispositif est-il mis à jour pour correspondre aux dernières classifications (CIM-11, DSM-5-TR) ?</li>
+        <li>L’outil peut-il s’intégrer automatiquement dans un dossier patient informatisé ?</li>
+        <li>Quelle formation est prévue pour les praticiens et combien de temps faut-il prévoir ?</li>
+        <li>Comment l’outil gère-t-il les signaux d’alerte graves (suicide, automutilation) ?</li>
+        <li>Avez-vous des données indépendantes prouvant l’impact positif sur la qualité des soins ou sur les coûts ?</li>
+        <li>Quels sont vos modèles tarifaires (licence, par patient, par volume) et vos conditions contractuelles ?</li>
+        <li>Pouvez-vous partager des retours d’expérience d’hôpitaux comparables ?</li>
+        <li>Où en est votre mise en conformité réglementaire (normes européennes sur les dispositifs médicaux) ?</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>Conclusion</h2>
+      <p><strong>Klenico</strong> apparaît comme un outil prometteur pour améliorer la qualité et la rapidité du diagnostic psychiatrique. Ses points forts sont la standardisation et la restitution visuelle. Toutefois, avant toute adoption, il est essentiel de clarifier la confidentialité des données, l’intégration technique, la validité francophone et le modèle économique. Les questions listées permettront de sécuriser la décision et d’ouvrir un échange transparent avec l’éditeur. Les suggestions de fonctionnalités additionnelles peuvent servir de base pour négocier une adaptation aux besoins locaux.</p>
+    </section>
+  </main>
+  <footer>
+    Rapport préparé pour Monsieur Levoivenel — Usage interne uniquement
+  </footer>
+</body>
+</html>
