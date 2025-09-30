@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questionnaire PHQ-9 - Évaluation de la Santé Mentale</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .navigation-bar {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 15px 20px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+
+        .nav-title {
+            font-size: 1.1em;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #6c757d, #495057);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.2em;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            animation: slideUp 0.5s ease;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .warning-box h3 {
+            color: #856404;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .warning-box ul {
+            color: #856404;
+            margin-left: 20px;
+            line-height: 1.6;
+        }
+
+        .question-card {
+            margin-bottom: 25px;
+            padding: 25px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            animation: fadeIn 0.6s ease;
+        }
+
+        .question-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            text-align: center;
+            line-height: 30px;
+            border-radius: 50%;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .question-text {
+            font-size: 1.1em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+        }
+
+        .option-btn {
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 0.95em;
+        }
+
+        .option-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-color: #667eea;
+        }
+
+        .option-btn.selected {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: transparent;
+            transform: scale(1.05);
+        }
+
+        .option-score {
+            display: block;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .critical-warning {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 15px;
+            color: #721c24;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .results-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 30px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+            display: none;
+            animation: slideUp 0.5s ease;
+        }
+
+        .results-section.show {
+            display: block;
+        }
+
+        .score-display {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .score-circle {
+            display: inline-block;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            margin-bottom: 20px;
+        }
+
+        .score-number {
+            font-size: 3em;
+            font-weight: bold;
+        }
+
+        .score-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .interpretation {
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .interpretation.minimal { 
+            background: #d4edda; 
+            color: #155724; 
+        }
+        .interpretation.mild { 
+            background: #fff3cd; 
+            color: #856404; 
+        }
+        .interpretation.moderate { 
+            background: #ffe5cc; 
+            color: #cc5500; 
+        }
+        .interpretation.moderate-severe { 
+            background: #f8d7da; 
+            color: #721c24; 
+        }
+        .interpretation.severe { 
+            background: #f5c2c7; 
+            color: #842029; 
+        }
+
+        .details-toggle {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .details-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .details-content {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .details-content.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .differential-item {
+            background: white;
+            padding: 15px;
+            border-left: 4px solid #667eea;
+            margin-bottom: 15px;
+            border-radius: 8px;
+        }
+
+        .differential-item h4 {
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .differential-item p {
+            color: #6c757d;
+            font-size: 0.95em;
+        }
+
+        .control-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #e9ecef;
+            color: #495057;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .consent-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .consent-box label {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .consent-box input[type="checkbox"] {
+            margin-top: 5px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: white;
+            margin-top: 50px;
+        }
+
+        .footer a {
+            color: #ffd700;
+            text-decoration: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2em; }
+            .options-grid { grid-template-columns: 1fr 1fr; }
+            .score-circle { width: 120px; height: 120px; }
+            .score-number { font-size: 2.5em; }
+            .navigation-bar { 
+                flex-direction: column; 
+                gap: 10px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation Bar -->
+        <div class="navigation-bar">
+            <a href="#LIEN_A_MODIFIER" class="back-button">
+                ← Retour
+            </a>
+            <span class="nav-title">Outils d'évaluation</span>
+        </div>
+
+        <div class="header">
+            <h1>📋 Questionnaire PHQ-9</h1>
+            <p>Évaluation de la santé mentale</p>
+        </div>
+
+        <div class="card">
+            <h2>ℹ️ À propos de ce questionnaire</h2>
+            <p style="margin: 15px 0; line-height: 1.6;">
+                Le PHQ-9 est un outil de dépistage validé scientifiquement pour évaluer la présence et la sévérité 
+                des symptômes dépressifs. Il évalue vos expériences au cours des <strong>2 dernières semaines</strong>.
+            </p>
+            
+            <div class="warning-box">
+                <h3>⚠️ Avertissements importants</h3>
+                <ul>
+                    <li>Ce questionnaire ne remplace pas une consultation médicale</li>
+                    <li>En cas de pensées suicidaires, contactez immédiatement un professionnel de santé</li>
+                    <li>Les résultats sont indicatifs et nécessitent une interprétation clinique</li>
+                    <li><strong>Numéro national de prévention du suicide : 3114</strong> (gratuit, 24h/7j)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="control-buttons">
+                <button class="btn btn-primary" onclick="importData()">
+                    📥 Importer un questionnaire
+                </button>
+                <button class="btn btn-secondary" onclick="resetForm()">
+                    🔄 Réinitialiser
+                </button>
+            </div>
+            <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="loadFile(event)">
+        </div>
+
+        <div class="card">
+            <h2 style="margin-bottom: 20px;">Au cours des 2 dernières semaines, selon quelle fréquence avez-vous été gêné(e) par les problèmes suivants ?</h2>
+            
+            <div id="questions"></div>
+        </div>
+
+        <div id="functionalImpact" class="card" style="display: none;">
+            <h3>Impact fonctionnel</h3>
+            <p style="margin: 15px 0;">À quel point ce(s) problème(s) a-t-il (ont-ils) rendu votre travail, vos tâches à la maison ou votre capacité à vous entendre avec les autres difficile(s) ?</p>
+            <div class="options-grid" id="difficultyOptions"></div>
+        </div>
+
+        <div id="results" class="results-section">
+            <h2 style="text-align: center; margin-bottom: 30px;">📊 Résultats de votre évaluation</h2>
+            
+            <div class="score-display">
+                <div class="score-circle">
+                    <span class="score-number" id="totalScore">0</span>
+                    <span class="score-label">sur 27</span>
+                </div>
+            </div>
+
+            <div id="interpretationBox" class="interpretation"></div>
+
+            <button class="details-toggle" onclick="toggleDetails()">
+                📋 Voir les détails et diagnostics différentiels
+                <span id="toggleIcon">▼</span>
+            </button>
+
+            <div id="detailsContent" class="details-content"></div>
+
+            <div class="card" style="margin-top: 30px;">
+                <h3>💾 Exporter les résultats</h3>
+                <div class="consent-box">
+                    <label>
+                        <input type="checkbox" id="exportConsent">
+                        <span>Je consens à l'exportation de mes données. Je comprends que ces données sont sensibles et doivent être protégées.</span>
+                    </label>
+                </div>
+                <button class="btn btn-primary" onclick="exportData()" style="width: 100%;">
+                    📥 Exporter en JSON
+                </button>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p style="font-size: 1.1em; margin-bottom: 15px;"><strong>PHQ-9 - Patient Health Questionnaire</strong></p>
+            <p style="font-size: 0.95em; margin-bottom: 10px;">
+                <strong>Auteurs originaux :</strong> Dr Robert L. Spitzer, Janet B.W. Williams, Kurt Kroenke et collègues<br>
+                Développé grâce à une allocation d'études de Pfizer Inc.
+            </p>
+            <p style="font-size: 0.95em; margin-bottom: 15px;">
+                <strong>Adaptation numérique :</strong> Dr FENOHASINA | Psychiatre - FFI
+            </p>
+            <small style="display: block;">© 2025 - Tous droits réservés</small>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            "Peu d'intérêt ou de plaisir à faire les choses",
+            "Être triste, déprimé(e) ou désespéré(e)",
+            "Difficultés à s'endormir ou à rester endormi(e), ou dormir trop",
+            "Se sentir fatigué(e) ou manquer d'énergie",
+            "Avoir peu d'appétit ou manger trop",
+            "Avoir une mauvaise opinion de soi-même, ou avoir le sentiment d'être nul(le), ou d'avoir déçu sa famille ou s'être déçu(e) soi-même",
+            "Avoir du mal à se concentrer, par exemple, pour lire le journal ou regarder la télévision",
+            "Bouger ou parler si lentement que les autres auraient pu le remarquer. Ou au contraire, être si agité(e) que vous avez eu du mal à tenir en place par rapport à d'habitude",
+            "Penser qu'il vaudrait mieux mourir ou envisager de vous faire du mal d'une manière ou d'une autre"
+        ];
+
+        const options = [
+            { value: 0, label: "Jamais" },
+            { value: 1, label: "Plusieurs jours" },
+            { value: 2, label: "Plus de la moitié du temps" },
+            { value: 3, label: "Presque tous les jours" }
+        ];
+
+        const difficultyOptions = [
+            { value: 0, label: "Pas du tout difficile(s)" },
+            { value: 1, label: "Assez difficile(s)" },
+            { value: 2, label: "Très difficile(s)" },
+            { value: 3, label: "Extrêmement difficile(s)" }
+        ];
+
+        let answers = new Array(9).fill(null);
+        let difficulty = null;
+
+        function initializeQuestions() {
+            const container = document.getElementById('questions');
+            container.innerHTML = '';
+
+            questions.forEach((question, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-card';
+                
+                let criticalWarning = '';
+                if (index === 8) {
+                    criticalWarning = `
+                        <div class="critical-warning">
+                            🛡️ <span>Question sensible - En cas de réponse positive, une aide immédiate peut être nécessaire</span>
+                        </div>
+                    `;
+                }
+
+                questionDiv.innerHTML = `
+                    <span class="question-number">${index + 1}</span>
+                    <div class="question-text">${question}</div>
+                    <div class="options-grid">
+                        ${options.map(opt => `
+                            <button class="option-btn" onclick="selectAnswer(${index}, ${opt.value})" id="q${index}_opt${opt.value}">
+                                <span class="option-score">${opt.value}</span>
+                                <span>${opt.label}</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                    ${criticalWarning}
+                `;
+                
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function initializeDifficulty() {
+            const container = document.getElementById('difficultyOptions');
+            container.innerHTML = difficultyOptions.map(opt => `
+                <button class="option-btn" onclick="selectDifficulty(${opt.value})" id="diff${opt.value}">
+                    ${opt.label}
+                </button>
+            `).join('');
+        }
+
+        function selectAnswer(questionIndex, value) {
+            answers[questionIndex] = value;
+            
+            // Update UI
+            for (let i = 0; i < 4; i++) {
+                const btn = document.getElementById(`q${questionIndex}_opt${i}`);
+                if (i === value) {
+                    btn.classList.add('selected');
+                } else {
+                    btn.classList.remove('selected');
+                }
+            }
+
+            checkCompletion();
+        }
+
+        function selectDifficulty(value) {
+            difficulty = value;
+            
+            // Update UI
+            for (let i = 0; i < 4; i++) {
+                const btn = document.getElementById(`diff${i}`);
+                if (i === value) {
+                    btn.classList.add('selected');
+                } else {
+                    btn.classList.remove('selected');
+                }
+            }
+
+            updateResults();
+        }
+
+        function checkCompletion() {
+            const allAnswered = answers.every(a => a !== null);
+            
+            if (allAnswered) {
+                document.getElementById('functionalImpact').style.display = 'block';
+                updateResults();
+                document.getElementById('results').classList.add('show');
+            }
+        }
+
+        function calculateScore() {
+            return answers.reduce((sum, val) => sum + (val || 0), 0);
+        }
+
+        function getInterpretation(score) {
+            if (score <= 4) return { 
+                level: "Minimale", 
+                className: "minimal",
+                description: "Les symptômes dépressifs sont minimes ou absents.",
+                action: "Surveillance de routine recommandée."
+            };
+            if (score <= 9) return { 
+                level: "Légère", 
+                className: "mild",
+                description: "Présence de symptômes dépressifs légers.",
+                action: "Surveillance active et support psychosocial recommandés."
+            };
+            if (score <= 14) return { 
+                level: "Modérée", 
+                className: "moderate",
+                description: "Symptômes dépressifs modérés nécessitant une intervention.",
+                action: "Considérer une psychothérapie et/ou un traitement pharmacologique."
+            };
+            if (score <= 19) return { 
+                level: "Modérément sévère", 
+                className: "moderate-severe",
+                description: "Symptômes dépressifs modérément sévères.",
+                action: "Traitement actif recommandé (psychothérapie + pharmacothérapie)."
+            };
+            return { 
+                level: "Sévère", 
+                className: "severe",
+                description: "Symptômes dépressifs sévères nécessitant une prise en charge urgente.",
+                action: "Évaluation psychiatrique immédiate recommandée. Considérer l'hospitalisation si risque suicidaire."
+            };
+        }
+
+        function getDifferentials(score) {
+            if (score <= 4) return [];
+            if (score <= 9) return [
+                { name: "Trouble de l'adaptation", test: "Évaluer les facteurs de stress récents et leur temporalité" },
+                { name: "Anxiété généralisée", test: "Utiliser le GAD-7 pour évaluer les symptômes anxieux" }
+            ];
+            if (score <= 14) return [
+                { name: "Trouble bipolaire", test: "Rechercher des antécédents d'épisodes maniaques/hypomaniaques (MDQ)" },
+                { name: "Hypothyroïdie", test: "Dosage TSH et T4 libre" },
+                { name: "Trouble anxieux comorbide", test: "Évaluation avec GAD-7 et recherche de symptômes spécifiques" }
+            ];
+            if (score <= 19) return [
+                { name: "Trouble bipolaire", test: "Évaluation approfondie des antécédents thymiques (YMRS, MDQ)" },
+                { name: "Trouble dépressif avec caractéristiques psychotiques", test: "Recherche d'idées délirantes ou hallucinations" },
+                { name: "Pathologie organique", test: "Bilan biologique complet (NFS, ionogramme, TSH, B12, folates)" },
+                { name: "Abus de substances", test: "Dépistage systématique (AUDIT, CAST)" }
+            ];
+            return [
+                { name: "Trouble dépressif avec caractéristiques psychotiques", test: "Évaluation psychiatrique complète (PANSS)" },
+                { name: "Trouble bipolaire mixte", test: "Recherche de symptômes maniaques concomitants" },
+                { name: "Trouble de la personnalité borderline", test: "Évaluation de la personnalité et des patterns relationnels" },
+                { name: "Pathologie neurologique", test: "IRM cérébrale si signes neurologiques ou début tardif" },
+                { name: "Syndrome paranéoplasique", test: "Bilan d'extension si suspicion clinique" }
+            ];
+        }
+
+        function updateResults() {
+            const score = calculateScore();
+            const interpretation = getInterpretation(score);
+            const differentials = getDifferentials(score);
+
+            document.getElementById('totalScore').textContent = score;
+            
+            const interpretationBox = document.getElementById('interpretationBox');
+            interpretationBox.className = `interpretation ${interpretation.className}`;
+            interpretationBox.innerHTML = `
+                <h3 style="margin-bottom: 10px;">Dépression ${interpretation.level}</h3>
+                <p><strong>Interprétation :</strong> ${interpretation.description}</p>
+                <p><strong>Recommandation :</strong> ${interpretation.action}</p>
+            `;
+
+            const detailsContent = document.getElementById('detailsContent');
+            if (differentials.length > 0) {
+                detailsContent.innerHTML = `
+                    <h3 style="margin-bottom: 20px;">Diagnostics différentiels à considérer :</h3>
+                    ${differentials.map(diff => `
+                        <div class="differential-item">
+                            <h4>${diff.name}</h4>
+                            <p><strong>Comment l'évaluer :</strong> ${diff.test}</p>
+                        </div>
+                    `).join('')}
+                `;
+                document.querySelector('.details-toggle').style.display = 'flex';
+            } else {
+                document.querySelector('.details-toggle').style.display = 'none';
+            }
+        }
+
+        function toggleDetails() {
+            const content = document.getElementById('detailsContent');
+            const icon = document.getElementById('toggleIcon');
+            
+            if (content.classList.contains('show')) {
+                content.classList.remove('show');
+                icon.textContent = '▼';
+            } else {
+                content.classList.add('show');
+                icon.textContent = '▲';
+            }
+        }
+
+        function resetForm() {
+            answers = new Array(9).fill(null);
+            difficulty = null;
+            
+            // Reset UI
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            document.getElementById('functionalImpact').style.display = 'none';
+            document.getElementById('results').classList.remove('show');
+            document.getElementById('detailsContent').classList.remove('show');
+            document.getElementById('exportConsent').checked = false;
+        }
+
+        function importData() {
+            document.getElementById('fileInput').click();
+        }
+
+        function loadFile(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        if (data.answers && Array.isArray(data.answers)) {
+                            answers = data.answers;
+                            difficulty = data.difficulty;
+                            
+                            // Update UI
+                            answers.forEach((value, index) => {
+                                if (value !== null) {
+                                    selectAnswer(index, value);
+                                }
+                            });
+                            
+                            if (difficulty !== null) {
+                                selectDifficulty(difficulty);
+                            }
+                        }
+                    } catch (error) {
+                        alert("Erreur lors de l'importation du fichier");
+                    }
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        function exportData() {
+            const consent = document.getElementById('exportConsent').checked;
+            if (!consent) {
+                alert("Veuillez confirmer votre consentement avant d'exporter les données.");
+                return;
+            }
+
+            const score = calculateScore();
+            const interpretation = getInterpretation(score);
+            
+            const data = {
+                date: new Date().toISOString(),
+                answers: answers,
+                difficulty: difficulty,
+                score: score,
+                interpretation: interpretation.level
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `PHQ9_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeQuestions();
+            initializeDifficulty();
+        });
+    </script>
+</body>
+</html>
