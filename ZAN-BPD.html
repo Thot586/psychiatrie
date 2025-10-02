@@ -357,6 +357,65 @@
     .severity-moderate { background: rgba(232, 144, 109, 0.2); color: #c87a3d; }
     .severity-severe { background: rgba(216, 141, 154, 0.2); color: var(--danger); }
     
+    .summary-box {
+      background: linear-gradient(135deg, rgba(139, 123, 184, 0.08) 0%, rgba(212, 165, 196, 0.08) 100%);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    
+    .probability-indicator {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      padding: 1rem;
+      background: white;
+      border-radius: 12px;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .probability-circle {
+      min-width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: white;
+      box-shadow: var(--shadow-md);
+    }
+    
+    .probability-text {
+      flex: 1;
+    }
+    
+    .probability-text .label {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--primary-dark);
+      margin-bottom: 0.25rem;
+    }
+    
+    .probability-text .desc {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+    
+    .criteria-count {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+      color: white;
+      padding: 0.35rem 0.75rem;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+    
     .barwrap {
       margin-top: 1.5rem;
     }
@@ -620,12 +679,10 @@
               </div>
             </div>
 
-            <details class="accordion" open>
-              <summary>Interprétation — résumé</summary>
-              <div class="content">
-                <p id="interp"></p>
-              </div>
-            </details>
+            <div class="summary-box">
+              <div id="probability-result"></div>
+              <p id="interp" style="margin-top: 1rem;"></p>
+            </div>
 
             <details class="accordion">
               <summary>Interprétation détaillée</summary>
@@ -640,12 +697,21 @@
                 <p><strong>Qu'est-ce que la ZAN-BPD ?</strong></p>
                 <p>La ZAN-BPD est une échelle qui mesure la sévérité des symptômes associés au trouble de la personnalité borderline durant la semaine écoulée. Elle évalue 9 critères correspondant aux critères diagnostiques du DSM-5.</p>
                 
-                <p class="note"><strong>Important :</strong> Cette échelle mesure l'intensité actuelle des symptômes, pas la présence ou l'absence d'un diagnostic. Un score élevé indique que vous vivez actuellement des difficultés importantes, mais seul un professionnel de santé qualifié peut poser un diagnostic.</p>
+                <p style="margin-top: 1rem;"><strong>Comment interpréter la probabilité ?</strong></p>
+                <p>La probabilité affichée est basée sur le nombre de critères "significativement présents" (avec un score ≥2 sur 4). Selon le DSM-5, un diagnostic de TPB nécessite au moins 5 critères présents sur 9. Cependant :</p>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                  <li>Cette estimation est basée sur <strong>une seule semaine</strong>, alors que le diagnostic nécessite des symptômes persistants</li>
+                  <li>Le diagnostic officiel nécessite une évaluation par un professionnel qualifié</li>
+                  <li>Même avec moins de 5 critères, vous pouvez avoir besoin d'aide et de soutien</li>
+                </ul>
+                
+                <p class="note" style="margin-top: 1rem;"><strong>Important :</strong> Cette échelle mesure l'intensité actuelle des symptômes, pas la présence ou l'absence d'un diagnostic. Un score élevé indique que vous vivez actuellement des difficultés importantes, mais seul un professionnel de santé qualifié peut poser un diagnostic.</p>
                 
                 <p style="margin-top: 1rem;"><strong>Que faire avec votre résultat ?</strong></p>
                 <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
-                  <li>Si votre score est élevé (≥19) et que ces difficultés impactent votre quotidien, il est recommandé de consulter un professionnel de santé mentale.</li>
-                  <li>Même avec un score plus bas, si vous souffrez, n'hésitez pas à demander de l'aide.</li>
+                  <li>Si votre probabilité est "Élevée" ou "Très élevée" et que ces difficultés impactent votre quotidien, consultez un professionnel de santé mentale.</li>
+                  <li>Si votre score de sévérité est élevé (≥19), même avec une probabilité "Modérée", une consultation est recommandée.</li>
+                  <li>Même avec une probabilité "Faible", si vous souffrez, n'hésitez pas à demander de l'aide.</li>
                   <li>Ce questionnaire peut être un point de départ pour discuter avec votre thérapeute de votre situation actuelle.</li>
                 </ul>
               </div>
@@ -662,17 +728,31 @@
                   <li>Mesurer la réponse au traitement</li>
                 </ul>
                 
-                <p class="note"><strong>Limites :</strong> La ZAN-BPD n'est pas un outil diagnostique autonome. Le diagnostic de TPB nécessite une évaluation clinique complète incluant l'anamnèse développementale, le fonctionnement global, et l'exclusion d'autres troubles.</p>
+                <p style="margin-top: 1rem;"><strong>Interprétation de la probabilité DSM-5</strong></p>
+                <p>L'estimation de probabilité se base sur le décompte des critères avec score ≥2 (symptômes modérés ou plus) :</p>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                  <li><strong>Faible (< 3 critères) :</strong> Sous le seuil diagnostique. Vigilance si symptômes émergents ou contexte à risque.</li>
+                  <li><strong>Modérée (3-4 critères) :</strong> Sous-syndromique. Considérer les diagnostics différentiels (TDAH, troubles anxieux, TSPT complexe). Traits borderline possibles nécessitant suivi.</li>
+                  <li><strong>Élevée (5-6 critères) :</strong> Correspond au seuil DSM-5 (≥5 critères). Forte probabilité de TPB si critères persistants dans le temps et contexte développemental cohérent.</li>
+                  <li><strong>Très élevée (≥7 critères) :</strong> Polysymptomatique. Très forte probabilité de TPB. Évaluer comorbidités, risque suicidaire, et intensité de la prise en charge.</li>
+                </ul>
                 
-                <p style="margin-top: 1rem;"><strong>Interprétation clinique</strong></p>
+                <p class="note" style="margin-top: 1rem;"><strong>Limites importantes :</strong> 
+                  <br>• La ZAN-BPD évalue une semaine, alors que le diagnostic DSM-5 nécessite des symptômes persistants depuis l'adolescence/début de l'âge adulte.
+                  <br>• Un score élevé peut refléter une décompensation aiguë plutôt qu'un trouble de personnalité.
+                  <br>• Le diagnostic différentiel reste essentiel (TSPT-C, troubles de l'humeur, TDAH avec dysrégulation émotionnelle).
+                  <br>• La ZAN-BPD ne remplace pas l'entretien clinique structuré (SCID-II, IPDE, DIB-R).
+                </p>
+                
+                <p style="margin-top: 1rem;"><strong>Interprétation de la sévérité</strong></p>
                 <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
                   <li><strong>0-9 :</strong> Symptômes absents ou minimes. Réévaluation selon contexte clinique.</li>
                   <li><strong>10-18 :</strong> Symptômes légers à modérés. Surveillance, interventions ciblées (psychothérapie, gestion de crise).</li>
-                  <li><strong>19-27 :</strong> Symptômes modérés à marqués. Traitement structuré recommandé (TCD, TBM, schéma thérapie).</li>
+                  <li><strong>19-27 :</strong> Symptômes modérés à marqués. Traitement structuré recommandé (TCD, TBM, thérapie des schémas).</li>
                   <li><strong>28-36 :</strong> Symptômes sévères. Intensification du traitement, évaluation du risque, possibilité d'hospitalisation si nécessaire.</li>
                 </ul>
                 
-                <p class="note" style="margin-top: 1rem;"><strong>Usage en pratique :</strong> Utilisez la ZAN-BPD en complément de l'évaluation clinique. Considérez le contexte (événements récents, comorbidités, compliance thérapeutique). Les fluctuations sont normales dans le TPB ; plusieurs évaluations sont plus informatives qu'une mesure isolée.</p>
+                <p class="note" style="margin-top: 1rem;"><strong>Usage en pratique :</strong> Utilisez la ZAN-BPD en complément de l'évaluation clinique. La probabilité DSM-5 est un indicateur, pas un diagnostic. Considérez toujours le contexte longitudinal, les événements récents, les comorbidités, et la compliance thérapeutique. Les fluctuations sont normales dans le TPB ; plusieurs évaluations sont plus informatives qu'une mesure isolée.</p>
               </div>
             </details>
           </div>
@@ -807,6 +887,50 @@
     });
 
     // Fonctions d'interprétation
+    function getProbabilityInfo(scores) {
+      // Compter le nombre de critères "significativement présents" (≥2)
+      let significantCriteria = 0;
+      for (let i = 1; i <= criteria.length; i++) {
+        if (scores[`q${i}`] >= 2) {
+          significantCriteria++;
+        }
+      }
+      
+      // Calculer la probabilité basée sur les critères DSM-5
+      // DSM-5 nécessite 5 critères sur 9 pour le diagnostic
+      let probability, probabilityClass, probabilityColor, probabilityDesc;
+      
+      if (significantCriteria < 3) {
+        probability = "Faible";
+        probabilityClass = "severity-minimal";
+        probabilityColor = "var(--success)";
+        probabilityDesc = "Moins de 3 critères significatifs. Peu probable selon les critères DSM-5.";
+      } else if (significantCriteria < 5) {
+        probability = "Modérée";
+        probabilityClass = "severity-mild";
+        probabilityColor = "#c89a3d";
+        probabilityDesc = `${significantCriteria} critères significatifs. En dessous du seuil DSM-5 (5 critères requis), mais présence de difficultés notables.`;
+      } else if (significantCriteria < 7) {
+        probability = "Élevée";
+        probabilityClass = "severity-moderate";
+        probabilityColor = "#c87a3d";
+        probabilityDesc = `${significantCriteria} critères significatifs. Au-dessus du seuil DSM-5 (5 critères), suggérant une forte probabilité de TPB.`;
+      } else {
+        probability = "Très élevée";
+        probabilityClass = "severity-severe";
+        probabilityColor = "var(--danger)";
+        probabilityDesc = `${significantCriteria} critères significatifs sur 9. Nettement au-dessus du seuil DSM-5, suggérant une très forte probabilité de TPB.`;
+      }
+      
+      return {
+        probability,
+        probabilityClass,
+        probabilityColor,
+        probabilityDesc,
+        significantCriteria
+      };
+    }
+    
     function getSeverityInfo(total) {
       if (total <= 9) {
         return {
@@ -846,6 +970,7 @@
     const totalscoreEl = document.getElementById('totalscore');
     const fill = document.getElementById('fill');
     const severityBadge = document.getElementById('severity-badge');
+    const probabilityResult = document.getElementById('probability-result');
     const interp = document.getElementById('interp');
     const interpLong = document.getElementById('interp-long');
     const criteriaScores = document.getElementById('criteria-scores');
@@ -878,8 +1003,29 @@
       const severity = getSeverityInfo(total);
       severityBadge.innerHTML = `<span class="severity-badge ${severity.class}">${severity.label}</span>`;
 
+      // Probabilité selon critères DSM-5
+      const probInfo = getProbabilityInfo(scores);
+      probabilityResult.innerHTML = `
+        <div class="probability-indicator">
+          <div class="probability-circle" style="background: linear-gradient(135deg, ${probInfo.probabilityColor}, ${probInfo.probabilityColor}dd);">
+            ${probInfo.probability}
+          </div>
+          <div class="probability-text">
+            <div class="label">Probabilité de TPB selon critères DSM-5</div>
+            <div class="desc">${probInfo.probabilityDesc}</div>
+            <div class="criteria-count">${probInfo.significantCriteria} critère(s) significatif(s) sur 9</div>
+          </div>
+        </div>
+        <div class="note" style="margin-top: 1rem;">
+          <strong>Important :</strong> Cette estimation se base sur le nombre de critères avec un score ≥2 (modéré ou plus). 
+          Le diagnostic DSM-5 du TPB nécessite 5 critères sur 9, MAIS seul un professionnel qualifié peut poser ce diagnostic 
+          après une évaluation clinique complète. Cette échelle mesure la sévérité des symptômes durant la semaine écoulée, 
+          pas la présence d'un trouble sur le long terme.
+        </div>
+      `;
+
       // Interprétations
-      interp.textContent = `Score ${total} / 36 : ${severity.shortDesc}`;
+      interp.textContent = `Score de sévérité : ${total} / 36 (${severity.shortDesc})`;
       interpLong.innerHTML = `<p>${severity.longDesc}</p>`;
 
       // Scores par critère
