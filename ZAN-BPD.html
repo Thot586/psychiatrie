@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ZAN-BPD – Échelle de Zanarini</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    
+    :root {
+      --primary: #8b7bb8;
+      --primary-light: #b4a5d4;
+      --primary-dark: #6d5f94;
+      --accent: #d4a5c4;
+      --bg-main: #f8f6fb;
+      --bg-card: #ffffff;
+      --text-primary: #2d2640;
+      --text-secondary: #6b5d7f;
+      --text-muted: #9b8db0;
+      --border: #e8e3f0;
+      --success: #7fb89e;
+      --warning: #e8b86d;
+      --danger: #d88d9a;
+      --shadow-sm: 0 2px 8px rgba(139, 123, 184, 0.08);
+      --shadow-md: 0 4px 16px rgba(139, 123, 184, 0.12);
+      --shadow-lg: 0 8px 32px rgba(139, 123, 184, 0.16);
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #f8f6fb 0%, #efe9f7 100%);
+      color: var(--text-primary);
+      line-height: 1.7;
+      padding: 1.5rem;
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 56rem;
+      margin: 0 auto;
+      background: var(--bg-card);
+      border-radius: 24px;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      animation: fadeIn 0.6s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white;
+      padding: 2rem 2rem 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 300px;
+      height: 300px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      animation: float 8s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(-20px, 20px) scale(1.1); }
+    }
+    
+    header h1 {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      position: relative;
+      z-index: 1;
+    }
+    
+    header .subtitle {
+      font-size: 1rem;
+      opacity: 0.95;
+      font-weight: 400;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .toolbar {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .btn {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 0.6rem 1.1rem;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+    
+    .btn:hover:not([disabled]) {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .btn[disabled] {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .section {
+      padding: 2rem;
+      border-top: 1px solid var(--border);
+    }
+    
+    .instructions {
+      background: linear-gradient(135deg, #f0ebf8 0%, #faf7fd 100%);
+      color: var(--text-primary);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin: 1.5rem 2rem;
+      border: 1px solid var(--border);
+      animation: slideIn 0.5s ease 0.2s both;
+    }
+    
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    
+    .instructions strong {
+      color: var(--primary-dark);
+    }
+    
+    .question {
+      padding: 1.5rem 0;
+      border-bottom: 1px solid var(--border);
+      animation: slideIn 0.5s ease both;
+      transition: all 0.3s ease;
+    }
+    
+    .question:hover {
+      background: linear-gradient(90deg, transparent 0%, rgba(139, 123, 184, 0.03) 50%, transparent 100%);
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+      margin-left: -0.5rem;
+      margin-right: -0.5rem;
+      border-radius: 12px;
+    }
+    
+    .question:last-child {
+      border-bottom: none;
+    }
+    
+    .qtext {
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+      font-size: 1.05rem;
+    }
+    
+    .qnumber {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--primary-light) 0%, var(--accent) 100%);
+      color: white;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 28px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-right: 0.75rem;
+    }
+    
+    .scale-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+      gap: 0.75rem;
+      margin-top: 0.75rem;
+    }
+    
+    .scale-container input[type="radio"] {
+      display: none;
+    }
+    
+    .scale-container label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem 0.5rem;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: var(--bg-card);
+      text-align: center;
+      min-height: 90px;
+    }
+    
+    .scale-container label:hover {
+      border-color: var(--primary-light);
+      background: linear-gradient(135deg, rgba(139, 123, 184, 0.05) 0%, rgba(212, 165, 196, 0.05) 100%);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .scale-container input[type="radio"]:checked + label {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white;
+      border-color: var(--primary);
+      box-shadow: var(--shadow-md);
+      transform: scale(1.05);
+    }
+    
+    .scale-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+    
+    .scale-label {
+      font-size: 0.85rem;
+      font-weight: 500;
+      opacity: 0.9;
+    }
+    
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+    
+    button.primary {
+      background: linear-gradient(135deg, var(--success) 0%, #6fa88a 100%);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-md);
+    }
+    
+    button.primary:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .validation {
+      color: var(--danger);
+      text-align: center;
+      font-weight: 600;
+      display: none;
+      padding: 1rem;
+      background: rgba(216, 141, 154, 0.1);
+      border-radius: 12px;
+      border: 1px solid var(--danger);
+    }
+    
+    #results {
+      display: none;
+      animation: fadeIn 0.6s ease;
+    }
+    
+    .grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+    
+    .panel {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 246, 251, 0.9) 100%);
+      box-shadow: var(--shadow-sm);
+      transition: all 0.3s ease;
+    }
+    
+    .panel:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+    
+    .panel h3 {
+      font-size: 1.15rem;
+      margin-bottom: 1rem;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .panel h3::before {
+      content: '';
+      width: 4px;
+      height: 1.5rem;
+      background: linear-gradient(180deg, var(--primary) 0%, var(--accent) 100%);
+      border-radius: 2px;
+    }
+    
+    .bigscore {
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+      font-weight: 800;
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin: 0.5rem 0;
+    }
+    
+    .bigscore small {
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    
+    .severity-badge {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+    
+    .severity-minimal { background: rgba(127, 184, 158, 0.2); color: var(--success); }
+    .severity-mild { background: rgba(232, 184, 109, 0.2); color: #c89a3d; }
+    .severity-moderate { background: rgba(232, 144, 109, 0.2); color: #c87a3d; }
+    .severity-severe { background: rgba(216, 141, 154, 0.2); color: var(--danger); }
+    
+    .barwrap {
+      margin-top: 1.5rem;
+    }
+    
+    .bar {
+      height: 12px;
+      width: 100%;
+      background: linear-gradient(90deg, #f0ebf8 0%, #e8e3f0 100%);
+      border-radius: 999px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+    }
+    
+    .fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary-light) 0%, var(--primary) 50%, var(--accent) 100%);
+      width: 0%;
+      transition: width 1s ease;
+      border-radius: 999px;
+      box-shadow: 0 0 8px rgba(139, 123, 184, 0.4);
+    }
+    
+    .threshold-markers {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 0.5rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    
+    .threshold-marker {
+      text-align: center;
+      flex: 1;
+    }
+    
+    details.accordion {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1rem 1.25rem;
+      margin-top: 1rem;
+      background: white;
+      transition: all 0.3s ease;
+    }
+    
+    details.accordion:hover {
+      box-shadow: var(--shadow-sm);
+    }
+    
+    details.accordion[open] {
+      box-shadow: var(--shadow-md);
+    }
+    
+    details.accordion summary {
+      cursor: pointer;
+      font-weight: 700;
+      color: var(--primary-dark);
+      list-style: none;
+      outline: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.25rem 0;
+    }
+    
+    details.accordion summary::-webkit-details-marker {
+      display: none;
+    }
+    
+    details.accordion summary::after {
+      content: '▸';
+      font-size: 1.2rem;
+      transition: transform 0.3s ease;
+      color: var(--primary);
+    }
+    
+    details.accordion[open] summary::after {
+      transform: rotate(90deg);
+    }
+    
+    details.accordion .content {
+      padding-top: 1rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
+    
+    .criteria-grid {
+      display: grid;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .criterion-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(248, 246, 251, 0.8) 100%);
+      transition: all 0.3s ease;
+    }
+    
+    .criterion-card:hover {
+      box-shadow: var(--shadow-sm);
+      transform: translateX(4px);
+    }
+    
+    .criterion-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    
+    .criterion-name {
+      font-weight: 700;
+      color: var(--primary-dark);
+      font-size: 0.95rem;
+    }
+    
+    .criterion-score {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+    
+    .criterion-desc {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+    
+    .consent {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      background: linear-gradient(135deg, rgba(232, 184, 109, 0.15) 0%, rgba(255, 251, 234, 0.15) 100%);
+      border: 1px solid rgba(232, 184, 109, 0.3);
+      color: var(--text-primary);
+      padding: 1rem;
+      border-radius: 12px;
+      margin-top: 1rem;
+    }
+    
+    .consent input[type="checkbox"] {
+      margin-top: 0.25rem;
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+    
+    .note {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-top: 1rem;
+      padding: 1rem;
+      background: rgba(139, 123, 184, 0.05);
+      border-radius: 10px;
+      border-left: 3px solid var(--primary);
+    }
+    
+    .note strong {
+      color: var(--primary-dark);
+    }
+    
+    .small {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+    
+    footer {
+      padding: 1.5rem 2rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      background: linear-gradient(135deg, #fafafa 0%, #f5f3f8 100%);
+      border-top: 1px solid var(--border);
+      line-height: 1.8;
+    }
+    
+    @media (max-width: 640px) {
+      body {
+        padding: 0.75rem;
+      }
+      
+      .section {
+        padding: 1.5rem 1rem;
+      }
+      
+      header {
+        padding: 1.5rem 1rem 1rem;
+      }
+      
+      .scale-container {
+        grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+      }
+      
+      .bigscore {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>ZAN-BPD</h1>
+      <div class="subtitle">Échelle de Zanarini pour le Trouble de la Personnalité Borderline</div>
+      <div class="toolbar">
+        <label class="btn" for="file-import">Importer un résultat</label>
+        <input type="file" id="file-import" accept=".json" style="display:none"/>
+      </div>
+    </header>
+
+    <div class="instructions">
+      <p><strong>Période de référence :</strong> la semaine écoulée (7 derniers jours)</p>
+      <p style="margin-top: 0.5rem;">Pour chaque critère ci-dessous, évaluez l'intensité et la fréquence des symptômes durant cette période. <strong>Toutes les questions doivent être complétées</strong> pour calculer les scores. Cet outil est un questionnaire de dépistage, non un instrument diagnostique.</p>
+    </div>
+
+    <form id="zan-form" class="section">
+      <div id="qwrap"></div>
+
+      <div class="actions">
+        <button type="submit" class="primary">Calculer les résultats</button>
+        <p id="valmsg" class="validation">Veuillez répondre à toutes les questions.</p>
+      </div>
+
+      <div id="results" class="section">
+        <div class="grid">
+          <div class="panel">
+            <h3>Score total</h3>
+            <div class="bigscore">
+              <span id="totalscore">0</span>
+              <small>/ 36</small>
+            </div>
+            <div id="severity-badge"></div>
+            <div class="barwrap">
+              <div class="bar">
+                <div class="fill" id="fill"></div>
+              </div>
+              <div class="threshold-markers">
+                <div class="threshold-marker">
+                  <div style="font-weight: 600;">0</div>
+                  <div>Minimal</div>
+                </div>
+                <div class="threshold-marker">
+                  <div style="font-weight: 600;">9</div>
+                  <div>Léger</div>
+                </div>
+                <div class="threshold-marker">
+                  <div style="font-weight: 600;">18</div>
+                  <div>Modéré</div>
+                </div>
+                <div class="threshold-marker">
+                  <div style="font-weight: 600;">27</div>
+                  <div>Marqué</div>
+                </div>
+                <div class="threshold-marker">
+                  <div style="font-weight: 600;">36</div>
+                  <div>Sévère</div>
+                </div>
+              </div>
+            </div>
+
+            <details class="accordion" open>
+              <summary>Interprétation — résumé</summary>
+              <div class="content">
+                <p id="interp"></p>
+              </div>
+            </details>
+
+            <details class="accordion">
+              <summary>Interprétation détaillée</summary>
+              <div class="content">
+                <div id="interp-long"></div>
+              </div>
+            </details>
+
+            <details class="accordion">
+              <summary>Pour les patients — comprendre votre résultat</summary>
+              <div class="content">
+                <p><strong>Qu'est-ce que la ZAN-BPD ?</strong></p>
+                <p>La ZAN-BPD est une échelle qui mesure la sévérité des symptômes associés au trouble de la personnalité borderline durant la semaine écoulée. Elle évalue 9 critères correspondant aux critères diagnostiques du DSM-5.</p>
+                
+                <p class="note"><strong>Important :</strong> Cette échelle mesure l'intensité actuelle des symptômes, pas la présence ou l'absence d'un diagnostic. Un score élevé indique que vous vivez actuellement des difficultés importantes, mais seul un professionnel de santé qualifié peut poser un diagnostic.</p>
+                
+                <p style="margin-top: 1rem;"><strong>Que faire avec votre résultat ?</strong></p>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                  <li>Si votre score est élevé (≥19) et que ces difficultés impactent votre quotidien, il est recommandé de consulter un professionnel de santé mentale.</li>
+                  <li>Même avec un score plus bas, si vous souffrez, n'hésitez pas à demander de l'aide.</li>
+                  <li>Ce questionnaire peut être un point de départ pour discuter avec votre thérapeute de votre situation actuelle.</li>
+                </ul>
+              </div>
+            </details>
+
+            <details class="accordion">
+              <summary>Pour les cliniciens — utilisation de l'échelle</summary>
+              <div class="content">
+                <p><strong>Contexte d'utilisation</strong></p>
+                <p>La ZAN-BPD est une échelle dimensionnelle conçue pour :</p>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                  <li>Évaluer la sévérité actuelle des symptômes borderline</li>
+                  <li>Suivre l'évolution symptomatique dans le temps</li>
+                  <li>Mesurer la réponse au traitement</li>
+                </ul>
+                
+                <p class="note"><strong>Limites :</strong> La ZAN-BPD n'est pas un outil diagnostique autonome. Le diagnostic de TPB nécessite une évaluation clinique complète incluant l'anamnèse développementale, le fonctionnement global, et l'exclusion d'autres troubles.</p>
+                
+                <p style="margin-top: 1rem;"><strong>Interprétation clinique</strong></p>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                  <li><strong>0-9 :</strong> Symptômes absents ou minimes. Réévaluation selon contexte clinique.</li>
+                  <li><strong>10-18 :</strong> Symptômes légers à modérés. Surveillance, interventions ciblées (psychothérapie, gestion de crise).</li>
+                  <li><strong>19-27 :</strong> Symptômes modérés à marqués. Traitement structuré recommandé (TCD, TBM, schéma thérapie).</li>
+                  <li><strong>28-36 :</strong> Symptômes sévères. Intensification du traitement, évaluation du risque, possibilité d'hospitalisation si nécessaire.</li>
+                </ul>
+                
+                <p class="note" style="margin-top: 1rem;"><strong>Usage en pratique :</strong> Utilisez la ZAN-BPD en complément de l'évaluation clinique. Considérez le contexte (événements récents, comorbidités, compliance thérapeutique). Les fluctuations sont normales dans le TPB ; plusieurs évaluations sont plus informatives qu'une mesure isolée.</p>
+              </div>
+            </details>
+          </div>
+
+          <details class="accordion">
+            <summary>Scores par critère DSM-5</summary>
+            <div class="content">
+              <p class="small" style="margin-bottom: 1rem;">Détail de vos scores pour chaque critère (0 = absent, 4 = sévère/quotidien)</p>
+              <div class="criteria-grid" id="criteria-scores"></div>
+            </div>
+          </details>
+
+          <div class="panel">
+            <h3>Exporter votre résultat</h3>
+            <p class="small">Aucun stockage local n'est effectué. Pour exporter, cochez la case de consentement puis cliquez sur « Exporter ».</p>
+            <label class="consent">
+              <input type="checkbox" id="consent"/>
+              <span>J'autorise l'export de mes réponses au format JSON (à conserver par moi). Ces données resteront confidentielles et ne seront pas transmises.</span>
+            </label>
+            <div class="actions" style="justify-content:flex-start; margin-top: 1rem;">
+              <button type="button" id="btn-export" class="btn" disabled>Exporter</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <footer>
+      <p><strong>© Mary C. Zanarini, PhD – McLean Hospital, Harvard Medical School</strong></p>
+      <p style="margin-top: 0.5rem;">La ZAN-BPD est un outil validé pour mesurer la sévérité des symptômes borderline. Usage clinique et recherche avec attribution appropriée. Aucune donnée n'est stockée localement.</p>
+      <p style="margin-top: 0.5rem;">Adapté en version interactive par Dr FENOHASINA Toto Jean Felicien (Psychiatre - FFI).</p>
+    </footer>
+  </div>
+
+  <script>
+    // Définition des critères (9 critères DSM-5)
+    const criteria = [
+      {
+        num: 1,
+        name: "Efforts effrénés pour éviter l'abandon",
+        question: "Avez-vous fait des efforts importants pour éviter d'être abandonné(e) (réel ou imaginé) ?",
+        examples: "Ex : appels répétés, menaces, comportements désespérés pour retenir quelqu'un"
+      },
+      {
+        num: 2,
+        name: "Relations instables et intenses",
+        question: "Avez-vous vécu des relations qui alternent entre idéalisation et dévalorisation extrêmes ?",
+        examples: "Ex : passer de 'tu es parfait(e)' à 'je te déteste' rapidement"
+      },
+      {
+        num: 3,
+        name: "Perturbations de l'identité",
+        question: "Avez-vous eu l'impression de ne pas savoir qui vous êtes vraiment ?",
+        examples: "Ex : sentiment de ne pas avoir d'identité stable, confusion sur ses valeurs/objectifs"
+      },
+      {
+        num: 4,
+        name: "Impulsivité",
+        question: "Avez-vous agi de manière impulsive dans au moins 2 domaines potentiellement dommageables ?",
+        examples: "Ex : dépenses excessives, sexualité à risque, abus de substances, conduite dangereuse, crises de boulimie"
+      },
+      {
+        num: 5,
+        name: "Comportements suicidaires ou automutilations",
+        question: "Avez-vous eu des gestes suicidaires, des menaces ou des comportements d'automutilation ?",
+        examples: "Ex : scarifications, tentatives de suicide, menaces suicidaires"
+      },
+      {
+        num: 6,
+        name: "Instabilité affective",
+        question: "Votre humeur a-t-elle changé de manière rapide et intense ?",
+        examples: "Ex : passer de la tristesse à la colère à l'euphorie en quelques heures"
+      },
+      {
+        num: 7,
+        name: "Sentiments chroniques de vide",
+        question: "Vous êtes-vous senti(e) vide intérieurement de manière persistante ?",
+        examples: "Ex : sensation de vide émotionnel, impression d'être creux/creuse"
+      },
+      {
+        num: 8,
+        name: "Colères intenses et inappropriées",
+        question: "Avez-vous ressenti des colères intenses difficiles à contrôler ?",
+        examples: "Ex : explosions de rage, difficulté à contrôler sa colère, conflits fréquents"
+      },
+      {
+        num: 9,
+        name: "Idéation paranoïaque ou dissociation",
+        question: "Avez-vous eu des moments où vous pensiez qu'on vous voulait du mal ou vous vous sentiez déconnecté(e) ?",
+        examples: "Ex : sentiment que les autres complotent contre vous, sensation de se regarder de l'extérieur"
+      }
+    ];
+
+    const scaleOptions = [
+      { value: 0, label: "Absent", desc: "Aucun symptôme" },
+      { value: 1, label: "Léger", desc: "Rare/minime" },
+      { value: 2, label: "Modéré", desc: "Occasionnel" },
+      { value: 3, label: "Marqué", desc: "Fréquent" },
+      { value: 4, label: "Sévère", desc: "Quotidien/extrême" }
+    ];
+
+    // Génération du formulaire
+    const qwrap = document.getElementById('qwrap');
+    criteria.forEach((crit, i) => {
+      const div = document.createElement('div');
+      div.className = 'question';
+      div.style.animationDelay = `${i * 0.05}s`;
+      
+      const scaleHTML = scaleOptions.map(opt => `
+        <div>
+          <input type="radio" id="q${crit.num}_${opt.value}" name="q${crit.num}" value="${opt.value}"/>
+          <label for="q${crit.num}_${opt.value}">
+            <div class="scale-value">${opt.value}</div>
+            <div class="scale-label">${opt.label}</div>
+          </label>
+        </div>
+      `).join('');
+      
+      div.innerHTML = `
+        <div class="qtext">
+          <span class="qnumber">${crit.num}</span>${crit.name}
+        </div>
+        <div style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 0.75rem; margin-left: 2.5rem;">
+          ${crit.question}
+        </div>
+        <div style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem; margin-left: 2.5rem; font-style: italic;">
+          ${crit.examples}
+        </div>
+        <div class="scale-container">${scaleHTML}</div>
+      `;
+      qwrap.appendChild(div);
+    });
+
+    // Fonctions d'interprétation
+    function getSeverityInfo(total) {
+      if (total <= 9) {
+        return {
+          label: "Symptômes minimes",
+          class: "severity-minimal",
+          shortDesc: "Symptômes absents ou minimes",
+          longDesc: "Votre score indique une absence ou une présence minime de symptômes borderline durant la semaine écoulée. Cela suggère un fonctionnement relativement stable sur cette période. Si toutefois vous ressentez des difficultés dans votre vie quotidienne, n'hésitez pas à en discuter avec un professionnel de santé."
+        };
+      } else if (total <= 18) {
+        return {
+          label: "Sévérité légère à modérée",
+          class: "severity-mild",
+          shortDesc: "Symptômes légers à modérés",
+          longDesc: "Votre score indique la présence de symptômes borderline d'intensité légère à modérée durant la semaine écoulée. Ces symptômes peuvent impacter votre quotidien de manière variable. Une consultation avec un professionnel de santé mentale peut être bénéfique pour évaluer vos besoins et discuter d'éventuelles stratégies d'adaptation ou interventions thérapeutiques (psychothérapie, gestion de crise)."
+        };
+      } else if (total <= 27) {
+        return {
+          label: "Sévérité modérée à marquée",
+          class: "severity-moderate",
+          shortDesc: "Symptômes modérés à marqués",
+          longDesc: "Votre score indique la présence de symptômes borderline d'intensité modérée à marquée durant la semaine écoulée. Ces symptômes ont probablement un impact significatif sur votre fonctionnement quotidien (relations, travail, bien-être). Une prise en charge thérapeutique structurée est fortement recommandée. Les approches validées incluent la thérapie comportementale dialectique (TCD), la thérapie basée sur la mentalisation (TBM), ou la thérapie des schémas."
+        };
+      } else {
+        return {
+          label: "Sévérité sévère",
+          class: "severity-severe",
+          shortDesc: "Symptômes sévères",
+          longDesc: "Votre score indique la présence de symptômes borderline sévères durant la semaine écoulée. Ces symptômes ont très probablement un impact majeur sur votre vie quotidienne et peuvent compromettre votre sécurité ou celle d'autrui. Une consultation urgente avec un professionnel de santé mentale est vivement recommandée. Une intensification du traitement peut être nécessaire, incluant un suivi rapproché, une évaluation du risque suicidaire, et dans certains cas, une hospitalisation si la situation le justifie."
+        };
+      }
+    }
+
+    // Gestion du formulaire
+    const form = document.getElementById('zan-form');
+    const valmsg = document.getElementById('valmsg');
+    const results = document.getElementById('results');
+    const totalscoreEl = document.getElementById('totalscore');
+    const fill = document.getElementById('fill');
+    const severityBadge = document.getElementById('severity-badge');
+    const interp = document.getElementById('interp');
+    const interpLong = document.getElementById('interp-long');
+    const criteriaScores = document.getElementById('criteria-scores');
+
+    function computeAndRender(answers) {
+      // Vérifier complétude
+      for (let i = 1; i <= criteria.length; i++) {
+        if (answers[`q${i}`] === undefined) {
+          valmsg.style.display = 'block';
+          results.style.display = 'none';
+          return false;
+        }
+      }
+      valmsg.style.display = 'none';
+
+      // Calculer le score total
+      let total = 0;
+      const scores = {};
+      for (let i = 1; i <= criteria.length; i++) {
+        const score = parseInt(answers[`q${i}`]);
+        scores[`q${i}`] = score;
+        total += score;
+      }
+
+      // Afficher le score total
+      totalscoreEl.textContent = String(total);
+      fill.style.width = `${(total / 36) * 100}%`;
+
+      // Badge de sévérité
+      const severity = getSeverityInfo(total);
+      severityBadge.innerHTML = `<span class="severity-badge ${severity.class}">${severity.label}</span>`;
+
+      // Interprétations
+      interp.textContent = `Score ${total} / 36 : ${severity.shortDesc}`;
+      interpLong.innerHTML = `<p>${severity.longDesc}</p>`;
+
+      // Scores par critère
+      criteriaScores.innerHTML = '';
+      criteria.forEach(crit => {
+        const score = scores[`q${crit.num}`];
+        const card = document.createElement('div');
+        card.className = 'criterion-card';
+        card.innerHTML = `
+          <div class="criterion-header">
+            <div class="criterion-name">${crit.num}. ${crit.name}</div>
+            <div class="criterion-score">${score} / 4</div>
+          </div>
+          <div class="criterion-desc">${scaleOptions[score].label} — ${scaleOptions[score].desc}</div>
+        `;
+        criteriaScores.appendChild(card);
+      });
+
+      // Afficher les résultats
+      results.style.display = 'block';
+      results.scrollIntoView({ behavior: 'smooth' });
+      
+      // Activer le bouton d'export
+      document.getElementById('btn-export').disabled = !document.getElementById('consent').checked;
+      return true;
+    }
+
+    // Gestion de la soumission
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fd = new FormData(form);
+      const answers = {};
+      for (const [k, v] of fd.entries()) {
+        answers[k] = v;
+      }
+      computeAndRender(answers);
+    });
+
+    // Import
+    const fileImport = document.getElementById('file-import');
+    fileImport.addEventListener('change', (ev) => {
+      const f = ev.target.files?.[0];
+      if (!f) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const data = JSON.parse(e.target.result);
+          for (let i = 1; i <= criteria.length; i++) {
+            const v = data[`q${i}`];
+            if (v !== undefined) {
+              const r = document.querySelector(`input[name="q${i}"][value="${v}"]`);
+              if (r) r.checked = true;
+            }
+          }
+          computeAndRender(data);
+        } catch {
+          alert("Fichier invalide.");
+        } finally {
+          ev.target.value = '';
+        }
+      };
+      reader.readAsText(f);
+    });
+
+    // Export
+    const consent = document.getElementById('consent');
+    const btnExport = document.getElementById('btn-export');
+    
+    consent.addEventListener('change', () => {
+      if (document.getElementById('results').style.display === 'block') {
+        btnExport.disabled = !consent.checked;
+      }
+    });
+    
+    btnExport.addEventListener('click', () => {
+      if (!consent.checked) return;
+      const fd = new FormData(form);
+      const answers = {};
+      let any = false;
+      for (const [k, v] of fd.entries()) {
+        answers[k] = v;
+        any = true;
+      }
+      if (!any) {
+        alert("Veuillez d'abord calculer un résultat.");
+        return;
+      }
+      
+      // Ajouter des métadonnées
+      const exportData = {
+        questionnaire: "ZAN-BPD",
+        date: new Date().toISOString(),
+        responses: answers
+      };
+      
+      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `zan-bpd_${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+  </script>
+</body>
+</html>
