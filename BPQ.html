@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BPQ – Questionnaire sur la Personnalité Limite</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    
+    :root {
+      --primary: #8b7bb8;
+      --primary-light: #b4a5d4;
+      --primary-dark: #6d5f94;
+      --accent: #d4a5c4;
+      --bg-main: #f8f6fb;
+      --bg-card: #ffffff;
+      --text-primary: #2d2640;
+      --text-secondary: #6b5d7f;
+      --text-muted: #9b8db0;
+      --border: #e8e3f0;
+      --success: #7fb89e;
+      --warning: #e8b86d;
+      --danger: #d88d9a;
+      --zone-low: #a8d5ba;
+      --zone-moderate: #f9d67a;
+      --zone-high: #ef9a9a;
+      --shadow-sm: 0 2px 8px rgba(139, 123, 184, 0.08);
+      --shadow-md: 0 4px 16px rgba(139, 123, 184, 0.12);
+      --shadow-lg: 0 8px 32px rgba(139, 123, 184, 0.16);
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #f8f6fb 0%, #efe9f7 100%);
+      color: var(--text-primary);
+      line-height: 1.7;
+      padding: 1.5rem;
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 56rem;
+      margin: 0 auto;
+      background: var(--bg-card);
+      border-radius: 24px;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      animation: fadeIn 0.6s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white;
+      padding: 2rem 2rem 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 300px;
+      height: 300px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      animation: float 8s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(-20px, 20px) scale(1.1); }
+    }
+    
+    header h1 {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      position: relative;
+      z-index: 1;
+    }
+    
+    header .subtitle {
+      font-size: 1rem;
+      opacity: 0.95;
+      font-weight: 400;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .toolbar {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .btn {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 0.6rem 1.1rem;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+    
+    .btn:hover:not([disabled]) {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .btn[disabled] {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .btn-secondary {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .btn-secondary:hover:not([disabled]) {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .section {
+      padding: 2rem;
+      border-top: 1px solid var(--border);
+    }
+    
+    .instructions {
+      background: linear-gradient(135deg, #f0ebf8 0%, #faf7fd 100%);
+      color: var(--text-primary);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin: 1.5rem 2rem;
+      border: 1px solid var(--border);
+    }
+    
+    .instructions strong {
+      color: var(--primary-dark);
+    }
+    
+    .question {
+      padding: 1.25rem 0;
+      border-bottom: 1px solid var(--border);
+      transition: all 0.3s ease;
+    }
+    
+    .question:hover {
+      background: linear-gradient(90deg, transparent 0%, rgba(139, 123, 184, 0.03) 50%, transparent 100%);
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+      margin-left: -0.5rem;
+      margin-right: -0.5rem;
+      border-radius: 12px;
+    }
+    
+    .question:last-child {
+      border-bottom: none;
+    }
+    
+    .qtext {
+      font-weight: 500;
+      margin-bottom: 0.75rem;
+      color: var(--text-primary);
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+    
+    .qnumber {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--primary-light) 0%, var(--accent) 100%);
+      color: white;
+      min-width: 32px;
+      height: 24px;
+      border-radius: 12px;
+      text-align: center;
+      line-height: 24px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-right: 0.75rem;
+      padding: 0 0.5rem;
+    }
+    
+    .binary-options {
+      display: flex;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+    
+    .binary-options input[type="radio"] {
+      display: none;
+    }
+    
+    .binary-options label {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.85rem 1.5rem;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: var(--bg-card);
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    
+    .binary-options label:hover {
+      border-color: var(--primary-light);
+      background: linear-gradient(135deg, rgba(139, 123, 184, 0.05) 0%, rgba(212, 165, 196, 0.05) 100%);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .binary-options input[type="radio"]:checked + label {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white;
+      border-color: var(--primary);
+      box-shadow: var(--shadow-md);
+      transform: scale(1.02);
+    }
+    
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+    
+    button.primary {
+      background: linear-gradient(135deg, var(--success) 0%, #6fa88a 100%);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-md);
+    }
+    
+    button.primary:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .validation {
+      color: var(--danger);
+      text-align: center;
+      font-weight: 600;
+      display: none;
+      padding: 1rem;
+      background: rgba(216, 141, 154, 0.1);
+      border-radius: 12px;
+      border: 1px solid var(--danger);
+    }
+    
+    #results {
+      display: none;
+      animation: fadeIn 0.6s ease;
+    }
+    
+    .grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+    
+    .panel {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 246, 251, 0.9) 100%);
+      box-shadow: var(--shadow-sm);
+      transition: all 0.3s ease;
+    }
+    
+    .panel:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+    
+    .panel h3 {
+      font-size: 1.15rem;
+      margin-bottom: 1rem;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .panel h3::before {
+      content: '';
+      width: 4px;
+      height: 1.5rem;
+      background: linear-gradient(180deg, var(--primary) 0%, var(--accent) 100%);
+      border-radius: 2px;
+    }
+
+    /* Score principal amélioré */
+    .score-display {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 1.5rem 0;
+      padding: 1.5rem;
+      background: white;
+      border-radius: 16px;
+      box-shadow: var(--shadow-sm);
+      border: 2px solid var(--border);
+    }
+
+    .score-number {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .score-value {
+      font-size: 3.5rem;
+      font-weight: 800;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .score-label {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      font-weight: 600;
+    }
+
+    /* Curseur de score amélioré avec zones colorées */
+    .score-slider {
+      margin: 2rem 0;
+    }
+
+    .slider-track {
+      position: relative;
+      height: 48px;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .slider-zones {
+      display: flex;
+      height: 100%;
+      width: 100%;
+    }
+
+    .zone {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: rgba(0, 0, 0, 0.5);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: all 0.3s ease;
+    }
+
+    .zone-very-low {
+      width: 50%;
+      background: linear-gradient(90deg, #a8d5ba 0%, #b8dfc4 100%);
+    }
+
+    .zone-low {
+      width: 12.5%;
+      background: linear-gradient(90deg, #b8dfc4 0%, #d4e8a8 100%);
+    }
+
+    .zone-moderate {
+      width: 12.5%;
+      background: linear-gradient(90deg, #d4e8a8 0%, #f9d67a 100%);
+    }
+
+    .zone-high {
+      width: 12.5%;
+      background: linear-gradient(90deg, #f9d67a 0%, #f5b895 100%);
+    }
+
+    .zone-very-high {
+      width: 12.5%;
+      background: linear-gradient(90deg, #f5b895 0%, #ef9a9a 100%);
+    }
+
+    .score-marker {
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      transition: left 1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .marker-pin {
+      width: 4px;
+      height: 56px;
+      background: white;
+      border-radius: 2px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+
+    .marker-pin::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 16px;
+      height: 16px;
+      background: white;
+      border: 3px solid var(--primary);
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .marker-value {
+      position: absolute;
+      top: -32px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--primary);
+      color: white;
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      white-space: nowrap;
+      box-shadow: 0 4px 12px rgba(139, 123, 184, 0.4);
+    }
+
+    .marker-value::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 6px solid var(--primary);
+    }
+
+    .slider-labels {
+      position: relative;
+      height: 50px;
+      margin-top: 1rem;
+    }
+
+    .slider-label {
+      position: absolute;
+      transform: translateX(-50%);
+      text-align: center;
+    }
+
+    .slider-label-value {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      margin-bottom: 0.25rem;
+    }
+
+    .slider-label-text {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    
+    .probability-indicator {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+      padding: 1.5rem;
+      background: white;
+      border-radius: 14px;
+      box-shadow: var(--shadow-sm);
+      border: 2px solid var(--border);
+    }
+    
+    .probability-circle {
+      min-width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: white;
+      box-shadow: var(--shadow-md);
+      text-align: center;
+      line-height: 1.2;
+      padding: 0.5rem;
+    }
+    
+    .probability-text {
+      flex: 1;
+    }
+    
+    .probability-text .label {
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: var(--primary-dark);
+      margin-bottom: 0.5rem;
+    }
+    
+    .probability-text .desc {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    details.accordion {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1rem 1.25rem;
+      margin-top: 1rem;
+      background: white;
+      transition: all 0.3s ease;
+    }
+    
+    details.accordion:hover {
+      box-shadow: var(--shadow-sm);
+    }
+    
+    details.accordion[open] {
+      box-shadow: var(--shadow-md);
+    }
+    
+    details.accordion summary {
+      cursor: pointer;
+      font-weight: 700;
+      color: var(--primary-dark);
+      list-style: none;
+      outline: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.25rem 0;
+    }
+    
+    details.accordion summary::-webkit-details-marker {
+      display: none;
+    }
+    
+    details.accordion summary::after {
+      content: '▸';
+      font-size: 1.2rem;
+      transition: transform 0.3s ease;
+      color: var(--primary);
+    }
+    
+    details.accordion[open] summary::after {
+      transform: rotate(90deg);
+    }
+    
+    details.accordion .content {
+      padding-top: 1rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
+    
+    .subscales-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .subscale-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(248, 246, 251, 0.8) 100%);
+      transition: all 0.3s ease;
+    }
+    
+    .subscale-card:hover {
+      box-shadow: var(--shadow-sm);
+      transform: translateX(4px);
+    }
+    
+    .subscale-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    
+    .subscale-name {
+      font-weight: 700;
+      color: var(--primary-dark);
+      font-size: 0.95rem;
+    }
+    
+    .subscale-score {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+    
+    .subscale-bar {
+      height: 6px;
+      width: 100%;
+      background: #f0ebf8;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 0.5rem;
+    }
+    
+    .subscale-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary-light) 0%, var(--primary) 100%);
+      transition: width 0.8s ease;
+      border-radius: 999px;
+    }
+    
+    .consent {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      background: linear-gradient(135deg, rgba(232, 184, 109, 0.15) 0%, rgba(255, 251, 234, 0.15) 100%);
+      border: 1px solid rgba(232, 184, 109, 0.3);
+      color: var(--text-primary);
+      padding: 1rem;
+      border-radius: 12px;
+      margin-top: 1rem;
+    }
+    
+    .consent input[type="checkbox"] {
+      margin-top: 0.25rem;
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+    
+    .note {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-top: 1rem;
+      padding: 1rem;
+      background: rgba(139, 123, 184, 0.05);
+      border-radius: 10px;
+      border-left: 3px solid var(--primary);
+    }
+    
+    .note strong {
+      color: var(--primary-dark);
+    }
+    
+    .small {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+    
+    footer {
+      padding: 1.5rem 2rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      background: linear-gradient(135deg, #fafafa 0%, #f5f3f8 100%);
+      border-top: 1px solid var(--border);
+      line-height: 1.8;
+    }
+    
+    @media (max-width: 640px) {
+      body {
+        padding: 0.75rem;
+      }
+      
+      .section {
+        padding: 1.5rem 1rem;
+      }
+      
+      header {
+        padding: 1.5rem 1rem 1rem;
+      }
+      
+      .binary-options {
+        flex-direction: column;
+      }
+
+      .score-display {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .score-value {
+        font-size: 2.5rem;
+      }
+
+      .marker-value {
+        font-size: 0.85rem;
+        padding: 0.3rem 0.6rem;
+      }
+      
+      .probability-indicator {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .subscales-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>BPQ</h1>
+      <div class="subtitle">Questionnaire sur la Personnalité Limite (Poreh et al., 2006)</div>
+      <div class="toolbar">
+        <label class="btn" for="file-import">Importer un résultat</label>
+        <input type="file" id="file-import" accept=".json" style="display:none"/>
+      </div>
+    </header>
+
+    <div class="instructions">
+      <p><strong>Période de référence :</strong> votre état habituel depuis les deux dernières années ou plus</p>
+      <p style="margin-top: 0.5rem;">Pour chaque affirmation ci-dessous, indiquez si elle est <strong>Vraie</strong> ou <strong>Fausse</strong> pour vous. Il n'y a aucune bonne ou mauvaise réponse. Répondez le plus honnêtement et spontanément possible. <strong>Toutes les questions doivent être complétées</strong> pour calculer les scores.</p>
+      
+      <div style="margin-top: 1rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+        <label for="eval-date" style="font-weight: 600;">Date de l'évaluation :</label>
+        <input type="date" id="eval-date" style="padding: 0.5rem; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 0.95rem;"/>
+      </div>
+    </div>
+
+    <form id="bpq-form" class="section">
+      <div id="qwrap"></div>
+
+      <div class="actions">
+        <button type="submit" class="primary">Calculer les résultats</button>
+        <p id="valmsg" class="validation">Veuillez répondre à toutes les questions.</p>
+      </div>
+
+      <div id="results" class="section">
+        <div class="grid">
+          <div class="panel">
+            <h3>Résultats de l'évaluation</h3>
+            <p id="eval-date-display" style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;"></p>
+            
+            <div class="score-display">
+              <div class="score-number">
+                <div class="score-value" id="totalscore">0</div>
+                <div class="score-label">Score total / 80</div>
+              </div>
+              <div id="probability-badge" style="flex: 1;"></div>
+            </div>
+
+            <div class="score-slider">
+              <div class="slider-track">
+                <div class="slider-zones">
+                  <div class="zone zone-very-low">Très faible</div>
+                  <div class="zone zone-low">Faible</div>
+                  <div class="zone zone-moderate">Modérée</div>
+                  <div class="zone zone-high">Élevée</div>
+                  <div class="zone zone-very-high">Très élevée</div>
+                </div>
+                <div class="score-marker" id="score-marker">
+                  <div class="marker-value" id="marker-value">0</div>
+                  <div class="marker-pin"></div>
+                </div>
+              </div>
+              <div class="slider-labels">
+                <div class="slider-label" style="left: 0%;">
+                  <div class="slider-label-value">0</div>
+                  <div class="slider-label-text">Minimum</div>
+                </div>
+                <div class="slider-label" style="left: 50%;">
+                  <div class="slider-label-value">40</div>
+                  <div class="slider-label-text">Seuil bas</div>
+                </div>
+                <div class="slider-label" style="left: 62.5%;">
+                  <div class="slider-label-value">50</div>
+                  <div class="slider-label-text">Seuil dépistage</div>
+                </div>
+                <div class="slider-label" style="left: 75%;">
+                  <div class="slider-label-value">60</div>
+                  <div class="slider-label-text">Seuil haut</div>
+                </div>
+                <div class="slider-label" style="left: 100%;">
+                  <div class="slider-label-value">80</div>
+                  <div class="slider-label-text">Maximum</div>
+                </div>
+              </div>
+            </div>
+
+            <details class="accordion">
+              <summary>Interprétation clinique détaillée</summary>
+              <div class="content">
+                <div id="interp-long"></div>
+              </div>
+            </details>
+
+            <details class="accordion">
+              <summary>Pour les patients — comprendre votre résultat</summary>
+              <div class="content">
+                <p><strong>Qu'est-ce que le BPQ ?</strong></p>
+                <p>Le BPQ (Borderline Personality Questionnaire) est un questionnaire d'auto-évaluation qui mesure les traits et symptômes associés au trouble de la personnalité borderline (TPB). Il évalue votre fonctionnement habituel sur les deux dernières années ou plus.</p>
+                
+                <p style="margin-top: 1rem;"><strong>Objectif : dépistage et orientation</strong></p>
+                <p>Le BPQ est conçu comme un <strong>outil de dépistage</strong> qui peut :</p>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                  <li>Vous aider à identifier si vous présentez des traits borderline significatifs</li>
+                  <li>Vous orienter vers une évaluation clinique approfondie si nécessaire</li>
+                  <li>Servir de point de départ à une discussion avec un professionnel de santé</li>
+                </ul>
+                
+                <p class="note" style="margin-top: 1rem;"><strong>Très important :</strong> Un score élevé ne signifie pas automatiquement que vous avez un TPB. Seul un professionnel de santé qualifié (psychiatre, psychologue clinicien) peut poser ce diagnostic après une évaluation complète. De nombreux symptômes du TPB se retrouvent dans d'autres troubles (TSPT complexe, TDAH, troubles de l'humeur, troubles anxieux).</p>
+                
+                <p style="margin-top: 1rem;"><strong>Que faire avec votre résultat ?</strong></p>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                  <li><strong>Probabilité élevée ou très élevée :</strong> Consultez un professionnel de santé mentale pour une évaluation diagnostique complète.</li>
+                  <li><strong>Probabilité modérée :</strong> Discutez-en avec un professionnel si ces difficultés impactent votre vie quotidienne.</li>
+                  <li><strong>Probabilité faible :</strong> Si vous ressentez des difficultés, n'hésitez pas à consulter malgré tout. Le score n'est qu'un indicateur.</li>
+                </ul>
+                
+                <p style="margin-top: 1rem;"><strong>Les 9 dimensions évaluées</strong></p>
+                <p>Le BPQ examine 9 aspects différents : impulsivité, instabilité affective, peur de l'abandon, difficultés relationnelles, image de soi instable, comportements autodestructeurs, sentiment de vide, colère intense, et états quasi-psychotiques. Vous pouvez consulter vos scores détaillés dans l'accordéon dédié.</p>
+              </div>
+            </details>
+
+            <details class="accordion">
+              <summary>Pour les cliniciens — utilisation de l'échelle</summary>
+              <div class="content">
+                <p><strong>Contexte et validation</strong></p>
+                <p>Le BPQ (Poreh et al., 2006) est un questionnaire d'auto-évaluation de 80 items (Vrai/Faux) conçu pour le dépistage du TPB. Il évalue 9 dimensions correspondant aux critères DSM et présente de bonnes propriétés psychométriques (α de Cronbach > 0.90 pour le score total).</p>
+                
+                <p style="margin-top: 1rem;"><strong>Interprétation des seuils</strong></p>
+                <p>Cut-offs approximatifs basés sur la littérature :</p>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                  <li><strong>< 40 :</strong> Probabilité très faible de TPB. Traits sous-cliniques.</li>
+                  <li><strong>40-49 :</strong> Probabilité faible. Certains traits présents, surveillance si retentissement.</li>
+                  <li><strong>50-59 :</strong> Probabilité modérée. Zone ambiguë nécessitant évaluation clinique approfondie. Sensibilité élevée mais spécificité modérée.</li>
+                  <li><strong>60-69 :</strong> Probabilité élevée. Forte présomption de TPB, évaluation diagnostique structurée recommandée (SCID-II, IPDE).</li>
+                  <li><strong>≥ 70 :</strong> Probabilité très élevée. Profil très évocateur de TPB, mais considérer diagnostics différentiels.</li>
+                </ul>
+                
+                <p class="note" style="margin-top: 1rem;"><strong>Note :</strong> Ces seuils sont indicatifs. Le cut-off optimal varie selon le contexte (prévalence attendue, coût des erreurs). En première ligne, privilégier ~52-55 pour équilibrer sensibilité/spécificité. En contexte spécialisé, un seuil plus bas (~50) augmente la sensibilité.</p>
+                
+                <p style="margin-top: 1rem;"><strong>Utilisation en pratique clinique</strong></p>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                  <li><strong>Dépistage en première ligne :</strong> Identifier les patients nécessitant évaluation spécialisée</li>
+                  <li><strong>Complément à l'entretien clinique :</strong> Structurer l'exploration des symptômes</li>
+                  <li><strong>Analyse des sous-échelles :</strong> Identifier les domaines les plus problématiques pour cibler les interventions</li>
+                  <li><strong>Suivi longitudinal :</strong> Répétition possible pour objectiver l'évolution (bien que conçu pour traits stables)</li>
+                </ul>
+                
+                <p style="margin-top: 1rem;"><strong>Limites et précautions</strong></p>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                  <li><strong>Auto-évaluation :</strong> Biais possibles (insight limité, désirabilité sociale, état émotionnel actuel)</li>
+                  <li><strong>Chevauchement symptomatique :</strong> TSPT-C, troubles bipolaires, TDAH avec dysrégulation émotionnelle peuvent donner des scores élevés</li>
+                  <li><strong>Pas diagnostique :</strong> Le BPQ est un outil de screening, pas un instrument diagnostique autonome</li>
+                  <li><strong>Contexte culturel :</strong> Valider l'adéquation des items avec le background culturel du patient</li>
+                  <li><strong>Comorbidités :</strong> Score total élevé peut refléter plusieurs troubles plutôt qu'un TPB pur</li>
+                </ul>
+                
+                <p style="margin-top: 1rem;"><strong>Diagnostics différentiels à considérer</strong></p>
+                <p>Face à un score élevé, explorer systématiquement :</p>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                  <li>TSPT complexe (chevauchement majeur avec TPB)</li>
+                  <li>Trouble bipolaire (notamment type II, cyclothymie)</li>
+                  <li>TDAH avec dysrégulation émotionnelle sévère</li>
+                  <li>Troubles anxieux sévères et chroniques</li>
+                  <li>Autres troubles de personnalité (cluster C notamment)</li>
+                </ul>
+                
+                <p class="note" style="margin-top: 1rem;"><strong>Recommandation :</strong> Utilisez le BPQ comme première étape d'évaluation. Un score ≥50 justifie une évaluation structurée (SCID-II). Intégrez toujours les données longitudinales, l'anamnèse développementale, et le fonctionnement global avant de conclure au diagnostic de TPB.</p>
+              </div>
+            </details>
+          </div>
+
+          <details class="accordion">
+            <summary>Scores par dimension (9 sous-échelles)</summary>
+            <div class="content">
+              <p class="small" style="margin-bottom: 1rem;">Vos scores pour chacune des 9 dimensions évaluées par le BPQ</p>
+              <div class="subscales-grid" id="subscales-scores"></div>
+            </div>
+          </details>
+
+          <div class="panel">
+            <h3>Exporter votre résultat</h3>
+            <p class="small">Aucun stockage local n'est effectué. Pour exporter, cochez la case de consentement puis cliquez sur « Exporter ».</p>
+            <label class="consent">
+              <input type="checkbox" id="consent"/>
+              <span>J'autorise l'export de mes réponses au format JSON (à conserver par moi). Ces données resteront confidentielles et ne seront pas transmises.</span>
+            </label>
+            <div class="actions" style="justify-content:flex-start; margin-top: 1rem;">
+              <button type="button" id="btn-export" class="btn-secondary" disabled>Exporter</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <footer>
+      <p><strong>© Poreh et al., 2006 – Borderline Personality Questionnaire (BPQ)</strong></p>
+      <p style="margin-top: 0.5rem;">Version française validée. Le BPQ est un outil de dépistage des traits borderline. Usage clinique et recherche avec attribution appropriée. Aucune donnée n'est stockée localement.</p>
+      <p style="margin-top: 0.5rem;">Adapté en version interactive par Dr FENOHASINA Toto Jean Felicien (Psychiatre - FFI).</p>
+    </footer>
+  </div>
+
+  <script>
+    // 80 items du BPQ (version française validée - Poreh et al., 2006)
+    const questions = [
+      "Je fais souvent les choses sans y avoir bien pensé.",
+      "Je deviens souvent déprimé ou anxieux de façon soudaine et inattendue.",
+      "Les gens me quittent souvent.",
+      "Mes amis me déçoivent rarement.",
+      "Je me sens inférieur aux autres personnes.",
+      "J'ai menacé de me faire mal dans le passé.",
+      "Je ne crois pas avoir les habiletés nécessaires pour faire quoi que ce soit de ma vie.",
+      "Je me mets rarement en colère envers les autres personnes.",
+      "Je me sens parfois comme si je n'étais pas réel.",
+      "Je n'aurai pas de relation sexuelle avec quelqu'un à moins de le connaître depuis un certain temps.",
+      "Je me sens parfois anxieux ou irritable, puis je deviens triste quelques heures plus tard.",
+      "Lorsque les gens près de moi meurent ou me quittent, je me sens abandonné.",
+      "J'ai tendance à surestimer la possibilité d'une amitié, pour me rendre compte plus tard que ça ne fonctionnera pas.",
+      "Si j'étais davantage comme les autres personnes, je me sentirais mieux avec moi-même.",
+      "J'ai déjà volontairement tenté de me blesser sans chercher à me tuer.",
+      "En général, ma vie est plutôt ennuyante.",
+      "Je suis fréquemment impliqué dans des bagarres.",
+      "J'ai parfois l'impression que les autres personnes cherchent à me nuire.",
+      "Mes amis m'ont déjà dit que mes humeurs changent très rapidement.",
+      "J'ai peur de passer du temps seul.",
+      "Les personnes qui semblent dignes de confiance me déçoivent souvent.",
+      "J'ai déjà fait une tentative de suicide dans le passé.",
+      "J'ai souvent l'impression que je n'ai rien à offrir aux autres.",
+      "J'ai de la difficulté à contrôler ma colère.",
+      "Je peux lire dans les pensées des gens.",
+      "J'ai essayé des drogues «dures» (cocaïne, héroïne, etc.)",
+      "Au cours d'une même journée, mon humeur alterne fréquemment entre la joie, la colère, l'anxiété et la dépression.",
+      "Lorsque mes amis partent, je suis confiant que je vais les revoir à nouveau.",
+      "Mes amis me déçoivent souvent.",
+      "Je me suis déjà volontairement coupé.",
+      "Je me sens souvent seul et délaissé.",
+      "Je n'ai aucune difficulté à contrôler ma colère.",
+      "Je vois ou j'entends parfois des choses que les autres personnes ne voient ou n'entendent pas.",
+      "Il n'est pas inhabituel pour moi d'avoir des relations sexuelles au premier rendez-vous.",
+      "Je me sens parfois très triste, mais cette émotion peut rapidement changer.",
+      "Les gens me laissent souvent tomber.",
+      "Je souhaiterais être davantage comme certains de mes amis.",
+      "J'ai déjà tenté de me blesser volontairement afin d'attirer l'attention.",
+      "Je suis souvent différent avec les gens dans différentes situations, si bien que des fois je ne suis plus sûr de qui je suis.",
+      "Je suis facilement irrité par les autres.",
+      "Il m'arrive de pouvoir réellement entendre ce que les gens pensent.",
+      "Je prends de la drogue quand j'en ai envie.",
+      "Je me sens rarement triste ou anxieux.",
+      "Personne ne m'aime.",
+      "Quand je fais confiance aux gens, ils me déçoivent rarement.",
+      "J'ai l'impression que les gens ne m'aimeraient pas s'ils me connaissaient vraiment.",
+      "Je me mets facilement en colère.",
+      "Il est impossible de lire dans les pensées des autres.",
+      "Je me sens parfois très heureux mais cette émotion peut rapidement changer.",
+      "Je trouve difficile de dépendre des autres parce qu'ils ne seront pas là lorsque j'aurai besoin d'eux.",
+      "Les relations avec les personnes significatives pour moi comportent beaucoup de hauts et de bas.",
+      "Je me sens mal à l'aise avec ma propre façon d'agir.",
+      "Je n'ai jamais tenté de me blesser.",
+      "Je me sens rarement seul.",
+      "Je me rends souvent compte que la moindre petite chose me met en colère.",
+      "Parfois, il m'est difficile de distinguer ce qui est réel de ce que j'ai imaginé.",
+      "Quand je consomme de l'alcool, j'en abuse.",
+      "Je me considère comme étant une personne d'humeur changeante.",
+      "J'ai du mal à développer des relations significatives, car les gens m'abandonnent souvent.",
+      "Mes amis sont toujours là lorsque j'ai besoin d'eux.",
+      "Je souhaiterais être quelqu'un d'autre.",
+      "J'ai l'impression que ma vie n'est pas intéressante.",
+      "Souvent, lorsque je suis en colère, je frappe et brise des choses.",
+      "Je reçois souvent des contraventions pour excès de vitesse.",
+      "J'ai souvent le sentiment d'être sur une « montagne russe » émotionnelle.",
+      "J'ai l'impression que ma famille m'a délaissé.",
+      "Je suis très à l'aise avec qui je suis.",
+      "Je fais souvent des choses de façon impulsive.",
+      "Ma vie n'a aucun but.",
+      "Je ne suis pas certain de ce que je veux faire dans l'avenir.",
+      "Parfois, je mange tellement que je ressens de la douleur ou que je dois me forcer à vomir.",
+      "Les gens me disent que je suis une personne d'humeur changeante.",
+      "Souvent, les personnes que j'aime me quittent.",
+      "En situation sociale, j'ai souvent l'impression que les autres vont découvrir qui je suis vraiment et réaliser que j'ai peu à offrir.",
+      "Je me suis déjà retrouvé à l'hôpital après avoir tenté de me blesser.",
+      "J'ai souvent un sentiment de vide intérieur.",
+      "Les autres me mettent souvent en colère.",
+      "Je suis souvent affolé par l'idée qu'une personne importante pour moi puisse me quitter.",
+      "Je suis souvent confus quant à mes buts à long terme.",
+      "Les gens disent que je suis colérique."
+    ];
+
+    // Définition des sous-échelles avec items inversés (cotation officielle)
+    const subscales = {
+      impulsivity: {
+        name: "Impulsivité",
+        items: [1, 10, 26, 34, 42, 57, 64, 68, 71],
+        reversed: [10],
+        max: 9
+      },
+      affective: {
+        name: "Instabilité Affective",
+        items: [2, 11, 19, 27, 35, 43, 49, 58, 65, 72],
+        reversed: [43],
+        max: 10
+      },
+      abandonment: {
+        name: "Abandonnisme",
+        items: [3, 12, 20, 28, 44, 50, 59, 66, 73, 78],
+        reversed: [28],
+        max: 10
+      },
+      relationships: {
+        name: "Relations",
+        items: [4, 13, 21, 29, 36, 45, 51, 60],
+        reversed: [4, 45, 60],
+        max: 8
+      },
+      identity: {
+        name: "Image de soi",
+        items: [5, 14, 37, 46, 52, 61, 67, 70, 74],
+        reversed: [52, 67],
+        max: 9
+      },
+      suicide: {
+        name: "Suicide/Auto-Mutilation",
+        items: [6, 15, 22, 30, 38, 53, 75],
+        reversed: [53],
+        max: 7
+      },
+      emptiness: {
+        name: "Vide",
+        items: [7, 16, 23, 31, 39, 54, 62, 69, 76, 79],
+        reversed: [54],
+        max: 10
+      },
+      anger: {
+        name: "Colère Intense",
+        items: [8, 17, 24, 32, 40, 47, 55, 63, 77, 80],
+        reversed: [8, 32],
+        max: 10
+      },
+      psychotic: {
+        name: "États Quasi-Psychotiques",
+        items: [9, 18, 25, 33, 41, 48, 56],
+        reversed: [48],
+        max: 7
+      }
+    };
+
+    // Initialiser la date du jour
+    const evalDateInput = document.getElementById('eval-date');
+    const today = new Date().toISOString().split('T')[0];
+    evalDateInput.value = today;
+
+    // Génération du formulaire
+    const qwrap = document.getElementById('qwrap');
+    questions.forEach((text, i) => {
+      const idx = i + 1;
+      const div = document.createElement('div');
+      div.className = 'question';
+      
+      div.innerHTML = `
+        <div class="qtext">
+          <span class="qnumber">${idx}</span>${text}
+        </div>
+        <div class="binary-options">
+          <div>
+            <input type="radio" id="q${idx}_true" name="q${idx}" value="true"/>
+            <label for="q${idx}_true">Vrai</label>
+          </div>
+          <div>
+            <input type="radio" id="q${idx}_false" name="q${idx}" value="false"/>
+            <label for="q${idx}_false">Faux</label>
+          </div>
+        </div>
+      `;
+      qwrap.appendChild(div);
+    });
+
+    // Fonctions d'interprétation
+    function getProbabilityInfo(total) {
+      let probability, probabilityClass, probabilityColor, probabilityDesc, detailedDesc;
+      
+      if (total < 40) {
+        probability = "Très faible";
+        probabilityClass = "success";
+        probabilityColor = "#a8d5ba";
+        probabilityDesc = "Profil peu évocateur de TPB. Traits borderline minimes ou absents.";
+        detailedDesc = "Votre score suggère une probabilité très faible de trouble de la personnalité borderline. Les traits borderline sont minimes ou absents. Si vous ressentez des difficultés dans votre vie quotidienne, elles sont probablement liées à d'autres facteurs ou troubles qu'il serait pertinent d'explorer avec un professionnel.";
+      } else if (total < 50) {
+        probability = "Faible";
+        probabilityClass = "success";
+        probabilityColor = "#b8dfc4";
+        probabilityDesc = "Certains traits présents mais sous le seuil de dépistage habituel.";
+        detailedDesc = "Votre score se situe dans une zone de faible probabilité. Certains traits borderline sont présents mais restent sous le seuil de dépistage généralement utilisé (~50-55). Si ces traits ont un impact significatif sur votre fonctionnement quotidien, une consultation peut néanmoins être utile pour explorer d'autres explications possibles (anxiété, stress chronique, TDAH, etc.).";
+      } else if (total < 60) {
+        probability = "Modérée";
+        probabilityClass = "warning";
+        probabilityColor = "#f9d67a";
+        probabilityDesc = "Zone de dépistage positif. Évaluation clinique approfondie recommandée.";
+        detailedDesc = "Votre score se situe dans la zone de dépistage positif (seuil habituel ~50-55). Cela suggère une probabilité modérée de TPB et justifie une évaluation clinique approfondie par un professionnel qualifié. À ce niveau, la sensibilité du test est élevée (il détecte bien les personnes potentiellement concernées) mais la spécificité est modérée (certaines personnes sans TPB peuvent aussi obtenir ce score). D'autres troubles peuvent présenter des symptômes similaires : TSPT complexe, TDAH avec dysrégulation émotionnelle, troubles anxieux sévères, troubles de l'humeur. Une évaluation diagnostique structurée (SCID-II, IPDE) est recommandée pour clarifier la situation.";
+      } else if (total < 70) {
+        probability = "Élevée";
+        probabilityClass = "danger";
+        probabilityColor = "#f5b895";
+        probabilityDesc = "Profil fortement évocateur de TPB. Évaluation diagnostique structurée recommandée.";
+        detailedDesc = "Votre score suggère une probabilité élevée de trouble de la personnalité borderline. Le profil est fortement évocateur et une évaluation diagnostique complète par un professionnel qualifié est fortement recommandée. Cette évaluation devrait idéalement inclure un entretien clinique structuré (SCID-II ou IPDE), une exploration de votre histoire développementale, et l'exclusion d'autres troubles qui peuvent présenter des symptômes similaires. Si le diagnostic de TPB est confirmé, sachez que des traitements efficaces existent (thérapie comportementale dialectique, thérapie basée sur la mentalisation, thérapie des schémas) et peuvent significativement améliorer la qualité de vie.";
+      } else {
+        probability = "Très élevée";
+        probabilityClass = "danger";
+        probabilityColor = "#ef9a9a";
+        probabilityDesc = "Profil très évocateur de TPB avec symptomatologie extensive.";
+        detailedDesc = "Votre score suggère une probabilité très élevée de trouble de la personnalité borderline, avec une symptomatologie extensive touchant la plupart des dimensions évaluées. Une consultation rapide avec un professionnel de santé mentale spécialisé est fortement recommandée. L'évaluation devrait être complète et inclure l'exploration des comorbidités fréquentes (dépression, anxiété, TSPT, troubles des conduites alimentaires, addictions), l'évaluation du risque suicidaire, et la mise en place d'un plan de traitement adapté. Des psychothérapies spécialisées ont montré leur efficacité pour le TPB et peuvent conduire à des améliorations significatives et durables.";
+      }
+      
+      return {
+        probability,
+        probabilityClass,
+        probabilityColor,
+        probabilityDesc,
+        detailedDesc
+      };
+    }
+
+    // Gestion du formulaire
+    const form = document.getElementById('bpq-form');
+    const valmsg = document.getElementById('valmsg');
+    const results = document.getElementById('results');
+    const totalscoreEl = document.getElementById('totalscore');
+    const scoreMarker = document.getElementById('score-marker');
+    const markerValue = document.getElementById('marker-value');
+    const evalDateDisplay = document.getElementById('eval-date-display');
+    const probabilityBadge = document.getElementById('probability-badge');
+    const interpLong = document.getElementById('interp-long');
+    const subscalesScores = document.getElementById('subscales-scores');
+
+    function computeAndRender(answers) {
+      // Vérifier complétude
+      for (let i = 1; i <= questions.length; i++) {
+        if (answers[`q${i}`] === undefined) {
+          valmsg.style.display = 'block';
+          results.style.display = 'none';
+          return false;
+        }
+      }
+      valmsg.style.display = 'none';
+
+      // Calculer le score total et les sous-échelles
+      let total = 0;
+      const subscaleScores = {};
+
+      for (const [key, subscale] of Object.entries(subscales)) {
+        let score = 0;
+        subscale.items.forEach(itemNum => {
+          const answer = answers[`q${itemNum}`] === 'true';
+          const isReversed = subscale.reversed.includes(itemNum);
+          if ((answer && !isReversed) || (!answer && isReversed)) {
+            score++;
+          }
+        });
+        subscaleScores[key] = score;
+        total += score;
+      }
+
+      // Afficher le score total
+      totalscoreEl.textContent = String(total);
+      
+      // Animer le curseur
+      const percentage = (total / 80) * 100;
+      setTimeout(() => {
+        scoreMarker.style.left = `${percentage}%`;
+        markerValue.textContent = total;
+      }, 100);
+
+      // Afficher la date
+      const evalDate = evalDateInput.value;
+      const dateObj = new Date(evalDate + 'T00:00:00');
+      const dateFormatted = dateObj.toLocaleDateString('fr-FR', { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      });
+      evalDateDisplay.textContent = `Évaluation du ${dateFormatted}`;
+
+      // Probabilité
+      const probInfo = getProbabilityInfo(total);
+      probabilityBadge.innerHTML = `
+        <div style="text-align: center;">
+          <div style="font-size: 1.5rem; font-weight: 800; color: ${probInfo.probabilityColor}; margin-bottom: 0.5rem;">
+            Probabilité ${probInfo.probability}
+          </div>
+          <div style="font-size: 0.9rem; color: var(--text-secondary);">
+            ${probInfo.probabilityDesc}
+          </div>
+        </div>
+      `;
+
+      // Interprétation détaillée
+      interpLong.innerHTML = `<p>${probInfo.detailedDesc}</p>`;
+
+      // Scores par dimension
+      subscalesScores.innerHTML = '';
+      for (const [key, subscale] of Object.entries(subscales)) {
+        const score = subscaleScores[key];
+        const percentage = (score / subscale.max) * 100;
+        
+        const card = document.createElement('div');
+        card.className = 'subscale-card';
+        card.innerHTML = `
+          <div class="subscale-header">
+            <div class="subscale-name">${subscale.name}</div>
+            <div class="subscale-score">${score} / ${subscale.max}</div>
+          </div>
+          <div class="subscale-bar">
+            <div class="subscale-bar-fill" style="width: ${percentage}%"></div>
+          </div>
+        `;
+        subscalesScores.appendChild(card);
+      }
+
+      // Afficher les résultats
+      results.style.display = 'block';
+      results.scrollIntoView({ behavior: 'smooth' });
+      
+      // Activer le bouton d'export
+      document.getElementById('btn-export').disabled = !document.getElementById('consent').checked;
+      return true;
+    }
+
+    // Gestion de la soumission
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fd = new FormData(form);
+      const answers = {};
+      for (const [k, v] of fd.entries()) {
+        answers[k] = v;
+      }
+      computeAndRender(answers);
+    });
+
+    // Import
+    const fileImport = document.getElementById('file-import');
+    fileImport.addEventListener('change', (ev) => {
+      const f = ev.target.files?.[0];
+      if (!f) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const data = JSON.parse(e.target.result);
+          
+          // Restaurer la date si présente
+          if (data.evaluationDate) {
+            evalDateInput.value = data.evaluationDate;
+          }
+          
+          // Restaurer les réponses
+          const responses = data.responses || data;
+          for (let i = 1; i <= questions.length; i++) {
+            const v = responses[`q${i}`];
+            if (v !== undefined) {
+              const r = document.querySelector(`input[name="q${i}"][value="${v}"]`);
+              if (r) r.checked = true;
+            }
+          }
+          computeAndRender(responses);
+        } catch {
+          alert("Fichier invalide.");
+        } finally {
+          ev.target.value = '';
+        }
+      };
+      reader.readAsText(f);
+    });
+
+    // Export
+    const consent = document.getElementById('consent');
+    const btnExport = document.getElementById('btn-export');
+    
+    consent.addEventListener('change', () => {
+      if (document.getElementById('results').style.display === 'block') {
+        btnExport.disabled = !consent.checked;
+      }
+    });
+    
+    btnExport.addEventListener('click', () => {
+      if (!consent.checked) return;
+      const fd = new FormData(form);
+      const answers = {};
+      let any = false;
+      for (const [k, v] of fd.entries()) {
+        answers[k] = v;
+        any = true;
+      }
+      if (!any) {
+        alert("Veuillez d'abord calculer un résultat.");
+        return;
+      }
+      
+      // Ajouter des métadonnées
+      const exportData = {
+        questionnaire: "BPQ",
+        version: "Poreh et al., 2006",
+        evaluationDate: evalDateInput.value,
+        exportDate: new Date().toISOString(),
+        responses: answers
+      };
+      
+      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `bpq_${evalDateInput.value}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+  </script>
+</body>
+</html>
