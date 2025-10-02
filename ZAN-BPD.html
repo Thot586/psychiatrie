@@ -130,6 +130,29 @@
       cursor: not-allowed;
     }
     
+    .btn-secondary {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .btn-secondary:hover:not([disabled]) {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .btn-secondary[disabled] {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
     .section {
       padding: 2rem;
       border-top: 1px solid var(--border);
@@ -631,7 +654,12 @@
 
     <div class="instructions">
       <p><strong>Période de référence :</strong> la semaine écoulée (7 derniers jours)</p>
-      <p style="margin-top: 0.5rem;">Pour chaque critère ci-dessous, évaluez l'intensité et la fréquence des symptômes durant cette période. <strong>Toutes les questions doivent être complétées</strong> pour calculer les scores. Cet outil est un questionnaire de dépistage, non un instrument diagnostique.</p>
+      <p style="margin-top: 0.5rem;">Pour chaque critère ci-dessous, évaluez l'intensité et la fréquence des symptômes durant cette période. <strong>Toutes les questions doivent être complétées</strong> pour calculer les scores. Cet outil est un questionnaire de suivi de la sévérité, non un instrument diagnostique.</p>
+      
+      <div style="margin-top: 1rem; display: flex; align-items: center; gap: 1rem;">
+        <label for="eval-date" style="font-weight: 600;">Date de l'évaluation :</label>
+        <input type="date" id="eval-date" style="padding: 0.5rem; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 0.95rem;"/>
+      </div>
     </div>
 
     <form id="zan-form" class="section">
@@ -645,12 +673,16 @@
       <div id="results" class="section">
         <div class="grid">
           <div class="panel">
-            <h3>Score total</h3>
-            <div class="bigscore">
-              <span id="totalscore">0</span>
-              <small>/ 36</small>
+            <h3>Score de sévérité</h3>
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+              <div class="bigscore">
+                <span id="totalscore">0</span>
+                <small>/ 36</small>
+              </div>
+              <div id="severity-badge"></div>
             </div>
-            <div id="severity-badge"></div>
+            <p id="eval-date-display" style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;"></p>
+            
             <div class="barwrap">
               <div class="bar">
                 <div class="fill" id="fill"></div>
@@ -680,14 +712,26 @@
             </div>
 
             <div class="summary-box">
-              <div id="probability-result"></div>
-              <p id="interp" style="margin-top: 1rem;"></p>
+              <p id="interp" style="font-size: 1.05rem; font-weight: 600; color: var(--primary-dark);"></p>
             </div>
 
             <details class="accordion">
               <summary>Interprétation détaillée</summary>
               <div class="content">
                 <div id="interp-long"></div>
+              </div>
+            </details>
+            
+            <details class="accordion">
+              <summary>Probabilité selon critères DSM-5</summary>
+              <div class="content">
+                <div id="probability-result"></div>
+                <p class="note" style="margin-top: 1rem;">
+                  <strong>Note importante :</strong> Cette estimation de probabilité est fournie à titre informatif uniquement. 
+                  La ZAN-BPD est principalement conçue pour le <strong>suivi de la sévérité</strong> des symptômes dans le temps, 
+                  pas pour poser un diagnostic. Seul un professionnel qualifié peut établir un diagnostic de TPB après une 
+                  évaluation clinique complète et longitudinale.
+                </p>
               </div>
             </details>
 
@@ -697,62 +741,81 @@
                 <p><strong>Qu'est-ce que la ZAN-BPD ?</strong></p>
                 <p>La ZAN-BPD est une échelle qui mesure la sévérité des symptômes associés au trouble de la personnalité borderline durant la semaine écoulée. Elle évalue 9 critères correspondant aux critères diagnostiques du DSM-5.</p>
                 
-                <p style="margin-top: 1rem;"><strong>Comment interpréter la probabilité ?</strong></p>
-                <p>La probabilité affichée est basée sur le nombre de critères "significativement présents" (avec un score ≥2 sur 4). Selon le DSM-5, un diagnostic de TPB nécessite au moins 5 critères présents sur 9. Cependant :</p>
+                <p style="margin-top: 1rem;"><strong>Objectif principal : le suivi de la sévérité</strong></p>
+                <p>Cette échelle est conçue pour <strong>suivre l'évolution</strong> de vos symptômes dans le temps, pas pour poser un diagnostic. Elle vous permet, ainsi qu'à votre thérapeute, de :</p>
                 <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
-                  <li>Cette estimation est basée sur <strong>une seule semaine</strong>, alors que le diagnostic nécessite des symptômes persistants</li>
-                  <li>Le diagnostic officiel nécessite une évaluation par un professionnel qualifié</li>
-                  <li>Même avec moins de 5 critères, vous pouvez avoir besoin d'aide et de soutien</li>
+                  <li>Mesurer l'intensité actuelle de vos difficultés</li>
+                  <li>Observer les changements d'une semaine à l'autre</li>
+                  <li>Évaluer l'efficacité des traitements ou stratégies mises en place</li>
+                  <li>Identifier les périodes plus difficiles nécessitant un ajustement du suivi</li>
                 </ul>
                 
-                <p class="note" style="margin-top: 1rem;"><strong>Important :</strong> Cette échelle mesure l'intensité actuelle des symptômes, pas la présence ou l'absence d'un diagnostic. Un score élevé indique que vous vivez actuellement des difficultés importantes, mais seul un professionnel de santé qualifié peut poser un diagnostic.</p>
+                <p class="note" style="margin-top: 1rem;"><strong>Important :</strong> Un score élevé ne signifie pas nécessairement que vous avez un TPB. Il indique que vous vivez actuellement des difficultés importantes qui méritent attention et soutien. Seul un professionnel de santé qualifié peut poser un diagnostic après une évaluation complète.</p>
                 
-                <p style="margin-top: 1rem;"><strong>Que faire avec votre résultat ?</strong></p>
+                <p style="margin-top: 1rem;"><strong>Comment utiliser vos résultats ?</strong></p>
                 <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
-                  <li>Si votre probabilité est "Élevée" ou "Très élevée" et que ces difficultés impactent votre quotidien, consultez un professionnel de santé mentale.</li>
-                  <li>Si votre score de sévérité est élevé (≥19), même avec une probabilité "Modérée", une consultation est recommandée.</li>
-                  <li>Même avec une probabilité "Faible", si vous souffrez, n'hésitez pas à demander de l'aide.</li>
-                  <li>Ce questionnaire peut être un point de départ pour discuter avec votre thérapeute de votre situation actuelle.</li>
+                  <li><strong>Suivi régulier :</strong> Vous pouvez remplir cette échelle chaque semaine pour suivre votre évolution</li>
+                  <li><strong>Exportez vos résultats :</strong> Conservez-les pour les partager avec votre thérapeute ou pour observer vos progrès sur plusieurs semaines</li>
+                  <li><strong>Dialogue thérapeutique :</strong> Utilisez ces scores pour discuter avec votre professionnel de santé de ce qui a été difficile ou de ce qui s'améliore</li>
+                  <li><strong>Si le score est élevé (≥19) de façon persistante :</strong> Discutez-en avec un professionnel pour adapter votre prise en charge</li>
                 </ul>
+                
+                <p style="margin-top: 1rem;"><strong>À propos de la "Probabilité DSM-5"</strong></p>
+                <p>Cette estimation (visible dans l'accordéon dédié) est fournie à titre informatif mais n'est <strong>pas l'objectif principal</strong> de cette échelle. Elle compte simplement le nombre de critères significativement présents. Le diagnostic réel nécessite bien plus qu'un score : une évaluation longitudinale, le contexte développemental, l'exclusion d'autres troubles, etc.</p>
               </div>
             </details>
 
             <details class="accordion">
               <summary>Pour les cliniciens — utilisation de l'échelle</summary>
               <div class="content">
-                <p><strong>Contexte d'utilisation</strong></p>
+                <p><strong>Objectif principal : mesure de la sévérité et suivi longitudinal</strong></p>
                 <p>La ZAN-BPD est une échelle dimensionnelle conçue pour :</p>
                 <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
-                  <li>Évaluer la sévérité actuelle des symptômes borderline</li>
-                  <li>Suivre l'évolution symptomatique dans le temps</li>
-                  <li>Mesurer la réponse au traitement</li>
+                  <li><strong>Évaluer la sévérité actuelle</strong> des symptômes borderline (semaine écoulée)</li>
+                  <li><strong>Suivre l'évolution symptomatique</strong> dans le temps (administrations répétées)</li>
+                  <li><strong>Mesurer la réponse au traitement</strong> (psychothérapie, pharmacothérapie)</li>
+                  <li><strong>Objectiver les fluctuations</strong> et identifier les périodes de décompensation</li>
                 </ul>
                 
-                <p style="margin-top: 1rem;"><strong>Interprétation de la probabilité DSM-5</strong></p>
-                <p>L'estimation de probabilité se base sur le décompte des critères avec score ≥2 (symptômes modérés ou plus) :</p>
+                <p class="note" style="margin-top: 1rem;"><strong>Limite majeure :</strong> La ZAN-BPD n'est <strong>pas</strong> un outil diagnostique autonome. Elle évalue une période de 7 jours, alors que le diagnostic de TPB nécessite une persistance des symptômes depuis l'adolescence/début de l'âge adulte, une évaluation longitudinale, et l'exclusion d'autres troubles.</p>
+                
+                <p style="margin-top: 1rem;"><strong>Interprétation de la sévérité (usage principal)</strong></p>
                 <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
-                  <li><strong>Faible (< 3 critères) :</strong> Sous le seuil diagnostique. Vigilance si symptômes émergents ou contexte à risque.</li>
-                  <li><strong>Modérée (3-4 critères) :</strong> Sous-syndromique. Considérer les diagnostics différentiels (TDAH, troubles anxieux, TSPT complexe). Traits borderline possibles nécessitant suivi.</li>
-                  <li><strong>Élevée (5-6 critères) :</strong> Correspond au seuil DSM-5 (≥5 critères). Forte probabilité de TPB si critères persistants dans le temps et contexte développemental cohérent.</li>
-                  <li><strong>Très élevée (≥7 critères) :</strong> Polysymptomatique. Très forte probabilité de TPB. Évaluer comorbidités, risque suicidaire, et intensité de la prise en charge.</li>
+                  <li><strong>0-9 (minimal) :</strong> Symptômes absents ou sous-cliniques. Période de stabilité ou rémission partielle.</li>
+                  <li><strong>10-18 (léger à modéré) :</strong> Symptômes présents mais gérables. Surveillance, interventions ciblées, ajustement des stratégies d'adaptation.</li>
+                  <li><strong>19-27 (modéré à marqué) :</strong> Symptômes significatifs impactant le fonctionnement. Intensification du suivi, psychothérapie structurée (TCD, TBM, schéma thérapie), évaluation pharmacologique.</li>
+                  <li><strong>28-36 (sévère) :</strong> Décompensation significative. Évaluation du risque suicidaire, intensification urgente du traitement, considération d'une hospitalisation si sécurité compromise.</li>
                 </ul>
                 
-                <p class="note" style="margin-top: 1rem;"><strong>Limites importantes :</strong> 
-                  <br>• La ZAN-BPD évalue une semaine, alors que le diagnostic DSM-5 nécessite des symptômes persistants depuis l'adolescence/début de l'âge adulte.
-                  <br>• Un score élevé peut refléter une décompensation aiguë plutôt qu'un trouble de personnalité.
-                  <br>• Le diagnostic différentiel reste essentiel (TSPT-C, troubles de l'humeur, TDAH avec dysrégulation émotionnelle).
-                  <br>• La ZAN-BPD ne remplace pas l'entretien clinique structuré (SCID-II, IPDE, DIB-R).
-                </p>
-                
-                <p style="margin-top: 1rem;"><strong>Interprétation de la sévérité</strong></p>
+                <p style="margin-top: 1rem;"><strong>Usage en suivi thérapeutique</strong></p>
+                <p>Administration recommandée :</p>
                 <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
-                  <li><strong>0-9 :</strong> Symptômes absents ou minimes. Réévaluation selon contexte clinique.</li>
-                  <li><strong>10-18 :</strong> Symptômes légers à modérés. Surveillance, interventions ciblées (psychothérapie, gestion de crise).</li>
-                  <li><strong>19-27 :</strong> Symptômes modérés à marqués. Traitement structuré recommandé (TCD, TBM, thérapie des schémas).</li>
-                  <li><strong>28-36 :</strong> Symptômes sévères. Intensification du traitement, évaluation du risque, possibilité d'hospitalisation si nécessaire.</li>
+                  <li><strong>Hebdomadaire</strong> en phase aiguë ou décompensation</li>
+                  <li><strong>Bimensuelle à mensuelle</strong> en phase de stabilisation</li>
+                  <li><strong>Mensuelle</strong> en phase d'entretien</li>
+                </ul>
+                <p>Interprétez les fluctuations dans leur contexte : événements de vie, adhésion thérapeutique, changements thérapeutiques récents, comorbidités actives.</p>
+                
+                <p style="margin-top: 1rem;"><strong>À propos de la "Probabilité DSM-5" (usage secondaire)</strong></p>
+                <p>L'estimation de probabilité (basée sur le décompte des critères ≥2) est fournie pour contexte mais présente des limites importantes :</p>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                  <li><strong>Fenêtre temporelle inadéquate :</strong> 7 jours vs critère de persistance du DSM-5</li>
+                  <li><strong>Pas de pondération :</strong> tous les critères comptent égal (alors que cliniquement, certains ont plus de poids)</li>
+                  <li><strong>Pas de contextualisation :</strong> ne considère pas l'histoire développementale, les comorbidités, le fonctionnement global</li>
+                  <li><strong>Risque de sur-diagnostic :</strong> une décompensation aiguë (trauma récent, deuil, stress majeur) peut donner un score élevé sans TPB sous-jacent</li>
                 </ul>
                 
-                <p class="note" style="margin-top: 1rem;"><strong>Usage en pratique :</strong> Utilisez la ZAN-BPD en complément de l'évaluation clinique. La probabilité DSM-5 est un indicateur, pas un diagnostic. Considérez toujours le contexte longitudinal, les événements récents, les comorbidités, et la compliance thérapeutique. Les fluctuations sont normales dans le TPB ; plusieurs évaluations sont plus informatives qu'une mesure isolée.</p>
+                <p class="note" style="margin-top: 1rem;"><strong>Recommandation clinique :</strong> Utilisez prioritairement le <strong>score de sévérité</strong> pour le suivi. Pour le diagnostic initial, privilégiez les entretiens structurés validés (SCID-II, IPDE, DIB-R) et l'évaluation clinique longitudinale. La ZAN-BPD excelle dans le suivi d'efficacité thérapeutique, pas dans le dépistage diagnostique.</p>
+                
+                <p style="margin-top: 1rem;"><strong>Considérations différentielles</strong></p>
+                <p>Un score élevé peut refléter :</p>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                  <li>TPB (si contexte clinique cohérent)</li>
+                  <li>TSPT complexe (chevauchement symptomatique important)</li>
+                  <li>Trouble bipolaire en phase mixte/dépressive</li>
+                  <li>TDAH avec dysrégulation émotionnelle sévère</li>
+                  <li>Réaction aiguë à un stress majeur</li>
+                </ul>
               </div>
             </details>
           </div>
@@ -773,7 +836,7 @@
               <span>J'autorise l'export de mes réponses au format JSON (à conserver par moi). Ces données resteront confidentielles et ne seront pas transmises.</span>
             </label>
             <div class="actions" style="justify-content:flex-start; margin-top: 1rem;">
-              <button type="button" id="btn-export" class="btn" disabled>Exporter</button>
+              <button type="button" id="btn-export" class="btn-secondary" disabled>Exporter</button>
             </div>
           </div>
         </div>
@@ -853,6 +916,11 @@
       { value: 3, label: "Marqué", desc: "Fréquent" },
       { value: 4, label: "Sévère", desc: "Quotidien/extrême" }
     ];
+
+    // Initialiser la date du jour
+    const evalDateInput = document.getElementById('eval-date');
+    const today = new Date().toISOString().split('T')[0];
+    evalDateInput.value = today;
 
     // Génération du formulaire
     const qwrap = document.getElementById('qwrap');
@@ -970,6 +1038,7 @@
     const totalscoreEl = document.getElementById('totalscore');
     const fill = document.getElementById('fill');
     const severityBadge = document.getElementById('severity-badge');
+    const evalDateDisplay = document.getElementById('eval-date-display');
     const probabilityResult = document.getElementById('probability-result');
     const interp = document.getElementById('interp');
     const interpLong = document.getElementById('interp-long');
@@ -999,11 +1068,26 @@
       totalscoreEl.textContent = String(total);
       fill.style.width = `${(total / 36) * 100}%`;
 
+      // Afficher la date
+      const evalDate = evalDateInput.value;
+      const dateObj = new Date(evalDate + 'T00:00:00');
+      const dateFormatted = dateObj.toLocaleDateString('fr-FR', { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      });
+      evalDateDisplay.textContent = `Évaluation du ${dateFormatted}`;
+
       // Badge de sévérité
       const severity = getSeverityInfo(total);
       severityBadge.innerHTML = `<span class="severity-badge ${severity.class}">${severity.label}</span>`;
 
-      // Probabilité selon critères DSM-5
+      // Interprétation résumée (sévérité)
+      interp.textContent = severity.shortDesc;
+      interpLong.innerHTML = `<p>${severity.longDesc}</p>`;
+
+      // Probabilité selon critères DSM-5 (dans accordéon)
       const probInfo = getProbabilityInfo(scores);
       probabilityResult.innerHTML = `
         <div class="probability-indicator">
@@ -1016,17 +1100,7 @@
             <div class="criteria-count">${probInfo.significantCriteria} critère(s) significatif(s) sur 9</div>
           </div>
         </div>
-        <div class="note" style="margin-top: 1rem;">
-          <strong>Important :</strong> Cette estimation se base sur le nombre de critères avec un score ≥2 (modéré ou plus). 
-          Le diagnostic DSM-5 du TPB nécessite 5 critères sur 9, MAIS seul un professionnel qualifié peut poser ce diagnostic 
-          après une évaluation clinique complète. Cette échelle mesure la sévérité des symptômes durant la semaine écoulée, 
-          pas la présence d'un trouble sur le long terme.
-        </div>
       `;
-
-      // Interprétations
-      interp.textContent = `Score de sévérité : ${total} / 36 (${severity.shortDesc})`;
-      interpLong.innerHTML = `<p>${severity.longDesc}</p>`;
 
       // Scores par critère
       criteriaScores.innerHTML = '';
@@ -1117,7 +1191,8 @@
       // Ajouter des métadonnées
       const exportData = {
         questionnaire: "ZAN-BPD",
-        date: new Date().toISOString(),
+        evaluationDate: evalDateInput.value,
+        exportDate: new Date().toISOString(),
         responses: answers
       };
       
@@ -1125,7 +1200,7 @@
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `zan-bpd_${new Date().toISOString().split('T')[0]}.json`;
+      a.download = `zan-bpd_${evalDateInput.value}.json`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
