@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Échelle d'Évaluation de Wender Utah (WURS-25)</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    :root{
+      --primary: #14b8a6; /* Teal-500 */
+      --primary-light: #5eead4; /* Teal-300 */
+      --primary-dark: #0f766e; /* Teal-700 */
+      --primary-weak: #ccfbf1; /* Teal-100 */
+
+      --text: #1e293b; /* Slate-800 */
+      --muted: #64748b; /* Slate-500 */
+      
+      --bg: #f8fafc; /* Slate-50 */
+      --paper: #ffffff;
+      --border: #e2e8f0; /* Slate-200 */
+      
+      --danger: #ef4444; /* Red-500 */
+      --danger-weak: #fee2e2; /* Red-100 */
+
+      --warning-bg: #fefce8; /* Yellow-50 */
+      --warning-border: #fde047; /* Yellow-300 */
+      --warning-text: #854d0e; /* Amber-800 */
+      font-size: 16px;
+    }
+    *{box-sizing: border-box; margin: 0; padding: 0}
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: var(--bg); color: var(--text); line-height: 1.6; padding: 1rem;
+    }
+    .container {
+      max-width: 56rem; margin: 1rem auto; background: var(--paper);
+      border: 1px solid var(--border); border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.07); overflow: hidden;
+    }
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: #fff; padding: 1.5rem 2rem;
+    }
+    header h1 {
+      font-size: clamp(1.4rem, 4vw, 1.85rem); font-weight: 700; line-height: 1.3;
+    }
+    header p {
+      color: #a7f3d0; /* Teal-200 */
+      margin-top: 0.25rem;
+    }
+    .btn {
+      background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.3);
+      padding: .55rem .9rem; border-radius: 10px; cursor: pointer;
+      font-weight: 500; transition: background-color .2s;
+    }
+    .btn:hover { background: rgba(255,255,255,0.25); }
+    .btn[disabled] { opacity: .5; cursor: not-allowed; }
+
+    .section { padding: 1.5rem 2rem; border-top: 1px solid var(--border); }
+    .instructions { background: var(--primary-weak); color: var(--primary-dark); }
+    
+    .question { padding: 1.25rem 0; border-bottom: 1px solid var(--border); transition: background-color .3s; }
+    .question.missing { background-color: var(--danger-weak); border-left: 4px solid var(--danger); padding-left: 1.5rem; }
+    .qtext { font-weight: 600; margin-bottom: 1rem; font-size: 1.05rem; }
+    
+    .opts { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .opts input[type="radio"] { display: none; }
+    .opts label {
+        flex-grow: 1; text-align: center; padding: .6rem .2rem; cursor: pointer;
+        border: 2px solid var(--border); border-radius: 10px;
+        background: var(--paper); transition: all .2s; font-weight: 500;
+        min-width: 100px;
+    }
+    .opts label:hover { border-color: var(--primary-light); background: var(--primary-weak); }
+    .opts input[type="radio"]:checked + label {
+        background: var(--primary); color: #fff; border-color: var(--primary-dark);
+        box-shadow: 0 4px 14px 0 rgba(13, 148, 136, 0.3);
+    }
+    
+    .actions { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: center; margin-top: 1.5rem; }
+    button.primary {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary)); color: #fff; border: none;
+      padding: .9rem 1.75rem; border-radius: 12px; font-weight: 700; font-size: 1.1rem;
+      cursor: pointer; transition: transform .2s, box-shadow .2s;
+    }
+    button.primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(13, 148, 136, .25); }
+    .validation { color: var(--danger); text-align: center; font-weight: 600; display: none; }
+
+    /* --- Résultats --- */
+    #results { display: none; background: var(--bg); }
+    .grid { display: grid; gap: 1.5rem; grid-template-columns: 1fr; }
+    .panel { border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; background: var(--paper); }
+    .panel h3 { font-size: 1.2rem; margin-bottom: .5rem; font-weight: 700; }
+    
+    .bigscore { display: flex; align-items: baseline; gap: .5rem; font-weight: 800; font-size: 2.5rem; color: var(--primary-dark); }
+    .bigscore small { font-size: 1.1rem; color: var(--muted); font-weight: 600; }
+    .barwrap { margin-top: .75rem; }
+    .bar { height: .85rem; width: 100%; background: #e9ecef; border-radius: 999px; position: relative; overflow: hidden; }
+    .fill { height: 100%; background: linear-gradient(90deg, var(--primary-light), var(--primary-dark)); width: 0%; transition: width .6s ease; border-radius: 999px; }
+    .tick { position: absolute; top: -.35rem; width: 2px; height: 1.55rem; background: #343a40; opacity: .75; }
+    .tick-label { position: absolute; top: 1.25rem; transform: translateX(-50%); font-size: .85rem; color: #343a40; font-weight: 600; }
+
+    details.accordion { border: 1px solid var(--border); border-radius: 12px; background: var(--paper); }
+    details.accordion summary { cursor: pointer; font-weight: 700; list-style: none; outline: none; padding: .8rem 1rem; }
+    details.accordion summary::-webkit-details-marker { display: none; }
+    details.accordion summary::after { content: "▸"; float: right; transform: translateY(-1px); opacity: .7; transition: transform 0.2s; }
+    details.accordion[open] summary { border-bottom: 1px solid var(--border); }
+    details.accordion[open] summary::after { transform: rotate(90deg); }
+    details.accordion .content { padding: 1rem; }
+    
+    .consent {
+      display: flex; gap: .75rem; align-items: flex-start;
+      background: var(--warning-bg); border: 1px solid var(--warning-border); color: var(--warning-text);
+      padding: .75rem 1rem; border-radius: 10px; font-size: .9rem;
+    }
+    .note { color: var(--muted); font-size: .95rem; margin-top: .5rem; }
+    .note strong { color: var(--text); }
+    .small { font-size: .9rem; color: var(--muted); }
+
+    footer { padding: 1.5rem 2rem; color: var(--muted); font-size: .9rem; background: #f1f3f5; border-top: 1px solid var(--border); }
+    @media (max-width: 640px) {
+      body { padding: .5rem; }
+      .section, header, footer { padding: 1.25rem; }
+      .opts label { font-size: .9rem; padding: .6rem .1rem; min-width: 80px;}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Échelle d'Évaluation de Wender Utah (WURS-25)</h1>
+      <p>Évaluation rétrospective des symptômes du TDAH dans l'enfance</p>
+      <div style="margin-top: .75rem;">
+        <label class="btn" for="file-import">Importer un résultat</label>
+        <input type="file" id="file-import" accept=".json" style="display:none"/>
+      </div>
+    </header>
+
+    <div class="section instructions">
+      <p>Pour chaque question, évaluez votre comportement durant votre <strong>enfance (entre 6 et 10 ans environ)</strong>. Cet outil est un dépistage et ne peut remplacer un diagnostic clinique complet réalisé par un professionnel de santé.</p>
+    </div>
+
+    <form id="wurs-form" class="section">
+      <div id="qwrap"></div>
+      <div class="actions">
+        <button type="submit" class="primary">Calculer mon score</button>
+        <p id="valmsg" class="validation">Veuillez répondre à toutes les questions.</p>
+      </div>
+    </form>
+    
+    <div id="results" class="section">
+      <h2>Vos Résultats</h2>
+      <div class="grid">
+        <div class="panel">
+          <h3>Score Total</h3>
+          <div class="bigscore"><span id="totalscore">0</span><small>/ 100</small></div>
+          <div class="barwrap">
+            <div class="bar">
+              <div class="fill" id="fill"></div>
+              <div class="tick" style="left:46%"></div><div class="tick-label" style="left:46%">Seuil (46)</div>
+            </div>
+          </div>
+          <details class="accordion" open style="margin-top: 1rem">
+            <summary>Interprétation du score</summary>
+            <div class="content">
+              <p id="interp-summary" style="font-weight:500;"></p>
+              <p id="interp-implication" class="note"></p>
+            </div>
+          </details>
+          <details class="accordion" style="margin-top: .6rem">
+            <summary>À propos du seuil de 46</summary>
+            <div class="content">
+              <p>Le seuil de 46 est un indicateur clinique issu de la recherche (Ward, Wender, & Reimherr, 1993) pour identifier les adultes qui ont une forte probabilité d'avoir eu un TDAH durant l'enfance. Il ne s'agit pas d'un score "diagnostique" mais d'un repère.</p>
+              <p class="note"><strong>Un score ≥ 46</strong> ne signifie pas automatiquement que vous avez un TDAH, mais indique que vos souvenirs d'enfance sont compatibles avec un profil TDAH. Cette information peut être une base de discussion très utile avec un médecin ou un psychologue.</p>
+              <p class="note"><strong>Un score &lt; 46</strong> rend un TDAH dans l'enfance moins probable, mais ne l'exclut pas formellement, surtout si d'autres difficultés étaient présentes.</p>
+            </div>
+          </details>
+        </div>
+
+        <div class="panel">
+          <h3>Exporter votre résultat</h3>
+          <p class="small">Aucune donnée n'est stockée dans votre navigateur. Pour conserver une copie de vos réponses, cochez la case de consentement puis cliquez sur « Exporter ».</p>
+          <label class="consent" style="margin-top: 1rem;">
+            <input type="checkbox" id="consent"/>
+            <span>J’autorise l’export de mes réponses au format JSON. Je comprends que je suis responsable de la confidentialité de ce fichier.</span>
+          </label>
+          <div class="actions" style="justify-content:flex-start; margin-top: 1rem;">
+            <button type="button" id="btn-export" class="btn" disabled style="background:var(--muted); border-color:transparent;">Exporter</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p><strong>Référence :</strong></p>
+      <p class="small">Ward, M. F., Wender, P. H., & Reimherr, F. W. (1993). The Wender Utah Rating Scale: an aid in the retrospective diagnosis of childhood attention deficit hyperactivity disorder. <em>American Journal of Psychiatry, 150</em>(6), 885–890.</p>
+      <p style="margin-top:0.5rem;" class="small">Adapté en version numérique par Dr FENOHASINA Toto Jean Felicien (Psychiatre - FFI).</p>
+    </footer>
+  </div>
+
+  <script>
+    // --- QUESTIONS ET RÉPONSES CONFORMES AU WURS-25 ---
+    const questions = [
+      "Des problèmes de concentration. J'étais facilement distrait(e)",
+      "Anxieux. Je me faisais du souci",
+      "Nerveux. Je ne tenais pas en place",
+      "Inattentif(ve), rêveur(se)",
+      "Facilement en colère, << soupe au lait >>",
+      "Des éclats d'humeur, des accès de colère",
+      "Des difficultés à me tenir aux choses, à mener mes projets jusqu'à la fin, à finir les choses commencées",
+      "Têtu(e), obstiné(e)",
+      "Triste ou cafardeux(se), déprimé(e), malheureux(se)",
+      "Désobéissant(e) envers mes parents, rebelle, effronté(e)",
+      "Mauvaise opinion de moi-même",
+      "Irritable",
+      "D'humeur changeante avec des hauts et des bas",
+      "En colère",
+      "Impulsif(ve). J'agissais sans réfléchir.",
+      "Tendance à être immature",
+      "Culpabilisé(e), plein(e) de regrets",
+      "Je pouvais perdre le contrôle de moi-même",
+      "Tendance à être ou à agir de façon irrationnelle",
+      "Impopulaire auprès des autres enfants. Je ne gardais pas longtemps mes amis ou je ne m'entendais pas avec les autres enfants",
+      "Du mal à voir les choses du point de vue de quelqu'un d'autre",
+      "Des ennuis avec les autorités, des ennuis à l'école, convoqué(e) par le directeur",
+      "Dans l'ensemble un élève peu doué, apprenant lentement",
+      "Des difficultés en mathématiques ou avec les chiffres",
+      "En dessous de mon potentiel"
+    ];
+    const responses = [
+      {label:"Pas du tout ou très légèrement", value:0},
+      {label:"Légèrement", value:1},
+      {label:"Modérément", value:2},
+      {label:"Assez", value:3},
+      {label:"Beaucoup", value:4}
+    ];
+
+    // --- Génération du formulaire ---
+    const qwrap = document.getElementById('qwrap');
+    questions.forEach((qText, i) => {
+      const idx = i + 1;
+      const div = document.createElement('div');
+      div.className = 'question';
+      div.id = `q-container-${idx}`;
+      
+      const opts = responses.map(r => `
+        <input type="radio" id="q${idx}_${r.value}" name="q${idx}" value="${r.value}" />
+        <label for="q${idx}_${r.value}">${r.label}</label>
+      `).join('');
+
+      div.innerHTML = `
+        <div class="qtext">${idx}. ${qText}</div>
+        <div class="opts">${opts}</div>`;
+      qwrap.appendChild(div);
+    });
+
+    // --- Fonctions d'interprétation ---
+    function interpretationSummary(total) {
+      if (total >= 46) return `Votre score de ${total} est <strong>supérieur ou égal au seuil clinique de 46</strong>.`;
+      return `Votre score de ${total} est <strong>inférieur au seuil clinique de 46</strong>.`;
+    }
+    function interpretationImplication(total) {
+      if (total >= 46) return `<strong>Implication :</strong> Ce résultat suggère une forte probabilité de TDAH dans l'enfance. Les difficultés que vous décrivez rétrospectivement sont compatibles avec celles rapportées par les adultes ayant un TDAH. Il serait pertinent de discuter de ce résultat avec un professionnel de la santé mentale pour une évaluation complète.`;
+      return `<strong>Implication :</strong> Un TDAH dans l'enfance est moins probable selon ce score. Si vous rencontrez des difficultés actuellement, elles pourraient être liées à d'autres facteurs. Un échange avec un professionnel reste la meilleure démarche pour clarifier votre situation.`;
+    }
+    
+    // --- Calcul et affichage ---
+    const form = document.getElementById('wurs-form');
+    
+    function computeAndRender(answers) {
+      let allAnswered = true;
+      for (let i = 1; i <= questions.length; i++) {
+        const qContainer = document.getElementById(`q-container-${i}`);
+        if (!answers[`q${i}`]) {
+          qContainer.classList.add('missing');
+          allAnswered = false;
+        } else {
+          qContainer.classList.remove('missing');
+        }
+      }
+
+      if (!allAnswered) {
+        document.getElementById('valmsg').style.display = 'block';
+        document.getElementById('results').style.display = 'none';
+        const firstMissing = document.querySelector('.question.missing');
+        if (firstMissing) firstMissing.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+      document.getElementById('valmsg').style.display = 'none';
+
+      let total = 0;
+      for (let i = 1; i <= questions.length; i++) {
+        total += parseInt(answers[`q${i}`], 10);
+      }
+      
+      // Affichage score total
+      document.getElementById('totalscore').textContent = total;
+      document.getElementById('fill').style.width = `${(total / 100) * 100}%`;
+      document.getElementById('interp-summary').innerHTML = interpretationSummary(total);
+      document.getElementById('interp-implication').innerHTML = interpretationImplication(total);
+      
+      const resultsDiv = document.getElementById('results');
+      resultsDiv.style.display = 'block';
+      resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      document.getElementById('btn-export').disabled = !document.getElementById('consent').checked;
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fd = new FormData(form);
+      const answers = {};
+      for (const [k, v] of fd.entries()) answers[k] = v;
+      computeAndRender(answers);
+    });
+
+    // --- Import/Export ---
+    const fileImport = document.getElementById('file-import');
+    fileImport.addEventListener('change', (ev) => {
+      const f = ev.target.files?.[0]; if (!f) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const data = JSON.parse(e.target.result);
+          for (let i = 1; i <= questions.length; i++) {
+            const v = data[`q${i}`];
+            if (v !== undefined) {
+              const r = document.querySelector(`input[name="q${i}"][value="${v}"]`);
+              if (r) r.checked = true;
+            }
+          }
+          computeAndRender(data);
+        } catch { alert("Fichier invalide."); }
+        finally { ev.target.value = ''; }
+      };
+      reader.readAsText(f);
+    });
+
+    const consent = document.getElementById('consent');
+    const btnExport = document.getElementById('btn-export');
+    consent.addEventListener('change', () => {
+      if (document.getElementById('results').style.display === 'block') {
+        btnExport.disabled = !consent.checked;
+      }
+    });
+    btnExport.addEventListener('click', () => {
+      if (!consent.checked) return;
+      const fd = new FormData(form);
+      const answers = {};
+      for (const [k, v] of fd.entries()) answers[k] = v;
+      if (Object.keys(answers).length < questions.length) { alert("Veuillez d’abord calculer un résultat."); return; }
+      const blob = new Blob([JSON.stringify(answers, null, 2)], {type: 'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'reponses_wurs-25.json';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+    });
+  </script>
+</body>
+</html>
+Et 
