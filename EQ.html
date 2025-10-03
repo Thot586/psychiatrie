@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
@@ -150,6 +150,8 @@
       height: 100%; background: linear-gradient(90deg, #9ab3ff, var(--primary)); 
       width: 0%; transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 999px;
     }
+    .tick { position: absolute; top: -.35rem; width: 2px; height: 1.55rem; background: #343a40; opacity: .75; }
+    .tick-label { position: absolute; top: 1.25rem; transform: translateX(-50%); font-size: .85rem; color: #343a40; font-weight: 600; }
 
     details.accordion { 
       border: 1px solid var(--border); border-radius: 12px; 
@@ -173,6 +175,15 @@
       from { opacity: 0; transform: translateY(-10px); }
       to { opacity: 1; transform: translateY(0); }
     }
+    
+    .subs { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit,minmax(16rem,1fr)); margin-top: 1rem;}
+    .subcard { border: 1px solid var(--border); border-radius: 12px; padding: 1rem; }
+    .subname { font-weight: 700; font-size: 1.05rem; margin-bottom: .5rem; }
+    .subscore { font-weight: 800; font-size: 1.1rem; }
+    .sub-bar-wrap { margin: .5rem 0; }
+    .sub-bar { height: .5rem; width: 100%; background: #e9ecef; border-radius: 999px; }
+    .sub-bar-fill { height: 100%; background: var(--muted); width: 0%; transition: width .6s ease .1s; border-radius: 999px; }
+    .sub-interp { font-size: .85rem; font-weight: 500; margin-top: .3rem; }
     
     .consent {
       display: flex; gap: .75rem; align-items: flex-start;
@@ -223,27 +234,6 @@
       <h2>Vos Résultats</h2>
       <div class="grid">
         <div class="panel">
-          <h3>Profil d'empathie</h3>
-          <p class="small" style="background: var(--warning-bg); padding: .5rem; border-radius: 8px; border: 1px solid var(--warning-border); color: var(--warning-text); margin-bottom: 1rem;"><strong>⚠️ Note méthodologique :</strong> Ces sous-échelles ne font pas partie de la validation originale de l'EQ. Elles sont basées sur une classification ultérieure et doivent être interprétées avec prudence.</p>
-          <div class="subs">
-            <div class="subcard">
-              <div class="subname">Empathie cognitive</div>
-              <div class="subdesc">Capacité à comprendre le point de vue, les pensées et l'état mental d'autrui (perspective-taking).</div>
-              <div class="subscore"><span id="score-cog">0</span> / <span id="max-cog">0</span></div>
-              <div class="sub-bar-wrap"><div class="sub-bar"><div class="sub-bar-fill" id="fill-cog"></div></div></div>
-              <p class="sub-interp" id="interp-cog"></p>
-            </div>
-            <div class="subcard">
-              <div class="subname">Empathie affective</div>
-              <div class="subdesc">Capacité à ressentir une réponse émotionnelle appropriée aux émotions d'autrui (résonance émotionnelle).</div>
-              <div class="subscore"><span id="score-aff">0</span> / <span id="max-aff">0</span></div>
-              <div class="sub-bar-wrap"><div class="sub-bar"><div class="sub-bar-fill" id="fill-aff"></div></div></div>
-              <p class="sub-interp" id="interp-aff"></p>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel">
           <h3>Score d'empathie</h3>
           <div class="bigscore"><span id="totalscore">0</span><small>/ 80</small></div>
           <div class="barwrap">
@@ -259,14 +249,32 @@
             </div>
           </details>
           <details class="accordion" style="margin-top: .6rem">
-            <summary>Comprendre l'empathie</summary>
+            <summary>Interprétation détaillée</summary>
             <div class="content">
-              <p>L'empathie est la capacité à reconnaître et comprendre les émotions d'autrui, et à y répondre de manière appropriée. Elle comporte deux dimensions :</p>
+              <h4 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem;">Comprendre l'empathie</h4>
+              <p>L'empathie comporte deux dimensions complémentaires :</p>
               <ul style="margin: 0.5rem 0 0.5rem 1.5rem; line-height: 1.8;">
                 <li><strong>Empathie cognitive :</strong> comprendre le point de vue et l'état mental d'autrui</li>
                 <li><strong>Empathie affective :</strong> ressentir une réponse émotionnelle appropriée aux émotions d'autrui</li>
               </ul>
-              <p class="note" style="margin-top: 0.5rem;"><strong>Note importante :</strong> Un score faible n'indique pas nécessairement un problème. Les personnes autistes, par exemple, peuvent avoir des scores plus faibles tout en ayant une grande compassion et une forte conscience morale. L'empathie se manifeste de différentes façons selon les individus.</p>
+              <p class="note" style="margin-top: 0.5rem;"><strong>Note importante :</strong> Un score faible n'indique pas nécessairement un problème. Les personnes autistes peuvent avoir des scores plus faibles tout en ayant une grande compassion. L'empathie se manifeste de différentes façons selon les individus.</p>
+              
+              <h4 style="font-size: 1.05rem; font-weight: 700; margin: 1.5rem 0 0.5rem 0;">Profil d'empathie</h4>
+              <p class="small" style="background: var(--warning-bg); padding: .5rem; border-radius: 8px; border: 1px solid var(--warning-border); color: var(--warning-text); margin-bottom: 1rem;"><strong>⚠️ Note :</strong> Ces sous-échelles sont indicatives et doivent être interprétées avec prudence.</p>
+              <div class="subs">
+                <div class="subcard">
+                  <div class="subname">Empathie cognitive</div>
+                  <div class="subscore"><span id="score-cog">0</span> / <span id="max-cog">0</span></div>
+                  <div class="sub-bar-wrap"><div class="sub-bar"><div class="sub-bar-fill" id="fill-cog"></div></div></div>
+                  <p class="sub-interp" id="interp-cog"></p>
+                </div>
+                <div class="subcard">
+                  <div class="subname">Empathie affective</div>
+                  <div class="subscore"><span id="score-aff">0</span> / <span id="max-aff">0</span></div>
+                  <div class="sub-bar-wrap"><div class="sub-bar"><div class="sub-bar-fill" id="fill-aff"></div></div></div>
+                  <p class="sub-interp" id="interp-aff"></p>
+                </div>
+              </div>
             </div>
           </details>
         </div>
