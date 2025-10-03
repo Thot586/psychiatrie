@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CAT-Q - Questionnaire de Camouflage des Traits Autistiques</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    :root{
+      --primary: #0f62fe; --primary-light: #4f8aff; --primary-weak: #eef4ff;
+      --text: #1f2937; --muted: #6b7280;
+      --bg: #f8f9fa; --paper: #ffffff; --border: #dee2e6;
+      --ok: #16a34a; --danger: #dc3545;
+      --warning-bg: #fff3cd; --warning-border: #ffe69c; --warning-text: #664d03;
+      font-size: 16px;
+    }
+    *{box-sizing: border-box; margin: 0; padding: 0}
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: var(--bg); color: var(--text); line-height: 1.6; padding: 1rem;
+    }
+    .container {
+      max-width: 56rem; margin: 1rem auto; background: var(--paper);
+      border: 1px solid var(--border); border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.07); overflow: hidden;
+    }
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: #fff; padding: 1.5rem 2rem;
+    }
+    header h1 {
+      font-size: clamp(1.4rem, 4vw, 1.85rem); font-weight: 700; line-height: 1.3;
+    }
+    .toolbar {
+      display: flex; gap: .75rem; flex-wrap: wrap; align-items: center; margin-top: .75rem;
+    }
+    .btn {
+      background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.3);
+      padding: .55rem .9rem; border-radius: 10px; cursor: pointer;
+      font-weight: 500; transition: background-color .2s;
+    }
+    .btn:hover { background: rgba(255,255,255,0.25); }
+    .btn[disabled] { opacity: .5; cursor: not-allowed; }
+
+    .section { padding: 1.5rem 2rem; border-top: 1px solid var(--border); }
+    .instructions { background: var(--primary-weak); color: #0b3d91; }
+    
+    .question { padding: 1.25rem 0; border-bottom: 1px solid var(--border); transition: background-color .3s; }
+    .question.missing { background-color: #fef2f2; border-left: 4px solid var(--danger); padding-left: 1.5rem; }
+    .qtext { font-weight: 600; margin-bottom: 1rem; font-size: 1.05rem; }
+    
+    .opts-scale { display: flex; justify-content: space-between; flex-wrap: wrap; border: 1px solid var(--border); border-radius: 10px; overflow: hidden;}
+    .opts-scale input[type="radio"] { display: none; }
+    .opts-scale label {
+      flex-grow: 1; text-align: center; padding: .8rem .2rem; cursor: pointer;
+      background: #f8f9fa; border-left: 1px solid var(--border);
+      transition: background-color .2s; font-weight: 500;
+    }
+    .opts-scale label:first-of-type { border-left: none; }
+    .opts-scale label:hover { background: var(--primary-weak); }
+    .opts-scale input[type="radio"]:checked + label {
+      background: var(--primary); color: #fff;
+    }
+    .scale-labels { display: flex; justify-content: space-between; padding: .25rem .5rem 0; font-size: .8rem; color: var(--muted); }
+    .scale-labels span:nth-child(2) { text-align: center; }
+    .scale-labels span:last-child { text-align: right; }
+    
+    .actions { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: center; margin-top: 1.5rem; }
+    button.primary {
+      background: linear-gradient(135deg, var(--ok), #15803d); color: #fff; border: none;
+      padding: .9rem 1.75rem; border-radius: 12px; font-weight: 700; font-size: 1.1rem;
+      cursor: pointer; transition: transform .2s, box-shadow .2s;
+    }
+    button.primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(22,163,74,.25); }
+    .validation { color: var(--danger); text-align: center; font-weight: 600; display: none; }
+
+    /* --- Résultats --- */
+    #results { display: none; }
+    .grid { display: grid; gap: 1.5rem; grid-template-columns: 1fr; }
+    .panel { border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; }
+    .panel h3 { font-size: 1.2rem; margin-bottom: .5rem; font-weight: 700; }
+    
+    .bigscore { display: flex; align-items: baseline; gap: .5rem; font-weight: 800; font-size: 2.5rem; color: var(--primary); }
+    .bigscore small { font-size: 1.1rem; color: var(--muted); font-weight: 600; }
+    .barwrap { margin-top: .75rem; }
+    .bar { height: .85rem; width: 100%; background: #e9ecef; border-radius: 999px; position: relative; overflow: hidden; }
+    .fill { height: 100%; background: linear-gradient(90deg, #9ab3ff, var(--primary)); width: 0%; transition: width .6s ease; border-radius: 999px; }
+    .tick { position: absolute; top: -.35rem; width: 2px; height: 1.55rem; background: #343a40; opacity: .75; }
+    .tick-label { position: absolute; top: 1.25rem; transform: translateX(-50%); font-size: .85rem; color: #343a40; font-weight: 600; }
+
+    details.accordion { border: 1px solid var(--border); border-radius: 12px; }
+    details.accordion summary { cursor: pointer; font-weight: 700; list-style: none; outline: none; padding: .8rem 1rem; }
+    details.accordion summary::-webkit-details-marker { display: none; }
+    details.accordion summary::after { content: "▸"; float: right; transform: translateY(-1px); opacity: .7; transition: transform 0.2s; }
+    details.accordion[open] summary { border-bottom: 1px solid var(--border); }
+    details.accordion[open] summary::after { transform: rotate(90deg); }
+    details.accordion .content { padding: 1rem; }
+    
+    /* --- Styles pour les sous-échelles --- */
+    .subs { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit,minmax(16rem,1fr)); margin-top: 1rem;}
+    .subcard { border: 1px solid var(--border); border-radius: 12px; padding: 1rem; }
+    .subname { font-weight: 700; font-size: 1.05rem; margin-bottom: .25rem; }
+    .subdesc { color: var(--muted); font-size: .9rem; margin-bottom: .5rem; min-height: 3.5rem; }
+    .subscore { font-weight: 800; font-size: 1.1rem; }
+    .sub-bar-wrap { margin: .5rem 0; }
+    .sub-bar { height: .5rem; width: 100%; background: #e9ecef; border-radius: 999px; }
+    .sub-bar-fill { height: 100%; background: var(--muted); width: 0%; transition: width .6s ease .1s; border-radius: 999px; }
+    .sub-interp { font-size: .85rem; font-weight: 500; margin-top: .3rem; }
+    
+    .consent {
+      display: flex; gap: .75rem; align-items: flex-start;
+      background: var(--warning-bg); border: 1px solid var(--warning-border); color: var(--warning-text);
+      padding: .75rem 1rem; border-radius: 10px;
+    }
+    .note { color: var(--muted); font-size: .95rem; margin-top: .5rem; }
+    .note strong { color: var(--text); }
+    .small { font-size: .9rem; color: var(--muted); }
+
+    footer { padding: 1.5rem 2rem; color: var(--muted); font-size: .9rem; background: #f1f3f5; border-top: 1px solid var(--border); }
+    @media (max-width: 640px) {
+      body { padding: .5rem; }
+      .section, header, footer { padding: 1.25rem; }
+      .opts-scale label { font-size: .9rem; padding: .6rem .1rem;}
+      .scale-labels { font-size: .7rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Questionnaire de Camouflage des Traits Autistiques (CAT-Q)</h1>
+      <div class="toolbar">
+        <label class="btn" for="file-import">Importer un résultat</label>
+        <input type="file" id="file-import" accept=".json" style="display:none"/>
+      </div>
+    </header>
+
+    <div class="section instructions">
+      <p>Lisez chaque phrase ci-dessous, et choisissez la réponse qui vous semble le mieux correspondre à votre expérience. <strong>Toutes les questions doivent être complétées</strong> pour calculer les scores. Cet outil mesure les stratégies de camouflage social et ne constitue pas un diagnostic de l'autisme.</p>
+    </div>
+
+    <form id="catq-form" class="section">
+      <div id="qwrap"></div>
+      <div class="actions">
+        <button type="submit" class="primary">Calculer mes résultats</button>
+        <p id="valmsg" class="validation">Veuillez répondre aux questions en surbrillance.</p>
+      </div>
+    </form>
+    
+    <div id="results" class="section">
+      <h2>Vos Résultats</h2>
+      <div class="grid">
+        <div class="panel">
+          <h3>Score total de camouflage</h3>
+          <div class="bigscore"><span id="totalscore">0</span><small>/ 175</small></div>
+          <div class="barwrap">
+            <div class="bar">
+              <div class="fill" id="fill"></div>
+              <div class="tick" style="left:57.14%"></div><div class="tick-label" style="left:57.14%">Seuil (100)</div>
+            </div>
+          </div>
+          <details class="accordion" open style="margin-top: 1rem">
+            <summary>Interprétation du score total</summary>
+            <div class="content">
+              <p id="interp-summary" style="font-weight:500;"></p>
+              <p id="interp-implication" class="note"></p>
+            </div>
+          </details>
+          <details class="accordion" style="margin-top: .6rem">
+            <summary>Interprétation détaillée</summary>
+            <div class="content">
+              <p id="interp-long"></p>
+              <p class="note"><strong>Le seuil de 100 :</strong> Ce score n'est pas un "diagnostic", mais un repère issu de la recherche (Hull et al., 2018). Un score ≥ 100 indique un niveau de camouflage plus typique des expériences autistiques et qui mérite attention, notamment en raison de son lien démontré avec l'épuisement, l'anxiété et la dépression (Hull et al., 2021).</p>
+            </div>
+          </details>
+        </div>
+
+        <div class="panel">
+          <h3>Profil de camouflage</h3>
+          <p class="small">Ces scores détaillent les types de stratégies que vous employez. Ils permettent de visualiser votre profil : privilégiez-vous l'apprentissage de règles (Compensation), le masquage de vos traits (Dissimulation) ou l'intégration à tout prix (Assimilation) ?</p>
+          <div class="subs">
+            <div class="subcard">
+              <div class="subname">Compensation</div>
+              <div class="subdesc">Stratégies apprises pour surmonter les difficultés (ex: imiter, préparer des scripts).</div>
+              <div class="subscore"><span id="score-comp">0</span> / 63</div>
+              <div class="sub-bar-wrap"><div class="sub-bar"><div class="sub-bar-fill" id="fill-comp"></div></div></div>
+              <p class="sub-interp" id="interp-comp"></p>
+            </div>
+            <div class="subcard">
+              <div class="subname">Dissimulation (Masquage)</div>
+              <div class="subdesc">Stratégies pour cacher les traits autistiques (ex: contrôler le langage corporel).</div>
+              <div class="subscore"><span id="score-mask">0</span> / 56</div>
+              <div class="sub-bar-wrap"><div class="sub-bar"><div class="sub-bar-fill" id="fill-mask"></div></div></div>
+              <p class="sub-interp" id="interp-mask"></p>
+            </div>
+            <div class="subcard">
+              <div class="subname">Assimilation</div>
+              <div class="subdesc">Stratégies pour s'intégrer en se forçant à agir comme les autres.</div>
+              <div class="subscore"><span id="score-assim">0</span> / 56</div>
+              <div class="sub-bar-wrap"><div class="sub-bar"><div class="sub-bar-fill" id="fill-assim"></div></div></div>
+              <p class="sub-interp" id="interp-assim"></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Exporter votre résultat</h3>
+          <p class="small">Aucun stockage local n’est réalisé. Pour conserver une copie, cochez la case de consentement puis cliquez sur « Exporter ».</p>
+          <label class="consent">
+            <input type="checkbox" id="consent"/>
+            <span>J’autorise l’export de mes réponses au format JSON. Je comprends que je suis responsable de la confidentialité de ce fichier.</span>
+          </label>
+          <div class="actions" style="justify-content:flex-start; margin-top: 1rem;">
+            <button type="button" id="btn-export" class="btn" disabled style="background:var(--muted); border-color:transparent;">Exporter</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p><strong>Références :</strong></p>
+      <p class="small">Hull, L., Mandy, W., Lai, M. C., Baron-Cohen, S., Allison, C., Smith, P., & Petrides, K. V. (2018). Development and validation of the Camouflaging Autistic Traits Questionnaire (CAT-Q). <em>Journal of Autism and Developmental Disorders, 49</em>(3), 819–833.</p>
+      <p class="small">Hull, L., Levy, L., & Lai, M. C. (2021). Is social camouflaging associated with anxiety and depression in autistic adults?. <em>Autism, 25</em>(8), 2297-2306.</p>
+      <p style="margin-top:0.5rem;" class="small">Adapté en version numérique par Dr FENOHASINA Toto Jean Felicien (Psychiatre - FFI).</p>
+    </footer>
+  </div>
+
+  <script>
+    const questions = [
+        "Quand j'interagis avec quelqu'un, je copie délibérément son langage corporel ou ses expressions faciales.",
+        "Je contrôle mon langage corporel ou mes expressions facials afin d'apparaître détendu(e).",
+        "Je ressens rarement le besoin de jouer un rôle pour me sortir d'une situation sociale.",
+        "J'ai développé un script à suivre dans les situations sociales (par exemple, une liste de questions ou des sujets de conversation).",
+        "Je vais répéter des phrases prononcées par d'autres exactement de la même façon que la première fois où je les ai entendues.",
+        "J'adapte mon langage corporel ou mes expressions faciales afin de donner l'impression de m'intéresser à la personne avec qui j'interagis.",
+        "Dans les situations sociales, je me sens comme \"en représentation\", plutôt que si j'étais réellement moi-même.",
+        "Dans mes interactions sociales, j'utilise des comportements que j'ai appris en regardant d'autres personnes interagir.",
+        "Je pense toujours à l'impression que je fais sur autrui.",
+        "J'ai besoin de l'aide d'autres personnes pour socialiser.",
+        "Je m'entraîne afin que mes expressions facials et mon langage corporel paraissent naturels.",
+        "Je ne ressens pas le besoin d'avoir un contact visuel avec autrui si je n'en ai pas envie.",
+        "Je dois me forcer à interagir avec autrui lorsque je suis dans des situations sociales.",
+        "J'ai essayé d'améliorer ma compréhension des habiletés sociales en observant autrui.",
+        "Je contrôle mon langage corporel ou mes expressions faciales afin de donner l'impression de m'intéresser à la personne avec qui j'interagis.",
+        "Lors de situations sociales, j'essaie de trouver des façons d'éviter d'interagir avec autrui.",
+        "J'ai étudié les règles régissant les interactions sociales (par exemple, en étudiant la psychologie ou en lisant des livres sur le comportement humain) afin d'améliorer mes propres habiletés sociales.",
+        "Je suis toujours conscient de l'impression que je fais sur autrui.",
+        "Je me sens libre d'être moi-même quand je suis avec d'autres personnes.",
+        "J'étudie comment les gens utilisent leur corps et leur visage en regardant la télévision ou des films, ou en lisant de la fiction.",
+        "J'adapte mon langage corporel ou mes expressions faciales afin de paraître détendu(e).",
+        "Lorsque je parle avec d'autres personnes, je sens comme si la conversation s'écoulait naturellement.",
+        "J'ai passé du temps à apprendre les habiletés sociales en regardant la télévision et des films, et j'essaie d'utiliser ces habiletés dans mes interactions.",
+        "Dans les interactions sociales, je ne prête pas attention à ce que font mon visage ou mon corps.",
+        "Dans les situations sociales, je me sens comme si je faisais semblant d'être 'normal(e)'."
+    ];
+    const responses = [
+      {label:"1", value:1}, {label:"2", value:2}, {label:"3", value:3},
+      {label:"4", value:4}, {label:"5", value:5}, {label:"6", value:6}, {label:"7", value:7}
+    ];
+    const reverseScoredQs = [3, 12, 19, 22, 24];
+    const SUBSCALES = {
+      compensation: { qs: [1, 4, 5, 8, 11, 14, 17, 20, 23], max: 63 },
+      masking: { qs: [2, 6, 9, 12, 15, 18, 21, 24], max: 56 },
+      assimilation: { qs: [3, 7, 10, 13, 16, 19, 22, 25], max: 56 }
+    };
+
+    // --- Génération du formulaire ---
+    const qwrap = document.getElementById('qwrap');
+    questions.forEach((qText, i) => {
+      const idx = i + 1;
+      const div = document.createElement('div');
+      div.className = 'question';
+      div.id = `q-container-${idx}`;
+      
+      const opts = responses.map(r => `
+        <input type="radio" id="q${idx}_${r.value}" name="q${idx}" value="${r.value}" />
+        <label for="q${idx}_${r.value}">${r.label}</label>
+      `).join('');
+
+      div.innerHTML = `
+        <div class="qtext">${idx}. ${qText}</div>
+        <div class="opts-scale">${opts}</div>
+        <div class="scale-labels" style="display: grid; grid-template-columns: 1fr 1fr 1fr;">
+          <span>Pas du tout d'accord</span>
+          <span>Ni d'accord, ni pas d'accord</span>
+          <span>Complètement d'accord</span>
+        </div>`;
+      qwrap.appendChild(div);
+    });
+
+    // --- Fonctions d'interprétation ---
+    function interpretationSummary(total) {
+      if (total >= 100) return `Votre score de ${total} est au-dessus du seuil de 100, suggérant un niveau de camouflage social <strong>très élevé</strong>.`;
+      if (total >= 87) return `Votre score de ${total} indique un niveau de camouflage social <strong>élevé</strong>, supérieur à la moyenne de la population non-autiste.`;
+      if (total >= 50) return `Votre score de ${total} est dans une fourchette <strong>modérée</strong>. Vous utilisez certaines stratégies de camouflage de manière ponctuelle ou moins intense.`;
+      return `Votre score de ${total} est dans la fourchette <strong>basse</strong>, indiquant un faible recours aux stratégies de camouflage social.`;
+    }
+    function interpretationImplication(total) {
+      if (total >= 100) return `<strong>Implication clinique :</strong> Un camouflage très élevé est fortement associé à un coût mental important. Il peut contribuer à l'épuisement (burnout), à l'anxiété, à la dépression et à un sentiment de perte d'identité. Il est crucial de reconnaître cet effort et son impact sur votre bien-être.`;
+      if (total >= 87) return `<strong>Implication clinique :</strong> Un camouflage élevé, même sous le seuil de 100, demande de l'énergie et peut avoir un impact négatif sur votre santé mentale. Il peut être utile d'identifier les situations où vous camouflez le plus.`;
+      return `<strong>Implication clinique :</strong> Un faible camouflage peut signifier que vous vous sentez plus à l'aise pour être authentique, ou que vous n'avez pas ressenti le besoin ou développé ces stratégies. Si des difficultés sociales existent, elles peuvent provenir d'autres facteurs.`;
+    }
+    function interpretationLong(total) {
+      if (total >= 100) return "Un score élevé indique que vous investissez une énergie cognitive et émotionnelle considérable pour adapter votre comportement, masquer des traits authentiques et vous intégrer. Bien que ces stratégies puissent être perçues comme nécessaires, la recherche (Hull et al., 2021) montre une corrélation forte entre un camouflage intense et des issues négatives en santé mentale. Cela peut masquer les difficultés sous-jacentes et retarder l'accès à un soutien, tout en créant un décalage entre votre 'vrai soi' et le personnage public.";
+      return "Un score plus bas suggère un usage moins intense ou moins fréquent des stratégies de camouflage. Cela ne signifie pas une absence de difficultés. Certaines personnes peuvent avoir des difficultés mais ne pas camoufler, tandis que d'autres peuvent avoir développé une acceptation de soi qui réduit ce besoin. L'important est d'évaluer votre propre expérience : vos interactions sociales sont-elles satisfaisantes et authentiques pour vous ? Votre bien-être est-il préservé ?";
+    }
+    function getSubscoreInterpretation(score, max) {
+        const percentage = (score / max) * 100;
+        if (percentage >= 75) return "Stratégie très utilisée.";
+        if (percentage >= 50) return "Stratégie fréquemment utilisée.";
+        if (percentage >= 25) return "Stratégie parfois utilisée.";
+        return "Stratégie peu utilisée.";
+    }
+    
+    // --- Calcul et affichage ---
+    const form = document.getElementById('catq-form');
+    
+    function computeAndRender(answers) {
+      let allAnswered = true;
+      for (let i = 1; i <= questions.length; i++) {
+        const qContainer = document.getElementById(`q-container-${i}`);
+        if (!answers[`q${i}`]) {
+          qContainer.classList.add('missing');
+          allAnswered = false;
+        } else {
+          qContainer.classList.remove('missing');
+        }
+      }
+
+      if (!allAnswered) {
+        document.getElementById('valmsg').style.display = 'block';
+        document.getElementById('results').style.display = 'none';
+        const firstMissing = document.querySelector('.question.missing');
+        if (firstMissing) firstMissing.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+      document.getElementById('valmsg').style.display = 'none';
+
+      const scores = { compensation: 0, masking: 0, assimilation: 0 };
+      let total = 0;
+
+      for (let i = 1; i <= questions.length; i++) {
+        let score = parseInt(answers[`q${i}`], 10);
+        if (reverseScoredQs.includes(i)) {
+          score = 8 - score;
+        }
+        total += score;
+        if (SUBSCALES.compensation.qs.includes(i)) scores.compensation += score;
+        if (SUBSCALES.masking.qs.includes(i)) scores.masking += score;
+        if (SUBSCALES.assimilation.qs.includes(i)) scores.assimilation += score;
+      }
+      
+      // Affichage score total
+      document.getElementById('totalscore').textContent = total;
+      document.getElementById('fill').style.width = `${(total / 175) * 100}%`;
+      document.getElementById('interp-summary').innerHTML = interpretationSummary(total);
+      document.getElementById('interp-implication').innerHTML = interpretationImplication(total);
+      document.getElementById('interp-long').textContent = interpretationLong(total);
+
+      // Affichage scores par domaine
+      document.getElementById('score-comp').textContent = scores.compensation;
+      document.getElementById('fill-comp').style.width = `${(scores.compensation / SUBSCALES.compensation.max) * 100}%`;
+      document.getElementById('interp-comp').textContent = getSubscoreInterpretation(scores.compensation, SUBSCALES.compensation.max);
+
+      document.getElementById('score-mask').textContent = scores.masking;
+      document.getElementById('fill-mask').style.width = `${(scores.masking / SUBSCALES.masking.max) * 100}%`;
+      document.getElementById('interp-mask').textContent = getSubscoreInterpretation(scores.masking, SUBSCALES.masking.max);
+
+      document.getElementById('score-assim').textContent = scores.assimilation;
+      document.getElementById('fill-assim').style.width = `${(scores.assimilation / SUBSCALES.assimilation.max) * 100}%`;
+      document.getElementById('interp-assim').textContent = getSubscoreInterpretation(scores.assimilation, SUBSCALES.assimilation.max);
+      
+      const resultsDiv = document.getElementById('results');
+      resultsDiv.style.display = 'block';
+      resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      document.getElementById('btn-export').disabled = !document.getElementById('consent').checked;
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fd = new FormData(form);
+      const answers = {};
+      for (const [k, v] of fd.entries()) answers[k] = v;
+      computeAndRender(answers);
+    });
+
+    // --- Import/Export ---
+    const fileImport = document.getElementById('file-import');
+    fileImport.addEventListener('change', (ev) => {
+      const f = ev.target.files?.[0]; if (!f) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const data = JSON.parse(e.target.result);
+          for (let i = 1; i <= questions.length; i++) {
+            const v = data[`q${i}`];
+            if (v !== undefined) {
+              const r = document.querySelector(`input[name="q${i}"][value="${v}"]`);
+              if (r) r.checked = true;
+            }
+          }
+          computeAndRender(data);
+        } catch { 
+            // Do not use alert. Instead, show an error message in a modal or a dedicated element.
+            // For now, let's just log it.
+            console.error("Fichier invalide.");
+        }
+        finally { ev.target.value = ''; }
+      };
+      reader.readAsText(f);
+    });
+
+    const consent = document.getElementById('consent');
+    const btnExport = document.getElementById('btn-export');
+    consent.addEventListener('change', () => {
+      if (document.getElementById('results').style.display === 'block') {
+        btnExport.disabled = !consent.checked;
+      }
+    });
+    btnExport.addEventListener('click', () => {
+      if (!consent.checked) return;
+      const fd = new FormData(form);
+      const answers = {};
+      for (const [k, v] of fd.entries()) answers[k] = v;
+      if (Object.keys(answers).length < questions.length) { 
+          // Do not use alert.
+          console.error("Veuillez d’abord calculer un résultat."); 
+          return; 
+      }
+      const blob = new Blob([JSON.stringify(answers, null, 2)], {type: 'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'reponses_cat-q.json';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+    });
+  </script>
+</body>
+</html>
+
