@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Échelle d'Auto-Évaluation du TDAH (ASRS-v1.1)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #14b8a6; /* Teal-500 */
+      --primary-light: #ccfbf1; /* Teal-100 */
+      --primary-dark: #0f766e; /* Teal-700 */
+      --text-on-primary: #ffffff;
+      --text-primary-dark: #042f2e; /* Teal-950 */
+      --success: #16a34a; /* Green-600 */
+      --success-light: #dcfce7; /* Green-100 */
+      --info: #2563eb; /* Blue-600 */
+      --info-light: #dbeafe; /* Blue-100 */
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f1f5f9; /* Slate-100 */
+      color: #334155; /* Slate-700 */
+    }
+    .main-container {
+      max-width: 56rem;
+      margin: 1.5rem auto;
+      background-color: #ffffff;
+      border-radius: 1rem;
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05), 0 8px 10px -6px rgba(0,0,0,0.05);
+      overflow: hidden;
+    }
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: var(--text-on-primary);
+      padding: 1.5rem 2rem;
+    }
+    .instructions {
+      background-color: var(--primary-light);
+      color: var(--text-primary-dark);
+      padding: 1rem 2rem;
+      border-bottom: 1px solid #e2e8f0; /* Slate-200 */
+    }
+    .question-card {
+      padding: 1.5rem;
+      border: 1px solid transparent;
+      border-bottom: 1px solid #e2e8f0; /* Slate-200 */
+      transition: background-color 0.3s, border-color 0.3s;
+    }
+    .question-card.unanswered {
+        background-color: #fff1f2; /* Rose-50 */
+        border-left: 4px solid #f43f5e; /* Rose-500 */
+    }
+    .opts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+        gap: 0.75rem;
+    }
+    .opts-grid label:hover {
+        border-color: var(--primary);
+        background-color: var(--primary-light);
+    }
+    .opts-grid input[type="radio"]:checked+label {
+        background-color: var(--primary);
+        color: var(--text-on-primary);
+        border-color: var(--primary-dark);
+        box-shadow: 0 4px 14px 0 rgba(20, 184, 166, 0.3);
+        transform: translateY(-2px);
+    }
+    .primary-btn {
+      background: var(--primary);
+      color: var(--text-on-primary);
+      transition: background-color 0.2s, transform 0.2s;
+    }
+    .primary-btn:hover {
+      background: var(--primary-dark);
+      transform: scale(1.05);
+    }
+    .progress-bar-container {
+        background-color: #e5e7eb; /* Gray-200 */
+        border-radius: 9999px;
+    }
+    .progress-bar {
+        background-color: var(--primary);
+        transition: width 0.5s ease-in-out;
+    }
+    .tab-btn {
+        transition: all 0.2s;
+        border-bottom: 3px solid transparent;
+    }
+    .tab-btn.active {
+        border-bottom-color: var(--primary);
+        color: var(--primary);
+        font-weight: 600;
+    }
+    .tab-content {
+        display: none;
+    }
+    .tab-content.active {
+        display: block;
+    }
+    #results h3, #results h4 {
+        color: var(--text-primary-dark);
+    }
+    #results a {
+        color: var(--primary);
+        text-decoration: underline;
+    }
+    #results a:hover {
+        color: var(--primary-dark);
+    }
+  </style>
+</head>
+<body class="antialiased">
+
+  <div class="main-container">
+    <header>
+      <h1 class="text-2xl md:text-3xl font-bold">Échelle d'Auto-Évaluation du TDAH Adulte (ASRS-v1.1)</h1>
+      <p class="text-teal-200 mt-1">Outil de dépistage clinique</p>
+      <div class="mt-4">
+        <label for="file-import" class="inline-block cursor-pointer bg-white/20 hover:bg-white/30 transition-colors text-white font-semibold py-2 px-4 rounded-lg text-sm">
+            Importer un résultat
+        </label>
+        <input type="file" id="file-import" accept=".json" class="hidden"/>
+      </div>
+    </header>
+
+    <div class="instructions">
+      <p class="font-medium">Veuillez répondre aux questions ci-dessous en vous basant sur la manière dont vous vous êtes senti(e) et comporté(e) au cours des <strong>6 derniers mois</strong>.</p>
+    </div>
+
+    <form id="asrs-form" class="p-4 sm:p-6 md:p-8">
+      <!-- Barre de progression -->
+      <div class="mb-6">
+          <div class="flex justify-between items-center mb-1 text-sm">
+              <span class="font-semibold text-gray-700">Progression</span>
+              <span id="progress-text" class="font-bold text-teal-600">0%</span>
+          </div>
+          <div class="progress-bar-container w-full h-2.5">
+              <div id="progress-bar" class="progress-bar h-2.5 rounded-full" style="width: 0%"></div>
+          </div>
+      </div>
+
+      <div id="qwrap"></div>
+      <div class="mt-8 text-center">
+        <button type="submit" class="primary-btn font-bold py-3 px-8 rounded-full text-lg shadow-lg">
+          Voir mes résultats
+        </button>
+        <p id="valmsg" class="text-red-600 font-semibold mt-4 hidden">Veuillez répondre à toutes les questions pour voir vos résultats.</p>
+      </div>
+    </form>
+
+    <div id="results" class="p-4 sm:p-6 md:p-8 bg-slate-50 hidden">
+        <h2 class="text-3xl font-extrabold text-center mb-2 text-slate-800">Vos Résultats</h2>
+        <p class="text-center text-slate-600 mb-8">Cette analyse est basée sur vos réponses et des données cliniques.</p>
+
+        <!-- Résultat principal -->
+        <div id="main-result-card" class="flex flex-col sm:flex-row items-center gap-4 p-5 rounded-xl mb-8 shadow-md">
+            <!-- Contenu dynamique ici -->
+        </div>
+
+        <!-- Exporter les résultats -->
+        <div class="p-4 bg-white rounded-lg border border-slate-200 mb-8">
+            <h3 class="text-lg font-bold text-slate-800 mb-2">Exporter votre résultat</h3>
+            <p class="text-sm text-slate-600 mb-4">Aucun stockage local n’est réalisé. Pour conserver une copie, cochez la case de consentement puis cliquez sur « Exporter ».</p>
+            <label class="flex items-start gap-3 p-3 bg-yellow-50 border border-yellow-200 text-yellow-800 text-sm rounded-md cursor-pointer">
+                <input type="checkbox" id="consent-export" class="mt-1 h-4 w-4 text-teal-600 border-gray-300 rounded focus:ring-teal-500"/>
+                <span>J’autorise l’export de mes réponses au format JSON. Je comprends que je suis responsable de la confidentialité de ce fichier.</span>
+            </label>
+            <div class="mt-4">
+                <button type="button" id="btn-export" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-slate-400 cursor-not-allowed" disabled>Exporter les résultats</button>
+            </div>
+        </div>
+        
+        <!-- Onglets pour l'interprétation -->
+        <div>
+            <div class="border-b border-gray-200">
+                <nav class="-mb-px flex space-x-4 sm:space-x-8" aria-label="Tabs">
+                    <button class="tab-btn active py-4 px-1 text-sm sm:text-base font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="interpretation">Interprétation</button>
+                    <button class="tab-btn py-4 px-1 text-sm sm:text-base font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="implications">Implications & Étapes</button>
+                    <button class="tab-btn py-4 px-1 text-sm sm:text-base font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="about">À propos</button>
+                </nav>
+            </div>
+            <div class="py-6 space-y-6">
+                <!-- Contenu Interprétation -->
+                <div id="interpretation-content" class="tab-content active prose max-w-none">
+                    <h3 class="text-xl font-bold mb-4">Interprétation de vos résultats</h3>
+                    <div class="p-4 bg-white rounded-lg border border-slate-200">
+                        <h4 class="font-bold">Partie A : Score de dépistage (<span id="part-a-score-text"></span>)</h4>
+                        <p>La Partie A de l'ASRS-v1.1 sert de court questionnaire de dépistage. Un score de <strong>4 ou plus</strong> est considéré comme un "dépistage positif". Cela n'est pas un diagnostic, mais indique que vos symptômes sont compatibles avec ceux du TDAH chez l'adulte et qu'une évaluation plus approfondie par un professionnel de la santé est justifiée (Kessler et al., 2005).</p>
+                        <p>Des études de validation ont montré que ce seuil de 4 est efficace pour identifier les adultes qui pourraient bénéficier d'une évaluation diagnostique complète (Adler et al., 2006).</p>
+                    </div>
+                    <div class="mt-4 p-4 bg-white rounded-lg border border-slate-200">
+                      <h4 class="font-bold">Partie B : Fréquence des autres symptômes (<span id="part-b-score-text"></span>)</h4>
+                      <p>La Partie B explore d'autres symptômes qui, bien que non inclus dans le score de dépistage initial, fournissent des informations cliniques précieuses. Le nombre de réponses "Souvent" ou "Très souvent" dans cette section donne un aperçu de l'étendue et de l'impact des symptômes d'inattention et d'hyperactivité/impulsivité sur votre vie quotidienne. Un nombre élevé de symptômes dans cette partie renforce la nécessité d'une discussion avec un professionnel.</p>
+                    </div>
+                </div>
+                <!-- Contenu Implications -->
+                <div id="implications-content" class="tab-content prose max-w-none">
+                    <h3 class="text-xl font-bold mb-4">Implications cliniques et étapes suivantes</h3>
+                    <div class="p-4 bg-white rounded-lg border border-slate-200">
+                        <h4 class="font-bold">Que faire de ce résultat ?</h4>
+                        <p>Indépendamment de votre score, si vous ressentez une détresse ou des difficultés dans votre vie personnelle, académique ou professionnelle, il est toujours conseillé de consulter un professionnel de la santé (médecin généraliste, psychiatre, psychologue).</p>
+                        <ul class="list-disc pl-5">
+                            <li><strong>Si votre dépistage est positif :</strong> Il est fortement recommandé de partager ces résultats avec un professionnel. Ils peuvent servir de point de départ pour une discussion sur vos symptômes.</li>
+                            <li><strong>Si votre dépistage est négatif :</strong> Si vous continuez à éprouver des difficultés, ne les ignorez pas. Vos symptômes pourraient être liés à une autre condition ou ne pas être capturés adéquatement par ce questionnaire spécifique.</li>
+                        </ul>
+                        <h4 class="font-bold mt-4">Le processus diagnostique du TDAH</h4>
+                        <p>Un diagnostic formel de TDAH ne peut être posé qu'après une évaluation complète, qui inclut généralement (CADDRA, 2020) :</p>
+                        <ul class="list-disc pl-5">
+                            <li>Une <strong>entrevue clinique structurée</strong> pour explorer vos symptômes actuels et passés (les symptômes doivent avoir commencé dans l'enfance).</li>
+                            <li>L'évaluation de l'<strong>impact des symptômes</strong> sur plusieurs domaines de votre vie (travail, études, relations sociales).</li>
+                            <li>La collecte d'<strong>informations collatérales</strong> (par exemple, auprès d'un parent ou d'un partenaire, anciens bulletins scolaires).</li>
+                            <li>L'élimination d'autres diagnostics potentiels qui pourraient expliquer les symptômes (diagnostic différentiel).</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Contenu À Propos -->
+                <div id="about-content" class="tab-content prose max-w-none">
+                    <h3 class="text-xl font-bold mb-4">À propos du TDAH et de l'échelle ASRS</h3>
+                     <div class="p-4 bg-white rounded-lg border border-slate-200">
+                        <h4 class="font-bold">Le Trouble du Déficit de l'Attention avec ou sans Hyperactivité (TDAH) chez l'adulte</h4>
+                        <p>Le TDAH est un trouble neurodéveloppemental qui persiste souvent à l'âge adulte. Il est caractérisé par un schéma persistant d'inattention et/ou d'hyperactivité-impulsivité qui interfère avec le fonctionnement ou le développement (Faraone et al., 2021). De nombreuses personnes, en particulier les femmes ou celles présentant une forme principalement inattentive, ne sont pas diagnostiquées dans l'enfance.</p>
+                        
+                        <h4 class="font-bold mt-4">Limites de cet outil</h4>
+                        <p>Il est crucial de comprendre les limites de l'ASRS-v1.1 :</p>
+                        <ul class="list-disc pl-5">
+                            <li><strong>C'est un dépistage, pas un diagnostic :</strong> Il identifie un risque potentiel mais ne confirme pas la présence d'un TDAH.</li>
+                            <li><strong>Subjectivité :</strong> Les réponses sont basées sur votre propre perception, qui peut être influencée par de nombreux facteurs.</li>
+                            <li><strong>Manque de contexte :</strong> L'outil n'évalue pas l'apparition des symptômes dans l'enfance ni l'impact fonctionnel, qui sont des critères diagnostiques essentiels.</li>
+                            <li><strong>Pas de diagnostic différentiel :</strong> Des symptômes similaires peuvent être présents dans d'autres conditions (troubles anxieux, dépression, troubles du sommeil, etc.).</li>
+                        </ul>
+                        <p class="font-semibold mt-4">Cet outil ne remplace en aucun cas l'avis d'un professionnel de la santé qualifié.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="p-6 bg-slate-100 border-t text-slate-600">
+        <div class="max-w-4xl mx-auto text-center">
+            <h3 class="font-bold text-base text-slate-800 mb-3">Références</h3>
+            <div class="space-y-2 text-xs text-left">
+                <p>Adler, L. A., Spencer, T., Faraone, S. V., Weiss, M. D., & Biederman, J. (2006). Validity of the World Health Organization Adult ADHD Self-Report Scale (ASRS) Screener in a nationally representative sample of health plan members. <em>International journal of methods in psychiatric research, 15</em>(4), 189–197.</p>
+                <p>CADDRA - Canadian ADHD Resource Alliance. (2020). <em>Canadian ADHD Practice Guidelines (4.1 ed.)</em>. CADDRA.</p>
+                <p>Faraone, S. V., Banaschewski, T., Coghill, D., Zheng, Y., Biederman, J., Bellgrove, M. A., ... & Wang, Y. (2021). The World Federation of ADHD International Consensus Statement: 208 Evidence-based conclusions about the disorder. <em>Neuroscience & Biobehavioral Reviews, 128</em>, 789-818.</p>
+                <p>Kessler, R. C., Adler, L., Ames, M., Demler, O., Faraone, S., Hiripi, E., ... & Walters, E. E. (2005). The World Health Organization Adult ADHD Self-Report Scale (ASRS): a short screening scale for use in the general population. <em>Psychological medicine, 35</em>(2), 245-256.</p>
+            </div>
+            <p class="mt-5 text-xs text-slate-500">Adapté en version numérique par Dr FENOHASINA Toto Jean Felicien (Psychiatre - FFI).</p>
+        </div>
+    </footer>
+  </div>
+
+<script>
+  // --- ALGORITHME DE SCORE CORRIGÉ ---
+  // L'algorithme de score ASRS-v1.1 n'est pas une simple addition. 
+  // Il compte le nombre de réponses qui tombent dans une "zone cliniquement significative".
+  // Cette zone varie selon la question. Le seuil de dépistage est de 4 réponses ou plus dans ces zones.
+  // Source : Kessler et al. (2005), Adler et al. (2006)
+  const questions = [
+    // --- Partie A (Questions 1-6) ---
+    // Pour les questions 1, 2, 3 : la zone significative est "Parfois", "Souvent", "Très souvent"
+    { text: "Combien de fois avez-vous du mal à finaliser les derniers détails d'un projet, une fois que les parties les plus difficiles ont été faites ?", part: 'A', scoreIdx: [2, 3, 4] },
+    { text: "Combien de fois avez-vous des difficultés à mettre de l'ordre lorsque vous devez effectuer une tâche qui demande de l'organisation ?", part: 'A', scoreIdx: [2, 3, 4] },
+    { text: "Combien de fois avez-vous du mal à vous souvenir de vos rendez-vous ou de vos obligations ?", part: 'A', scoreIdx: [2, 3, 4] }, // CORRIGÉ
+    
+    // Pour les questions 4, 5, 6 : la zone significative est "Souvent", "Très souvent"
+    { text: "Lorsque vous devez effectuer une tâche qui demande beaucoup de réflexion, combien de fois évitez-vous ou retardez-vous le moment de vous y mettre ?", part: 'A', scoreIdx: [3, 4] }, // CORRIGÉ
+    { text: "Combien de fois vous arrive-t-il de remuer ou de tortiller vos mains ou vos pieds lorsque vous devez rester assis(e) pendant longtemps ?", part: 'A', scoreIdx: [3, 4] }, // CORRIGÉ
+    { text: "Combien de fois vous sentez-vous trop actif/active et obligé(e) de faire des choses, comme si vous étiez 'poussé(e) par un moteur' ?", part: 'A', scoreIdx: [3, 4] },
+    
+    // --- Partie B (Questions 7-18) ---
+    // Ces questions fournissent un contexte clinique mais ne sont pas utilisées dans le score de dépistage.
+    { text: "Combien de fois faites-vous des fautes d'inattention lorsque vous travaillez sur un projet ennuyeux ou difficile ?", part: 'B' },
+    { text: "Combien de fois avez-vous du mal à maintenir votre attention lorsque vous effectuez un travail ennuyeux ou répétitif ?", part: 'B' },
+    { text: "Combien de fois avez-vous du mal à vous concentrer sur ce que les gens vous disent, même lorsqu'ils s'adressent directement à vous ?", part: 'B' },
+    { text: "Combien de fois égarez-vous ou avez-vous du mal à retrouver des choses chez vous ou au travail ?", part: 'B' },
+    { text: "Combien de fois êtes-vous distrait(e) par des activités ou des bruits autour de vous ?", part: 'B' },
+    { text: "Combien de fois quittez-vous votre siège dans des réunions ou dans d'autres situations où vous êtes censé(e) rester assis(e) ?", part: 'B' },
+    { text: "Combien de fois vous sentez-vous agité(e) ou incapable de tenir en place ?", part: 'B' },
+    { text: "Combien de fois avez-vous du mal à vous détendre et à vous relaxer lorsque vous avez du temps libre ?", part: 'B' },
+    { text: "Combien de fois vous surprenez-vous à parler beaucoup plus que les autres dans des situations sociales ?", part: 'B' },
+    { text: "Lorsque vous êtes en conversation, combien de fois vous surprenez-vous à finir les phrases des personnes à qui vous parlez avant qu'elles ne puissent le faire elles-mêmes ?", part: 'B' },
+    { text: "Combien de fois avez-vous du mal à attendre votre tour dans des situations où cela est nécessaire ?", part: 'B' },
+    { text: "Combien de fois interrompez-vous les gens lorsqu'ils sont occupés ?", part: 'B' }
+  ];
+
+  const responses = [
+    { label: "Jamais", value: 0 },
+    { label: "Rarement", value: 1 },
+    { label: "Parfois", value: 2 },
+    { label: "Souvent", value: 3 },
+    { label: "Très souvent", value: 4 }
+  ];
+
+  const qwrap = document.getElementById('qwrap');
+  let partAHeaderAdded = false;
+  let partBHeaderAdded = false;
+
+  questions.forEach((q, i) => {
+    const idx = i + 1;
+    
+    if (q.part === 'A' && !partAHeaderAdded) {
+      const header = document.createElement('h2');
+      header.className = 'text-xl font-bold mb-4 pb-2 border-b-2 border-slate-200 text-teal-800';
+      header.textContent = 'Partie A : Questionnaire de dépistage';
+      qwrap.appendChild(header);
+      partAHeaderAdded = true;
+    }
+    if (q.part === 'B' && !partBHeaderAdded) {
+      const header = document.createElement('h2');
+      header.className = 'text-xl font-bold mt-10 mb-4 pb-2 border-b-2 border-slate-200 text-teal-800';
+      header.textContent = 'Partie B : Autres symptômes';
+      qwrap.appendChild(header);
+      partBHeaderAdded = true;
+    }
+    
+    const div = document.createElement('div');
+    div.className = 'question-card';
+    div.id = `q-container-${idx}`;
+
+    const opts = responses.map(r => {
+      // Pour la Partie A, on met en évidence les réponses qui contribuent au score
+      const isScored = q.part === 'A' && q.scoreIdx.includes(r.value);
+      return `
+        <div>
+          <input type="radio" id="q${idx}_${r.value}" name="q${idx}" value="${r.value}" class="sr-only"/>
+          <label for="q${idx}_${r.value}" class="block text-center cursor-pointer p-3 border-2 rounded-lg transition-all text-sm md:text-base font-medium ${isScored ? 'bg-teal-50 border-teal-200' : 'bg-white border-slate-300'}">
+            ${r.label}
+          </label>
+        </div>
+      `;
+    }).join('');
+    
+    div.innerHTML = `
+      <p class="font-semibold mb-4 text-slate-800">${idx}. ${q.text}</p>
+      <div class="opts-grid">${opts}</div>
+    `;
+    qwrap.appendChild(div);
+  });
+
+  const form = document.getElementById('asrs-form');
+  const progressBar = document.getElementById('progress-bar');
+  const progressText = document.getElementById('progress-text');
+
+  function updateProgress() {
+      const answeredQuestions = document.querySelectorAll('input[type="radio"]:checked').length;
+      const totalQuestions = questions.length;
+      const percentage = Math.round((answeredQuestions / totalQuestions) * 100);
+      progressBar.style.width = `${percentage}%`;
+      progressText.textContent = `${percentage}%`;
+  }
+
+  form.addEventListener('change', updateProgress);
+
+  function calculateAndShowResults(answers) {
+    const valmsg = document.getElementById('valmsg');
+    const resultsDiv = document.getElementById('results');
+
+    // Scoring according to the official WHO ASRS-v1.1 guide
+    let scoreA = 0;
+    for(let i=0; i<6; i++){
+      const qIdx = i + 1;
+      const qInfo = questions[i];
+      const answerVal = answers[`q${qIdx}`];
+      if (qInfo.scoreIdx.includes(answerVal)) {
+        scoreA++;
+      }
+    }
+    
+    let scoreB = 0;
+    for(let i=6; i<18; i++){
+        const qIdx = i + 1;
+        const answerVal = answers[`q${qIdx}`];
+        if(answerVal >= 3) { // Souvent ou Très souvent
+            scoreB++;
+        }
+    }
+    
+    // Render results
+    const mainResultCard = document.getElementById('main-result-card');
+    const positiveScreen = scoreA >= 4;
+    
+    if(positiveScreen) {
+      mainResultCard.className = 'flex flex-col sm:flex-row items-center gap-5 p-5 rounded-xl mb-8 shadow-md bg-success-light text-green-900';
+      mainResultCard.innerHTML = `
+        <div class="flex-shrink-0 h-16 w-16 rounded-full bg-success text-white flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        </div>
+        <div>
+          <p class="font-bold text-xl">Dépistage positif pour les symptômes du TDAH</p>
+          <p class="text-green-800">Votre score est de <strong>${scoreA} sur 6</strong>. Ce résultat suggère qu'une évaluation par un professionnel de la santé est recommandée.</p>
+        </div>
+      `;
+    } else {
+      mainResultCard.className = 'flex flex-col sm:flex-row items-center gap-5 p-5 rounded-xl mb-8 shadow-md bg-info-light text-blue-900';
+      mainResultCard.innerHTML = `
+        <div class="flex-shrink-0 h-16 w-16 rounded-full bg-info text-white flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        </div>
+        <div>
+          <p class="font-bold text-xl">Dépistage négatif pour les symptômes du TDAH</p>
+          <p class="text-blue-800">Votre score est de <strong>${scoreA} sur 6</strong>. Si vous rencontrez tout de même des difficultés, n'hésitez pas à en parler à un professionnel.</p>
+        </div>
+      `;
+    }
+    
+    document.getElementById('part-a-score-text').textContent = `${scoreA}/6`;
+    document.getElementById('part-b-score-text').textContent = `${scoreB}/12`;
+    
+    resultsDiv.classList.remove('hidden');
+    resultsDiv.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const fd = new FormData(form);
+    const answers = {};
+    let allAnswered = true;
+    
+    document.querySelectorAll('.question-card').forEach(qDiv => qDiv.classList.remove('unanswered'));
+
+    for (let i = 1; i <= questions.length; i++) {
+      if (fd.has(`q${i}`)) {
+        answers[`q${i}`] = parseInt(fd.get(`q${i}`), 10);
+      } else {
+        allAnswered = false;
+        document.getElementById(`q-container-${i}`).classList.add('unanswered');
+      }
+    }
+
+    const valmsg = document.getElementById('valmsg');
+
+    if (!allAnswered) {
+      valmsg.classList.remove('hidden');
+      document.getElementById('results').classList.add('hidden');
+      const firstUnanswered = document.querySelector('.unanswered');
+      if (firstUnanswered) {
+          firstUnanswered.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      return;
+    }
+    valmsg.classList.add('hidden');
+    calculateAndShowResults(answers);
+  });
+
+  // Tab functionality
+  const tabButtons = document.querySelectorAll('.tab-btn');
+  const tabContents = document.querySelectorAll('.tab-content');
+
+  tabButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+
+        tabContents.forEach(content => content.classList.remove('active'));
+        document.getElementById(`${button.dataset.tab}-content`).classList.add('active');
+    });
+  });
+
+  // Export functionality
+  const consentCheckbox = document.getElementById('consent-export');
+  const exportButton = document.getElementById('btn-export');
+
+  consentCheckbox.addEventListener('change', () => {
+    if (consentCheckbox.checked) {
+        exportButton.disabled = false;
+        exportButton.classList.remove('bg-slate-400', 'cursor-not-allowed');
+        exportButton.classList.add('bg-teal-600', 'hover:bg-teal-700');
+    } else {
+        exportButton.disabled = true;
+        exportButton.classList.add('bg-slate-400', 'cursor-not-allowed');
+        exportButton.classList.remove('bg-teal-600', 'hover:bg-teal-700');
+    }
+  });
+
+  exportButton.addEventListener('click', () => {
+      if (exportButton.disabled) return;
+
+      const currentFormData = new FormData(form);
+      const answersToExport = {};
+      let allQuestionsAnsweredForExport = true;
+
+      for (let i = 1; i <= questions.length; i++) {
+          if (currentFormData.has(`q${i}`)) {
+              answersToExport[`q${i}`] = parseInt(currentFormData.get(`q${i}`), 10);
+          } else {
+              allQuestionsAnsweredForExport = false;
+              break; 
+          }
+      }
+
+      if (!allQuestionsAnsweredForExport) {
+          // This case should not happen if the button is active, but it is a safeguard.
+          return;
+      }
+      
+      const blob = new Blob([JSON.stringify(answersToExport, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'resultats_asrs-v1.1.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+  });
+
+  // Import functionality
+  const fileImportInput = document.getElementById('file-import');
+
+  function repopulateForm(answers) {
+    document.querySelectorAll('input[type="radio"]').forEach(radio => radio.checked = false);
+    for (const qName in answers) {
+        const qValue = answers[qName];
+        if (qName.startsWith('q')) {
+            const radio = document.querySelector(`input[name="${qName}"][value="${qValue}"]`);
+            if (radio) {
+                radio.checked = true;
+            }
+        }
+    }
+    updateProgress();
+  }
+
+  fileImportInput.addEventListener('change', (event) => {
+      const file = event.target.files[0];
+      if (!file) { return; }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+          try {
+              const importedAnswers = JSON.parse(e.target.result);
+              if (typeof importedAnswers === 'object' && importedAnswers !== null) {
+                  repopulateForm(importedAnswers);
+                  calculateAndShowResults(importedAnswers);
+              } else {
+                  throw new Error("Format JSON invalide");
+              }
+          } catch (error) {
+              console.error("Erreur lors de l'importation du fichier :", error);
+              // Optionnel : afficher un message d'erreur à l'utilisateur de manière non-intrusive.
+          } finally {
+              event.target.value = ''; // Permet de ré-importer le même fichier
+          }
+      };
+      reader.readAsText(file);
+  });
+
+</script>
+</body>
+</html>
