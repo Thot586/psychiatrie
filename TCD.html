@@ -1,371 +1,256 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guide Pratique TCD - Stratégies Interactives</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 20px;
             color: #333;
         }
-
         .container {
             max-width: 1200px;
-            margin: 0 auto;
         }
-
-        header {
-            text-align: center;
-            color: white;
-            margin-bottom: 40px;
-            animation: fadeIn 0.8s ease-in;
-        }
-
-        header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-
         .crisis-alert {
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
             animation: pulse 2s infinite;
         }
-
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.02); }
         }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .crisis-alert h2 {
-            font-size: 1.8rem;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
         .tab-btn {
             background: white;
             color: #667eea;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 30px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
-
         .tab-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0,0,0,0.15);
         }
-
         .tab-btn.active {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
         }
-
         .content-section {
             display: none;
-            animation: fadeIn 0.5s ease-in;
+            animation: fadeIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
-
         .content-section.active {
             display: block;
         }
-
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
         .strategy-card {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
             transition: all 0.3s ease;
         }
-
         .strategy-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 12px 35px rgba(0,0,0,0.15);
         }
-
-        .strategy-card h3 {
-            color: #667eea;
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .technique-list {
-            list-style: none;
-            margin-top: 15px;
-        }
-
         .technique-item {
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
             border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
         }
-
         .technique-item:hover {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             transform: translateX(5px);
         }
-
         .technique-detail {
             display: none;
-            margin-top: 10px;
-            padding: 15px;
             background: rgba(102, 126, 234, 0.1);
-            border-radius: 8px;
-            font-size: 0.95rem;
             line-height: 1.6;
         }
-
         .technique-item.expanded .technique-detail {
             display: block;
         }
-
         .icon {
-            display: inline-block;
-            width: 30px;
-            height: 30px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 50%;
-            text-align: center;
-            line-height: 30px;
-            color: white;
-            font-weight: bold;
         }
-
-        .priority-badge {
-            display: inline-block;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-left: 10px;
-        }
-
         .priority-1 { background: #f5576c; color: white; }
         .priority-2 { background: #ffa726; color: white; }
         .priority-3 { background: #66bb6a; color: white; }
-
-        .interactive-quiz {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            margin-top: 20px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        }
-
         .quiz-option {
             background: #f5f7fa;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
             border: 2px solid transparent;
+            transition: all 0.3s ease;
         }
-
         .quiz-option:hover {
             border-color: #667eea;
             background: #e8eaf6;
         }
-
         .quiz-result {
-            margin-top: 20px;
-            padding: 20px;
-            border-radius: 10px;
             display: none;
         }
-
         .quiz-result.show {
             display: block;
-            animation: fadeIn 0.5s ease-in;
+            animation: fadeIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
-
-        @media (max-width: 768px) {
-            header h1 {
-                font-size: 1.8rem;
-            }
-
-            .tab-btn {
-                padding: 12px 20px;
-                font-size: 0.9rem;
-            }
-
-            .strategy-card {
-                padding: 20px;
-            }
-        }
-
-        .mindfulness-timer {
-            text-align: center;
-            padding: 30px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        }
-
-        .timer-display {
-            font-size: 3rem;
-            font-weight: bold;
-            color: #667eea;
-            margin: 20px 0;
-        }
-
         .timer-btn {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            border-radius: 30px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            margin: 5px;
             transition: all 0.3s ease;
         }
-
         .timer-btn:hover {
             transform: scale(1.05);
             box-shadow: 0 6px 20px rgba(0,0,0,0.2);
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <header>
-            <h1>🧠 Guide Pratique TCD</h1>
-            <p>Thérapie Dialectique et Comportementale - Stratégies Concrètes</p>
+<body class="p-5">
+    <div class="container mx-auto rounded-lg shadow-xl p-6 bg-gray-50">
+        <header class="text-center text-white mb-10 p-4 rounded-lg bg-indigo-600 bg-opacity-90">
+            <h1 class="text-4xl font-extrabold mb-2 text-shadow-md animate-fade-in flex items-center justify-center gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+                Guide Pratique TCD
+            </h1>
+            <p class="text-xl opacity-90">Thérapie Dialectique et Comportementale - Stratégies Concrètes</p>
         </header>
 
-        <div class="crisis-alert">
-            <h2>⚡ En cas de crise émotionnelle intense</h2>
-            <p><strong>1. NOMMER</strong> l'émotion : "Je ressens de la [colère/tristesse/peur]"</p>
-            <p><strong>2. ACCEPTER</strong> : "C'est normal de ressentir cela dans cette situation"</p>
-            <p><strong>3. AGIR</strong> : Utilisez les techniques de tolérance à la détresse ci-dessous</p>
+        <div class="crisis-alert p-6 rounded-xl mb-8 shadow-lg">
+            <h2 class="text-2xl font-bold mb-4 flex items-center gap-3 text-white">
+                 <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                En cas de crise émotionnelle intense
+            </h2>
+            <p class="mb-2 text-white"><strong>1. NOMMER</strong> l'émotion : "Je ressens de la [colère/tristesse/peur]"</p>
+            <p class="mb-2 text-white"><strong>2. ACCEPTER</strong> : "C'est normal de ressentir cela dans cette situation"</p>
+            <p class="text-white"><strong>3. AGIR</strong> : Utilisez les techniques de tolérance à la détresse ci-dessous</p>
         </div>
 
-        <div class="tabs">
-            <button class="tab-btn active" onclick="showTab('distress')">Tolérance à la Détresse</button>
-            <button class="tab-btn" onclick="showTab('emotions')">Régulation Émotionnelle</button>
-            <button class="tab-btn" onclick="showTab('interpersonal')">Efficacité Interpersonnelle</button>
-            <button class="tab-btn" onclick="showTab('mindfulness')">Pleine Conscience</button>
-            <button class="tab-btn" onclick="showTab('quiz')">Outil Interactif</button>
+        <div class="tabs flex flex-wrap justify-center gap-3 mb-8">
+            <button class="tab-btn active px-6 py-3 rounded-full font-semibold shadow-md" onclick="showTab(event, 'distress')">Tolérance à la Détresse</button>
+            <button class="tab-btn px-6 py-3 rounded-full font-semibold shadow-md" onclick="showTab(event, 'emotions')">Régulation Émotionnelle</button>
+            <button class="tab-btn px-6 py-3 rounded-full font-semibold shadow-md" onclick="showTab(event, 'interpersonal')">Efficacité Interpersonnelle</button>
+            <button class="tab-btn px-6 py-3 rounded-full font-semibold shadow-md" onclick="showTab(event, 'mindfulness')">Pleine Conscience</button>
+            <button class="tab-btn px-6 py-3 rounded-full font-semibold shadow-md" onclick="showTab(event, 'quiz')">Outil Interactif</button>
+            <button class="tab-btn px-6 py-3 rounded-full font-semibold shadow-md" onclick="showTab(event, 'references')">Références</button>
         </div>
 
         <div id="distress" class="content-section active">
-            <div class="strategy-card">
-                <h3><span class="icon">1</span> Tolérance à la Détresse <span class="priority-badge priority-1">Priorité Haute</span></h3>
-                <p><strong>Objectif :</strong> Survivre aux crises sans se faire de mal et sans empirer la situation</p>
+            <div class="strategy-card bg-white rounded-xl p-8 mb-5 shadow-lg">
+                <h3 class="text-2xl font-bold text-indigo-600 mb-4 flex items-center gap-3">
+                    <span class="icon inline-flex items-center justify-center w-8 h-8 rounded-full font-bold text-white shadow-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 1.944A11.954 11.954 0 012.166 5.002L10 18.456l7.834-13.454A11.954 11.954 0 0110 1.944zM10 4a9.954 9.954 0 017.071 2.929L10 15.051 2.929 6.929A9.954 9.954 0 0110 4z" clip-rule="evenodd" />
+                        </svg>
+                    </span> Tolérance à la Détresse
+                    <span class="priority-badge priority-1 px-4 py-1 rounded-full text-sm font-semibold shadow-inner">Priorité Haute</span>
+                </h3>
+                <p class="mb-4"><strong>Objectif :</strong> Survivre aux crises sans se faire de mal et sans empirer la situation.</p>
                 
-                <ul class="technique-list">
-                    <li class="technique-item" onclick="toggleDetail(this)">
-                        <strong>🧊 Technique TIP - Température</strong>
-                        <div class="technique-detail">
-                            <p><strong>Comment faire :</strong></p>
-                            <ul>
-                                <li>Plongez votre visage dans de l'eau froide (10-15°C) pendant 30 secondes</li>
-                                <li>Ou appliquez un sac de glace sur les yeux et les joues</li>
-                                <li>Active le réflexe de plongée et ralentit le rythme cardiaque</li>
+                <ul class="technique-list list-none">
+                    <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
+                        <strong class="text-lg flex items-center gap-2">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7.C14.05 1 16.957 1.222 18.657 2.922m-1 15.735a8.003 8.003 0 01-11.314-11.314m11.314 11.314L18 20m-2-2v-2m0-4h-4m8 0h-2m-2-4H8m-2 6h2" />
+                            </svg>
+                            Technique TIP - Température
+                        </strong>
+                        <div class="technique-detail mt-3 p-4 rounded-lg text-base">
+                            <p class="font-semibold mb-2">Comment faire :</p>
+                            <ul class="list-disc pl-5">
+                                <li>Plongez votre visage dans de l'eau froide (10-15°C) pendant 30 secondes.</li>
+                                <li>Ou appliquez un sac de glace sur les yeux et les joues.</li>
+                                <li>Active le réflexe de plongée et ralentit le rythme cardiaque.</li>
                             </ul>
-                            <p><strong>Quand l'utiliser :</strong> Moment de panique intense, envie d'agir impulsivement</p>
+                            <p class="font-semibold mt-3">Quand l'utiliser :</p>
+                            <p>Moment de panique intense, envie d'agir impulsivement.</p>
                         </div>
                     </li>
                     
-                    <li class="technique-item" onclick="toggleDetail(this)">
-                        <strong>🏃 Technique TIP - Exercice Intense</strong>
-                        <div class="technique-detail">
-                            <p><strong>Comment faire :</strong></p>
-                            <ul>
-                                <li>Course sur place pendant 10-15 minutes</li>
-                                <li>Montées d'escaliers rapides</li>
-                                <li>Jumping jacks, squats, pompes</li>
-                                <li>Brûle l'adrénaline du stress</li>
+                    <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
+                        <strong class="text-lg flex items-center gap-2">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                            Technique TIP - Exercice Intense
+                        </strong>
+                        <div class="technique-detail mt-3 p-4 rounded-lg text-base">
+                            <p class="font-semibold mb-2">Comment faire :</p>
+                            <ul class="list-disc pl-5">
+                                <li>Course sur place pendant 10-15 minutes.</li>
+                                <li>Montées d'escaliers rapides.</li>
+                                <li>Jumping jacks, squats, pompes.</li>
+                                <li>Brûle l'adrénaline du stress.</li>
                             </ul>
-                            <p><strong>Quand l'utiliser :</strong> Colère intense, agitation physique</p>
+                            <p class="font-semibold mt-3">Quand l'utiliser :</p>
+                            <p>Colère intense, agitation physique.</p>
                         </div>
                     </li>
                     
-                    <li class="technique-item" onclick="toggleDetail(this)">
-                        <strong>😮‍💨 Technique TIP - Respiration Paced</strong>
-                        <div class="technique-detail">
-                            <p><strong>Comment faire :</strong></p>
-                            <ul>
-                                <li>Inspirez pendant 5 secondes</li>
-                                <li>Expirez lentement pendant 7 secondes</li>
-                                <li>Répétez pendant 3-5 minutes</li>
-                                <li>L'expiration longue active le système parasympathique</li>
+                    <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
+                        <strong class="text-lg flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.636 18.364a9 9 0 010-12.728m2.828 9.9a5 5 0 010-7.072" />
+                            </svg>
+                            Technique TIP - Respiration Paced
+                        </strong>
+                        <div class="technique-detail mt-3 p-4 rounded-lg text-base">
+                            <p class="font-semibold mb-2">Comment faire :</p>
+                            <ul class="list-disc pl-5">
+                                <li>Inspirez pendant 5 secondes.</li>
+                                <li>Expirez lentement pendant 7 secondes.</li>
+                                <li>Répétez pendant 3-5 minutes.</li>
+                                <li>L'expiration longue active le système parasympathique.</li>
                             </ul>
-                            <p><strong>Quand l'utiliser :</strong> Anxiété, début de crise</p>
+                            <p class="font-semibold mt-3">Quand l'utiliser :</p>
+                            <p>Anxiété, début de crise.</p>
                         </div>
                     </li>
                     
-                    <li class="technique-item" onclick="toggleDetail(this)">
-                        <strong>🎯 Distraction ACCEPTS</strong>
-                        <div class="technique-detail">
-                            <p><strong>Activités :</strong> Sport, ménage, cuisine, puzzle</p>
-                            <p><strong>Contribution :</strong> Aider quelqu'un, bénévolat</p>
-                            <p><strong>Comparaisons :</strong> Se rappeler des moments plus difficiles surmontés</p>
-                            <p><strong>Émotions opposées :</strong> Comédie si triste, musique calme si énervé</p>
-                            <p><strong>Pensées autres :</strong> Compter, réciter, liste de courses</p>
-                            <p><strong>Sensations :</strong> Glace dans la main, douche froide, élastique au poignet</p>
+                    <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
+                        <strong class="text-lg flex items-center gap-2">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2 1m0 0l-2-1m2 1V2.5M10 7l2 1m-2-1l2-1m-2 1v2.5m-4 5l-2-1m0 0l-2 1m2-1V9.5M6 14l2 1m-2-1l2-1m-2 1v2.5m4 5l2-1m0 0l2 1m-2-1v2.5m4-5l2 1m-2-1l2-1m-2 1v2.5" />
+                            </svg>
+                            Distraction ACCEPTS
+                        </strong>
+                        <div class="technique-detail mt-3 p-4 rounded-lg text-base">
+                            <p class="font-semibold mb-2">Activités :</p>
+                            <p>Sport, ménage, cuisine, puzzle.</p>
+                            <p class="font-semibold mt-2 mb-1">Contribution :</p>
+                            <p>Aider quelqu'un, bénévolat.</p>
+                            <p class="font-semibold mt-2 mb-1">Comparaisons :</p>
+                            <p>Se rappeler des moments plus difficiles surmontés.</p>
+                            <p class="font-semibold mt-2 mb-1">Émotions opposées :</p>
+                            <p>Comédie si triste, musique calme si énervé.</p>
+                            <p class="font-semibold mt-2 mb-1">Pensées autres :</p>
+                            <p>Compter, réciter, liste de courses.</p>
+                            <p class="font-semibold mt-2 mb-1">Sensations :</p>
+                            <p>Glace dans la main, douche froide, élastique au poignet.</p>
                         </div>
                     </li>
                     
-                    <li class="technique-item" onclick="toggleDetail(this)">
-                        <strong>🛡️ Auto-apaisement 5 Sens</strong>
-                        <div class="technique-detail">
-                            <p><strong>Vue :</strong> Regarder des images apaisantes, nature, art</p>
-                            <p><strong>Ouïe :</strong> Musique douce, sons de la nature, ASMR</p>
-                            <p><strong>Odorat :</strong> Huiles essentielles (lavande), bougies parfumées</p>
-                            <p><strong>Goût :</strong> Thé chaud, bonbon mentholé, chocolat noir</p>
-                            <p><strong>Toucher :</strong> Couverture douce, bain chaud, auto-massage</p>
+                    <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
+                        <strong class="text-lg flex items-center gap-2">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Auto-apaisement 5 Sens
+                        </strong>
+                        <div class="technique-detail mt-3 p-4 rounded-lg text-base">
+                            <p class="font-semibold mb-2">Vue :</p>
+                            <p>Regarder des images apaisantes, nature, art.</p>
+                            <p class="font-semibold mt-2 mb-1">Ouïe :</p>
+                            <p>Musique douce, sons de la nature, ASMR.</p>
+                            <p class="font-semibold mt-2 mb-1">Odorat :</p>
+                            <p>Huiles essentielles (lavande), bougies parfumées.</p>
+                            <p class="font-semibold mt-2 mb-1">Goût :</p>
+                            <p>Thé chaud, bonbon mentholé, chocolat noir.</p>
+                            <p class="font-semibold mt-2 mb-1">Toucher :</p>
+                            <p>Couverture douce, bain chaud, auto-massage.</p>
                         </div>
                     </li>
                 </ul>
@@ -373,49 +258,77 @@
         </div>
 
         <div id="emotions" class="content-section">
-            <div class="strategy-card">
-                <h3><span class="icon">2</span> Régulation des Émotions <span class="priority-badge priority-2">Priorité Moyenne</span></h3>
-                <p><strong>Objectif :</strong> Comprendre et gérer les émotions de façon saine</p>
+            <div class="strategy-card bg-white rounded-xl p-8 mb-5 shadow-lg">
+                <h3 class="text-2xl font-bold text-indigo-600 mb-4 flex items-center gap-3">
+                    <span class="icon inline-flex items-center justify-center w-8 h-8 rounded-full font-bold text-white shadow-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                           <path d="M5.5 16a3.5 3.5 0 01-.369-6.98 4 4 0 117.739 0 3.5 3.5 0 01-.369 6.98C12.083 16 9.333 16 5.5 16z" />
+                           <path d="M5 9a1 1 0 00-2 0v5a1 1 0 002 0V9zM15 9a1 1 0 00-2 0v5a1 1 0 002 0V9z" />
+                        </svg>
+                    </span> Régulation des Émotions
+                    <span class="priority-badge priority-2 px-4 py-1 rounded-full text-sm font-semibold shadow-inner">Priorité Moyenne</span>
+                </h3>
+                <p class="mb-4"><strong>Objectif :</strong> Comprendre et gérer les émotions de façon saine.</p>
                 
-                <ul class="technique-list">
-                    <li class="technique-item" onclick="toggleDetail(this)">
-                        <strong>📝 Identifier l'Émotion (STOP)</strong>
-                        <div class="technique-detail">
-                            <p><strong>S - Stop :</strong> Arrêtez-vous, ne réagissez pas immédiatement</p>
-                            <p><strong>T - Take a step back :</strong> Prenez du recul mentalement</p>
+                <ul class="technique-list list-none">
+                    <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
+                        <strong class="text-lg flex items-center gap-2">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Identifier l'Émotion (STOP)
+                        </strong>
+                        <div class="technique-detail mt-3 p-4 rounded-lg text-base">
+                            <p><strong>S - Stop :</strong> Arrêtez-vous, ne réagissez pas immédiatement.</p>
+                            <p><strong>T - Take a step back :</strong> Prenez du recul mentalement.</p>
                             <p><strong>O - Observe :</strong> Que se passe-t-il ? Que je ressens ?</p>
-                            <p><strong>P - Proceed mindfully :</strong> Agir en conscience, pas en réaction</p>
+                            <p><strong>P - Proceed mindfully :</strong> Agir en conscience, pas en réaction.</p>
                         </div>
                     </li>
                     
-                    <li class="technique-item" onclick="toggleDetail(this)">
-                        <strong>🔄 Action Opposée</strong>
-                        <div class="technique-detail">
-                            <p><strong>Si tristesse :</strong> Se lever, s'activer, sortir (inverse de s'isoler)</p>
-                            <p><strong>Si colère :</strong> Parler doucement, s'éloigner gentiment</p>
-                            <p><strong>Si peur :</strong> S'exposer progressivement à ce qui fait peur</p>
-                            <p><strong>Si honte :</strong> Partager avec quelqu'un de confiance</p>
-                            <p><em>Fonctionne quand l'émotion n'est pas justifiée par la situation</em></p>
+                    <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
+                        <strong class="text-lg flex items-center gap-2">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                            </svg>
+                           Action Opposée
+                        </strong>
+                        <div class="technique-detail mt-3 p-4 rounded-lg text-base">
+                            <p><strong>Si tristesse :</strong> Se lever, s'activer, sortir (inverse de s'isoler).</p>
+                            <p><strong>Si colère :</strong> Parler doucement, s'éloigner gentiment.</p>
+                            <p><strong>Si peur :</strong> S'exposer progressivement à ce qui fait peur.</p>
+                            <p><strong>Si honte :</strong> Partager avec quelqu'un de confiance.</p>
+                            <p class="italic mt-2">Fonctionne quand l'émotion n'est pas justifiée par la situation.</p>
                         </div>
                     </li>
                     
-                    <li class="technique-item" onclick="toggleDetail(this)">
-                        <strong>🛡️ Réduire la Vulnérabilité (ABC PLEASE)</strong>
-                        <div class="technique-detail">
-                            <p><strong>Accumulate positive :</strong> Faire des activités agréables quotidiennes</p>
-                            <p><strong>Build mastery :</strong> Activités qui donnent un sentiment de compétence</p>
-                            <p><strong>Cope ahead :</strong> Anticiper les situations difficiles</p>
-                            <p><strong>Physical illness :</strong> Traiter ses problèmes de santé</p>
-                            <p><strong>Eating :</strong> Alimentation équilibrée et régulière</p>
-                            <p><strong>Avoid drugs :</strong> Éviter alcool et drogues</p>
-                            <p><strong>Sleep :</strong> 7-9h de sommeil régulier</p>
-                            <p><strong>Exercise :</strong> 30 min d'activité physique/jour</p>
+                    <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
+                        <strong class="text-lg flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                            </svg>
+                           Réduire la Vulnérabilité (ABC PLEASE)
+                        </strong>
+                        <div class="technique-detail mt-3 p-4 rounded-lg text-base">
+                            <p><strong>Accumulate positive :</strong> Faire des activités agréables quotidiennes.</p>
+                            <p><strong>Build mastery :</strong> Activités qui donnent un sentiment de compétence.</p>
+                            <p><strong>Cope ahead :</strong> Anticiper les situations difficiles.</p>
+                            <p><strong>Physical illness :</strong> Traiter ses problèmes de santé.</p>
+                            <p><strong>Eating :</strong> Alimentation équilibrée et régulière.</p>
+                            <p><strong>Avoid drugs :</strong> Éviter alcool et drogues.</p>
+                            <p><strong>Sleep :</strong> 7-9h de sommeil régulier.</p>
+                            <p><strong>Exercise :</strong> 30 min d'activité physique/jour.</p>
                         </div>
                     </li>
                     
-                    <li class="technique-item" onclick="toggleDetail(this)">
-                        <strong>📊 Vérifier les Faits</strong>
-                        <div class="technique-detail">
+                    <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
+                        <strong class="text-lg flex items-center gap-2">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2V6a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z" />
+                            </svg>
+                            Vérifier les Faits
+                        </strong>
+                        <div class="technique-detail mt-3 p-4 rounded-lg text-base">
                             <p>1. <strong>Quelle est l'émotion ?</strong> (la nommer précisément)</p>
                             <p>2. <strong>Quel est l'événement déclencheur ?</strong></p>
                             <p>3. <strong>Quelles sont mes interprétations ?</strong> (vs. faits objectifs)</p>
@@ -428,44 +341,66 @@
         </div>
 
         <div id="interpersonal" class="content-section">
-            <div class="strategy-card">
-                <h3><span class="icon">3</span> Efficacité Interpersonnelle <span class="priority-badge priority-2">Priorité Moyenne</span></h3>
-                <p><strong>Objectif :</strong> Améliorer les relations et communiquer efficacement</p>
+            <div class="strategy-card bg-white rounded-xl p-8 mb-5 shadow-lg">
+                <h3 class="text-2xl font-bold text-indigo-600 mb-4 flex items-center gap-3">
+                    <span class="icon inline-flex items-center justify-center w-8 h-8 rounded-full font-bold text-white shadow-md">
+                       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
+                        </svg>
+                    </span> Efficacité Interpersonnelle
+                    <span class="priority-badge priority-2 px-4 py-1 rounded-full text-sm font-semibold shadow-inner">Priorité Moyenne</span>
+                </h3>
+                <p class="mb-4"><strong>Objectif :</strong> Améliorer les relations et communiquer efficacement.</p>
                 
-                <ul class="technique-list">
-                    <li class="technique-item" onclick="toggleDetail(this)">
-                        <strong>🎯 Technique DEAR MAN (Demander/Refuser)</strong>
-                        <div class="technique-detail">
-                            <p><strong>D - Describe :</strong> Décrire la situation de façon factuelle</p>
-                            <p><strong>E - Express :</strong> Exprimer ses sentiments et opinions</p>
-                            <p><strong>A - Assert :</strong> Affirmer clairement ce que l'on veut</p>
-                            <p><strong>R - Reinforce :</strong> Expliquer les conséquences positives</p>
-                            <p><strong>M - Mindful :</strong> Rester focalisé sur l'objectif</p>
-                            <p><strong>A - Appear confident :</strong> Ton assuré, contact visuel</p>
-                            <p><strong>N - Negotiate :</strong> Être prêt à négocier</p>
-                            <p><em>Exemple : "Quand tu arrives en retard (D), je me sens inquiet (E). J'aimerais que tu m'envoies un message (A). Ça m'aiderait à me sentir rassuré (R)."</em></p>
+                <ul class="technique-list list-none">
+                    <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
+                        <strong class="text-lg flex items-center gap-2">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                            </svg>
+                            Technique DEAR MAN (Demander/Refuser)
+                        </strong>
+                        <div class="technique-detail mt-3 p-4 rounded-lg text-base">
+                            <p><strong>D - Describe :</strong> Décrire la situation de façon factuelle.</p>
+                            <p><strong>E - Express :</strong> Exprimer ses sentiments et opinions.</p>
+                            <p><strong>A - Assert :</strong> Affirmer clairement ce que l'on veut.</p>
+                            <p><strong>R - Reinforce :</strong> Expliquer les conséquences positives.</p>
+                            <p><strong>M - Mindful :</strong> Rester focalisé sur l'objectif.</p>
+                            <p><strong>A - Appear confident :</strong> Ton assuré, contact visuel.</p>
+                            <p><strong>N - Negotiate :</strong> Être prêt à négocier.</p>
+                            <p class="italic mt-2">Exemple : "Quand tu arrives en retard (D), je me sens inquiet (E). J'aimerais que tu m'envoies un message (A). Ça m'aiderait à me sentir rassuré (R)."</p>
                         </div>
                     </li>
                     
-                    <li class="technique-item" onclick="toggleDetail(this)">
-                        <strong>💝 Technique GIVE (Maintenir la relation)</strong>
-                        <div class="technique-detail">
-                            <p><strong>G - Gentle :</strong> Être doux, pas d'attaques ni de menaces</p>
-                            <p><strong>I - Interested :</strong> Montrer de l'intérêt sincère</p>
-                            <p><strong>V - Validate :</strong> Valider les émotions de l'autre</p>
-                            <p><strong>E - Easy manner :</strong> Être détendu, sourire, humour léger</p>
-                            <p><em>Utiliser quand la relation est plus importante que l'objectif immédiat</em></p>
+                    <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
+                        <strong class="text-lg flex items-center gap-2">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                            </svg>
+                           Technique GIVE (Maintenir la relation)
+                        </strong>
+                        <div class="technique-detail mt-3 p-4 rounded-lg text-base">
+                            <p><strong>G - Gentle :</strong> Être doux, pas d'attaques ni de menaces.</p>
+                            <p><strong>I - Interested :</strong> Montrer de l'intérêt sincère.</p>
+                            <p><strong>V - Validate :</strong> Valider les émotions de l'autre.</p>
+                            <p><strong>E - Easy manner :</strong> Être détendu, sourire, humour léger.</p>
+                            <p class="italic mt-2">Utiliser quand la relation est plus importante que l'objectif immédiat.</p>
                         </div>
                     </li>
                     
-                    <li class="technique-item" onclick="toggleDetail(this)">
-                        <strong>🏆 Technique FAST (Garder le respect de soi)</strong>
-                        <div class="technique-detail">
-                            <p><strong>F - Fair :</strong> Être juste envers soi et l'autre</p>
-                            <p><strong>A - Apologies (no unnecessary) :</strong> Pas d'excuses excessives</p>
-                            <p><strong>S - Stick to values :</strong> Rester fidèle à ses valeurs</p>
-                            <p><strong>T - Truthful :</strong> Être honnête, ne pas mentir ni exagérer</p>
-                            <p><em>Utiliser pour maintenir son intégrité et son estime de soi</em></p>
+                    <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
+                        <strong class="text-lg flex items-center gap-2">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
+                            </svg>
+                            Technique FAST (Garder le respect de soi)
+                        </strong>
+                        <div class="technique-detail mt-3 p-4 rounded-lg text-base">
+                            <p><strong>F - Fair :</strong> Être juste envers soi et l'autre.</p>
+                            <p><strong>A - Apologies (no unnecessary) :</strong> Pas d'excuses excessives.</p>
+                            <p><strong>S - Stick to values :</strong> Rester fidèle à ses valeurs.</p>
+                            <p><strong>T - Truthful :</strong> Être honnête, ne pas mentir ni exagérer.</p>
+                            <p class="italic mt-2">Utiliser pour maintenir son intégrité et son estime de soi.</p>
                         </div>
                     </li>
                 </ul>
@@ -473,110 +408,191 @@
         </div>
 
         <div id="mindfulness" class="content-section">
-            <div class="strategy-card">
-                <h3><span class="icon">4</span> Pleine Conscience <span class="priority-badge priority-3">Base Quotidienne</span></h3>
-                <p><strong>Objectif :</strong> Être présent à l'instant, développer l'acceptation</p>
+            <div class="strategy-card bg-white rounded-xl p-8 mb-5 shadow-lg">
+                <h3 class="text-2xl font-bold text-indigo-600 mb-4 flex items-center gap-3">
+                    <span class="icon inline-flex items-center justify-center w-8 h-8 rounded-full font-bold text-white shadow-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                           <path d="M10 3.5a1.5 1.5 0 013 0V4a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-.5a1.5 1.5 0 000 3h.5a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-.5a1.5 1.5 0 00-3 0v.5a1 1 0 01-1 1H6a1 1 0 01-1-1v-3a1 1 0 00-1-1h-.5a1.5 1.5 0 010-3H4a1 1 0 001-1V6a1 1 0 011-1h3a1 1 0 001-1v-.5z" />
+                        </svg>
+                    </span> Pleine Conscience
+                    <span class="priority-badge priority-3 px-4 py-1 rounded-full text-sm font-semibold shadow-inner">Base Quotidienne</span>
+                </h3>
+                <p class="mb-4"><strong>Objectif :</strong> Être présent à l'instant, développer l'acceptation.</p>
                 
-                <ul class="technique-list">
-                    <li class="technique-item" onclick="toggleDetail(this)">
-                        <strong>👁️ Observer</strong>
-                        <div class="technique-detail">
-                            <p>Porter attention à l'expérience sans essayer de la changer</p>
-                            <p><strong>Exercice :</strong> Notez 3 choses que vous voyez, 3 que vous entendez, 3 que vous ressentez physiquement</p>
-                            <p>Comme un scientifique qui observe sans juger</p>
+                <ul class="technique-list list-none">
+                    <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
+                        <strong class="text-lg flex items-center gap-2">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                            Observer
+                        </strong>
+                        <div class="technique-detail mt-3 p-4 rounded-lg text-base">
+                            <p>Porter attention à l'expérience sans essayer de la changer.</p>
+                            <p class="font-semibold mt-2 mb-1">Exercice :</p>
+                            <p>Notez 3 choses que vous voyez, 3 que vous entendez, 3 que vous ressentez physiquement.</p>
+                            <p class="italic mt-2">Comme un scientifique qui observe sans juger.</p>
                         </div>
                     </li>
                     
-                    <li class="technique-item" onclick="toggleDetail(this)">
-                        <strong>📝 Décrire</strong>
-                        <div class="technique-detail">
-                            <p>Mettre des mots sur ce qui est observé, sans interprétation</p>
-                            <p><strong>Faits :</strong> "Il pleut" vs <strong>Jugement :</strong> "C'est une journée horrible"</p>
-                            <p><strong>Faits :</strong> "Mon cœur bat vite" vs <strong>Interprétation :</strong> "Je vais faire une crise cardiaque"</p>
+                    <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
+                        <strong class="text-lg flex items-center gap-2">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                            Décrire
+                        </strong>
+                        <div class="technique-detail mt-3 p-4 rounded-lg text-base">
+                            <p>Mettre des mots sur ce qui est observé, sans interprétation.</p>
+                            <p class="mt-2"><strong>Faits :</strong> "Il pleut" vs <strong>Jugement :</strong> "C'est une journée horrible".</p>
+                            <p><strong>Faits :</strong> "Mon cœur bat vite" vs <strong>Interprétation :</strong> "Je vais faire une crise cardiaque".</p>
                         </div>
                     </li>
                     
-                    <li class="technique-item" onclick="toggleDetail(this)">
-                        <strong>🎯 Participer</strong>
-                        <div class="technique-detail">
-                            <p>S'engager pleinement dans l'activité du moment</p>
-                            <p>Être UN avec l'action (manger en mangeant, marcher en marchant)</p>
-                            <p>Oublier le passé et le futur pour être 100% présent</p>
+                    <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
+                        <strong class="text-lg flex items-center gap-2">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                            </svg>
+                            Participer
+                        </strong>
+                        <div class="technique-detail mt-3 p-4 rounded-lg text-base">
+                            <p>S'engager pleinement dans l'activité du moment.</p>
+                            <p>Être UN avec l'action (manger en mangeant, marcher en marchant).</p>
+                            <p>Oublier le passé et le futur pour être 100% présent.</p>
                         </div>
                     </li>
                     
-                    <li class="technique-item" onclick="toggleDetail(this)">
-                        <strong>🎭 Non-Jugement</strong>
-                        <div class="technique-detail">
-                            <p>Abandonner les étiquettes "bon/mauvais", "bien/mal"</p>
-                            <p>Remplacer "Je suis nul" par "J'ai fait une erreur, c'est humain"</p>
-                            <p>Observer les jugements sans s'y identifier</p>
+                    <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
+                        <strong class="text-lg flex items-center gap-2">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Non-Jugement
+                        </strong>
+                        <div class="technique-detail mt-3 p-4 rounded-lg text-base">
+                            <p>Abandonner les étiquettes "bon/mauvais", "bien/mal".</p>
+                            <p>Remplacer "Je suis nul" par "J'ai fait une erreur, c'est humain".</p>
+                            <p>Observer les jugements sans s'y identifier.</p>
                         </div>
                     </li>
                     
-                    <li class="technique-item" onclick="toggleDetail(this)">
-                        <strong>🎯 Une Chose à la Fois</strong>
-                        <div class="technique-detail">
-                            <p>Faire une seule activité avec toute son attention</p>
-                            <p>Si l'esprit s'égare, le ramener doucement sans se juger</p>
-                            <p>Qualité > Quantité</p>
+                    <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
+                        <strong class="text-lg flex items-center gap-2">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                            </svg>
+                           Une Chose à la Fois
+                        </strong>
+                        <div class="technique-detail mt-3 p-4 rounded-lg text-base">
+                            <p>Faire une seule activité avec toute son attention.</p>
+                            <p>Si l'esprit s'égare, le ramener doucement sans se juger.</p>
+                            <p>Qualité > Quantité.</p>
                         </div>
                     </li>
                     
-                    <li class="technique-item" onclick="toggleDetail(this)">
-                        <strong>✨ Efficacité</strong>
-                        <div class="technique-detail">
-                            <p>Faire ce qui fonctionne dans la situation</p>
-                            <p>Pas "ce qui est juste" mais "ce qui est efficace"</p>
-                            <p>Lâcher prise sur "devoir avoir raison"</p>
+                    <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
+                        <strong class="text-lg flex items-center gap-2">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                            </svg>
+                           Efficacité
+                        </strong>
+                        <div class="technique-detail mt-3 p-4 rounded-lg text-base">
+                            <p>Faire ce qui fonctionne dans la situation.</p>
+                            <p>Pas "ce qui est juste" mais "ce qui est efficace".</p>
+                            <p>Lâcher prise sur "devoir avoir raison".</p>
                         </div>
                     </li>
                 </ul>
             </div>
 
-            <div class="mindfulness-timer">
-                <h3>⏱️ Mini-Pratique de Pleine Conscience</h3>
-                <p>Prenez quelques minutes pour vous recentrer</p>
-                <div class="timer-display" id="timerDisplay">5:00</div>
-                <button class="timer-btn" onclick="startTimer(300)">5 minutes</button>
-                <button class="timer-btn" onclick="startTimer(180)">3 minutes</button>
-                <button class="timer-btn" onclick="startTimer(60)">1 minute</button>
-                <button class="timer-btn" onclick="resetTimer()">Reset</button>
-                <p id="timerInstruction" style="margin-top: 20px; font-style: italic; color: #667eea;"></p>
+            <div class="mindfulness-timer text-center p-8 bg-white rounded-xl shadow-lg mt-8">
+                <h3 class="text-2xl font-bold text-indigo-600 mb-4">⏱️ Mini-Pratique de Pleine Conscience</h3>
+                <p class="mb-5 text-gray-700">Prenez quelques minutes pour vous recentrer</p>
+                <div class="timer-display text-5xl font-extrabold text-indigo-600 my-6" id="timerDisplay">5:00</div>
+                <div class="flex flex-wrap justify-center gap-3">
+                    <button class="timer-btn text-white px-8 py-4 rounded-full text-lg font-semibold shadow-md" onclick="startTimer(300)">5 minutes</button>
+                    <button class="timer-btn text-white px-8 py-4 rounded-full text-lg font-semibold shadow-md" onclick="startTimer(180)">3 minutes</button>
+                    <button class="timer-btn text-white px-8 py-4 rounded-full text-lg font-semibold shadow-md" onclick="startTimer(60)">1 minute</button>
+                    <button class="timer-btn text-white px-8 py-4 rounded-full text-lg font-semibold shadow-md bg-red-500 hover:bg-red-600" onclick="resetTimer()">Reset</button>
+                </div>
+                <p id="timerInstruction" class="mt-5 italic text-indigo-500 text-base"></p>
             </div>
         </div>
 
         <div id="quiz" class="content-section">
-            <div class="interactive-quiz">
-                <h3>🎯 Quelle Stratégie Utiliser ?</h3>
-                <p style="margin-bottom: 20px;">Répondez à ces questions pour identifier la meilleure stratégie</p>
+            <div class="interactive-quiz bg-white rounded-xl p-8 shadow-lg">
+                <h3 class="text-2xl font-bold text-indigo-600 mb-4 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                    </svg>
+                    Quelle Stratégie Utiliser ?
+                </h3>
+                <p class="mb-6 text-gray-700">Répondez à ces questions pour identifier la meilleure stratégie</p>
                 
                 <div id="question1" class="quiz-question">
-                    <h4>1. Comment vous sentez-vous en ce moment ?</h4>
-                    <div class="quiz-option" onclick="selectOption('q1', 'crisis')">
-                        😰 Crise intense - Je vais exploser ou me faire du mal
+                    <h4 class="text-xl font-semibold mb-4">1. Comment vous sentez-vous en ce moment ?</h4>
+                    <div class="quiz-option p-4 my-3 rounded-lg cursor-pointer shadow-sm flex items-center gap-3" onclick="selectOption('q1', 'crisis', this)">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Crise intense - Je vais exploser ou me faire du mal
                     </div>
-                    <div class="quiz-option" onclick="selectOption('q1', 'stressed')">
-                        😓 Stressé/Anxieux - Mais je garde le contrôle
+                    <div class="quiz-option p-4 my-3 rounded-lg cursor-pointer shadow-sm flex items-center gap-3" onclick="selectOption('q1', 'stressed', this)">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                       Stressé/Anxieux - Mais je garde le contrôle
                     </div>
-                    <div class="quiz-option" onclick="selectOption('q1', 'conflict')">
-                        😤 En conflit - Problème relationnel
+                    <div class="quiz-option p-4 my-3 rounded-lg cursor-pointer shadow-sm flex items-center gap-3" onclick="selectOption('q1', 'conflict', this)">
+                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a2 2 0 01-2-2V7a2 2 0 012-2h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293H17z" />
+                        </svg>
+                       En conflit - Problème relationnel
                     </div>
-                    <div class="quiz-option" onclick="selectOption('q1', 'calm')">
-                        😊 Plutôt calme - Je veux m'entraîner préventivement
+                    <div class="quiz-option p-4 my-3 rounded-lg cursor-pointer shadow-sm flex items-center gap-3" onclick="selectOption('q1', 'calm', this)">
+                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                       Plutôt calme - Je veux m'entraîner préventivement
                     </div>
                 </div>
 
-                <div id="quizResult" class="quiz-result"></div>
+                <div id="quizResult" class="quiz-result mt-5 p-5 rounded-lg bg-blue-100 border-blue-300 border"></div>
+            </div>
+        </div>
+
+        <div id="references" class="content-section">
+            <div class="strategy-card bg-white rounded-xl p-8 mb-5 shadow-lg">
+                <h3 class="text-2xl font-bold text-indigo-600 mb-4 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                    Références
+                </h3>
+                <div class="text-base space-y-4">
+                    <p>Linehan, M. M. (1993a). <em>Cognitive-behavioral treatment of borderline personality disorder</em>. The Guilford Press.</p>
+                    <p>Linehan, M. M. (1993b). <em>Skills training manual for treating borderline personality disorder</em>. The Guilford Press.</p>
+                </div>
             </div>
         </div>
     </div>
+    
+    <footer class="text-center text-white text-sm mt-8 pb-4">
+        <p>Inspiré de la Thérapie Dialectique et Comportementale de Marsha M. Linehan.</p>
+        <p>Adaptation numérique par Dr FENOHASINA Toto Jean Felicien (Psychiatre - FFI).</p>
+        <p>Dernière mise à jour : 21 octobre 2025.</p>
+    </footer>
+
 
     <script>
         let timerInterval;
         let timeLeft;
+        let quizAnswers = {};
 
-        function showTab(tabName) {
+        function showTab(event, tabName) {
             const sections = document.querySelectorAll('.content-section');
             const buttons = document.querySelectorAll('.tab-btn');
             
@@ -631,3 +647,61 @@
         }
 
         function resetTimer() {
+            clearInterval(timerInterval);
+            timeLeft = 300; // Default to 5 minutes
+            updateTimerDisplay();
+            document.getElementById('timerInstruction').textContent = "";
+        }
+
+        function selectOption(questionId, answer, element) {
+            quizAnswers[questionId] = answer;
+            
+            // Remove active class from other options in the same question
+            const options = element.parentNode.querySelectorAll('.quiz-option');
+            options.forEach(opt => opt.classList.remove('bg-indigo-200', 'border-indigo-500'));
+            
+            // Add active class to the selected option
+            element.classList.add('bg-indigo-200', 'border-indigo-500');
+
+            displayQuizResult();
+        }
+
+        function displayQuizResult() {
+            const resultDiv = document.getElementById('quizResult');
+            let resultHtml = '';
+
+            if (quizAnswers.q1) {
+                resultHtml += '<h4 class="text-xl font-bold text-blue-800 mb-3">Votre situation actuelle :</h4>';
+                switch (quizAnswers.q1) {
+                    case 'crisis':
+                        resultHtml += '<p class="text-lg">Vous traversez une crise émotionnelle intense. Priorisez les techniques de la section <strong>"Tolérance à la Détresse"</strong>. Celles-ci vous aideront à naviguer ce moment difficile sans actions impulsives.</p>';
+                        resultHtml += '<p class="mt-2 text-blue-700"><em>Recommandation : Essayez la "Technique TIP - Température" ou la "Respiration Paced" en urgence.</em></p>';
+                        break;
+                    case 'stressed':
+                        resultHtml += '<p class="text-lg">Vous vous sentez stressé ou anxieux, mais vous maintenez le contrôle. Les stratégies de <strong>"Régulation Émotionnelle"</strong> seront très utiles pour comprendre et gérer vos émotions avant qu\'elles ne s\'intensifient.</p>';
+                        resultHtml += '<p class="mt-2 text-blue-700"><em>Recommandation : La technique "Vérifier les Faits" peut vous aider à prendre du recul.</em></p>';
+                        break;
+                    case 'conflict':
+                        resultHtml += '<p class="text-lg">Vous êtes face à un problème relationnel. Concentrez-vous sur les compétences d\'<strong>"Efficacité Interpersonnelle"</strong> pour améliorer votre communication et maintenir des relations saines.</p>';
+                        resultHtml += '<p class="mt-2 text-blue-700"><em>Recommandation : La "Technique DEAR MAN" est idéale pour demander ou refuser avec assertivité.</em></p>';
+                        break;
+                    case 'calm':
+                        resultHtml += '<p class="text-lg">Vous êtes calme et souhaitez vous entraîner préventivement. C\'est le moment idéal pour pratiquer les compétences de <strong>"Pleine Conscience"</strong> afin de renforcer votre capacité à être présent et accepter les expériences.</p>';
+                        resultHtml += '<p class="mt-2 text-blue-700"><em>Recommandation : Le "Minuteur de Pleine Conscience" est un excellent point de départ.</em></p>';
+                        break;
+                }
+            }
+
+            resultDiv.innerHTML = resultHtml;
+            resultDiv.classList.add('show');
+        }
+
+        // Initial tab activation for the first button and section on load
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelector('.tab-btn').click();
+        });
+
+    </script>
+</body>
+</html>
+
