@@ -1,0 +1,633 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide Pratique TCD - Stratégies Interactives</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .crisis-alert {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .crisis-alert h2 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .content-section {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .strategy-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .strategy-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+        }
+
+        .strategy-card h3 {
+            color: #667eea;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .technique-list {
+            list-style: none;
+            margin-top: 15px;
+        }
+
+        .technique-item {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid #667eea;
+        }
+
+        .technique-item:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .technique-detail {
+            display: none;
+            margin-top: 10px;
+            padding: 15px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .technique-item.expanded .technique-detail {
+            display: block;
+        }
+
+        .icon {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .priority-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .priority-1 { background: #f5576c; color: white; }
+        .priority-2 { background: #ffa726; color: white; }
+        .priority-3 { background: #66bb6a; color: white; }
+
+        .interactive-quiz {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .quiz-option {
+            background: #f5f7fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .quiz-option:hover {
+            border-color: #667eea;
+            background: #e8eaf6;
+        }
+
+        .quiz-result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .quiz-result.show {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .tab-btn {
+                padding: 12px 20px;
+                font-size: 0.9rem;
+            }
+
+            .strategy-card {
+                padding: 20px;
+            }
+        }
+
+        .mindfulness-timer {
+            text-align: center;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .timer-display {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+        }
+
+        .timer-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .timer-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧠 Guide Pratique TCD</h1>
+            <p>Thérapie Dialectique et Comportementale - Stratégies Concrètes</p>
+        </header>
+
+        <div class="crisis-alert">
+            <h2>⚡ En cas de crise émotionnelle intense</h2>
+            <p><strong>1. NOMMER</strong> l'émotion : "Je ressens de la [colère/tristesse/peur]"</p>
+            <p><strong>2. ACCEPTER</strong> : "C'est normal de ressentir cela dans cette situation"</p>
+            <p><strong>3. AGIR</strong> : Utilisez les techniques de tolérance à la détresse ci-dessous</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('distress')">Tolérance à la Détresse</button>
+            <button class="tab-btn" onclick="showTab('emotions')">Régulation Émotionnelle</button>
+            <button class="tab-btn" onclick="showTab('interpersonal')">Efficacité Interpersonnelle</button>
+            <button class="tab-btn" onclick="showTab('mindfulness')">Pleine Conscience</button>
+            <button class="tab-btn" onclick="showTab('quiz')">Outil Interactif</button>
+        </div>
+
+        <div id="distress" class="content-section active">
+            <div class="strategy-card">
+                <h3><span class="icon">1</span> Tolérance à la Détresse <span class="priority-badge priority-1">Priorité Haute</span></h3>
+                <p><strong>Objectif :</strong> Survivre aux crises sans se faire de mal et sans empirer la situation</p>
+                
+                <ul class="technique-list">
+                    <li class="technique-item" onclick="toggleDetail(this)">
+                        <strong>🧊 Technique TIP - Température</strong>
+                        <div class="technique-detail">
+                            <p><strong>Comment faire :</strong></p>
+                            <ul>
+                                <li>Plongez votre visage dans de l'eau froide (10-15°C) pendant 30 secondes</li>
+                                <li>Ou appliquez un sac de glace sur les yeux et les joues</li>
+                                <li>Active le réflexe de plongée et ralentit le rythme cardiaque</li>
+                            </ul>
+                            <p><strong>Quand l'utiliser :</strong> Moment de panique intense, envie d'agir impulsivement</p>
+                        </div>
+                    </li>
+                    
+                    <li class="technique-item" onclick="toggleDetail(this)">
+                        <strong>🏃 Technique TIP - Exercice Intense</strong>
+                        <div class="technique-detail">
+                            <p><strong>Comment faire :</strong></p>
+                            <ul>
+                                <li>Course sur place pendant 10-15 minutes</li>
+                                <li>Montées d'escaliers rapides</li>
+                                <li>Jumping jacks, squats, pompes</li>
+                                <li>Brûle l'adrénaline du stress</li>
+                            </ul>
+                            <p><strong>Quand l'utiliser :</strong> Colère intense, agitation physique</p>
+                        </div>
+                    </li>
+                    
+                    <li class="technique-item" onclick="toggleDetail(this)">
+                        <strong>😮‍💨 Technique TIP - Respiration Paced</strong>
+                        <div class="technique-detail">
+                            <p><strong>Comment faire :</strong></p>
+                            <ul>
+                                <li>Inspirez pendant 5 secondes</li>
+                                <li>Expirez lentement pendant 7 secondes</li>
+                                <li>Répétez pendant 3-5 minutes</li>
+                                <li>L'expiration longue active le système parasympathique</li>
+                            </ul>
+                            <p><strong>Quand l'utiliser :</strong> Anxiété, début de crise</p>
+                        </div>
+                    </li>
+                    
+                    <li class="technique-item" onclick="toggleDetail(this)">
+                        <strong>🎯 Distraction ACCEPTS</strong>
+                        <div class="technique-detail">
+                            <p><strong>Activités :</strong> Sport, ménage, cuisine, puzzle</p>
+                            <p><strong>Contribution :</strong> Aider quelqu'un, bénévolat</p>
+                            <p><strong>Comparaisons :</strong> Se rappeler des moments plus difficiles surmontés</p>
+                            <p><strong>Émotions opposées :</strong> Comédie si triste, musique calme si énervé</p>
+                            <p><strong>Pensées autres :</strong> Compter, réciter, liste de courses</p>
+                            <p><strong>Sensations :</strong> Glace dans la main, douche froide, élastique au poignet</p>
+                        </div>
+                    </li>
+                    
+                    <li class="technique-item" onclick="toggleDetail(this)">
+                        <strong>🛡️ Auto-apaisement 5 Sens</strong>
+                        <div class="technique-detail">
+                            <p><strong>Vue :</strong> Regarder des images apaisantes, nature, art</p>
+                            <p><strong>Ouïe :</strong> Musique douce, sons de la nature, ASMR</p>
+                            <p><strong>Odorat :</strong> Huiles essentielles (lavande), bougies parfumées</p>
+                            <p><strong>Goût :</strong> Thé chaud, bonbon mentholé, chocolat noir</p>
+                            <p><strong>Toucher :</strong> Couverture douce, bain chaud, auto-massage</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="emotions" class="content-section">
+            <div class="strategy-card">
+                <h3><span class="icon">2</span> Régulation des Émotions <span class="priority-badge priority-2">Priorité Moyenne</span></h3>
+                <p><strong>Objectif :</strong> Comprendre et gérer les émotions de façon saine</p>
+                
+                <ul class="technique-list">
+                    <li class="technique-item" onclick="toggleDetail(this)">
+                        <strong>📝 Identifier l'Émotion (STOP)</strong>
+                        <div class="technique-detail">
+                            <p><strong>S - Stop :</strong> Arrêtez-vous, ne réagissez pas immédiatement</p>
+                            <p><strong>T - Take a step back :</strong> Prenez du recul mentalement</p>
+                            <p><strong>O - Observe :</strong> Que se passe-t-il ? Que je ressens ?</p>
+                            <p><strong>P - Proceed mindfully :</strong> Agir en conscience, pas en réaction</p>
+                        </div>
+                    </li>
+                    
+                    <li class="technique-item" onclick="toggleDetail(this)">
+                        <strong>🔄 Action Opposée</strong>
+                        <div class="technique-detail">
+                            <p><strong>Si tristesse :</strong> Se lever, s'activer, sortir (inverse de s'isoler)</p>
+                            <p><strong>Si colère :</strong> Parler doucement, s'éloigner gentiment</p>
+                            <p><strong>Si peur :</strong> S'exposer progressivement à ce qui fait peur</p>
+                            <p><strong>Si honte :</strong> Partager avec quelqu'un de confiance</p>
+                            <p><em>Fonctionne quand l'émotion n'est pas justifiée par la situation</em></p>
+                        </div>
+                    </li>
+                    
+                    <li class="technique-item" onclick="toggleDetail(this)">
+                        <strong>🛡️ Réduire la Vulnérabilité (ABC PLEASE)</strong>
+                        <div class="technique-detail">
+                            <p><strong>Accumulate positive :</strong> Faire des activités agréables quotidiennes</p>
+                            <p><strong>Build mastery :</strong> Activités qui donnent un sentiment de compétence</p>
+                            <p><strong>Cope ahead :</strong> Anticiper les situations difficiles</p>
+                            <p><strong>Physical illness :</strong> Traiter ses problèmes de santé</p>
+                            <p><strong>Eating :</strong> Alimentation équilibrée et régulière</p>
+                            <p><strong>Avoid drugs :</strong> Éviter alcool et drogues</p>
+                            <p><strong>Sleep :</strong> 7-9h de sommeil régulier</p>
+                            <p><strong>Exercise :</strong> 30 min d'activité physique/jour</p>
+                        </div>
+                    </li>
+                    
+                    <li class="technique-item" onclick="toggleDetail(this)">
+                        <strong>📊 Vérifier les Faits</strong>
+                        <div class="technique-detail">
+                            <p>1. <strong>Quelle est l'émotion ?</strong> (la nommer précisément)</p>
+                            <p>2. <strong>Quel est l'événement déclencheur ?</strong></p>
+                            <p>3. <strong>Quelles sont mes interprétations ?</strong> (vs. faits objectifs)</p>
+                            <p>4. <strong>Est-ce que mes pensées sont des faits ?</strong></p>
+                            <p>5. <strong>Mon émotion et son intensité sont-elles justifiées ?</strong></p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="interpersonal" class="content-section">
+            <div class="strategy-card">
+                <h3><span class="icon">3</span> Efficacité Interpersonnelle <span class="priority-badge priority-2">Priorité Moyenne</span></h3>
+                <p><strong>Objectif :</strong> Améliorer les relations et communiquer efficacement</p>
+                
+                <ul class="technique-list">
+                    <li class="technique-item" onclick="toggleDetail(this)">
+                        <strong>🎯 Technique DEAR MAN (Demander/Refuser)</strong>
+                        <div class="technique-detail">
+                            <p><strong>D - Describe :</strong> Décrire la situation de façon factuelle</p>
+                            <p><strong>E - Express :</strong> Exprimer ses sentiments et opinions</p>
+                            <p><strong>A - Assert :</strong> Affirmer clairement ce que l'on veut</p>
+                            <p><strong>R - Reinforce :</strong> Expliquer les conséquences positives</p>
+                            <p><strong>M - Mindful :</strong> Rester focalisé sur l'objectif</p>
+                            <p><strong>A - Appear confident :</strong> Ton assuré, contact visuel</p>
+                            <p><strong>N - Negotiate :</strong> Être prêt à négocier</p>
+                            <p><em>Exemple : "Quand tu arrives en retard (D), je me sens inquiet (E). J'aimerais que tu m'envoies un message (A). Ça m'aiderait à me sentir rassuré (R)."</em></p>
+                        </div>
+                    </li>
+                    
+                    <li class="technique-item" onclick="toggleDetail(this)">
+                        <strong>💝 Technique GIVE (Maintenir la relation)</strong>
+                        <div class="technique-detail">
+                            <p><strong>G - Gentle :</strong> Être doux, pas d'attaques ni de menaces</p>
+                            <p><strong>I - Interested :</strong> Montrer de l'intérêt sincère</p>
+                            <p><strong>V - Validate :</strong> Valider les émotions de l'autre</p>
+                            <p><strong>E - Easy manner :</strong> Être détendu, sourire, humour léger</p>
+                            <p><em>Utiliser quand la relation est plus importante que l'objectif immédiat</em></p>
+                        </div>
+                    </li>
+                    
+                    <li class="technique-item" onclick="toggleDetail(this)">
+                        <strong>🏆 Technique FAST (Garder le respect de soi)</strong>
+                        <div class="technique-detail">
+                            <p><strong>F - Fair :</strong> Être juste envers soi et l'autre</p>
+                            <p><strong>A - Apologies (no unnecessary) :</strong> Pas d'excuses excessives</p>
+                            <p><strong>S - Stick to values :</strong> Rester fidèle à ses valeurs</p>
+                            <p><strong>T - Truthful :</strong> Être honnête, ne pas mentir ni exagérer</p>
+                            <p><em>Utiliser pour maintenir son intégrité et son estime de soi</em></p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="mindfulness" class="content-section">
+            <div class="strategy-card">
+                <h3><span class="icon">4</span> Pleine Conscience <span class="priority-badge priority-3">Base Quotidienne</span></h3>
+                <p><strong>Objectif :</strong> Être présent à l'instant, développer l'acceptation</p>
+                
+                <ul class="technique-list">
+                    <li class="technique-item" onclick="toggleDetail(this)">
+                        <strong>👁️ Observer</strong>
+                        <div class="technique-detail">
+                            <p>Porter attention à l'expérience sans essayer de la changer</p>
+                            <p><strong>Exercice :</strong> Notez 3 choses que vous voyez, 3 que vous entendez, 3 que vous ressentez physiquement</p>
+                            <p>Comme un scientifique qui observe sans juger</p>
+                        </div>
+                    </li>
+                    
+                    <li class="technique-item" onclick="toggleDetail(this)">
+                        <strong>📝 Décrire</strong>
+                        <div class="technique-detail">
+                            <p>Mettre des mots sur ce qui est observé, sans interprétation</p>
+                            <p><strong>Faits :</strong> "Il pleut" vs <strong>Jugement :</strong> "C'est une journée horrible"</p>
+                            <p><strong>Faits :</strong> "Mon cœur bat vite" vs <strong>Interprétation :</strong> "Je vais faire une crise cardiaque"</p>
+                        </div>
+                    </li>
+                    
+                    <li class="technique-item" onclick="toggleDetail(this)">
+                        <strong>🎯 Participer</strong>
+                        <div class="technique-detail">
+                            <p>S'engager pleinement dans l'activité du moment</p>
+                            <p>Être UN avec l'action (manger en mangeant, marcher en marchant)</p>
+                            <p>Oublier le passé et le futur pour être 100% présent</p>
+                        </div>
+                    </li>
+                    
+                    <li class="technique-item" onclick="toggleDetail(this)">
+                        <strong>🎭 Non-Jugement</strong>
+                        <div class="technique-detail">
+                            <p>Abandonner les étiquettes "bon/mauvais", "bien/mal"</p>
+                            <p>Remplacer "Je suis nul" par "J'ai fait une erreur, c'est humain"</p>
+                            <p>Observer les jugements sans s'y identifier</p>
+                        </div>
+                    </li>
+                    
+                    <li class="technique-item" onclick="toggleDetail(this)">
+                        <strong>🎯 Une Chose à la Fois</strong>
+                        <div class="technique-detail">
+                            <p>Faire une seule activité avec toute son attention</p>
+                            <p>Si l'esprit s'égare, le ramener doucement sans se juger</p>
+                            <p>Qualité > Quantité</p>
+                        </div>
+                    </li>
+                    
+                    <li class="technique-item" onclick="toggleDetail(this)">
+                        <strong>✨ Efficacité</strong>
+                        <div class="technique-detail">
+                            <p>Faire ce qui fonctionne dans la situation</p>
+                            <p>Pas "ce qui est juste" mais "ce qui est efficace"</p>
+                            <p>Lâcher prise sur "devoir avoir raison"</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="mindfulness-timer">
+                <h3>⏱️ Mini-Pratique de Pleine Conscience</h3>
+                <p>Prenez quelques minutes pour vous recentrer</p>
+                <div class="timer-display" id="timerDisplay">5:00</div>
+                <button class="timer-btn" onclick="startTimer(300)">5 minutes</button>
+                <button class="timer-btn" onclick="startTimer(180)">3 minutes</button>
+                <button class="timer-btn" onclick="startTimer(60)">1 minute</button>
+                <button class="timer-btn" onclick="resetTimer()">Reset</button>
+                <p id="timerInstruction" style="margin-top: 20px; font-style: italic; color: #667eea;"></p>
+            </div>
+        </div>
+
+        <div id="quiz" class="content-section">
+            <div class="interactive-quiz">
+                <h3>🎯 Quelle Stratégie Utiliser ?</h3>
+                <p style="margin-bottom: 20px;">Répondez à ces questions pour identifier la meilleure stratégie</p>
+                
+                <div id="question1" class="quiz-question">
+                    <h4>1. Comment vous sentez-vous en ce moment ?</h4>
+                    <div class="quiz-option" onclick="selectOption('q1', 'crisis')">
+                        😰 Crise intense - Je vais exploser ou me faire du mal
+                    </div>
+                    <div class="quiz-option" onclick="selectOption('q1', 'stressed')">
+                        😓 Stressé/Anxieux - Mais je garde le contrôle
+                    </div>
+                    <div class="quiz-option" onclick="selectOption('q1', 'conflict')">
+                        😤 En conflit - Problème relationnel
+                    </div>
+                    <div class="quiz-option" onclick="selectOption('q1', 'calm')">
+                        😊 Plutôt calme - Je veux m'entraîner préventivement
+                    </div>
+                </div>
+
+                <div id="quizResult" class="quiz-result"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let timerInterval;
+        let timeLeft;
+
+        function showTab(tabName) {
+            const sections = document.querySelectorAll('.content-section');
+            const buttons = document.querySelectorAll('.tab-btn');
+            
+            sections.forEach(section => section.classList.remove('active'));
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function toggleDetail(element) {
+            element.classList.toggle('expanded');
+        }
+
+        function startTimer(seconds) {
+            clearInterval(timerInterval);
+            timeLeft = seconds;
+            updateTimerDisplay();
+            
+            const instructions = [
+                "Concentrez-vous sur votre respiration...",
+                "Observez vos pensées sans les juger...",
+                "Sentez votre corps se détendre...",
+                "Restez présent à l'instant..."
+            ];
+            
+            let instrIndex = 0;
+            document.getElementById('timerInstruction').textContent = instructions[instrIndex];
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                if (timeLeft % 30 === 0 && timeLeft > 0) {
+                    instrIndex = (instrIndex + 1) % instructions.length;
+                    document.getElementById('timerInstruction').textContent = instructions[instrIndex];
+                }
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    document.getElementById('timerDisplay').textContent = "Terminé !";
+                    document.getElementById('timerInstruction').textContent = "Bravo ! Prenez un moment pour observer comment vous vous sentez.";
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timerDisplay').textContent = 
+                `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function resetTimer() {
