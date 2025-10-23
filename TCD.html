@@ -103,6 +103,15 @@
             transform: scale(1.05);
             box-shadow: 0 6px 20px rgba(0,0,0,0.2);
         }
+        /* Style FALC (Facile à Lire et à Comprendre) */
+        .falc-list {
+            list-style-type: disc;
+            padding-left: 20px;
+            margin-top: 8px;
+        }
+        .falc-list li {
+            margin-bottom: 6px;
+        }
     </style>
 </head>
 <body class="p-5">
@@ -110,23 +119,24 @@
         <header class="text-center text-white mb-10 p-4 rounded-lg bg-indigo-600 bg-opacity-90">
             <h1 class="text-4xl font-extrabold mb-2 text-shadow-md animate-fade-in flex items-center justify-center gap-3">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                 </svg>
                 Guide Pratique TCD
             </h1>
-            <p class="text-xl opacity-90">Thérapie Dialectique et Comportementale - Stratégies Concrètes</p>
+            <p class="text-xl opacity-90">Thérapie Dialectique et Comportementale - Outils concrets</p>
         </header>
 
+        <!-- Alerte Crise : Simplifiée style FALC -->
         <div class="crisis-alert p-6 rounded-xl mb-8 shadow-lg">
             <h2 class="text-2xl font-bold mb-4 flex items-center gap-3 text-white">
-                 <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
-                En cas de crise émotionnelle intense
+                En cas de crise (Émotion très forte)
             </h2>
-            <p class="mb-2 text-white"><strong>1. NOMMER</strong> l'émotion : "Je ressens de la [colère/tristesse/peur]"</p>
-            <p class="mb-2 text-white"><strong>2. ACCEPTER</strong> : "C'est normal de ressentir cela dans cette situation"</p>
-            <p class="text-white"><strong>3. AGIR</strong> : Utilisez les techniques de tolérance à la détresse ci-dessous</p>
+            <p class="mb-2 text-white"><strong>1. NOMMER :</strong> Dites ce que vous ressentez. "Je ressens de la [colère/tristesse/peur]".</p>
+            <p class="mb-2 text-white"><strong>2. ACCEPTER :</strong> Dites-vous : "C'est OK de ressentir ça."</p>
+            <p class="text-white"><strong>3. AGIR :</strong> Utilisez un outil ci-dessous pour passer la vague.</p>
         </div>
 
         <div class="tabs flex flex-wrap justify-center gap-3 mb-8">
@@ -138,6 +148,7 @@
             <button class="tab-btn px-6 py-3 rounded-full font-semibold shadow-md" onclick="showTab(event, 'references')">Références</button>
         </div>
 
+        <!-- Onglet Tolérance à la Détresse (Mis à jour avec STOP, TER, EVASION, AMELIOR, SENS, Acceptation) -->
         <div id="distress" class="content-section active">
             <div class="strategy-card bg-white rounded-xl p-8 mb-5 shadow-lg">
                 <h3 class="text-2xl font-bold text-indigo-600 mb-4 flex items-center gap-3">
@@ -148,88 +159,176 @@
                     </span> Tolérance à la Détresse
                     <span class="priority-badge priority-1 px-4 py-1 rounded-full text-sm font-semibold shadow-inner">Priorité Haute</span>
                 </h3>
-                <p class="mb-4"><strong>Objectif :</strong> Survivre aux crises sans se faire de mal et sans empirer la situation.</p>
+                <p class="mb-4"><strong>But :</strong> Traverser la crise (survivre). Ne pas vous faire de mal. Ne pas rendre les choses pires.</p>
                 
                 <ul class="technique-list list-none">
-                    <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
-                        <strong class="text-lg flex items-center gap-2">
-                           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                              <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7.C14.05 1 16.957 1.222 18.657 2.922m-1 15.735a8.003 8.003 0 01-11.314-11.314m11.314 11.314L18 20m-2-2v-2m0-4h-4m8 0h-2m-2-4H8m-2 6h2" />
-                            </svg>
-                            Technique TIP - Température
-                        </strong>
-                        <div class="technique-detail mt-3 p-4 rounded-lg text-base">
-                            <p class="font-semibold mb-2">Comment faire :</p>
-                            <ul class="list-disc pl-5">
-                                <li>Plongez votre visage dans de l'eau froide (10-15°C) pendant 30 secondes.</li>
-                                <li>Ou appliquez un sac de glace sur les yeux et les joues.</li>
-                                <li>Active le réflexe de plongée et ralentit le rythme cardiaque.</li>
-                            </ul>
-                            <p class="font-semibold mt-3">Quand l'utiliser :</p>
-                            <p>Moment de panique intense, envie d'agir impulsivement.</p>
-                        </div>
-                    </li>
                     
-                    <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
-                        <strong class="text-lg flex items-center gap-2">
-                           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                              <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                            </svg>
-                            Technique TIP - Exercice Intense
-                        </strong>
-                        <div class="technique-detail mt-3 p-4 rounded-lg text-base">
-                            <p class="font-semibold mb-2">Comment faire :</p>
-                            <ul class="list-disc pl-5">
-                                <li>Course sur place pendant 10-15 minutes.</li>
-                                <li>Montées d'escaliers rapides.</li>
-                                <li>Jumping jacks, squats, pompes.</li>
-                                <li>Brûle l'adrénaline du stress.</li>
-                            </ul>
-                            <p class="font-semibold mt-3">Quand l'utiliser :</p>
-                            <p>Colère intense, agitation physique.</p>
-                        </div>
-                    </li>
-                    
+                    <!-- Compétence STOP (Ajoutée depuis les docs) -->
                     <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
                         <strong class="text-lg flex items-center gap-2">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                              <path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.636 18.364a9 9 0 010-12.728m2.828 9.9a5 5 0 010-7.072" />
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
                             </svg>
-                            Technique TIP - Respiration Paced
+                            Compétence STOP
+                        </strong>
+                        <div class="technique-detail mt-3 p-4 rounded-lg text-base">
+                            <p class="font-semibold mb-2">Quand l'utiliser :</p>
+                            <p>Quand vous sentez l'urgence d'agir impulsivement.</p>
+                            <p class="font-semibold mt-3 mb-2">Comment faire :</p>
+                            <ul class="falc-list">
+                                <li><strong>S - S'arrêter :</strong> Ne bougez plus. Figez-vous. Ne réagissez pas.</li>
+                                <li><strong>T - Temporiser :</strong> Prenez une pause. Respirez profondément.</li>
+                                <li><strong>O - Observer :</strong> Remarquez ce qui se passe. (Vos pensées, vos émotions, la situation).</li>
+                                <li><strong>P - Poursuivre :</strong> Agissez en pleine conscience. Pensez à vos objectifs. Choisissez l'action la plus efficace.</li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <!-- Compétence TER (remplace TIP) -->
+                    <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
+                        <strong class="text-lg flex items-center gap-2">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7.C14.05 1 16.957 1.222 18.657 2.922m-1 15.735a8.003 8.003 0 01-11.314-11.314m11.314 11.314L18 20m-2-2v-2m0-4h-4m8 0h-2m-2-4H8m-2 6h2" />
+                            </svg>
+                            Compétence TER : T - Température
                         </strong>
                         <div class="technique-detail mt-3 p-4 rounded-lg text-base">
                             <p class="font-semibold mb-2">Comment faire :</p>
-                            <ul class="list-disc pl-5">
-                                <li>Inspirez pendant 5 secondes.</li>
-                                <li>Expirez lentement pendant 7 secondes.</li>
-                                <li>Répétez pendant 3-5 minutes.</li>
-                                <li>L'expiration longue active le système parasympathique.</li>
+                            <ul class="falc-list">
+                                <li>Mettez votre visage dans de l'eau très froide (pas glacée) pendant 30 secondes.</li>
+                                <li>Ou : Tenez un pack de glace sur vos joues et vos yeux.</li>
+                                <li>Important : Pensez à vous pencher en avant et à retenir votre respiration.</li>
                             </ul>
+                            <p class="font-semibold mt-3">Pourquoi :</p>
+                            <p>Cela calme votre corps très vite. Votre cœur bat plus lentement.</p>
                             <p class="font-semibold mt-3">Quand l'utiliser :</p>
-                            <p>Anxiété, début de crise.</p>
+                            <p>En moment de panique. Quand l'émotion est à 100%.</p>
                         </div>
                     </li>
                     
                     <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
                         <strong class="text-lg flex items-center gap-2">
                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                              <path stroke-linecap="round" stroke-linejoin="round" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2 1m0 0l-2-1m2 1V2.5M10 7l2 1m-2-1l2-1m-2 1v2.5m-4 5l-2-1m0 0l-2 1m2-1V9.5M6 14l2 1m-2-1l2-1m-2 1v2.5m4 5l2-1m0 0l2 1m-2-1v2.5m4-5l2 1m-2-1l2-1m-2 1v2.5" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
                             </svg>
-                            Distraction ACCEPTS
+                            Compétence TER : E - Exercice Intense
                         </strong>
                         <div class="technique-detail mt-3 p-4 rounded-lg text-base">
-                            <p class="font-semibold mb-2">Activités :</p>
-                            <p>Sport, ménage, cuisine, puzzle.</p>
-                            <p class="font-semibold mt-2 mb-1">Contribution :</p>
-                            <p>Aider quelqu'un, bénévolat.</p>
-                            <p class="font-semibold mt-2 mb-1">Comparaisons :</p>
-                            <p>Se rappeler des moments plus difficiles surmontés.</p>
-                            <p class="font-semibold mt-2 mb-1">Émotions opposées :</p>
-                            <p>Comédie si triste, musique calme si énervé.</p>
-                            <p class="font-semibold mt-2 mb-1">Pensées autres :</p>
-                            <p>Compter, réciter, liste de courses.</p>
-                            <p class="font-semibold mt-2 mb-1">Sensations :</p>
-                            <p>Glace dans la main, douche froide, élastique au poignet.</p>
+                            <p class="font-semibold mb-2">Comment faire :</p>
+                            <ul class="falc-list">
+                                <li>Bougez très fort pendant un court moment (ex: 10-15 minutes).</li>
+                                <li>Courir sur place, monter des escaliers, faire des squats, danser.</li>
+                                <!-- Ajustement demandé par l'utilisateur -->
+                                <li><strong>But :</strong> Dépenser l'énergie physique accumulée dans le corps.</li>
+                            </ul>
+                            <p class="font-semibold mt-3">Quand l'utiliser :</p>
+                            <p>Quand vous sentez de la colère ou de l'agitation dans votre corps.</p>
+                        </div>
+                    </li>
+                    
+                    <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
+                        <strong class="text-lg flex items-center gap-2">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.636 18.364a9 9 0 010-12.728m2.828 9.9a5 5 0 010-7.072" />
+                            </svg>
+                            Compétence TER : R - Respiration Rythmée
+                        </strong>
+                        <div class="technique-detail mt-3 p-4 rounded-lg text-base">
+                            <p class="font-semibold mb-2">Comment faire :</p>
+                            <ul class="falc-list">
+                                <li>Inspirez lentement par le ventre (comptez jusqu'à 5).</li>
+                                <li>Expirez ENCORE PLUS lentement (comptez jusqu'à 7).</li>
+                                <li>Répétez pendant 1 ou 2 minutes.</li>
+                                <li>Cela dit à votre corps de se calmer.</li>
+                            </ul>
+                             <p class="font-semibold mt-3 mb-2">Relaxation Musculaire (aussi R) :</p>
+                             <ul class="falc-list">
+                                <li>Contractez un groupe de muscles (ex: serrez les poings) en inspirant.</li>
+                                <li>Relâchez les muscles en expirant, dites "relax" dans votre tête.</li>
+                                <li>Faites-le pour plusieurs parties du corps (mains, bras, épaules...).</li>
+                            </ul>
+                            <p class="font-semibold mt-3">Quand l'utiliser :</p>
+                            <p>Anxiété, tension, début de crise.</p>
+                        </div>
+                    </li>
+                    
+                    <!-- Compétence EVASION (remplace ACCEPTS) -->
+                    <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
+                        <strong class="text-lg flex items-center gap-2">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2 1m0 0l-2-1m2 1V2.5M10 7l2 1m-2-1l2-1m-2 1v2.5m-4 5l-2-1m0 0l-2 1m2-1V9.5M6 14l2 1m-2-1l2-1m-2 1v2.5m4 5l2-1m0 0l2 1m-2-1v2.5m4-5l2 1m-2-1l2-1m-2 1v2.5" />
+                            </svg>
+                            Distraction (Compétence EVASION)
+                        </strong>
+                        <div class="technique-detail mt-3 p-4 rounded-lg text-base">
+                            <p class="font-semibold mb-2">But : Détourner votre attention de la crise pour un moment.</p>
+                            <p><strong>E - Encombrer l'esprit :</strong> Comptez les objets rouges, listez des animaux, récitez une chanson.</p>
+                            <p class="mt-2"><strong>V - Verrouiller les pensées :</strong> Mettez le problème "dans une boîte" mentale pour plus tard. Dites "Non !" aux ruminations.</p>
+                            <p class="mt-2"><strong>A - Activités :</strong> Faites autre chose. (Sport, ménage, jeu vidéo, marcher, appeler un ami).</p>
+                            <p class="mt-2"><strong>S - Sensations :</strong> Utilisez une sensation forte. (Tenir un glaçon, douche froide, manger un piment).</p>
+                            <p class="mt-2"><strong>I - Inverser l'émotion :</strong> Si vous êtes triste, regardez une vidéo drôle. Si vous êtes en colère, écoutez une musique calme.</p>
+                            <p class="mt-2"><strong>O - Ouverture aux autres :</strong> Aidez quelqu'un, faites un compliment, faites du bénévolat.</p>
+                            <p class="mt-2"><strong>N - Nuancer :</strong> Comparez votre situation à un moment où c'était encore plus difficile (et que vous avez surmonté).</p>
+                        </div>
+                    </li>
+
+                    <!-- Compétence AMELIOR (Ajoutée depuis les docs) -->
+                    <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
+                        <strong class="text-lg flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                            </svg>
+                            Améliorer le moment (AMELIOR)
+                        </strong>
+                        <div class="technique-detail mt-3 p-4 rounded-lg text-base">
+                            <p class="font-semibold mb-2">But : Introduire des éléments positifs pour rendre le moment plus supportable.</p>
+                            <p><strong>A - Adresser une prière :</strong> Ou se connecter à ses valeurs, à un "Esprit Éclairé".</p>
+                            <p class="mt-2"><strong>M - Mettre du sens :</strong> Trouver un sens à la douleur. "Qu'est-ce que je peux apprendre de ça ?"</p>
+                            <p class="mt-2"><strong>E - Encouragement de soi :</strong> Parlez-vous gentiment. "Je fais de mon mieux", "Ça va passer", "Je peux y arriver".</p>
+                            <p class="mt-2"><strong>L - Loisir / vacances :</strong> Prenez une petite pause. Faites un "mini-congé" mental ou physique (ex: éteindre le téléphone 1h).</p>
+                            <p class="mt-2"><strong>I - Imagerie mentale :</strong> Imaginez un lieu sûr et relaxant. Imaginez que vous gérez bien la situation.</p>
+                            <p class="mt-2"><strong>O - Orientation sur le présent :</strong> Concentrez-vous sur UNE seule chose dans le moment présent.</p>
+                            <p class="mt-2"><strong>R - Relaxation :</strong> Prenez un bain chaud, étirez-vous, buvez une tisane.</p>
+                        </div>
+                    </li>
+                    
+                    <!-- Compétence SENS (Titre mis à jour) -->
+                    <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
+                        <strong class="text-lg flex items-center gap-2">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Apaisement avec les 5 Sens
+                        </strong>
+                        <div class="technique-detail mt-3 p-4 rounded-lg text-base">
+                            <p class="font-semibold mb-2">But : Se calmer en utilisant ses sens. Être gentil avec soi.</p>
+                            <p class="mt-2"><strong>Vue :</strong> Regardez une belle image, la nature, une fleur, une bougie.</p>
+                            <p class="mt-2"><strong>Ouïe :</strong> Écoutez une musique douce, les oiseaux, le son de la pluie.</p>
+                            <p class="mt-2"><strong>Odorat :</strong> Sentez du café, un parfum, une huile essentielle (lavande), l'herbe coupée.</p>
+                            <p class="mt-2"><strong>Goût :</strong> Buvez un thé chaud, mangez un petit chocolat (en pleine conscience), un bonbon à la menthe.</p>
+                            <p class="mt-2"><strong>Toucher :</strong> Caressez un animal, mettez une couverture douce, un bain chaud, mettez de la crème.</p>
+                        </div>
+                    </li>
+
+                    <!-- Compétences d'Acceptation (Ajoutées depuis les docs) -->
+                    <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
+                        <strong class="text-lg flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                            </svg>
+                            Acceptation Radicale
+                        </strong>
+                        <div class="technique-detail mt-3 p-4 rounded-lg text-base">
+                            <p class="font-semibold mb-2">But : Arrêter de lutter contre la réalité.</p>
+                            <p>L'acceptation, c'est reconnaître que les faits sont vrais. Ce n'est pas aimer la réalité, c'est arrêter de se battre avec.</p>
+                            <p class="font-semibold mt-3 mb-2">Comment faire :</p>
+                            <ul class="falc-list">
+                                <li><strong>Observez</strong> que vous luttez contre la réalité (Ex: "Ça ne devrait pas être comme ça !").</li>
+                                <li><strong>Rappelez-vous</strong> que la réalité est ce qu'elle est. Les faits sont des faits.</li>
+                                <li><strong>Pratiquez</strong> l'acceptation avec tout votre être (esprit, corps).</li>
+                                <li><strong>Attention :</strong> Lutter contre la réalité transforme la douleur en souffrance.</li>
+                            </ul>
                         </div>
                     </li>
                     
@@ -238,25 +337,30 @@
                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                               <path stroke-linecap="round" stroke-linejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            Auto-apaisement 5 Sens
+                            Demi-Sourire et Mains Volontaires
                         </strong>
                         <div class="technique-detail mt-3 p-4 rounded-lg text-base">
-                            <p class="font-semibold mb-2">Vue :</p>
-                            <p>Regarder des images apaisantes, nature, art.</p>
-                            <p class="font-semibold mt-2 mb-1">Ouïe :</p>
-                            <p>Musique douce, sons de la nature, ASMR.</p>
-                            <p class="font-semibold mt-2 mb-1">Odorat :</p>
-                            <p>Huiles essentielles (lavande), bougies parfumées.</p>
-                            <p class="font-semibold mt-2 mb-1">Goût :</p>
-                            <p>Thé chaud, bonbon mentholé, chocolat noir.</p>
-                            <p class="font-semibold mt-2 mb-1">Toucher :</p>
-                            <p>Couverture douce, bain chaud, auto-massage.</p>
+                             <p class="font-semibold mb-2">But : Utiliser votre corps pour aider votre esprit à accepter.</p>
+                            <p class="font-semibold mt-3 mb-2">Demi-Sourire :</p>
+                            <ul class="falc-list">
+                                <li>Détendez votre visage (front, yeux, mâchoire).</li>
+                                <li>Remontez très légèrement les coins de vos lèvres. Juste assez pour le sentir.</li>
+                                <li>Essayez d'avoir une expression sereine.</li>
+                            </ul>
+                            <p class="font-semibold mt-3 mb-2">Mains Volontaires :</p>
+                            <ul class="falc-list">
+                                <li>Mettez vos mains ouvertes, paumes vers le haut.</li>
+                                <li>Vous pouvez être assis (mains sur les genoux) ou couché (mains le long du corps).</li>
+                                <li>C'est une posture d'ouverture et d'acceptation.</li>
+                            </ul>
                         </div>
                     </li>
+
                 </ul>
             </div>
         </div>
 
+        <!-- Onglet Régulation Émotionnelle (Mis à jour avec ABC SANTÉ) -->
         <div id="emotions" class="content-section">
             <div class="strategy-card bg-white rounded-xl p-8 mb-5 shadow-lg">
                 <h3 class="text-2xl font-bold text-indigo-600 mb-4 flex items-center gap-3">
@@ -268,80 +372,85 @@
                     </span> Régulation des Émotions
                     <span class="priority-badge priority-2 px-4 py-1 rounded-full text-sm font-semibold shadow-inner">Priorité Moyenne</span>
                 </h3>
-                <p class="mb-4"><strong>Objectif :</strong> Comprendre et gérer les émotions de façon saine.</p>
+                <p class="mb-4"><strong>But :</strong> Comprendre vos émotions. Les gérer pour qu'elles ne vous contrôlent pas.</p>
                 
                 <ul class="technique-list list-none">
                     <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
                         <strong class="text-lg flex items-center gap-2">
                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                              <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            Identifier l'Émotion (STOP)
+                            Identifier (Qu'est-ce que je ressens ?)
                         </strong>
                         <div class="technique-detail mt-3 p-4 rounded-lg text-base">
-                            <p><strong>S - Stop :</strong> Arrêtez-vous, ne réagissez pas immédiatement.</p>
-                            <p><strong>T - Take a step back :</strong> Prenez du recul mentalement.</p>
-                            <p><strong>O - Observe :</strong> Que se passe-t-il ? Que je ressens ?</p>
-                            <p><strong>P - Proceed mindfully :</strong> Agir en conscience, pas en réaction.</p>
+                            <p><strong>1. Nommer l'émotion :</strong> Est-ce de la colère ? Tristesse ? Peur ? Joie ? Honte ?</p>
+                            <p><strong>2. Événement :</strong> Qu'est-ce qui a déclenché l'émotion ?</p>
+                            <p><strong>3. Pensées :</strong> Qu'est-ce que je me suis dit ?</p>
+                            <p><strong>4. Sensations :</strong> Qu'est-ce que je ressens dans mon corps ? (Cœur qui bat, tension...)</p>
+                            <p><strong>5. Action :</strong> Qu'est-ce que j'ai envie de faire ?</p>
                         </div>
                     </li>
                     
                     <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
                         <strong class="text-lg flex items-center gap-2">
                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                              <path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                             </svg>
-                           Action Opposée
+                            Action Opposée
                         </strong>
                         <div class="technique-detail mt-3 p-4 rounded-lg text-base">
-                            <p><strong>Si tristesse :</strong> Se lever, s'activer, sortir (inverse de s'isoler).</p>
-                            <p><strong>Si colère :</strong> Parler doucement, s'éloigner gentiment.</p>
-                            <p><strong>Si peur :</strong> S'exposer progressivement à ce qui fait peur.</p>
-                            <p><strong>Si honte :</strong> Partager avec quelqu'un de confiance.</p>
-                            <p class="italic mt-2">Fonctionne quand l'émotion n'est pas justifiée par la situation.</p>
+                            <p class="font-semibold">Faites l'inverse de ce que l'émotion vous pousse à faire.</p>
+                            <p class="mt-2"><strong>Si TRISTE (envie de s'isoler) :</strong> Sortez, voyez des gens, activez-vous.</p>
+                            <p><strong>Si EN COLÈRE (envie d'attaquer) :</strong> Parlez doucement, soyez gentil, éloignez-vous.</p>
+                            <p><strong>Si PEUR (envie de fuir) :</strong> Approchez-vous de ce qui fait peur, petit à petit.</p>
+                            <p><strong>Si HONTE (envie de se cacher) :</strong> Parlez-en à quelqu'un de confiance.</p>
+                            <p class="italic mt-2">Marche bien si l'émotion est très forte mais pas justifiée par les faits.</p>
                         </div>
                     </li>
                     
+                    <!-- Compétence ABC SANTÉ (remplace ABC PLEASE) -->
                     <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
                         <strong class="text-lg flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                             </svg>
-                           Réduire la Vulnérabilité (ABC PLEASE)
+                            Prendre soin de soi (ABC SANTÉ)
                         </strong>
                         <div class="technique-detail mt-3 p-4 rounded-lg text-base">
-                            <p><strong>Accumulate positive :</strong> Faire des activités agréables quotidiennes.</p>
-                            <p><strong>Build mastery :</strong> Activités qui donnent un sentiment de compétence.</p>
-                            <p><strong>Cope ahead :</strong> Anticiper les situations difficiles.</p>
-                            <p><strong>Physical illness :</strong> Traiter ses problèmes de santé.</p>
-                            <p><strong>Eating :</strong> Alimentation équilibrée et régulière.</p>
-                            <p><strong>Avoid drugs :</strong> Éviter alcool et drogues.</p>
-                            <p><strong>Sleep :</strong> 7-9h de sommeil régulier.</p>
-                            <p><strong>Exercise :</strong> 30 min d'activité physique/jour.</p>
+                            <p class="font-semibold">Moins vous êtes vulnérable, mieux vous gérez vos émotions.</p>
+                            <p class="mt-2"><strong>A - Accumuler</strong> des émotions positives (faire des choses agréables).</p>
+                            <p><strong>B - Bâtir</strong> une expertise (faire des choses où vous vous sentez compétent).</p>
+                            <p><strong>C - Chercher</strong> à anticiper (se préparer aux situations difficiles).</p>
+                            <p class="mt-2"><strong>S - Soin :</strong> Traitez vos problèmes de santé, prenez vos médicaments.</p>
+                            <p><strong>A - Addiction :</strong> Évitez l'alcool et les drogues (ils dérégulent les émotions).</p>
+                            <p><strong>N - Nutrition :</strong> Mangez équilibré et régulièrement.</p>
+                            <p><strong>T - Temps de sommeil :</strong> Dormez 7-9h par nuit.</p>
+                            <p><strong>É - Exercice :</strong> Bougez votre corps un peu chaque jour.</p>
                         </div>
                     </li>
                     
                     <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
                         <strong class="text-lg flex items-center gap-2">
                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                              <path stroke-linecap="round" stroke-linejoin="round" d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2V6a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2V6a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z" />
                             </svg>
                             Vérifier les Faits
                         </strong>
                         <div class="technique-detail mt-3 p-4 rounded-lg text-base">
-                            <p>1. <strong>Quelle est l'émotion ?</strong> (la nommer précisément)</p>
-                            <p>2. <strong>Quel est l'événement déclencheur ?</strong></p>
-                            <p>3. <strong>Quelles sont mes interprétations ?</strong> (vs. faits objectifs)</p>
-                            <p>4. <strong>Est-ce que mes pensées sont des faits ?</strong></p>
-                            <p>5. <strong>Mon émotion et son intensité sont-elles justifiées ?</strong></p>
+                            <p>1. <strong>Émotion :</strong> Quelle émotion je ressens ?</p>
+                            <p>2. <strong>Fait :</strong> Qu'est-ce qui s'est passé (juste les faits) ?</p>
+                            <p>3. <strong>Interprétation :</strong> Quelles sont mes pensées / jugements sur le fait ?</p>
+                            <p>4. <strong>Question :</strong> Est-ce que mon émotion (et son intensité) colle aux FAITS ? Ou est-ce qu'elle colle à mon INTERPRÉTATION ?</p>
+                            <p>5. <strong>Changer :</strong> Si l'émotion ne colle pas aux faits, essayez de voir les choses autrement.</p>
                         </div>
                     </li>
                 </ul>
             </div>
         </div>
 
+        <!-- Onglet Efficacité Interpersonnelle (Simplifié FALC) -->
         <div id="interpersonal" class="content-section">
-            <div class="strategy-card bg-white rounded-xl p-8 mb-5 shadow-lg">
+             <div class="strategy-card bg-white rounded-xl p-8 mb-5 shadow-lg">
                 <h3 class="text-2xl font-bold text-indigo-600 mb-4 flex items-center gap-3">
                     <span class="icon inline-flex items-center justify-center w-8 h-8 rounded-full font-bold text-white shadow-md">
                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -350,65 +459,63 @@
                     </span> Efficacité Interpersonnelle
                     <span class="priority-badge priority-2 px-4 py-1 rounded-full text-sm font-semibold shadow-inner">Priorité Moyenne</span>
                 </h3>
-                <p class="mb-4"><strong>Objectif :</strong> Améliorer les relations et communiquer efficacement.</p>
+                <p class="mb-4"><strong>But :</strong> Mieux communiquer. Obtenir ce que l'on veut. Garder de bonnes relations. Se respecter.</p>
                 
                 <ul class="technique-list list-none">
                     <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
                         <strong class="text-lg flex items-center gap-2">
                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                              <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
                             </svg>
-                            Technique DEAR MAN (Demander/Refuser)
+                            DEAR MAN (Demander / Refuser)
                         </strong>
                         <div class="technique-detail mt-3 p-4 rounded-lg text-base">
-                            <p><strong>D - Describe :</strong> Décrire la situation de façon factuelle.</p>
-                            <p><strong>E - Express :</strong> Exprimer ses sentiments et opinions.</p>
-                            <p><strong>A - Assert :</strong> Affirmer clairement ce que l'on veut.</p>
-                            <p><strong>R - Reinforce :</strong> Expliquer les conséquences positives.</p>
-                            <p><strong>M - Mindful :</strong> Rester focalisé sur l'objectif.</p>
-                            <p><strong>A - Appear confident :</strong> Ton assuré, contact visuel.</p>
-                            <p><strong>N - Negotiate :</strong> Être prêt à négocier.</p>
-                            <p class="italic mt-2">Exemple : "Quand tu arrives en retard (D), je me sens inquiet (E). J'aimerais que tu m'envoies un message (A). Ça m'aiderait à me sentir rassuré (R)."</p>
+                            <p><strong>D - Décrire :</strong> Dire les faits. "J'ai remarqué que..."</p>
+                            <p><strong>E - Exprimer :</strong> Dire ce que vous ressentez. "Je me sens..."</p>
+                            <p><strong>A - Affirmer :</strong> Demander clairement. "J'aimerais que tu..." ou "Je ne peux pas..."</p>
+                            <p><strong>R - Renforcer :</strong> Expliquer pourquoi c'est bien (pour l'autre ou la relation).</p>
+                            <p><strong>M - Mindful (Conscient) :</strong> Rester sur l'objectif. Ne pas se laisser distraire.</p>
+                            <p><strong>A - Apparaître confiant :</strong> Parler calmement, regarder la personne.</p>
+                            <p><strong>N - Négocier :</strong> Être prêt à trouver un accord. "Que proposes-tu ?"</p>
                         </div>
                     </li>
                     
                     <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
                         <strong class="text-lg flex items-center gap-2">
                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                              <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                             </svg>
-                           Technique GIVE (Maintenir la relation)
+                            GIVE (Garder la relation)
                         </strong>
                         <div class="technique-detail mt-3 p-4 rounded-lg text-base">
-                            <p><strong>G - Gentle :</strong> Être doux, pas d'attaques ni de menaces.</p>
-                            <p><strong>I - Interested :</strong> Montrer de l'intérêt sincère.</p>
-                            <p><strong>V - Validate :</strong> Valider les émotions de l'autre.</p>
-                            <p><strong>E - Easy manner :</strong> Être détendu, sourire, humour léger.</p>
-                            <p class="italic mt-2">Utiliser quand la relation est plus importante que l'objectif immédiat.</p>
+                            <p><strong>G - Gentle (Doux) :</strong> Parler gentiment. Pas d'attaque, pas de menace.</p>
+                            <p><strong>I - Interested (Intéressé) :</strong> Écouter vraiment ce que l'autre dit.</p>
+                            <p><strong>V - Validate (Valider) :</strong> Montrer qu'on comprend l'autre. "Je vois que c'est dur pour toi."</p>
+                            <p><strong>E - Easy manner (Détendu) :</strong> Rester calme, sourire un peu.</p>
                         </div>
                     </li>
                     
                     <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
                         <strong class="text-lg flex items-center gap-2">
                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                              <path stroke-linecap="round" stroke-linejoin="round" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
                             </svg>
-                            Technique FAST (Garder le respect de soi)
+                            FAST (Garder le respect de soi)
                         </strong>
                         <div class="technique-detail mt-3 p-4 rounded-lg text-base">
-                            <p><strong>F - Fair :</strong> Être juste envers soi et l'autre.</p>
-                            <p><strong>A - Apologies (no unnecessary) :</strong> Pas d'excuses excessives.</p>
-                            <p><strong>S - Stick to values :</strong> Rester fidèle à ses valeurs.</p>
-                            <p><strong>T - Truthful :</strong> Être honnête, ne pas mentir ni exagérer.</p>
-                            <p class="italic mt-2">Utiliser pour maintenir son intégrité et son estime de soi.</p>
+                            <p><strong>F - Fair (Juste) :</strong> Être juste avec soi et l'autre.</p>
+                            <p><strong>A - Apologies (Excuses) :</strong> Ne pas s'excuser 1000 fois si ce n'est pas nécessaire.</p>
+                            <p><strong>S - Stick to values (Valeurs) :</strong> Rester fidèle à ce qui est important pour vous.</p>
+                            <p><strong>T - Truthful (Vrai) :</strong> Être honnête. Ne pas mentir.</p>
                         </div>
                     </li>
                 </ul>
             </div>
         </div>
 
+        <!-- Onglet Pleine Conscience (Simplifié FALC) -->
         <div id="mindfulness" class="content-section">
-            <div class="strategy-card bg-white rounded-xl p-8 mb-5 shadow-lg">
+             <div class="strategy-card bg-white rounded-xl p-8 mb-5 shadow-lg">
                 <h3 class="text-2xl font-bold text-indigo-600 mb-4 flex items-center gap-3">
                     <span class="icon inline-flex items-center justify-center w-8 h-8 rounded-full font-bold text-white shadow-md">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -417,92 +524,91 @@
                     </span> Pleine Conscience
                     <span class="priority-badge priority-3 px-4 py-1 rounded-full text-sm font-semibold shadow-inner">Base Quotidienne</span>
                 </h3>
-                <p class="mb-4"><strong>Objectif :</strong> Être présent à l'instant, développer l'acceptation.</p>
+                <p class="mb-4"><strong>But :</strong> Être présent ici et maintenant. Accepter ce qui est là, sans juger.</p>
                 
                 <ul class="technique-list list-none">
                     <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
                         <strong class="text-lg flex items-center gap-2">
                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                              <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                             </svg>
-                            Observer
+                            Observer (Compétence QUOI)
                         </strong>
                         <div class="technique-detail mt-3 p-4 rounded-lg text-base">
-                            <p>Porter attention à l'expérience sans essayer de la changer.</p>
+                            <p>Remarquer ce qui est là, sans essayer de le changer.</p>
                             <p class="font-semibold mt-2 mb-1">Exercice :</p>
-                            <p>Notez 3 choses que vous voyez, 3 que vous entendez, 3 que vous ressentez physiquement.</p>
-                            <p class="italic mt-2">Comme un scientifique qui observe sans juger.</p>
+                            <p>Notez 3 choses que vous voyez. 3 choses que vous entendez. 3 choses que vous ressentez (ex: vos pieds sur le sol).</p>
                         </div>
                     </li>
                     
                     <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
                         <strong class="text-lg flex items-center gap-2">
                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                              <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                             </svg>
-                            Décrire
+                            Décrire (Compétence QUOI)
                         </strong>
                         <div class="technique-detail mt-3 p-4 rounded-lg text-base">
-                            <p>Mettre des mots sur ce qui est observé, sans interprétation.</p>
-                            <p class="mt-2"><strong>Faits :</strong> "Il pleut" vs <strong>Jugement :</strong> "C'est une journée horrible".</p>
-                            <p><strong>Faits :</strong> "Mon cœur bat vite" vs <strong>Interprétation :</strong> "Je vais faire une crise cardiaque".</p>
+                            <p>Mettre des mots sur ce que vous observez. Juste les faits.</p>
+                            <p class="mt-2"><strong>Jugement :</strong> "C'est une journée horrible."</p>
+                            <p><strong>Description :</strong> "Il pleut."</p>
+                            <p class="mt-2"><strong>Jugement :</strong> "Je suis nul."</p>
+                            <p><strong>Description :</strong> "J'ai la pensée que je suis nul." ou "J'ai fait une erreur."</p>
                         </div>
                     </li>
                     
                     <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
                         <strong class="text-lg flex items-center gap-2">
                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                              <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
                             </svg>
-                            Participer
+                            Participer (Compétence QUOI)
                         </strong>
                         <div class="technique-detail mt-3 p-4 rounded-lg text-base">
-                            <p>S'engager pleinement dans l'activité du moment.</p>
-                            <p>Être UN avec l'action (manger en mangeant, marcher en marchant).</p>
-                            <p>Oublier le passé et le futur pour être 100% présent.</p>
+                            <p>S'engager à 100% dans ce que vous faites.</p>
+                            <p>Quand vous marchez, marchez. Quand vous mangez, mangez.</p>
+                            <p>Oubliez le passé et le futur. Soyez juste là.</p>
                         </div>
                     </li>
                     
                     <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
                         <strong class="text-lg flex items-center gap-2">
                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            Non-Jugement
+                            Non-Jugement (Compétence COMMENT)
                         </strong>
                         <div class="technique-detail mt-3 p-4 rounded-lg text-base">
-                            <p>Abandonner les étiquettes "bon/mauvais", "bien/mal".</p>
-                            <p>Remplacer "Je suis nul" par "J'ai fait une erreur, c'est humain".</p>
-                            <p>Observer les jugements sans s'y identifier.</p>
+                            <p>Voir les choses sans les juger "bonnes" ou "mauvaises".</p>
+                            <p>Remarquez les jugements, mais ne les croyez pas. Laissez-les passer.</p>
                         </div>
                     </li>
                     
                     <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
                         <strong class="text-lg flex items-center gap-2">
                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                              <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                             </svg>
-                           Une Chose à la Fois
+                            Une Chose à la Fois (Compétence COMMENT)
                         </strong>
                         <div class="technique-detail mt-3 p-4 rounded-lg text-base">
-                            <p>Faire une seule activité avec toute son attention.</p>
-                            <p>Si l'esprit s'égare, le ramener doucement sans se juger.</p>
-                            <p>Qualité > Quantité.</p>
+                            <p>Faites une seule chose avec toute votre attention.</p>
+                            <p>Si votre esprit part, ramenez-le doucement.</p>
                         </div>
                     </li>
                     
                     <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
                         <strong class="text-lg flex items-center gap-2">
                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                              <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
                             </svg>
-                           Efficacité
+                            Efficacité (Compétence COMMENT)
                         </strong>
                         <div class="technique-detail mt-3 p-4 rounded-lg text-base">
-                            <p>Faire ce qui fonctionne dans la situation.</p>
-                            <p>Pas "ce qui est juste" mais "ce qui est efficace".</p>
-                            <p>Lâcher prise sur "devoir avoir raison".</p>
+                            <p>Faites ce qui marche. Pas ce qui est "juste" ou "injuste".</p>
+                            <p>Lâchez prise sur le besoin d'avoir raison.</p>
+                            <p>Posez-vous la question : "Qu'est-ce qui est efficace ici ?"</p>
                         </div>
                     </li>
                 </ul>
@@ -522,41 +628,42 @@
             </div>
         </div>
 
+        <!-- Onglet Outil Interactif (Mis à jour pour coller aux nouveaux acronymes) -->
         <div id="quiz" class="content-section">
             <div class="interactive-quiz bg-white rounded-xl p-8 shadow-lg">
                 <h3 class="text-2xl font-bold text-indigo-600 mb-4 flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                     </svg>
-                    Quelle Stratégie Utiliser ?
+                    Quel outil utiliser ?
                 </h3>
-                <p class="mb-6 text-gray-700">Répondez à ces questions pour identifier la meilleure stratégie</p>
+                <p class="mb-6 text-gray-700">Répondez à cette question pour trouver le bon outil.</p>
                 
                 <div id="question1" class="quiz-question">
                     <h4 class="text-xl font-semibold mb-4">1. Comment vous sentez-vous en ce moment ?</h4>
                     <div class="quiz-option p-4 my-3 rounded-lg cursor-pointer shadow-sm flex items-center gap-3" onclick="selectOption('q1', 'crisis', this)">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                        Crise intense - Je vais exploser ou me faire du mal
+                        Crise intense - Je vais exploser ou me faire du mal.
                     </div>
                     <div class="quiz-option p-4 my-3 rounded-lg cursor-pointer shadow-sm flex items-center gap-3" onclick="selectOption('q1', 'stressed', this)">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                         </svg>
-                       Stressé/Anxieux - Mais je garde le contrôle
+                        Stressé / Émotion forte - Mais je garde le contrôle.
                     </div>
                     <div class="quiz-option p-4 my-3 rounded-lg cursor-pointer shadow-sm flex items-center gap-3" onclick="selectOption('q1', 'conflict', this)">
                          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a2 2 0 01-2-2V7a2 2 0 012-2h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293H17z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a2 2 0 01-2-2V7a2 2 0 012-2h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293H17z" />
                         </svg>
-                       En conflit - Problème relationnel
+                        En conflit - J'ai un problème avec quelqu'un.
                     </div>
                     <div class="quiz-option p-4 my-3 rounded-lg cursor-pointer shadow-sm flex items-center gap-3" onclick="selectOption('q1', 'calm', this)">
                          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                       Plutôt calme - Je veux m'entraîner préventivement
+                        Plutôt calme - Je veux m'entraîner ou prendre soin de moi.
                     </div>
                 </div>
 
@@ -568,13 +675,15 @@
             <div class="strategy-card bg-white rounded-xl p-8 mb-5 shadow-lg">
                 <h3 class="text-2xl font-bold text-indigo-600 mb-4 flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                     </svg>
                     Références
                 </h3>
                 <div class="text-base space-y-4">
+                    <p>Ce guide est une adaptation pratique et simplifiée (style FALC) inspirée des manuels de Thérapie Comportementale Dialectique.</p>
                     <p>Linehan, M. M. (1993a). <em>Cognitive-behavioral treatment of borderline personality disorder</em>. The Guilford Press.</p>
                     <p>Linehan, M. M. (1993b). <em>Skills training manual for treating borderline personality disorder</em>. The Guilford Press.</p>
+                    <p>Linehan, M. M. (2015). <em>DBT skills training manual</em> (2nd ed.). The Guilford Press.</p>
                 </div>
             </div>
         </div>
@@ -583,7 +692,7 @@
     <footer class="text-center text-white text-sm mt-8 pb-4">
         <p>Inspiré de la Thérapie Dialectique et Comportementale de Marsha M. Linehan.</p>
         <p>Adaptation numérique par Dr FENOHASINA Toto Jean Felicien (Psychiatre - FFI).</p>
-        <p>Dernière mise à jour : 21 octobre 2025.</p>
+        <p>Dernière mise à jour : 23 octobre 2025.</p>
     </footer>
 
 
@@ -604,6 +713,14 @@
         }
 
         function toggleDetail(element) {
+            // Fermer tous les autres détails ouverts pour garder l'interface propre
+            const allDetails = element.closest('.technique-list').querySelectorAll('.technique-item');
+            allDetails.forEach(item => {
+                if (item !== element) {
+                    item.classList.remove('expanded');
+                }
+            });
+            // Ouvrir ou fermer l'élément cliqué
             element.classList.toggle('expanded');
         }
 
@@ -666,28 +783,29 @@
             displayQuizResult();
         }
 
+        // Logique du quiz mise à jour avec les nouveaux noms de compétences
         function displayQuizResult() {
             const resultDiv = document.getElementById('quizResult');
             let resultHtml = '';
 
             if (quizAnswers.q1) {
-                resultHtml += '<h4 class="text-xl font-bold text-blue-800 mb-3">Votre situation actuelle :</h4>';
+                resultHtml += '<h4 class="text-xl font-bold text-blue-800 mb-3">Outil recommandé :</h4>';
                 switch (quizAnswers.q1) {
                     case 'crisis':
-                        resultHtml += '<p class="text-lg">Vous traversez une crise émotionnelle intense. Priorisez les techniques de la section <strong>"Tolérance à la Détresse"</strong>. Celles-ci vous aideront à naviguer ce moment difficile sans actions impulsives.</p>';
-                        resultHtml += '<p class="mt-2 text-blue-700"><em>Recommandation : Essayez la "Technique TIP - Température" ou la "Respiration Paced" en urgence.</em></p>';
+                        resultHtml += '<p class="text-lg">Vous êtes en crise. Votre priorité est de survivre à la vague sans aggraver les choses. Allez à <strong>"Tolérance à la Détresse"</strong>.</p>';
+                        resultHtml += '<p class="mt-2 text-blue-700"><em>Recommandation : Essayez <strong>STOP</strong> en premier. Si l\'émotion est trop forte, utilisez <strong>TER (Température)</strong> ou <strong>TER (Exercice)</strong>.</em></p>';
                         break;
                     case 'stressed':
-                        resultHtml += '<p class="text-lg">Vous vous sentez stressé ou anxieux, mais vous maintenez le contrôle. Les stratégies de <strong>"Régulation Émotionnelle"</strong> seront très utiles pour comprendre et gérer vos émotions avant qu\'elles ne s\'intensifient.</p>';
-                        resultHtml += '<p class="mt-2 text-blue-700"><em>Recommandation : La technique "Vérifier les Faits" peut vous aider à prendre du recul.</em></p>';
+                        resultHtml += '<p class="text-lg">Vous sentez l\'émotion monter. C\'est le bon moment pour la comprendre. Allez à <strong>"Régulation Émotionnelle"</strong>.</p>';
+                        resultHtml += '<p class="mt-2 text-blue-700"><em>Recommandation : Utilisez <strong>"Vérifier les Faits"</strong> pour voir si votre émotion colle à la réalité. Vous pouvez aussi utiliser <strong>"Action Opposée"</strong>.</em></p>';
                         break;
                     case 'conflict':
-                        resultHtml += '<p class="text-lg">Vous êtes face à un problème relationnel. Concentrez-vous sur les compétences d\'<strong>"Efficacité Interpersonnelle"</strong> pour améliorer votre communication et maintenir des relations saines.</p>';
-                        resultHtml += '<p class="mt-2 text-blue-700"><em>Recommandation : La "Technique DEAR MAN" est idéale pour demander ou refuser avec assertivité.</em></p>';
+                        resultHtml += '<p class="text-lg">Vous avez un problème avec une autre personne. Allez à <strong>"Efficacité Interpersonnelle"</strong>.</p>';
+                        resultHtml += '<p class="mt-2 text-blue-700"><em>Recommandation : Utilisez <strong>DEAR MAN</strong> pour demander quelque chose ou dire non. Utilisez <strong>GIVE</strong> pour préserver la relation.</em></p>';
                         break;
                     case 'calm':
-                        resultHtml += '<p class="text-lg">Vous êtes calme et souhaitez vous entraîner préventivement. C\'est le moment idéal pour pratiquer les compétences de <strong>"Pleine Conscience"</strong> afin de renforcer votre capacité à être présent et accepter les expériences.</p>';
-                        resultHtml += '<p class="mt-2 text-blue-700"><em>Recommandation : Le "Minuteur de Pleine Conscience" est un excellent point de départ.</em></p>';
+                        resultHtml += '<p class="text-lg">C\'est le moment idéal pour vous entraîner et prendre soin de vous. Allez à <strong>"Pleine Conscience"</strong> ou <strong>"Régulation Émotionnelle"</strong>.</p>';
+                        resultHtml += '<p class="mt-2 text-blue-700"><em>Recommandation : Pratiquez avec le <strong>"Minuteur de Pleine Conscience"</strong> ou vérifiez votre <strong>"ABC SANTÉ"</strong>.</em></p>';
                         break;
                 }
             }
@@ -704,4 +822,3 @@
     </script>
 </body>
 </html>
-
