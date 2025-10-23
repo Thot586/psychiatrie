@@ -148,7 +148,7 @@
             <button class="tab-btn px-6 py-3 rounded-full font-semibold shadow-md" onclick="showTab(event, 'references')">Références</button>
         </div>
 
-        <!-- Onglet Tolérance à la Détresse (Mis à jour avec STOP, TER, EVASION, AMELIOR, SENS, Acceptation) -->
+        <!-- Onglet Tolérance à la Détresse  -->
         <div id="distress" class="content-section active">
             <div class="strategy-card bg-white rounded-xl p-8 mb-5 shadow-lg">
                 <h3 class="text-2xl font-bold text-indigo-600 mb-4 flex items-center gap-3">
@@ -360,7 +360,7 @@
             </div>
         </div>
 
-        <!-- Onglet Régulation Émotionnelle (Mis à jour avec ABC SANTÉ) -->
+<!-- Onglet Régulation Émotionnelle  -->
         <div id="emotions" class="content-section">
             <div class="strategy-card bg-white rounded-xl p-8 mb-5 shadow-lg">
                 <h3 class="text-2xl font-bold text-indigo-600 mb-4 flex items-center gap-3">
@@ -372,7 +372,7 @@
                     </span> Régulation des Émotions
                     <span class="priority-badge priority-2 px-4 py-1 rounded-full text-sm font-semibold shadow-inner">Priorité Moyenne</span>
                 </h3>
-                <p class="mb-4"><strong>But :</strong> Comprendre vos émotions. Les gérer pour qu'elles ne vous contrôlent pas.</p>
+                <p class="mb-4"><strong>But :</strong> Mieux comprendre mes émotions, pour qu’elles m’aident au lieu de me diriger. L’objectif est d’agir selon mes valeurs, pas seulement selon mon humeur.</p>
                 
                 <ul class="technique-list list-none">
                     <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
@@ -380,14 +380,17 @@
                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            Identifier (Qu'est-ce que je ressens ?)
+                            Identifier (Qu’est-ce que je ressens ?)
                         </strong>
                         <div class="technique-detail mt-3 p-4 rounded-lg text-base">
-                            <p><strong>1. Nommer l'émotion :</strong> Est-ce de la colère ? Tristesse ? Peur ? Joie ? Honte ?</p>
-                            <p><strong>2. Événement :</strong> Qu'est-ce qui a déclenché l'émotion ?</p>
-                            <p><strong>3. Pensées :</strong> Qu'est-ce que je me suis dit ?</p>
-                            <p><strong>4. Sensations :</strong> Qu'est-ce que je ressens dans mon corps ? (Cœur qui bat, tension...)</p>
-                            <p><strong>5. Action :</strong> Qu'est-ce que j'ai envie de faire ?</p>
+                            <p><strong>1. Nommer :</strong> Donnez un mot à votre émotion : colère, peur, honte, joie, tristesse.</p>
+                            <p><strong>2. Déclencheur :</strong> Qu’est-ce qui s’est passé juste avant ?</p>
+                            <p><strong>3. Pensées :</strong> Qu’est-ce que je me suis dit ? (« Il ne me respecte pas », « Je vais échouer »…)</p>
+                            <p><strong>4. Corps :</strong> Où ça se sent ? (tension, chaleur, gorge serrée, larmes…)</p>
+                            <p><strong>5. Envie d’agir :</strong> Qu’ai-je eu envie de faire ?</p>
+                            <p><strong>Exemples (bulles) :</strong> Travail — « Je sens mon cœur battre fort (4). J’ai peur de parler en réunion (1-5). »  
+                            Famille — « Je suis triste car on ne m’a pas invité (1-2). »  
+                            Soins — « Je ressens de la honte car j’ai oublié mon rendez-vous (1-3). »</p>
                         </div>
                     </li>
                     
@@ -396,19 +399,21 @@
                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                             </svg>
-                            Action Opposée
+                            Agir à l’opposé
                         </strong>
                         <div class="technique-detail mt-3 p-4 rounded-lg text-base">
-                            <p class="font-semibold">Faites l'inverse de ce que l'émotion vous pousse à faire.</p>
-                            <p class="mt-2"><strong>Si TRISTE (envie de s'isoler) :</strong> Sortez, voyez des gens, activez-vous.</p>
-                            <p><strong>Si EN COLÈRE (envie d'attaquer) :</strong> Parlez doucement, soyez gentil, éloignez-vous.</p>
-                            <p><strong>Si PEUR (envie de fuir) :</strong> Approchez-vous de ce qui fait peur, petit à petit.</p>
-                            <p><strong>Si HONTE (envie de se cacher) :</strong> Parlez-en à quelqu'un de confiance.</p>
-                            <p class="italic mt-2">Marche bien si l'émotion est très forte mais pas justifiée par les faits.</p>
+                            <p class="font-semibold">Faites le contraire de ce que l’émotion vous pousse à faire, si elle est trop forte ou inadaptée.</p>
+                            <p><strong>Si TRISTE :</strong> L’envie est de s’isoler → appelez quelqu’un, sortez marcher, écoutez de la musique.</p>
+                            <p><strong>Si EN COLÈRE :</strong> L’envie est de crier → parlez bas, sortez prendre l’air, écrivez vos pensées.</p>
+                            <p><strong>Si PEUR :</strong> L’envie est de fuir → avancez par petites étapes vers ce qui fait peur.</p>
+                            <p><strong>Si HONTE :</strong> L’envie est de se cacher → en parler à une personne de confiance.</p>
+                            <p><strong>Exemples (bulles) :</strong> Travail — « J’ai peur de téléphoner ; je commence par écrire un message. »  
+                            Famille — « Je suis en colère ; je respire et je parle demain. »  
+                            Soins — « Je suis triste ; je viens quand même au groupe aujourd’hui. »</p>
                         </div>
                     </li>
                     
-                    <!-- Compétence ABC SANTÉ (remplace ABC PLEASE) -->
+                    <!-- Compétence ABC SANTÉ -->
                     <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
                         <strong class="text-lg flex items-center gap-2">
                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -417,15 +422,18 @@
                             Prendre soin de soi (ABC SANTÉ)
                         </strong>
                         <div class="technique-detail mt-3 p-4 rounded-lg text-base">
-                            <p class="font-semibold">Moins vous êtes vulnérable, mieux vous gérez vos émotions.</p>
-                            <p class="mt-2"><strong>A - Accumuler</strong> des émotions positives (faire des choses agréables).</p>
-                            <p><strong>B - Bâtir</strong> une expertise (faire des choses où vous vous sentez compétent).</p>
-                            <p><strong>C - Chercher</strong> à anticiper (se préparer aux situations difficiles).</p>
-                            <p class="mt-2"><strong>S - Soin :</strong> Traitez vos problèmes de santé, prenez vos médicaments.</p>
-                            <p><strong>A - Addiction :</strong> Évitez l'alcool et les drogues (ils dérégulent les émotions).</p>
-                            <p><strong>N - Nutrition :</strong> Mangez équilibré et régulièrement.</p>
-                            <p><strong>T - Temps de sommeil :</strong> Dormez 7-9h par nuit.</p>
-                            <p><strong>É - Exercice :</strong> Bougez votre corps un peu chaque jour.</p>
+                            <p class="font-semibold">Plus je prends soin de moi, moins mes émotions me submergent.</p>
+                            <p><strong>A – Accumuler</strong> des émotions positives : faire chaque jour une petite chose agréable (marcher, écouter, rire).</p>
+                            <p><strong>B – Bâtir</strong> des réussites : faire quelque chose où je me sens compétent (cuisiner, ranger, apprendre).</p>
+                            <p><strong>C – Chercher</strong> à anticiper : me préparer aux moments stressants (prévoir, planifier, respirer avant).</p>
+                            <p><strong>S – Santé :</strong> suivre mes soins, prendre mes traitements.</p>
+                            <p><strong>A – Addictions :</strong> éviter alcool, drogues, excès d’écran.</p>
+                            <p><strong>N – Nutrition :</strong> manger à heure régulière, sans sauter de repas.</p>
+                            <p><strong>T – Temps de sommeil :</strong> dormir 7-9 h, se lever à heure fixe.</p>
+                            <p><strong>É – Exercice :</strong> bouger un peu chaque jour, sans compétition.</p>
+                            <p><strong>Exemples (bulles) :</strong> Travail — « Je fais une pause dehors 5 min avant la réunion (É). »  
+                            Famille — « Je cuisine un plat que j’aime (A). »  
+                            Soins — « Je prépare mes médicaments la veille (S/C). »</p>
                         </div>
                     </li>
                     
@@ -434,21 +442,25 @@
                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2V6a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z" />
                             </svg>
-                            Vérifier les Faits
+                            Vérifier les faits
                         </strong>
                         <div class="technique-detail mt-3 p-4 rounded-lg text-base">
-                            <p>1. <strong>Émotion :</strong> Quelle émotion je ressens ?</p>
-                            <p>2. <strong>Fait :</strong> Qu'est-ce qui s'est passé (juste les faits) ?</p>
-                            <p>3. <strong>Interprétation :</strong> Quelles sont mes pensées / jugements sur le fait ?</p>
-                            <p>4. <strong>Question :</strong> Est-ce que mon émotion (et son intensité) colle aux FAITS ? Ou est-ce qu'elle colle à mon INTERPRÉTATION ?</p>
-                            <p>5. <strong>Changer :</strong> Si l'émotion ne colle pas aux faits, essayez de voir les choses autrement.</p>
+                            <p><strong>1. Nommer l’émotion :</strong> Quelle émotion est là ?</p>
+                            <p><strong>2. Décrire les faits :</strong> Que s’est-il passé exactement, sans interpréter.</p>
+                            <p><strong>3. Penser :</strong> Quelles pensées ai-je eues ?</p>
+                            <p><strong>4. Comparer :</strong> Mon émotion correspond-elle aux faits ou à mes pensées ?</p>
+                            <p><strong>5. Ajuster :</strong> Si c’est mes pensées, je les teste autrement.</p>
+                            <p><strong>Exemples (bulles) :</strong> Travail — « Il ne m’a pas salué (fait) ; peut-être était-il pressé (pensée alternative). »  
+                            Famille — « Je crois qu’ils m’ignorent, mais ils n’avaient pas vu mon message. »  
+                            Soins — « Je pense qu’on me juge, mais personne n’a fait de remarque. »</p>
                         </div>
                     </li>
                 </ul>
             </div>
         </div>
 
-        <!-- Onglet Efficacité Interpersonnelle (Simplifié FALC) -->
+
+<!-- Onglet Efficacité Interpersonnelle --> 
         <div id="interpersonal" class="content-section">
              <div class="strategy-card bg-white rounded-xl p-8 mb-5 shadow-lg">
                 <h3 class="text-2xl font-bold text-indigo-600 mb-4 flex items-center gap-3">
@@ -459,7 +471,7 @@
                     </span> Efficacité Interpersonnelle
                     <span class="priority-badge priority-2 px-4 py-1 rounded-full text-sm font-semibold shadow-inner">Priorité Moyenne</span>
                 </h3>
-                <p class="mb-4"><strong>But :</strong> Mieux communiquer. Obtenir ce que l'on veut. Garder de bonnes relations. Se respecter.</p>
+                <p class="mb-4"><strong>But :</strong> Trois objectifs clairs : 1) Obtenir ce que je veux, 2) Garder une bonne relation, 3) Me respecter. Avant de parler, je choisis l’objectif principal.</p>
                 
                 <ul class="technique-list list-none">
                     <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
@@ -470,13 +482,14 @@
                             DEAR MAN (Demander / Refuser)
                         </strong>
                         <div class="technique-detail mt-3 p-4 rounded-lg text-base">
-                            <p><strong>D - Décrire :</strong> Dire les faits. "J'ai remarqué que..."</p>
-                            <p><strong>E - Exprimer :</strong> Dire ce que vous ressentez. "Je me sens..."</p>
-                            <p><strong>A - Affirmer :</strong> Demander clairement. "J'aimerais que tu..." ou "Je ne peux pas..."</p>
-                            <p><strong>R - Renforcer :</strong> Expliquer pourquoi c'est bien (pour l'autre ou la relation).</p>
-                            <p><strong>M - Mindful (Conscient) :</strong> Rester sur l'objectif. Ne pas se laisser distraire.</p>
-                            <p><strong>A - Apparaître confiant :</strong> Parler calmement, regarder la personne.</p>
-                            <p><strong>N - Négocier :</strong> Être prêt à trouver un accord. "Que proposes-tu ?"</p>
+                            <p><strong>D - Décrire :</strong> Dire les faits, simples et vérifiables. « J’ai remarqué que le rapport n’est pas envoyé. »</p>
+                            <p><strong>E - Exprimer :</strong> Dire ce que je ressens et ce que je pense avec « je ». « Je me sens stressé quand le délai n’est pas respecté. »</p>
+                            <p><strong>A - Affirmer :</strong> Demande ou refus clair. « Je demande un envoi avant 16h. » / « Je ne peux pas rester ce soir. »</p>
+                            <p><strong>R - Renforcer :</strong> Dire ce que cela apporte. « Cela nous évite des retards et des tensions. »</p>
+                            <p><strong>M - Rester concentré :</strong> Revenir à l’objectif si la discussion dévie. « Mon point, c’est l’envoi avant 16h. »</p>
+                            <p><strong>A - Paraître assuré :</strong> Parler calmement, voix posée, phrases courtes.</p>
+                            <p><strong>N - Négocier :</strong> Proposer ou demander une option. « 16h30 te convient-il ? »</p>
+                            <p><strong>Exemples (bulles) :</strong> Travail — « Je vois que la salle est prise (D). Je suis embêté (E). Je demande la salle à 14h (A). Comme ça, le briefing est prêt (R). » Famille — « Le volume est élevé (D). Je suis fatigué (E). Baisse le son s’il te plaît (A). On pourra parler tranquillement (R). » Soins — « Le rendez-vous a été manqué (D). Je m’inquiète (E). Reprogrammons cette semaine (A). Cela aide votre suivi (R). »</p>
                         </div>
                     </li>
                     
@@ -488,10 +501,12 @@
                             GIVE (Garder la relation)
                         </strong>
                         <div class="technique-detail mt-3 p-4 rounded-lg text-base">
-                            <p><strong>G - Gentle (Doux) :</strong> Parler gentiment. Pas d'attaque, pas de menace.</p>
-                            <p><strong>I - Interested (Intéressé) :</strong> Écouter vraiment ce que l'autre dit.</p>
-                            <p><strong>V - Validate (Valider) :</strong> Montrer qu'on comprend l'autre. "Je vois que c'est dur pour toi."</p>
-                            <p><strong>E - Easy manner (Détendu) :</strong> Rester calme, sourire un peu.</p>
+                            <p><strong>G - Doux :</strong> Voix douce, pas d’attaque, pas de menace. Partir poliment si besoin.</p>
+                            <p><strong>I - Intéressé :</strong> Écouter vraiment, questions courtes et ouvertes. « Qu’est-ce qui te bloque ? »</p>
+                            <p><strong>V - Valider :</strong> Dire ce qui est compréhensible chez l’autre. « Je comprends que tu sois fatigué. »</p>
+                            <p><strong>E - Détendu :</strong> Rester calme, petite touche d’humour si c’est adapté.</p>
+                            <p><strong>Exemples (bulles) :</strong> Travail — « Je vois que tu cours partout (V). Qu’est-ce qui aiderait maintenant ? (I) » Famille — « Je comprends que tu tiennes à cette sortie (V). On en parle 10 minutes tranquillement ? (G/E) » Soins — « Ce traitement est lourd (V). Dis-moi ce qui te gêne le plus (I). »</p>
+                            <p><strong>Mémo français :</strong> AVEC = Altruiste, Validant, Empathique, Chaleureux.</p>
                         </div>
                     </li>
                     
@@ -503,17 +518,20 @@
                             FAST (Garder le respect de soi)
                         </strong>
                         <div class="technique-detail mt-3 p-4 rounded-lg text-base">
-                            <p><strong>F - Fair (Juste) :</strong> Être juste avec soi et l'autre.</p>
-                            <p><strong>A - Apologies (Excuses) :</strong> Ne pas s'excuser 1000 fois si ce n'est pas nécessaire.</p>
-                            <p><strong>S - Stick to values (Valeurs) :</strong> Rester fidèle à ce qui est important pour vous.</p>
-                            <p><strong>T - Truthful (Vrai) :</strong> Être honnête. Ne pas mentir.</p>
+                            <p><strong>F - Juste :</strong> Être équitable avec soi et l’autre. « Je veux être correct avec toi et avec moi. »</p>
+                            <p><strong>A - Excuses :</strong> S’excuser seulement si nécessaire. « Je m’excuse pour mon retard. » (éviter « pardon » dix fois).</p>
+                            <p><strong>S - Valeurs :</strong> Dire sa limite et ses valeurs. « J’ai besoin de mes soirées pour me reposer. »</p>
+                            <p><strong>T - Vrai :</strong> Dire la vérité, sans exagérer ni minimiser.</p>
+                            <p><strong>Exemples (bulles) :</strong> Travail — « Je comprends l’urgence (F). Je ne peux pas travailler après 19h (S/T). Je propose demain 8h (F). » Famille — « Je t’aime (F), mais je ne prêterai pas d’argent cette fois (S/T). » Soins — « Je respecte ton choix (F). Je ne peux pas prescrire sans évaluation (S/T). »</p>
+                            <p><strong>Mémo français :</strong> VRAI = Valeurs, Respect de soi, Arrêter les excuses, Intègre.</p>
                         </div>
                     </li>
                 </ul>
             </div>
         </div>
 
-        <!-- Onglet Pleine Conscience (Simplifié FALC) -->
+
+        <!-- Onglet Pleine Conscience -->
         <div id="mindfulness" class="content-section">
              <div class="strategy-card bg-white rounded-xl p-8 mb-5 shadow-lg">
                 <h3 class="text-2xl font-bold text-indigo-600 mb-4 flex items-center gap-3">
@@ -524,7 +542,7 @@
                     </span> Pleine Conscience
                     <span class="priority-badge priority-3 px-4 py-1 rounded-full text-sm font-semibold shadow-inner">Base Quotidienne</span>
                 </h3>
-                <p class="mb-4"><strong>But :</strong> Être présent ici et maintenant. Accepter ce qui est là, sans juger.</p>
+                <p class="mb-4"><strong>But :</strong> Être présent ici et maintenant. Voir ce qui se passe, dans mon corps et autour de moi, sans juger. Agir selon ce qui m’aide vraiment.</p>
                 
                 <ul class="technique-list list-none">
                     <li class="technique-item p-4 mb-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md" onclick="toggleDetail(this)">
@@ -536,9 +554,10 @@
                             Observer (Compétence QUOI)
                         </strong>
                         <div class="technique-detail mt-3 p-4 rounded-lg text-base">
-                            <p>Remarquer ce qui est là, sans essayer de le changer.</p>
+                            <p>Regarder, écouter, sentir. Laisser venir et repartir, sans changer.</p>
                             <p class="font-semibold mt-2 mb-1">Exercice :</p>
-                            <p>Notez 3 choses que vous voyez. 3 choses que vous entendez. 3 choses que vous ressentez (ex: vos pieds sur le sol).</p>
+                            <p>3 choses que je <strong>vois</strong>, 3 choses que j’<strong>entends</strong>, 3 choses que je <strong>ressens</strong> (ex. pieds au sol, air sur la peau).</p>
+                            <p class="mt-2"><em>Bulle :</em> « Je remarque la lumière sur la table, le bruit du couloir, ma respiration dans la poitrine. »</p>
                         </div>
                     </li>
                     
@@ -550,11 +569,10 @@
                             Décrire (Compétence QUOI)
                         </strong>
                         <div class="technique-detail mt-3 p-4 rounded-lg text-base">
-                            <p>Mettre des mots sur ce que vous observez. Juste les faits.</p>
-                            <p class="mt-2"><strong>Jugement :</strong> "C'est une journée horrible."</p>
-                            <p><strong>Description :</strong> "Il pleut."</p>
-                            <p class="mt-2"><strong>Jugement :</strong> "Je suis nul."</p>
-                            <p><strong>Description :</strong> "J'ai la pensée que je suis nul." ou "J'ai fait une erreur."</p>
+                            <p>Mettre des mots simples sur ce qui est là. Juste les faits.</p>
+                            <p class="mt-2"><strong>Jugement :</strong> « C’est une journée horrible. » → <strong>Description :</strong> « Il pleut et j’ai raté le bus. »</p>
+                            <p><strong>Jugement :</strong> « Je suis nul. » → <strong>Description :</strong> « J’ai la pensée que je suis nul » / « J’ai fait une erreur. »</p>
+                            <p class="mt-2"><em>Bulle :</em> « Je nomme : pluie, froid, tension dans les épaules. »</p>
                         </div>
                     </li>
                     
@@ -566,9 +584,10 @@
                             Participer (Compétence QUOI)
                         </strong>
                         <div class="technique-detail mt-3 p-4 rounded-lg text-base">
-                            <p>S'engager à 100% dans ce que vous faites.</p>
-                            <p>Quand vous marchez, marchez. Quand vous mangez, mangez.</p>
-                            <p>Oubliez le passé et le futur. Soyez juste là.</p>
+                            <p>Faire une seule activité, à 100%. Être « dedans ».</p>
+                            <p>Quand je marche, je marche. Quand je mange, je mange.</p>
+                            <p>Hier et demain attendront. Je suis ici.</p>
+                            <p class="mt-2"><em>Bulle :</em> « Je bois mon thé : je sens la chaleur, le goût, l’odeur. »</p>
                         </div>
                     </li>
                     
@@ -580,8 +599,9 @@
                             Non-Jugement (Compétence COMMENT)
                         </strong>
                         <div class="technique-detail mt-3 p-4 rounded-lg text-base">
-                            <p>Voir les choses sans les juger "bonnes" ou "mauvaises".</p>
-                            <p>Remarquez les jugements, mais ne les croyez pas. Laissez-les passer.</p>
+                            <p>Remarquer sans coller une étiquette « bon » / « mauvais ».</p>
+                            <p>Voir les faits tels qu’ils sont. Laisser passer l’opinion.</p>
+                            <p class="mt-2"><em>Bulle :</em> « Je note : “pensée de critique”, je reviens à ma respiration. »</p>
                         </div>
                     </li>
                     
@@ -593,8 +613,9 @@
                             Une Chose à la Fois (Compétence COMMENT)
                         </strong>
                         <div class="technique-detail mt-3 p-4 rounded-lg text-base">
-                            <p>Faites une seule chose avec toute votre attention.</p>
-                            <p>Si votre esprit part, ramenez-le doucement.</p>
+                            <p>Mon attention sur une seule chose. Puis la suivante.</p>
+                            <p>Si l’esprit part, je le ramène doucement, sans me gronder.</p>
+                            <p class="mt-2"><em>Bulle :</em> « Je termine ce mail, ensuite je regarde mon téléphone. »</p>
                         </div>
                     </li>
                     
@@ -606,9 +627,9 @@
                             Efficacité (Compétence COMMENT)
                         </strong>
                         <div class="technique-detail mt-3 p-4 rounded-lg text-base">
-                            <p>Faites ce qui marche. Pas ce qui est "juste" ou "injuste".</p>
-                            <p>Lâchez prise sur le besoin d'avoir raison.</p>
-                            <p>Posez-vous la question : "Qu'est-ce qui est efficace ici ?"</p>
+                            <p>Faire ce qui marche pour mon objectif, pas pour « avoir raison ».</p>
+                            <p>Question clé : « Qu’est-ce qui m’aide maintenant ? »</p>
+                            <p class="mt-2"><em>Bulle :</em> « Je respire 3 fois et je réponds calmement : c’est plus utile. »</p>
                         </div>
                     </li>
                 </ul>
@@ -616,7 +637,7 @@
 
             <div class="mindfulness-timer text-center p-8 bg-white rounded-xl shadow-lg mt-8">
                 <h3 class="text-2xl font-bold text-indigo-600 mb-4">⏱️ Mini-Pratique de Pleine Conscience</h3>
-                <p class="mb-5 text-gray-700">Prenez quelques minutes pour vous recentrer</p>
+                <p class="mb-5 text-gray-700">Choisissez un temps. Pendant l’exercice : respirer, sentir, revenir au présent.</p>
                 <div class="timer-display text-5xl font-extrabold text-indigo-600 my-6" id="timerDisplay">5:00</div>
                 <div class="flex flex-wrap justify-center gap-3">
                     <button class="timer-btn text-white px-8 py-4 rounded-full text-lg font-semibold shadow-md" onclick="startTimer(300)">5 minutes</button>
@@ -624,11 +645,11 @@
                     <button class="timer-btn text-white px-8 py-4 rounded-full text-lg font-semibold shadow-md" onclick="startTimer(60)">1 minute</button>
                     <button class="timer-btn text-white px-8 py-4 rounded-full text-lg font-semibold shadow-md bg-red-500 hover:bg-red-600" onclick="resetTimer()">Reset</button>
                 </div>
-                <p id="timerInstruction" class="mt-5 italic text-indigo-500 text-base"></p>
+                <p id="timerInstruction" class="mt-5 italic text-indigo-500 text-base">Astuce : dites mentalement « j’inspire… j’expire ». Si un jugement arrive, notez « jugement », puis revenez à la respiration.</p>
             </div>
         </div>
 
-        <!-- Onglet Outil Interactif (Mis à jour pour coller aux nouveaux acronymes) -->
+        <!-- Onglet Outil Interactif  -->
         <div id="quiz" class="content-section">
             <div class="interactive-quiz bg-white rounded-xl p-8 shadow-lg">
                 <h3 class="text-2xl font-bold text-indigo-600 mb-4 flex items-center gap-2">
@@ -637,39 +658,64 @@
                     </svg>
                     Quel outil utiliser ?
                 </h3>
-                <p class="mb-6 text-gray-700">Répondez à cette question pour trouver le bon outil.</p>
+                <p class="mb-6 text-gray-700">
+                    Choisissez votre état actuel. L’outil conseillé s’affichera (Pleine conscience, Vérifier les faits, Agir à l’opposé, ABC SANTÉ, DEAR MAN, AVEC/VRAI).
+                </p>
                 
                 <div id="question1" class="quiz-question">
                     <h4 class="text-xl font-semibold mb-4">1. Comment vous sentez-vous en ce moment ?</h4>
+
+                    <!-- CRISE / URGENCE EMOTIONNELLE -->
                     <div class="quiz-option p-4 my-3 rounded-lg cursor-pointer shadow-sm flex items-center gap-3" onclick="selectOption('q1', 'crisis', this)">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                        Crise intense - Je vais exploser ou me faire du mal.
+                        Crise intense — Je suis au bord d’exploser / de me faire du mal.
+                        <!-- Reco attendue par le script : Pleine conscience (mini-timer), ancrage sensoriel, respiration ; puis Vérifier les faits et Agir à l’opposé si possible. -->
                     </div>
+
+                    <!-- STRESS / EMOTION FORTE MAIS CONTROLEE -->
                     <div class="quiz-option p-4 my-3 rounded-lg cursor-pointer shadow-sm flex items-center gap-3" onclick="selectOption('q1', 'stressed', this)">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                         </svg>
-                        Stressé / Émotion forte - Mais je garde le contrôle.
+                        Émotion forte / très stressé — Je garde encore le contrôle.
+                        <!-- Reco attendue : Pleine conscience (3-5 minutes) + Vérifier les faits ; si émotion inadaptée → Agir à l’opposé ; renforcer avec ABC SANTÉ. -->
                     </div>
+
+                    <!-- CONFLIT / INTERPERSONNEL -->
                     <div class="quiz-option p-4 my-3 rounded-lg cursor-pointer shadow-sm flex items-center gap-3" onclick="selectOption('q1', 'conflict', this)">
                          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a2 2 0 01-2-2V7a2 2 0 012-2h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293H17z" />
                         </svg>
-                        En conflit - J'ai un problème avec quelqu'un.
+                        En conflit avec quelqu’un — J’ai un problème relationnel.
+                        <!-- Reco attendue : DEAR MAN pour demander/refuser + AVEC (GIVE) pour préserver la relation + VRAI (FAST) pour respect de soi. -->
                     </div>
+
+                    <!-- CALME / PREVENTION / ENTRAINEMENT -->
                     <div class="quiz-option p-4 my-3 rounded-lg cursor-pointer shadow-sm flex items-center gap-3" onclick="selectOption('q1', 'calm', this)">
                          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                        Plutôt calme - Je veux m'entraîner ou prendre soin de moi.
+                        Plutôt calme — Je veux m’entraîner / prendre soin de moi.
+                        <!-- Reco attendue : ABC SANTÉ (plan quotidien) + entraînement DEAR MAN/AVEC/VRAI + mini-pratiques de Pleine conscience. -->
                     </div>
                 </div>
 
-                <div id="quizResult" class="quiz-result mt-5 p-5 rounded-lg bg-blue-100 border-blue-300 border"></div>
+                <div id="quizResult" class="quiz-result mt-5 p-5 rounded-lg bg-blue-100 border-blue-300 border">
+                    <p class="font-semibold text-indigo-800">
+                        Conseils : 
+                    </p>
+                    <p class="mt-2 text-indigo-900">
+                        • <strong>Crise</strong> → Commencez par <em>Pleine conscience</em> (minuteur), ancrage 3-3-3 (voir/entendre/ressentir), puis « Vérifier les faits ». Si l’émotion ne colle pas aux faits, utilisez « Agir à l’opposé ». <br>
+                        • <strong>Émotion forte</strong> → 3–5 minutes de Pleine conscience, puis « Vérifier les faits ». Si nécessaire, « Agir à l’opposé ». Renforcez avec <em>ABC SANTÉ</em>. <br>
+                        • <strong>Conflit</strong> → Préparez un DEAR MAN (objectif), parlez en mode <em>AVEC</em> pour la relation, et restez <em>VRAI</em> pour le respect de soi. <br>
+                        • <strong>Calme</strong> → Programmez votre <em>ABC SANTÉ</em> (A-B-C + Santé/Addictions/Nutrition/Sommeil/Exercice) et entraînez DEAR MAN / AVEC / VRAI ; faites 1 mini-pratique de Pleine conscience par jour.
+                    </p>
+                </div>
             </div>
         </div>
+
 
         <div id="references" class="content-section">
             <div class="strategy-card bg-white rounded-xl p-8 mb-5 shadow-lg">
@@ -680,7 +726,7 @@
                     Références
                 </h3>
                 <div class="text-base space-y-4">
-                    <p>Ce guide est une adaptation pratique et simplifiée (style FALC) inspirée des manuels de Thérapie Comportementale Dialectique.</p>
+                    <p>Ce guide est une adaptation pratique et simplifiée inspirée des manuels de Thérapie Comportementale Dialectique.</p>
                     <p>Linehan, M. M. (1993a). <em>Cognitive-behavioral treatment of borderline personality disorder</em>. The Guilford Press.</p>
                     <p>Linehan, M. M. (1993b). <em>Skills training manual for treating borderline personality disorder</em>. The Guilford Press.</p>
                     <p>Linehan, M. M. (2015). <em>DBT skills training manual</em> (2nd ed.). The Guilford Press.</p>
