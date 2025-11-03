@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modèle Bio-Psycho-Social-Culturel</title>
+    <!-- Chargement de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chargement de la police Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Définition de la police par défaut */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Style pour le contenu de l'accordéon (caché par défaut) */
+        .accordion-content {
+            display: none;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        /* Classe pour l'icône chevron */
+        .chevron {
+            transition: transform 0.3s ease;
+        }
+        /* Rotation du chevron quand l'accordéon est actif */
+        .accordion-button.active .chevron {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <!-- En-tête -->
+    <header class="bg-teal-800 text-white p-6 md:p-8 shadow-lg">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-3xl md:text-4xl font-bold">Du Biopsychosocial au Culturel</h1>
+            <p class="mt-2 text-lg text-teal-100">Comprendre l'évolution vers un modèle plus complet.</p>
+        </div>
+    </header>
+
+    <!-- Contenu principal -->
+    <main class="max-w-4xl mx-auto p-4 md:p-8">
+        
+        <div class="space-y-4">
+            
+            <!-- Section 1: Le Modèle BPS d'Engel -->
+            <div class="rounded-lg shadow-lg overflow-hidden bg-white">
+                <button class="accordion-button w-full text-left p-5 bg-teal-700 text-white font-semibold text-xl focus:outline-none hover:bg-teal-600 transition duration-300 flex justify-between items-center">
+                    <span>1. Le Modèle Biopsychosocial (BPS) d'Engel</span>
+                    <svg class="chevron w-6 h-6 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <div class="accordion-content p-6 text-slate-700 leading-relaxed">
+                    <p class="mb-4">Le modèle "Bio-Psycho-Social" (BPS) a été proposé par le médecin George L. Engel dans les années 1970.</p>
+                    <p class="mb-4">C'était une réaction au modèle "biomédical" de l'époque, qui se concentrait uniquement sur le corps et la maladie (Stiefel, 2010).</p>
+                    <p class="font-semibold mb-2">Le modèle BPS explique que la santé et la maladie sont le résultat de l'interaction de trois grands facteurs :</p>
+                    <ul class="list-disc list-inside space-y-2 text-base">
+                        <li><strong class="text-teal-700">BIO :</strong> Le corps, la biologie, la génétique, les virus, les bactéries.</li>
+                        <li><strong class="text-teal-700">PSYCHO :</strong> Les pensées, les émotions, les comportements, la personnalité.</li>
+                        <li><strong class="text-teal-700">SOCIAL :</strong> La famille, le travail, le statut économique, les relations avec les autres.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Section 2: Les Limites du BPS -->
+            <div class="rounded-lg shadow-lg overflow-hidden bg-white">
+                <button class="accordion-button w-full text-left p-5 bg-teal-700 text-white font-semibold text-xl focus:outline-none hover:bg-teal-600 transition duration-300 flex justify-between items-center">
+                    <span>2. Les Limites : Pourquoi le BPS est insuffisant ?</span>
+                    <svg class="chevron w-6 h-6 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <div class="accordion-content p-6 text-slate-700 leading-relaxed">
+                    <p class="mb-4">Le modèle BPS est très utile, mais il a une faiblesse importante.</p>
+                    <p class="mb-4">Souvent, le facteur <strong class="text-red-600">"Social"</strong> est traité de manière trop large ou trop vague. Il ne capture pas bien la complexité de la <strong class="text-red-600">culture</strong> (Fernandez, 2014).</p>
+                    <p>Dans ce modèle, la culture est parfois réduite à une simple "case à cocher" (comme l'ethnicité ou la religion), et non comme un système dynamique qui façonne activement notre façon de :</p>
+                    <ul class="list-disc list-inside space-y-2 mt-2">
+                        <li>Vivre la souffrance.</li>
+                        <li>Exprimer nos émotions.</li>
+                        <li>Chercher de l'aide.</li>
+                    </ul>
+                    <p class="mt-4">Ignorer la culture peut mener à des malentendus et à des soins qui ne sont pas adaptés (Fernandez, 2014).</p>
+                </div>
+            </div>
+
+            <!-- Section 3: Le Modèle BPSC -->
+            <div class="rounded-lg shadow-lg overflow-hidden bg-white">
+                <button class="accordion-button w-full text-left p-5 bg-teal-700 text-white font-semibold text-xl focus:outline-none hover:bg-teal-600 transition duration-300 flex justify-between items-center">
+                    <span>3. L'Évolution : Le Modèle BPSC</span>
+                    <svg class="chevron w-6 h-6 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <div class="accordion-content p-6 text-slate-700 leading-relaxed">
+                    <p class="mb-4">Pour être plus pertinent et plus juste, nous devons faire évoluer le modèle.</p>
+                    <p class="mb-4">Nous proposons un <strong class="text-teal-700">Modèle Bio-Psycho-Social-Culturel (BPSC)</strong>.</p>
+                    <p>Ce modèle ajoute la <strong class="text-teal-700">Culture</strong> comme un quatrième pilier central et indispensable.</p>
+                    
+                    <!-- Représentation visuelle simple des 4 piliers -->
+                    <div class="my-6 w-full max-w-md mx-auto">
+                        <div class="relative p-8 border-4 border-teal-700 rounded-full flex items-center justify-center">
+                            <span class="absolute top-1 left-1/2 -translate-x-1/2 -mt-4 px-3 bg-white text-teal-700 font-bold text-lg">BIO</span>
+                            <span class="absolute bottom-1 left-1/2 -translate-x-1/2 -mb-4 px-3 bg-white text-teal-700 font-bold text-lg">SOCIAL</span>
+                            <span class="absolute left-1 top-1/2 -translate-y-1/2 -ml-6 px-3 bg-white text-teal-700 font-bold text-lg">PSYCHO</span>
+                            <span class="absolute right-1 top-1/2 -translate-y-1/2 -mr-8 px-3 bg-white text-teal-700 font-bold text-lg">CULTUREL</span>
+                            <div class="w-32 h-32 bg-teal-100 rounded-full flex items-center justify-center text-center text-teal-800 font-semibold p-4">
+                                Santé de la Personne
+                            </div>
+                        </div>
+                    </div>
+
+                    <p>Le modèle BPSC reconnaît que la culture n'est pas un simple "plus". C'est un élément fondamental qui influence tous les autres aspects : notre biologie, notre psychologie et nos relations sociales.</p>
+                </div>
+            </div>
+
+            <!-- Section 4: Définition de la Culture -->
+            <div class="rounded-lg shadow-lg overflow-hidden bg-white">
+                <button class="accordion-button w-full text-left p-5 bg-teal-700 text-white font-semibold text-xl focus:outline-none hover:bg-teal-600 transition duration-300 flex justify-between items-center">
+                    <span>4. Qu'est-ce que la Culture ?</span>
+                    <svg class="chevron w-6 h-6 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <div class="accordion-content p-6 text-slate-700 leading-relaxed">
+                    <p class="mb-4">La culture n'est pas une chose fixe ou ancienne. Ce n'est pas seulement l'art, la langue ou la nourriture.</p>
+                    <p class="mb-4">En se basant sur le document de travail, la culture est un <strong class="text-teal-700">ensemble dynamique</strong> (Fernandez, 2014). Elle comprend :</p>
+                    <ul class="list-disc list-inside space-y-2">
+                        <li>Des croyances et des valeurs partagées.</li>
+                        <li>Des normes (ce qui est "normal" ou "attendu").</li>
+                        <li>Des pratiques et des façons de faire.</li>
+                        <li>Des significations (comment on comprend le monde).</li>
+                        <li>Des structures sociales (l'organisation de la société).</li>
+                        <li>Des contextes historiques.</li>
+                    </ul>
+                    <p class="mt-4">La culture est l'ensemble de ce qui est <strong class="text-teal-700">transmis socialement</strong> dans un mode de vie. Comprendre la culture d'une personne est donc essentiel pour la comprendre et la soigner dans sa globalité.</p>
+                </div>
+            </div>
+
+            <!-- Section 5: Références -->
+            <div class="rounded-lg shadow-lg overflow-hidden bg-white">
+                <button class="accordion-button w-full text-left p-5 bg-teal-700 text-white font-semibold text-xl focus:outline-none hover:bg-teal-600 transition duration-300 flex justify-between items-center">
+                    <span>5. Références</span>
+                    <svg class="chevron w-6 h-6 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <div class="accordion-content p-6 text-slate-700 leading-relaxed">
+                    <p class="mb-4 font-semibold">Voici les sources utilisées pour construire cette présentation :</p>
+                    <ul class="space-y-3" style="word-break: break-word;">
+                        <li>
+                            <p class="text-sm">Engel, G. L. (1977). The need for a new medical model: A challenge for biomedicine. <i>Science</i>, <i>196</i>(4286), 129–136. https://doi.org/10.1126/science.847460</p>
+                        </li>
+                        <li>
+                            <p class="text-sm">Fernandez, G. S. (2014, août). <i>The Status of the “Biopsychosocial” Model in Health Psychology: Towards an Integrated Approach and a Critique of Cultural Conceptions</i> [Présentation de conférence]. 13th International Congress of Behavioral Medicine, Groningen, Pays-Bas. https://www.researchgate.net/publication/264971784_The_Status_of_the_Biopsychosocial_Model_in_Health_Psychology_Towards_an_Integrated_Approach_and_a_Critique_of_Cultural_Conceptions</p>
+                        </li>
+                        <li>
+                            <p class="text-sm">Stiefel, F. (2010). Le modèle biopsychosocial : beaucoup plus qu’un supplément d’empathie. <i>Revue Médicale Suisse</i>, <i>6</i>(258), 1339. https://www.revmed.ch/revue-medicale-suisse/2010/revue-medicale-suisse-258/le-modele-biopsychosocial-beaucoup-plus-qu-un-supplement-d-empathie</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Pied de page -->
+    <footer class="text-center p-6 mt-8 text-slate-500 text-sm">
+        
+    </footer>
+
+    <script>
+        // Script JavaScript pour l'accordéon
+        document.addEventListener('DOMContentLoaded', function () {
+            const accordionButtons = document.querySelectorAll('.accordion-button');
+
+            accordionButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Ajoute ou retire la classe 'active' au bouton
+                    button.classList.toggle('active');
+
+                    // Cible le contenu de l'accordéon (l'élément frère suivant)
+                    const content = button.nextElementSibling;
+
+                    // Affiche ou cache le contenu
+                    if (content.style.display === "block") {
+                        content.style.display = "none";
+                    } else {
+                        content.style.display = "block";
+                    }
+                });
+            });
+
+            // Optionnel : Ouvrir le premier accordéon par défaut
+            if (accordionButtons.length > 0) {
+                accordionButtons[0].click();
+            }
+        });
+    </script>
+
+</body>
+</html>
+
