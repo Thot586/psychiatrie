@@ -1,0 +1,1207 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PCL-5 – Questionnaire de Stress Post-Traumatique</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    
+    :root {
+      /* Palette Rouge Clair / Soft Red pour PCL-5 */
+      --primary: #d66d75;
+      --primary-light: #e2959b;
+      --primary-dark: #b84b55;
+      --accent: #e6b2b2;
+      
+      --bg-main: #fff9f9;
+      --bg-card: #ffffff;
+      
+      --text-primary: #4a2c2c;
+      --text-secondary: #7f5a5a;
+      --text-muted: #ad8e8e;
+      
+      --border: #f0d5d5;
+      
+      /* Zones de score */
+      --success: #7fb89e;
+      --warning: #e8b86d;
+      --danger: #d88d9a;
+      
+      --zone-low: #a8d5ba;       /* Vert */
+      --zone-moderate: #f9d67a;  /* Jaune */
+      --zone-high: #e2959b;      /* Rouge clair */
+      --zone-very-high: #d66d75; /* Rouge foncé */
+
+      --shadow-sm: 0 2px 8px rgba(214, 109, 117, 0.08);
+      --shadow-md: 0 4px 16px rgba(214, 109, 117, 0.12);
+      --shadow-lg: 0 8px 32px rgba(214, 109, 117, 0.16);
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, var(--bg-main) 0%, #fff0f0 100%);
+      color: var(--text-primary);
+      line-height: 1.7;
+      padding: 1.5rem;
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 56rem;
+      margin: 0 auto;
+      background: var(--bg-card);
+      border-radius: 24px;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      animation: fadeIn 0.6s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white;
+      padding: 2rem 2rem 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 300px;
+      height: 300px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      animation: float 8s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(-20px, 20px) scale(1.1); }
+    }
+    
+    header h1 {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      position: relative;
+      z-index: 1;
+    }
+    
+    header .subtitle {
+      font-size: 1rem;
+      opacity: 0.95;
+      font-weight: 400;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .toolbar {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .btn {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 0.6rem 1.1rem;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+    
+    .btn:hover:not([disabled]) {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .btn[disabled] {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .btn-secondary {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .btn-secondary:hover:not([disabled]) {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .section {
+      padding: 2rem;
+      border-top: 1px solid var(--border);
+    }
+    
+    .instructions {
+      background: linear-gradient(135deg, #fff5f5 0%, #fffcfc 100%);
+      color: var(--text-primary);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin: 1.5rem 2rem;
+      border: 1px solid var(--border);
+    }
+    
+    .instructions strong {
+      color: var(--primary-dark);
+    }
+    
+    .question {
+      padding: 1.5rem 0;
+      border-bottom: 1px solid var(--border);
+      transition: all 0.3s ease;
+    }
+    
+    .question:hover {
+      background: linear-gradient(90deg, transparent 0%, rgba(214, 109, 117, 0.03) 50%, transparent 100%);
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+      margin-left: -0.5rem;
+      margin-right: -0.5rem;
+      border-radius: 12px;
+    }
+    
+    .question:last-child {
+      border-bottom: none;
+    }
+    
+    .qtext {
+      font-weight: 500;
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+    
+    .qnumber {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--primary-light) 0%, var(--accent) 100%);
+      color: white;
+      min-width: 32px;
+      height: 24px;
+      border-radius: 12px;
+      text-align: center;
+      line-height: 24px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-right: 0.75rem;
+      padding: 0 0.5rem;
+    }
+    
+    /* Adaptation pour l'échelle Likert 0-4 du PCL-5 */
+    .likert-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+    
+    .likert-options input[type="radio"] {
+      display: none;
+    }
+    
+    .likert-options label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0.75rem 0.5rem;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: var(--bg-card);
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      min-height: 80px;
+    }
+    
+    .likert-options label strong {
+        display: block;
+        font-size: 1.1rem;
+        margin-bottom: 4px;
+    }
+    
+    .likert-options label:hover {
+      border-color: var(--primary-light);
+      background: linear-gradient(135deg, rgba(214, 109, 117, 0.05) 0%, rgba(230, 178, 178, 0.05) 100%);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .likert-options input[type="radio"]:checked + label {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white;
+      border-color: var(--primary);
+      box-shadow: var(--shadow-md);
+      transform: scale(1.02);
+    }
+    
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+    
+    button.primary {
+      background: linear-gradient(135deg, var(--success) 0%, #6fa88a 100%);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-md);
+    }
+    
+    button.primary:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .validation {
+      color: var(--danger);
+      text-align: center;
+      font-weight: 600;
+      display: none;
+      padding: 1rem;
+      background: rgba(216, 141, 154, 0.1);
+      border-radius: 12px;
+      border: 1px solid var(--danger);
+    }
+    
+    #results {
+      display: none;
+      animation: fadeIn 0.6s ease;
+    }
+    
+    .grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+    
+    .panel {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 250, 250, 0.9) 100%);
+      box-shadow: var(--shadow-sm);
+      transition: all 0.3s ease;
+    }
+    
+    .panel:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+    
+    .panel h3 {
+      font-size: 1.15rem;
+      margin-bottom: 1rem;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .panel h3::before {
+      content: '';
+      width: 4px;
+      height: 1.5rem;
+      background: linear-gradient(180deg, var(--primary) 0%, var(--accent) 100%);
+      border-radius: 2px;
+    }
+
+    /* Score principal amélioré */
+    .score-display {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 1.5rem 0;
+      padding: 1.5rem;
+      background: white;
+      border-radius: 16px;
+      box-shadow: var(--shadow-sm);
+      border: 2px solid var(--border);
+    }
+
+    .score-number {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .score-value {
+      font-size: 3.5rem;
+      font-weight: 800;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .score-label {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      font-weight: 600;
+    }
+
+    /* Curseur de score amélioré */
+    .score-slider {
+      margin: 2rem 0;
+    }
+
+    .slider-track {
+      position: relative;
+      height: 48px;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .slider-zones {
+      display: flex;
+      height: 100%;
+      width: 100%;
+    }
+
+    .zone {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: rgba(0, 0, 0, 0.4);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: all 0.3s ease;
+    }
+    
+    /* Zones PCL-5: 0-32 (Non), 33-80 (Oui) - on nuance un peu */
+    .zone-low {
+      width: 41.25%; /* 0 à 33 */
+      background: linear-gradient(90deg, #a8d5ba 0%, #f9d67a 100%);
+    }
+
+    .zone-high {
+      width: 58.75%; /* 33 à 80 */
+      background: linear-gradient(90deg, #f9d67a 0%, #d66d75 100%);
+    }
+
+    .score-marker {
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      transition: left 1s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 10;
+    }
+
+    .marker-pin {
+      width: 4px;
+      height: 56px;
+      background: white;
+      border-radius: 2px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+
+    .marker-pin::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 16px;
+      height: 16px;
+      background: white;
+      border: 3px solid var(--primary);
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .marker-value {
+      position: absolute;
+      top: -32px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--primary);
+      color: white;
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      white-space: nowrap;
+      box-shadow: 0 4px 12px rgba(214, 109, 117, 0.4);
+    }
+
+    .marker-value::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 6px solid var(--primary);
+    }
+
+    .slider-labels {
+      position: relative;
+      height: 50px;
+      margin-top: 1rem;
+    }
+
+    .slider-label {
+      position: absolute;
+      transform: translateX(-50%);
+      text-align: center;
+    }
+
+    .slider-label-value {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      margin-bottom: 0.25rem;
+    }
+
+    .slider-label-text {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    
+    .probability-indicator {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+      padding: 1.5rem;
+      background: white;
+      border-radius: 14px;
+      box-shadow: var(--shadow-sm);
+      border: 2px solid var(--border);
+    }
+
+    details.accordion {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1rem 1.25rem;
+      margin-top: 1rem;
+      background: white;
+      transition: all 0.3s ease;
+    }
+    
+    details.accordion:hover {
+      box-shadow: var(--shadow-sm);
+    }
+    
+    details.accordion[open] {
+      box-shadow: var(--shadow-md);
+    }
+    
+    details.accordion summary {
+      cursor: pointer;
+      font-weight: 700;
+      color: var(--primary-dark);
+      list-style: none;
+      outline: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.25rem 0;
+    }
+    
+    details.accordion summary::-webkit-details-marker {
+      display: none;
+    }
+    
+    details.accordion summary::after {
+      content: '▸';
+      font-size: 1.2rem;
+      transition: transform 0.3s ease;
+      color: var(--primary);
+    }
+    
+    details.accordion[open] summary::after {
+      transform: rotate(90deg);
+    }
+    
+    details.accordion .content {
+      padding-top: 1rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
+    
+    .subscales-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .subscale-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 245, 245, 0.8) 100%);
+      transition: all 0.3s ease;
+    }
+    
+    .subscale-card:hover {
+      box-shadow: var(--shadow-sm);
+      transform: translateX(4px);
+    }
+    
+    .subscale-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    
+    .subscale-name {
+      font-weight: 700;
+      color: var(--primary-dark);
+      font-size: 0.95rem;
+    }
+    
+    .subscale-score {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+    
+    .subscale-bar {
+      height: 6px;
+      width: 100%;
+      background: #f0ebf8;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 0.5rem;
+    }
+    
+    .subscale-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary-light) 0%, var(--primary) 100%);
+      transition: width 0.8s ease;
+      border-radius: 999px;
+    }
+    
+    .consent {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      background: linear-gradient(135deg, rgba(232, 184, 109, 0.15) 0%, rgba(255, 251, 234, 0.15) 100%);
+      border: 1px solid rgba(232, 184, 109, 0.3);
+      color: var(--text-primary);
+      padding: 1rem;
+      border-radius: 12px;
+      margin-top: 1rem;
+    }
+    
+    .consent input[type="checkbox"] {
+      margin-top: 0.25rem;
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+    
+    .note {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      margin-top: 1rem;
+      padding: 1rem;
+      background: rgba(214, 109, 117, 0.05);
+      border-radius: 10px;
+      border-left: 3px solid var(--primary);
+    }
+    
+    .note strong {
+      color: var(--primary-dark);
+    }
+
+    /* Style pour les citations académiques */
+    .reference-box {
+        font-size: 0.85rem;
+        background: #fff;
+        border: 1px solid var(--border);
+        padding: 1rem;
+        border-radius: 8px;
+        margin-top: 1rem;
+    }
+    .reference-item {
+        margin-bottom: 0.5rem;
+        padding-left: 1rem;
+        text-indent: -1rem;
+    }
+    
+    .small {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+    
+    footer {
+      padding: 1.5rem 2rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      background: linear-gradient(135deg, #fafafa 0%, #fffbfb 100%);
+      border-top: 1px solid var(--border);
+      line-height: 1.8;
+    }
+    
+    @media (max-width: 640px) {
+      body { padding: 0.75rem; }
+      .section { padding: 1.5rem 1rem; }
+      header { padding: 1.5rem 1rem 1rem; }
+      .likert-options { grid-template-columns: 1fr 1fr; }
+      .likert-options label:last-child { grid-column: span 2; }
+      .score-display { flex-direction: column; gap: 1rem; }
+      .score-value { font-size: 2.5rem; }
+      .marker-value { font-size: 0.85rem; padding: 0.3rem 0.6rem; }
+      .probability-indicator { flex-direction: column; text-align: center; }
+      .subscales-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>PCL-5</h1>
+      <div class="subtitle">Posttraumatic Stress Disorder Checklist for DSM-5 (Weathers et al., 2013)</div>
+      <div class="toolbar">
+        <label class="btn" for="file-import">Importer un résultat</label>
+        <input type="file" id="file-import" accept=".json" style="display:none"/>
+      </div>
+    </header>
+
+    <div class="instructions">
+      <p><strong>Période de référence :</strong> Au cours du dernier mois.</p>
+      <p style="margin-top: 0.5rem;">Voici une liste de difficultés que les gens éprouvent parfois à la suite d'une expérience stressante. Veuillez lire chaque énoncé attentivement et indiquer dans quelle mesure ce problème vous a affecté <strong>au cours du dernier mois</strong>. Il n'y a pas de bonne ou de mauvaise réponse.</p>
+      
+      <div style="margin-top: 1rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+        <label for="eval-date" style="font-weight: 600;">Date de l'évaluation :</label>
+        <input type="date" id="eval-date" style="padding: 0.5rem; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 0.95rem;"/>
+      </div>
+    </div>
+
+    <form id="pcl5-form" class="section">
+      <div id="qwrap"></div>
+
+      <div class="actions">
+        <button type="submit" class="primary">Calculer les résultats</button>
+        <p id="valmsg" class="validation">Veuillez répondre à toutes les questions.</p>
+      </div>
+
+      <div id="results" class="section">
+        <div class="grid">
+          <div class="panel">
+            <h3>Résultats de l'évaluation</h3>
+            <p id="eval-date-display" style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;"></p>
+            
+            <div class="score-display">
+              <div class="score-number">
+                <div class="score-value" id="totalscore">0</div>
+                <div class="score-label">Score total / 80</div>
+              </div>
+              <div id="probability-badge" style="flex: 1;"></div>
+            </div>
+
+            <div class="score-slider">
+              <div class="slider-track">
+                <div class="slider-zones">
+                  <div class="zone zone-low">Normal / Infra-clinique</div>
+                  <div class="zone zone-high">Dépistage Positif (>33)</div>
+                </div>
+                <div class="score-marker" id="score-marker">
+                  <div class="marker-value" id="marker-value">0</div>
+                  <div class="marker-pin"></div>
+                </div>
+              </div>
+              <div class="slider-labels">
+                <div class="slider-label" style="left: 0%;">
+                  <div class="slider-label-value">0</div>
+                  <div class="slider-label-text">Min</div>
+                </div>
+                <div class="slider-label" style="left: 41.25%;">
+                  <div class="slider-label-value">33</div>
+                  <div class="slider-label-text">Seuil Clinique</div>
+                </div>
+                <div class="slider-label" style="left: 100%;">
+                  <div class="slider-label-value">80</div>
+                  <div class="slider-label-text">Max</div>
+                </div>
+              </div>
+            </div>
+
+            <details class="accordion">
+              <summary>Interprétation clinique détaillée</summary>
+              <div class="content">
+                <div id="interp-long"></div>
+                <div class="reference-box">
+                    <p style="font-weight:600; margin-bottom:0.5rem;">Références utilisées pour l'interprétation :</p>
+                    <div class="reference-item">Ashbaugh, A. R., et al. (2016). Psychometric properties of the French version of the PCL-5. <em>International Journal of Mental Health and Addiction</em>, 14(6), 1058-1076.</div>
+                    <div class="reference-item">Weathers, F. W., et al. (2013). <em>The Posttraumatic Stress Disorder Checklist for DSM-5 (PCL-5)</em>. National Center for PTSD.</div>
+                </div>
+              </div>
+            </details>
+
+            <details class="accordion">
+              <summary>Pour les patients — comprendre votre résultat</summary>
+              <div class="content">
+                <p><strong>Qu'est-ce que le PCL-5 ?</strong></p>
+                <p>Le PCL-5 est un questionnaire de 20 questions qui évalue les symptômes de stress post-traumatique selon les critères du manuel diagnostique DSM-5. Il est utilisé pour dépister les symptômes liés à un événement traumatique passé.</p>
+                
+                <p style="margin-top: 1rem;"><strong>Que signifie votre score ?</strong></p>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                  <li><strong>Score élevé (généralement 33 ou plus) :</strong> Cela suggère que vous présentez de nombreux symptômes associés au TSPT. Il est recommandé de consulter un professionnel de santé (psychologue, psychiatre) pour une évaluation complète.</li>
+                  <li><strong>Score bas :</strong> Vous présentez peu de symptômes, ou ceux-ci sont peu intenses.</li>
+                </ul>
+                
+                <p class="note" style="margin-top: 1rem;"><strong>Important :</strong> Ce questionnaire est un outil d'aide et ne remplace pas un diagnostic médical. Seul un clinicien peut poser un diagnostic de Trouble de Stress Post-Traumatique après un entretien approfondi.</p>
+              </div>
+            </details>
+
+            <details class="accordion">
+              <summary>Pour les cliniciens — score et algorithme DSM-5</summary>
+              <div class="content">
+                <p><strong>Méthodologie de cotation</strong></p>
+                <p>Le PCL-5 permet deux méthodes d'interprétation validées par la littérature (Weathers et al., 2013; Ashbaugh et al., 2016) :</p>
+                
+                <p style="margin-top: 1rem;"><strong>1. Score Total (Cut-off)</strong></p>
+                <p>Un score total de <strong>31 à 33</strong> est généralement considéré comme le seuil (cut-off) pour un dépistage positif du TSPT.</p>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                    <li>Sensibilité élevée (.94) pour un seuil de 33 (Bovin et al., 2016).</li>
+                    <li>Utile pour le suivi de la sévérité des symptômes.</li>
+                    <li>Un changement de 5 à 10 points représente un changement clinique fiable, et 10-20 points un changement cliniquement significatif.</li>
+                </ul>
+
+                <p style="margin-top: 1rem;"><strong>2. Algorithme Diagnostique (DSM-5)</strong></p>
+                <p>Le PCL-5 peut être coté en traitant chaque item noté <strong>2 (Modérément) ou plus</strong> comme un symptôme présent. Pour un diagnostic de TSPT, le profil doit respecter la règle :</p>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                    <li><strong>Critère B :</strong> Au moins 1 symptôme intrusif (Q1-5)</li>
+                    <li><strong>Critère C :</strong> Au moins 1 symptôme d'évitement (Q6-7)</li>
+                    <li><strong>Critère D :</strong> Au moins 2 symptômes cognitifs/humeur (Q8-14)</li>
+                    <li><strong>Critère E :</strong> Au moins 2 symptômes d'éveil/réactivité (Q15-20)</li>
+                </ul>
+                <div id="dsm-result" style="margin-top: 1rem; padding: 1rem; background: #fff0f0; border-radius: 8px; font-weight: 600; color: var(--primary-dark);"></div>
+
+                <p style="margin-top: 1rem;"><strong>Lacunes et limites actuelles</strong></p>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                  <li><strong>Sur-déclaration :</strong> Les questionnaires auto-rapportés tendent à produire des scores plus élevés que les entretiens cliniques (CAPS-5).</li>
+                  <li><strong>Recouvrement des symptômes :</strong> Certains symptômes (troubles du sommeil, concentration, irritabilité) sont peu spécifiques et se retrouvent dans la dépression ou les troubles anxieux généralisés.</li>
+                  <li><strong>Pistes de recherche :</strong> La validation de cut-offs spécifiques pour des sous-populations francophones (militaires vs civils vs réfugiés) reste un champ d'étude nécessaire.</li>
+                </ul>
+              </div>
+            </details>
+          </div>
+
+          <details class="accordion">
+            <summary>Scores par cluster (Critères DSM-5)</summary>
+            <div class="content">
+              <p class="small" style="margin-bottom: 1rem;">Scores détaillés pour les 4 clusters de symptômes du DSM-5.</p>
+              <div class="subscales-grid" id="subscales-scores"></div>
+            </div>
+          </details>
+
+          <div class="panel">
+            <h3>Exporter votre résultat</h3>
+            <p class="small">Aucun stockage local n'est effectué. Pour exporter, cochez la case de consentement puis cliquez sur « Exporter ».</p>
+            <label class="consent">
+              <input type="checkbox" id="consent"/>
+              <span>J'autorise l'export de mes réponses au format JSON (à conserver par moi). Ces données resteront confidentielles et ne seront pas transmises.</span>
+            </label>
+            <div class="actions" style="justify-content:flex-start; margin-top: 1rem;">
+              <button type="button" id="btn-export" class="btn-secondary" disabled>Exporter</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <footer>
+      <p><strong>© Weathers, F.W., Litz, B.T., Keane, T.M., Palmieri, P.A., Marx, B.P., & Schnurr, P.P. (2013).</strong></p>
+      <p style="margin-top: 0.5rem;">Le PCL-5 est un instrument du domaine public. Version française validée par Ashbaugh et al. (2016). Usage clinique et recherche. Aucune donnée n'est stockée sur serveur.</p>
+      <p style="margin-top: 0.5rem;">Adaptation en version numérique par le Dr FENOHASINA Toto Jean Felicien (Psychiatre).</p>
+    </footer>
+  </div>
+
+  <script>
+    // 20 items du PCL-5 (Version française officielle - Ashbaugh et al., 2016 / CNPTSD)
+    // Texte extrait du PDF fourni.
+    const questions = [
+      "Des souvenirs répétés, pénibles et involontaires de l'expérience stressante ?",
+      "Des rêves répétés et pénibles de l'expérience stressante ?",
+      "Se sentir ou agir soudainement comme si vous viviez à nouveau l'expérience stressante ?",
+      "Se sentir mal quand quelque chose vous rappelle l'événement ?",
+      "Avoir de fortes réactions physiques lorsque quelque chose vous rappelle l'événement (accélération cardiaque, difficulté respiratoire, sudation) ?",
+      "Essayer d'éviter les souvenirs, pensées, et sentiments liés à l'événement ?",
+      "Essayer d'éviter les personnes et les choses qui vous rappellent l'expérience stressante (lieux, personnes, activités, objets) ?",
+      "Des difficultés à vous rappeler des parties importantes de l'événement ?",
+      "Des croyances négatives sur vous-même, les autres, le monde (ex: je suis mauvais, le monde est dangereux) ?",
+      "Vous blâmer ou blâmer quelqu'un d'autre pour l'événement ou ce qui s'est produit ensuite ?",
+      "Avoir des sentiments négatifs intenses tels que peur, horreur, colère, culpabilité, ou honte ?",
+      "Perdre de l'intérêt pour des activités que vous aimiez auparavant ?",
+      "Vous sentir distant ou coupé des autres ?",
+      "Avoir du mal à éprouver des sentiments positifs (joie, amour) ?",
+      "Comportement irritable, explosions de colère, ou agir agressivement ?",
+      "Prendre des risques inconsidérés ou avoir des conduites qui pourraient vous mettre en danger ?",
+      "Être en état de « super-alerte », hyper vigilant ou sur vos gardes ?",
+      "Sursauter facilement ?",
+      "Avoir du mal à vous concentrer ?",
+      "Avoir du mal à trouver le sommeil ou à rester endormi ?"
+    ];
+
+    // Clusters DSM-5
+    const clusters = {
+      B: { name: "B. Intrusion (Reviviscence)", items: [1, 2, 3, 4, 5], required: 1 },
+      C: { name: "C. Évitement", items: [6, 7], required: 1 },
+      D: { name: "D. Altérations cognitives/humeur", items: [8, 9, 10, 11, 12, 13, 14], required: 2 },
+      E: { name: "E. Altérations de l'éveil/réactivité", items: [15, 16, 17, 18, 19, 20], required: 2 }
+    };
+
+    // Initialiser la date du jour
+    const evalDateInput = document.getElementById('eval-date');
+    const today = new Date().toISOString().split('T')[0];
+    evalDateInput.value = today;
+
+    // Génération du formulaire
+    const qwrap = document.getElementById('qwrap');
+    questions.forEach((text, i) => {
+      const idx = i + 1;
+      const div = document.createElement('div');
+      div.className = 'question';
+      
+      div.innerHTML = `
+        <div class="qtext">
+          <span class="qnumber">${idx}</span>${text}
+        </div>
+        <div class="likert-options">
+          <div>
+            <input type="radio" id="q${idx}_0" name="q${idx}" value="0"/>
+            <label for="q${idx}_0"><strong>0</strong>Pas du tout</label>
+          </div>
+          <div>
+            <input type="radio" id="q${idx}_1" name="q${idx}" value="1"/>
+            <label for="q${idx}_1"><strong>1</strong>Un peu</label>
+          </div>
+          <div>
+            <input type="radio" id="q${idx}_2" name="q${idx}" value="2"/>
+            <label for="q${idx}_2"><strong>2</strong>Modérément</label>
+          </div>
+          <div>
+            <input type="radio" id="q${idx}_3" name="q${idx}" value="3"/>
+            <label for="q${idx}_3"><strong>3</strong>Beaucoup</label>
+          </div>
+          <div>
+            <input type="radio" id="q${idx}_4" name="q${idx}" value="4"/>
+            <label for="q${idx}_4"><strong>4</strong>Extrêmement</label>
+          </div>
+        </div>
+      `;
+      qwrap.appendChild(div);
+    });
+
+    // Fonctions d'interprétation
+    function getInterpretation(total, algorithmPass) {
+      let probability, probabilityClass, probabilityColor, probabilityDesc, detailedDesc;
+      
+      // Cut-off à 33 (National Center for PTSD)
+      const CUTOFF = 33;
+      
+      if (total < CUTOFF) {
+        probability = "Faible / Négatif";
+        probabilityClass = "success";
+        probabilityColor = "#7fb89e"; // Vert succès
+        probabilityDesc = "Score en dessous du seuil clinique (33).";
+        detailedDesc = "Votre score total est inférieur au seuil de 33, ce qui indique généralement l'absence d'un trouble de stress post-traumatique (TSPT) actif selon les critères du PCL-5. Cependant, si vous ressentez une souffrance significative, n'hésitez pas à consulter. Certains symptômes isolés peuvent nécessiter une attention particulière.";
+      } else {
+        // Score >= 33
+        if (algorithmPass) {
+            probability = "Élevée";
+            probabilityClass = "danger";
+            probabilityColor = "#d66d75"; // Rouge PCL
+            probabilityDesc = "Score au-dessus du seuil ET critères DSM-5 remplis.";
+            detailedDesc = `Votre score (${total}) dépasse le seuil clinique de 33, et la répartition de vos symptômes correspond aux critères diagnostiques du DSM-5.<br><br>Ce résultat suggère une <strong>probabilité élevée de TSPT</strong>. Il est fortement recommandé de consulter un professionnel pour un entretien clinique structuré (ex: CAPS-5) afin de confirmer ce diagnostic et d'évaluer le besoin d'une prise en charge thérapeutique.`;
+        } else {
+            probability = "Modérée / À surveiller";
+            probabilityClass = "warning";
+            probabilityColor = "#e8b86d"; // Jaune/Orange
+            probabilityDesc = "Score au-dessus du seuil mais critères DSM-5 incomplets.";
+            detailedDesc = `Votre score total (${total}) est élevé (supérieur à 33), ce qui indique une détresse significative. Cependant, la répartition spécifique de vos symptômes ne remplit pas complètement tous les critères stricts de l'algorithme DSM-5 (combinaison B+C+D+E).<br><br>Cela peut refléter un TSPT partiel, un autre trouble anxieux, ou une dépression. Une évaluation clinique est recommandée pour clarifier la nature de vos difficultés.`;
+        }
+      }
+      
+      return {
+        probability,
+        probabilityClass,
+        probabilityColor,
+        probabilityDesc,
+        detailedDesc
+      };
+    }
+
+    // Gestion du formulaire
+    const form = document.getElementById('pcl5-form');
+    const valmsg = document.getElementById('valmsg');
+    const results = document.getElementById('results');
+    const totalscoreEl = document.getElementById('totalscore');
+    const scoreMarker = document.getElementById('score-marker');
+    const markerValue = document.getElementById('marker-value');
+    const evalDateDisplay = document.getElementById('eval-date-display');
+    const probabilityBadge = document.getElementById('probability-badge');
+    const interpLong = document.getElementById('interp-long');
+    const subscalesScores = document.getElementById('subscales-scores');
+    const dsmResult = document.getElementById('dsm-result');
+
+    function computeAndRender(answers) {
+      // Vérifier complétude
+      for (let i = 1; i <= questions.length; i++) {
+        if (answers[`q${i}`] === undefined) {
+          valmsg.style.display = 'block';
+          results.style.display = 'none';
+          return false;
+        }
+      }
+      valmsg.style.display = 'none';
+
+      // Calcul des scores
+      let total = 0;
+      let clusterStatus = { B: 0, C: 0, D: 0, E: 0 }; // Compteur de symptômes validés (>=2) par cluster
+      const clusterScores = { B: 0, C: 0, D: 0, E: 0 }; // Score brut par cluster
+
+      // Conversion réponses en entiers et calcul
+      for (let i = 1; i <= questions.length; i++) {
+          const val = parseInt(answers[`q${i}`], 10);
+          total += val;
+          
+          // Trouver à quel cluster appartient la question
+          for (const [key, data] of Object.entries(clusters)) {
+              if (data.items.includes(i)) {
+                  clusterScores[key] += val;
+                  if (val >= 2) { // Règle DSM-5: Symptôme présent si score >= 2 (Modérément)
+                      clusterStatus[key]++;
+                  }
+              }
+          }
+      }
+
+      // Algorithme DSM-5
+      // Règle: 1 B, 1 C, 2 D, 2 E
+      const passB = clusterStatus.B >= clusters.B.required;
+      const passC = clusterStatus.C >= clusters.C.required;
+      const passD = clusterStatus.D >= clusters.D.required;
+      const passE = clusterStatus.E >= clusters.E.required;
+      const algorithmPass = passB && passC && passD && passE;
+
+      // Affichage DSM Cliniciens
+      dsmResult.innerHTML = `
+        Algorithme DSM-5 : ${algorithmPass ? '<span style="color:#d66d75">POSITIF</span>' : '<span style="color:#7fb89e">NÉGATIF</span>'}<br>
+        <div style="font-weight:400; font-size:0.9rem; margin-top:0.5rem">
+        Détail critères (symptômes ≥ 2) :<br>
+        B (Intrusion) : ${clusterStatus.B}/${clusters.B.items.length} (Requis: 1) -> ${passB ? 'OK' : 'X'}<br>
+        C (Évitement) : ${clusterStatus.C}/${clusters.C.items.length} (Requis: 1) -> ${passC ? 'OK' : 'X'}<br>
+        D (Cognitions) : ${clusterStatus.D}/${clusters.D.items.length} (Requis: 2) -> ${passD ? 'OK' : 'X'}<br>
+        E (Éveil) : ${clusterStatus.E}/${clusters.E.items.length} (Requis: 2) -> ${passE ? 'OK' : 'X'}
+        </div>
+      `;
+
+      // Afficher le score total
+      totalscoreEl.textContent = String(total);
+      
+      // Animer le curseur
+      const percentage = (total / 80) * 100;
+      setTimeout(() => {
+        scoreMarker.style.left = `${percentage}%`;
+        markerValue.textContent = total;
+      }, 100);
+
+      // Afficher la date
+      const evalDate = evalDateInput.value;
+      const dateObj = new Date(evalDate + 'T00:00:00');
+      const dateFormatted = dateObj.toLocaleDateString('fr-FR', { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      });
+      evalDateDisplay.textContent = `Évaluation du ${dateFormatted}`;
+
+      // Interprétation
+      const probInfo = getInterpretation(total, algorithmPass);
+      probabilityBadge.innerHTML = `
+        <div style="text-align: center;">
+          <div style="font-size: 1.5rem; font-weight: 800; color: ${probInfo.probabilityColor}; margin-bottom: 0.5rem;">
+            ${probInfo.probability}
+          </div>
+          <div style="font-size: 0.9rem; color: var(--text-secondary);">
+            ${probInfo.probabilityDesc}
+          </div>
+        </div>
+      `;
+
+      // Interprétation détaillée texte
+      interpLong.innerHTML = `<p>${probInfo.detailedDesc}</p>`;
+
+      // Scores par cluster
+      subscalesScores.innerHTML = '';
+      for (const [key, data] of Object.entries(clusters)) {
+        const score = clusterScores[key];
+        const max = data.items.length * 4;
+        const percentage = (score / max) * 100;
+        
+        const card = document.createElement('div');
+        card.className = 'subscale-card';
+        card.innerHTML = `
+          <div class="subscale-header">
+            <div class="subscale-name">${data.name}</div>
+            <div class="subscale-score">${score} / ${max}</div>
+          </div>
+          <div class="subscale-bar">
+            <div class="subscale-bar-fill" style="width: ${percentage}%"></div>
+          </div>
+        `;
+        subscalesScores.appendChild(card);
+      }
+
+      // Afficher les résultats
+      results.style.display = 'block';
+      results.scrollIntoView({ behavior: 'smooth' });
+      
+      // Activer le bouton d'export
+      document.getElementById('btn-export').disabled = !document.getElementById('consent').checked;
+      return true;
+    }
+
+    // Gestion de la soumission
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fd = new FormData(form);
+      const answers = {};
+      for (const [k, v] of fd.entries()) {
+        answers[k] = v;
+      }
+      computeAndRender(answers);
+    });
+
+    // Import
+    const fileImport = document.getElementById('file-import');
+    fileImport.addEventListener('change', (ev) => {
+      const f = ev.target.files?.[0];
+      if (!f) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const data = JSON.parse(e.target.result);
+          
+          if (data.evaluationDate) {
+            evalDateInput.value = data.evaluationDate;
+          }
+          
+          const responses = data.responses || data;
+          for (let i = 1; i <= questions.length; i++) {
+            const v = responses[`q${i}`];
+            if (v !== undefined) {
+              const r = document.querySelector(`input[name="q${i}"][value="${v}"]`);
+              if (r) r.checked = true;
+            }
+          }
+          computeAndRender(responses);
+        } catch {
+          alert("Fichier invalide.");
+        } finally {
+          ev.target.value = '';
+        }
+      };
+      reader.readAsText(f);
+    });
+
+    // Export
+    const consent = document.getElementById('consent');
+    const btnExport = document.getElementById('btn-export');
+    
+    consent.addEventListener('change', () => {
+      if (document.getElementById('results').style.display === 'block') {
+        btnExport.disabled = !consent.checked;
+      }
+    });
+    
+    btnExport.addEventListener('click', () => {
+      if (!consent.checked) return;
+      const fd = new FormData(form);
+      const answers = {};
+      let any = false;
+      for (const [k, v] of fd.entries()) {
+        answers[k] = v;
+        any = true;
+      }
+      if (!any) {
+        alert("Veuillez d'abord calculer un résultat.");
+        return;
+      }
+      
+      const exportData = {
+        questionnaire: "PCL-5",
+        version: "Weathers et al., 2013",
+        evaluationDate: evalDateInput.value,
+        exportDate: new Date().toISOString(),
+        responses: answers
+      };
+      
+      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `pcl5_${evalDateInput.value}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+  </script>
+</body>
+</html>
