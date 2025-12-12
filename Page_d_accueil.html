@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Accueil TND - Outils de Dépistage</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .gradient-bg {
+      background: #f8f9fa;
+    }
+    .card-hover:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+    }
+    .section-icon {
+      flex-shrink: 0;
+      width: 3rem;
+      height: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0.75rem;
+    }
+  </style>
+</head>
+<body class="gradient-bg text-gray-800">
+
+  <div class="container mx-auto px-4 py-8 md:py-16">
+
+    <!-- En-tête -->
+    <header class="text-center mb-12 md:mb-16">
+      <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-3">Outils de Dépistage des TND</h1>
+      <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
+        Une collection de questionnaires interactifs pour explorer les traits associés aux troubles neurodéveloppementaux.
+      </p>
+    </header>
+
+    <!-- Avertissement Important -->
+    <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 p-6 rounded-lg mb-12 md:mb-16 max-w-4xl mx-auto shadow-sm">
+      <div class="flex">
+        <div class="py-1">
+          <svg class="h-6 w-6 text-yellow-500 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.21 3.03-1.742 3.03H4.42c-1.532 0-2.492-1.696-1.742-3.03l5.58-9.92zM10 13a1 1 0 110-2 1 1 0 010 2zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+          </svg>
+        </div>
+        <div>
+          <h2 class="font-bold text-lg mb-1">Avertissement Important</h2>
+          <p class="text-sm">Ces outils sont des questionnaires de dépistage et ne constituent en aucun cas un diagnostic. Ils sont destinés à des fins d'information et d'exploration personnelle. Un score élevé n'est qu'un indicateur. Seul un professionnel de santé qualifié peut poser un diagnostic. Veuillez consulter un médecin ou un psychologue pour toute question médicale.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section Diagnostics Différentiels -->
+    <section id="diff" class="mb-12 md:mb-16 max-w-5xl mx-auto">
+        <h2 class="text-3xl font-bold text-gray-900 text-center mb-8">Pistes de réflexion avant de conclure</h2>
+        <p class="text-center text-gray-600 mb-10">Certains symptômes peuvent ressembler à ceux d'un TND mais provenir d'autres affections. C'est ce qu'on appelle le diagnostic différentiel. Voici des exemples clés à discuter avec le médecin.</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Colonne TDAH -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                <div class="flex items-start">
+                    <div class="section-icon bg-teal-100 text-teal-600">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-xl font-bold mb-2">Pour le TDAH</h3>
+                        <p class="text-sm text-gray-600">Des difficultés d'attention ou une agitation peuvent aussi être liées à :</p>
+                        <ul class="mt-3 list-disc list-inside text-sm space-y-3">
+                            <li><strong>Troubles du sommeil :</strong> Notamment l'apnée du sommeil.
+                                <span class="block text-gray-500 text-xs italic mt-1">Des signes comme des ronflements sonores, des pauses respiratoires nocturnes, une fatigue diurne importante ou des maux de tête au réveil doivent alerter. Les symptômes varient avec la qualité du sommeil, contrairement à la constance du TDAH.</span>
+                            </li>
+                            <li><strong>Anxiété ou dépression :</strong> Ruminations, démotivation...
+                                <span class="block text-gray-500 text-xs italic mt-1">La distraction du TDAH est souvent diffuse, alors que celle de l'anxiété/dépression est typiquement centrée sur des inquiétudes ou une perte d'élan vital.</span>
+                            </li>
+                            <li><strong>Affections médicales :</strong> Thyroïde, anémie, carences...
+                                <span class="block text-gray-500 text-xs italic mt-1">Un bilan sanguin peut révéler ces problèmes. Ils apparaissent souvent plus tard que les symptômes du TDAH, qui remontent à l’enfance.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Colonne TSA -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                <div class="flex items-start">
+                    <div class="section-icon bg-indigo-100 text-indigo-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-xl font-bold mb-2">Pour le TSA</h3>
+                        <p class="text-sm text-gray-600">Des difficultés sociales ou des comportements répétitifs peuvent aussi être liés à :</p>
+                        <ul class="mt-3 list-disc list-inside text-sm space-y-3">
+                            <li><strong>Anxiété sociale :</strong> Peur intense du jugement.
+                                <span class="block text-gray-500 text-xs italic mt-1">La personne anxieuse craint avant tout le regard des autres, tandis que la personne autiste peut avoir des difficultés liées à une compréhension différente des codes sociaux.</span>
+                            </li>
+                            <li><strong>Troubles de la personnalité :</strong> Schizoïde, évitant...
+                                <span class="block text-gray-500 text-xs italic mt-1">Le TSA est présent depuis l'enfance, alors que ces troubles se structurent plus tard. Le désir de lien, souvent présent dans le TSA, peut être absent dans un trouble schizoïde.</span>
+                            </li>
+                            <li><strong>TOC :</strong> Rituels pour calmer une obsession.
+                                <span class="block text-gray-500 text-xs italic mt-1">Les rituels du TOC sont une réponse à une pensée anxiogène (obsession). Les comportements répétitifs dans le TSA (stimming, intérêts spécifiques) sont plus souvent auto-apaisants ou sources de plaisir.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section TSA -->
+    <section id="tsa" class="mb-12 md:mb-16">
+      <div class="flex items-center mb-8">
+        <span class="bg-indigo-500 text-white text-2xl font-bold rounded-lg px-4 py-2 mr-4">TSA</span>
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Trouble du Spectre de l'Autisme</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+        <!-- Card RAADS-R -->
+        <div class="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 card-hover flex flex-col">
+          <div class="p-8 flex flex-col flex-grow">
+            <h3 class="text-xl font-bold text-gray-900 mb-1">RAADS-R</h3>
+            <p class="text-sm text-gray-500 mb-3 italic">Ritvo Autism Asperger Diagnostic Scale-Revised</p>
+            <div class="bg-gray-50 p-4 rounded-lg mb-6 border border-gray-200 flex-grow">
+                <p class="text-gray-700 text-sm">Idéal pour les adultes suspectant un autisme non diagnostiqué, il explore les traits autistiques tout au long de la vie.</p>
+            </div>
+            <a href="U:\\_Dossiers Communs\\_CADEO\\ECHELLES PSYCHOMETRIQUES\\Appli_Felicien\\TND\\Tests\\RAADS-R.html" target="_blank" class="mt-auto inline-block bg-indigo-500 text-white font-bold py-2 px-5 rounded-lg hover:bg-indigo-600 transition-colors text-center">
+              Commencer le test &rarr;
+            </a>
+          </div>
+        </div>
+
+        <!-- Card CAT-Q -->
+        <div class="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 card-hover flex flex-col">
+          <div class="p-8 flex flex-col flex-grow">
+            <h3 class="text-xl font-bold text-gray-900 mb-1">CAT-Q</h3>
+            <p class="text-sm text-gray-500 mb-3 italic">Camouflaging Autistic Traits Questionnaire</p>
+            <div class="bg-gray-50 p-4 rounded-lg mb-6 border border-gray-200 flex-grow">
+                <p class="text-gray-700 text-sm">Très utile pour identifier les stratégies d'adaptation sociale (masking) qui peuvent dissimuler les signes de l'autisme.</p>
+            </div>
+            <a href="U:\\_Dossiers Communs\\_CADEO\\ECHELLES PSYCHOMETRIQUES\\Appli_Felicien\\TND\\Tests\\CAT-Q.html" target="_blank" class="mt-auto inline-block bg-indigo-500 text-white font-bold py-2 px-5 rounded-lg hover:bg-indigo-600 transition-colors text-center">
+              Commencer le test &rarr;
+            </a>
+          </div>
+        </div>
+
+        <!-- Card SRS-2 -->
+        <div class="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 card-hover flex flex-col">
+          <div class="p-8 flex flex-col flex-grow">
+            <h3 class="text-xl font-bold text-gray-900 mb-1">SRS-2</h3>
+            <p class="text-sm text-gray-500 mb-3 italic">Social Responsiveness Scale, Second Edition</p>
+            <div class="bg-gray-50 p-4 rounded-lg mb-6 border border-gray-200 flex-grow">
+                <p class="text-gray-700 text-sm">Permet de mesurer la sévérité des difficultés de communication et d'interactions sociales, et de les situer par rapport à la norme.</p>
+            </div>
+            <a href="U:\\_Dossiers Communs\\_CADEO\\ECHELLES PSYCHOMETRIQUES\\Appli_Felicien\\TND\\Tests\\SRS-2.html" target="_blank" class="mt-auto inline-block bg-indigo-500 text-white font-bold py-2 px-5 rounded-lg hover:bg-indigo-600 transition-colors text-center">
+              Commencer le test &rarr;
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section TDAH -->
+    <section id="tdah">
+      <div class="flex items-center mb-8">
+        <span class="bg-teal-500 text-white text-2xl font-bold rounded-lg px-4 py-2 mr-4">TDAH</span>
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Trouble du Déficit de l'Attention</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        
+        <!-- Card ASRS-v1.1 -->
+        <div class="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 card-hover flex flex-col">
+          <div class="p-8 flex flex-col flex-grow">
+            <h3 class="text-xl font-bold text-gray-900 mb-1">ASRS-v1.1</h3>
+            <p class="text-sm text-gray-500 mb-3 italic">Adult ADHD Self-Report Scale</p>
+            <div class="bg-gray-50 p-4 rounded-lg mb-6 border border-gray-200 flex-grow">
+                <p class="text-gray-700 text-sm">Un excellent outil de dépistage rapide pour les symptômes actuels du TDAH, basé sur les critères du DSM-5.</p>
+            </div>
+            <a href="U:\\_Dossiers Communs\\_CADEO\\ECHELLES PSYCHOMETRIQUES\\Appli_Felicien\\TND\\Tests\\ASRS.html" target="_blank" class="mt-auto inline-block bg-teal-500 text-white font-bold py-2 px-5 rounded-lg hover:bg-teal-600 transition-colors text-center">
+              Commencer le test &rarr;
+            </a>
+          </div>
+        </div>
+
+        <!-- Card WURS-25 -->
+        <div class="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 card-hover flex flex-col">
+          <div class="p-8 flex flex-col flex-grow">
+            <h3 class="text-xl font-bold text-gray-900 mb-1">WURS-25</h3>
+            <p class="text-sm text-gray-500 mb-3 italic">Wender Utah Rating Scale-25</p>
+            <div class="bg-gray-50 p-4 rounded-lg mb-6 border border-gray-200 flex-grow">
+                <p class="text-gray-700 text-sm">Essentiel pour investiguer la présence des symptômes durant l'enfance, un critère obligatoire pour poser le diagnostic de TDAH à l'âge adulte.</p>
+            </div>
+            <a href="U:\\_Dossiers Communs\\_CADEO\\ECHELLES PSYCHOMETRIQUES\\Appli_Felicien\\TND\\Tests\\WURS-25.html" target="_blank" class="mt-auto inline-block bg-teal-500 text-white font-bold py-2 px-5 rounded-lg hover:bg-teal-600 transition-colors text-center">
+              Commencer le test &rarr;
+            </a>
+          </div>
+        </div>
+
+        <!-- Card DIVA-5 -->
+        <div class="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 card-hover flex flex-col">
+          <div class="p-8 flex flex-col flex-grow">
+            <h3 class="text-xl font-bold text-gray-900 mb-1">DIVA-5</h3>
+            <p class="text-sm text-gray-500 mb-3 italic">Diagnostic Interview for ADHD in Adults 5</p>
+            <div class="bg-gray-50 p-4 rounded-lg mb-6 border border-gray-200 flex-grow">
+                <p class="text-gray-700 text-sm">Outil complet qui guide un entretien pour confirmer le diagnostic et évaluer l'impact des symptômes dans tous les domaines de la vie.</p>
+            </div>
+             <a href="U:\\_Dossiers Communs\\_CADEO\\ECHELLES PSYCHOMETRIQUES\\Appli_Felicien\\TND\\Tests\\DIVA-5.html" target="_blank" class="mt-auto inline-block bg-teal-500 text-white font-bold py-2 px-5 rounded-lg hover:bg-teal-600 transition-colors text-center">
+              Commencer le test &rarr;
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white mt-16">
+    <div class="container mx-auto px-4 py-8 text-center text-sm space-y-2">
+      <p class="text-gray-400">Projet initié et maintenu par Dr. FENOHASINA T.J.Felicien (Psychiatre - FFI).</p>
+      <p>&copy; 2025 - Outils de Dépistage TND. Conçu comme ressource informative, non substitut à un avis médical.</p>
+      <p class="text-xs text-gray-400 mt-4">Droits d’auteur et licences :</p>
+      <p class="text-xs text-gray-500">DIVA-5 © DIVA Foundation, La Haye, 2019. Tous droits réservés.</p>
+      <p class="text-xs text-gray-500">SRS-2 © Western Psychological Services, 2012. Licence requise pour usage commercial.</p>
+      <p class="text-xs text-gray-500">RAADS-R © Ritvo et al., 2008. Usage clinique/recherche autorisé avec citation.</p>
+      <p class="text-xs text-gray-500">CAT-Q © Hull et al., 2019. Reproduction académique permise avec mention.</p>
+      <p class="text-xs text-gray-500">ASRS-v1.1 © OMS. Diffusion libre non-commerciale avec citation.</p>
+      <p class="text-xs text-gray-500">WURS © Ward, Wender & Reimherr, 1993. Utilisation restreinte selon contexte clinique.</p>
+      <p class="text-xs text-gray-600 mt-2">Dernière mise à jour : 17 septembre 2025</p>
+    </div>
+  </footer>
+
+</body>
+</html>
+
