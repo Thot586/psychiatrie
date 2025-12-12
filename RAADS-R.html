@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RAADS-R - Échelle Diagnostique de l'Autisme (Révisée)</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    :root{
+      --primary: #0f62fe;
+      --primary-light: #4f8aff;
+      --primary-weak: #eef4ff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --bg: #f8f9fa;
+      --paper: #ffffff;
+      --border: #dee2e6;
+      --ok: #16a34a;
+      --danger: #dc3545;
+      --warning-bg: #fff3cd;
+      --warning-border: #ffe69c;
+      --warning-text: #664d03;
+      font-size: 16px;
+    }
+    *{box-sizing: border-box; margin: 0; padding: 0}
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 1rem;
+    }
+    .container {
+      max-width: 56rem;
+      margin: 1rem auto;
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.07);
+      overflow: hidden;
+    }
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: #fff;
+      padding: 1.5rem 2rem;
+    }
+    header h1 {
+      font-size: clamp(1.4rem, 4vw, 1.85rem);
+      font-weight: 700;
+      line-height: 1.3;
+    }
+    .toolbar {
+      display: flex;
+      gap: .75rem;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-top: .75rem;
+    }
+    .btn {
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.3);
+      padding: .55rem .9rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background-color .2s;
+    }
+    .btn:hover { background: rgba(255,255,255,0.25); }
+    .btn[disabled] { opacity: .5; cursor: not-allowed; }
+
+    .section { padding: 1.5rem 2rem; border-top: 1px solid var(--border); }
+    .instructions { background: var(--primary-weak); color: #0b3d91; }
+    
+    .question { padding: 1.25rem 0; border-bottom: 1px solid var(--border); transition: background-color .3s; }
+    .question.missing { background-color: #fef2f2; border-left: 4px solid var(--danger); padding-left: 1rem; }
+    .qtext { font-weight: 600; margin-bottom: .75rem; font-size: 1.05rem; }
+    .opts { display: grid; gap: .5rem; grid-template-columns: repeat(auto-fit,minmax(12rem,1fr)); }
+    .opts input[type="radio"] { display: none; }
+    .opts label {
+      display: block;
+      padding: .7rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: .15s;
+    }
+    .opts label:hover { border-color: var(--primary); background: var(--primary-weak); }
+    .opts input[type="radio"]:checked + label {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+      box-shadow: 0 6px 16px rgba(15,98,254,.3);
+      font-weight: 500;
+    }
+
+    .actions { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: center; margin-top: 1.5rem; }
+    button.primary {
+      background: linear-gradient(135deg, var(--ok), #15803d);
+      color: #fff;
+      border: none;
+      padding: .9rem 1.75rem;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: transform .2s, box-shadow .2s;
+    }
+    button.primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(22,163,74,.25); }
+    .validation { color: var(--danger); text-align: center; font-weight: 600; display: none; }
+
+    /* --- Résultats --- */
+    #results { display: none; }
+    .grid { display: grid; gap: 1.5rem; grid-template-columns: 1fr; }
+    .panel { border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; }
+    .panel h3 { font-size: 1.2rem; margin-bottom: .5rem; font-weight: 700; }
+    
+    .bigscore { display: flex; align-items: baseline; gap: .5rem; font-weight: 800; font-size: 2.5rem; color: var(--primary); }
+    .bigscore small { font-size: 1.1rem; color: var(--muted); font-weight: 600; }
+    .barwrap { margin-top: .75rem; }
+    .bar { height: .85rem; width: 100%; background: #e9ecef; border-radius: 999px; position: relative; overflow: hidden; }
+    .fill { height: 100%; background: linear-gradient(90deg, #9ab3ff, var(--primary)); width: 0%; transition: width .6s ease; border-radius: 999px; }
+
+    details.accordion { border: 1px solid var(--border); border-radius: 12px; }
+    details.accordion summary { cursor: pointer; font-weight: 700; list-style: none; outline: none; padding: .8rem 1rem; }
+    details.accordion summary::-webkit-details-marker { display: none; }
+    details.accordion summary::after { content: "▸"; float: right; transform: translateY(-1px); opacity: .7; transition: transform 0.2s; }
+    details.accordion[open] summary { border-bottom: 1px solid var(--border); }
+    details.accordion[open] summary::after { transform: rotate(90deg); }
+    details.accordion .content { padding: 1rem; }
+
+    /* --- Clarification des Scores par Domaine --- */
+    .subs { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit,minmax(16rem,1fr)); margin-top: 1rem; }
+    .subcard { border: 1px solid var(--border); border-radius: 12px; padding: 1rem; }
+    .subname { font-weight: 700; font-size: 1.05rem; margin-bottom: .25rem; }
+    .subdesc { color: var(--muted); font-size: .9rem; margin-bottom: .5rem; }
+    .subscore { font-weight: 800; font-size: 1.1rem; }
+    .sub-bar-wrap { margin: .5rem 0; }
+    .sub-bar { height: .5rem; width: 100%; background: #e9ecef; border-radius: 999px; }
+    .sub-bar-fill { height: 100%; background: var(--muted); width: 0%; transition: width .6s ease .1s; border-radius: 999px; }
+    .sub-interp { font-size: .85rem; font-weight: 500; margin-top: .3rem; }
+
+    .consent {
+      display: flex; gap: .75rem; align-items: flex-start;
+      background: var(--warning-bg); border: 1px solid var(--warning-border); color: var(--warning-text);
+      padding: .75rem 1rem; border-radius: 10px;
+    }
+    .note { color: var(--muted); font-size: .95rem; margin-top: .5rem; }
+    .note strong { color: var(--text); }
+    .small { font-size: .9rem; color: var(--muted); }
+
+    footer { padding: 1.5rem 2rem; color: var(--muted); font-size: .9rem; background: #f1f3f5; border-top: 1px solid var(--border); }
+    @media (max-width: 640px) {
+      body { padding: .5rem; }
+      .section, header, footer { padding: 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Échelle Diagnostique de l'Autisme de Ritvo - Révisée (RAADS-R)</h1>
+      <div class="toolbar">
+        <label class="btn" for="file-import">Importer un résultat</label>
+        <input type="file" id="file-import" accept=".json" style="display:none"/>
+      </div>
+    </header>
+
+    <div class="section instructions">
+      <p>Pour chaque affirmation, choisissez la réponse qui vous décrit le mieux. Répondez en fonction de vos expériences de vie. <strong>Toutes les questions doivent être complétées</strong> pour calculer les scores. Cet outil est un questionnaire de dépistage et ne constitue pas un diagnostic.</p>
+    </div>
+
+    <form id="raadsr-form" class="section">
+      <div id="qwrap"></div>
+      <div class="actions">
+        <button type="submit" class="primary">Calculer mes résultats</button>
+        <p id="valmsg" class="validation">Veuillez répondre aux questions en surbrillance.</p>
+      </div>
+    </form>
+    
+    <div id="results" class="section">
+      <h2>Vos Résultats</h2>
+      <div class="grid">
+        <div class="panel">
+          <h3>Score total</h3>
+          <div class="bigscore"><span id="totalscore">0</span><small>/ 240</small></div>
+          <div class="barwrap">
+            <div class="bar">
+              <div class="fill" id="fill"></div>
+            </div>
+          </div>
+          <details class="accordion" open style="margin-top: 1rem">
+            <summary>Interprétation du score total</summary>
+            <div class="content">
+              <p id="interp-summary" style="font-weight:500;"></p>
+              <p class="note"><strong>Important :</strong> Le RAADS-R (Ritvo et al., 2011) suggère un seuil de 65 pour distinguer les adultes autistes des adultes neurotypiques dans leurs études de validation. Cependant, un score est un indicateur et non un diagnostic. Un score élevé justifie une discussion approfondie avec un professionnel, mais ce n'est pas un résultat binaire "positif" ou "négatif".</p>
+            </div>
+          </details>
+          <details class="accordion" style="margin-top: .6rem">
+            <summary>Signification du score</summary>
+            <div class="content">
+              <p id="interp-long"></p>
+              <p class="note">Ce questionnaire est un outil de dépistage. Un diagnostic formel de trouble du spectre de l'autisme ne peut être posé que par un clinicien qualifié après une évaluation complète, qui inclut des entretiens cliniques, l'histoire développementale, et l'évaluation du retentissement fonctionnel.</p>
+            </div>
+          </details>
+        </div>
+
+        <div class="panel">
+          <h3>Scores par domaine</h3>
+          <p class="small">Ces scores détaillent les domaines de traits mesurés par le questionnaire. Ils permettent de visualiser un <strong>profil</strong> de vos traits, en identifiant les domaines où ils sont les plus prononcés.</p>
+          <p class="note"><strong>Important :</strong> Il n'existe pas de seuil clinique validé pour ces scores individuels.</p>
+          <div class="subs">
+            <div class="subcard">
+              <div class="subname">Relations Sociales</div>
+              <div class="subdesc">Difficultés dans les interactions, la compréhension des signaux sociaux et l'empathie cognitive.</div>
+              <div class="subscore"><span id="score-social">0</span> / 117</div>
+              <div class="sub-bar-wrap"><div class="sub-bar"><div class="sub-bar-fill" id="fill-social"></div></div></div>
+              <p class="sub-interp" id="interp-social"></p>
+            </div>
+            <div class="subcard">
+              <div class="subname">Intérêts Spécifiques</div>
+              <div class="subdesc">Centres d'intérêt intenses et circonscrits.</div>
+              <div class="subscore"><span id="score-interests">0</span> / 42</div>
+              <div class="sub-bar-wrap"><div class="sub-bar"><div class="sub-bar-fill" id="fill-interests"></div></div></div>
+              <p class="sub-interp" id="interp-interests"></p>
+            </div>
+            <div class="subcard">
+              <div class="subname">Sensorimoteur</div>
+              <div class="subdesc">Particularités sensorielles et coordination motrice.</div>
+              <div class="subscore"><span id="score-sensory">0</span> / 60</div>
+              <div class="sub-bar-wrap"><div class="sub-bar"><div class="sub-bar-fill" id="fill-sensory"></div></div></div>
+              <p class="sub-interp" id="interp-sensory"></p>
+            </div>
+             <div class="subcard">
+              <div class="subname">Langage</div>
+              <div class="subdesc">Compréhension littérale du langage et pragmatique.</div>
+              <div class="subscore"><span id="score-language">0</span> / 21</div>
+              <div class="sub-bar-wrap"><div class="sub-bar"><div class="sub-bar-fill" id="fill-language"></div></div></div>
+              <p class="sub-interp" id="interp-language"></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Exporter votre résultat</h3>
+          <p class="small">Aucun stockage local n’est réalisé. Pour conserver une copie, cochez la case de consentement puis cliquez sur « Exporter ».</p>
+          <label class="consent">
+            <input type="checkbox" id="consent"/>
+            <span>J’autorise l’export de mes réponses au format JSON. Je comprends que je suis responsable de la confidentialité de ce fichier.</span>
+          </label>
+          <div class="actions" style="justify-content:flex-start; margin-top: 1rem;">
+            <button type="button" id="btn-export" class="btn" disabled style="background:var(--muted); border-color:transparent;">Exporter</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+        <p><strong>Référence :</strong></p>
+        <p class="small">Ritvo, R. A., Ritvo, E. R., Guthrie, D., Ritvo, M. J., Hufnagel, D. H., McMahon, W., ... & Eloff, J. (2011). The Ritvo Autism Asperger Diagnostic Scale-Revised (RAADS-R): A scale to assist the diagnosis of autism spectrum disorder in adults: An international validation study. <em>Journal of autism and developmental disorders, 41</em>(8), 1076-1089.</p>
+        <p style="margin-top:0.5rem;" class="small">Adapté en version numerique par Dr FENOHASINA Toto Jean Felicien (Psychiatre - FFI).</p>
+    </footer>
+  </div>
+
+  <script>
+    // Les 80 questions et leur cotation (sous-échelle et score inversé) sont calées sur la publication de validation originale (Ritvo et al., 2011).
+    const questions = [
+        { text: "Je suis une personne compatissante.", subscale: 'social', reversed: true },
+        { text: "J'utilise souvent des mots et des phrases entendus dans des films ou à la télévision dans les conversations.", subscale: 'language', reversed: false },
+        { text: "Je suis souvent surpris lorsque les autres me disent que j'ai été impoli.", subscale: 'social', reversed: false },
+        { text: "Parfois je parle trop fort ou trop doucement, et je ne m'en aperçois pas.", subscale: 'sensory', reversed: false },
+        { text: "J'ai souvent des difficultés à savoir comment me comporter en société.", subscale: 'social', reversed: false },
+        { text: "Je peux « me mettre dans la peau de quelqu'un d'autre ».", subscale: 'social', reversed: true },
+        { text: "J'ai du mal à comprendre le sens de certaines phrases comme « je tiens à toi comme à la prunelle de mes yeux ».", subscale: 'language', reversed: false },
+        { text: "J'aime seulement parler aux gens qui partagent mes centres d'intérêt.", subscale: 'social', reversed: false },
+        { text: "Je fais plus attention aux détails qu'à l'idée générale.", subscale: 'interests', reversed: false },
+        { text: "Je suis sensible à l'effet produit par un aliment dans ma bouche. Ceci est plus important que son goût.", subscale: 'sensory', reversed: false },
+        { text: "Mes meilleurs amis ou ma famille me manquent quand nous sommes séparés depuis longtemps.", subscale: 'social', reversed: true },
+        { text: "Quelquefois je vexe les autres en disant ce que je pense, sans le faire exprès.", subscale: 'social', reversed: false },
+        { text: "J'aime seulement penser et parler des choses qui m'intéressent.", subscale: 'social', reversed: false },
+        { text: "Je préfère aller manger dans un restaurant tout seul plutôt qu'avec quelqu'un que je connais.", subscale: 'social', reversed: false },
+        { text: "Je n'arrive pas à imaginer comment ce serait d'être quelqu'un d'autre.", subscale: 'social', reversed: false },
+        { text: "On m'a déjà dit que j'étais maladroit ou que je manquais de coordination.", subscale: 'sensory', reversed: false },
+        { text: "Les autres me trouvent étrange ou différent.", subscale: 'social', reversed: false },
+        { text: "Je comprends lorsque des amis ont besoin d'être réconfortés.", subscale: 'social', reversed: true },
+        { text: "Je suis très sensible au contact de mes vêtements lorsque je les touche. Leur texture est plus importante pour moi que leur look.", subscale: 'sensory', reversed: false },
+        { text: "J'aime copier la manière dont certaines personnes parlent et agissent. Cela m'aide à me sentir plus « normal ».", subscale: 'social', reversed: false },
+        { text: "Cela peut être très intimidant pour moi de parler à plus d'une personne en même temps.", subscale: 'social', reversed: false },
+        { text: "Je dois adopter un comportement \"normal\" pour plaire aux autres et pour qu'ils m'apprécient.", subscale: 'social', reversed: false },
+        { text: "Rencontrer de nouvelles personnes est habituellement facile pour moi.", subscale: 'social', reversed: true },
+        { text: "Je suis déstabilisé lorsque quelqu'un m'interrompt alors que je parle de quelque chose qui m'intéresse beaucoup.", subscale: 'interests', reversed: false },
+        { text: "Il m'est difficile de percevoir les sentiments des autres lors d'une conversation.", subscale: 'social', reversed: false },
+        { text: "J'aime avoir une conversation avec plusieurs personnes, par exemple lors d'un dîner, à l'école, ou au travail.", subscale: 'social', reversed: true },
+        { text: "Je prends les choses trop au premier degré, ainsi je passe à côté de ce que les gens essaient de dire.", subscale: 'language', reversed: false },
+        { text: "C'est très difficile pour moi de comprendre lorsque quelqu'un est gêné ou jaloux.", subscale: 'social', reversed: false },
+        { text: "Certaines textures ordinaires qui ne posent aucun problème aux autres sont pour moi insupportables lorsqu'elles sont au contact de ma peau.", subscale: 'sensory', reversed: false },
+        { text: "Je suis très contrarié lorsqu'on m'empêche de faire les choses à ma façon.", subscale: 'interests', reversed: false },
+        { text: "Je n'ai jamais désiré ou eu besoin de ce que les autres personnes appellent une « relation intime ».", subscale: 'social', reversed: false },
+        { text: "C'est difficile pour moi de commencer et d'arrêter une conversation. J'ai besoin d'aller jusqu'au bout de mon propos.", subscale: 'language', reversed: false },
+        { text: "Je parle avec un rythme de voix normal.", subscale: 'sensory', reversed: true },
+        { text: "Je peux sans transition être très sensible ou pas du tout sensible au même son, à la même couleur ou à la même texture.", subscale: 'sensory', reversed: false },
+        { text: "La phrase « je t'ai dans la peau » me met mal à l'aise.", subscale: 'language', reversed: false },
+        { text: "Quelquefois la sonorité d'un mot ou un bruit aigu peut me faire mal aux oreilles.", subscale: 'sensory', reversed: false },
+        { text: "On me considère comme une personne très compréhensive.", subscale: 'social', reversed: true },
+        { text: "Je ne peux pas m'identifier à un personnage dans un film, et je ne peux pas ressentir ce qu'il ressent.", subscale: 'social', reversed: false },
+        { text: "Je ne peux pas dire si quelqu'un est en train de me draguer.", subscale: 'social', reversed: false },
+        { text: "Je peux me représenter avec précision les détails qui m'intéressent.", subscale: 'sensory', reversed: false },
+        { text: "Je fais des listes de choses qui m'intéressent, même si elles n'ont pas d'utilité pratique (par exemple statistiques sportives, horaires de train, dates du calendrier, faits historiques et dates).", subscale: 'interests', reversed: false },
+        { text: "Quand je me sens dépassé par des stimulations sensorielles, je dois m'isoler pour y échapper.", subscale: 'sensory', reversed: false },
+        { text: "J'aime parler de choses et d'autres avec mes amis.", subscale: 'social', reversed: true },
+        { text: "Je ne peux pas dire si quelqu'un est intéressé ou ennuyé par ce que je dis.", subscale: 'social', reversed: false },
+        { text: "Lorsque quelqu'un est en train de parler, il peut m'être très difficile de lire sur son visage, de comprendre les mouvements de ses mains ou de son corps.", subscale: 'social', reversed: false },
+        { text: "Je peux ressentir à différents moments la même chose très différemment (comme des vêtements ou la température).", subscale: 'sensory', reversed: false },
+        { text: "Je me sens très à l'aise lors d'un rendez-vous amoureux ou lorsque je me trouve en société.", subscale: 'social', reversed: true },
+        { text: "J'essaie d'être aussi aidant que possible lorsque les autres me parlent de leurs problèmes personnels.", subscale: 'social', reversed: true },
+        { text: "On m'a dit que j'avais une voix particulière (par exemple, plate, monotone, enfantine ou aigüe).", subscale: 'sensory', reversed: false },
+        { text: "Quelquefois une idée ou un sujet reste bloqué dans mon esprit et je dois en parler, même si cela n'intéresse personne.", subscale: 'interests', reversed: false },
+        { text: "Je fais certaines choses avec mes mains de façon répétée (comme un battement d'ailes, faire tournoyer un bâton ou une ficelle, agiter des choses devant mes yeux).", subscale: 'sensory', reversed: false },
+        { text: "Je n'ai jamais été intéressé par ce que la plupart des gens que je connais considèrent comme intéressant.", subscale: 'interests', reversed: false },
+        { text: "On me considère comme une personne compatissante.", subscale: 'social', reversed: true },
+        { text: "Pour m'entendre avec les autres, je suis un ensemble de règles spécifiques qui m'aide à paraître normale.", subscale: 'social', reversed: false },
+        { text: "C'est très difficile pour moi de travailler et d'évoluer dans un groupe.", subscale: 'social', reversed: false },
+        { text: "Lorsque je parle à quelqu'un, il m'est difficile de changer de sujet. Si l'autre personne le fait, je peux être bouleversé et confus.", subscale: 'language', reversed: false },
+        { text: "Quelquefois je dois couvrir mes oreilles pour arrêter des bruits douloureux (comme un aspirateur ou des gens qui parlent trop ou trop fort).", subscale: 'sensory', reversed: false },
+        { text: "Je peux discuter et avoir des conversations superficielles.", subscale: 'social', reversed: true },
+        { text: "Quelquefois des choses qui devraient être douloureuses ne me font pas mal (par exemple, lorsque je me blesse ou lorsque je me brûle la main sur un poêle).", subscale: 'sensory', reversed: false },
+        { text: "Quand je parle à quelqu'un, j'ai des difficultés à savoir si c'est à mon tour de parler ou d'écouter.", subscale: 'language', reversed: false },
+        { text: "Je suis considéré comme un solitaire par ceux qui me connaissent le mieux.", subscale: 'social', reversed: false },
+        { text: "Je parle habituellement avec un ton de voix normal.", subscale: 'sensory', reversed: true },
+        { text: "J'aime que les choses se déroulent toujours de la même manière jour après jour, et même les petits changements dans mes routines me perturbent.", subscale: 'interests', reversed: false },
+        { text: "Comment se faire des amis et s'intégrer socialement est un mystère pour moi.", subscale: 'social', reversed: false },
+        { text: "Cela me calme de tourner en rond ou de me balancer sur une chaise lorsque je me sens stressé.", subscale: 'sensory', reversed: false },
+        { text: "La phrase « il a le cœur sur la main » n'a pas de sens pour moi.", subscale: 'language', reversed: false },
+        { text: "Si je suis dans un endroit où il y a beaucoup d'odeurs, de matières à toucher, de bruits ou de lumières intenses, je me sens anxieux ou effrayé.", subscale: 'sensory', reversed: false },
+        { text: "Je sais faire la différence lorsque quelqu'un dit une chose mais veut en dire une autre.", subscale: 'language', reversed: true },
+        { text: "J'aime être seul autant que possible.", subscale: 'social', reversed: false },
+        { text: "Je garde mes pensées empilées dans ma mémoire comme dans un classeur, et je prends celles dont j'ai besoin en sélectionnant dans la pile (ou par une méthode similaire).", subscale: 'sensory', reversed: false },
+        { text: "Le même son peut paraître quelquefois très fort ou très doux alors que je sais qu'il n'a pas changé.", subscale: 'sensory', reversed: false },
+        { text: "J'aime passer du temps à manger et parler avec ma famille et mes amis.", subscale: 'social', reversed: true },
+        { text: "Je ne supporte pas les choses que je n'aime pas (comme des odeurs, des matières, des sons ou des couleurs).", subscale: 'sensory', reversed: false },
+        { text: "Je n'aime pas être tenu ou étreint.", subscale: 'sensory', reversed: false },
+        { text: "Lorsque je vais quelque part, je dois suivre un parcours familier sinon je peux devenir très confus et perturbé.", subscale: 'interests', reversed: false },
+        { text: "C'est difficile de comprendre ce que les autres personnes attendent de moi.", subscale: 'social', reversed: false },
+        { text: "J'aime avoir des amis proches.", subscale: 'social', reversed: true },
+        { text: "On me dit que je donne trop de détails.", subscale: 'interests', reversed: false },
+        { text: "On me dit souvent que je pose des questions embarrassantes.", subscale: 'social', reversed: false },
+        { text: "J'ai tendance à souligner les erreurs des autres.", subscale: 'social', reversed: false },
+    ];
+
+    const responses = [
+      {label: "Vrai maintenant et quand j'étais jeune", value: 3}, {label: "Vrai seulement maintenant", value: 2},
+      {label: "Vrai seulement quand j'étais jeune", value: 1}, {label: "Jamais vrai", value: 0}
+    ];
+    
+    const SUBSCALES_MAX = {
+        social: 117, // 39 items
+        interests: 42, // 14 items
+        sensory: 60, // 20 items
+        language: 21 // 7 items
+    };
+
+    // --- Génération du formulaire ---
+    const qwrap = document.getElementById('qwrap');
+    questions.forEach((q, i) => {
+      const idx = i + 1;
+      const div = document.createElement('div');
+      div.className = 'question';
+      div.id = `q-container-${idx}`;
+      
+      const opts = responses.map(r => `
+        <div>
+          <input type="radio" id="q${idx}_${r.value}" name="q${idx}" value="${r.value}"/>
+          <label for="q${idx}_${r.value}">${r.label}</label>
+        </div>`).join('');
+      div.innerHTML = `<div class="qtext">${idx}. ${q.text}</div><div class="opts">${opts}</div>`;
+      qwrap.appendChild(div);
+    });
+
+    // --- Fonctions d'interprétation ---
+    function interpretationSummary(total) {
+        if (total >= 65) return `Votre score total de ${total} est égal ou supérieur au seuil de 65. Ce résultat suggère la présence de traits autistiques significatifs et justifie une discussion avec un professionnel qualifié pour une évaluation complète.`;
+        if (total >= 45) return `Votre score total de ${total} indique la présence de certains traits autistiques. Bien que sous le seuil de 65, ce score peut refléter des expériences qui méritent d'être explorées davantage.`;
+        return `Votre score total de ${total} est inférieur au seuil généralement considéré comme indiquant des traits autistiques significatifs sur cette échelle.`;
+    }
+
+    function interpretationLong(total) {
+        if (total >= 65) return "Un score de 65 ou plus au RAADS-R est considéré comme un indicateur que les expériences de la personne sont très cohérentes avec celles rapportées par les adultes autistes. L'échelle évalue les relations sociales, les intérêts circonscrits, les particularités sensorielles et le langage. Un score élevé reflète la présence de traits dans ces domaines. Il est essentiel de noter que ce test n'est pas un diagnostic. Seul un clinicien qualifié peut poser un diagnostic de trouble du spectre de l'autisme après une évaluation complète.";
+        return "Un score inférieur à 65 indique que vous ne rapportez pas l'ensemble des traits typiquement associés à l'autisme tels que mesurés par cette échelle. Cependant, les auto-questionnaires ont leurs limites. Ils ne peuvent pas toujours tenir compte du masquage social (stratégies pour masquer les traits) ou de la grande variabilité de l'expression des traits. Un score plus bas n'invalide pas nécessairement un questionnement personnel ou le besoin d'une évaluation si le retentissement fonctionnel est important.";
+    }
+    
+    function getSubscoreInterpretation(score, max) {
+        const percentage = (score / max) * 100;
+        if (percentage >= 66) return "Traits très prononcés dans ce domaine.";
+        if (percentage >= 33) return "Traits significativement présents.";
+        return "Traits peu prononcés dans ce domaine.";
+    }
+    
+    // --- Calcul et affichage ---
+    const form = document.getElementById('raadsr-form');
+    
+    function computeAndRender(answers) {
+      let allAnswered = true;
+      for (let i = 1; i <= questions.length; i++) {
+        const qContainer = document.getElementById(`q-container-${i}`);
+        if (!answers[`q${i}`]) {
+          qContainer.classList.add('missing');
+          allAnswered = false;
+        } else {
+          qContainer.classList.remove('missing');
+        }
+      }
+
+      if (!allAnswered) {
+        document.getElementById('valmsg').style.display = 'block';
+        document.getElementById('results').style.display = 'none';
+        const firstMissing = document.querySelector('.question.missing');
+        if (firstMissing) firstMissing.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+      document.getElementById('valmsg').style.display = 'none';
+
+      const scores = { social: 0, sensory: 0, language: 0, interests: 0 };
+      let total = 0;
+
+      questions.forEach((q, i) => {
+        const idx = i + 1;
+        const rawValue = parseInt(answers[`q${idx}`], 10);
+        // Pour les questions inversées, un "Jamais vrai" (valeur 0) donne un score de 3.
+        // Pour les questions directes, un "Vrai tout le temps" (valeur 3) donne un score de 3.
+        const score = q.reversed ? (3 - rawValue) : rawValue;
+        
+        total += score;
+        scores[q.subscale] += score;
+      });
+
+      // Affichage score total
+      document.getElementById('totalscore').textContent = total;
+      document.getElementById('fill').style.width = `${(total / 240) * 100}%`;
+      document.getElementById('interp-summary').innerHTML = interpretationSummary(total);
+      document.getElementById('interp-long').textContent = interpretationLong(total);
+
+      // Affichage scores par domaine
+      document.getElementById('score-social').textContent = scores.social;
+      document.getElementById('fill-social').style.width = `${(scores.social / SUBSCALES_MAX.social) * 100}%`;
+      document.getElementById('interp-social').textContent = getSubscoreInterpretation(scores.social, SUBSCALES_MAX.social);
+
+      document.getElementById('score-sensory').textContent = scores.sensory;
+      document.getElementById('fill-sensory').style.width = `${(scores.sensory / SUBSCALES_MAX.sensory) * 100}%`;
+      document.getElementById('interp-sensory').textContent = getSubscoreInterpretation(scores.sensory, SUBSCALES_MAX.sensory);
+
+      document.getElementById('score-language').textContent = scores.language;
+      document.getElementById('fill-language').style.width = `${(scores.language / SUBSCALES_MAX.language) * 100}%`;
+      document.getElementById('interp-language').textContent = getSubscoreInterpretation(scores.language, SUBSCALES_MAX.language);
+
+      document.getElementById('score-interests').textContent = scores.interests;
+      document.getElementById('fill-interests').style.width = `${(scores.interests / SUBSCALES_MAX.interests) * 100}%`;
+      document.getElementById('interp-interests').textContent = getSubscoreInterpretation(scores.interests, SUBSCALES_MAX.interests);
+      
+      const resultsDiv = document.getElementById('results');
+      resultsDiv.style.display = 'block';
+      resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      document.getElementById('btn-export').disabled = !document.getElementById('consent').checked;
+    }
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const fd = new FormData(form);
+        const answers = {};
+        for (const [k, v] of fd.entries()) answers[k] = v;
+        computeAndRender(answers);
+    });
+
+    // --- Import/Export ---
+    const fileImport = document.getElementById('file-import');
+    fileImport.addEventListener('change', (ev) => {
+        const f = ev.target.files?.[0]; if (!f) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const data = JSON.parse(e.target.result);
+                for (let i = 1; i <= questions.length; i++) {
+                    const v = data[`q${i}`];
+                    if (v !== undefined) {
+                        const r = document.querySelector(`input[name="q${i}"][value="${v}"]`);
+                        if (r) r.checked = true;
+                    }
+                }
+                computeAndRender(data);
+            } catch { 
+                // Custom alert would be better, but for now...
+                console.error("Fichier d'import invalide.");
+            }
+            finally { ev.target.value = ''; }
+        };
+        reader.readAsText(f);
+    });
+
+    const consent = document.getElementById('consent');
+    const btnExport = document.getElementById('btn-export');
+    consent.addEventListener('change', () => {
+        if (document.getElementById('results').style.display === 'block') {
+            btnExport.disabled = !consent.checked;
+        }
+    });
+    btnExport.addEventListener('click', () => {
+        if (!consent.checked) return;
+        const fd = new FormData(form);
+        const answers = {};
+        for (const [k, v] of fd.entries()) answers[k] = v;
+        if (Object.keys(answers).length < questions.length) { 
+            console.error("Veuillez d’abord calculer un résultat.");
+            return; 
+        }
+        const blob = new Blob([JSON.stringify(answers, null, 2)], {type: 'application/json'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = 'reponses_raads-r.json';
+        document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+    });
+  </script>
+</body>
+</html>
+
