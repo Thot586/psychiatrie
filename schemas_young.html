@@ -3,329 +3,847 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analyseur de Schémas de Young (YSQ-L3)</title>
+    <title>Questionnaire des Schémas de Young (YSQ-L3)</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
-        details > summary { list-style: none; cursor: pointer; padding: 1rem; transition: background-color 0.2s ease-in-out; }
-        details > summary:hover { background-color: #f8fafc; }
-        details > summary::before { content: '▶'; margin-right: 0.75rem; font-size: 0.8em; color: #0d9488; transition: transform 0.2s ease-in-out; }
-        details[open] > summary::before { transform: rotate(90deg); }
-        .focus-visible-ring:focus-visible { outline: 2px solid #0d9488; outline-offset: 2px; }
-        .card { background-color: white; border-radius: 0.75rem; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); padding: 1.5rem; }
-        @media (min-width: 768px) { .card { padding: 2rem; } }
-        .chart-container { position: relative; height: 80vw; max-height: 500px; width: 100%; }
-        input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-        input[type="number"] { -moz-appearance: textfield; }
+        * { box-sizing: border-box; }
+        body { 
+            font-family: 'DM Sans', sans-serif; 
+            background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+        }
+        
+        /* Header sticky */
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #e2e8f0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        /* Progress bar animation */
+        .progress-fill {
+            transition: width 0.3s ease-out;
+            background: linear-gradient(90deg, #0d9488 0%, #14b8a6 50%, #2dd4bf 100%);
+        }
+        
+        /* Scale buttons */
+        .scale-btn {
+            transition: all 0.15s ease;
+            background: linear-gradient(145deg, #ffffff, #f1f5f9);
+            box-shadow: 
+                2px 2px 5px rgba(0, 0, 0, 0.08),
+                -1px -1px 3px rgba(255, 255, 255, 0.9);
+            border: 2px solid transparent;
+        }
+        .scale-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                3px 3px 8px rgba(0, 0, 0, 0.12),
+                -2px -2px 5px rgba(255, 255, 255, 1);
+        }
+        .scale-btn.selected {
+            background: linear-gradient(145deg, #0d9488, #0f766e);
+            color: white;
+            box-shadow: 
+                inset 2px 2px 4px rgba(0, 0, 0, 0.2),
+                0 2px 8px rgba(13, 148, 136, 0.4);
+            border-color: #0d9488;
+        }
+        .scale-btn:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.3);
+        }
+        
+        /* Question card */
+        .question-card {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s ease;
+        }
+        .question-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .question-card.answered {
+            border-color: #10b981;
+            background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+        }
+        .question-card.current {
+            border-color: #0d9488;
+            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Navigation buttons */
+        .nav-btn {
+            transition: all 0.2s ease;
+        }
+        .nav-btn:hover:not(:disabled) {
+            transform: translateY(-1px);
+        }
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* Results modal */
+        .modal-overlay {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(4px);
+        }
+        
+        /* Floating action button */
+        .fab {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 50;
+        }
+        
+        @media (max-width: 640px) {
+            .scale-btn {
+                min-width: 40px;
+                padding: 0.5rem;
+            }
+        }
     </style>
 </head>
-<body class="text-slate-800">
+<body class="text-slate-800 pb-24">
 
-    <div class="container mx-auto p-4 md:p-8 max-w-5xl">
+    <!-- Header Sticky avec progression et échelle -->
+    <header class="sticky-header">
+        <div class="container mx-auto max-w-4xl px-4 py-3">
+            <!-- Titre et progression -->
+            <div class="flex items-center justify-between mb-3">
+                <h1 class="text-lg md:text-xl font-bold text-slate-800">Questionnaire YSQ-L3</h1>
+                <div class="flex items-center gap-3">
+                    <span id="progressText" class="text-sm font-medium text-slate-600">0 / 232</span>
+                    <span id="progressPercent" class="text-sm font-bold text-teal-600">0%</span>
+                </div>
+            </div>
+            
+            <!-- Barre de progression -->
+            <div class="w-full bg-slate-200 rounded-full h-3 overflow-hidden mb-3">
+                <div id="progressBar" class="progress-fill h-3 rounded-full" style="width: 0%"></div>
+            </div>
+            
+            <!-- Échelle de cotation toujours visible -->
+            <div class="bg-slate-50 rounded-xl p-3">
+                <div class="text-xs text-slate-500 mb-2 font-medium text-center">Échelle de cotation</div>
+                <div class="grid grid-cols-6 gap-1 md:gap-2 text-center">
+                    <div class="flex flex-col items-center">
+                        <span class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-slate-200 flex items-center justify-center font-bold text-slate-700">1</span>
+                        <span class="text-[10px] md:text-xs text-slate-500 mt-1 leading-tight">Complètement faux</span>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <span class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-slate-200 flex items-center justify-center font-bold text-slate-700">2</span>
+                        <span class="text-[10px] md:text-xs text-slate-500 mt-1 leading-tight">Le plus souvent faux</span>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <span class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-amber-100 flex items-center justify-center font-bold text-amber-700">3</span>
+                        <span class="text-[10px] md:text-xs text-slate-500 mt-1 leading-tight">Plutôt vrai que faux</span>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <span class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-amber-200 flex items-center justify-center font-bold text-amber-800">4</span>
+                        <span class="text-[10px] md:text-xs text-slate-500 mt-1 leading-tight">Assez vrai</span>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <span class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-orange-200 flex items-center justify-center font-bold text-orange-800">5</span>
+                        <span class="text-[10px] md:text-xs text-slate-500 mt-1 leading-tight">Le plus souvent vrai</span>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <span class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-rose-200 flex items-center justify-center font-bold text-rose-800">6</span>
+                        <span class="text-[10px] md:text-xs text-slate-500 mt-1 leading-tight">Me décrit parfaitement</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
 
-        <!-- En-tête -->
-        <header class="text-center mb-10">
-            <h1 class="text-3xl md:text-4xl font-bold text-slate-900">Analyseur de Schémas de Young</h1>
-            <p class="text-lg text-slate-600 mt-2">Un outil pour synthétiser et comprendre vos résultats au YSQ-L3</p>
-        </header>
+    <!-- Contenu principal -->
+    <main class="container mx-auto max-w-4xl px-4 py-6">
         
-        <!-- Avertissement Important -->
-        <div class="bg-amber-50 border-l-4 border-amber-500 text-amber-900 p-4 rounded-lg mb-10" role="alert">
-            <h2 class="font-bold mb-2">Avertissement Important</h2>
-            <p>Cet outil est à but informatif et psychoéducatif. Il ne constitue pas un diagnostic et ne remplace pas l'avis d'un professionnel. Les seuils de couleur sont des indicateurs basés sur la pratique clinique générale et non des normes de validation scientifique strictes.</p>
-        </div>
-
-        <!-- Section de Saisie -->
-        <div class="card mb-10">
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
-                <h2 class="text-2xl font-semibold text-slate-800 mb-2 sm:mb-0">1. Entrez vos scores</h2>
-                <div class="flex flex-wrap gap-2">
-                     <button id="importBtn" class="text-sm bg-sky-100 text-sky-700 font-semibold py-2 px-3 rounded-lg hover:bg-sky-200 transition-all">Importer</button>
-                     <button id="exportBtn" class="text-sm bg-sky-100 text-sky-700 font-semibold py-2 px-3 rounded-lg hover:bg-sky-200 transition-all">Exporter</button>
-                     <button id="fillTestBtn" class="text-sm bg-slate-200 text-slate-700 font-semibold py-2 px-3 rounded-lg hover:bg-slate-300 transition-all">Test</button>
-                     <button id="clearBtn" class="text-sm bg-rose-100 text-rose-700 font-semibold py-2 px-3 rounded-lg hover:bg-rose-200 transition-all">Effacer</button>
-                     <input type="file" id="importFile" class="hidden" accept=".json">
-                </div>
-            </div>
-            <p class="text-slate-600 mb-6">Pour chaque question, entrez votre score de 1 (totalement faux) à 6 (me décrit parfaitement).</p>
-            
-            <div id="questions-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-x-4 gap-y-5">
-                <!-- Les questions seront générées ici par JavaScript -->
-            </div>
-            
-            <button id="calculateBtn" class="mt-8 w-full bg-teal-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-teal-700 focus:outline-none focus-visible-ring transition-all shadow-sm">
-                Calculer et Analyser les Schémas
-            </button>
-        </div>
-
-        <!-- Section des Résultats (initialement cachée) -->
-        <div id="results-section" class="hidden">
-            
-            <h2 class="text-3xl font-semibold mb-6 text-slate-800 text-center">2. Vos Résultats</h2>
-
-            <div class="card mb-10">
-                <h3 class="text-2xl font-semibold mb-4 text-slate-800">Profil des Schémas (Graphique Radar)</h3>
-                <div class="chart-container">
-                    <canvas id="schemaChart"></canvas>
-                </div>
-            </div>
-
-            <div class="card mb-10">
-                <h3 class="text-2xl font-semibold mb-4 text-slate-800">Scores Détaillés</h3>
-                 <div class="flex flex-wrap gap-x-4 gap-y-2 text-sm mb-6">
-                    <div class="flex items-center"><span class="w-3 h-3 rounded-full bg-teal-500 mr-2"></span> Faible (&lt; 2,5)</div>
-                    <div class="flex items-center"><span class="w-3 h-3 rounded-full bg-amber-400 mr-2"></span> Modéré (2,5 - 3,9)</div>
-                    <div class="flex items-center"><span class="w-3 h-3 rounded-full bg-orange-500 mr-2"></span> Élevé (4,0 - 4,9)</div>
-                    <div class="flex items-center"><span class="w-3 h-3 rounded-full bg-rose-500 mr-2"></span> Très élevé (≥ 5,0)</div>
-                </div>
-                <div id="results-bars" class="space-y-5"></div>
-            </div>
-
-            <div class="card mb-10">
-                 <h2 class="text-2xl font-semibold mb-4 text-slate-800">3. Comprendre vos Schémas</h2>
-                 <p class="text-slate-600 mb-6">Cliquez sur un schéma pour en apprendre plus. Un score élevé suggère que le schéma pourrait être actif.</p>
-                 <div id="explanations" class="space-y-2"></div>
-            </div>
-        </div>
-
-        <div class="card">
-            <h2 class="text-2xl font-semibold mb-4 text-slate-800">4. Ressources pour aller plus loin</h2>
-            <div class="space-y-8">
-                <div>
-                    <h3 class="font-semibold text-lg text-slate-900">Vidéos</h3>
-                    <div class="mt-4 space-y-4">
-                        <div>
-                            <p class="mb-1"><strong class="font-medium">Introduction à la Thérapie des Schémas (1/3) par Marion Martinelli :</strong></p>
-                            <a href="https://www.youtube.com/watch?v=TxwEHstSLmw" target="_blank" class="text-teal-700 hover:underline break-words">Lien vers la vidéo</a>
-                            <p class="text-sm text-slate-500 mt-1"><strong>Apport :</strong> Une excellente introduction générale qui pose les bases de la théorie des schémas, leur origine et leur fonctionnement.</p>
-                        </div>
-                         <div>
-                            <p class="mb-1"><strong class="font-medium">"Pourquoi conseiller cette thérapie?" par Psykocouac :</strong></p>
-                            <a href="https://www.youtube.com/watch?v=EPzgumSNMUM" target="_blank" class="text-teal-700 hover:underline break-words">Lien vers la vidéo</a>
-                            <p class="text-sm text-slate-500 mt-1"><strong>Apport :</strong> Offre un regard critique et "méta" sur le choix d'une thérapie, pertinent pour comprendre la place de la thérapie des schémas.</p>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <h3 class="font-semibold text-lg text-slate-900">Livres</h3>
-                     <div class="mt-4 text-slate-700 space-y-4">
-                        <div><p class="mb-1"><strong class="font-medium">"Je réinvente ma vie" de J. E. Young & J. S. Klosko :</strong> Le livre de référence pour les patients.</p></div>
-                        <div><p class="mb-1"><strong class="font-medium">"La thérapie des schémas" de J. Young, J. Klosko, & M. E. Weishaar :</strong> L'ouvrage technique pour les thérapeutes.</p></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <footer class="text-center mt-12 py-4 text-sm text-slate-500">
-            <p>Créé avec ❤️ pour favoriser la connaissance de soi.</p>
-            <p class="mt-4">
-                Le modèle de la Thérapie des Schémas et le questionnaire YSQ ont été développés par le Dr. Jeffrey E. Young. La traduction et l'adaptation du YSQ-L3 sont issues des travaux du Dr. Bernard Pascal. Ce projet est un outil non-officiel.
+        <!-- Instructions -->
+        <div class="bg-teal-50 border border-teal-200 rounded-xl p-4 mb-6">
+            <h2 class="font-semibold text-teal-800 mb-2">Instructions</h2>
+            <p class="text-teal-700 text-sm leading-relaxed">
+                Lisez chaque affirmation et évaluez dans quelle mesure elle vous décrit. 
+                <strong>Basez votre réponse sur ce que vous ressentez émotionnellement</strong>, 
+                et non pas sur ce que vous pensez rationnellement être vrai pour vous.
             </p>
-        </footer>
+        </div>
+
+        <!-- Questions container -->
+        <div id="questionsContainer" class="space-y-4">
+            <!-- Questions générées par JavaScript -->
+        </div>
+
+        <!-- Bouton de soumission -->
+        <div class="mt-8 text-center">
+            <button id="submitBtn" disabled class="nav-btn bg-gradient-to-r from-teal-600 to-teal-500 text-white font-bold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl disabled:from-slate-400 disabled:to-slate-300 disabled:shadow-none transition-all">
+                <span id="submitBtnText">Répondez à toutes les questions pour voir les résultats</span>
+            </button>
+            <p id="remainingText" class="text-sm text-slate-500 mt-2"></p>
+        </div>
+    </main>
+
+    <!-- Floating navigation -->
+    <div class="fab flex flex-col gap-2">
+        <button id="scrollTopBtn" class="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-slate-600 hover:bg-slate-50 hover:shadow-xl transition-all" title="Remonter">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+            </svg>
+        </button>
+        <button id="nextUnansweredBtn" class="w-12 h-12 bg-teal-500 rounded-full shadow-lg flex items-center justify-center text-white hover:bg-teal-600 hover:shadow-xl transition-all" title="Question suivante non répondue">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+            </svg>
+        </button>
     </div>
 
-    <!-- Modal pour les erreurs -->
-    <div id="errorModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-75 overflow-y-auto h-full w-full flex items-center justify-center p-4 z-50">
-        <div class="bg-white p-6 rounded-lg shadow-xl max-w-sm mx-auto text-center">
-            <h3 class="text-lg font-bold text-red-700 mb-3">Erreur</h3>
-            <p id="errorMessage" class="text-slate-700 mb-5"></p>
-            <button id="closeModalBtn" class="w-full bg-red-600 text-white font-bold py-2 px-4 rounded-md hover:bg-red-700 focus:outline-none focus-visible-ring">Compris</button>
+    <!-- Modal des résultats -->
+    <div id="resultsModal" class="hidden fixed inset-0 z-[200] overflow-y-auto">
+        <div class="modal-overlay fixed inset-0"></div>
+        <div class="relative min-h-screen flex items-center justify-center p-4">
+            <div class="relative bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="sticky top-0 bg-white border-b border-slate-200 p-4 flex justify-between items-center rounded-t-2xl">
+                    <h2 class="text-xl font-bold text-slate-800">Résultats</h2>
+                    <button id="closeModalBtn" class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <div id="resultsContent" class="p-6">
+                    <!-- Résultats générés par JavaScript -->
+                </div>
+                <div class="sticky bottom-0 bg-white border-t border-slate-200 p-4 flex gap-3 rounded-b-2xl">
+                    <button id="exportResultsBtn" class="flex-1 bg-teal-600 text-white font-semibold py-3 px-4 rounded-xl hover:bg-teal-700 transition-colors">
+                        Exporter (JSON)
+                    </button>
+                    <button id="copyResultsBtn" class="flex-1 bg-slate-100 text-slate-700 font-semibold py-3 px-4 rounded-xl hover:bg-slate-200 transition-colors">
+                        Copier les scores
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    // --- DATABASE & CONFIG ---
-    const schemaMap = {
-        ed: { name: "Carence Affective", q: [3, 26, 49, 93, 115, 137, 159, 181, 203, 225], expl: "Le sentiment que vos besoins d'affection, d'écoute et de compréhension n'ont pas été comblés." }, ab: { name: "Abandon / Instabilité", q: [1, 24, 47, 69, 91, 113, 135, 157, 179, 201, 223], expl: "La peur que les personnes importantes vont vous quitter, vous laisser tomber, ou sont imprévisibles." }, ma: { name: "Méfiance / Abus", q: [2, 25, 48, 70, 92, 114, 136, 158, 180, 202, 224], expl: "La conviction que les autres vont vous faire du mal, abuser de vous, ou profiter de vous." }, si: { name: "Isolement Social", q: [4, 27, 50, 71, 94, 116, 138, 160, 182, 204, 226], expl: "Le sentiment d'être différent et de ne faire partie d'aucun groupe, ce qui pousse à s'isoler." }, ds: { name: "Imperfection / Honte", q: [5, 28, 51, 72, 95, 117, 139, 161, 183, 205, 227], expl: "La croyance intime que vous êtes défectueux, mauvais, inférieur ou indésirable." }, fa: { name: "Échec", q: [6, 29, 52, 73, 96, 118, 140, 162, 184, 206, 228], expl: "La croyance que vous êtes fondamentalement incompétent et voué à l'échec." }, di: { name: "Dépendance / Incompétence", q: [7, 30, 53, 74, 97, 119, 141, 163, 185, 207, 229], expl: "Le sentiment d'être incapable de gérer le quotidien sans l'aide considérable des autres." }, vu: { name: "Peur du Danger / Maladie", q: [8, 31, 54, 75, 98, 120, 142, 164, 186, 208, 230], expl: "Une peur exagérée que des catastrophes (médicales, financières...) sont sur le point de se produire." }, eu: { name: "Fusion / Personnalité Atrophiée", q: [9, 32, 55, 76, 99, 121, 143, 165, 187, 209, 231], expl: "Être si impliqué avec autrui que l'on n'a pas développé une identité propre." }, sb: { name: "Droits Personnels Exagérés", q: [10, 33, 56, 77, 100, 122, 144, 166, 188, 210, 232], expl: "La croyance d'être supérieur et d'avoir des droits spéciaux, menant à l'impatience et au manque d'empathie." }, is: { name: "Contrôle de soi / Discipline Insuffisants", q: [11, 34, 57, 78, 101, 123, 145, 167, 189, 211], expl: "Une difficulté à tolérer la frustration et à contrôler ses impulsions pour atteindre un but." }, us: { name: "Assujettissement", q: [12, 35, 58, 79, 102, 124, 146, 168, 190, 212], expl: "Sacrifier ses propres besoins pour plaire aux autres ou pour éviter leur colère et leur rejet." }, et: { name: "Abnégation", q: [13, 36, 59, 80, 103, 125, 147, 169, 191, 213], expl: "Choisir volontairement de répondre aux besoins des autres au détriment des siens, au risque de s'épuiser." }, ss: { name: "Surcontrôle Émotionnel", q: [14, 37, 60, 81, 104, 126, 148, 170, 192, 214], expl: "Inhiber excessivement l'expression de ses émotions, par peur de perdre le contrôle ou de déplaire." }, ei: { name: "Exigences Élevées", q: [15, 38, 61, 82, 105, 127, 149, 171, 193, 215], expl: "La croyance qu'il faut atteindre des standards très élevés pour éviter la critique, menant au perfectionnisme." }, pu: { name: "Punition", q: [16, 40, 62, 84, 106, 128, 150, 172, 194, 216], expl: "La croyance que les gens (y compris soi-même) méritent d'être sévèrement punis pour leurs erreurs." }, as: { name: "Recherche d'Approbation", q: [17, 39, 63, 83, 107, 129, 151, 173, 195, 217], expl: "Une estime de soi qui dépend énormément de l'approbation et de l'attention des autres." }, np: { name: "Négativité / Pessimisme", q: [18, 41, 64, 85, 108, 130, 152, 174, 196, 218], expl: "Une focalisation durable sur les aspects négatifs de la vie tout en minimisant les aspects positifs." }
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // DONNÉES DES 232 QUESTIONS - YSQ-L3 (Cousineau & Pascal, 2005)
+    // ═══════════════════════════════════════════════════════════════════════
+
+    const questions = [
+        // DOMAINE I — Séparation et Rejet
+        // Carence Affective (ED) - items 1-9
+        { id: 1, text: "Les autres n'ont pas satisfait mes besoins affectifs.", schema: "ed" },
+        { id: 2, text: "Je n'ai pas reçu suffisamment d'amour et d'attention.", schema: "ed" },
+        { id: 3, text: "Dans l'ensemble, je n'ai eu personne sur qui compter pour recevoir des conseils ou du soutien affectif.", schema: "ed" },
+        { id: 4, text: "La plupart du temps, je n'ai eu personne pour m'aider à grandir, pour partager son univers intérieur avec moi, ou qui se soucie profondément de tout ce qui m'arrive.", schema: "ed" },
+        { id: 5, text: "Pour la plus grande partie de ma vie, je n'ai eu personne qui veuille être près de moi et passer beaucoup de temps avec moi.", schema: "ed" },
+        { id: 6, text: "En général, les autres n'ont pas été présents pour me prendre dans leurs bras, pour me donner de la chaleur et de l'affection.", schema: "ed" },
+        { id: 7, text: "Pour la plus grande partie de ma vie, je n'ai jamais eu le sentiment que je représentais quelqu'un d'important pour quelqu'un d'autre.", schema: "ed" },
+        { id: 8, text: "En grande partie, je n'ai eu personne qui m'écoute réellement, me comprenne et soit sensible à mes besoins et mes sentiments véritables.", schema: "ed" },
+        { id: 9, text: "J'ai rarement eu une personne forte pour me donner de bons conseils ou pour me guider lorsque je ne savais pas quoi faire.", schema: "ed" },
+        
+        // Abandon (AB) - items 10-26
+        { id: 10, text: "Je suis préoccupé(e) par le fait que les gens que j'aime vont mourir bientôt même s'il y a peu de raisons médicales à ma préoccupation.", schema: "ab" },
+        { id: 11, text: "Je m'accroche aux gens dont je suis proche par peur qu'ils ne me quittent.", schema: "ab" },
+        { id: 12, text: "Je crains que les gens dont je me sens proche ne me quittent ou ne m'abandonnent.", schema: "ab" },
+        { id: 13, text: "J'ai le sentiment de manquer d'une base stable qui me soutienne affectivement.", schema: "ab" },
+        { id: 14, text: "Je n'ai pas l'impression que les relations importantes dureront : je m'attends à ce qu'elles finissent.", schema: "ab" },
+        { id: 15, text: "Je me sens \"accro\" aux partenaires qui ne peuvent pas s'engager avec moi de façon stable.", schema: "ab" },
+        { id: 16, text: "Je finirai seul(e).", schema: "ab" },
+        { id: 17, text: "Quand je sens que quelqu'un à qui je tiens s'éloigne de moi, je deviens désespéré.", schema: "ab" },
+        { id: 18, text: "Quelquefois j'ai tellement peur que les gens m'abandonnent que je les repousse.", schema: "ab" },
+        { id: 19, text: "Je deviens bouleversé(e) quand quelqu'un me laisse seul(e) même pour une courte période.", schema: "ab" },
+        { id: 20, text: "Je ne peux compter sur la présence régulière de ceux qui me soutiennent.", schema: "ab" },
+        { id: 21, text: "Je ne peux me permettre d'être vraiment proche des autres car je ne peux être sûr(e) qu'ils seront toujours là.", schema: "ab" },
+        { id: 22, text: "Il me semble que les personnes importantes dans ma vie sont toujours en train de venir et de repartir.", schema: "ab" },
+        { id: 23, text: "J'ai très peur que les personnes que j'aime ne trouvent quelqu'un d'autre qu'elles préfèrent et qu'elles m'abandonnent.", schema: "ab" },
+        { id: 24, text: "Les gens qui me sont proches ont toujours été très imprévisibles : un moment ils sont disponibles et gentils, puis, ils sont fâchés, contrariés, querelleurs, préoccupés par eux-mêmes…", schema: "ab" },
+        { id: 25, text: "J'ai tellement besoin des autres que j'ai peur de les perdre.", schema: "ab" },
+        { id: 26, text: "Je ne peux être moi-même ou exprimer ce que je ressens véritablement, sinon les autres vont me quitter.", schema: "ab" },
+        
+        // Méfiance / Abus (MA) - items 27-43
+        { id: 27, text: "J'ai l'impression que les autres vont profiter de moi.", schema: "ma" },
+        { id: 28, text: "J'ai souvent l'impression que je dois me protéger des autres.", schema: "ma" },
+        { id: 29, text: "J'ai l'impression que je dois être sur mes gardes en présence des autres sinon ils me blesseront intentionnellement.", schema: "ma" },
+        { id: 30, text: "Si une personne est aimable avec moi, je suppose qu'elle cherche à obtenir quelque chose.", schema: "ma" },
+        { id: 31, text: "Ce n'est qu'une question de temps avant que quelqu'un me trahisse.", schema: "ma" },
+        { id: 32, text: "La plupart des gens pensent uniquement à eux.", schema: "ma" },
+        { id: 33, text: "J'ai la plus grande difficulté à faire confiance aux autres.", schema: "ma" },
+        { id: 34, text: "Je suis très méfiant quant aux motivations des autres.", schema: "ma" },
+        { id: 35, text: "Les autres sont rarement honnêtes, ils ne sont pas en général ce qu'ils paraissent.", schema: "ma" },
+        { id: 36, text: "Je m'interroge habituellement sur les véritables intentions des autres.", schema: "ma" },
+        { id: 37, text: "Si je pense que quelqu'un cherche à me blesser, je cherche à le blesser en premier.", schema: "ma" },
+        { id: 38, text: "Les autres habituellement doivent faire leurs preuves avant que je leur accorde ma confiance.", schema: "ma" },
+        { id: 39, text: "Je teste les autres pour voir s'ils me disent la vérité ou s'ils sont bien intentionnés.", schema: "ma" },
+        { id: 40, text: "Je souscris à la croyance : « Contrôle ou tu seras contrôlé(e). »", schema: "ma" },
+        { id: 41, text: "Je me mets en colère quand je pense aux façons dont j'ai été maltraité(e) par les autres tout au long de ma vie.", schema: "ma" },
+        { id: 42, text: "Tout au long de ma vie, mes proches ont profité de moi et m'ont utilisé(e) à leurs propres desseins.", schema: "ma" },
+        { id: 43, text: "J'ai été physiquement, émotionnellement, ou sexuellement abusé(e) par des personnes importantes de ma vie.", schema: "ma" },
+        
+        // Isolement Social (SI) - items 44-53
+        { id: 44, text: "Je ne suis pas adapté(e).", schema: "si" },
+        { id: 45, text: "Je suis fondamentalement différent(e) des autres.", schema: "si" },
+        { id: 46, text: "Je suis à part ; je suis un(e) solitaire.", schema: "si" },
+        { id: 47, text: "Je me sens étranger(ère) aux autres.", schema: "si" },
+        { id: 48, text: "Je me sens isolé(e) et seul(e).", schema: "si" },
+        { id: 49, text: "Je me sens toujours à l'extérieur des groupes.", schema: "si" },
+        { id: 50, text: "Personne ne me comprend vraiment.", schema: "si" },
+        { id: 51, text: "Ma famille a toujours été différente des autres familles.", schema: "si" },
+        { id: 52, text: "J'ai parfois le sentiment d'être un étranger.", schema: "si" },
+        { id: 53, text: "Si je disparaissais demain, personne ne le remarquerait.", schema: "si" },
+        
+        // Imperfection / Honte (DS) - items 54-68
+        { id: 54, text: "Aucun homme ou femme que je désire ne pourrait m'aimer une fois qu'il(elle) aurait vu mes défauts.", schema: "ds" },
+        { id: 55, text: "Aucune personne que je désire ne pourrait rester proche de moi si elle savait qui je suis réellement.", schema: "ds" },
+        { id: 56, text: "Je suis fondamentalement imparfait(e) et marqué(e) par un défaut.", schema: "ds" },
+        { id: 57, text: "Même si je me donne le plus grand mal, je sens qu'il ne me sera pas possible d'obtenir le respect d'un homme ou d'une femme important(e) et de sentir que j'ai de la valeur.", schema: "ds" },
+        { id: 58, text: "Je ne mérite pas l'amour, l'attention et le respect des autres.", schema: "ds" },
+        { id: 59, text: "J'ai le sentiment d'être quelqu'un que l'on ne peut pas aimer.", schema: "ds" },
+        { id: 60, text: "Je suis trop fondamentalement inacceptable pour me révéler aux autres.", schema: "ds" },
+        { id: 61, text: "Je ne pourrais pas affronter les gens, s'ils découvraient mes défauts fondamentaux.", schema: "ds" },
+        { id: 62, text: "Lorsque les gens m'apprécient, j'ai l'impression de les duper.", schema: "ds" },
+        { id: 63, text: "Je suis souvent attiré(e) par les gens qui sont très critiques envers moi ou qui me rejettent.", schema: "ds" },
+        { id: 64, text: "J'ai des secrets que je ne veux pas que mes proches découvrent.", schema: "ds" },
+        { id: 65, text: "C'est de ma faute si mes parents n'ont pas pu m'aimer suffisamment.", schema: "ds" },
+        { id: 66, text: "Je ne laisse pas les gens connaître ce que je suis réellement.", schema: "ds" },
+        { id: 67, text: "Une de mes plus grandes peurs est que mes défauts deviennent publics.", schema: "ds" },
+        { id: 68, text: "Je ne puis comprendre comment qui que ce soit pourrait m'aimer.", schema: "ds" },
+        
+        // DOMAINE II — Manque d'Autonomie et Performance
+        // Échec (FA) - items 69-77
+        { id: 69, text: "Presque rien de ce que je fais au travail (ou à l'école) n'est aussi bon que ce que font les autres.", schema: "fa" },
+        { id: 70, text: "Je suis incompétent(e) quand il s'agit de réussir.", schema: "fa" },
+        { id: 71, text: "La plupart des gens sont plus doués que moi en ce qui concerne le travail (ou l'école) et la réussite.", schema: "fa" },
+        { id: 72, text: "Je suis un(e) raté(e).", schema: "fa" },
+        { id: 73, text: "Je n'ai pas autant de talent que les autres au travail (ou à l'école).", schema: "fa" },
+        { id: 74, text: "Je ne suis pas aussi intelligent(e) que la plupart des gens quand il s'agit du travail (ou de l'école).", schema: "fa" },
+        { id: 75, text: "Je suis humilié(e) par mes échecs ou mes insuffisances dans le monde du travail (ou de l'école).", schema: "fa" },
+        { id: 76, text: "Je suis souvent mal à l'aise avec les autres, car je ne les vaux pas en termes de réussites.", schema: "fa" },
+        { id: 77, text: "Je compare souvent mes réalisations à celles des autres et je trouve qu'ils réussissent beaucoup mieux.", schema: "fa" },
+        
+        // Dépendance / Incompétence (DI) - items 78-92
+        { id: 78, text: "Je ne me sens pas capable de me débrouiller par moi-même dans la vie de tous les jours.", schema: "di" },
+        { id: 79, text: "J'ai besoin des autres pour m'aider à m'en sortir.", schema: "di" },
+        { id: 80, text: "Je n'ai pas le sentiment que je puisse bien m'adapter par moi-même.", schema: "di" },
+        { id: 81, text: "Je crois que les autres peuvent prendre soin de moi mieux que je ne le peux moi-même.", schema: "di" },
+        { id: 82, text: "J'ai des difficultés à prendre en charge de nouvelles tâches en dehors du travail à moins que quelqu'un ne me guide.", schema: "di" },
+        { id: 83, text: "Je me considère comme une personne dépendante en ce qui concerne la vie de tous les jours.", schema: "di" },
+        { id: 84, text: "Je bousille tout ce que j'entreprends, même à l'extérieur du travail (ou de l'école).", schema: "di" },
+        { id: 85, text: "Je suis stupide dans la plupart des domaines de la vie.", schema: "di" },
+        { id: 86, text: "Si je me fie à mon jugement dans la vie de tous les jours, je vais prendre la mauvaise décision.", schema: "di" },
+        { id: 87, text: "Je manque de bon sens.", schema: "di" },
+        { id: 88, text: "On ne peut se fier à mon jugement dans les situations quotidiennes.", schema: "di" },
+        { id: 89, text: "Je n'ai pas confiance dans ma capacité à résoudre les problèmes qui se posent tous les jours.", schema: "di" },
+        { id: 90, text: "Je pense avoir besoin de quelqu'un sur qui je puisse compter pour me donner des conseils sur les questions pratiques.", schema: "di" },
+        { id: 91, text: "Je me sens plus un(e) enfant qu'un(e) adulte quand il s'agit de prendre en main les responsabilités quotidiennes.", schema: "di" },
+        { id: 92, text: "Je me sens dépassé(e) par les responsabilités de tous les jours.", schema: "di" },
+        
+        // Vulnérabilité (VU) - items 93-104
+        { id: 93, text: "Il ne me semble pas possible d'échapper au sentiment que quelque chose de mauvais va bientôt se passer.", schema: "vu" },
+        { id: 94, text: "J'ai l'impression qu'un désastre naturel, criminel, financier ou médical pourrait frapper à tout moment.", schema: "vu" },
+        { id: 95, text: "J'ai peur de devenir un(e) sans domicile fixe ou un(e) mendiant(e).", schema: "vu" },
+        { id: 96, text: "J'ai peur d'être attaqué(e).", schema: "vu" },
+        { id: 97, text: "Je prends de grandes précautions pour éviter de tomber malade ou d'être blessé(e).", schema: "vu" },
+        { id: 98, text: "J'ai peur d'avoir une maladie grave, même si rien de sérieux n'a été diagnostiqué par un médecin.", schema: "vu" },
+        { id: 99, text: "Je suis quelqu'un de peureux(se).", schema: "vu" },
+        { id: 100, text: "Je me soucie beaucoup de ce qui va mal dans le monde : le crime, la pollution, etc.", schema: "vu" },
+        { id: 101, text: "J'ai souvent le sentiment que je pourrais devenir fou(folle).", schema: "vu" },
+        { id: 102, text: "J'ai souvent l'impression que je vais avoir une crise d'angoisse.", schema: "vu" },
+        { id: 103, text: "J'ai souvent peur d'avoir une crise cardiaque ou un cancer, même s'il y a peu de raisons médicales de s'en soucier.", schema: "vu" },
+        { id: 104, text: "Je pense que le monde est un endroit dangereux.", schema: "vu" },
+        
+        // Fusion (EU) - items 105-115
+        { id: 105, text: "Je n'ai pas pu me séparer de ma mère ou de mon père comme semblent le faire les gens de mon âge.", schema: "eu" },
+        { id: 106, text: "Mes parents et moi avons tendance à être sur-impliqués dans nos vies et nos problèmes réciproques.", schema: "eu" },
+        { id: 107, text: "Il est très difficile, pour mes parents et moi-même, de garder secrets, chacun pour soi, certains détails intimes, sans nous sentir trahis ou coupables.", schema: "eu" },
+        { id: 108, text: "Mes parents et moi devons nous parler presque tous les jours, sinon l'un de nous se sent coupable, blessé(e), déçu(e), ou seul(e).", schema: "eu" },
+        { id: 109, text: "J'ai souvent l'impression de ne pas avoir une identité distincte de celle de mes parents ou de mon partenaire.", schema: "eu" },
+        { id: 110, text: "J'ai souvent l'impression que mes parents vivent à travers moi — je n'ai pas une vie qui me soit propre.", schema: "eu" },
+        { id: 111, text: "Il m'est vraiment ardu de maintenir une distance vis-à-vis des gens dont je suis intime ; il m'est difficile de me sentir une personne séparée.", schema: "eu" },
+        { id: 112, text: "Je suis tellement lié(e) à mon partenaire ou à mes parents que je ne sais pas vraiment qui je suis ou ce que je veux.", schema: "eu" },
+        { id: 113, text: "J'éprouve des difficultés à distinguer mon point de vue ou mon opinion de ceux de mes parents ou de mon partenaire.", schema: "eu" },
+        { id: 114, text: "J'ai souvent l'impression de ne pas avoir d'intimité par rapport à mes parents ou mon partenaire.", schema: "eu" },
+        { id: 115, text: "Je sens que mes parents seraient vraiment peinés si je vivais seul(e), loin d'eux.", schema: "eu" },
+        
+        // DOMAINE III — Orientation vers les Autres
+        // Assujettissement (SB) - items 116-125
+        { id: 116, text: "Je laisse les autres faire ce qu'ils veulent, car j'ai peur des conséquences.", schema: "sb" },
+        { id: 117, text: "Je pense que si je fais ce que je veux, je cours après les problèmes.", schema: "sb" },
+        { id: 118, text: "Je sens que je n'ai pas d'autre choix que de me soumettre aux souhaits des autres, sinon ils exerceront des représailles ou me rejetteront d'une façon ou d'une autre.", schema: "sb" },
+        { id: 119, text: "Dans mes relations, je laisse l'autre avoir le dessus sur moi.", schema: "sb" },
+        { id: 120, text: "Je laisse toujours les autres choisir à ma place, si bien que je ne sais pas vraiment ce que je veux moi-même.", schema: "sb" },
+        { id: 121, text: "J'ai le sentiment que les décisions importantes de ma vie n'étaient pas vraiment les miennes.", schema: "sb" },
+        { id: 122, text: "Je me soucie beaucoup de plaire aux autres, pour qu'ils ne me rejettent pas.", schema: "sb" },
+        { id: 123, text: "J'ai beaucoup de difficultés à exiger que mes droits soient respectés et que mes sentiments soient pris en compte.", schema: "sb" },
+        { id: 124, text: "Plutôt que manifester ouvertement ma colère, je me venge dans des petites choses.", schema: "sb" },
+        { id: 125, text: "Je vais tolérer beaucoup plus de choses que la plupart des gens afin d'éviter une confrontation.", schema: "sb" },
+        
+        // Abnégation (SS) - items 126-142
+        { id: 126, text: "Je fais passer les besoins des autres avant les miens, sinon je me sens coupable.", schema: "ss" },
+        { id: 127, text: "Je me sens coupable si je laisse tomber les autres ou si je les déçois.", schema: "ss" },
+        { id: 128, text: "Je donne davantage aux autres que je ne reçois en retour.", schema: "ss" },
+        { id: 129, text: "Je suis celui (celle) qui finit généralement par prendre soin des gens dont je suis proche.", schema: "ss" },
+        { id: 130, text: "Il n'y a presque rien que je ne puisse supporter lorsque j'aime quelqu'un.", schema: "ss" },
+        { id: 131, text: "Je suis quelqu'un de bon car je pense aux autres plus qu'à moi-même.", schema: "ss" },
+        { id: 132, text: "Au travail, je suis habituellement celui (celle) qui est volontaire pour faire des heures ou des tâches supplémentaires.", schema: "ss" },
+        { id: 133, text: "Même si je suis très occupé(e), je trouve toujours du temps pour les autres.", schema: "ss" },
+        { id: 134, text: "Je peux m'en sortir avec vraiment très peu car mes besoins sont minimes.", schema: "ss" },
+        { id: 135, text: "Je ne suis heureux(se) que si les gens qui m'entourent le sont aussi.", schema: "ss" },
+        { id: 136, text: "Je suis tellement occupé(e) à me dévouer pour les gens qui m'importent que j'ai très peu de temps pour moi.", schema: "ss" },
+        { id: 137, text: "J'ai toujours été celui (celle) qui écoute les problèmes des autres.", schema: "ss" },
+        { id: 138, text: "Je me sens plus à l'aise pour donner un cadeau que pour en recevoir un.", schema: "ss" },
+        { id: 139, text: "On me voit comme quelqu'un qui en fait trop pour les autres et pas assez pour lui-même.", schema: "ss" },
+        { id: 140, text: "Peu importe combien je donne, ce n'est jamais assez.", schema: "ss" },
+        { id: 141, text: "Si je fais ce que je veux, je me sens vraiment mal à l'aise.", schema: "ss" },
+        { id: 142, text: "Il m'est vraiment difficile de demander aux autres de se soucier de mes besoins.", schema: "ss" },
+        
+        // Surcontrôle Émotionnel (EI) - items 143-151
+        { id: 143, text: "J'ai peur de perdre le contrôle de mes actes.", schema: "ei" },
+        { id: 144, text: "J'ai peur de faire du mal à quelqu'un, physiquement ou affectivement, si je perds tout contrôle sur ma colère.", schema: "ei" },
+        { id: 145, text: "Je sens que je dois contrôler mes émotions et mes impulsions, sinon quelque chose de déplorable risque de se produire.", schema: "ei" },
+        { id: 146, text: "J'en arrive à accumuler en moi beaucoup de colère et de ressentiment que je n'exprime pas.", schema: "ei" },
+        { id: 147, text: "Je suis trop gêné(e) pour exprimer des sentiments positifs aux autres (par ex. de l'affection, de l'intérêt).", schema: "ei" },
+        { id: 148, text: "Je trouve embarrassant d'exprimer mes sentiments aux autres.", schema: "ei" },
+        { id: 149, text: "Il m'est difficile d'être chaleureux(se) et spontané(e).", schema: "ei" },
+        { id: 150, text: "Je me contrôle tellement bien que les autres croient que je n'ai pas d'émotions.", schema: "ei" },
+        { id: 151, text: "Les gens me trouvent coincé(e) sur le plan émotionnel.", schema: "ei" },
+        
+        // DOMAINE IV — Survigilance et Inhibition
+        // Exigences Élevées (US) - items 152-167
+        { id: 152, text: "Je dois être le(la) meilleur(e) dans presque tout ce que je fais, je ne peux pas accepter d'être le(la) deuxième.", schema: "us" },
+        { id: 153, text: "Je m'efforce de tout maintenir parfaitement en ordre.", schema: "us" },
+        { id: 154, text: "Je dois apparaître sous mon meilleur aspect la plupart du temps.", schema: "us" },
+        { id: 155, text: "Je m'efforce de faire de mon mieux ; je ne peux pas me contenter d'être « assez bien ».", schema: "us" },
+        { id: 156, text: "J'ai tant de choses à faire qu'il ne me reste presque pas de temps pour me détendre vraiment.", schema: "us" },
+        { id: 157, text: "Presque rien de ce que je fais n'est assez bien, je pourrais toujours faire mieux.", schema: "us" },
+        { id: 158, text: "Je dois faire face à toutes mes responsabilités.", schema: "us" },
+        { id: 159, text: "Je ressens une pression constante qui me force à faire les choses et à les réussir.", schema: "us" },
+        { id: 160, text: "Mes relations souffrent de ce que je m'impose trop de choses.", schema: "us" },
+        { id: 161, text: "Je m'impose une telle pression pour bien faire que ma santé en souffre.", schema: "us" },
+        { id: 162, text: "Souvent je sacrifie plaisir et bonheur pour atteindre mes idéaux.", schema: "us" },
+        { id: 163, text: "Lorsque je fais une erreur, je mérite une critique sévère.", schema: "us" },
+        { id: 164, text: "Je ne peux pas accepter de me dégager aisément d'une situation difficile ou de présenter des excuses pour mes erreurs.", schema: "us" },
+        { id: 165, text: "Je suis quelqu'un de très compétitif.", schema: "us" },
+        { id: 166, text: "J'attache beaucoup d'importance à l'argent ou au statut social.", schema: "us" },
+        { id: 167, text: "Je tiens toujours à être le(la) meilleur(e) dans ce que j'accomplis.", schema: "us" },
+        
+        // Droits Personnels Exagérés (ET) - items 168-178
+        { id: 168, text: "Lorsque j'attends quelque chose des autres, j'ai beaucoup de difficulté à accepter un refus.", schema: "et" },
+        { id: 169, text: "Je me mets souvent en colère ou je m'irrite quand je ne peux pas avoir ce que je veux.", schema: "et" },
+        { id: 170, text: "Je suis quelqu'un de spécial et je ne devrais pas avoir à accepter les restrictions auxquelles les autres doivent se soumettre.", schema: "et" },
+        { id: 171, text: "Je déteste être contraint(e) ou qu'on m'empêche de faire ce que je veux.", schema: "et" },
+        { id: 172, text: "Je crois que je n'ai pas à suivre les règles et les conventions comme les autres.", schema: "et" },
+        { id: 173, text: "J'ai le sentiment que j'ai beaucoup plus à offrir que les autres.", schema: "et" },
+        { id: 174, text: "Habituellement, je fais passer mes besoins avant ceux des autres.", schema: "et" },
+        { id: 175, text: "Je remarque souvent que l'importance accordée à mes priorités personnelles ne me laisse plus de temps pour les amis ou la famille.", schema: "et" },
+        { id: 176, text: "Les autres me disent souvent que je contrôle trop la façon dont les choses sont faites.", schema: "et" },
+        { id: 177, text: "Je suis très irrité(e) lorsque les autres ne font pas ce que je leur demande.", schema: "et" },
+        { id: 178, text: "Je ne supporte pas que les autres me disent ce que je dois faire.", schema: "et" },
+        
+        // Contrôle de Soi Insuffisant (IS) - items 179-193
+        { id: 179, text: "J'ai beaucoup de difficultés à m'arrêter de boire, de fumer, de trop manger ou à cesser d'autres comportements problématiques.", schema: "is" },
+        { id: 180, text: "Il ne me semble pas possible de me discipliner pour terminer des tâches routinières ou ennuyeuses.", schema: "is" },
+        { id: 181, text: "Souvent, je me laisse aller à mes impulsions ou à exprimer des émotions qui me créent des difficultés ou blessent les autres.", schema: "is" },
+        { id: 182, text: "Si je ne peux pas atteindre un but, je suis facilement frustré(e) et j'abandonne.", schema: "is" },
+        { id: 183, text: "Il m'est très difficile de sacrifier une gratification immédiate pour mener à bien un projet à long terme.", schema: "is" },
+        { id: 184, text: "Quand je me mets en colère, il est fréquent que je ne puisse pas du tout me contrôler.", schema: "is" },
+        { id: 185, text: "J'ai tendance à abuser de certaines choses, même si je sais que c'est mauvais pour moi.", schema: "is" },
+        { id: 186, text: "Je m'ennuie très facilement.", schema: "is" },
+        { id: 187, text: "Quand les tâches deviennent difficiles, je ne peux souvent pas persévérer pour les terminer.", schema: "is" },
+        { id: 188, text: "Je ne peux pas me concentrer longtemps sur quoi que ce soit.", schema: "is" },
+        { id: 189, text: "Je ne peux pas me forcer à faire des choses qui ne me plaisent pas même quand je sais que c'est pour mon bien.", schema: "is" },
+        { id: 190, text: "Je me mets en colère à la moindre offense.", schema: "is" },
+        { id: 191, text: "J'ai rarement été capable de tenir mes engagements.", schema: "is" },
+        { id: 192, text: "Je ne peux presque jamais m'empêcher de montrer aux gens mes véritables sentiments, même si cela doit me coûter cher.", schema: "is" },
+        { id: 193, text: "J'agis souvent impulsivement et je le regrette plus tard.", schema: "is" },
+        
+        // DOMAINE V — Manque de Limites
+        // Recherche d'Approbation (AS) - items 194-207
+        { id: 194, text: "Il m'est important d'être aimé(e) par presque tous ceux que je connais.", schema: "as" },
+        { id: 195, text: "Je modifie mon comportement en fonction des gens avec qui je me trouve, afin qu'ils puissent m'aimer davantage.", schema: "as" },
+        { id: 196, text: "Je fais tout mon possible pour m'adapter.", schema: "as" },
+        { id: 197, text: "Mon estime personnelle est principalement fondée sur la façon dont les autres me voient.", schema: "as" },
+        { id: 198, text: "Posséder de l'argent et connaître des gens importants sont des choses qui me donnent de la valeur.", schema: "as" },
+        { id: 199, text: "Je consacre beaucoup de temps à soigner mon apparence afin de gagner l'estime des autres.", schema: "as" },
+        { id: 200, text: "Mes réussites ont plus de valeur à mes yeux si les autres les remarquent.", schema: "as" },
+        { id: 201, text: "Je suis à ce point soucieux(e) de m'adapter aux autres qu'il m'arrive de ne plus savoir qui je suis.", schema: "as" },
+        { id: 202, text: "Je trouve difficile de me fixer des objectifs propres, sans prendre en compte ce que les autres vont penser de mes choix.", schema: "as" },
+        { id: 203, text: "Lorsque je considère les décisions que j'ai prises dans ma vie, je réalise que la plupart d'entre elles reposaient sur le désir d'obtenir l'approbation des autres.", schema: "as" },
+        { id: 204, text: "Même si je n'aime pas une personne, je tiens malgré tout à ce qu'elle m'aime.", schema: "as" },
+        { id: 205, text: "À moins d'obtenir beaucoup d'attention des autres, je me sens peu important(e).", schema: "as" },
+        { id: 206, text: "Si j'interviens lors d'une réunion ou si on me présente dans un groupe, je cherche à être reconnu(e) et admiré(e).", schema: "as" },
+        { id: 207, text: "Lorsqu'on me fait beaucoup de compliments et d'éloges, je me sens une personne de valeur.", schema: "as" },
+        
+        // Négativité / Pessimisme (NP) - items 208-218
+        { id: 208, text: "Même lorsque tout va bien, j'ai l'impression que ce ne sera que temporaire.", schema: "np" },
+        { id: 209, text: "S'il se produit quelque chose de bien, j'ai peur qu'il n'arrive ensuite quelque chose de mauvais.", schema: "np" },
+        { id: 210, text: "On n'est jamais assez prudent ; il peut toujours se produire quelque chose de mauvais.", schema: "np" },
+        { id: 211, text: "Même si je travaille beaucoup, j'ai peur de me retrouver un jour sans le sou.", schema: "np" },
+        { id: 212, text: "J'ai peur qu'une mauvaise décision ne puisse conduire à un désastre.", schema: "np" },
+        { id: 213, text: "Je me tourmente souvent pour des décisions mineures, car les conséquences d'une erreur m'apparaissent tellement graves.", schema: "np" },
+        { id: 214, text: "Je préfère considérer que les choses ne vont pas aller comme je le veux, car ainsi je ne serai pas déçu(e) si ça se passe mal.", schema: "np" },
+        { id: 215, text: "Je pense plutôt aux aspects négatifs de la vie et des évènements qu'aux côtés positifs.", schema: "np" },
+        { id: 216, text: "J'ai tendance à être pessimiste.", schema: "np" },
+        { id: 217, text: "Mes proches considèrent que je me fais trop de soucis.", schema: "np" },
+        { id: 218, text: "Si les gens s'enthousiasment trop, je me sens mal et j'éprouve le besoin de les prévenir de ce qui pourrait mal se passer.", schema: "np" },
+        
+        // Punition (PU) - items 219-232
+        { id: 219, text: "Si je fais une erreur, je mérite d'être puni(e).", schema: "pu" },
+        { id: 220, text: "Si je ne donne pas le meilleur de moi-même, je dois m'attendre à échouer.", schema: "pu" },
+        { id: 221, text: "Je n'ai aucune excuse si je fais une erreur.", schema: "pu" },
+        { id: 222, text: "Les gens qui ne font pas leur part de travail à fond devraient être punis d'une manière ou d'une autre.", schema: "pu" },
+        { id: 223, text: "La plupart du temps, je n'accepte pas les excuses des autres : ils n'ont pas pris leurs responsabilités et ils en paient les conséquences.", schema: "pu" },
+        { id: 224, text: "Si je ne fais pas mon travail, je devrai en subir les conséquences.", schema: "pu" },
+        { id: 225, text: "Je pense souvent à mes erreurs passées et je me mets en colère contre moi-même.", schema: "pu" },
+        { id: 226, text: "Lorsque les gens font quelque chose de mal, j'ai du mal à appliquer la phrase : « pardonnez et oubliez ».", schema: "pu" },
+        { id: 227, text: "Je garde de la rancune envers les gens, même s'ils se sont excusés.", schema: "pu" },
+        { id: 228, text: "Je me sens énervé(e) à l'idée que quelqu'un s'est tiré trop facilement d'un mauvais pas.", schema: "pu" },
+        { id: 229, text: "Je me mets en colère lorsque des gens se trouvent des excuses, ou lorsqu'ils accusent les autres pour des problèmes dont ils sont eux-mêmes responsables.", schema: "pu" },
+        { id: 230, text: "Peu importe les raisons, quand je fais une erreur, je devrais en payer le prix.", schema: "pu" },
+        { id: 231, text: "Je m'en veux énormément lorsque je bousille quelque chose.", schema: "pu" },
+        { id: 232, text: "Je suis quelqu'un de mauvais qui mérite d'être puni.", schema: "pu" }
+    ];
+
+    const schemaInfo = {
+        ed: { name: "Carence Affective", domain: "I" },
+        ab: { name: "Abandon", domain: "I" },
+        ma: { name: "Méfiance / Abus", domain: "I" },
+        si: { name: "Isolement Social", domain: "I" },
+        ds: { name: "Imperfection / Honte", domain: "I" },
+        fa: { name: "Échec", domain: "II" },
+        di: { name: "Dépendance", domain: "II" },
+        vu: { name: "Vulnérabilité", domain: "II" },
+        eu: { name: "Fusion", domain: "II" },
+        sb: { name: "Assujettissement", domain: "III" },
+        ss: { name: "Abnégation", domain: "III" },
+        ei: { name: "Surcontrôle Émotionnel", domain: "III" },
+        us: { name: "Exigences Élevées", domain: "IV" },
+        et: { name: "Droits Exagérés", domain: "IV" },
+        is: { name: "Contrôle Insuffisant", domain: "IV" },
+        as: { name: "Recherche d'Approbation", domain: "V" },
+        np: { name: "Négativité / Pessimisme", domain: "V" },
+        pu: { name: "Punition", domain: "V" }
     };
-    const THRESHOLDS = {
-        VERY_HIGH: 5.0,
-        HIGH: 4.0,
-        MODERATE: 2.5
-    };
-    const COLORS = {
-        VERY_HIGH: { tailwind: 'bg-rose-500', rgba: 'rgb(244, 63, 94)' },
-        HIGH: { tailwind: 'bg-orange-500', rgba: 'rgb(249, 115, 22)' },
-        MODERATE: { tailwind: 'bg-amber-400', rgba: 'rgb(251, 191, 36)' },
-        LOW: { tailwind: 'bg-teal-500', rgba: 'rgb(20, 184, 166)' }
-    };
 
-    // --- DOM ELEMENTS ---
-    const { questionsContainer, calculateBtn, clearBtn, fillTestBtn, importBtn, exportBtn, importFile, resultsSection, resultsBars, explanationsContainer, chartCanvas, errorModal, errorMessage, closeModalBtn } = {
-        questionsContainer: document.getElementById('questions-container'), calculateBtn: document.getElementById('calculateBtn'), clearBtn: document.getElementById('clearBtn'), fillTestBtn: document.getElementById('fillTestBtn'), importBtn: document.getElementById('importBtn'), exportBtn: document.getElementById('exportBtn'), importFile: document.getElementById('importFile'), resultsSection: document.getElementById('results-section'), resultsBars: document.getElementById('results-bars'), explanationsContainer: document.getElementById('explanations'), chartCanvas: document.getElementById('schemaChart'), errorModal: document.getElementById('errorModal'), errorMessage: document.getElementById('errorMessage'), closeModalBtn: document.getElementById('closeModalBtn')
-    };
+    // ═══════════════════════════════════════════════════════════════════════
+    // ÉTAT DE L'APPLICATION
+    // ═══════════════════════════════════════════════════════════════════════
 
-    let schemaChartInstance = null;
+    const answers = {};
+    const totalQuestions = 232;
 
-    // --- INITIALIZATION ---
-    function generateQuestionInputs() {
-        questionsContainer.innerHTML = Array.from({ length: 232 }, (_, i) => `
-            <div class="flex items-center space-x-2">
-                <label for="q${i + 1}" class="w-1/2 text-sm text-slate-600 font-medium">Q${i + 1}</label>
-                <input type="number" id="q${i + 1}" name="q${i + 1}" min="1" max="6" class="score-input w-1/2 p-2 border border-slate-300 rounded-md text-center focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
-            </div>
-        `).join('');
-    }
-    generateQuestionInputs();
-    
-    const scoreInputs = document.querySelectorAll('.score-input');
+    // ═══════════════════════════════════════════════════════════════════════
+    // ÉLÉMENTS DOM
+    // ═══════════════════════════════════════════════════════════════════════
 
-    // --- EVENT LISTENERS ---
-    clearBtn.addEventListener('click', () => {
-        scoreInputs.forEach(input => input.value = '');
-        resultsSection.classList.add('hidden');
-    });
+    const questionsContainer = document.getElementById('questionsContainer');
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+    const progressPercent = document.getElementById('progressPercent');
+    const submitBtn = document.getElementById('submitBtn');
+    const submitBtnText = document.getElementById('submitBtnText');
+    const remainingText = document.getElementById('remainingText');
+    const scrollTopBtn = document.getElementById('scrollTopBtn');
+    const nextUnansweredBtn = document.getElementById('nextUnansweredBtn');
+    const resultsModal = document.getElementById('resultsModal');
+    const resultsContent = document.getElementById('resultsContent');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const exportResultsBtn = document.getElementById('exportResultsBtn');
+    const copyResultsBtn = document.getElementById('copyResultsBtn');
 
-    fillTestBtn.addEventListener('click', () => {
-        scoreInputs.forEach(input => input.value = Math.floor(Math.random() * 6) + 1);
-    });
+    // ═══════════════════════════════════════════════════════════════════════
+    // GÉNÉRATION DES QUESTIONS
+    // ═══════════════════════════════════════════════════════════════════════
 
-    calculateBtn.addEventListener('click', () => {
-        const scoresArray = [];
-        if (!validateScores(scoresArray)) return;
-
-        const schemaScores = {};
-        Object.keys(schemaMap).forEach(code => {
-            const sum = schemaMap[code].q.reduce((acc, qNum) => acc + scoresArray[qNum - 1], 0);
-            schemaScores[code] = sum / schemaMap[code].q.length;
+    function generateQuestions() {
+        let html = '';
+        
+        questions.forEach((q, index) => {
+            html += `
+                <div id="question-${q.id}" class="question-card p-4 md:p-5" data-question="${q.id}">
+                    <div class="flex gap-3 md:gap-4">
+                        <span class="flex-shrink-0 w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-sm font-bold text-slate-600">
+                            ${q.id}
+                        </span>
+                        <div class="flex-1">
+                            <p class="text-slate-800 leading-relaxed mb-4">${q.text}</p>
+                            <div class="flex gap-2 flex-wrap">
+                                ${[1,2,3,4,5,6].map(score => `
+                                    <button type="button" 
+                                            class="scale-btn w-12 h-12 md:w-14 md:h-14 rounded-xl font-bold text-lg text-slate-700"
+                                            data-question="${q.id}"
+                                            data-score="${score}"
+                                            aria-label="Score ${score}">
+                                        ${score}
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
         });
         
-        displayResults(schemaScores);
-        resultsSection.classList.remove('hidden');
-        resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-    
-    importBtn.addEventListener('click', () => importFile.click());
-    exportBtn.addEventListener('click', () => {
-        const scoresArray = [];
-        if (!validateScores(scoresArray)) return;
-        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ scores: scoresArray }));
-        const downloadAnchorNode = document.createElement('a');
-        downloadAnchorNode.setAttribute("href", dataStr);
-        downloadAnchorNode.setAttribute("download", `scores-ysq-${new Date().toISOString().slice(0, 10)}.json`);
-        document.body.appendChild(downloadAnchorNode);
-        downloadAnchorNode.click();
-        downloadAnchorNode.remove();
-    });
-
-    importFile.addEventListener('change', (event) => {
-        const file = event.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            try {
-                const data = JSON.parse(e.target.result);
-                if (!data.scores || !Array.isArray(data.scores) || data.scores.length !== 232) throw new Error("Format de fichier invalide.");
-                data.scores.forEach((score, index) => {
-                    if (score >= 1 && score <= 6) scoreInputs[index].value = score;
-                });
-            } catch (err) {
-                showError("Fichier invalide ou corrompu. Veuillez utiliser un fichier JSON exporté depuis cette application.");
-            }
-        };
-        reader.readAsText(file);
-        event.target.value = '';
-    });
-
-    closeModalBtn.addEventListener('click', () => errorModal.classList.add('hidden'));
-
-    // --- HELPER FUNCTIONS ---
-    function showError(message) {
-        errorMessage.textContent = message;
-        errorModal.classList.remove('hidden');
+        questionsContainer.innerHTML = html;
+        
+        // Event listeners pour les boutons
+        document.querySelectorAll('.scale-btn').forEach(btn => {
+            btn.addEventListener('click', handleScoreClick);
+        });
     }
 
-    function validateScores(scoresArray) {
-        let allAnswered = true;
-        scoreInputs.forEach(input => {
-            const value = input.value;
-            if (value === "" || +value < 1 || +value > 6) allAnswered = false;
-            scoresArray.push(Number(value));
+    // ═══════════════════════════════════════════════════════════════════════
+    // GESTION DES RÉPONSES
+    // ═══════════════════════════════════════════════════════════════════════
+
+    function handleScoreClick(e) {
+        const btn = e.currentTarget;
+        const questionId = parseInt(btn.dataset.question);
+        const score = parseInt(btn.dataset.score);
+        
+        // Enregistrer la réponse
+        answers[questionId] = score;
+        
+        // Mettre à jour l'UI
+        const questionCard = document.getElementById(`question-${questionId}`);
+        
+        // Désélectionner tous les boutons de cette question
+        questionCard.querySelectorAll('.scale-btn').forEach(b => {
+            b.classList.remove('selected');
         });
-        if (!allAnswered) {
-            showError("Veuillez répondre à toutes les questions avec un score valide (entre 1 et 6) avant de continuer.");
-            return false;
+        
+        // Sélectionner le bouton cliqué
+        btn.classList.add('selected');
+        
+        // Marquer la carte comme répondue
+        questionCard.classList.add('answered');
+        
+        // Mettre à jour la progression
+        updateProgress();
+        
+        // Auto-scroll vers la prochaine question non répondue (optionnel, après un délai)
+        setTimeout(() => {
+            const nextUnanswered = findNextUnanswered(questionId);
+            if (nextUnanswered && nextUnanswered <= questionId + 3) {
+                scrollToQuestion(nextUnanswered);
+            }
+        }, 150);
+    }
+
+    function updateProgress() {
+        const answered = Object.keys(answers).length;
+        const percent = (answered / totalQuestions) * 100;
+        
+        progressBar.style.width = `${percent}%`;
+        progressText.textContent = `${answered} / ${totalQuestions}`;
+        progressPercent.textContent = `${Math.round(percent)}%`;
+        
+        // Mettre à jour le bouton de soumission
+        if (answered === totalQuestions) {
+            submitBtn.disabled = false;
+            submitBtnText.textContent = "Voir mes résultats";
+            remainingText.textContent = "✓ Toutes les questions ont été répondues";
+            remainingText.classList.add('text-teal-600', 'font-medium');
+        } else {
+            submitBtn.disabled = true;
+            const remaining = totalQuestions - answered;
+            submitBtnText.textContent = `Encore ${remaining} question${remaining > 1 ? 's' : ''} à répondre`;
+            remainingText.textContent = "";
+            remainingText.classList.remove('text-teal-600', 'font-medium');
         }
-        return true;
-    }
-    
-    function getScoreStyle(score) {
-        if (score >= THRESHOLDS.VERY_HIGH) return COLORS.VERY_HIGH;
-        if (score >= THRESHOLDS.HIGH) return COLORS.HIGH;
-        if (score >= THRESHOLDS.MODERATE) return COLORS.MODERATE;
-        return COLORS.LOW;
     }
 
-    // --- DISPLAY FUNCTION ---
-    function displayResults(scores) {
-        const sortedSchemas = Object.entries(scores).sort(([, a], [, b]) => b - a);
-        const chartPointColors = Object.values(scores).map(score => getScoreStyle(score).rgba);
+    function findNextUnanswered(afterId = 0) {
+        for (let i = afterId + 1; i <= totalQuestions; i++) {
+            if (!answers[i]) return i;
+        }
+        // Si rien trouvé après, chercher depuis le début
+        for (let i = 1; i <= afterId; i++) {
+            if (!answers[i]) return i;
+        }
+        return null;
+    }
+
+    function scrollToQuestion(id) {
+        const el = document.getElementById(`question-${id}`);
+        if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            el.classList.add('current');
+            setTimeout(() => el.classList.remove('current'), 2000);
+        }
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // CALCUL DES RÉSULTATS
+    // ═══════════════════════════════════════════════════════════════════════
+
+    function calculateResults() {
+        const results = {};
         
-        if (schemaChartInstance) schemaChartInstance.destroy();
-        schemaChartInstance = new Chart(chartCanvas.getContext('2d'), {
-            type: 'radar',
-            data: {
-                labels: Object.keys(scores).map(code => schemaMap[code].name),
-                datasets: [{
-                    label: 'Score moyen',
-                    data: Object.values(scores),
-                    backgroundColor: 'rgba(20, 184, 166, 0.2)',
-                    borderColor: 'rgba(20, 184, 166, 0.7)',
-                    borderWidth: 2,
-                    pointBackgroundColor: chartPointColors,
-                    pointRadius: 4,
-                    pointHoverRadius: 6
-                }]
-            },
-            options: {
-                responsive: true, maintainAspectRatio: false,
-                scales: { r: { suggestedMin: 0, suggestedMax: 6, ticks: { stepSize: 1 } } },
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                let label = context.dataset.label || '';
-                                if (label) label += ': ';
-                                if (context.parsed.r !== null) {
-                                    label += context.parsed.r.toFixed(2).replace('.', ',');
-                                }
-                                return label;
-                            }
-                        }
-                    }
-                }
+        // Grouper les réponses par schéma
+        const schemaScores = {};
+        Object.keys(schemaInfo).forEach(code => {
+            schemaScores[code] = [];
+        });
+        
+        questions.forEach(q => {
+            if (answers[q.id]) {
+                schemaScores[q.schema].push(answers[q.id]);
             }
         });
+        
+        // Calculer moyenne et % 5-6
+        Object.entries(schemaScores).forEach(([code, scores]) => {
+            const sum = scores.reduce((a, b) => a + b, 0);
+            const count56 = scores.filter(s => s >= 5).length;
+            
+            results[code] = {
+                name: schemaInfo[code].name,
+                domain: schemaInfo[code].domain,
+                mean: sum / scores.length,
+                count56: count56,
+                total: scores.length,
+                percent56: (count56 / scores.length) * 100
+            };
+        });
+        
+        return results;
+    }
 
-        resultsBars.innerHTML = '';
-        explanationsContainer.innerHTML = '';
-        sortedSchemas.forEach(([code, score]) => {
-            const detail = schemaMap[code];
-            const style = getScoreStyle(score);
+    function displayResults() {
+        const results = calculateResults();
+        const sorted = Object.entries(results).sort((a, b) => b[1].mean - a[1].mean);
+        
+        let html = `
+            <div class="space-y-4">
+                <p class="text-sm text-slate-600 mb-4">
+                    <strong>Interprétation :</strong> Une moyenne ≥ 4 est cliniquement significative. 
+                    Un pourcentage ≥ 50% d'items 5-6 suggère un schéma actif.
+                </p>
+        `;
+        
+        sorted.forEach(([code, data]) => {
+            const isHighMean = data.mean >= 4;
+            const isHigh56 = data.percent56 >= 50;
+            const isSignificant = isHighMean || isHigh56;
+            
+            html += `
+                <div class="p-4 rounded-xl ${isSignificant ? 'bg-gradient-to-r from-rose-50 to-violet-50 border border-rose-200' : 'bg-slate-50'}">
+                    <div class="flex justify-between items-start mb-2">
+                        <div>
+                            <span class="font-semibold text-slate-800">${data.name}</span>
+                            <span class="text-xs text-slate-400 ml-2">(${code.toUpperCase()})</span>
+                        </div>
+                        <div class="flex gap-2">
+                            ${isHighMean ? '<span class="text-xs bg-rose-200 text-rose-700 px-2 py-0.5 rounded-full">≥4</span>' : ''}
+                            ${isHigh56 ? '<span class="text-xs bg-violet-200 text-violet-700 px-2 py-0.5 rounded-full">5-6≥50%</span>' : ''}
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <div class="text-slate-500">Moyenne</div>
+                            <div class="font-bold ${isHighMean ? 'text-rose-600' : 'text-slate-800'}">${data.mean.toFixed(2).replace('.', ',')} / 6</div>
+                        </div>
+                        <div>
+                            <div class="text-slate-500">Items 5-6</div>
+                            <div class="font-bold ${isHigh56 ? 'text-violet-600' : 'text-slate-800'}">${data.count56}/${data.total} (${data.percent56.toFixed(0)}%)</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        html += '</div>';
+        resultsContent.innerHTML = html;
+        resultsModal.classList.remove('hidden');
+    }
 
-            resultsBars.innerHTML += `
-                <div>
-                    <div class="flex justify-between items-center mb-1">
-                        <span class="font-medium text-slate-800">${detail.name} (${code.toUpperCase()})</span>
-                        <span class="font-semibold text-slate-900">${score.toFixed(2).replace('.', ',')} / 6</span>
-                    </div>
-                    <div class="w-full bg-slate-200 rounded-full h-4 overflow-hidden">
-                        <div class="${style.tailwind} h-4 rounded-full" style="width: ${(score / 6) * 100}%"></div>
-                    </div>
-                </div>`;
-            explanationsContainer.innerHTML += `
-                <details class="bg-slate-100/70 rounded-lg transition-all">
-                    <summary class="font-semibold text-lg text-slate-800 focus:outline-none focus-visible-ring rounded-lg">${detail.name}</summary>
-                    <div class="p-4 pt-0"><p class="text-slate-700 leading-relaxed">${detail.expl}</p></div>
-                </details>`;
+    function exportResults() {
+        const results = calculateResults();
+        const exportData = {
+            version: "YSQ-L3",
+            date: new Date().toISOString(),
+            totalItems: 232,
+            answers: answers,
+            results: results
+        };
+        
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData, null, 2));
+        const a = document.createElement('a');
+        a.href = dataStr;
+        a.download = `YSQ-L3_${new Date().toISOString().slice(0, 10)}.json`;
+        a.click();
+    }
+
+    function copyResults() {
+        const results = calculateResults();
+        const sorted = Object.entries(results).sort((a, b) => b[1].mean - a[1].mean);
+        
+        let text = "RÉSULTATS YSQ-L3\n";
+        text += "================\n\n";
+        
+        sorted.forEach(([code, data]) => {
+            const flag = data.mean >= 4 ? " ⚠️" : "";
+            text += `${data.name} (${code.toUpperCase()})${flag}\n`;
+            text += `  Moyenne: ${data.mean.toFixed(2)}/6\n`;
+            text += `  Items 5-6: ${data.count56}/${data.total} (${data.percent56.toFixed(0)}%)\n\n`;
+        });
+        
+        navigator.clipboard.writeText(text).then(() => {
+            copyResultsBtn.textContent = "✓ Copié !";
+            setTimeout(() => {
+                copyResultsBtn.textContent = "Copier les scores";
+            }, 2000);
         });
     }
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // EVENT LISTENERS
+    // ═══════════════════════════════════════════════════════════════════════
+
+    submitBtn.addEventListener('click', displayResults);
+    closeModalBtn.addEventListener('click', () => resultsModal.classList.add('hidden'));
+    resultsModal.querySelector('.modal-overlay').addEventListener('click', () => resultsModal.classList.add('hidden'));
+    exportResultsBtn.addEventListener('click', exportResults);
+    copyResultsBtn.addEventListener('click', copyResults);
+    
+    scrollTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    
+    nextUnansweredBtn.addEventListener('click', () => {
+        const next = findNextUnanswered(0);
+        if (next) {
+            scrollToQuestion(next);
+        }
+    });
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // INITIALISATION
+    // ═══════════════════════════════════════════════════════════════════════
+
+    generateQuestions();
+    updateProgress();
+
 });
 </script>
 
