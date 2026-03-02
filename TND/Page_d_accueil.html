@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Accueil TND - Outils de Depistage</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .portal-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+    .portal-card {
+        background: linear-gradient(145deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-xl);
+        padding: 1.5rem;
+        text-decoration: none;
+        display: block;
+        transition: all var(--transition-slow);
+    }
+    .portal-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--color-border-active);
+        box-shadow: var(--shadow-glow);
+    }
+    .portal-card h3 { color: var(--color-text-primary); margin-bottom: 0.5rem; }
+    .portal-card p { color: var(--color-text-muted); font-size: var(--font-size-sm); }
+    .section-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius-lg);
+        font-weight: 600;
+        font-size: var(--font-size-lg);
+        margin-bottom: 1.5rem;
+        color: white;
+    }
+    .section-badge-tsa { background: #6366f1; }
+    .section-badge-tdah { background: #14b8a6; }
+    .subsection-title {
+        color: var(--color-text-secondary);
+        font-size: var(--font-size-base);
+        font-weight: 600;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .subsection-title i { font-size: 0.9rem; }
+    .card-subtitle { color: var(--color-text-muted); font-style: italic; font-size: var(--font-size-sm); margin-bottom: 0.75rem; }
+    .card-description {
+        background: rgba(15, 23, 42, 0.5);
+        padding: 1rem;
+        border-radius: var(--radius-md);
+        margin-bottom: 1rem;
+        flex-grow: 1;
+        border: 1px solid var(--color-border);
+    }
+    .card-description p { margin: 0; }
+    .btn-test {
+        display: inline-block;
+        padding: 0.5rem 1.25rem;
+        border-radius: var(--radius-md);
+        font-weight: 600;
+        text-align: center;
+        transition: all var(--transition-normal);
+        text-decoration: none;
+    }
+    .btn-test-tsa { background: #6366f1; color: white; }
+    .btn-test-tsa:hover { background: #4f46e5; }
+    .btn-test-tdah { background: #14b8a6; color: white; }
+    .btn-test-tdah:hover { background: #0d9488; }
+    .diff-section {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+    }
+    .diff-card {
+        background: linear-gradient(145deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-xl);
+        padding: 1.5rem;
+    }
+    .diff-card h3 { color: var(--color-text-primary); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+    .diff-card ul { list-style: disc; padding-left: 1.25rem; margin-top: 0.75rem; }
+    .diff-card li { margin-bottom: 0.75rem; color: var(--color-text-secondary); font-size: var(--font-size-sm); }
+    .diff-card li strong { color: var(--color-text-primary); }
+    .diff-card li span { display: block; color: var(--color-text-muted); font-size: var(--font-size-xs); font-style: italic; margin-top: 0.25rem; }
+    .icon-tsa { color: #6366f1; }
+    .icon-tdah { color: #14b8a6; }
+  </style>
+</head>
+<body>
+
+  <nav class="navigation-bar">
+    <div class="nav-buttons">
+        <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+        <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+    </div>
+    <h1>Outils de Depistage des TND</h1>
+    <span class="badge badge-cat-tnd">TND</span>
+  </nav>
+
+  <main class="container" style="max-width: 1200px;">
+
+    <header class="text-center" style="margin-bottom: 3rem;">
+      <p style="color: var(--color-text-secondary); font-size: var(--font-size-lg); max-width: 800px; margin: 0 auto;">
+        Une collection de questionnaires interactifs pour explorer les traits associes aux troubles neurodeveloppementaux.
+      </p>
+    </header>
+
+    <div class="glass-card" style="border-left: 4px solid #eab308; margin-bottom: 3rem;">
+      <div style="display: flex; align-items: flex-start; gap: 1rem;">
+        <i class="fas fa-exclamation-triangle" style="color: #eab308; font-size: 1.5rem;"></i>
+        <div>
+          <h2 style="color: var(--color-text-primary); margin-bottom: 0.5rem;">Avertissement Important</h2>
+          <p style="color: var(--color-text-secondary); font-size: var(--font-size-sm);">Ces outils sont des questionnaires de depistage et ne constituent en aucun cas un diagnostic. Ils sont destines a des fins d'information et d'exploration personnelle. Un score eleve n'est qu'un indicateur. Seul un professionnel de sante qualifie peut poser un diagnostic. Veuillez consulter un medecin ou un psychologue pour toute question medicale.</p>
+        </div>
+      </div>
+    </div>
+
+    <section style="margin-bottom: 3rem;">
+        <h2 style="color: var(--color-text-primary); text-align: center; margin-bottom: 1rem;">Pistes de reflexion avant de conclure</h2>
+        <p style="text-align: center; color: var(--color-text-secondary); margin-bottom: 2rem;">Certains symptomes peuvent ressembler a ceux d'un TND mais provenir d'autres affections. C'est ce qu'on appelle le diagnostic differentiel. Voici des exemples cles a discuter avec le medecin.</p>
+
+        <div class="diff-section">
+            <!-- Colonne TDAH -->
+            <div class="diff-card">
+                <h3><i class="fas fa-bolt icon-tdah"></i> Pour le TDAH</h3>
+                <p style="color: var(--color-text-secondary); font-size: var(--font-size-sm);">Des difficultes d'attention ou une agitation peuvent aussi etre liees a :</p>
+                <ul>
+                    <li><strong>Troubles du sommeil :</strong> Notamment l'apnee du sommeil.
+                        <span>Des signes comme des ronflements sonores, des pauses respiratoires nocturnes, une fatigue diurne importante ou des maux de tete au reveil doivent alerter. Les symptomes varient avec la qualite du sommeil, contrairement a la constance du TDAH.</span>
+                    </li>
+                    <li><strong>Anxiete ou depression :</strong> Ruminations, demotivation...
+                        <span>La distraction du TDAH est souvent diffuse, alors que celle de l'anxiete/depression est typiquement centree sur des inquietudes ou une perte d'elan vital.</span>
+                    </li>
+                    <li><strong>Affections medicales :</strong> Thyroide, anemie, carences...
+                        <span>Un bilan sanguin peut reveler ces problemes. Ils apparaissent souvent plus tard que les symptomes du TDAH, qui remontent a l'enfance.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Colonne TSA -->
+            <div class="diff-card">
+                <h3><i class="fas fa-users icon-tsa"></i> Pour le TSA</h3>
+                <p style="color: var(--color-text-secondary); font-size: var(--font-size-sm);">Des difficultes sociales ou des comportements repetitifs peuvent aussi etre lies a :</p>
+                <ul>
+                    <li><strong>Anxiete sociale :</strong> Peur intense du jugement.
+                        <span>La personne anxieuse craint avant tout le regard des autres, tandis que la personne autiste peut avoir des difficultes liees a une comprehension differente des codes sociaux.</span>
+                    </li>
+                    <li><strong>Troubles de la personnalite :</strong> Schizoide, evitant...
+                        <span>Le TSA est present depuis l'enfance, alors que ces troubles se structurent plus tard. Le desir de lien, souvent present dans le TSA, peut etre absent dans un trouble schizoide.</span>
+                    </li>
+                    <li><strong>TOC :</strong> Rituels pour calmer une obsession.
+                        <span>Les rituels du TOC sont une reponse a une pensee anxiogene (obsession). Les comportements repetitifs dans le TSA (stimming, interets specifiques) sont plus souvent auto-apaisants ou sources de plaisir.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section style="margin-bottom: 3rem;">
+      <span class="section-badge section-badge-tsa"><i class="fas fa-puzzle-piece"></i> TSA - Trouble du Spectre de l'Autisme</span>
+
+      <h3 class="subsection-title"><i class="fas fa-search" style="color: #6366f1;"></i> Aide au Depistage</h3>
+      <div class="portal-grid" style="margin-bottom: 2rem;">
+
+        <a href="AQ-50.html" class="portal-card">
+          <h3>AQ-50</h3>
+          <p class="card-subtitle">Autism-Spectrum Quotient</p>
+          <div class="card-description">
+              <p>Outil de depistage de premiere intention le plus valide (Baron-Cohen 2001). Mesure les traits autistiques a travers cinq domaines : competences sociales, attention selective, souci du detail, communication et imagination.</p>
+          </div>
+          <span class="btn-test btn-test-tsa">Commencer le test &rarr;</span>
+        </a>
+
+        <a href="RAADS-R.html" class="portal-card">
+          <h3>RAADS-R</h3>
+          <p class="card-subtitle">Ritvo Autism Asperger Diagnostic Scale-Revised</p>
+          <div class="card-description">
+              <p>Outil de depistage approfondi, specifiquement concu pour les adultes suspectant un autisme non diagnostique. Explore les traits autistiques tout au long de la vie avec une haute sensibilite.</p>
+          </div>
+          <span class="btn-test btn-test-tsa">Commencer le test &rarr;</span>
+        </a>
+
+      </div>
+
+      <h3 class="subsection-title"><i class="fas fa-microscope" style="color: #8b5cf6;"></i> Evaluation Complementaire</h3>
+      <div class="portal-grid">
+
+        <a href="CAT-Q.html" class="portal-card">
+          <h3>CAT-Q</h3>
+          <p class="card-subtitle">Camouflaging Autistic Traits Questionnaire</p>
+          <div class="card-description">
+              <p>Evalue les strategies de camouflage social (masking). Particulierement important pour les presentations feminines ou les diagnostics tardifs, ou le masking peut dissimuler les signes de l'autisme.</p>
+          </div>
+          <span class="btn-test btn-test-tsa">Commencer le test &rarr;</span>
+        </a>
+
+        <a href="EQ.html" class="portal-card">
+          <h3>EQ</h3>
+          <p class="card-subtitle">Empathy Quotient</p>
+          <div class="card-description">
+              <p>Evalue l'empathie cognitive et affective. Utilise en complement de l'AQ pour mieux comprendre le profil emotionnel et social de la personne.</p>
+          </div>
+          <span class="btn-test btn-test-tsa">Commencer le test &rarr;</span>
+        </a>
+
+        <a href="SRS-2.html" class="portal-card">
+          <h3>SRS-2</h3>
+          <p class="card-subtitle">Social Responsiveness Scale, Second Edition</p>
+          <div class="card-description">
+              <p>Mesure dimensionnelle de la reactivite sociale. Permet de situer les difficultes de communication et d'interactions par rapport a la norme. <strong style="color: #f59e0b;">Hetero-questionnaire : a remplir par un parent ou proche.</strong></p>
+          </div>
+          <span class="btn-test btn-test-tsa">Commencer le test &rarr;</span>
+        </a>
+
+      </div>
+    </section>
+
+    <section style="margin-bottom: 3rem;">
+      <span class="section-badge section-badge-tdah"><i class="fas fa-bolt"></i> TDAH - Trouble du Deficit de l'Attention</span>
+
+      <h3 class="subsection-title"><i class="fas fa-search" style="color: #14b8a6;"></i> Aide au Depistage</h3>
+      <div class="portal-grid" style="margin-bottom: 2rem;">
+
+        <a href="ASRS.html" class="portal-card">
+          <h3>ASRS-v1.1</h3>
+          <p class="card-subtitle">Adult ADHD Self-Report Scale</p>
+          <div class="card-description">
+              <p>Outil de depistage de premiere intention recommande par l'OMS. Evalue les symptomes actuels du TDAH chez l'adulte, base sur les criteres du DSM-5.</p>
+          </div>
+          <span class="btn-test btn-test-tdah">Commencer le test &rarr;</span>
+        </a>
+
+        <a href="WURS-25.html" class="portal-card">
+          <h3>WURS-25</h3>
+          <p class="card-subtitle">Wender Utah Rating Scale-25</p>
+          <div class="card-description">
+              <p>Evaluation retrospective des symptomes dans l'enfance. Essentiel car le debut dans l'enfance est un critere obligatoire du DSM-5 pour le diagnostic de TDAH a l'age adulte.</p>
+          </div>
+          <span class="btn-test btn-test-tdah">Commencer le test &rarr;</span>
+        </a>
+
+      </div>
+
+      <h3 class="subsection-title"><i class="fas fa-stethoscope" style="color: #0d9488;"></i> Aide au Diagnostic</h3>
+      <div class="portal-grid">
+
+        <a href="DIVA-5.html" class="portal-card">
+          <h3>DIVA-5</h3>
+          <p class="card-subtitle">Diagnostic Interview for ADHD in Adults 5</p>
+          <div class="card-description">
+              <p>Entretien structure de reference pour le diagnostic du TDAH adulte. Evalue l'impact des symptomes dans tous les domaines de la vie. <strong style="color: #f59e0b;">Hetero-questionnaire : a administrer par un professionnel.</strong></p>
+          </div>
+          <span class="btn-test btn-test-tdah">Commencer le test &rarr;</span>
+        </a>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p>Projet initie et maintenu par Dr. FENOHASINA T.J.Felicien (Psychiatre - FFI).</p>
+    <p>&copy; 2025 - Outils de Depistage TND. Concu comme ressource informative, non substitut a un avis medical.</p>
+    <p style="font-size: var(--font-size-xs); color: var(--color-text-muted); margin-top: 1rem;">Droits d'auteur et licences :</p>
+    <p style="font-size: var(--font-size-xs); color: var(--color-text-muted);">AQ-50 & EQ - Baron-Cohen et al. Usage clinique/recherche autorise.</p>
+    <p style="font-size: var(--font-size-xs); color: var(--color-text-muted);">DIVA-5 - DIVA Foundation, La Haye, 2019. Tous droits reserves.</p>
+    <p style="font-size: var(--font-size-xs); color: var(--color-text-muted);">SRS-2 - Western Psychological Services, 2012. Licence requise pour usage commercial.</p>
+    <p style="font-size: var(--font-size-xs); color: var(--color-text-muted);">RAADS-R - Ritvo et al., 2008. Usage clinique/recherche autorise avec citation.</p>
+    <p style="font-size: var(--font-size-xs); color: var(--color-text-muted);">CAT-Q - Hull et al., 2019. Reproduction academique permise avec mention.</p>
+    <p style="font-size: var(--font-size-xs); color: var(--color-text-muted);">ASRS-v1.1 - OMS. Diffusion libre non-commerciale avec citation.</p>
+    <p style="font-size: var(--font-size-xs); color: var(--color-text-muted);">WURS - Ward, Wender & Reimherr, 1993. Utilisation restreinte selon contexte clinique.</p>
+    <p style="font-size: var(--font-size-xs); color: var(--color-text-muted); margin-top: 0.5rem;">Derniere mise a jour : 17 septembre 2025</p>
+  </footer>
+
+</body>
+</html>

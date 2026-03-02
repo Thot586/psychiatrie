@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Guide du Retablissement</title>
+  <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .guide-header {
+      text-align: center;
+      padding: 3rem 2rem;
+      background: linear-gradient(135deg, rgba(100, 116, 139, 0.2), rgba(71, 85, 105, 0.1));
+      border-radius: var(--radius-xl);
+      margin-bottom: 2rem;
+      border: 1px solid rgba(100, 116, 139, 0.3);
+    }
+    .guide-header h2 {
+      color: #94a3b8;
+      font-size: 2.5rem;
+      margin-bottom: 0.75rem;
+    }
+    .guide-header .subtitle {
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-lg);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .intro-card {
+      background: var(--color-bg-secondary);
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      border: 1px solid var(--color-border);
+    }
+    .intro-card h3 {
+      color: var(--color-text-primary);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .intro-card h3 i {
+      color: #64748b;
+    }
+    .intro-card p {
+      color: var(--color-text-secondary);
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+    .intro-card p:last-child {
+      margin-bottom: 0;
+    }
+
+    .quote-block {
+      background: linear-gradient(135deg, rgba(100, 116, 139, 0.1), rgba(71, 85, 105, 0.05));
+      border-left: 4px solid #64748b;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+    }
+    .quote-block p {
+      font-style: italic;
+      color: var(--color-text-secondary);
+      margin-bottom: 0.5rem;
+    }
+    .quote-block cite {
+      color: var(--color-text-muted);
+      font-size: var(--font-size-sm);
+    }
+
+    /* CHIME Framework */
+    .chime-section {
+      margin-bottom: 3rem;
+    }
+    .chime-header {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .chime-letter {
+      width: 80px;
+      height: 80px;
+      border-radius: var(--radius-xl);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: white;
+      flex-shrink: 0;
+    }
+    .chime-c .chime-letter { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+    .chime-h .chime-letter { background: linear-gradient(135deg, #f59e0b, #d97706); }
+    .chime-i .chime-letter { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
+    .chime-m .chime-letter { background: linear-gradient(135deg, #10b981, #059669); }
+    .chime-e .chime-letter { background: linear-gradient(135deg, #ec4899, #be185d); }
+
+    .chime-title h3 {
+      color: var(--color-text-primary);
+      font-size: var(--font-size-xl);
+      margin-bottom: 0.25rem;
+    }
+    .chime-title span {
+      color: var(--color-text-muted);
+      font-size: var(--font-size-sm);
+    }
+
+    .chime-content {
+      background: var(--color-bg-secondary);
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+      border: 1px solid var(--color-border);
+    }
+    .chime-c .chime-content { border-top: 3px solid #3b82f6; }
+    .chime-h .chime-content { border-top: 3px solid #f59e0b; }
+    .chime-i .chime-content { border-top: 3px solid #8b5cf6; }
+    .chime-m .chime-content { border-top: 3px solid #10b981; }
+    .chime-e .chime-content { border-top: 3px solid #ec4899; }
+
+    .chime-content p {
+      color: var(--color-text-secondary);
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+
+    .tips-list {
+      list-style: none;
+      padding: 0;
+      margin: 1.5rem 0 0 0;
+    }
+    .tips-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--color-border);
+      color: var(--color-text-secondary);
+    }
+    .tips-list li:last-child {
+      border-bottom: none;
+    }
+    .tips-list li i {
+      flex-shrink: 0;
+      margin-top: 0.25rem;
+    }
+    .chime-c .tips-list li i { color: #3b82f6; }
+    .chime-h .tips-list li i { color: #f59e0b; }
+    .chime-i .tips-list li i { color: #8b5cf6; }
+    .chime-m .tips-list li i { color: #10b981; }
+    .chime-e .tips-list li i { color: #ec4899; }
+
+    /* Stages Section */
+    .stages-container {
+      display: grid;
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    .stage-card {
+      background: var(--color-bg-secondary);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      border: 1px solid var(--color-border);
+      display: flex;
+      gap: 1.25rem;
+      align-items: flex-start;
+    }
+    .stage-number {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #64748b, #475569);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: white;
+      flex-shrink: 0;
+    }
+    .stage-content h4 {
+      color: var(--color-text-primary);
+      margin-bottom: 0.5rem;
+    }
+    .stage-content p {
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-sm);
+      line-height: 1.6;
+    }
+
+    /* Resources Section */
+    .resources-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    .resource-card {
+      background: var(--color-bg-secondary);
+      border-radius: var(--radius-xl);
+      padding: 1.5rem;
+      border: 1px solid var(--color-border);
+      transition: all var(--transition-normal);
+    }
+    .resource-card:hover {
+      border-color: var(--color-border-active);
+      transform: translateY(-3px);
+    }
+    .resource-card h4 {
+      color: var(--color-text-primary);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .resource-card h4 i {
+      color: #64748b;
+    }
+    .resource-card p {
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-sm);
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+    .resource-card a {
+      color: #64748b;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: var(--font-size-sm);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .resource-card a:hover {
+      color: #94a3b8;
+    }
+
+    /* Tools Section */
+    .tools-section {
+      background: linear-gradient(135deg, rgba(100, 116, 139, 0.1), rgba(71, 85, 105, 0.05));
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+      margin: 2rem 0;
+      border: 1px solid var(--color-border);
+    }
+    .tools-section h3 {
+      color: var(--color-text-primary);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .tools-section h3 i {
+      color: #64748b;
+    }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+    .tool-link {
+      background: var(--color-bg-secondary);
+      border-radius: var(--radius-lg);
+      padding: 1rem 1.25rem;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      border: 1px solid var(--color-border);
+      transition: all var(--transition-normal);
+    }
+    .tool-link:hover {
+      border-color: var(--color-border-active);
+      background: var(--color-bg-tertiary);
+    }
+    .tool-link i {
+      font-size: 1.25rem;
+    }
+    .tool-link span {
+      color: var(--color-text-primary);
+      font-weight: 500;
+    }
+    .tool-link.tool-recovery i { color: #3b82f6; }
+    .tool-link.tool-qol i { color: #10b981; }
+    .tool-link.tool-social i { color: #06b6d4; }
+    .tool-link.tool-insight i { color: #ec4899; }
+    .tool-link.tool-empower i { color: #f59e0b; }
+
+    /* Testimonial Section */
+    .testimonial-section {
+      background: var(--color-bg-secondary);
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+      margin: 2rem 0;
+      border: 1px solid var(--color-border);
+    }
+    .testimonial-section h3 {
+      color: var(--color-text-primary);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .testimonial-section h3 i {
+      color: #64748b;
+    }
+    .testimonial-card {
+      background: var(--color-bg-tertiary);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      border-left: 3px solid #64748b;
+    }
+    .testimonial-card:last-child {
+      margin-bottom: 0;
+    }
+    .testimonial-card p {
+      color: var(--color-text-secondary);
+      font-style: italic;
+      line-height: 1.7;
+      margin-bottom: 0.75rem;
+    }
+    .testimonial-card cite {
+      color: var(--color-text-muted);
+      font-size: var(--font-size-sm);
+    }
+
+    /* Key Points */
+    .key-points {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    .key-point {
+      background: var(--color-bg-secondary);
+      border-radius: var(--radius-xl);
+      padding: 1.5rem;
+      text-align: center;
+      border: 1px solid var(--color-border);
+    }
+    .key-point-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: rgba(100, 116, 139, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      font-size: 1.5rem;
+      color: #64748b;
+    }
+    .key-point h4 {
+      color: var(--color-text-primary);
+      margin-bottom: 0.5rem;
+    }
+    .key-point p {
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-sm);
+      line-height: 1.6;
+    }
+
+    /* Actions */
+    .actions-section {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+    .btn-action {
+      padding: 0.875rem 1.5rem;
+      border-radius: var(--radius-lg);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition-normal);
+      border: none;
+      text-decoration: none;
+    }
+    .btn-primary {
+      background: #64748b;
+      color: white;
+    }
+    .btn-primary:hover {
+      background: #475569;
+    }
+    .btn-secondary {
+      background: var(--color-bg-tertiary);
+      color: var(--color-text-primary);
+      border: 1px solid var(--color-border);
+    }
+    .btn-secondary:hover {
+      border-color: #64748b;
+    }
+
+    @media (max-width: 768px) {
+      .chime-header {
+        flex-direction: column;
+        text-align: center;
+      }
+      .guide-header h2 {
+        font-size: 1.75rem;
+      }
+    }
+  </style>
+</head>
+<body class="light-questionnaire">
+
+  <!-- Navigation -->
+  <nav class="navigation-bar">
+    <div class="nav-buttons">
+      <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+      <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+    </div>
+    <h1>Guide du Retablissement</h1>
+    <span class="badge badge-cat-rehab">Psychoeducation</span>
+  </nav>
+
+  <div class="container">
+
+    <!-- Header -->
+    <div class="guide-header">
+      <h2><i class="fas fa-seedling"></i> Le Retablissement</h2>
+      <p class="subtitle">Un voyage personnel vers une vie satisfaisante et pleine de sens, malgre les defis de la maladie mentale</p>
+    </div>
+
+    <!-- Introduction -->
+    <div class="intro-card">
+      <h3><i class="fas fa-question-circle"></i> Qu'est-ce que le retablissement ?</h3>
+      <p>Le retablissement n'est pas synonyme de "guerison" au sens medical du terme. C'est un <strong>processus personnel et unique</strong> qui permet de reprendre le controle de sa vie, de retrouver l'espoir et de construire une existence satisfaisante, meme en presence de symptomes persistants.</p>
+      <p>Le retablissement est un <strong>cheminement</strong>, pas une destination. Il ne suit pas une ligne droite et peut comporter des hauts et des bas. Ce qui compte, c'est de continuer a avancer, a son propre rythme.</p>
+
+      <div class="quote-block">
+        <p>"Le retablissement est un processus profondement personnel et unique de changement de ses attitudes, valeurs, sentiments, objectifs, competences et roles. C'est une facon de vivre une vie satisfaisante, pleine d'espoir et contributive, meme avec les limitations causees par la maladie."</p>
+        <cite>— William Anthony, 1993</cite>
+      </div>
+    </div>
+
+    <!-- Key Points -->
+    <div class="key-points">
+      <div class="key-point">
+        <div class="key-point-icon"><i class="fas fa-fingerprint"></i></div>
+        <h4>Personnel et unique</h4>
+        <p>Chaque parcours de retablissement est different. Il n'existe pas de "bonne" facon de se retablir.</p>
+      </div>
+      <div class="key-point">
+        <div class="key-point-icon"><i class="fas fa-road"></i></div>
+        <h4>Un processus</h4>
+        <p>Le retablissement est un voyage continu, pas une destination finale. Les progres ne sont pas toujours lineaires.</p>
+      </div>
+      <div class="key-point">
+        <div class="key-point-icon"><i class="fas fa-heart"></i></div>
+        <h4>Au-dela des symptomes</h4>
+        <p>On peut vivre une vie epanouissante meme avec des symptomes persistants. Le retablissement porte sur la qualite de vie.</p>
+      </div>
+      <div class="key-point">
+        <div class="key-point-icon"><i class="fas fa-users"></i></div>
+        <h4>Avec les autres</h4>
+        <p>Le soutien des proches et des pairs est essentiel. Personne ne se retablit seul.</p>
+      </div>
+    </div>
+
+    <!-- CHIME Framework -->
+    <div class="intro-card">
+      <h3><i class="fas fa-star"></i> Le modele CHIME</h3>
+      <p>La recherche a identifie cinq processus cles qui soutiennent le retablissement. Ces elements, connus sous l'acronyme <strong>CHIME</strong>, representent les piliers fondamentaux du retablissement en sante mentale.</p>
+    </div>
+
+    <!-- C - Connectedness -->
+    <section class="chime-section chime-c">
+      <div class="chime-header">
+        <div class="chime-letter">C</div>
+        <div class="chime-title">
+          <h3>Connectedness</h3>
+          <span>Connexion - Relations et appartenance</span>
+        </div>
+      </div>
+      <div class="chime-content">
+        <p>La connexion avec les autres est fondamentale pour le retablissement. Cela inclut le soutien des pairs (personnes ayant une experience vecue similaire), des proches, de la communaute et des professionnels de sante.</p>
+        <p>Se sentir connecte reduit l'isolement, combat la stigmatisation et procure un sentiment d'appartenance essentiel au bien-etre.</p>
+        <ul class="tips-list">
+          <li><i class="fas fa-check"></i> Rejoindre un groupe d'entraide ou de pairs aidants</li>
+          <li><i class="fas fa-check"></i> Maintenir le contact avec la famille et les amis</li>
+          <li><i class="fas fa-check"></i> Participer a des activites communautaires</li>
+          <li><i class="fas fa-check"></i> Developper des relations de confiance avec l'equipe soignante</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- H - Hope -->
+    <section class="chime-section chime-h">
+      <div class="chime-header">
+        <div class="chime-letter">H</div>
+        <div class="chime-title">
+          <h3>Hope</h3>
+          <span>Espoir - Croire en un avenir meilleur</span>
+        </div>
+      </div>
+      <div class="chime-content">
+        <p>L'espoir est le moteur du retablissement. C'est la croyance qu'un avenir meilleur est possible, que le changement peut survenir et que l'on peut atteindre ses objectifs personnels.</p>
+        <p>L'espoir peut venir de l'interieur, mais il est souvent inspire par les autres - notamment par les personnes qui ont vecu des experiences similaires et qui ont progresse dans leur retablissement.</p>
+        <ul class="tips-list">
+          <li><i class="fas fa-check"></i> Ecouter des temoignages de personnes retablies</li>
+          <li><i class="fas fa-check"></i> Celebrer les petites victoires quotidiennes</li>
+          <li><i class="fas fa-check"></i> Se fixer des objectifs realistes et motivants</li>
+          <li><i class="fas fa-check"></i> Cultiver la gratitude pour ce qui va bien</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- I - Identity -->
+    <section class="chime-section chime-i">
+      <div class="chime-header">
+        <div class="chime-letter">I</div>
+        <div class="chime-title">
+          <h3>Identity</h3>
+          <span>Identite - Qui suis-je au-dela de la maladie ?</span>
+        </div>
+      </div>
+      <div class="chime-content">
+        <p>Le retablissement implique de reconstruire une identite positive qui ne se limite pas au diagnostic. Il s'agit de redefinir qui l'on est, de reconnaitre ses forces et de surmonter la stigmatisation.</p>
+        <p>Vous etes bien plus que votre diagnostic. Vos experiences, vos talents, vos valeurs et vos reves font partie integrante de votre identite.</p>
+        <ul class="tips-list">
+          <li><i class="fas fa-check"></i> Identifier ses forces et ses talents</li>
+          <li><i class="fas fa-check"></i> Explorer de nouveaux roles (travailleur, benevole, artiste...)</li>
+          <li><i class="fas fa-check"></i> Partager son histoire quand on se sent pret</li>
+          <li><i class="fas fa-check"></i> Combattre la stigmatisation interieure</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- M - Meaning -->
+    <section class="chime-section chime-m">
+      <div class="chime-header">
+        <div class="chime-letter">M</div>
+        <div class="chime-title">
+          <h3>Meaning</h3>
+          <span>Sens - Donner un sens a sa vie et a ses experiences</span>
+        </div>
+      </div>
+      <div class="chime-content">
+        <p>Trouver du sens dans sa vie et dans ses experiences est crucial pour le retablissement. Cela peut inclure la comprehension de sa maladie, la decouverte d'un but dans la vie, ou la transformation d'experiences difficiles en quelque chose de significatif.</p>
+        <p>Le sens peut venir de nombreuses sources : la spiritualite, les relations, le travail, les loisirs creatifs, l'engagement social...</p>
+        <ul class="tips-list">
+          <li><i class="fas fa-check"></i> Explorer ce qui donne du sens a votre vie</li>
+          <li><i class="fas fa-check"></i> S'engager dans des activites qui vous passionnent</li>
+          <li><i class="fas fa-check"></i> Transformer ses experiences en sagesse a partager</li>
+          <li><i class="fas fa-check"></i> Contribuer au bien-etre des autres (pair-aidance, benevolat)</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- E - Empowerment -->
+    <section class="chime-section chime-e">
+      <div class="chime-header">
+        <div class="chime-letter">E</div>
+        <div class="chime-title">
+          <h3>Empowerment</h3>
+          <span>Pouvoir d'agir - Reprendre le controle de sa vie</span>
+        </div>
+      </div>
+      <div class="chime-content">
+        <p>L'empowerment, c'est reprendre le controle de sa vie et de ses soins. C'est avoir la capacite de faire des choix, de prendre des responsabilites et d'influencer les decisions qui vous concernent.</p>
+        <p>Cela implique de developper des competences, de renforcer sa confiance en soi et de devenir un acteur actif de son retablissement plutot qu'un recepteur passif de soins.</p>
+        <ul class="tips-list">
+          <li><i class="fas fa-check"></i> Participer activement aux decisions concernant vos soins</li>
+          <li><i class="fas fa-check"></i> Developper des strategies pour gerer les symptomes</li>
+          <li><i class="fas fa-check"></i> Apprendre a identifier ses signes d'alerte precoces</li>
+          <li><i class="fas fa-check"></i> Rediger des directives anticipees de soins</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Stages of Recovery -->
+    <div class="intro-card">
+      <h3><i class="fas fa-stairs"></i> Les etapes du retablissement</h3>
+      <p>Le retablissement passe generalement par plusieurs etapes. Ces etapes ne sont pas lineaires - on peut avancer, reculer, ou vivre plusieurs etapes simultanement.</p>
+
+      <div class="stages-container">
+        <div class="stage-card">
+          <div class="stage-number">1</div>
+          <div class="stage-content">
+            <h4>Moratoire</h4>
+            <p>Periode de retrait caracterisee par un profond sentiment de perte, de confusion et parfois de desespoir. C'est une periode de deuil et d'adaptation au diagnostic.</p>
+          </div>
+        </div>
+        <div class="stage-card">
+          <div class="stage-number">2</div>
+          <div class="stage-content">
+            <h4>Conscience</h4>
+            <p>Emergence d'une premiere lueur d'espoir. On realise qu'un retablissement est possible et qu'il existe des personnes qui ont traverse des experiences similaires.</p>
+          </div>
+        </div>
+        <div class="stage-card">
+          <div class="stage-number">3</div>
+          <div class="stage-content">
+            <h4>Preparation</h4>
+            <p>On commence a inventorier ses forces et ses faiblesses. On explore les ressources disponibles et on se prepare au changement.</p>
+          </div>
+        </div>
+        <div class="stage-card">
+          <div class="stage-number">4</div>
+          <div class="stage-content">
+            <h4>Reconstruction</h4>
+            <p>Travail actif vers une nouvelle identite positive. On developpe de nouvelles competences, on poursuit des objectifs significatifs et on reprend le controle de sa vie.</p>
+          </div>
+        </div>
+        <div class="stage-card">
+          <div class="stage-number">5</div>
+          <div class="stage-content">
+            <h4>Croissance</h4>
+            <p>Vie pleinement engagee avec un sens renouvele. On peut contribuer a aider d'autres personnes et on gere efficacement les hauts et les bas.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tools Section -->
+    <div class="tools-section">
+      <h3><i class="fas fa-toolbox"></i> Outils du portail pour soutenir votre retablissement</h3>
+      <div class="tools-grid">
+        <a href="STORI.html" class="tool-link tool-recovery">
+          <i class="fas fa-chart-line"></i>
+          <span>STORI - Stades du retablissement</span>
+        </a>
+        <a href="RAS.html" class="tool-link tool-empower">
+          <i class="fas fa-fist-raised"></i>
+          <span>RAS - Evaluation du retablissement</span>
+        </a>
+        <a href="SERS.html" class="tool-link tool-recovery">
+          <i class="fas fa-heart"></i>
+          <span>SERS - Estime de soi</span>
+        </a>
+        <a href="S-QoL.html" class="tool-link tool-qol">
+          <i class="fas fa-smile"></i>
+          <span>S-QoL - Qualite de vie</span>
+        </a>
+        <a href="SFS.html" class="tool-link tool-social">
+          <i class="fas fa-users"></i>
+          <span>SFS - Fonctionnement social</span>
+        </a>
+        <a href="BIS.html" class="tool-link tool-insight">
+          <i class="fas fa-eye"></i>
+          <span>BIS - Conscience du trouble</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Testimonials -->
+    <div class="testimonial-section">
+      <h3><i class="fas fa-comments"></i> Temoignages</h3>
+      <div class="testimonial-card">
+        <p>"Le retablissement, pour moi, c'est avoir retrouve l'espoir. Pendant longtemps, je pensais que ma vie etait finie. Aujourd'hui, je travaille, j'ai des amis, et je sais que les moments difficiles passent. Je ne suis plus defini par ma maladie."</p>
+        <cite>— Personne concernee, Groupe d'entraide</cite>
+      </div>
+      <div class="testimonial-card">
+        <p>"J'ai appris a vivre avec mes symptomes plutot que de lutter contre eux en permanence. Le plus important a ete de trouver des gens qui me comprennent et de decouvrir que je pouvais encore avoir des reves et les poursuivre."</p>
+        <cite>— Pair-aidant, Centre de rehabilitation</cite>
+      </div>
+      <div class="testimonial-card">
+        <p>"Mon retablissement n'a pas ete lineaire. J'ai eu des rechutes, des moments de doute. Mais chaque fois, je me suis releve un peu plus fort. Le soutien de mon equipe et de ma famille a ete essentiel."</p>
+        <cite>— Membre d'une association d'usagers</cite>
+      </div>
+    </div>
+
+    <!-- Resources -->
+    <div class="intro-card">
+      <h3><i class="fas fa-book-open"></i> Ressources pour aller plus loin</h3>
+      <div class="resources-grid">
+        <div class="resource-card">
+          <h4><i class="fas fa-users-cog"></i> Groupes d'entraide</h4>
+          <p>Les groupes de pairs permettent de partager des experiences, de rompre l'isolement et de s'inspirer mutuellement.</p>
+          <a href="https://www.unafam.org/" target="_blank">UNAFAM - Union des familles <i class="fas fa-external-link-alt"></i></a>
+        </div>
+        <div class="resource-card">
+          <h4><i class="fas fa-hand-holding-heart"></i> Pair-aidance</h4>
+          <p>Les pairs-aidants sont des personnes ayant l'experience vecue de la maladie et formees pour accompagner d'autres personnes.</p>
+          <a href="https://www.psycom.org/" target="_blank">Psycom - Information sante mentale <i class="fas fa-external-link-alt"></i></a>
+        </div>
+        <div class="resource-card">
+          <h4><i class="fas fa-briefcase"></i> Reinsertion professionnelle</h4>
+          <p>Le travail peut etre un element important du retablissement. Des dispositifs existent pour accompagner le retour a l'emploi.</p>
+          <a href="#" target="_blank">IPS - Individual Placement and Support <i class="fas fa-external-link-alt"></i></a>
+        </div>
+        <div class="resource-card">
+          <h4><i class="fas fa-graduation-cap"></i> Formation et education</h4>
+          <p>Programmes de psychoeducation pour mieux comprendre la maladie et developper des competences d'autogestion.</p>
+          <a href="#" target="_blank">Programmes ProFamille, Revivre... <i class="fas fa-external-link-alt"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Final Message -->
+    <div class="intro-card" style="text-align: center;">
+      <h3 style="justify-content: center;"><i class="fas fa-lightbulb"></i> Message cle</h3>
+      <p style="font-size: var(--font-size-lg); max-width: 700px; margin: 0 auto;">
+        <strong>Le retablissement est possible.</strong><br><br>
+        Quelle que soit votre situation actuelle, l'espoir existe. Avec le bon soutien, a votre propre rythme, vous pouvez construire une vie qui a du sens pour vous.
+      </p>
+      <div class="quote-block" style="max-width: 600px; margin: 2rem auto 0;">
+        <p>"Ce n'est pas parce que les choses sont difficiles que nous n'osons pas, c'est parce que nous n'osons pas qu'elles sont difficiles."</p>
+        <cite>— Seneque</cite>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="actions-section">
+      <button class="btn-action btn-primary" onclick="window.print()">
+        <i class="fas fa-print"></i> Imprimer ce guide
+      </button>
+      <a href="Page_d_accueil.html" class="btn-action btn-secondary">
+        <i class="fas fa-arrow-left"></i> Retour au portail
+      </a>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>Dr. FENOHASINA T.J. Felicien (Psychiatre)</p>
+    <p>&copy; 2025 - Centre Ressource de Rehabilitation</p>
+    <p class="license">Guide base sur le modele CHIME (Leamy et al., 2011) et le concept de retablissement (Anthony, 1993)</p>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Boite a Outils de Recherche</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .portal-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+    .portal-card {
+        background: linear-gradient(145deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-xl);
+        padding: 1.5rem;
+        text-decoration: none;
+        display: block;
+        transition: all var(--transition-slow);
+    }
+    .portal-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--color-border-active);
+        box-shadow: var(--shadow-glow);
+    }
+    .portal-card h3 { color: var(--color-text-primary); margin-bottom: 0.5rem; }
+    .portal-card p { color: var(--color-text-muted); font-size: var(--font-size-sm); }
+    .section-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius-lg);
+        font-weight: 600;
+        font-size: var(--font-size-lg);
+        margin-bottom: 1.5rem;
+        color: white;
+    }
+    .portal-card .card-description {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 1rem;
+        border-radius: var(--radius-md);
+        margin: 1rem 0;
+        border: 1px solid var(--color-border);
+    }
+    .portal-card .card-subtitle {
+        color: var(--color-text-secondary);
+        font-style: italic;
+        font-size: var(--font-size-sm);
+        margin-bottom: 0.75rem;
+    }
+    .portal-card .card-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        display: block;
+    }
+    .portal-card .btn-action {
+        display: inline-block;
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--radius-lg);
+        font-weight: 600;
+        text-decoration: none;
+        text-align: center;
+        transition: all var(--transition-normal);
+        margin-top: auto;
+    }
+    .btn-sky { background: #0ea5e9; color: white; }
+    .btn-sky:hover { background: #0284c7; }
+    .btn-emerald { background: #10b981; color: white; }
+    .btn-emerald:hover { background: #059669; }
+    .btn-violet { background: #8b5cf6; color: white; }
+    .btn-violet:hover { background: #7c3aed; }
+
+    .resources-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    .resource-link {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        background: rgba(30, 41, 59, 0.5);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        color: var(--color-text-secondary);
+        text-decoration: none;
+        transition: all var(--transition-normal);
+        font-size: var(--font-size-sm);
+    }
+    .resource-link:hover {
+        background: rgba(30, 41, 59, 0.8);
+        border-color: var(--color-border-hover);
+        color: var(--color-text-primary);
+    }
+    .resource-link i {
+        color: var(--color-primary);
+        width: 20px;
+        text-align: center;
+    }
+
+    .feature-highlights {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+    .feature-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: 1rem;
+        background: rgba(14, 165, 233, 0.05);
+        border-radius: var(--radius-md);
+        border: 1px solid rgba(14, 165, 233, 0.2);
+    }
+    .feature-item i {
+        color: #0ea5e9;
+        font-size: 1.25rem;
+        margin-top: 0.1rem;
+    }
+    .feature-item span {
+        color: var(--color-text-muted);
+        font-size: var(--font-size-sm);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navigation-bar">
+    <div class="nav-buttons">
+      <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+      <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+    </div>
+    <h1>Boite a Outils de Recherche</h1>
+    <span class="badge badge-cat-recherche">Recherche</span>
+  </nav>
+
+  <div class="container">
+
+    <!-- En-tete -->
+    <header class="page-header">
+      <p class="subtitle">
+        Apprenez a formuler des questions de recherche pertinentes et testez vos hypotheses avec nos outils interactifs.
+      </p>
+    </header>
+
+    <!-- Introduction -->
+    <div class="alert alert-info">
+      <div class="alert-icon">
+        <i class="fas fa-lightbulb"></i>
+      </div>
+      <div class="alert-content">
+        <h3>Pourquoi une bonne question de recherche ?</h3>
+        <p>Une question de recherche bien formulee est la cle d'une etude reussie. Elle guide votre methodologie, clarifie vos objectifs et facilite l'interpretation des resultats. Decouvrez nos outils pour maitriser cet art essentiel.</p>
+      </div>
+    </div>
+
+    <!-- Section Outils Principaux -->
+    <section class="section">
+      <div class="section-badge" style="background: #0ea5e9;">
+        <i class="fas fa-tools"></i>Outils Principaux
+      </div>
+      <div class="portal-grid">
+
+        <!-- Card Guide Pedagogique -->
+        <a href="Guide_Question_Recherche.html" class="portal-card">
+          <span class="card-icon"><i class="fas fa-book-open" style="color: #0ea5e9;"></i></span>
+          <h3>Guide Question de Recherche</h3>
+          <p class="card-subtitle">Parcours pedagogique en 5 etapes</p>
+          <div class="card-description">
+            <p>Apprenez a formuler des questions de recherche selon les cadres PICO, SPIDER, PECO et SPICE. Exercices pratiques, quiz et exemples commentes.</p>
+          </div>
+          <span class="btn-action btn-sky">
+            Commencer le guide &rarr;
+          </span>
+        </a>
+
+        <!-- Card Testeur de Question -->
+        <a href="Testeur_Question.html" class="portal-card">
+          <span class="card-icon"><i class="fas fa-flask" style="color: #10b981;"></i></span>
+          <h3>Testeur de Question</h3>
+          <p class="card-subtitle">Analysez et ameliorez votre question</p>
+          <div class="card-description">
+            <p>Entrez votre question de recherche et obtenez une analyse automatique : detection des composantes PICO/SPIDER, score de qualite et suggestions d'amelioration.</p>
+          </div>
+          <span class="btn-action btn-emerald">
+            Tester ma question &rarr;
+          </span>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- Section Fonctionnalites du Guide -->
+    <section class="section">
+      <div class="section-badge" style="background: #6366f1;">
+        <i class="fas fa-star"></i>Contenu du Guide
+      </div>
+      <div class="feature-highlights">
+        <div class="feature-item">
+          <i class="fas fa-sitemap"></i>
+          <span><strong>Arbre de decision</strong> pour choisir le bon cadre (PICO, SPIDER, PECO...)</span>
+        </div>
+        <div class="feature-item">
+          <i class="fas fa-layer-group"></i>
+          <span><strong>Cadres detailles</strong> avec explications et exemples pour chaque composante</span>
+        </div>
+        <div class="feature-item">
+          <i class="fas fa-hammer"></i>
+          <span><strong>Ateliers pratiques</strong> pour construire vos questions pas a pas</span>
+        </div>
+        <div class="feature-item">
+          <i class="fas fa-gamepad"></i>
+          <span><strong>Quiz interactifs</strong> pour valider vos connaissances</span>
+        </div>
+        <div class="feature-item">
+          <i class="fas fa-clipboard-check"></i>
+          <span><strong>Checklist</strong> d'auto-evaluation en 10 criteres</span>
+        </div>
+        <div class="feature-item">
+          <i class="fas fa-balance-scale"></i>
+          <span><strong>Tableau comparatif</strong> PICO vs SPIDER vs PECO</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section Ressources Externes -->
+    <section class="section">
+      <div class="section-badge" style="background: #8b5cf6;">
+        <i class="fas fa-external-link-alt"></i>Ressources Externes
+      </div>
+      <div class="portal-grid">
+
+        <!-- Card Bases de Donnees -->
+        <div class="portal-card" style="cursor: default;">
+          <span class="card-icon"><i class="fas fa-database" style="color: #8b5cf6;"></i></span>
+          <h3>Bases de Donnees</h3>
+          <p class="card-subtitle">Ou chercher vos articles</p>
+          <div class="resources-list" style="margin-top: 1rem;">
+            <a href="https://pubmed.ncbi.nlm.nih.gov/" target="_blank" rel="noopener" class="resource-link">
+              <i class="fas fa-search"></i>
+              <span>PubMed - Litterature biomedicale</span>
+            </a>
+            <a href="https://www.cochranelibrary.com/" target="_blank" rel="noopener" class="resource-link">
+              <i class="fas fa-book-medical"></i>
+              <span>Cochrane Library - Revues systematiques</span>
+            </a>
+            <a href="https://www.crd.york.ac.uk/prospero/" target="_blank" rel="noopener" class="resource-link">
+              <i class="fas fa-clipboard-list"></i>
+              <span>PROSPERO - Registre des revues</span>
+            </a>
+            <a href="https://scholar.google.com/" target="_blank" rel="noopener" class="resource-link">
+              <i class="fab fa-google"></i>
+              <span>Google Scholar - Recherche academique</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Card Methodologie -->
+        <div class="portal-card" style="cursor: default;">
+          <span class="card-icon"><i class="fas fa-graduation-cap" style="color: #a855f7;"></i></span>
+          <h3>Methodologie</h3>
+          <p class="card-subtitle">Guides et standards</p>
+          <div class="resources-list" style="margin-top: 1rem;">
+            <a href="https://www.equator-network.org/" target="_blank" rel="noopener" class="resource-link">
+              <i class="fas fa-check-double"></i>
+              <span>EQUATOR Network - Guidelines de reporting</span>
+            </a>
+            <a href="https://www.prisma-statement.org/" target="_blank" rel="noopener" class="resource-link">
+              <i class="fas fa-project-diagram"></i>
+              <span>PRISMA - Revues systematiques</span>
+            </a>
+            <a href="https://jbi.global/critical-appraisal-tools" target="_blank" rel="noopener" class="resource-link">
+              <i class="fas fa-tasks"></i>
+              <span>JBI - Outils d'evaluation critique</span>
+            </a>
+            <a href="https://www.consort-statement.org/" target="_blank" rel="noopener" class="resource-link">
+              <i class="fas fa-random"></i>
+              <span>CONSORT - Essais randomises</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Conseil -->
+    <div class="alert alert-success" style="margin-top: 2rem;">
+      <div class="alert-icon">
+        <i class="fas fa-route"></i>
+      </div>
+      <div class="alert-content">
+        <h3>Parcours Recommande</h3>
+        <p><strong>1.</strong> Commencez par le <em>Guide pedagogique</em> pour comprendre les cadres PICO et SPIDER.<br>
+        <strong>2.</strong> Utilisez le <em>Testeur de Question</em> pour analyser et affiner votre question.<br>
+        <strong>3.</strong> Consultez les <em>Ressources externes</em> pour lancer votre recherche bibliographique.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>Dr. FENOHASINA T.J. Felicien (Psychiatre)</p>
+    <p>&copy; 2025 - Centre Ressource de Rehabilitation</p>
+    <p class="license">Licence CC BY-NC-SA 4.0</p>
+  </footer>
+
+</body>
+</html>

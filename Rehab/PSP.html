@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PSP - Echelle de Performance Personnelle et Sociale</title>
+
+    <!-- Font Awesome pour les icones -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Styles partages -->
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <style>
+        :root {
+            --cat-main: #10b981;
+            --cat-dark: #059669;
+            --cat-light: #34d399;
+            --cat-rgb: 16, 185, 129;
+            --cat-readable: #059669;
+        }
+        .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
+        .option-btn.selected, .answer-btn.selected { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        .score-circle { border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 30px rgba(var(--cat-rgb), 0.2); }
+        .score-value { color: var(--cat-light); }
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-light); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+        .progress-fill { background: linear-gradient(90deg, var(--cat-main), var(--cat-light)); box-shadow: 0 0 8px rgba(var(--cat-rgb), 0.4); }
+        .likert-options input[type="radio"]:checked + label,
+        .binary-options input[type="radio"]:checked + label,
+        .radio-options input[type="radio"]:checked + label { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+
+        /* Hetero-box */
+        .hetero-box {
+            background: rgba(236, 253, 245, 0.95);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .hetero-box h3 {
+            color: #065f46;
+            margin: 0 0 0.75rem 0;
+        }
+        .hetero-box p, .hetero-box li {
+            color: #374151;
+        }
+
+        /* Domain cards */
+        .domain-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        .domain-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: #fff;
+            flex-shrink: 0;
+            background: linear-gradient(135deg, var(--cat-main), var(--cat-dark));
+        }
+        .domain-subtitle {
+            font-size: 0.9rem;
+            color: var(--color-text-muted);
+            font-weight: 400;
+        }
+
+        /* PSP option buttons */
+        .psp-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 0.6rem;
+            margin-top: 1rem;
+        }
+        .psp-option-btn {
+            padding: 0.85rem 1rem;
+            border-radius: 12px;
+            border: 2px solid rgba(0, 0, 0, 0.08);
+            background: #ffffff;
+            cursor: pointer;
+            text-align: left;
+            font-size: 0.92rem;
+            transition: all 0.25s ease;
+            box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.07), -3px -3px 8px rgba(255, 255, 255, 0.85);
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+        .psp-option-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 5px 5px 12px rgba(0, 0, 0, 0.09), -5px -5px 12px rgba(255, 255, 255, 0.9);
+            border-color: rgba(var(--cat-rgb), 0.3);
+        }
+        .psp-option-btn.selected {
+            border-color: var(--cat-main);
+            color: var(--cat-readable);
+            box-shadow: inset 3px 3px 7px rgba(0, 0, 0, 0.07), inset -3px -3px 7px rgba(255, 255, 255, 0.85);
+        }
+        .psp-option-btn .opt-number {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+            background: rgba(var(--cat-rgb), 0.1);
+            color: var(--cat-readable);
+        }
+        .psp-option-btn.selected .opt-number {
+            background: var(--cat-main);
+            color: #fff;
+        }
+        .opt-text strong {
+            display: block;
+            margin-bottom: 0.15rem;
+        }
+        .opt-text span {
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+        }
+        .psp-option-btn.selected .opt-text span {
+            color: var(--cat-readable);
+            opacity: 0.8;
+        }
+
+        /* Domain result bars */
+        .domain-bars {
+            display: grid;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .domain-bar-item {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.07), -4px -4px 10px rgba(255, 255, 255, 0.85);
+        }
+        .domain-bar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        .domain-bar-label {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .domain-bar-value {
+            font-weight: 700;
+            font-size: 0.9rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+        }
+        .bar-track {
+            width: 100%;
+            height: 10px;
+            background: #e2e8f0;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.06), inset -2px -2px 4px rgba(255, 255, 255, 0.8);
+        }
+        .bar-fill {
+            height: 100%;
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+        .bar-fill.sev-1 { width: 0%; background: linear-gradient(90deg, #22c55e, #4ade80); }
+        .bar-fill.sev-2 { width: 20%; background: linear-gradient(90deg, #84cc16, #a3e635); }
+        .bar-fill.sev-3 { width: 40%; background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+        .bar-fill.sev-4 { width: 60%; background: linear-gradient(90deg, #f97316, #fb923c); }
+        .bar-fill.sev-5 { width: 80%; background: linear-gradient(90deg, #ef4444, #f87171); }
+        .bar-fill.sev-6 { width: 100%; background: linear-gradient(90deg, #dc2626, #991b1b); }
+
+        .sev-label-1 { background: rgba(34, 197, 94, 0.1); color: #15803d; }
+        .sev-label-2 { background: rgba(132, 204, 22, 0.1); color: #4d7c0f; }
+        .sev-label-3 { background: rgba(245, 158, 11, 0.1); color: #b45309; }
+        .sev-label-4 { background: rgba(249, 115, 22, 0.1); color: #c2410c; }
+        .sev-label-5 { background: rgba(239, 68, 68, 0.1); color: #b91c1c; }
+        .sev-label-6 { background: rgba(220, 38, 38, 0.15); color: #991b1b; }
+
+        @media (max-width: 600px) {
+            .psp-options {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+</head>
+<body class="light-questionnaire">
+    <!-- Navigation -->
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil">
+                <i class="fas fa-home"></i>
+            </a>
+            <button onclick="history.back()" class="btn-back" title="Retour">
+                <i class="fas fa-arrow-left"></i> <span>Retour</span>
+            </button>
+        </div>
+        <h1>PSP</h1>
+        <span class="badge badge-cat-rehab">REHAB</span>
+    </nav>
+
+    <div class="container">
+        <!-- En-tete -->
+        <header class="glass-card" style="text-align: center; margin-bottom: 1.5rem;">
+            <h2 class="gradient-text">PSP - Echelle de Performance Personnelle et Sociale</h2>
+            <p>Personal and Social Performance Scale (Morosini et al., 2000)</p>
+        </header>
+
+        <!-- Information hetero-evaluation -->
+        <section class="hetero-box">
+            <h3><i class="fas fa-user-md"></i> Hetero-questionnaire clinicien</h3>
+            <p>Le PSP est une echelle d'evaluation du fonctionnement personnel et social validee pour les patients presentant des troubles psychiatriques severes. Cet outil est un <strong>hetero-questionnaire</strong> : il doit etre rempli par un clinicien sur la base d'un entretien avec le patient et de l'observation clinique. Il evalue 4 domaines de fonctionnement sur les <strong>30 derniers jours</strong>.</p>
+        </section>
+
+        <!-- Avertissement -->
+        <section class="warning-box">
+            <h3><i class="fas fa-exclamation-triangle"></i> Avertissements importants</h3>
+            <ul style="margin: 0; padding-left: 1.5rem;">
+                <li>Cette echelle necessite une formation a son utilisation</li>
+                <li>L'evaluation doit etre realisee par un professionnel de sante qualifie</li>
+                <li>Les resultats doivent etre interpretes dans le contexte clinique global</li>
+                <li>Les resultats necessitent une interpretation par un professionnel</li>
+            </ul>
+        </section>
+
+        <!-- Controles -->
+        <section class="glass-card">
+            <div class="control-buttons">
+                <button class="btn-secondary" onclick="importData()">
+                    <i class="fas fa-file-import"></i> Importer
+                </button>
+                <button class="btn-secondary" onclick="resetForm()">
+                    <i class="fas fa-redo"></i> Reinitialiser
+                </button>
+            </div>
+            <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="loadFile(event)">
+        </section>
+
+        <!-- Instructions -->
+        <section class="glass-card">
+            <h3 style="margin-bottom: 1rem;"><i class="fas fa-clipboard-list"></i> Instructions</h3>
+            <p style="color: var(--color-text-muted); margin-bottom: 1.5rem;">
+                Evaluez le fonctionnement du patient dans les 4 domaines suivants sur les <strong>30 derniers jours</strong>.
+            </p>
+
+            <!-- Domaine A -->
+            <div class="glass-card question-card" id="card-a" style="margin-bottom: 1.5rem;">
+                <div class="domain-header">
+                    <div class="domain-icon"><i class="fas fa-briefcase"></i></div>
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span class="question-number" style="font-size: 0.85rem; padding: 0.25rem 0.6rem;">A</span>
+                            <strong style="font-size: 1.1rem;">Activites socialement utiles</strong>
+                        </div>
+                        <div class="domain-subtitle">Inclut le travail, les etudes, le benevolat et toute activite socialement utile ou constructive.</div>
+                    </div>
+                </div>
+                <div class="psp-options" id="options-a"></div>
+            </div>
+
+            <!-- Domaine B -->
+            <div class="glass-card question-card" id="card-b" style="margin-bottom: 1.5rem;">
+                <div class="domain-header">
+                    <div class="domain-icon"><i class="fas fa-users"></i></div>
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span class="question-number" style="font-size: 0.85rem; padding: 0.25rem 0.6rem;">B</span>
+                            <strong style="font-size: 1.1rem;">Relations personnelles et sociales</strong>
+                        </div>
+                        <div class="domain-subtitle">Inclut les relations avec la famille, les amis, les collegues et les contacts sociaux en general.</div>
+                    </div>
+                </div>
+                <div class="psp-options" id="options-b"></div>
+            </div>
+
+            <!-- Domaine C -->
+            <div class="glass-card question-card" id="card-c" style="margin-bottom: 1.5rem;">
+                <div class="domain-header">
+                    <div class="domain-icon"><i class="fas fa-shower"></i></div>
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span class="question-number" style="font-size: 0.85rem; padding: 0.25rem 0.6rem;">C</span>
+                            <strong style="font-size: 1.1rem;">Soins personnels</strong>
+                        </div>
+                        <div class="domain-subtitle">Inclut l'hygiene corporelle, la tenue vestimentaire, l'alimentation et les soins de base.</div>
+                    </div>
+                </div>
+                <div class="psp-options" id="options-c"></div>
+            </div>
+
+            <!-- Domaine D -->
+            <div class="glass-card question-card" id="card-d" style="margin-bottom: 1.5rem;">
+                <div class="domain-header">
+                    <div class="domain-icon"><i class="fas fa-fist-raised"></i></div>
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span class="question-number" style="font-size: 0.85rem; padding: 0.25rem 0.6rem;">D</span>
+                            <strong style="font-size: 1.1rem;">Comportements perturbateurs et agressifs</strong>
+                        </div>
+                        <div class="domain-subtitle">Inclut les comportements verbalement ou physiquement agressifs, les comportements socialement inacceptables et les mises en danger de soi ou d'autrui.</div>
+                    </div>
+                </div>
+                <div class="psp-options" id="options-d"></div>
+            </div>
+        </section>
+
+        <!-- Resultats -->
+        <section id="results" class="results-section" style="display: none;">
+            <h2 style="text-align: center; margin-bottom: 2rem;">
+                <i class="fas fa-chart-bar"></i> Resultats de l'evaluation
+            </h2>
+
+            <!-- Score global -->
+            <div class="score-display">
+                <div class="score-circle">
+                    <span class="score-value" id="totalScore">0</span>
+                </div>
+                <p class="score-label">sur 100 points (Score PSP global)</p>
+            </div>
+
+            <!-- Interpretation -->
+            <div id="interpretationBox" class="interpretation"></div>
+
+            <!-- Barres par domaine -->
+            <div class="glass-card" style="margin-top: 1.5rem;">
+                <h3 style="margin-bottom: 1rem;"><i class="fas fa-th-list"></i> Detail par domaine</h3>
+                <div class="domain-bars" id="domainBars"></div>
+            </div>
+
+            <!-- Details -->
+            <button class="btn-primary w-full" onclick="toggleDetails()" style="margin-top: 1.5rem;">
+                <i class="fas fa-list"></i> Voir les details de l'evaluation
+                <span id="toggleIcon"><i class="fas fa-chevron-down"></i></span>
+            </button>
+
+            <div id="detailsContent" class="glass-card" style="display: none; margin-top: 1rem;"></div>
+
+            <!-- Export -->
+            <div class="glass-card" style="margin-top: 2rem;">
+                <h3><i class="fas fa-download"></i> Exporter les resultats</h3>
+                <div class="consent-box">
+                    <label>
+                        <input type="checkbox" id="exportConsent">
+                        <span>Je souhaite telecharger les resultats (questionnaire, reponses, score et date) dans un fichier JSON sur mon appareil. <strong>Ces resultats constituent des donnees de sante - je m'engage a les conserver de facon securisee et a ne les partager qu'avec un professionnel de sante de mon choix.</strong> Aucune donnee n'est transmise a un serveur.</span>
+                    </label>
+                </div>
+                <div class="export-buttons">
+                    <button class="btn-primary" onclick="exportData()">
+                        <i class="fas fa-file-export"></i> Exporter en JSON
+                    </button>
+                    <button class="btn-print" onclick="printResults()">
+                        <i class="fas fa-print"></i> Imprimer
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p><strong>PSP - Personal and Social Performance Scale</strong></p>
+        <p>Auteurs : Morosini PL, Magliano L, Brambilla L, Ugolini S, Pioli R (2000)</p>
+        <p>Adaptation numerique : Dr FENOHASINA | Psychiatre</p>
+        <p style="margin-top: 1rem;">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr" target="_blank">
+                Licence CC BY-NC-SA 4.0
+            </a>
+        </p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../js/app.js"></script>
+    <script>
+        // Configuration des 4 domaines PSP
+        const domains = {
+            a: {
+                id: 'a',
+                label: 'Activites socialement utiles',
+                icon: 'fa-briefcase'
+            },
+            b: {
+                id: 'b',
+                label: 'Relations personnelles et sociales',
+                icon: 'fa-users'
+            },
+            c: {
+                id: 'c',
+                label: 'Soins personnels',
+                icon: 'fa-shower'
+            },
+            d: {
+                id: 'd',
+                label: 'Comportements perturbateurs et agressifs',
+                icon: 'fa-fist-raised'
+            }
+        };
+
+        // Options d'evaluation (identiques pour les 4 domaines)
+        const options = [
+            { value: 1, label: "Absent", description: "Fonctionnement excellent dans ce domaine" },
+            { value: 2, label: "Leger", description: "Difficultes mineures, pas d'impact significatif" },
+            { value: 3, label: "Manifeste", description: "Difficultes notables mais ne necessitant pas d'aide professionnelle reguliere" },
+            { value: 4, label: "Marque", description: "Difficultes marquees, necessitant une aide professionnelle" },
+            { value: 5, label: "Severe", description: "Difficultes severes, fonctionnement tres reduit dans ce domaine" },
+            { value: 6, label: "Tres severe", description: "Incapacite totale de fonctionner dans ce domaine" }
+        ];
+
+        // Labels de severite
+        const severityLabels = {
+            1: "Absent",
+            2: "Leger",
+            3: "Manifeste",
+            4: "Marque",
+            5: "Severe",
+            6: "Tres severe"
+        };
+
+        // Deductions pour le calcul du score PSP (algorithme standard)
+        // Absent=0, Leger=3, Manifeste=7, Marque=12, Severe=19, Tres severe=26
+        const deductions = [0, 0, 3, 7, 12, 19, 26];
+
+        // Etat des reponses
+        let answers = { a: null, b: null, c: null, d: null };
+
+        function initializeOptions() {
+            Object.keys(domains).forEach(domainKey => {
+                const container = document.getElementById(`options-${domainKey}`);
+                container.innerHTML = options.map(opt => `
+                    <button class="psp-option-btn" onclick="selectDomain('${domainKey}', ${opt.value})" id="${domainKey}_opt${opt.value}">
+                        <span class="opt-number">${opt.value}</span>
+                        <div class="opt-text">
+                            <strong>${opt.label}</strong>
+                            <span>${opt.description}</span>
+                        </div>
+                    </button>
+                `).join('');
+            });
+        }
+
+        function selectDomain(domain, value) {
+            answers[domain] = value;
+
+            // Mettre a jour les styles des boutons
+            options.forEach(opt => {
+                const btn = document.getElementById(`${domain}_opt${opt.value}`);
+                btn.classList.toggle('selected', opt.value === value);
+            });
+
+            // Marquer la carte comme repondue
+            document.getElementById(`card-${domain}`).classList.add('answered');
+
+            checkCompletion();
+        }
+
+        function checkCompletion() {
+            const allAnswered = Object.values(answers).every(a => a !== null);
+
+            if (allAnswered) {
+                updateResults();
+                document.getElementById('results').style.display = 'block';
+                document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function calculateScore() {
+            let score = 100;
+            Object.values(answers).forEach(val => {
+                if (val !== null) {
+                    score -= deductions[val];
+                }
+            });
+            return Math.max(1, score);
+        }
+
+        function getInterpretation(score) {
+            if (score >= 71) return {
+                level: "Fonctionnement bon a excellent",
+                className: "low",
+                description: "Difficultes mineures a absentes",
+                action: "Le patient presente un bon niveau de fonctionnement personnel et social. Maintenir le suivi et les strategies actuelles."
+            };
+            if (score >= 51) return {
+                level: "Fonctionnement avec difficultes manifestes",
+                className: "moderate",
+                description: "Difficultes notables dans un ou plusieurs domaines",
+                action: "Un accompagnement cible sur les domaines en difficulte est recommande. Envisager des interventions psychosociales specifiques."
+            };
+            if (score >= 31) return {
+                level: "Fonctionnement avec difficultes marquees",
+                className: "high",
+                description: "Necessite un soutien professionnel regulier",
+                action: "Une prise en charge rehabilitative structuree est recommandee. Evaluer les besoins en termes d'accompagnement quotidien."
+            };
+            return {
+                level: "Fonctionnement severement altere",
+                className: "critical",
+                description: "Necessite une prise en charge intensive et un soutien constant",
+                action: "Une prise en charge intensive et multidisciplinaire est necessaire. Evaluer les besoins en termes d'hebergement et d'accompagnement continu."
+            };
+        }
+
+        function getRecommendations() {
+            const recs = [];
+
+            Object.keys(domains).forEach(key => {
+                const val = answers[key];
+                const domain = domains[key];
+                if (val >= 4) {
+                    const actions = getDomainActions(key, val);
+                    recs.push({
+                        domain: domain.label,
+                        severity: severityLabels[val],
+                        actions: actions
+                    });
+                }
+            });
+
+            return recs;
+        }
+
+        function getDomainActions(domain, severity) {
+            const actionMap = {
+                a: {
+                    4: [
+                        "Evaluer les capacites professionnelles residuelles",
+                        "Envisager un travail protege ou accompagne (ESAT, emploi accompagne)",
+                        "Proposer une formation adaptee ou un bilan de competences"
+                    ],
+                    5: [
+                        "Orientation vers un centre de readaptation professionnelle",
+                        "Mise en place d'activites structurees en milieu protege",
+                        "Evaluation des besoins en accompagnement quotidien"
+                    ],
+                    6: [
+                        "Accompagnement quotidien pour les activites de base",
+                        "Programme de jour structure adapte",
+                        "Reevaluation reguliere des capacites fonctionnelles"
+                    ]
+                },
+                b: {
+                    4: [
+                        "Programme d'entrainement aux habiletes sociales",
+                        "Groupe therapeutique de socialisation",
+                        "Accompagnement dans les demarches sociales"
+                    ],
+                    5: [
+                        "Accompagnement individualise dans les interactions sociales",
+                        "Mediation familiale si necessaire",
+                        "Evaluation de l'isolement et mise en place de mesures correctives"
+                    ],
+                    6: [
+                        "Accompagnement intensif pour toute interaction sociale",
+                        "Programme de restauration du lien social",
+                        "Evaluation de la necessite d'un hebergement accompagne"
+                    ]
+                },
+                c: {
+                    4: [
+                        "Programme d'education therapeutique sur l'hygiene et les soins",
+                        "Accompagnement aux soins medicaux et dentaires",
+                        "Suivi nutritionnel si necessaire"
+                    ],
+                    5: [
+                        "Aide a domicile pour les soins personnels quotidiens",
+                        "Suivi infirmier rapproche",
+                        "Evaluation des besoins en aide a la vie quotidienne"
+                    ],
+                    6: [
+                        "Accompagnement constant pour les soins personnels",
+                        "Envisager un placement en structure adaptee",
+                        "Surveillance medicale rapprochee"
+                    ]
+                },
+                d: {
+                    4: [
+                        "Programme de gestion de la colere et des emotions",
+                        "Evaluation du risque de passage a l'acte",
+                        "Ajustement du traitement pharmacologique si necessaire"
+                    ],
+                    5: [
+                        "Surveillance rapprochee des comportements a risque",
+                        "Plan de prevention de la violence",
+                        "Envisager une hospitalisation si necessaire"
+                    ],
+                    6: [
+                        "Prise en charge en milieu hospitalier securise",
+                        "Evaluation psychiatrique approfondie",
+                        "Plan de gestion de crise individualise"
+                    ]
+                }
+            };
+
+            return actionMap[domain][severity] || actionMap[domain][Math.min(severity, 6)];
+        }
+
+        function updateResults() {
+            const score = calculateScore();
+            const interpretation = getInterpretation(score);
+            const recommendations = getRecommendations();
+
+            // Score global
+            document.getElementById('totalScore').textContent = score;
+
+            // Interpretation
+            const interpretationBox = document.getElementById('interpretationBox');
+            interpretationBox.className = `interpretation ${interpretation.className}`;
+            interpretationBox.innerHTML = `
+                <h3>${interpretation.level} (Score : ${score}/100)</h3>
+                <p><strong>Interpretation :</strong> ${interpretation.description}</p>
+                <p><strong>Recommandation :</strong> ${interpretation.action}</p>
+            `;
+
+            // Barres par domaine
+            const barsContainer = document.getElementById('domainBars');
+            barsContainer.innerHTML = Object.keys(domains).map(key => {
+                const domain = domains[key];
+                const val = answers[key];
+                return `
+                    <div class="domain-bar-item">
+                        <div class="domain-bar-header">
+                            <span class="domain-bar-label">
+                                <i class="fas ${domain.icon}" style="color: var(--cat-readable); margin-right: 0.4rem;"></i>
+                                ${key.toUpperCase()} - ${domain.label}
+                            </span>
+                            <span class="domain-bar-value sev-label-${val}">${severityLabels[val]}</span>
+                        </div>
+                        <div class="bar-track">
+                            <div class="bar-fill sev-${val}"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Details
+            updateDetails(score, interpretation, recommendations);
+        }
+
+        function updateDetails(score, interpretation, recommendations) {
+            const detailsContent = document.getElementById('detailsContent');
+
+            let html = `
+                <h3 style="margin-bottom: 1.5rem;"><i class="fas fa-clipboard-check"></i> Details de l'evaluation PSP</h3>
+            `;
+
+            // Tableau recapitulatif
+            html += `
+                <div class="info-box" style="margin-bottom: 1.5rem;">
+                    <h4 style="color: var(--cat-readable); margin-bottom: 1rem;"><i class="fas fa-table"></i> Recapitulatif par domaine</h4>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid rgba(0,0,0,0.1);">
+                                <th style="text-align: left; padding: 0.5rem;">Domaine</th>
+                                <th style="text-align: center; padding: 0.5rem;">Score</th>
+                                <th style="text-align: center; padding: 0.5rem;">Severite</th>
+                                <th style="text-align: center; padding: 0.5rem;">Deduction</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${Object.keys(domains).map(key => {
+                                const val = answers[key];
+                                const domain = domains[key];
+                                return `
+                                    <tr style="border-bottom: 1px solid rgba(0,0,0,0.05);">
+                                        <td style="padding: 0.5rem;"><i class="fas ${domain.icon}" style="color: var(--cat-readable); margin-right: 0.5rem;"></i>${key.toUpperCase()} - ${domain.label}</td>
+                                        <td style="text-align: center; padding: 0.5rem; font-weight: 600;">${val}</td>
+                                        <td style="text-align: center; padding: 0.5rem;">${severityLabels[val]}</td>
+                                        <td style="text-align: center; padding: 0.5rem; color: #ef4444;">-${deductions[val]}</td>
+                                    </tr>
+                                `;
+                            }).join('')}
+                        </tbody>
+                        <tfoot>
+                            <tr style="border-top: 2px solid rgba(0,0,0,0.1);">
+                                <td style="padding: 0.5rem; font-weight: 700;" colspan="3">Score PSP global (100 - somme des deductions)</td>
+                                <td style="text-align: center; padding: 0.5rem; font-weight: 700; color: var(--cat-readable);">${score}/100</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            `;
+
+            // Recommandations si domaines deficitaires
+            if (recommendations.length > 0) {
+                html += `
+                    <h4 style="margin-bottom: 1rem; color: var(--color-text-primary);">Recommandations par domaine deficitaire</h4>
+                    ${recommendations.map(rec => `
+                        <div class="info-box" style="margin-bottom: 0.75rem;">
+                            <h4 style="color: var(--cat-readable); margin-bottom: 0.5rem;">
+                                ${rec.domain} - Severite : ${rec.severity}
+                            </h4>
+                            <ul style="margin: 0; padding-left: 1.5rem;">
+                                ${rec.actions.map(action => `<li style="margin-bottom: 0.25rem;">${action}</li>`).join('')}
+                            </ul>
+                        </div>
+                    `).join('')}
+                `;
+            } else {
+                html += `
+                    <div class="info-box">
+                        <h4 style="color: var(--cat-readable); margin-bottom: 0.5rem;">Aucun domaine avec difficulte marquee ou plus</h4>
+                        <p>Le fonctionnement du patient est globalement preserve. Maintenir le suivi actuel et renforcer les facteurs protecteurs.</p>
+                    </div>
+                `;
+            }
+
+            // Guide d'interpretation
+            html += `
+                <div class="info-box" style="margin-top: 1.5rem;">
+                    <h4 style="color: var(--cat-readable); margin-bottom: 1rem;"><i class="fas fa-info-circle"></i> Guide d'interpretation du score PSP</h4>
+                    <ul style="margin: 0; padding-left: 1.5rem; line-height: 2;">
+                        <li><strong>71-100 :</strong> Fonctionnement bon a excellent - Difficultes mineures a absentes</li>
+                        <li><strong>51-70 :</strong> Fonctionnement avec difficultes manifestes - Difficultes notables dans un ou plusieurs domaines</li>
+                        <li><strong>31-50 :</strong> Fonctionnement avec difficultes marquees - Necessite un soutien professionnel regulier</li>
+                        <li><strong>1-30 :</strong> Fonctionnement severement altere - Necessite une prise en charge intensive et un soutien constant</li>
+                    </ul>
+                </div>
+            `;
+
+            detailsContent.innerHTML = html;
+        }
+
+        function toggleDetails() {
+            const content = document.getElementById('detailsContent');
+            const icon = document.getElementById('toggleIcon');
+            const isVisible = content.style.display !== 'none';
+
+            content.style.display = isVisible ? 'none' : 'block';
+            icon.innerHTML = isVisible ? '<i class="fas fa-chevron-down"></i>' : '<i class="fas fa-chevron-up"></i>';
+        }
+
+        function resetForm() {
+            answers = { a: null, b: null, c: null, d: null };
+
+            // Reinitialiser les boutons
+            Object.keys(domains).forEach(key => {
+                options.forEach(opt => {
+                    document.getElementById(`${key}_opt${opt.value}`).classList.remove('selected');
+                });
+                document.getElementById(`card-${key}`).classList.remove('answered');
+            });
+
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('detailsContent').style.display = 'none';
+            document.getElementById('exportConsent').checked = false;
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function importData() {
+            document.getElementById('fileInput').click();
+        }
+
+        function loadFile(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        if (data.questionnaire === 'PSP' && data.domainScores) {
+                            Object.keys(domains).forEach(key => {
+                                const upperKey = key.toUpperCase();
+                                if (data.domainScores[upperKey] !== null && data.domainScores[upperKey] !== undefined) {
+                                    selectDomain(key, data.domainScores[upperKey]);
+                                }
+                            });
+                        } else {
+                            alert('Format de fichier invalide. Veuillez importer un fichier PSP valide.');
+                        }
+                    } catch (error) {
+                        alert("Erreur lors de l'importation du fichier: " + error.message);
+                    }
+                };
+                reader.readAsText(file);
+            }
+            event.target.value = '';
+        }
+
+        function exportData() {
+            const consent = document.getElementById('exportConsent').checked;
+            if (!consent) {
+                alert("Veuillez cocher la case de consentement avant d'exporter.");
+                return;
+            }
+
+            const score = calculateScore();
+            const interpretation = getInterpretation(score);
+
+            const data = {
+                questionnaire: "PSP",
+                date: new Date().toISOString(),
+                domainScores: {
+                    A: answers.a,
+                    B: answers.b,
+                    C: answers.c,
+                    D: answers.d
+                },
+                globalScore: score,
+                interpretation: interpretation.level
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `PSP_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function printResults() {
+            window.print();
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeOptions();
+        });
+    </script>
+</body>
+</html>

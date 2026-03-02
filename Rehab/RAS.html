@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RAS - Recovery Assessment Scale</title>
+  <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --cat-main: #0ea5e9;
+            --cat-dark: #0284c7;
+            --cat-light: #38bdf8;
+            --cat-rgb: 14, 165, 233;
+            --cat-readable: #0284c7;
+        }
+        .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
+        .option-btn.selected, .answer-btn.selected { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        .score-circle { border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 30px rgba(var(--cat-rgb), 0.2); }
+        .score-value { color: var(--cat-light); }
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-light); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+        .progress-fill { background: linear-gradient(90deg, var(--cat-main), var(--cat-light)); box-shadow: 0 0 8px rgba(var(--cat-rgb), 0.4); }
+        .likert-options input[type="radio"]:checked + label,
+        .binary-options input[type="radio"]:checked + label,
+        .radio-options input[type="radio"]:checked + label { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+    </style>
+
+</head>
+<body class="light-questionnaire">
+
+  <!-- Navigation -->
+  <nav class="navigation-bar">
+    <div class="nav-buttons">
+      <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+      <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+    </div>
+    <h1>RAS</h1>
+    <span class="badge badge-cat-rehab">Empowerment</span>
+  </nav>
+
+  <div class="container">
+
+    <!-- Questionnaire Section -->
+    <div id="questionnaire-section">
+
+      <!-- Header -->
+      <div class="ras-header">
+        <h2><i class="fas fa-fist-raised"></i> Recovery Assessment Scale</h2>
+        <p class="subtitle">Echelle d'evaluation du retablissement personnel - 24 items</p>
+      </div>
+
+      <!-- Instructions -->
+      <div class="alert alert-info">
+        <div class="alert-icon">
+          <i class="fas fa-info-circle"></i>
+        </div>
+        <div class="alert-content">
+          <h3>Instructions</h3>
+          <p>Ce questionnaire evalue votre processus de retablissement personnel. Indiquez dans quelle mesure vous etes d'accord avec chaque affirmation en vous basant sur votre experience actuelle.</p>
+        </div>
+      </div>
+
+      <!-- Progress -->
+      <div class="progress-container">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+        </div>
+        <div class="progress-text">
+          <span id="progress-count">0/24 questions</span>
+          <span id="progress-percent">0%</span>
+        </div>
+      </div>
+
+      <!-- Factor 1: Personal confidence and hope -->
+      <div class="factor-section factor-1">
+        <div class="factor-header">
+          <div class="factor-icon"><i class="fas fa-sun"></i></div>
+          <div class="factor-title">
+            <h3>Confiance personnelle et espoir</h3>
+            <span>9 items - Croyance en soi et en l'avenir</span>
+          </div>
+        </div>
+
+        <div class="question-item" data-question="1">
+          <p class="question-text"><span class="question-number">1.</span> J'ai le desir de reussir.</p>
+          <div class="likert-scale">
+            <div class="likert-option">
+              <input type="radio" name="q1" id="q1_1" value="1">
+              <label for="q1_1"><span class="likert-value">1</span>Pas du tout d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q1" id="q1_2" value="2">
+              <label for="q1_2"><span class="likert-value">2</span>Plutot pas d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q1" id="q1_3" value="3">
+              <label for="q1_3"><span class="likert-value">3</span>Incertain</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q1" id="q1_4" value="4">
+              <label for="q1_4"><span class="likert-value">4</span>Plutot d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q1" id="q1_5" value="5">
+              <label for="q1_5"><span class="likert-value">5</span>Tout a fait d'accord</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="question-item" data-question="2">
+          <p class="question-text"><span class="question-number">2.</span> J'ai mes propres projets pour me retablir.</p>
+          <div class="likert-scale">
+            <div class="likert-option">
+              <input type="radio" name="q2" id="q2_1" value="1">
+              <label for="q2_1"><span class="likert-value">1</span>Pas du tout d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q2" id="q2_2" value="2">
+              <label for="q2_2"><span class="likert-value">2</span>Plutot pas d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q2" id="q2_3" value="3">
+              <label for="q2_3"><span class="likert-value">3</span>Incertain</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q2" id="q2_4" value="4">
+              <label for="q2_4"><span class="likert-value">4</span>Plutot d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q2" id="q2_5" value="5">
+              <label for="q2_5"><span class="likert-value">5</span>Tout a fait d'accord</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="question-item" data-question="3">
+          <p class="question-text"><span class="question-number">3.</span> J'ai des objectifs dans la vie que je veux atteindre.</p>
+          <div class="likert-scale">
+            <div class="likert-option">
+              <input type="radio" name="q3" id="q3_1" value="1">
+              <label for="q3_1"><span class="likert-value">1</span>Pas du tout d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q3" id="q3_2" value="2">
+              <label for="q3_2"><span class="likert-value">2</span>Plutot pas d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q3" id="q3_3" value="3">
+              <label for="q3_3"><span class="likert-value">3</span>Incertain</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q3" id="q3_4" value="4">
+              <label for="q3_4"><span class="likert-value">4</span>Plutot d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q3" id="q3_5" value="5">
+              <label for="q3_5"><span class="likert-value">5</span>Tout a fait d'accord</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="question-item" data-question="4">
+          <p class="question-text"><span class="question-number">4.</span> Je crois que je peux atteindre mes objectifs personnels actuels.</p>
+          <div class="likert-scale">
+            <div class="likert-option">
+              <input type="radio" name="q4" id="q4_1" value="1">
+              <label for="q4_1"><span class="likert-value">1</span>Pas du tout d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q4" id="q4_2" value="2">
+              <label for="q4_2"><span class="likert-value">2</span>Plutot pas d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q4" id="q4_3" value="3">
+              <label for="q4_3"><span class="likert-value">3</span>Incertain</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q4" id="q4_4" value="4">
+              <label for="q4_4"><span class="likert-value">4</span>Plutot d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q4" id="q4_5" value="5">
+              <label for="q4_5"><span class="likert-value">5</span>Tout a fait d'accord</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="question-item" data-question="5">
+          <p class="question-text"><span class="question-number">5.</span> J'ai un but dans la vie.</p>
+          <div class="likert-scale">
+            <div class="likert-option">
+              <input type="radio" name="q5" id="q5_1" value="1">
+              <label for="q5_1"><span class="likert-value">1</span>Pas du tout d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q5" id="q5_2" value="2">
+              <label for="q5_2"><span class="likert-value">2</span>Plutot pas d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q5" id="q5_3" value="3">
+              <label for="q5_3"><span class="likert-value">3</span>Incertain</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q5" id="q5_4" value="4">
+              <label for="q5_4"><span class="likert-value">4</span>Plutot d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q5" id="q5_5" value="5">
+              <label for="q5_5"><span class="likert-value">5</span>Tout a fait d'accord</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="question-item" data-question="6">
+          <p class="question-text"><span class="question-number">6.</span> Meme quand je ne crois pas en moi, les autres le font.</p>
+          <div class="likert-scale">
+            <div class="likert-option">
+              <input type="radio" name="q6" id="q6_1" value="1">
+              <label for="q6_1"><span class="likert-value">1</span>Pas du tout d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q6" id="q6_2" value="2">
+              <label for="q6_2"><span class="likert-value">2</span>Plutot pas d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q6" id="q6_3" value="3">
+              <label for="q6_3"><span class="likert-value">3</span>Incertain</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q6" id="q6_4" value="4">
+              <label for="q6_4"><span class="likert-value">4</span>Plutot d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q6" id="q6_5" value="5">
+              <label for="q6_5"><span class="likert-value">5</span>Tout a fait d'accord</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="question-item" data-question="7">
+          <p class="question-text"><span class="question-number">7.</span> J'ai une idee de qui je veux devenir.</p>
+          <div class="likert-scale">
+            <div class="likert-option">
+              <input type="radio" name="q7" id="q7_1" value="1">
+              <label for="q7_1"><span class="likert-value">1</span>Pas du tout d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q7" id="q7_2" value="2">
+              <label for="q7_2"><span class="likert-value">2</span>Plutot pas d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q7" id="q7_3" value="3">
+              <label for="q7_3"><span class="likert-value">3</span>Incertain</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q7" id="q7_4" value="4">
+              <label for="q7_4"><span class="likert-value">4</span>Plutot d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q7" id="q7_5" value="5">
+              <label for="q7_5"><span class="likert-value">5</span>Tout a fait d'accord</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="question-item" data-question="8">
+          <p class="question-text"><span class="question-number">8.</span> Quelque chose de bien finira par arriver.</p>
+          <div class="likert-scale">
+            <div class="likert-option">
+              <input type="radio" name="q8" id="q8_1" value="1">
+              <label for="q8_1"><span class="likert-value">1</span>Pas du tout d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q8" id="q8_2" value="2">
+              <label for="q8_2"><span class="likert-value">2</span>Plutot pas d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q8" id="q8_3" value="3">
+              <label for="q8_3"><span class="likert-value">3</span>Incertain</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q8" id="q8_4" value="4">
+              <label for="q8_4"><span class="likert-value">4</span>Plutot d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q8" id="q8_5" value="5">
+              <label for="q8_5"><span class="likert-value">5</span>Tout a fait d'accord</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="question-item" data-question="9">
+          <p class="question-text"><span class="question-number">9.</span> J'ai de l'espoir pour mon avenir.</p>
+          <div class="likert-scale">
+            <div class="likert-option">
+              <input type="radio" name="q9" id="q9_1" value="1">
+              <label for="q9_1"><span class="likert-value">1</span>Pas du tout d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q9" id="q9_2" value="2">
+              <label for="q9_2"><span class="likert-value">2</span>Plutot pas d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q9" id="q9_3" value="3">
+              <label for="q9_3"><span class="likert-value">3</span>Incertain</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q9" id="q9_4" value="4">
+              <label for="q9_4"><span class="likert-value">4</span>Plutot d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q9" id="q9_5" value="5">
+              <label for="q9_5"><span class="likert-value">5</span>Tout a fait d'accord</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Factor 2: Willingness to ask for help -->
+      <div class="factor-section factor-2">
+        <div class="factor-header">
+          <div class="factor-icon"><i class="fas fa-hands-helping"></i></div>
+          <div class="factor-title">
+            <h3>Volonte de demander de l'aide</h3>
+            <span>3 items - Capacite a solliciter du soutien</span>
+          </div>
+        </div>
+
+        <div class="question-item" data-question="10">
+          <p class="question-text"><span class="question-number">10.</span> Je sais quand demander de l'aide.</p>
+          <div class="likert-scale">
+            <div class="likert-option">
+              <input type="radio" name="q10" id="q10_1" value="1">
+              <label for="q10_1"><span class="likert-value">1</span>Pas du tout d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q10" id="q10_2" value="2">
+              <label for="q10_2"><span class="likert-value">2</span>Plutot pas d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q10" id="q10_3" value="3">
+              <label for="q10_3"><span class="likert-value">3</span>Incertain</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q10" id="q10_4" value="4">
+              <label for="q10_4"><span class="likert-value">4</span>Plutot d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q10" id="q10_5" value="5">
+              <label for="q10_5"><span class="likert-value">5</span>Tout a fait d'accord</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="question-item" data-question="11">
+          <p class="question-text"><span class="question-number">11.</span> Je suis pret(e) a demander de l'aide.</p>
+          <div class="likert-scale">
+            <div class="likert-option">
+              <input type="radio" name="q11" id="q11_1" value="1">
+              <label for="q11_1"><span class="likert-value">1</span>Pas du tout d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q11" id="q11_2" value="2">
+              <label for="q11_2"><span class="likert-value">2</span>Plutot pas d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q11" id="q11_3" value="3">
+              <label for="q11_3"><span class="likert-value">3</span>Incertain</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q11" id="q11_4" value="4">
+              <label for="q11_4"><span class="likert-value">4</span>Plutot d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q11" id="q11_5" value="5">
+              <label for="q11_5"><span class="likert-value">5</span>Tout a fait d'accord</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="question-item" data-question="12">
+          <p class="question-text"><span class="question-number">12.</span> Je demande de l'aide quand j'en ai besoin.</p>
+          <div class="likert-scale">
+            <div class="likert-option">
+              <input type="radio" name="q12" id="q12_1" value="1">
+              <label for="q12_1"><span class="likert-value">1</span>Pas du tout d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q12" id="q12_2" value="2">
+              <label for="q12_2"><span class="likert-value">2</span>Plutot pas d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q12" id="q12_3" value="3">
+              <label for="q12_3"><span class="likert-value">3</span>Incertain</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q12" id="q12_4" value="4">
+              <label for="q12_4"><span class="likert-value">4</span>Plutot d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q12" id="q12_5" value="5">
+              <label for="q12_5"><span class="likert-value">5</span>Tout a fait d'accord</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Factor 3: Goal and success orientation -->
+      <div class="factor-section factor-3">
+        <div class="factor-header">
+          <div class="factor-icon"><i class="fas fa-bullseye"></i></div>
+          <div class="factor-title">
+            <h3>Orientation vers les objectifs et le succes</h3>
+            <span>5 items - Capacite a avancer vers ses buts</span>
+          </div>
+        </div>
+
+        <div class="question-item" data-question="13">
+          <p class="question-text"><span class="question-number">13.</span> Je peux gerer ce qui arrive dans ma vie.</p>
+          <div class="likert-scale">
+            <div class="likert-option">
+              <input type="radio" name="q13" id="q13_1" value="1">
+              <label for="q13_1"><span class="likert-value">1</span>Pas du tout d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q13" id="q13_2" value="2">
+              <label for="q13_2"><span class="likert-value">2</span>Plutot pas d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q13" id="q13_3" value="3">
+              <label for="q13_3"><span class="likert-value">3</span>Incertain</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q13" id="q13_4" value="4">
+              <label for="q13_4"><span class="likert-value">4</span>Plutot d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q13" id="q13_5" value="5">
+              <label for="q13_5"><span class="likert-value">5</span>Tout a fait d'accord</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="question-item" data-question="14">
+          <p class="question-text"><span class="question-number">14.</span> J'aime qui je suis.</p>
+          <div class="likert-scale">
+            <div class="likert-option">
+              <input type="radio" name="q14" id="q14_1" value="1">
+              <label for="q14_1"><span class="likert-value">1</span>Pas du tout d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q14" id="q14_2" value="2">
+              <label for="q14_2"><span class="likert-value">2</span>Plutot pas d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q14" id="q14_3" value="3">
+              <label for="q14_3"><span class="likert-value">3</span>Incertain</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q14" id="q14_4" value="4">
+              <label for="q14_4"><span class="likert-value">4</span>Plutot d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q14" id="q14_5" value="5">
+              <label for="q14_5"><span class="likert-value">5</span>Tout a fait d'accord</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="question-item" data-question="15">
+          <p class="question-text"><span class="question-number">15.</span> Si les gens me connaissaient vraiment, ils m'aimeraient bien.</p>
+          <div class="likert-scale">
+            <div class="likert-option">
+              <input type="radio" name="q15" id="q15_1" value="1">
+              <label for="q15_1"><span class="likert-value">1</span>Pas du tout d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q15" id="q15_2" value="2">
+              <label for="q15_2"><span class="likert-value">2</span>Plutot pas d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q15" id="q15_3" value="3">
+              <label for="q15_3"><span class="likert-value">3</span>Incertain</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q15" id="q15_4" value="4">
+              <label for="q15_4"><span class="likert-value">4</span>Plutot d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q15" id="q15_5" value="5">
+              <label for="q15_5"><span class="likert-value">5</span>Tout a fait d'accord</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="question-item" data-question="16">
+          <p class="question-text"><span class="question-number">16.</span> J'ai une contribution importante a apporter a la vie.</p>
+          <div class="likert-scale">
+            <div class="likert-option">
+              <input type="radio" name="q16" id="q16_1" value="1">
+              <label for="q16_1"><span class="likert-value">1</span>Pas du tout d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q16" id="q16_2" value="2">
+              <label for="q16_2"><span class="likert-value">2</span>Plutot pas d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q16" id="q16_3" value="3">
+              <label for="q16_3"><span class="likert-value">3</span>Incertain</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q16" id="q16_4" value="4">
+              <label for="q16_4"><span class="likert-value">4</span>Plutot d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q16" id="q16_5" value="5">
+              <label for="q16_5"><span class="likert-value">5</span>Tout a fait d'accord</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="question-item" data-question="17">
+          <p class="question-text"><span class="question-number">17.</span> Je suis le (la) principal(e) responsable de ma vie.</p>
+          <div class="likert-scale">
+            <div class="likert-option">
+              <input type="radio" name="q17" id="q17_1" value="1">
+              <label for="q17_1"><span class="likert-value">1</span>Pas du tout d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q17" id="q17_2" value="2">
+              <label for="q17_2"><span class="likert-value">2</span>Plutot pas d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q17" id="q17_3" value="3">
+              <label for="q17_3"><span class="likert-value">3</span>Incertain</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q17" id="q17_4" value="4">
+              <label for="q17_4"><span class="likert-value">4</span>Plutot d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q17" id="q17_5" value="5">
+              <label for="q17_5"><span class="likert-value">5</span>Tout a fait d'accord</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Factor 4: Reliance on others -->
+      <div class="factor-section factor-4">
+        <div class="factor-header">
+          <div class="factor-icon"><i class="fas fa-user-friends"></i></div>
+          <div class="factor-title">
+            <h3>S'appuyer sur les autres</h3>
+            <span>4 items - Soutien social et connexion</span>
+          </div>
+        </div>
+
+        <div class="question-item" data-question="18">
+          <p class="question-text"><span class="question-number">18.</span> J'ai des gens sur qui je peux compter.</p>
+          <div class="likert-scale">
+            <div class="likert-option">
+              <input type="radio" name="q18" id="q18_1" value="1">
+              <label for="q18_1"><span class="likert-value">1</span>Pas du tout d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q18" id="q18_2" value="2">
+              <label for="q18_2"><span class="likert-value">2</span>Plutot pas d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q18" id="q18_3" value="3">
+              <label for="q18_3"><span class="likert-value">3</span>Incertain</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q18" id="q18_4" value="4">
+              <label for="q18_4"><span class="likert-value">4</span>Plutot d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q18" id="q18_5" value="5">
+              <label for="q18_5"><span class="likert-value">5</span>Tout a fait d'accord</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="question-item" data-question="19">
+          <p class="question-text"><span class="question-number">19.</span> Meme quand je ne me sens pas bien en moi, je peux toujours parler de mon malaise a quelqu'un.</p>
+          <div class="likert-scale">
+            <div class="likert-option">
+              <input type="radio" name="q19" id="q19_1" value="1">
+              <label for="q19_1"><span class="likert-value">1</span>Pas du tout d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q19" id="q19_2" value="2">
+              <label for="q19_2"><span class="likert-value">2</span>Plutot pas d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q19" id="q19_3" value="3">
+              <label for="q19_3"><span class="likert-value">3</span>Incertain</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q19" id="q19_4" value="4">
+              <label for="q19_4"><span class="likert-value">4</span>Plutot d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q19" id="q19_5" value="5">
+              <label for="q19_5"><span class="likert-value">5</span>Tout a fait d'accord</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="question-item" data-question="20">
+          <p class="question-text"><span class="question-number">20.</span> J'ai des gens avec qui je peux faire des choses agreables.</p>
+          <div class="likert-scale">
+            <div class="likert-option">
+              <input type="radio" name="q20" id="q20_1" value="1">
+              <label for="q20_1"><span class="likert-value">1</span>Pas du tout d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q20" id="q20_2" value="2">
+              <label for="q20_2"><span class="likert-value">2</span>Plutot pas d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q20" id="q20_3" value="3">
+              <label for="q20_3"><span class="likert-value">3</span>Incertain</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q20" id="q20_4" value="4">
+              <label for="q20_4"><span class="likert-value">4</span>Plutot d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q20" id="q20_5" value="5">
+              <label for="q20_5"><span class="likert-value">5</span>Tout a fait d'accord</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="question-item" data-question="21">
+          <p class="question-text"><span class="question-number">21.</span> J'ai au moins un ami proche.</p>
+          <div class="likert-scale">
+            <div class="likert-option">
+              <input type="radio" name="q21" id="q21_1" value="1">
+              <label for="q21_1"><span class="likert-value">1</span>Pas du tout d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q21" id="q21_2" value="2">
+              <label for="q21_2"><span class="likert-value">2</span>Plutot pas d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q21" id="q21_3" value="3">
+              <label for="q21_3"><span class="likert-value">3</span>Incertain</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q21" id="q21_4" value="4">
+              <label for="q21_4"><span class="likert-value">4</span>Plutot d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q21" id="q21_5" value="5">
+              <label for="q21_5"><span class="likert-value">5</span>Tout a fait d'accord</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Factor 5: Non-dominance by symptoms -->
+      <div class="factor-section factor-5">
+        <div class="factor-header">
+          <div class="factor-icon"><i class="fas fa-shield-alt"></i></div>
+          <div class="factor-title">
+            <h3>Non-domination par les symptomes</h3>
+            <span>3 items - Gestion des symptomes au quotidien</span>
+          </div>
+        </div>
+
+        <div class="question-item" data-question="22">
+          <p class="question-text"><span class="question-number">22.</span> Les symptomes interferent de moins en moins avec ma vie.</p>
+          <div class="likert-scale">
+            <div class="likert-option">
+              <input type="radio" name="q22" id="q22_1" value="1">
+              <label for="q22_1"><span class="likert-value">1</span>Pas du tout d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q22" id="q22_2" value="2">
+              <label for="q22_2"><span class="likert-value">2</span>Plutot pas d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q22" id="q22_3" value="3">
+              <label for="q22_3"><span class="likert-value">3</span>Incertain</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q22" id="q22_4" value="4">
+              <label for="q22_4"><span class="likert-value">4</span>Plutot d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q22" id="q22_5" value="5">
+              <label for="q22_5"><span class="likert-value">5</span>Tout a fait d'accord</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="question-item" data-question="23">
+          <p class="question-text"><span class="question-number">23.</span> Mes symptomes semblent etre un probleme pour des periodes de temps de plus en plus courtes.</p>
+          <div class="likert-scale">
+            <div class="likert-option">
+              <input type="radio" name="q23" id="q23_1" value="1">
+              <label for="q23_1"><span class="likert-value">1</span>Pas du tout d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q23" id="q23_2" value="2">
+              <label for="q23_2"><span class="likert-value">2</span>Plutot pas d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q23" id="q23_3" value="3">
+              <label for="q23_3"><span class="likert-value">3</span>Incertain</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q23" id="q23_4" value="4">
+              <label for="q23_4"><span class="likert-value">4</span>Plutot d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q23" id="q23_5" value="5">
+              <label for="q23_5"><span class="likert-value">5</span>Tout a fait d'accord</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="question-item" data-question="24">
+          <p class="question-text"><span class="question-number">24.</span> Je peux gerer mon probleme de sante mentale.</p>
+          <div class="likert-scale">
+            <div class="likert-option">
+              <input type="radio" name="q24" id="q24_1" value="1">
+              <label for="q24_1"><span class="likert-value">1</span>Pas du tout d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q24" id="q24_2" value="2">
+              <label for="q24_2"><span class="likert-value">2</span>Plutot pas d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q24" id="q24_3" value="3">
+              <label for="q24_3"><span class="likert-value">3</span>Incertain</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q24" id="q24_4" value="4">
+              <label for="q24_4"><span class="likert-value">4</span>Plutot d'accord</label>
+            </div>
+            <div class="likert-option">
+              <input type="radio" name="q24" id="q24_5" value="5">
+              <label for="q24_5"><span class="likert-value">5</span>Tout a fait d'accord</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <div class="submit-section">
+        <button type="button" class="btn-submit" id="btn-submit" onclick="calculateResults()" disabled>
+          <i class="fas fa-calculator"></i> Calculer les resultats
+        </button>
+        <p style="color: var(--color-text-muted); margin-top: 1rem; font-size: var(--font-size-sm);">
+          Repondez a toutes les questions pour obtenir vos resultats
+        </p>
+      </div>
+    </div>
+
+    <!-- Results Section -->
+    <div class="results-container" id="results-section">
+
+      <div class="ras-header">
+        <h2><i class="fas fa-chart-pie"></i> Resultats RAS</h2>
+        <p class="subtitle">Votre profil de retablissement personnel</p>
+      </div>
+
+      <!-- Total Score -->
+      <div class="score-card">
+        <div class="total-score" id="total-score">--</div>
+        <div class="score-max">/ 120</div>
+        <div class="score-label">Score total de retablissement</div>
+      </div>
+
+      <!-- Interpretation -->
+      <div class="interpretation-card" id="interpretation-card">
+        <h3 class="interpretation-title"><i class="fas fa-lightbulb"></i> Interpretation</h3>
+        <p class="interpretation-text" id="interpretation-text"></p>
+      </div>
+
+      <!-- Factor Results -->
+      <div class="factor-results" id="factor-results">
+        <div class="factor-result-card">
+          <div class="factor-result-header">
+            <div class="factor-result-icon"><i class="fas fa-sun"></i></div>
+            <span class="factor-result-title">Confiance et espoir</span>
+          </div>
+          <div class="factor-score-bar">
+            <div class="factor-score-fill" id="factor1-bar" style="width: 0%"></div>
+          </div>
+          <div class="factor-score-text">
+            <span id="factor1-score">--/45</span>
+            <span id="factor1-percent">--%</span>
+          </div>
+        </div>
+
+        <div class="factor-result-card">
+          <div class="factor-result-header">
+            <div class="factor-result-icon"><i class="fas fa-hands-helping"></i></div>
+            <span class="factor-result-title">Demander de l'aide</span>
+          </div>
+          <div class="factor-score-bar">
+            <div class="factor-score-fill" id="factor2-bar" style="width: 0%"></div>
+          </div>
+          <div class="factor-score-text">
+            <span id="factor2-score">--/15</span>
+            <span id="factor2-percent">--%</span>
+          </div>
+        </div>
+
+        <div class="factor-result-card">
+          <div class="factor-result-header">
+            <div class="factor-result-icon"><i class="fas fa-bullseye"></i></div>
+            <span class="factor-result-title">Objectifs et succes</span>
+          </div>
+          <div class="factor-score-bar">
+            <div class="factor-score-fill" id="factor3-bar" style="width: 0%"></div>
+          </div>
+          <div class="factor-score-text">
+            <span id="factor3-score">--/25</span>
+            <span id="factor3-percent">--%</span>
+          </div>
+        </div>
+
+        <div class="factor-result-card">
+          <div class="factor-result-header">
+            <div class="factor-result-icon"><i class="fas fa-user-friends"></i></div>
+            <span class="factor-result-title">S'appuyer sur les autres</span>
+          </div>
+          <div class="factor-score-bar">
+            <div class="factor-score-fill" id="factor4-bar" style="width: 0%"></div>
+          </div>
+          <div class="factor-score-text">
+            <span id="factor4-score">--/20</span>
+            <span id="factor4-percent">--%</span>
+          </div>
+        </div>
+
+        <div class="factor-result-card">
+          <div class="factor-result-header">
+            <div class="factor-result-icon"><i class="fas fa-shield-alt"></i></div>
+            <span class="factor-result-title">Gestion des symptomes</span>
+          </div>
+          <div class="factor-score-bar">
+            <div class="factor-score-fill" id="factor5-bar" style="width: 0%"></div>
+          </div>
+          <div class="factor-score-text">
+            <span id="factor5-score">--/15</span>
+            <span id="factor5-percent">--%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Radar Chart -->
+      <div class="chart-container">
+        <h3 class="chart-title">Profil de retablissement</h3>
+        <div class="chart-wrapper">
+          <canvas id="radarChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Info Section -->
+      <div class="info-section">
+        <h3><i class="fas fa-info-circle"></i> A propos de la RAS</h3>
+        <p>La <strong>Recovery Assessment Scale (RAS)</strong> est un instrument d'auto-evaluation developpe par Corrigan et al. (1999) pour mesurer le retablissement personnel chez les personnes vivant avec des troubles psychiatriques.</p>
+        <p style="margin-top: 1rem;"><strong>Les 5 facteurs evalues :</strong></p>
+        <ul>
+          <li><strong>Confiance personnelle et espoir (9 items)</strong> : Croyance en soi et en un avenir positif</li>
+          <li><strong>Volonte de demander de l'aide (3 items)</strong> : Capacite a identifier et solliciter du soutien</li>
+          <li><strong>Orientation vers les objectifs (5 items)</strong> : Capacite a definir et poursuivre des buts</li>
+          <li><strong>S'appuyer sur les autres (4 items)</strong> : Presence d'un reseau de soutien</li>
+          <li><strong>Non-domination par les symptomes (3 items)</strong> : Capacite a vivre malgre les symptomes</li>
+        </ul>
+        <p style="margin-top: 1rem;"><strong>Interpretation des scores :</strong></p>
+        <ul>
+          <li><strong>96-120</strong> : Retablissement tres avance - fort sentiment d'empowerment</li>
+          <li><strong>72-95</strong> : Retablissement en bonne voie - progression positive</li>
+          <li><strong>48-71</strong> : Retablissement en developpement - axes de travail identifies</li>
+          <li><strong>24-47</strong> : Debut du parcours - accompagnement soutenu recommande</li>
+        </ul>
+      </div>
+
+      <!-- Actions -->
+      <div class="actions-section">
+        <button class="btn-action btn-primary" onclick="printResults()">
+          <i class="fas fa-print"></i> Imprimer
+        </button>
+        <button class="btn-action btn-secondary" onclick="resetQuestionnaire()">
+          <i class="fas fa-redo"></i> Recommencer
+        </button>
+        <a href="Page_d_accueil.html" class="btn-action btn-secondary">
+          <i class="fas fa-arrow-left"></i> Retour au portail
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>Dr. FENOHASINA T.J. Felicien (Psychiatre)</p>
+    <p>&copy; 2025 - Centre Ressource de Rehabilitation</p>
+    <p class="license">RAS - Corrigan et al. (1999)</p>
+  </footer>
+
+  <script>
+    // Factor definitions
+    const factors = {
+      factor1: { items: [1, 2, 3, 4, 5, 6, 7, 8, 9], maxScore: 45, name: 'Confiance et espoir' },
+      factor2: { items: [10, 11, 12], maxScore: 15, name: 'Demander de l\'aide' },
+      factor3: { items: [13, 14, 15, 16, 17], maxScore: 25, name: 'Objectifs et succes' },
+      factor4: { items: [18, 19, 20, 21], maxScore: 20, name: 'S\'appuyer sur les autres' },
+      factor5: { items: [22, 23, 24], maxScore: 15, name: 'Gestion des symptomes' }
+    };
+
+    const totalQuestions = 24;
+    let radarChart = null;
+
+    // Update progress and question states
+    function updateProgress() {
+      let answered = 0;
+      for (let i = 1; i <= totalQuestions; i++) {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        const questionItem = document.querySelector(`[data-question="${i}"]`);
+        if (selected) {
+          answered++;
+          questionItem.classList.add('answered');
+        } else {
+          questionItem.classList.remove('answered');
+        }
+      }
+
+      const percent = Math.round((answered / totalQuestions) * 100);
+      document.getElementById('progress-fill').style.width = `${percent}%`;
+      document.getElementById('progress-count').textContent = `${answered}/${totalQuestions} questions`;
+      document.getElementById('progress-percent').textContent = `${percent}%`;
+
+      document.getElementById('btn-submit').disabled = answered !== totalQuestions;
+    }
+
+    // Add listeners to all radio buttons
+    document.querySelectorAll('input[type="radio"]').forEach(radio => {
+      radio.addEventListener('change', updateProgress);
+    });
+
+    // Calculate results
+    function calculateResults() {
+      const scores = {};
+      let totalScore = 0;
+
+      // Calculate each factor score
+      Object.keys(factors).forEach(factorKey => {
+        const factor = factors[factorKey];
+        let factorScore = 0;
+
+        factor.items.forEach(itemNum => {
+          const selected = document.querySelector(`input[name="q${itemNum}"]:checked`);
+          if (selected) {
+            factorScore += parseInt(selected.value);
+          }
+        });
+
+        scores[factorKey] = factorScore;
+        totalScore += factorScore;
+      });
+
+      // Display results
+      displayResults(totalScore, scores);
+    }
+
+    function displayResults(totalScore, scores) {
+      // Hide questionnaire, show results
+      document.getElementById('questionnaire-section').style.display = 'none';
+      document.getElementById('results-section').classList.add('visible');
+
+      // Display total score
+      document.getElementById('total-score').textContent = totalScore;
+
+      // Display interpretation
+      let interpretation = '';
+      if (totalScore >= 96) {
+        interpretation = 'Votre score indique un <strong>retablissement tres avance</strong>. Vous faites preuve d\'un fort sentiment d\'empowerment, d\'espoir et de confiance en vous. Vous avez developpe des ressources solides pour gerer votre vie et vos symptomes. Continuez a entretenir ces forces et a les partager avec d\'autres personnes dans leur parcours.';
+      } else if (totalScore >= 72) {
+        interpretation = 'Votre score suggere que votre <strong>retablissement est en bonne voie</strong>. Vous avez developpe plusieurs ressources importantes et vous progressez positivement. Identifiez les domaines ou vous pouvez encore renforcer vos capacites et continuez a avancer a votre rythme.';
+      } else if (totalScore >= 48) {
+        interpretation = 'Votre score indique que votre <strong>retablissement est en developpement</strong>. Certaines forces sont presentes, mais des axes de travail peuvent etre identifies. Avec le soutien de votre equipe soignante, explorez les domaines ou vous souhaitez progresser. Chaque petit pas compte.';
+      } else {
+        interpretation = 'Votre score suggere que vous etes au <strong>debut de votre parcours de retablissement</strong>. Un accompagnement soutenu est recommande. N\'oubliez pas que le retablissement est un processus personnel et unique - il n\'y a pas de bonne ou mauvaise facon de le vivre. Votre equipe soignante est la pour vous accompagner.';
+      }
+      document.getElementById('interpretation-text').innerHTML = interpretation;
+
+      // Display factor scores
+      Object.keys(factors).forEach((factorKey, index) => {
+        const factor = factors[factorKey];
+        const score = scores[factorKey];
+        const percent = Math.round((score / factor.maxScore) * 100);
+
+        document.getElementById(`factor${index + 1}-score`).textContent = `${score}/${factor.maxScore}`;
+        document.getElementById(`factor${index + 1}-percent`).textContent = `${percent}%`;
+
+        setTimeout(() => {
+          document.getElementById(`factor${index + 1}-bar`).style.width = `${percent}%`;
+        }, 100 * index);
+      });
+
+      // Create radar chart
+      createRadarChart(scores);
+
+      // Scroll to results
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function createRadarChart(scores) {
+      const ctx = document.getElementById('radarChart').getContext('2d');
+
+      // Calculate percentages for each factor
+      const percentages = Object.keys(factors).map(factorKey => {
+        return Math.round((scores[factorKey] / factors[factorKey].maxScore) * 100);
+      });
+
+      if (radarChart) {
+        radarChart.destroy();
+      }
+
+      radarChart = new Chart(ctx, {
+        type: 'radar',
+        data: {
+          labels: [
+            'Confiance\net espoir',
+            'Demander\nde l\'aide',
+            'Objectifs\net succes',
+            'S\'appuyer sur\nles autres',
+            'Gestion des\nsymptomes'
+          ],
+          datasets: [{
+            label: 'Votre profil',
+            data: percentages,
+            backgroundColor: 'rgba(245, 158, 11, 0.2)',
+            borderColor: '#f59e0b',
+            borderWidth: 2,
+            pointBackgroundColor: '#f59e0b',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: '#f59e0b'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          scales: {
+            r: {
+              beginAtZero: true,
+              max: 100,
+              ticks: {
+                stepSize: 20,
+                color: '#94a3b8',
+                backdropColor: 'transparent'
+              },
+              grid: {
+                color: 'rgba(148, 163, 184, 0.2)'
+              },
+              angleLines: {
+                color: 'rgba(148, 163, 184, 0.2)'
+              },
+              pointLabels: {
+                color: '#e2e8f0',
+                font: {
+                  size: 11
+                }
+              }
+            }
+          },
+          plugins: {
+            legend: {
+              display: false
+            }
+          }
+        }
+      });
+    }
+
+    function resetQuestionnaire() {
+      // Clear all selections
+      document.querySelectorAll('input[type="radio"]').forEach(radio => {
+        radio.checked = false;
+      });
+
+      // Reset question states
+      document.querySelectorAll('.question-item').forEach(item => {
+        item.classList.remove('answered');
+      });
+
+      // Reset progress
+      updateProgress();
+
+      // Show questionnaire, hide results
+      document.getElementById('questionnaire-section').style.display = 'block';
+      document.getElementById('results-section').classList.remove('visible');
+
+      // Scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function printResults() {
+      window.print();
+    }
+
+    // Initialize
+    updateProgress();
+  </script>
+
+</body>
+</html>

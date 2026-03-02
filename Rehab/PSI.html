@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plan de Suivi Individualisé (PSI)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <style>
+        :root {
+            --cat-main: #0ea5e9;
+            --cat-dark: #0284c7;
+            --cat-light: #38bdf8;
+            --cat-rgb: 14, 165, 233;
+            --cat-readable: #0284c7;
+        }
+        .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
+        .option-btn.selected, .answer-btn.selected { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        .score-circle { border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 30px rgba(var(--cat-rgb), 0.2); }
+        .score-value { color: var(--cat-light); }
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-light); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+        .progress-fill { background: linear-gradient(90deg, var(--cat-main), var(--cat-light)); box-shadow: 0 0 8px rgba(var(--cat-rgb), 0.4); }
+        .likert-options input[type="radio"]:checked + label,
+        .binary-options input[type="radio"]:checked + label,
+        .radio-options input[type="radio"]:checked + label { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+    </style>
+
+</head>
+<body class="light-questionnaire">
+    <div class="container">
+        <!-- Navigation Bar -->
+        <nav class="navigation-bar">
+            <div class="nav-buttons">
+                <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+                <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+            </div>
+            <h1>Plan de Suivi Individualisé</h1>
+            <span class="badge badge-cat-rehab">Rehab</span>
+        </nav>
+
+        <div class="header-section">
+            <h2><i class="fas fa-clipboard-list"></i> Plan de Suivi Individualisé</h2>
+            <p>Formulaire de synthèse et de planification</p>
+        </div>
+
+        <div class="glass-card">
+            <div id="importStatus" class="import-status"></div>
+            <div class="control-buttons">
+                <button class="btn btn-primary" onclick="importFile('satisfaction')">
+                    <i class="fas fa-file-import"></i> Importer Satisfaction
+                </button>
+                <button class="btn btn-primary" onclick="importFile('psi')">
+                    <i class="fas fa-file-import"></i> Importer PSI
+                </button>
+                <button class="btn btn-secondary" onclick="resetForm()">
+                    <i class="fas fa-sync-alt"></i> Réinitialiser
+                </button>
+            </div>
+            <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="loadFile(event)">
+        </div>
+
+        <form class="glass-card" id="psi-form">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                <div class="input-group">
+                    <label for="patientName">Nom et Prénom</label>
+                    <input type="text" id="patientName" placeholder="À remplir ou importer">
+                </div>
+                 <div class="input-group">
+                    <label for="date">Date</label>
+                    <input type="date" id="date">
+                </div>
+            </div>
+
+            <div id="priorityGoals" class="domain-card">
+                 <h3><i class="fas fa-bullseye"></i> Objectifs prioritaires à travailler</h3>
+                 <div id="priorityCounter" class="priority-counter" style="display: none;">
+                    <span id="priorityCount">0</span> domaines
+                 </div>
+                 <ul id="priorityGoalsList" class="priority-list">
+                    <li style="color: var(--color-text-muted); font-style: italic;"><i class="fas fa-folder-open"></i> Importer un questionnaire pour voir les priorités...</li>
+                 </ul>
+            </div>
+
+            <div id="domainsContainer"></div>
+        </form>
+
+        <div class="glass-card">
+            <div class="export-buttons">
+                 <button class="btn btn-primary" onclick="exportPsiData()">
+                    <i class="fas fa-save"></i> Exporter le PSI
+                </button>
+                <button class="btn-print" onclick="printResults()">
+                    <i class="fas fa-print"></i> Imprimer
+                </button>
+            </div>
+             <div class="consent-box" id="exportConsentContainer">
+                <label>
+                    <input type="checkbox" id="exportConsent">
+                    <span>Je consens à l'exportation des données de ce PSI. Je comprends qu'elles sont hautement confidentielles.</span>
+                </label>
+            </div>
+        </div>
+
+        <footer class="footer">
+             <p>
+                <strong>Source :</strong> Inspiré des principes du Plan de Suivi Individualisé (PSI) développés dans le cadre de la réhabilitation psychosociale en France, notamment au sein d'établissements comme le Centre Hospitalier Le Vinatier.
+            </p>
+            <p>
+                <strong>Adaptation numérique :</strong> Dr FENOHASINA | Psychiatre - FFI
+            </p>
+            <small>2025 - Tous droits réservés</small>
+        </footer>
+    </div>
+
+    <script>
+        let currentImportType = null;
+        let speechRecognition = null;
+        let currentRecordingField = null;
+        let recognizedText = '';
+
+        const domains = [
+            { id: 'lieu_vie', title: 'Lieu de vie' },
+            { id: 'quotidien', title: 'Quotidien' },
+            { id: 'argent_papiers', title: "Argent/Papiers" },
+            { id: 'deplacements', title: 'Déplacements' },
+            { id: 'sante', title: 'Santé' },
+            { id: 'maladie_symptomes', title: 'Maladie/Symptômes' },
+            { id: 'traitement', title: 'Traitement' },
+            { id: 'addiction', title: 'Addiction' },
+            { id: 'cognitif', title: 'Cognition' },
+            { id: 'relations', title: 'Relations' },
+            { id: 'loisirs', title: 'Loisirs' },
+            { id: 'formation_emploi', title: 'Formation/Emploi' }
+        ];
+
+        function createDomainCard(domain, index) {
+            return `
+                <div class="domain-card" data-domain-id="${domain.id}" id="domain_${domain.id}">
+                    <div class="domain-header">
+                        <span class="domain-number">${index + 1}</span>
+                        <h3 class="domain-title">${domain.title}</h3>
+                        <span class="satisfaction-score" id="score_${domain.id}">Satisfaction : N/A</span>
+                    </div>
+                    <div class="form-grid">
+                        <div>
+                            <label for="sit_act_${domain.id}">Situation actuelle</label>
+                            <textarea id="sit_act_${domain.id}"></textarea>
+                        </div>
+                        <div class="textarea-container">
+                            <label for="sit_souh_${domain.id}">
+                                <span>Situation souhaitée - Objectifs</span>
+                                <div class="audio-controls">
+                                    <button type="button" class="audio-btn" id="rec_sit_souh_${domain.id}"
+                                            onclick="toggleRecording('sit_souh_${domain.id}', '${domain.title}')">
+                                        <i class="fas fa-microphone"></i> Dicter
+                                    </button>
+                                    <span class="recording-indicator" id="rec_ind_sit_souh_${domain.id}"><i class="fas fa-circle"></i> En cours...</span>
+                                </div>
+                            </label>
+                            <textarea id="sit_souh_${domain.id}"></textarea>
+                            <div class="processing-status" id="proc_sit_souh_${domain.id}"></div>
+                        </div>
+                        <div class="textarea-container">
+                            <label for="res_freins_${domain.id}">
+                                <span>Ressources et Freins</span>
+                                <div class="audio-controls">
+                                    <button type="button" class="audio-btn" id="rec_res_freins_${domain.id}"
+                                            onclick="toggleRecording('res_freins_${domain.id}', '${domain.title}')">
+                                        <i class="fas fa-microphone"></i> Dicter
+                                    </button>
+                                    <span class="recording-indicator" id="rec_ind_res_freins_${domain.id}"><i class="fas fa-circle"></i> En cours...</span>
+                                </div>
+                            </label>
+                            <textarea id="res_freins_${domain.id}"></textarea>
+                            <div class="processing-status" id="proc_res_freins_${domain.id}"></div>
+                        </div>
+                        <div>
+                            <label for="echeances_${domain.id}">Échéances</label>
+                            <textarea id="echeances_${domain.id}"></textarea>
+                        </div>
+                         <div>
+                            <label for="moyens_${domain.id}">Moyens proposés</label>
+                            <textarea id="moyens_${domain.id}"></textarea>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Initialize Speech to Text functionality (Web Speech API)
+        function isSpeechRecognitionSupported() {
+            return !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+        }
+
+        // Toggle recording function
+        function toggleRecording(fieldId, domainTitle) {
+            if (!isSpeechRecognitionSupported()) {
+                alert('La reconnaissance vocale n\'est pas supportée par votre navigateur. Utilisez Chrome ou Edge pour cette fonctionnalité.');
+                return;
+            }
+
+            if (speechRecognition) {
+                stopRecording(fieldId);
+            } else {
+                startRecording(fieldId);
+            }
+        }
+
+        function startRecording(fieldId) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            speechRecognition = new SpeechRecognition();
+            speechRecognition.lang = 'fr-FR';
+            speechRecognition.continuous = true;
+            speechRecognition.interimResults = true;
+            currentRecordingField = fieldId;
+            recognizedText = '';
+
+            const button = document.getElementById(`rec_${fieldId}`);
+            const indicator = document.getElementById(`rec_ind_${fieldId}`);
+            const statusDiv = document.getElementById(`proc_${fieldId}`);
+
+            button.classList.add('recording');
+            button.innerHTML = '<i class="fas fa-stop"></i> Arrêter';
+            indicator.classList.add('active');
+            statusDiv.classList.add('active');
+            statusDiv.innerHTML = '<i class="fas fa-microphone"></i> Écoute en cours...';
+
+            speechRecognition.onresult = (event) => {
+                let finalTranscript = '';
+                let interimTranscript = '';
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    if (event.results[i].isFinal) {
+                        finalTranscript += event.results[i][0].transcript;
+                    } else {
+                        interimTranscript += event.results[i][0].transcript;
+                    }
+                }
+                if (finalTranscript) {
+                    recognizedText += finalTranscript + ' ';
+                }
+                statusDiv.innerHTML = '<i class="fas fa-microphone"></i> ' +
+                    (interimTranscript ? `"${interimTranscript.substring(0, 50)}..."` : 'Écoute en cours...');
+            };
+
+            speechRecognition.onerror = (event) => {
+                console.error('Speech recognition error:', event.error);
+                if (event.error === 'not-allowed') {
+                    alert('Veuillez autoriser l\'accès au microphone pour utiliser cette fonctionnalité.');
+                }
+                cleanupRecording(fieldId);
+            };
+
+            speechRecognition.onend = () => {
+                finishRecording(fieldId);
+            };
+
+            speechRecognition.start();
+        }
+
+        function stopRecording(fieldId) {
+            if (speechRecognition) {
+                speechRecognition.stop();
+            }
+        }
+
+        function finishRecording(fieldId) {
+            const button = document.getElementById(`rec_${fieldId}`);
+            const indicator = document.getElementById(`rec_ind_${fieldId}`);
+            const statusDiv = document.getElementById(`proc_${fieldId}`);
+            const textarea = document.getElementById(fieldId);
+
+            const text = recognizedText.trim();
+            if (text) {
+                const existingText = textarea.value;
+                textarea.value = existingText ?
+                    `${existingText}\n\n--- Ajout vocal (${new Date().toLocaleString('fr-FR')}) ---\n${text}` :
+                    text;
+
+                textarea.style.background = 'linear-gradient(135deg, rgba(39, 174, 96, 0.2), rgba(39, 174, 96, 0.1))';
+                setTimeout(() => { textarea.style.background = ''; }, 3000);
+
+                statusDiv.innerHTML = '<i class="fas fa-check-circle"></i> Transcription ajoutée au champ';
+            } else {
+                statusDiv.innerHTML = '<i class="fas fa-info-circle"></i> Aucun texte détecté. Réessayez en parlant plus fort.';
+            }
+
+            setTimeout(() => { statusDiv.classList.remove('active'); }, 3000);
+            cleanupRecording(fieldId);
+        }
+
+        function cleanupRecording(fieldId) {
+            const button = document.getElementById(`rec_${fieldId}`);
+            const indicator = document.getElementById(`rec_ind_${fieldId}`);
+
+            button.classList.remove('recording', 'processing');
+            button.disabled = false;
+            button.innerHTML = '<i class="fas fa-microphone"></i> Dicter';
+            indicator.classList.remove('active');
+            speechRecognition = null;
+            recognizedText = '';
+        }
+
+        function getDomainTitleFromFieldId(fieldId) {
+            const domainId = fieldId.replace(/^(sit_souh_|res_freins_)/, '');
+            const domain = domains.find(d => d.id === domainId);
+            return domain ? domain.title : 'Domaine inconnu';
+        }
+
+        function initializeForm() {
+            const container = document.getElementById('domainsContainer');
+            container.innerHTML = domains.map((d, i) => createDomainCard(d, i)).join('');
+
+            // Disable dictation buttons if Web Speech API is not supported
+            if (!isSpeechRecognitionSupported()) {
+                document.querySelectorAll('[id^="rec_"]').forEach(btn => {
+                    btn.title = 'Reconnaissance vocale non supportée par ce navigateur';
+                });
+            }
+        }
+
+        function importFile(type) {
+            currentImportType = type;
+            document.getElementById('fileInput').click();
+        }
+
+        function showImportStatus(message, type = 'success') {
+            const statusDiv = document.getElementById('importStatus');
+            statusDiv.className = `import-status ${type}`;
+            statusDiv.innerHTML = message;
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        function loadFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (currentImportType === 'satisfaction' && data.questionnaire === "PSI-Satisfaction") {
+                        populateFromSatisfaction(data);
+                        showImportStatus("<i class='fas fa-check-circle'></i> Données de SATISFACTION importées avec succès ! Les domaines prioritaires sont mis en évidence.", "success");
+                    } else if (currentImportType === 'psi' && data.questionnaire === "PSI-Formulaire") {
+                        populateFromPsi(data);
+                        showImportStatus("<i class='fas fa-check-circle'></i> Données de PSI importées avec succès !", "success");
+                    } else {
+                        showImportStatus(`<i class='fas fa-times-circle'></i> Le fichier ne correspond pas au type d'import attendu (${currentImportType}).`, "error");
+                    }
+                } catch (error) {
+                    showImportStatus("<i class='fas fa-times-circle'></i> Erreur lors de la lecture du fichier : " + error.message, "error");
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = ''; // Reset file input
+        }
+
+        function populateFromSatisfaction(data) {
+            resetForm();
+            document.getElementById('patientName').value = data.patientName || '';
+            document.getElementById('date').value = data.date || '';
+
+            const priorityGoalsList = document.getElementById('priorityGoalsList');
+            priorityGoalsList.innerHTML = '';
+            let priorityCount = 0;
+            let needHelpCount = 0;
+
+            data.responses.forEach(response => {
+                const domainObject = domains.find(d => d.title === response.domaine);
+                if (!domainObject) {
+                    console.warn(`Domaine non trouvé pour "${response.domaine}"`);
+                    return;
+                }
+                const domainId = domainObject.id;
+
+                // Update satisfaction score with color coding
+                const scoreElement = document.getElementById(`score_${domainId}`);
+                const domainCard = document.getElementById(`domain_${domainId}`);
+
+                if (scoreElement) {
+                    const score = response.satisfaction || 0;
+                    const filledCircles = '<i class="fas fa-star" style="color: #f1c40f;"></i>'.repeat(score);
+                    const emptyCircles = '<i class="far fa-star" style="color: var(--color-text-muted);"></i>'.repeat(5 - score);
+                    scoreElement.innerHTML = `${filledCircles}${emptyCircles} ${score}/5`;
+
+                    // Add color classes based on score
+                    scoreElement.classList.remove('low-score', 'medium-score', 'high-score');
+                    if (score <= 2) {
+                        scoreElement.classList.add('low-score');
+                    } else if (score === 3) {
+                        scoreElement.classList.add('medium-score');
+                    } else {
+                        scoreElement.classList.add('high-score');
+                    }
+                }
+
+                // Style domain cards based on priority and need for help
+                if (domainCard) {
+                    domainCard.classList.remove('priority-domain', 'need-help');
+
+                    // Remove existing badges
+                    const existingBadge = domainCard.querySelector('.work-badge');
+                    const existingIndicator = domainCard.querySelector('.priority-indicator');
+                    if (existingBadge) existingBadge.remove();
+                    if (existingIndicator) existingIndicator.remove();
+
+                    if (response.priorite) {
+                        domainCard.classList.add('priority-domain');
+                        const badge = document.createElement('div');
+                        badge.className = 'work-badge';
+                        badge.innerHTML = '<i class="fas fa-exclamation-triangle"></i> PRIORITÉ';
+                        domainCard.appendChild(badge);
+
+                        const indicator = document.createElement('div');
+                        indicator.className = 'priority-indicator';
+                        indicator.innerHTML = '!';
+                        domainCard.appendChild(indicator);
+
+                        priorityCount++;
+                    } else if (response.besoin_aide) {
+                        domainCard.classList.add('need-help');
+                        const badge = document.createElement('div');
+                        badge.className = 'work-badge';
+                        badge.style.background = 'linear-gradient(135deg, #ff9ff3, #f368e0)';
+                        badge.innerHTML = '<i class="fas fa-lightbulb"></i> À TRAVAILLER';
+                        domainCard.appendChild(badge);
+
+                        needHelpCount++;
+                    }
+                }
+
+                // Update situation actuelle textarea
+                const sitActTextarea = document.getElementById(`sit_act_${domainId}`);
+                if (sitActTextarea) {
+                    let initialText = `Satisfaction : ${response.satisfaction_text} (${response.satisfaction}/5)\n`;
+                    initialText += `Évolution souhaitée : ${response.evolution_souhaitee ? 'Oui' : 'Non'}\n`;
+                    initialText += `Besoin d'aide : ${response.besoin_aide ? 'Oui' : 'Non'}\n`;
+                    initialText += `Priorité : ${response.priorite ? 'HAUTE PRIORITÉ' : 'Non prioritaire'}`;
+                    sitActTextarea.value = initialText;
+
+                    if (response.priorite || response.besoin_aide) {
+                        sitActTextarea.style.background = 'linear-gradient(135deg, rgba(253, 203, 110, 0.15), rgba(253, 203, 110, 0.05))';
+                    }
+                }
+
+                // Update priority goals list
+                if (response.besoin_aide) {
+                    const li = document.createElement('li');
+
+                    if (response.priorite) {
+                        li.className = 'high-priority';
+                        li.innerHTML = `<span style="font-size: 1.5em;"><i class="fas fa-exclamation-triangle"></i></span> <strong>${response.domaine}</strong> - Priorité absolue`;
+                        priorityGoalsList.prepend(li); // Priorities go first
+                    } else {
+                        li.className = 'medium-priority';
+                        li.innerHTML = `<span style="font-size: 1.2em;"><i class="fas fa-lightbulb"></i></span> ${response.domaine} - À travailler`;
+                        priorityGoalsList.appendChild(li);
+                    }
+                }
+            });
+
+            // Update priority counter
+            const totalPriorities = priorityCount + needHelpCount;
+            if (totalPriorities > 0) {
+                const counterDiv = document.getElementById('priorityCounter');
+                const countSpan = document.getElementById('priorityCount');
+                counterDiv.style.display = 'block';
+                countSpan.textContent = totalPriorities;
+
+                if (priorityCount > 0) {
+                    document.getElementById('priorityGoals').classList.add('glow-text');
+                }
+            } else {
+                priorityGoalsList.innerHTML = '<li style="color: #55efc4; font-weight: bold;"><i class="fas fa-check-circle"></i> Excellente satisfaction générale - Aucun besoin d\'aide identifié!</li>';
+            }
+        }
+
+        function populateFromPsi(data) {
+            resetForm();
+            document.getElementById('patientName').value = data.patientName || '';
+            document.getElementById('date').value = data.date || '';
+
+            data.domains.forEach(domainData => {
+                const scoreElement = document.getElementById(`score_${domainData.id}`);
+                if (scoreElement) {
+                    scoreElement.innerHTML = domainData.satisfaction_score_text;
+
+                    // Extract score number and apply styling
+                    const scoreMatch = domainData.satisfaction_score_text.match(/(\d)\/5/);
+                    if (scoreMatch) {
+                        const score = parseInt(scoreMatch[1]);
+                        scoreElement.classList.remove('low-score', 'medium-score', 'high-score');
+                        if (score <= 2) {
+                            scoreElement.classList.add('low-score');
+                        } else if (score === 3) {
+                            scoreElement.classList.add('medium-score');
+                        } else {
+                            scoreElement.classList.add('high-score');
+                        }
+                    }
+                }
+
+                document.getElementById(`sit_act_${domainData.id}`).value = domainData.situation_actuelle;
+                document.getElementById(`sit_souh_${domainData.id}`).value = domainData.situation_souhaitee;
+                document.getElementById(`res_freins_${domainData.id}`).value = domainData.ressources_freins;
+                document.getElementById(`echeances_${domainData.id}`).value = domainData.echeances;
+                document.getElementById(`moyens_${domainData.id}`).value = domainData.moyens;
+            });
+        }
+
+        function resetForm() {
+            document.getElementById('psi-form').reset();
+            document.getElementById('priorityGoalsList').innerHTML = '<li style="color: var(--color-text-muted); font-style: italic;"><i class="fas fa-folder-open"></i> Importer un questionnaire pour voir les priorités...</li>';
+            document.getElementById('priorityCounter').style.display = 'none';
+
+            domains.forEach(domain => {
+                const scoreElement = document.getElementById(`score_${domain.id}`);
+                if (scoreElement) {
+                    scoreElement.textContent = 'Satisfaction : N/A';
+                    scoreElement.classList.remove('low-score', 'medium-score', 'high-score');
+                }
+
+                const domainCard = document.getElementById(`domain_${domain.id}`);
+                if (domainCard) {
+                    domainCard.classList.remove('priority-domain', 'need-help');
+                    const badge = domainCard.querySelector('.work-badge');
+                    const indicator = domainCard.querySelector('.priority-indicator');
+                    if (badge) badge.remove();
+                    if (indicator) indicator.remove();
+                }
+
+                const textarea = document.getElementById(`sit_act_${domain.id}`);
+                if (textarea) {
+                    textarea.style.background = '';
+                }
+            });
+
+            document.getElementById('date').valueAsDate = new Date();
+            document.getElementById('importStatus').style.display = 'none';
+            document.getElementById('priorityGoals').classList.remove('glow-text');
+        }
+
+        function exportPsiData() {
+            const consent = document.getElementById('exportConsent').checked;
+            if (!consent) {
+                alert("Veuillez cocher la case de consentement avant d''exporter.");
+                return;
+            }
+
+            const psiData = {
+                questionnaire: "PSI-Formulaire",
+                patientName: document.getElementById('patientName').value,
+                date: document.getElementById('date').value,
+                domains: domains.map(domain => ({
+                    title: domain.title,
+                    id: domain.id,
+                    satisfaction_score_text: document.getElementById(`score_${domain.id}`).textContent || document.getElementById(`score_${domain.id}`).innerHTML,
+                    situation_actuelle: document.getElementById(`sit_act_${domain.id}`).value,
+                    situation_souhaitee: document.getElementById(`sit_souh_${domain.id}`).value,
+                    ressources_freins: document.getElementById(`res_freins_${domain.id}`).value,
+                    echeances: document.getElementById(`echeances_${domain.id}`).value,
+                    moyens: document.getElementById(`moyens_${domain.id}`).value
+                }))
+            };
+
+            const blob = new Blob([JSON.stringify(psiData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            const dateStr = new Date().toISOString().split('T')[0];
+            a.download = `PSI_${psiData.patientName.replace(/ /g,'_') || 'anonyme'}_${dateStr}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showImportStatus("<i class='fas fa-check-circle'></i> Export réussi! Le fichier a été téléchargé.", "success");
+        }
+
+        function printResults() {
+            window.print();
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeForm();
+            document.getElementById('date').valueAsDate = new Date();
+        });
+    </script>
+</body>
+</html>

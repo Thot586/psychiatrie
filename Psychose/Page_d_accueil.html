@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Psychose - Questionnaires</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .portal-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+    .portal-card {
+        background: linear-gradient(145deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-xl);
+        padding: 1.5rem;
+        text-decoration: none;
+        display: block;
+        transition: all var(--transition-slow);
+    }
+    .portal-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--color-border-active);
+        box-shadow: var(--shadow-glow);
+    }
+    .portal-card h3 { color: var(--color-text-primary); margin-bottom: 0.5rem; }
+    .portal-card p { color: var(--color-text-muted); font-size: var(--font-size-sm); }
+    .section-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius-lg);
+        font-weight: 600;
+        font-size: var(--font-size-lg);
+        margin-bottom: 1.5rem;
+        color: white;
+    }
+    .portal-card .card-description {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 1rem;
+        border-radius: var(--radius-md);
+        margin: 1rem 0;
+        border: 1px solid var(--color-border);
+    }
+    .portal-card .card-subtitle {
+        color: var(--color-text-secondary);
+        font-style: italic;
+        font-size: var(--font-size-sm);
+        margin-bottom: 0.75rem;
+    }
+    .portal-card .btn-action {
+        display: inline-block;
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--radius-lg);
+        font-weight: 600;
+        text-decoration: none;
+        text-align: center;
+        transition: all var(--transition-normal);
+        margin-top: auto;
+    }
+    .btn-violet { background: #7c3aed; color: white; }
+    .btn-violet:hover { background: #6d28d9; }
+    .btn-purple { background: #a855f7; color: white; }
+    .btn-purple:hover { background: #9333ea; }
+    .btn-indigo { background: #6366f1; color: white; }
+    .btn-indigo:hover { background: #4f46e5; }
+  </style>
+</head>
+<body>
+
+  <nav class="navigation-bar">
+    <div class="nav-buttons">
+      <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+      <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+    </div>
+    <h1>Psychose</h1>
+    <span class="badge badge-cat-psychose">Psychose</span>
+  </nav>
+
+  <div class="container">
+
+    <header class="page-header">
+      <p class="page-subtitle">
+        Outils de dépistage du prodrome psychotique, de suivi des symptômes et d'évaluation clinique globale.
+      </p>
+    </header>
+
+    <div class="alert alert-warning">
+      <div class="alert-icon">
+        <i class="fas fa-exclamation-triangle"></i>
+      </div>
+      <div class="alert-content">
+        <h3>Avertissement Important</h3>
+        <p>Ces outils sont des questionnaires de dépistage et de suivi. Ils ne constituent en aucun cas un diagnostic. La suspicion d'un premier épisode psychotique ou d'un état mental à risque nécessite une évaluation spécialisée urgente.</p>
+      </div>
+    </div>
+
+    <section class="section">
+      <span class="section-badge" style="background: #7c3aed;">
+        <i class="fas fa-search"></i> Dépistage Prodrome
+      </span>
+      <div class="portal-grid">
+
+        <div class="portal-card">
+          <h3>PQ-16</h3>
+          <p class="card-subtitle">Prodromal Questionnaire-16</p>
+          <div class="card-description">
+            <p>Questionnaire de dépistage des états mentaux à risque de transition psychotique. 16 items évaluant les expériences perceptuelles inhabituelles et les idées de référence.</p>
+          </div>
+          <a href="PQ-16.html" class="btn-action btn-violet">
+            Commencer le test &rarr;
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="section">
+      <span class="section-badge" style="background: #a855f7;">
+        <i class="fas fa-chart-line"></i> Suivi des Symptômes
+      </span>
+      <div class="portal-grid">
+
+        <div class="portal-card">
+          <h3>BPRS</h3>
+          <p class="card-subtitle">Brief Psychiatric Rating Scale</p>
+          <div class="card-description">
+            <p>Échelle de référence pour évaluer la sévérité des symptômes psychiatriques, particulièrement les symptômes psychotiques positifs et négatifs. <strong>Hétéro-questionnaire (clinicien).</strong></p>
+          </div>
+          <a href="BPRS.html" class="btn-action btn-purple">
+            Commencer l'évaluation &rarr;
+          </a>
+        </div>
+
+        <div class="portal-card">
+          <h3>PANSS</h3>
+          <p class="card-subtitle">Positive And Negative Syndrome Scale</p>
+          <div class="card-description">
+            <p>Gold standard pour le suivi de la schizophrenie. 30 items evaluant les symptomes positifs (7), negatifs (7) et la psychopathologie generale (16). <strong>Hetero-questionnaire (clinicien).</strong></p>
+          </div>
+          <a href="PANSS.html" class="btn-action btn-purple">
+            Commencer l'evaluation &rarr;
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="section">
+      <span class="section-badge" style="background: #6366f1;">
+        <i class="fas fa-stethoscope"></i> Impression Clinique
+      </span>
+      <div class="portal-grid">
+
+        <div class="portal-card">
+          <h3>CGI</h3>
+          <p class="card-subtitle">Clinical Global Impression</p>
+          <div class="card-description">
+            <p>Échelle simple et rapide pour évaluer la sévérité globale de la maladie (CGI-S) et l'amélioration globale (CGI-I). Utilisable pour tout trouble psychiatrique. <strong>Hétéro-questionnaire (clinicien).</strong></p>
+          </div>
+          <a href="CGI.html" class="btn-action btn-indigo">
+            Commencer l'évaluation &rarr;
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+
+  <footer class="footer">
+    <p>Dr. FENOHASINA T.J. Felicien (Psychiatre)</p>
+    <p>&copy; 2025 - Centre Ressource de Réhabilitation</p>
+    <p class="license">Licence CC BY-NC-SA 4.0</p>
+  </footer>
+
+</body>
+</html>

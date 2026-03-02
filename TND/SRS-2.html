@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SRS-2 - Échelle de Réciprocité Sociale</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <style>
+        :root {
+            --cat-main: #8b5cf6;
+            --cat-dark: #7c3aed;
+            --cat-light: #a78bfa;
+            --cat-rgb: 139, 92, 246;
+            --cat-readable: #7c3aed;
+        }
+        .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
+        .option-btn.selected, .answer-btn.selected { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        .score-circle { border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 30px rgba(var(--cat-rgb), 0.2); }
+        .score-value { color: var(--cat-light); }
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-light); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+        .progress-fill { background: linear-gradient(90deg, var(--cat-main), var(--cat-light)); box-shadow: 0 0 8px rgba(var(--cat-rgb), 0.4); }
+        .likert-options input[type="radio"]:checked + label,
+        .binary-options input[type="radio"]:checked + label,
+        .radio-options input[type="radio"]:checked + label { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+    </style>
+
+</head>
+<body class="light-questionnaire">
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil">
+                <i class="fas fa-home"></i>
+            </a>
+            <button onclick="history.back()" class="btn-back" title="Retour">
+                <i class="fas fa-arrow-left"></i> <span>Retour</span>
+            </button>
+        </div>
+        <h1>SRS-2</h1>
+        <span class="badge badge-cat-tnd">TND</span>
+    </nav>
+
+    <main class="container">
+        <header class="header-glow" style="text-align: center; margin-bottom: 2rem;">
+            <h1><i class="fas fa-people-arrows"></i> Échelle de Réciprocité Sociale (SRS-2)</h1>
+            <p class="subtitle">Social Responsiveness Scale - Version Adulte (65 questions)</p>
+        </header>
+
+        <section class="glass-card warning-box">
+            <h3><i class="fas fa-exclamation-triangle"></i> Important</h3>
+            <p><strong>Ce questionnaire doit être rempli par un adulte de votre entourage</strong> ayant vécu avec vous au cours des 6 derniers mois (conjoint, parent, frère/sœur).</p>
+        </section>
+
+        <section class="glass-card info-box">
+            <h2><i class="fas fa-info-circle"></i> À propos</h2>
+            <p>Le SRS-2 (Constantino & Gruber, 2012) mesure les <strong>difficultés de réciprocité sociale</strong> caractéristiques du spectre autistique. Il évalue la communication sociale, l'interaction et les comportements répétitifs.</p>
+            <p style="margin-top: 0.5rem;"><strong>Seuils indicatifs :</strong> Score < 60 = Normal | 60-75 = Léger à modéré | ≥ 76 = Sévère</p>
+        </section>
+
+        <section class="glass-card">
+            <div class="control-buttons">
+                <button class="btn-primary" onclick="importData()">
+                    <i class="fas fa-file-import"></i> Importer
+                </button>
+                <button class="btn-secondary" onclick="resetForm()">
+                    <i class="fas fa-redo"></i> Réinitialiser
+                </button>
+            </div>
+            <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="loadFile(event)">
+        </section>
+
+        <section class="glass-card">
+            <h2><i class="fas fa-clipboard-list"></i> Questions</h2>
+            <p style="margin-bottom: 1.5rem; opacity: 0.8;">Décrivez le comportement de la personne au cours des <strong>6 derniers mois</strong>.</p>
+            <div id="questions"></div>
+        </section>
+
+        <!-- Résultats -->
+        <section id="results" class="glass-card results-section" style="display: none;">
+            <h2 style="text-align: center; margin-bottom: 2rem;"><i class="fas fa-chart-pie"></i> Résultats</h2>
+
+            <div class="score-display">
+                <div class="score-circle">
+                    <span class="score-number" id="totalScore">0</span>
+                    <span class="score-label">sur 195</span>
+                </div>
+            </div>
+
+            <div id="interpretationBox" class="interpretation"></div>
+
+            <button class="btn-primary" onclick="toggleDetails()" style="width: 100%; margin-top: 1.5rem;">
+                <i class="fas fa-list-ul"></i> Voir l'interprétation détaillée
+                <span id="toggleIcon"><i class="fas fa-chevron-down"></i></span>
+            </button>
+            <div id="detailsContent" class="details-content" style="display: none;"></div>
+
+            <div class="glass-card" style="margin-top: 2rem; background: rgba(255,255,255,0.05);">
+                <h3><i class="fas fa-download"></i> Exporter</h3>
+                <div class="consent-box">
+                    <label>
+                        <input type="checkbox" id="exportConsent">
+                        <span>J'atteste avoir informé la personne concernée de cet export et obtenu son accord. <strong>Ces résultats constituent des données de santé — je m'engage à les conserver de façon sécurisée et à ne les partager qu'avec des professionnels de santé autorisés.</strong> Aucune donnée n'est transmise à un serveur.</span>
+                    </label>
+                </div>
+                <div class="export-buttons">
+                    <button class="btn-primary" onclick="exportData()">
+                        <i class="fas fa-file-export"></i> Exporter en JSON
+                    </button>
+                    <button class="btn-print" onclick="printResults()">
+                        <i class="fas fa-print"></i> Imprimer
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p><strong>SRS-2 - Social Responsiveness Scale</strong></p>
+        <p style="margin: 0.5rem 0;"><strong>Auteurs :</strong> Constantino, J.N. & Gruber, C.P. (2012)</p>
+        <p><strong>Adaptation numérique :</strong> Dr FENOHASINA | Psychiatre</p>
+        <small>© Western Psychological Services - Usage recherche uniquement</small>
+    </footer>
+
+    <script src="../js/app.js"></script>
+    <script>
+        const questions = [
+            "Semble beaucoup plus nerveux dans des situations sociales que quand il/elle est seul(e).",
+            "Son expression faciale n'est pas en harmonie avec le contenu de son discours.",
+            "Semble avoir confiance en lui/elle quand il/elle interagit avec les autres.",
+            "Quand il/elle est stressé(e), il/elle semble fonctionner en \"pilote automatique\".",
+            "Ne réalise pas quand les autres essaient de se servir de lui/elle.",
+            "Préfère être seul(e) qu'avec les autres.",
+            "Semble être conscient(e) de ce que les autres pensent ou ressentent.",
+            "Se comporte de façon étrange ou bizarre.",
+            "Semble trop dépendant(e) des autres pour répondre à des besoins basiques.",
+            "Interprète les choses de manière trop littérale.",
+            "A confiance en lui/elle.",
+            "Est capable de communiquer ses sentiments aux autres.",
+            "Est maladroit(e) dans les interactions impliquant un tour de rôle avec autrui.",
+            "N'est pas bien coordonné(e) dans les activités physiques.",
+            "Perçoit et répond de manière appropriée aux changements du ton de la voix.",
+            "Évite le contact visuel ou a un contact visuel inhabituel.",
+            "Reconnaît lorsque quelque chose est injuste.",
+            "A des difficultés à se faire des amis, même quand il/elle fait de son mieux.",
+            "A des difficultés à transmettre ses idées au cours d'une conversation.",
+            "Fait preuve d'intérêts sensoriels inhabituels.",
+            "Est capable d'imiter les actions des autres.",
+            "Interagit de manière appropriée avec d'autres adultes.",
+            "Ne se joint pas aux activités des autres sauf s'il/elle est forcé(e).",
+            "A plus de difficulté que les autres à modifier ses routines.",
+            "Ne semble pas préoccupé(e) de ne pas être \"en phase\" avec les autres.",
+            "Offre du réconfort aux autres quand ils sont tristes.",
+            "Évite d'initier des interactions sociales avec les autres.",
+            "Pense ou parle de la même chose de manière répétitive.",
+            "Considéré(e) par les autres comme étrange ou bizarre.",
+            "Est troublé(e) par les situations où il se passe beaucoup de choses.",
+            "Ne peut pas s'arrêter de penser à quelque chose une fois commencé.",
+            "A une bonne hygiène personnelle.",
+            "Est socialement bizarre, même quand il/elle essaie d'être poli(e).",
+            "Évite les gens qui veulent être émotionnellement proches de lui/elle.",
+            "A du mal à suivre le rythme d'une conversation normale.",
+            "A des difficultés à entrer en relation avec les membres de sa famille.",
+            "A des difficultés à entrer en relation avec d'autres adultes.",
+            "Répond de manière appropriée aux changements d'humeur des autres.",
+            "A des intérêts réduits ou inhabituellement restrictifs.",
+            "A de l'imagination (sans perdre le contact avec la réalité).",
+            "Saute ; passe d'une activité à l'autre de manière imprévisible.",
+            "Semble extrêmement sensible aux sons, aux textures ou aux odeurs.",
+            "Est capable de participer au \"bavardage\" (conversation simple).",
+            "Ne comprend pas comment les événements sont liés les uns aux autres.",
+            "Généralement est intéressé(e) par ce que les autres font autour de lui/elle.",
+            "A une expression faciale trop sérieuse.",
+            "Rit de manière inappropriée.",
+            "A le sens de l'humour ; comprend les plaisanteries.",
+            "Est extrêmement bon(ne) dans quelques tâches mais mauvais dans la plupart.",
+            "A des comportements étranges répétitifs.",
+            "A des difficultés à répondre aux questions directement.",
+            "Sait quand il/elle parle trop fort ou fait trop de bruit.",
+            "Parle aux personnes avec une tonalité vocale inhabituelle.",
+            "Semble traiter les gens comme s'ils étaient des objets.",
+            "Se rend compte quand il/elle est trop proche ou envahit l'espace d'autrui.",
+            "Marche entre deux personnes qui sont en train de parler.",
+            "Isolé(e) ; a tendance à ne pas quitter sa maison.",
+            "Se concentre trop sur des parties d'objets au lieu de voir la totalité.",
+            "Trop soupçonneux(se).",
+            "Est émotionnellement distant(e), ne montre pas ses émotions.",
+            "Est inflexible, ne change que très rarement d'avis.",
+            "Donne des raisons inhabituelles ou illogiques pour faire des choses.",
+            "Touche ou accueille les autres de manière inadaptée.",
+            "Est trop tendu(e) dans les situations sociales.",
+            "Fixe les gens intensément ou ne dirige pas son regard vers le centre d'attention."
+        ];
+
+        const responses = [
+            { label: "Pas VRAI", value: 0 },
+            { label: "Parfois VRAI", value: 1 },
+            { label: "Souvent VRAI", value: 2 },
+            { label: "Presque toujours VRAI", value: 3 }
+        ];
+
+        const invertedItems = [3, 7, 11, 12, 15, 17, 21, 22, 26, 38, 40, 43, 45, 48, 52, 55];
+        let answers = new Array(65).fill(null);
+
+        function initializeQuestions() {
+            const container = document.getElementById('questions');
+            container.innerHTML = '';
+            questions.forEach((q, index) => {
+                const opts = responses.map(r => `
+                    <button type="button" class="option-btn" onclick="selectAnswer(${index}, ${r.value})" id="q${index}_opt${r.value}">
+                        ${r.label}
+                    </button>
+                `).join('');
+
+                container.innerHTML += `
+                    <div class="question-card" id="q-container-${index}">
+                        <span class="question-number">${index + 1}</span>
+                        <div class="question-text">${q}</div>
+                        <div class="options-grid binary">${opts}</div>
+                    </div>
+                `;
+            });
+        }
+
+        function selectAnswer(index, value) {
+            answers[index] = value;
+            responses.forEach(r => {
+                const btn = document.getElementById(`q${index}_opt${r.value}`);
+                if (btn) btn.classList.toggle('selected', r.value === value);
+            });
+            document.getElementById(`q-container-${index}`).classList.remove('missing');
+
+            if (answers.every(a => a !== null)) {
+                updateResults();
+                document.getElementById('results').style.display = 'block';
+                document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function getInterpretation(score) {
+            if (score >= 76) return { level: "Difficultés sévères", className: "critical", desc: "Votre score suggère des difficultés importantes et observables dans la réciprocité sociale. Une évaluation complète par un spécialiste est recommandée." };
+            if (score >= 60) return { level: "Difficultés légères à modérées", className: "high", desc: "Votre score indique la présence de difficultés socialement significatives qui peuvent affecter les relations." };
+            return { level: "Dans la norme", className: "low", desc: "Votre score ne suggère pas de difficultés cliniquement significatives en matière de réciprocité sociale." };
+        }
+
+        function updateResults() {
+            let total = 0;
+            for (let i = 0; i < questions.length; i++) {
+                const value = answers[i] || 0;
+                if (invertedItems.includes(i + 1)) {
+                    total += (3 - value);
+                } else {
+                    total += value;
+                }
+            }
+
+            document.getElementById('totalScore').textContent = total;
+            const interp = getInterpretation(total);
+            const interpretationBox = document.getElementById('interpretationBox');
+            interpretationBox.className = `interpretation ${interp.className}`;
+            interpretationBox.innerHTML = `<h3>${interp.level}</h3><p>${interp.desc}</p>`;
+
+            document.getElementById('detailsContent').innerHTML = `
+                <h3>Interprétation des scores SRS-2</h3>
+                <div class="info-box">
+                    <ul>
+                        <li><strong>< 60 :</strong> Dans la norme - pas de difficultés significatives</li>
+                        <li><strong>60-75 :</strong> Léger à modéré - difficultés présentes mais adaptatives</li>
+                        <li><strong>≥ 76 :</strong> Sévère - difficultés importantes justifiant une évaluation</li>
+                    </ul>
+                </div>
+                <div class="warning-box" style="margin-top: 1rem;">
+                    <p><strong>Avertissement :</strong> Un score élevé indique des difficultés dans la réciprocité sociale mais ne constitue pas un diagnostic. Seul un professionnel qualifié peut poser un diagnostic de TSA après une évaluation complète.</p>
+                </div>
+            `;
+        }
+
+        function toggleDetails() {
+            const content = document.getElementById('detailsContent');
+            const icon = document.getElementById('toggleIcon');
+            const isVisible = content.style.display !== 'none';
+            content.style.display = isVisible ? 'none' : 'block';
+            icon.innerHTML = isVisible ? '<i class="fas fa-chevron-down"></i>' : '<i class="fas fa-chevron-up"></i>';
+        }
+
+        function resetForm() {
+            answers = new Array(65).fill(null);
+            document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+            document.querySelectorAll('.question-card').forEach(card => card.classList.remove('missing'));
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('detailsContent').style.display = 'none';
+            document.getElementById('exportConsent').checked = false;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function importData() { document.getElementById('fileInput').click(); }
+
+        function loadFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data.questionnaire === "SRS-2" && data.answers) {
+                        answers = data.answers;
+                        initializeQuestions();
+                        answers.forEach((val, i) => { if (val !== null) selectAnswer(i, val); });
+                    }
+                } catch { alert("Fichier invalide."); }
+            };
+            reader.readAsText(file);
+        }
+
+        function exportData() {
+            if (!document.getElementById('exportConsent').checked) {
+                alert("Veuillez cocher la case de consentement avant d''exporter.");
+                return;
+            }
+            let total = 0;
+            for (let i = 0; i < questions.length; i++) {
+                const value = answers[i] || 0;
+                total += invertedItems.includes(i + 1) ? (3 - value) : value;
+            }
+
+            const data = {
+                questionnaire: "SRS-2",
+                date: new Date().toISOString(),
+                answers: answers,
+                totalScore: total,
+                interpretation: getInterpretation(total).level
+            };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `SRS-2_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        document.addEventListener('DOMContentLoaded', initializeQuestions);
+    </script>
+</body>
+</html>

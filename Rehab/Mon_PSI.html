@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon PSI - Mon Guide Personnel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <style>
+        :root {
+            --cat-main: #0ea5e9;
+            --cat-dark: #0284c7;
+            --cat-light: #38bdf8;
+            --cat-rgb: 14, 165, 233;
+            --cat-readable: #0284c7;
+        }
+        .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
+        .option-btn.selected, .answer-btn.selected { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        .score-circle { border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 30px rgba(var(--cat-rgb), 0.2); }
+        .score-value { color: var(--cat-light); }
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-light); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+        .progress-fill { background: linear-gradient(90deg, var(--cat-main), var(--cat-light)); box-shadow: 0 0 8px rgba(var(--cat-rgb), 0.4); }
+        .likert-options input[type="radio"]:checked + label,
+        .binary-options input[type="radio"]:checked + label,
+        .radio-options input[type="radio"]:checked + label { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+    </style>
+
+</head>
+<body class="light-questionnaire">
+    <div class="container app-container">
+        <!-- Navigation Bar -->
+        <nav class="navigation-bar">
+            <div class="nav-buttons">
+                <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+                <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+            </div>
+            <h1>Mon PSI</h1>
+            <span class="badge badge-cat-rehab">Rehab</span>
+        </nav>
+
+        <!-- Header -->
+        <div class="app-header">
+            <div class="user-info">
+                <div class="avatar"><i class="fas fa-user"></i></div>
+                <div class="welcome-text">
+                    <h1 id="userName">Mon PSI</h1>
+                    <p id="lastUpdate">Commencez par importer votre plan</p>
+                </div>
+            </div>
+            <div class="streak-badge">
+                <i class="fas fa-fire"></i> <span id="streakCount">0</span> jours de suivi
+            </div>
+        </div>
+
+        <!-- Import Section (shown initially) -->
+        <div id="importSection" class="dashboard-card">
+            <div class="empty-state">
+                <div class="empty-state-icon"><i class="fas fa-clipboard-list"></i></div>
+                <h2>Bienvenue dans votre espace personnel</h2>
+                <p>Importez votre Plan de Suivi Individualisé pour commencer</p>
+                <div class="action-buttons" style="justify-content: center; margin-top: 30px;">
+                    <button class="btn btn-primary" onclick="importPSI()">
+                        <i class="fas fa-file-import"></i> Importer mon PSI
+                    </button>
+                </div>
+                <input type="file" id="fileInput" accept=".json" onchange="loadPSI(event)">
+            </div>
+        </div>
+
+        <!-- Main Dashboard (hidden initially) -->
+        <div id="mainDashboard" style="display: none;">
+            <div class="main-grid">
+                <!-- Left Column -->
+                <div>
+                    <!-- Progress Overview -->
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h2 class="card-title"><i class="fas fa-chart-pie"></i> Vue d'ensemble</h2>
+                            <button class="btn btn-secondary" onclick="showAllDomains()">
+                                Voir tout
+                            </button>
+                        </div>
+                        <div class="progress-overview">
+                            <div class="progress-stat">
+                                <div class="stat-value" id="totalDomains">0</div>
+                                <div class="stat-label">Domaines</div>
+                            </div>
+                            <div class="progress-stat">
+                                <div class="stat-value" id="activeTasks">0</div>
+                                <div class="stat-label">En cours</div>
+                            </div>
+                            <div class="progress-stat">
+                                <div class="stat-value" id="completedTasks">0</div>
+                                <div class="stat-label">Completes</div>
+                            </div>
+                            <div class="progress-stat">
+                                <div class="stat-value" id="progressPercent">0%</div>
+                                <div class="stat-label">Progression</div>
+                            </div>
+                        </div>
+                        <div id="domainsList" class="domain-list"></div>
+                    </div>
+
+                    <!-- Journal Section -->
+                    <div class="journal-section" style="margin-top: 20px;">
+                        <div class="card-header">
+                            <h2 class="card-title"><i class="fas fa-book"></i> Mon Journal</h2>
+                        </div>
+                        <div id="journalEntries"></div>
+                        <div class="add-note-area">
+                            <textarea id="newNote" class="note-input" placeholder="Comment vous sentez-vous aujourd'hui ? Notez vos progres, vos pensees..."></textarea>
+                            <div class="action-buttons">
+                                <button class="btn btn-primary" onclick="addJournalEntry()">
+                                    <i class="fas fa-pen"></i> Ajouter une note
+                                </button>
+                                <button class="btn btn-secondary" onclick="addVoiceNote()">
+                                    <i class="fas fa-microphone"></i> Note vocale
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Sidebar -->
+                <div class="sidebar">
+                    <!-- Mood Tracker -->
+                    <div class="mood-tracker">
+                        <h3 class="card-title"><i class="fas fa-comment-dots"></i> Mon humeur aujourd'hui</h3>
+                        <div class="mood-selector">
+                            <span class="mood-option" data-mood="1" onclick="selectMood(1)">😔</span>
+                            <span class="mood-option" data-mood="2" onclick="selectMood(2)">😐</span>
+                            <span class="mood-option" data-mood="3" onclick="selectMood(3)">🙂</span>
+                            <span class="mood-option" data-mood="4" onclick="selectMood(4)">😊</span>
+                            <span class="mood-option" data-mood="5" onclick="selectMood(5)">😄</span>
+                        </div>
+                        <canvas id="moodChart" width="300" height="150" style="margin-top: 15px;"></canvas>
+                    </div>
+
+                    <!-- Timeline Widget -->
+                    <div class="timeline-widget">
+                        <h3 class="card-title"><i class="fas fa-clock"></i> Prochaines echeances</h3>
+                        <div id="upcomingDeadlines"></div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="dashboard-card">
+                        <h3 class="card-title"><i class="fas fa-bolt"></i> Actions rapides</h3>
+                        <div class="action-buttons" style="flex-direction: column;">
+                            <button class="btn btn-success" onclick="showCheckIn()">
+                                <i class="fas fa-check-circle"></i> Check-in quotidien
+                            </button>
+                            <button class="btn btn-secondary" onclick="exportProgress()">
+                                <i class="fas fa-chart-bar"></i> Exporter mon suivi
+                            </button>
+                            <button class="btn btn-secondary" onclick="showHelp()">
+                                <i class="fas fa-lightbulb"></i> Conseils & Aide
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Domain Detail Modal -->
+        <div id="domainModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modalTitle">Details du domaine</h2>
+                    <button class="close-btn" onclick="closeModal()"><i class="fas fa-times"></i></button>
+                </div>
+                <div id="modalBody"></div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p><strong>Adaptation numerique :</strong> Dr FENOHASINA | Psychiatre - FFI</p>
+            <small>2025 - Tous droits reserves</small>
+        </footer>
+    </div>
+
+    <script>
+        let psiData = null;
+        let journalEntries = [];
+        let moodHistory = [];
+        let streakDays = 0;
+        let domainProgress = {};
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadFromLocalStorage();
+            updateDateTime();
+            setInterval(updateDateTime, 60000);
+        });
+
+        function loadFromLocalStorage() {
+            const savedData = localStorage.getItem('monPSI_data');
+            const savedJournal = localStorage.getItem('monPSI_journal');
+            const savedMood = localStorage.getItem('monPSI_mood');
+            const savedProgress = localStorage.getItem('monPSI_progress');
+            const savedStreak = localStorage.getItem('monPSI_streak');
+
+            if (savedData) {
+                psiData = JSON.parse(savedData);
+                showDashboard();
+            }
+
+            if (savedJournal) {
+                journalEntries = JSON.parse(savedJournal);
+                updateJournal();
+            }
+
+            if (savedMood) {
+                moodHistory = JSON.parse(savedMood);
+                updateMoodChart();
+            }
+
+            if (savedProgress) {
+                domainProgress = JSON.parse(savedProgress);
+            }
+
+            if (savedStreak) {
+                const lastVisit = new Date(savedStreak);
+                const today = new Date();
+                const diffDays = Math.floor((today - lastVisit) / (1000 * 60 * 60 * 24));
+
+                if (diffDays <= 1) {
+                    streakDays = parseInt(localStorage.getItem('monPSI_streakCount') || 0);
+                    if (diffDays === 1) {
+                        streakDays++;
+                        localStorage.setItem('monPSI_streakCount', streakDays);
+                    }
+                } else {
+                    streakDays = 1;
+                    localStorage.setItem('monPSI_streakCount', 1);
+                }
+
+                localStorage.setItem('monPSI_streak', today.toISOString());
+                document.getElementById('streakCount').textContent = streakDays;
+            } else {
+                localStorage.setItem('monPSI_streak', new Date().toISOString());
+                localStorage.setItem('monPSI_streakCount', 1);
+                streakDays = 1;
+            }
+        }
+
+        function importPSI() {
+            document.getElementById('fileInput').click();
+        }
+
+        function loadPSI(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data.questionnaire === "PSI-Formulaire") {
+                        psiData = data;
+                        processPSIData();
+                        localStorage.setItem('monPSI_data', JSON.stringify(psiData));
+                        showDashboard();
+                        showCelebration("PSI importe avec succes !");
+                    } else {
+                        alert("Ce fichier ne semble pas etre un PSI valide.");
+                    }
+                } catch (error) {
+                    alert("Erreur lors de la lecture du fichier : " + error.message);
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        function processPSIData() {
+            if (!psiData) return;
+
+            // Process each domain
+            psiData.domains.forEach(domain => {
+                if (!domainProgress[domain.id]) {
+                    domainProgress[domain.id] = {
+                        tasks: [],
+                        completed: [],
+                        progress: 0
+                    };
+                }
+
+                // Parse and standardize deadlines
+                if (domain.echeances) {
+                    domain.parsedDeadlines = parseDeadlines(domain.echeances);
+                }
+
+                // Extract tasks from objectives
+                if (domain.situation_souhaitee) {
+                    const tasks = extractTasks(domain.situation_souhaitee);
+                    domainProgress[domain.id].tasks = tasks;
+                }
+            });
+
+            localStorage.setItem('monPSI_progress', JSON.stringify(domainProgress));
+        }
+
+        function parseDeadlines(text) {
+            const deadlines = [];
+            const now = new Date();
+
+            // Patterns to match different date formats
+            const patterns = [
+                /(\d{1,2})[\/-](\d{1,2})[\/-](\d{2,4})/g,  // DD/MM/YYYY or DD-MM-YYYY
+                /(\d{1,2})\s+(janvier|fevrier|mars|avril|mai|juin|juillet|aout|septembre|octobre|novembre|decembre)\s+(\d{2,4})/gi,
+                /dans\s+(\d+)\s+(jour|semaine|mois|an)/gi,
+                /(court|moyen|long)\s+terme/gi,
+                /urgent/gi,
+                /immediat/gi
+            ];
+
+            let matches;
+
+            // Try date patterns
+            matches = text.match(patterns[0]);
+            if (matches) {
+                matches.forEach(match => {
+                    const parts = match.split(/[\/-]/);
+                    const date = new Date(parts[2], parts[1] - 1, parts[0]);
+                    if (!isNaN(date)) {
+                        deadlines.push({
+                            date: date,
+                            text: match,
+                            type: 'specific'
+                        });
+                    }
+                });
+            }
+
+            // Try relative time patterns
+            const relativeMatch = text.match(/dans\s+(\d+)\s+(jour|semaine|mois|an)/i);
+            if (relativeMatch) {
+                const amount = parseInt(relativeMatch[1]);
+                const unit = relativeMatch[2].toLowerCase();
+                const date = new Date(now);
+
+                switch(unit) {
+                    case 'jour':
+                        date.setDate(date.getDate() + amount);
+                        break;
+                    case 'semaine':
+                        date.setDate(date.getDate() + (amount * 7));
+                        break;
+                    case 'mois':
+                        date.setMonth(date.getMonth() + amount);
+                        break;
+                    case 'an':
+                        date.setFullYear(date.getFullYear() + amount);
+                        break;
+                }
+
+                deadlines.push({
+                    date: date,
+                    text: relativeMatch[0],
+                    type: 'relative'
+                });
+            }
+
+            // Try term patterns
+            if (text.match(/urgent|immediat/i)) {
+                const date = new Date(now);
+                date.setDate(date.getDate() + 7);
+                deadlines.push({
+                    date: date,
+                    text: 'Urgent',
+                    type: 'priority'
+                });
+            } else if (text.match(/court\s+terme/i)) {
+                const date = new Date(now);
+                date.setMonth(date.getMonth() + 1);
+                deadlines.push({
+                    date: date,
+                    text: 'Court terme',
+                    type: 'term'
+                });
+            } else if (text.match(/moyen\s+terme/i)) {
+                const date = new Date(now);
+                date.setMonth(date.getMonth() + 3);
+                deadlines.push({
+                    date: date,
+                    text: 'Moyen terme',
+                    type: 'term'
+                });
+            } else if (text.match(/long\s+terme/i)) {
+                const date = new Date(now);
+                date.setMonth(date.getMonth() + 6);
+                deadlines.push({
+                    date: date,
+                    text: 'Long terme',
+                    type: 'term'
+                });
+            }
+
+            return deadlines.sort((a, b) => a.date - b.date);
+        }
+
+        function extractTasks(text) {
+            const tasks = [];
+            const lines = text.split(/[\n\r]+/);
+
+            lines.forEach(line => {
+                line = line.trim();
+                if (line.length > 3) {
+                    // Remove common prefixes
+                    line = line.replace(/^[-•·*]\s*/, '');
+                    line = line.replace(/^\d+[\.)]\s*/, '');
+
+                    if (line.length > 3) {
+                        tasks.push({
+                            id: generateId(),
+                            text: line,
+                            completed: false,
+                            dateAdded: new Date().toISOString()
+                        });
+                    }
+                }
+            });
+
+            return tasks;
+        }
+
+        function generateId() {
+            return '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        function showDashboard() {
+            document.getElementById('importSection').style.display = 'none';
+            document.getElementById('mainDashboard').style.display = 'block';
+
+            if (psiData) {
+                document.getElementById('userName').textContent = `Bonjour ${psiData.patientName || 'Mon PSI'}`;
+                updateDashboard();
+                updateTimeline();
+            }
+        }
+
+        function updateDashboard() {
+            const domainsList = document.getElementById('domainsList');
+            domainsList.innerHTML = '';
+
+            let totalTasks = 0;
+            let completedTasks = 0;
+
+            psiData.domains.forEach(domain => {
+                const progress = domainProgress[domain.id] || { tasks: [], completed: [], progress: 0 };
+                const domainTasks = progress.tasks.length;
+                const domainCompleted = progress.completed.length;
+
+                totalTasks += domainTasks;
+                completedTasks += domainCompleted;
+
+                const progressPercent = domainTasks > 0 ? Math.round((domainCompleted / domainTasks) * 100) : 0;
+
+                const domainItem = document.createElement('div');
+                domainItem.className = `domain-item ${progressPercent === 100 ? 'completed' : ''} ${domain.parsedDeadlines && domain.parsedDeadlines.length > 0 ? 'active' : ''}`;
+                domainItem.onclick = () => showDomainDetails(domain);
+
+                domainItem.innerHTML = `
+                    <div class="domain-header">
+                        <span class="domain-name">${domain.title}</span>
+                        <div class="domain-status">
+                            ${domain.parsedDeadlines && domain.parsedDeadlines.length > 0 ?
+                                `<span class="deadline-badge ${getDeadlineClass(domain.parsedDeadlines[0].date)}">
+                                    ${formatDeadline(domain.parsedDeadlines[0].date)}
+                                </span>` : ''}
+                            <span class="status-icon" style="background: ${progressPercent === 100 ? '#27ae60' : progressPercent > 0 ? '#f39c12' : 'var(--color-border)'}; color: white;">
+                                ${progressPercent === 100 ? '<i class="fas fa-check"></i>' : progressPercent > 0 ? progressPercent + '%' : ''}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${progressPercent}%"></div>
+                    </div>
+                `;
+
+                domainsList.appendChild(domainItem);
+            });
+
+            // Update statistics
+            document.getElementById('totalDomains').textContent = psiData.domains.length;
+            document.getElementById('activeTasks').textContent = totalTasks - completedTasks;
+            document.getElementById('completedTasks').textContent = completedTasks;
+            document.getElementById('progressPercent').textContent = totalTasks > 0 ?
+                Math.round((completedTasks / totalTasks) * 100) + '%' : '0%';
+        }
+
+        function getDeadlineClass(date) {
+            const now = new Date();
+            const diff = Math.floor((date - now) / (1000 * 60 * 60 * 24));
+
+            if (diff < 7) return '';
+            if (diff < 30) return 'soon';
+            return 'later';
+        }
+
+        function formatDeadline(date) {
+            const now = new Date();
+            const diff = Math.floor((date - now) / (1000 * 60 * 60 * 24));
+
+            if (diff < 0) return 'En retard';
+            if (diff === 0) return "Aujourd'hui";
+            if (diff === 1) return 'Demain';
+            if (diff < 7) return `${diff} jours`;
+            if (diff < 30) return `${Math.floor(diff / 7)} sem.`;
+            return `${Math.floor(diff / 30)} mois`;
+        }
+
+        function updateTimeline() {
+            const timeline = document.getElementById('upcomingDeadlines');
+            timeline.innerHTML = '';
+
+            const allDeadlines = [];
+
+            psiData.domains.forEach(domain => {
+                if (domain.parsedDeadlines) {
+                    domain.parsedDeadlines.forEach(deadline => {
+                        allDeadlines.push({
+                            domain: domain.title,
+                            ...deadline
+                        });
+                    });
+                }
+            });
+
+            allDeadlines.sort((a, b) => a.date - b.date);
+
+            const upcomingDeadlines = allDeadlines.slice(0, 5);
+
+            if (upcomingDeadlines.length === 0) {
+                timeline.innerHTML = '<p style="color: var(--color-text-muted); text-align: center;">Aucune echeance definie</p>';
+                return;
+            }
+
+            upcomingDeadlines.forEach(deadline => {
+                const item = document.createElement('div');
+                item.className = 'timeline-item';
+                item.innerHTML = `
+                    <div class="timeline-date">
+                        ${deadline.date.getDate()}/${deadline.date.getMonth() + 1}
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">${deadline.domain}</div>
+                        <div class="timeline-desc">${deadline.text}</div>
+                    </div>
+                `;
+                timeline.appendChild(item);
+            });
+        }
+
+        function showDomainDetails(domain) {
+            const modal = document.getElementById('domainModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+
+            modalTitle.textContent = domain.title;
+
+            const progress = domainProgress[domain.id] || { tasks: [], completed: [], progress: 0 };
+
+            let content = `
+                <div style="margin-bottom: 20px;">
+                    <h4><i class="fas fa-map-marker-alt"></i> Situation actuelle</h4>
+                    <p>${domain.situation_actuelle || 'Non renseigne'}</p>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <h4><i class="fas fa-bullseye"></i> Objectifs</h4>
+                    <p style="background: rgba(14, 165, 233, 0.1) !important;">${domain.situation_souhaitee || 'Non renseigne'}</p>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <h4><i class="fas fa-tools"></i> Moyens proposes</h4>
+                    <p style="background: rgba(253, 203, 110, 0.15) !important;">${domain.moyens || 'Non renseigne'}</p>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <h4><i class="fas fa-tasks"></i> Taches a accomplir</h4>
+                    <ul class="task-list">
+            `;
+
+            if (progress.tasks.length > 0) {
+                progress.tasks.forEach(task => {
+                    const isCompleted = progress.completed.includes(task.id);
+                    content += `
+                        <li class="task-item">
+                            <input type="checkbox" class="task-checkbox"
+                                ${isCompleted ? 'checked' : ''}
+                                onchange="toggleTask('${domain.id}', '${task.id}', this.checked)">
+                            <span style="${isCompleted ? 'text-decoration: line-through; color: var(--color-text-muted);' : ''}">${task.text}</span>
+                        </li>
+                    `;
+                });
+            } else {
+                content += '<li style="color: var(--color-text-muted);">Aucune tache definie</li>';
+            }
+
+            content += `
+                    </ul>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="addTask('${domain.id}')">
+                        <i class="fas fa-plus"></i> Ajouter une tache
+                    </button>
+                    <button class="btn btn-secondary" onclick="closeModal()">
+                        Fermer
+                    </button>
+                </div>
+            `;
+
+            modalBody.innerHTML = content;
+            modal.classList.add('active');
+        }
+
+        function toggleTask(domainId, taskId, isChecked) {
+            if (!domainProgress[domainId]) {
+                domainProgress[domainId] = { tasks: [], completed: [], progress: 0 };
+            }
+
+            if (isChecked) {
+                if (!domainProgress[domainId].completed.includes(taskId)) {
+                    domainProgress[domainId].completed.push(taskId);
+                    showCelebration("Bravo ! Tache accomplie !");
+                }
+            } else {
+                domainProgress[domainId].completed = domainProgress[domainId].completed.filter(id => id !== taskId);
+            }
+
+            // Update progress
+            const tasks = domainProgress[domainId].tasks.length;
+            const completed = domainProgress[domainId].completed.length;
+            domainProgress[domainId].progress = tasks > 0 ? (completed / tasks) * 100 : 0;
+
+            localStorage.setItem('monPSI_progress', JSON.stringify(domainProgress));
+            updateDashboard();
+        }
+
+        function addTask(domainId) {
+            const taskText = prompt("Quelle tache souhaitez-vous ajouter ?");
+            if (taskText && taskText.trim()) {
+                if (!domainProgress[domainId]) {
+                    domainProgress[domainId] = { tasks: [], completed: [], progress: 0 };
+                }
+
+                const newTask = {
+                    id: generateId(),
+                    text: taskText.trim(),
+                    completed: false,
+                    dateAdded: new Date().toISOString()
+                };
+
+                domainProgress[domainId].tasks.push(newTask);
+                localStorage.setItem('monPSI_progress', JSON.stringify(domainProgress));
+
+                // Refresh the modal
+                const domain = psiData.domains.find(d => d.id === domainId);
+                if (domain) {
+                    showDomainDetails(domain);
+                }
+
+                updateDashboard();
+            }
+        }
+
+        function selectMood(mood) {
+            // Visual feedback
+            document.querySelectorAll('.mood-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            document.querySelector(`.mood-option[data-mood="${mood}"]`).classList.add('selected');
+
+            // Save mood
+            const moodEntry = {
+                date: new Date().toISOString(),
+                mood: mood
+            };
+
+            moodHistory.push(moodEntry);
+
+            // Keep only last 30 days
+            if (moodHistory.length > 30) {
+                moodHistory = moodHistory.slice(-30);
+            }
+
+            localStorage.setItem('monPSI_mood', JSON.stringify(moodHistory));
+            updateMoodChart();
+
+            showCelebration("Humeur enregistree !");
+        }
+
+        function updateMoodChart() {
+            const canvas = document.getElementById('moodChart');
+            if (!canvas) return;
+
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+
+            // Clear canvas
+            ctx.clearRect(0, 0, width, height);
+
+            if (moodHistory.length < 2) {
+                ctx.fillStyle = '#94a3b8';
+                ctx.font = '14px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('Pas encore de donnees', width / 2, height / 2);
+                return;
+            }
+
+            // Draw simple line chart
+            const recentMoods = moodHistory.slice(-7); // Last 7 entries
+            const stepX = width / (recentMoods.length - 1);
+            const stepY = height / 5;
+
+            ctx.strokeStyle = '#0ea5e9';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+
+            recentMoods.forEach((entry, index) => {
+                const x = index * stepX;
+                const y = height - (entry.mood * stepY);
+
+                if (index === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+
+                // Draw point
+                ctx.fillStyle = '#0ea5e9';
+                ctx.beginPath();
+                ctx.arc(x, y, 4, 0, 2 * Math.PI);
+                ctx.fill();
+            });
+
+            ctx.stroke();
+        }
+
+        function addJournalEntry() {
+            const noteText = document.getElementById('newNote').value.trim();
+            if (!noteText) return;
+
+            const entry = {
+                id: generateId(),
+                date: new Date().toISOString(),
+                text: noteText
+            };
+
+            journalEntries.unshift(entry);
+            localStorage.setItem('monPSI_journal', JSON.stringify(journalEntries));
+
+            document.getElementById('newNote').value = '';
+            updateJournal();
+
+            showCelebration("Note ajoutee !");
+        }
+
+        function updateJournal() {
+            const container = document.getElementById('journalEntries');
+            if (!container) return;
+
+            if (journalEntries.length === 0) {
+                container.innerHTML = '<p style="color: var(--color-text-muted); text-align: center;">Aucune note pour le moment</p>';
+                return;
+            }
+
+            container.innerHTML = '';
+
+            // Show last 5 entries
+            journalEntries.slice(0, 5).forEach(entry => {
+                const entryDiv = document.createElement('div');
+                entryDiv.className = 'journal-entry';
+                entryDiv.innerHTML = `
+                    <div class="journal-date">${formatDate(new Date(entry.date))}</div>
+                    <div class="journal-text">${entry.text}</div>
+                `;
+                container.appendChild(entryDiv);
+            });
+        }
+
+        function formatDate(date) {
+            const options = { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' };
+            return date.toLocaleDateString('fr-FR', options);
+        }
+
+        function showCelebration(message) {
+            // Create celebration popup
+            const celebration = document.createElement('div');
+            celebration.className = 'celebration';
+            celebration.innerHTML = `
+                <h2>${message}</h2>
+                <div style="font-size: 4em;"><i class="fas fa-party-horn"></i></div>
+            `;
+            document.body.appendChild(celebration);
+
+            // Create confetti effect
+            for (let i = 0; i < 20; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.animationDuration = (Math.random() * 2 + 1) + 's';
+                confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                document.body.appendChild(confetti);
+
+                setTimeout(() => confetti.remove(), 3000);
+            }
+
+            // Remove celebration after 2 seconds
+            setTimeout(() => celebration.remove(), 2000);
+        }
+
+        function closeModal() {
+            document.getElementById('domainModal').classList.remove('active');
+        }
+
+        function showCheckIn() {
+            const questions = [
+                "Comment vous sentez-vous aujourd'hui ?",
+                "Avez-vous pris vos medicaments ?",
+                "Avez-vous bien dormi ?",
+                "Avez-vous fait une activite qui vous a fait du bien ?"
+            ];
+
+            let responses = [];
+
+            questions.forEach(question => {
+                const response = confirm(question);
+                responses.push(response);
+            });
+
+            const positiveCount = responses.filter(r => r).length;
+
+            if (positiveCount === questions.length) {
+                showCelebration("Parfait ! Continuez comme ca !");
+            } else if (positiveCount >= questions.length / 2) {
+                showCelebration("Bien joue ! Chaque effort compte !");
+            } else {
+                showCelebration("Courage, demain sera meilleur !");
+            }
+
+            // Save check-in
+            const checkIn = {
+                date: new Date().toISOString(),
+                responses: responses
+            };
+
+            let checkIns = JSON.parse(localStorage.getItem('monPSI_checkIns') || '[]');
+            checkIns.push(checkIn);
+            localStorage.setItem('monPSI_checkIns', JSON.stringify(checkIns));
+        }
+
+        function exportProgress() {
+            const exportData = {
+                exportDate: new Date().toISOString(),
+                patientName: psiData?.patientName || 'Anonyme',
+                progress: domainProgress,
+                journal: journalEntries,
+                mood: moodHistory,
+                streak: streakDays
+            };
+
+            const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `MonPSI_Suivi_${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showCelebration("Suivi exporte !");
+        }
+
+        function showHelp() {
+            alert(`
+CONSEILS D'UTILISATION
+
+Journal : Notez vos pensees et progres chaque jour
+Taches : Cochez les objectifs accomplis
+Humeur : Suivez votre moral quotidiennement
+Echeances : Respectez les dates importantes
+Streak : Maintenez votre serie de jours de suivi
+
+N'oubliez pas : Chaque petit pas compte !
+            `);
+        }
+
+        function showAllDomains() {
+            // Scroll to domains list
+            document.getElementById('domainsList').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function addVoiceNote() {
+            alert("Fonction vocale en developpement. Utilisez le texte pour le moment !");
+        }
+
+        function updateDateTime() {
+            const now = new Date();
+            document.getElementById('lastUpdate').textContent = `Derniere mise a jour : ${formatDate(now)}`;
+        }
+    </script>
+</body>
+</html>

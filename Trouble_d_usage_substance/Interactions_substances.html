@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactions Médicaments / Substances</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <style>
+        :root {
+            --cat-main: #8b5cf6;
+            --cat-dark: #7c3aed;
+            --cat-light: #a78bfa;
+            --cat-rgb: 139, 92, 246;
+            --cat-readable: #7c3aed;
+        }
+
+        /* Tableau d'interactions */
+        .interaction-table-wrapper {
+            overflow-x: auto;
+            margin-top: 1rem;
+        }
+        .interaction-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            min-width: 600px;
+        }
+        .interaction-table th {
+            background: rgba(var(--cat-rgb), 0.12);
+            color: var(--cat-readable);
+            padding: 0.75rem 1rem;
+            text-align: center;
+            font-weight: 700;
+            border: 1px solid rgba(var(--cat-rgb), 0.2);
+        }
+        .interaction-table th:first-child { text-align: left; min-width: 160px; }
+        .interaction-table td {
+            padding: 0.65rem 0.9rem;
+            border: 1px solid #e5e7eb;
+            vertical-align: top;
+        }
+        .interaction-table tr:nth-child(even) td { background: rgba(249, 250, 251, 0.8); }
+        .interaction-table td:first-child {
+            font-weight: 600;
+            color: #374151;
+            background: rgba(var(--cat-rgb), 0.05);
+        }
+
+        /* Cellules de risque */
+        .risk-none    { background: #f0fdf4 !important; color: #166534; text-align: center; }
+        .risk-low     { background: #fefce8 !important; color: #713f12; text-align: center; }
+        .risk-moderate{ background: #fff7ed !important; color: #9a3412; text-align: center; }
+        .risk-high    { background: #fef2f2 !important; color: #991b1b; text-align: center; font-weight: 600; }
+        .risk-critical{ background: #dc2626 !important; color: white !important; text-align: center; font-weight: 700; }
+
+        /* Légende */
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.82rem;
+        }
+        .legend-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+            flex-shrink: 0;
+        }
+
+        /* Accordéon détails */
+        .detail-card {
+            border: 1px solid rgba(var(--cat-rgb), 0.2);
+            border-radius: var(--radius-md);
+            margin-bottom: 0.75rem;
+            overflow: hidden;
+        }
+        .detail-header {
+            width: 100%;
+            background: rgba(var(--cat-rgb), 0.07);
+            border: none;
+            padding: 0.9rem 1.1rem;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--cat-readable);
+            transition: background 0.2s;
+        }
+        .detail-header:hover { background: rgba(var(--cat-rgb), 0.13); }
+        .detail-body {
+            display: none;
+            padding: 1rem 1.1rem;
+            border-top: 1px solid rgba(var(--cat-rgb), 0.15);
+            background: rgba(255,255,255,0.7);
+            font-size: 0.88rem;
+            color: #374151;
+        }
+        .detail-body.open { display: block; }
+        .detail-body ul { padding-left: 1.2rem; }
+        .detail-body li { margin-bottom: 0.4rem; }
+        .detail-body table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; }
+        .detail-body table th,
+        .detail-body table td { padding: 0.5rem 0.75rem; border: 1px solid #d1d5db; }
+        .detail-body table th { background: #f3f4f6; font-weight: 600; }
+
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-readable); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+
+        .alert-interaction {
+            background: #fff7ed;
+            border: 1px solid #fed7aa;
+            border-radius: var(--radius-md);
+            padding: 0.9rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            gap: 0.7rem;
+        }
+        .alert-interaction i { color: #ea580c; font-size: 1.1rem; flex-shrink: 0; margin-top: 0.1rem; }
+    </style>
+</head>
+<body class="light-questionnaire">
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+            <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+        </div>
+        <h1>Interactions Substances</h1>
+        <span class="badge badge-cat-substance">Substance</span>
+    </nav>
+
+    <main class="container">
+        <header class="header-glow" style="text-align: center; margin-bottom: 2rem;">
+            <h1><i class="fas fa-exchange-alt"></i> Interactions Médicaments / Substances</h1>
+            <p class="subtitle">Tableau clinique des interactions entre psychotropes et substances psychoactives</p>
+        </header>
+
+        <section class="glass-card info-box">
+            <h2><i class="fas fa-info-circle"></i> À propos</h2>
+            <p>Ce tableau récapitule les principales interactions cliniquement significatives entre les psychotropes (antidépresseurs, antipsychotiques, thymorégulateurs, benzodiazépines) et les substances psychoactives couramment consommées (alcool, cannabis, opioïdes, stimulants). Il est destiné aux professionnels de santé.</p>
+            <p style="margin-top: 0.5rem; font-size: 0.85rem; opacity: 0.8;">Source : ANSM, Thériaque, British National Formulary, UpToDate. Les niveaux de risque sont indicatifs et doivent être adaptés au contexte clinique.</p>
+        </section>
+
+        <section class="glass-card warning-box">
+            <h3><i class="fas fa-exclamation-triangle"></i> Avertissement</h3>
+            <ul>
+                <li>Ce tableau est un <strong>aide-mémoire clinique</strong>, non une liste exhaustive</li>
+                <li>Les interactions peuvent être bi-directionnelles et modulées par la dose et la durée</li>
+                <li>Vérifier systématiquement dans le RCP ou Thériaque avant toute prescription</li>
+                <li><strong>Signaler au patient</strong> les risques identifiés et documenter dans le dossier</li>
+            </ul>
+        </section>
+
+        <!-- LÉGENDE -->
+        <section class="glass-card">
+            <h2><i class="fas fa-palette"></i> Légende</h2>
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-dot" style="background: #f0fdf4; border: 1px solid #166534;"></div>
+                    <span><strong>Aucune / négligeable</strong> — usage habituel sans interaction clinique majeure</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot" style="background: #fefce8; border: 1px solid #ca8a04;"></div>
+                    <span><strong>Faible</strong> — interaction possible, surveillance recommandée</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot" style="background: #fff7ed; border: 1px solid #ea580c;"></div>
+                    <span><strong>Modérée</strong> — potentialisation ou antagonisme cliniquement pertinent</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot" style="background: #fef2f2; border: 1px solid #dc2626;"></div>
+                    <span><strong>Élevée</strong> — risque important, adaptation de traitement nécessaire</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot" style="background: #dc2626;"></div>
+                    <span><strong>Critique / CI</strong> — contre-indication ou risque vital</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- TABLEAU PRINCIPAL -->
+        <section class="glass-card">
+            <h2><i class="fas fa-table"></i> Tableau des interactions</h2>
+            <div class="interaction-table-wrapper">
+                <table class="interaction-table">
+                    <thead>
+                        <tr>
+                            <th>Médicament / Classe</th>
+                            <th>🍺 Alcool</th>
+                            <th>🌿 Cannabis</th>
+                            <th>💊 Opioïdes</th>
+                            <th>⚡ Stimulants<br><small>(cocaïne, amphét.)</small></th>
+                            <th>🔵 Benzodiazépines<br><small>(BZD utilisées)</small></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- ANTIDÉPRESSEURS -->
+                        <tr>
+                            <td colspan="6" style="background: rgba(var(--cat-rgb), 0.08); font-weight: 700; color: var(--cat-readable); text-align: center;">— ANTIDÉPRESSEURS —</td>
+                        </tr>
+                        <tr>
+                            <td>ISRS<br><small>Fluoxétine, Sertraline, Escitalopram</small></td>
+                            <td class="risk-moderate">Modérée<br><small>Sédation ↑, dépression SNC</small></td>
+                            <td class="risk-low">Faible<br><small>Inhibition CYP2C19 (fluoxétine)</small></td>
+                            <td class="risk-moderate">Modérée<br><small>Risque sérotonine (tramadol), CYP2D6</small></td>
+                            <td class="risk-moderate">Modérée<br><small>Risque syndrome sérotoninergique (cocaïne)</small></td>
+                            <td class="risk-low">Faible<br><small>Sédation additive modérée</small></td>
+                        </tr>
+                        <tr>
+                            <td>IRSN<br><small>Venlafaxine, Duloxétine</small></td>
+                            <td class="risk-high">Élevée<br><small>Sédation ↑↑, HTA, toxicité hépatique (duloxétine)</small></td>
+                            <td class="risk-low">Faible<br><small>CYP2D6 (duloxétine)</small></td>
+                            <td class="risk-high">Élevée<br><small>Syndrome sérotoninergique, dépression respiratoire</small></td>
+                            <td class="risk-high">Élevée<br><small>Sd sérotoninergique, crise HTA</small></td>
+                            <td class="risk-low">Faible</td>
+                        </tr>
+                        <tr>
+                            <td>IMAO<br><small>Phénelzine, Moclobémide</small></td>
+                            <td class="risk-critical">CI<br><small>Crise hypertensive (tyramine alcool)</small></td>
+                            <td class="risk-high">Élevée<br><small>Sd sérotoninergique potentiel</small></td>
+                            <td class="risk-critical">CI<br><small>Sd sérotoninergique sévère (méperidine++)</small></td>
+                            <td class="risk-critical">CI<br><small>Crise HTA, sd sérotoninergique</small></td>
+                            <td class="risk-low">Faible</td>
+                        </tr>
+                        <tr>
+                            <td>Tricycliques<br><small>Amitriptyline, Clomipramine</small></td>
+                            <td class="risk-high">Élevée<br><small>Sédation ↑↑, troubles rythme, chute</small></td>
+                            <td class="risk-moderate">Modérée<br><small>Tachycardie, sédation</small></td>
+                            <td class="risk-high">Élevée<br><small>Dépression respiratoire, QTc ↑</small></td>
+                            <td class="risk-moderate">Modérée<br><small>QTc ↑, arythmie</small></td>
+                            <td class="risk-moderate">Modérée<br><small>Sédation importante</small></td>
+                        </tr>
+                        <tr>
+                            <td>Mirtazapine</td>
+                            <td class="risk-high">Élevée<br><small>Sédation ↑↑, psychomoteur altéré</small></td>
+                            <td class="risk-moderate">Modérée<br><small>Sédation additive</small></td>
+                            <td class="risk-moderate">Modérée<br><small>Sédation, hypotension</small></td>
+                            <td class="risk-low">Faible</td>
+                            <td class="risk-high">Élevée<br><small>Sédation très importante</small></td>
+                        </tr>
+                        <tr>
+                            <td>Bupropion</td>
+                            <td class="risk-high">Élevée<br><small>Seuil épileptique ↓ (alcoolisme ++)</small></td>
+                            <td class="risk-low">Faible</td>
+                            <td class="risk-moderate">Modérée<br><small>Inhibition CYP2D6 → ↑ opioïdes actifs</small></td>
+                            <td class="risk-moderate">Modérée<br><small>Crise HTA, épilepsie</small></td>
+                            <td class="risk-low">Faible</td>
+                        </tr>
+
+                        <!-- ANTIPSYCHOTIQUES -->
+                        <tr>
+                            <td colspan="6" style="background: rgba(var(--cat-rgb), 0.08); font-weight: 700; color: var(--cat-readable); text-align: center;">— ANTIPSYCHOTIQUES —</td>
+                        </tr>
+                        <tr>
+                            <td>AP typiques (1ère gen)<br><small>Halopéridol, Chlorpromazine</small></td>
+                            <td class="risk-high">Élevée<br><small>Hypotension, sédation, QTc ↑</small></td>
+                            <td class="risk-moderate">Modérée<br><small>Risque d'aggravation psychotique, sédation</small></td>
+                            <td class="risk-high">Élevée<br><small>Dépression respiratoire, hypotension</small></td>
+                            <td class="risk-moderate">Modérée<br><small>Antagonisme thérapeutique partiel</small></td>
+                            <td class="risk-high">Élevée<br><small>Sédation, hypotension orthostatique</small></td>
+                        </tr>
+                        <tr>
+                            <td>AP atypiques<br><small>Olanzapine, Quétiapine</small></td>
+                            <td class="risk-high">Élevée<br><small>Sédation ↑↑, QTc ↑ (quétiapine), hypoglycémie</small></td>
+                            <td class="risk-moderate">Modérée<br><small>Sédation additive, poids ↑</small></td>
+                            <td class="risk-high">Élevée<br><small>Dépression respiratoire, hypotension</small></td>
+                            <td class="risk-low">Faible<br><small>Antagonisme D2 partiel</small></td>
+                            <td class="risk-high">Élevée<br><small>Sédation, hypotension, dépression SNC</small></td>
+                        </tr>
+                        <tr>
+                            <td>Clozapine</td>
+                            <td class="risk-critical">CI<br><small>Dépression respiratoire sévère, hypotension critique</small></td>
+                            <td class="risk-high">Élevée<br><small>Sédation ↑↑, risque agranulocytose (tabac modifie niveaux)</small></td>
+                            <td class="risk-critical">CI<br><small>Dépression respiratoire, arrêt cardiaque possible</small></td>
+                            <td class="risk-moderate">Modérée<br><small>Convulsions, interactions métaboliques</small></td>
+                            <td class="risk-critical">CI<br><small>Collapsus, arrêt respiratoire</small></td>
+                        </tr>
+                        <tr>
+                            <td>Aripiprazole, Brexpiprazole</td>
+                            <td class="risk-moderate">Modérée<br><small>Sédation légère-modérée</small></td>
+                            <td class="risk-low">Faible</td>
+                            <td class="risk-low">Faible</td>
+                            <td class="risk-low">Faible</td>
+                            <td class="risk-low">Faible</td>
+                        </tr>
+
+                        <!-- THYMORÉGULATEURS -->
+                        <tr>
+                            <td colspan="6" style="background: rgba(var(--cat-rgb), 0.08); font-weight: 700; color: var(--cat-readable); text-align: center;">— THYMORÉGULATEURS —</td>
+                        </tr>
+                        <tr>
+                            <td>Lithium</td>
+                            <td class="risk-high">Élevée<br><small>Déshydratation → toxicité lithium ↑↑</small></td>
+                            <td class="risk-low">Faible</td>
+                            <td class="risk-low">Faible</td>
+                            <td class="risk-low">Faible</td>
+                            <td class="risk-low">Faible</td>
+                        </tr>
+                        <tr>
+                            <td>Valproate (Dépakine)</td>
+                            <td class="risk-high">Élevée<br><small>Hépatotoxicité ↑, sédation, pancréatite</small></td>
+                            <td class="risk-low">Faible<br><small>Inhibition CYP2C9 mineur</small></td>
+                            <td class="risk-moderate">Modérée<br><small>Sédation additive</small></td>
+                            <td class="risk-low">Faible</td>
+                            <td class="risk-moderate">Modérée<br><small>Sédation ↑</small></td>
+                        </tr>
+                        <tr>
+                            <td>Lamotrigine</td>
+                            <td class="risk-low">Faible<br><small>Seuil convulsif légèrement ↓</small></td>
+                            <td class="risk-low">Faible</td>
+                            <td class="risk-low">Faible</td>
+                            <td class="risk-low">Faible</td>
+                            <td class="risk-low">Faible</td>
+                        </tr>
+                        <tr>
+                            <td>Carbamazépine</td>
+                            <td class="risk-high">Élevée<br><small>Sédation ↑, inducteur enzymatique fort</small></td>
+                            <td class="risk-moderate">Modérée<br><small>Induction CYP3A4 → ↓ concentrations THC</small></td>
+                            <td class="risk-moderate">Modérée<br><small>Métabolisme opioïdes accéléré (↓ effet)</small></td>
+                            <td class="risk-low">Faible</td>
+                            <td class="risk-moderate">Modérée<br><small>Induction → ↓ niveaux BZD</small></td>
+                        </tr>
+
+                        <!-- BENZODIAZÉPINES -->
+                        <tr>
+                            <td colspan="6" style="background: rgba(var(--cat-rgb), 0.08); font-weight: 700; color: var(--cat-readable); text-align: center;">— BENZODIAZÉPINES (BZD prescrites) —</td>
+                        </tr>
+                        <tr>
+                            <td>BZD (toutes)<br><small>Diazépam, Lorazépam, Alprazolam…</small></td>
+                            <td class="risk-critical">CI<br><small>Dépression respiratoire synergique, coma, décès</small></td>
+                            <td class="risk-high">Élevée<br><small>Sédation ↑↑, dépression respiratoire</small></td>
+                            <td class="risk-critical">CI<br><small>Dépression respiratoire → décès (combinaison mortelle++)</small></td>
+                            <td class="risk-moderate">Modérée<br><small>Masque les effets des BZD, crash potentiel</small></td>
+                            <td class="risk-none">—<br><small>Même classe</small></td>
+                        </tr>
+
+                        <!-- MÉDICAMENTS SEVRAGE -->
+                        <tr>
+                            <td colspan="6" style="background: rgba(var(--cat-rgb), 0.08); font-weight: 700; color: var(--cat-readable); text-align: center;">— MÉDICAMENTS DU SEVRAGE / TSO —</td>
+                        </tr>
+                        <tr>
+                            <td>Naltrexone (Revia, Vivitrol)</td>
+                            <td class="risk-none">Aucune<br><small>Réduit le craving alcool</small></td>
+                            <td class="risk-none">Aucune</td>
+                            <td class="risk-critical">CI<br><small>Précipite le sevrage opioïde brutal</small></td>
+                            <td class="risk-none">Aucune</td>
+                            <td class="risk-none">Aucune</td>
+                        </tr>
+                        <tr>
+                            <td>Méthadone (TSO)</td>
+                            <td class="risk-high">Élevée<br><small>Sédation ↑, QTc ↑↑, dépression respiratoire</small></td>
+                            <td class="risk-moderate">Modérée<br><small>Sédation additive, CYP3A4</small></td>
+                            <td class="risk-critical">CI<br><small>Dépression respiratoire fatale</small></td>
+                            <td class="risk-moderate">Modérée<br><small>QTc ↑ (cocaïne), crise</small></td>
+                            <td class="risk-critical">CI<br><small>Dépression respiratoire sévère, décès</small></td>
+                        </tr>
+                        <tr>
+                            <td>Buprénorphine (Subutex, Suboxone)</td>
+                            <td class="risk-high">Élevée<br><small>Dépression respiratoire, hépatotoxicité</small></td>
+                            <td class="risk-moderate">Modérée<br><small>Sédation</small></td>
+                            <td class="risk-high">Élevée<br><small>Précipitation sevrage si opioïdes complets présents</small></td>
+                            <td class="risk-low">Faible</td>
+                            <td class="risk-critical">CI<br><small>Dépression respiratoire fatale (décès documentés)</small></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- DÉTAILS PAR PAIRE -->
+        <section class="glass-card">
+            <h2><i class="fas fa-search"></i> Interactions critiques — Détails cliniques</h2>
+
+            <div class="detail-card">
+                <button class="detail-header" onclick="toggleDetail(this)">
+                    <span><i class="fas fa-skull-crossbones" style="color: #dc2626;"></i> Opioïdes + Benzodiazépines (ou alcool)</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="detail-body">
+                    <p><strong>Mécanisme :</strong> Potentialisation de la dépression du SNC et du centre respiratoire bulbaire. Effets synergiques sur les récepteurs GABA-A (BZD) et opioïdes (µ).</p>
+                    <p style="margin-top:0.5rem;"><strong>Risque principal :</strong> Apnée, coma, arrêt cardiorespiratoire. Responsable de la majorité des surdosages mortels aux opioïdes (données CDC, EMCDDA).</p>
+                    <p style="margin-top:0.5rem;"><strong>Conduite à tenir :</strong></p>
+                    <ul>
+                        <li>Éviter absolument la coprescription BZD + opioïdes sauf cas justifiés (douleur palliative, épilepsie)</li>
+                        <li>Si coprescription inévitable : doses minimales, durée courte, surveillance clinique</li>
+                        <li>Former l'entourage à la naloxone nasale (Nalscue®)</li>
+                        <li>Réduire progressivement l'une des deux classes</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="detail-card">
+                <button class="detail-header" onclick="toggleDetail(this)">
+                    <span><i class="fas fa-exclamation-triangle" style="color: #ea580c;"></i> IMAO + Opioïdes / Stimulants</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="detail-body">
+                    <p><strong>Mécanisme :</strong> Inhibition des MAO → accumulation de sérotonine, dopamine, noradrénaline. Les opioïdes (tramadol, méperidine) et stimulants (cocaïne, MDMA) majorent cette accumulation.</p>
+                    <p style="margin-top:0.5rem;"><strong>Syndrome sérotoninergique :</strong> hyperthermie, tremblement, myoclonies, agitation, diarrhée, HTA, confusion. Potentiellement fatal.</p>
+                    <p style="margin-top:0.5rem;"><strong>Conduite à tenir :</strong></p>
+                    <ul>
+                        <li>Délai d'attente de 14 jours après arrêt IMAO irréversibles avant tout opioïde</li>
+                        <li>Seule la morphine et l'oxycodone peuvent être utilisés avec précaution (pas tramadol, méperidine)</li>
+                        <li>Informer systématiquement les patients sous IMAO des risques</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="detail-card">
+                <button class="detail-header" onclick="toggleDetail(this)">
+                    <span><i class="fas fa-heartbeat" style="color: #dc2626;"></i> Clozapine + Alcool / Opioïdes / BZD</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="detail-body">
+                    <p><strong>Mécanisme :</strong> La clozapine a un index thérapeutique étroit et des effets sédatifs/cardiaques puissants. Les dépresseurs du SNC majorent drastiquement le risque.</p>
+                    <p style="margin-top:0.5rem;"><strong>Risque :</strong> Collapsus cardiovasculaire, arrêt respiratoire, coma. Décès documentés avec l'association clozapine + BZD IV.</p>
+                    <p style="margin-top:0.5rem;"><strong>Note tabac :</strong> Le tabac induit le CYP1A2, principal enzyme du métabolisme de la clozapine. L'arrêt du tabac peut augmenter les niveaux de clozapine de 50% → risque toxique.</p>
+                    <p style="margin-top:0.5rem;"><strong>Conduite à tenir :</strong></p>
+                    <ul>
+                        <li>Contrôle des taux plasmatiques clozapine lors de tout changement tabagique</li>
+                        <li>Éviter BZD IV en même temps que clozapine (surtout en phase d'initiation)</li>
+                        <li>Information patient sur risque alcool absolu</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="detail-card">
+                <button class="detail-header" onclick="toggleDetail(this)">
+                    <span><i class="fas fa-pills" style="color: #7c3aed;"></i> Méthadone / Buprénorphine + Associations à risque</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="detail-body">
+                    <p><strong>Méthadone :</strong> Substrat CYP3A4 et CYP2D6 + fort allongeur du QTc. Interactions avec :</p>
+                    <ul>
+                        <li>Inducteurs CYP3A4 (carbamazépine, rifampicine) → ↓ niveaux méthadone → risque de manque</li>
+                        <li>Inhibiteurs CYP3A4 (azolés, fluconazole) → ↑ niveaux → risque toxique</li>
+                        <li>Tous les QTc-allongeurs (halopéridol, quétiapine, certains antibiotiques)</li>
+                    </ul>
+                    <p style="margin-top:0.5rem;"><strong>Buprénorphine :</strong> Agoniste partiel µ. Précipitation du sevrage si opioïdes complets présents (délai minimum 12–24h après dernière prise). Association BZD → décès documentés.</p>
+                    <p style="margin-top:0.5rem;"><strong>Conduite à tenir :</strong></p>
+                    <ul>
+                        <li>ECG de base et surveillance QTc pour la méthadone</li>
+                        <li>Dosage plasmatique méthadone si interaction pharmacocinétique</li>
+                        <li>Éducation patient sur risque fatal alcool/BZD</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="detail-card">
+                <button class="detail-header" onclick="toggleDetail(this)">
+                    <span><i class="fas fa-smoking" style="color: #64748b;"></i> Tabac et niveaux plasmatiques des psychotropes</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="detail-body">
+                    <p>Les hydrocarbures aromatiques polycycliques (HAP) du tabac sont des <strong>inducteurs puissants du CYP1A2</strong>, principal enzyme de plusieurs psychotropes.</p>
+                    <table>
+                        <thead>
+                            <tr><th>Médicament</th><th>Effet tabac</th><th>Conséquence clinique</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Clozapine</td><td>↓ 50% niveaux</td><td>Dose habituelle plus efficace, surveillance à l'arrêt</td></tr>
+                            <tr><td>Olanzapine</td><td>↓ 30–50% niveaux</td><td>Idem, augmentation dose souvent nécessaire</td></tr>
+                            <tr><td>Halopéridol</td><td>↓ 10–25%</td><td>Ajustement modeste</td></tr>
+                            <tr><td>Théophylline</td><td>↓ 50–100%</td><td>Toxicité à l'arrêt tabac</td></tr>
+                            <tr><td>Caféine</td><td>↓ 50%</td><td>Non cliniquement significatif</td></tr>
+                        </tbody>
+                    </table>
+                    <p style="margin-top:0.75rem;"><strong>À retenir :</strong> À l'hospitalisation d'un fumeur (patient arrête de fumer), anticiper une <strong>remontée des taux de clozapine et olanzapine</strong> dans les 1–2 semaines.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONSEIL PRATIQUE -->
+        <section class="glass-card">
+            <h2><i class="fas fa-clipboard-check"></i> Conduite à tenir — Conseils pratiques</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                <div style="background: white; border: 1px solid #e5e7eb; border-radius: var(--radius-md); padding: 1rem;">
+                    <h4 style="color: var(--cat-readable); margin-bottom: 0.5rem;"><i class="fas fa-question-circle"></i> À l'évaluation initiale</h4>
+                    <ul style="font-size: 0.88rem; color: #374151; padding-left: 1.1rem;">
+                        <li>Dépister systématiquement les consommations (AUDIT, ASSIST, CAST)</li>
+                        <li>Documenter tabac, alcool, cannabis, autres drogues</li>
+                        <li>Intégrer au bilan avant prescription de psychotropes</li>
+                    </ul>
+                </div>
+                <div style="background: white; border: 1px solid #e5e7eb; border-radius: var(--radius-md); padding: 1rem;">
+                    <h4 style="color: var(--cat-readable); margin-bottom: 0.5rem;"><i class="fas fa-info-circle"></i> Information patient</h4>
+                    <ul style="font-size: 0.88rem; color: #374151; padding-left: 1.1rem;">
+                        <li>Expliquer les risques spécifiques au traitement prescrit</li>
+                        <li>Ne pas attendre que le patient signale une consommation</li>
+                        <li>Proposer la réduction des risques si l'arrêt n'est pas envisageable</li>
+                    </ul>
+                </div>
+                <div style="background: white; border: 1px solid #e5e7eb; border-radius: var(--radius-md); padding: 1rem;">
+                    <h4 style="color: var(--cat-readable); margin-bottom: 0.5rem;"><i class="fas fa-sync-alt"></i> Surveillance</h4>
+                    <ul style="font-size: 0.88rem; color: #374151; padding-left: 1.1rem;">
+                        <li>Adapter la posologie lors de changements de consommation</li>
+                        <li>ECG si allongement QTc (méthadone, antipsychotiques + alcool)</li>
+                        <li>Bilan hépatique régulier si alcool + valproate/tricycliques</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p><strong>Interactions Médicaments / Substances Psychoactives</strong></p>
+        <p style="margin: 0.5rem 0;"><strong>Références :</strong> ANSM, Thériaque, BNF, UpToDate, Martindale</p>
+        <p><strong>Adaptation numérique :</strong> Dr FENOHASINA | Psychiatre</p>
+        <small>Licence CC BY-NC-SA 4.0 — Usage professionnel uniquement</small>
+    </footer>
+
+    <script src="../js/app.js"></script>
+    <script>
+        function toggleDetail(header) {
+            const body = header.nextElementSibling;
+            const isOpen = body.classList.contains('open');
+            body.classList.toggle('open', !isOpen);
+            const icon = header.querySelector('.fa-chevron-down, .fa-chevron-up');
+            if (icon) {
+                icon.classList.toggle('fa-chevron-down', isOpen);
+                icon.classList.toggle('fa-chevron-up', !isOpen);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoCA - Montreal Cognitive Assessment</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --cat-main: #0ea5e9;
+            --cat-dark: #0284c7;
+            --cat-light: #38bdf8;
+            --cat-rgb: 14, 165, 233;
+            --cat-readable: #0284c7;
+        }
+        .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
+        .option-btn.selected, .answer-btn.selected { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        .score-circle { border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 30px rgba(var(--cat-rgb), 0.2); }
+        .score-value { color: var(--cat-light); }
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-light); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+        .progress-fill { background: linear-gradient(90deg, var(--cat-main), var(--cat-light)); box-shadow: 0 0 8px rgba(var(--cat-rgb), 0.4); }
+        .likert-options input[type="radio"]:checked + label,
+        .binary-options input[type="radio"]:checked + label,
+        .radio-options input[type="radio"]:checked + label { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+    </style>
+
+</head>
+<body class="light-questionnaire">
+
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+            <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+        </div>
+        <h1>MoCA</h1>
+        <span class="badge badge-cat-rehab">Cognition</span>
+    </nav>
+
+    <div class="container">
+        <header class="page-header">
+            <h2 class="page-title">Montreal Cognitive Assessment</h2>
+            <p class="page-subtitle">Evaluation cognitive rapide en 8 domaines (30 points)</p>
+        </header>
+
+        <div class="alert alert-warning">
+            <div class="alert-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <div class="alert-content">
+                <h3>Avertissement</h3>
+                <p>Cette version simplifiee du MoCA est un outil de depistage. Elle ne remplace pas une evaluation neuropsychologique complete. Consultez un professionnel pour une interpretation clinique.</p>
+            </div>
+        </div>
+
+        <!-- Education Section -->
+        <div class="alert alert-info" style="margin-bottom: 2rem;">
+            <div class="alert-icon">
+                <i class="fas fa-info-circle"></i>
+            </div>
+            <div class="alert-content">
+                <h3>Correction pour la scolarite</h3>
+                <p>Si vous avez 12 annees d'etudes ou moins, ajoutez 1 point a votre score final (maximum 30 points).</p>
+            </div>
+        </div>
+
+        <!-- DOMAIN 1: Orientation -->
+        <div class="domain-section">
+            <div class="domain-header">
+                <div class="domain-title">
+                    <i class="fas fa-compass"></i>
+                    <span>1. Orientation</span>
+                </div>
+                <span class="domain-points">/ 6 points</span>
+            </div>
+            <div class="task-card">
+                <h4>Questions d'orientation</h4>
+                <p>Repondez aux questions suivantes :</p>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="orient1" data-domain="orientation" data-points="1">
+                        <label for="orient1">Je connais la date d'aujourd'hui (jour du mois)</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="orient2" data-domain="orientation" data-points="1">
+                        <label for="orient2">Je connais le mois actuel</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="orient3" data-domain="orientation" data-points="1">
+                        <label for="orient3">Je connais l'annee actuelle</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="orient4" data-domain="orientation" data-points="1">
+                        <label for="orient4">Je connais le jour de la semaine</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="orient5" data-domain="orientation" data-points="1">
+                        <label for="orient5">Je sais dans quel lieu je me trouve (hopital, clinique, domicile...)</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="orient6" data-domain="orientation" data-points="1">
+                        <label for="orient6">Je connais la ville ou je me trouve</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DOMAIN 2: Attention -->
+        <div class="domain-section">
+            <div class="domain-header">
+                <div class="domain-title">
+                    <i class="fas fa-crosshairs"></i>
+                    <span>2. Attention</span>
+                </div>
+                <span class="domain-points">/ 6 points</span>
+            </div>
+
+            <div class="task-card">
+                <h4>Repetition de chiffres (ordre direct)</h4>
+                <p>Memorisez puis repetez dans l'ordre : <strong>2 - 1 - 8 - 5 - 4</strong></p>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="digit1" data-domain="attention" data-points="1">
+                        <label for="digit1">J'ai reussi a repeter les 5 chiffres dans l'ordre</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-card">
+                <h4>Repetition de chiffres (ordre inverse)</h4>
+                <p>Memorisez puis repetez dans l'ordre INVERSE : <strong>7 - 4 - 2</strong> (reponse attendue : 2-4-7)</p>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="digit2" data-domain="attention" data-points="1">
+                        <label for="digit2">J'ai reussi a repeter les chiffres dans l'ordre inverse</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-card">
+                <h4>Vigilance (detection de lettre)</h4>
+                <p>Dans la sequence suivante, comptez mentalement le nombre de fois ou vous entendez/voyez la lettre "A" :</p>
+                <p style="font-family: monospace; font-size: 1.1rem; letter-spacing: 0.5rem; color: #a78bfa; margin: 1rem 0;">F B A C M N A A J K L B A F A K D E A A A J A M O F A A B</p>
+                <p>Il y a <strong>11 lettres "A"</strong> dans cette sequence.</p>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="vigil" data-domain="attention" data-points="1">
+                        <label for="vigil">J'ai trouve le bon nombre de "A" (ou a 1 pres)</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-card">
+                <h4>Calcul en serie (soustraction de 7)</h4>
+                <p>En partant de 100, soustrayez 7 successivement : 100 - 93 - 86 - 79 - 72 - 65</p>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="serial1" data-domain="attention" data-points="1">
+                        <label for="serial1">J'ai trouve au moins 4 bonnes reponses sur 5</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="serial2" data-domain="attention" data-points="1">
+                        <label for="serial2">J'ai trouve 5 bonnes reponses sur 5 (93-86-79-72-65)</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="serial3" data-domain="attention" data-points="1">
+                        <label for="serial3">J'ai fait tous les calculs sans erreur</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DOMAIN 3: Memoire -->
+        <div class="domain-section">
+            <div class="domain-header">
+                <div class="domain-title">
+                    <i class="fas fa-memory"></i>
+                    <span>3. Memoire (Rappel Differe)</span>
+                </div>
+                <span class="domain-points">/ 5 points</span>
+            </div>
+
+            <div class="task-card">
+                <h4>Memorisation de mots</h4>
+                <p>Memorisez les 5 mots suivants. Vous devrez les rappeler plus tard :</p>
+                <div class="words-list">
+                    <span class="word-tag">VISAGE</span>
+                    <span class="word-tag">VELOURS</span>
+                    <span class="word-tag">EGLISE</span>
+                    <span class="word-tag">MARGUERITE</span>
+                    <span class="word-tag">ROUGE</span>
+                </div>
+                <p style="color: var(--color-warning);">Lisez-les plusieurs fois, puis continuez le test. Vous les rappellerez a la fin.</p>
+            </div>
+
+            <div class="task-card" id="recall-section">
+                <h4>Rappel des mots (a completer a la fin du test)</h4>
+                <p>Quels mots avez-vous retenu ? Cochez ceux dont vous vous souvenez SANS indice :</p>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="word1" data-domain="memory" data-points="1">
+                        <label for="word1">VISAGE</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="word2" data-domain="memory" data-points="1">
+                        <label for="word2">VELOURS</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="word3" data-domain="memory" data-points="1">
+                        <label for="word3">EGLISE</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="word4" data-domain="memory" data-points="1">
+                        <label for="word4">MARGUERITE</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="word5" data-domain="memory" data-points="1">
+                        <label for="word5">ROUGE</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DOMAIN 4: Langage -->
+        <div class="domain-section">
+            <div class="domain-header">
+                <div class="domain-title">
+                    <i class="fas fa-language"></i>
+                    <span>4. Langage</span>
+                </div>
+                <span class="domain-points">/ 3 points</span>
+            </div>
+
+            <div class="task-card">
+                <h4>Repetition de phrases</h4>
+                <p>Repetez exactement les phrases suivantes :</p>
+                <ol style="color: var(--color-text-secondary); margin: 1rem 0; padding-left: 1.5rem;">
+                    <li style="margin-bottom: 0.5rem;">"Je sais que c'est Jean qui doit venir ce matin."</li>
+                    <li>"Le chat se cachait toujours sous le canape quand les chiens etaient dans la piece."</li>
+                </ol>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="sentence1" data-domain="language" data-points="1">
+                        <label for="sentence1">J'ai repete la phrase 1 correctement</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="sentence2" data-domain="language" data-points="1">
+                        <label for="sentence2">J'ai repete la phrase 2 correctement</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-card">
+                <h4>Fluence verbale</h4>
+                <p>En 1 minute, citez le maximum de mots commencant par la lettre "F" (pas de noms propres).</p>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="fluency" data-domain="language" data-points="1">
+                        <label for="fluency">J'ai trouve 11 mots ou plus commencant par "F"</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DOMAIN 5: Abstraction -->
+        <div class="domain-section">
+            <div class="domain-header">
+                <div class="domain-title">
+                    <i class="fas fa-lightbulb"></i>
+                    <span>5. Abstraction</span>
+                </div>
+                <span class="domain-points">/ 2 points</span>
+            </div>
+
+            <div class="task-card">
+                <h4>Similitudes</h4>
+                <p>Trouvez le point commun (categorie) entre les paires suivantes :</p>
+                <div style="margin: 1rem 0;">
+                    <p style="color: var(--color-text-secondary); margin-bottom: 0.5rem;"><strong>Train - Velo</strong> : Reponse attendue = "Moyens de transport"</p>
+                    <p style="color: var(--color-text-secondary);"><strong>Montre - Regle</strong> : Reponse attendue = "Instruments de mesure"</p>
+                </div>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="abstract1" data-domain="abstraction" data-points="1">
+                        <label for="abstract1">J'ai trouve la categorie pour Train-Velo (moyens de transport)</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="abstract2" data-domain="abstraction" data-points="1">
+                        <label for="abstract2">J'ai trouve la categorie pour Montre-Regle (instruments de mesure)</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DOMAIN 6: Denomination -->
+        <div class="domain-section">
+            <div class="domain-header">
+                <div class="domain-title">
+                    <i class="fas fa-paw"></i>
+                    <span>6. Denomination</span>
+                </div>
+                <span class="domain-points">/ 3 points</span>
+            </div>
+
+            <div class="task-card">
+                <h4>Identification d'animaux</h4>
+                <p>Identifiez les animaux suivants :</p>
+                <div style="display: flex; gap: 2rem; flex-wrap: wrap; margin: 1rem 0; font-size: 3rem;">
+                    <span title="Lion">🦁</span>
+                    <span title="Rhinoceros">🦏</span>
+                    <span title="Chameau/Dromadaire">🐪</span>
+                </div>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="animal1" data-domain="naming" data-points="1">
+                        <label for="animal1">J'ai identifie le LION</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="animal2" data-domain="naming" data-points="1">
+                        <label for="animal2">J'ai identifie le RHINOCEROS</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="animal3" data-domain="naming" data-points="1">
+                        <label for="animal3">J'ai identifie le CHAMEAU (ou dromadaire)</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DOMAIN 7: Visuospatial/Executif -->
+        <div class="domain-section">
+            <div class="domain-header">
+                <div class="domain-title">
+                    <i class="fas fa-shapes"></i>
+                    <span>7. Visuospatial / Executif</span>
+                </div>
+                <span class="domain-points">/ 5 points</span>
+            </div>
+
+            <div class="task-card">
+                <h4>Trail Making B (adaptation)</h4>
+                <p>Reliez mentalement dans l'ordre : 1 → A → 2 → B → 3 → C → 4 → D → 5 → E</p>
+                <div class="sequence-container">
+                    <span class="sequence-item">1</span>
+                    <span class="sequence-arrow">→</span>
+                    <span class="sequence-item">A</span>
+                    <span class="sequence-arrow">→</span>
+                    <span class="sequence-item">2</span>
+                    <span class="sequence-arrow">→</span>
+                    <span class="sequence-item">B</span>
+                    <span class="sequence-arrow">→</span>
+                    <span class="sequence-item">3</span>
+                    <span class="sequence-arrow">→</span>
+                    <span class="sequence-item">C</span>
+                    <span class="sequence-arrow">→</span>
+                    <span class="sequence-item">4</span>
+                    <span class="sequence-arrow">→</span>
+                    <span class="sequence-item">D</span>
+                    <span class="sequence-arrow">→</span>
+                    <span class="sequence-item">5</span>
+                    <span class="sequence-arrow">→</span>
+                    <span class="sequence-item">E</span>
+                </div>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="trail" data-domain="visuospatial" data-points="1">
+                        <label for="trail">Je comprends et peux suivre cette alternance chiffre-lettre sans erreur</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-card">
+                <h4>Copie de cube</h4>
+                <p>Imaginez que vous devez dessiner un cube en 3D. Pouvez-vous visualiser toutes les aretes ?</p>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="cube" data-domain="visuospatial" data-points="1">
+                        <label for="cube">Je peux dessiner/visualiser un cube avec ses 12 aretes correctement</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-card">
+                <h4>Dessin de l'horloge</h4>
+                <p>Imaginez une horloge indiquant "11h10". Pouvez-vous placer correctement :</p>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="clock1" data-domain="visuospatial" data-points="1">
+                        <label for="clock1">Le contour circulaire avec tous les chiffres (1-12) bien places</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="clock2" data-domain="visuospatial" data-points="1">
+                        <label for="clock2">La petite aiguille sur le 11</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="clock3" data-domain="visuospatial" data-points="1">
+                        <label for="clock3">La grande aiguille sur le 2 (pour 10 minutes)</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Correction scolarite -->
+        <div class="domain-section">
+            <div class="domain-header">
+                <div class="domain-title">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Correction pour la scolarite</span>
+                </div>
+            </div>
+            <div class="task-card">
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="education" data-domain="education" data-points="1">
+                        <label for="education">J'ai 12 annees d'etudes ou moins (ajoute 1 point au score total)</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div style="text-align: center; margin: 2rem 0;">
+            <button id="calculateBtn" class="btn-primary" style="padding: 1rem 2rem; font-size: 1.1rem;">
+                <i class="fas fa-calculator" style="margin-right: 0.5rem;"></i>Calculer mon score
+            </button>
+        </div>
+
+        <!-- Results Section -->
+        <div id="resultsSection" class="results-section">
+            <div class="score-display">
+                <div class="total-score" id="totalScore">0</div>
+                <div class="score-max">/ 30 points</div>
+            </div>
+
+            <div id="interpretationBox" class="interpretation-box">
+                <h3 id="interpretationTitle"></h3>
+                <p id="interpretationText"></p>
+            </div>
+
+            <div class="glass-card">
+                <h3 style="margin-bottom: 1rem;"><i class="fas fa-chart-bar" style="color: #8b5cf6; margin-right: 0.5rem;"></i>Scores par domaine</h3>
+                <div class="domain-scores" id="domainScores"></div>
+            </div>
+
+            <div class="alert alert-info" style="margin-top: 1.5rem;">
+                <div class="alert-icon">
+                    <i class="fas fa-user-md"></i>
+                </div>
+                <div class="alert-content">
+                    <h3>Interpretation clinique</h3>
+                    <p>Ces resultats doivent etre interpretes par un professionnel de sante en tenant compte du contexte clinique, de l'age, du niveau d'education et d'eventuels facteurs confondants (fatigue, anxiete, medicaments).</p>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 1.5rem;">
+                <button onclick="location.reload()" class="btn-secondary">
+                    <i class="fas fa-redo" style="margin-right: 0.5rem;"></i>Recommencer le test
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p><strong>&copy; Nasreddine et al. (2005) - Montreal Cognitive Assessment (MoCA)</strong></p>
+        <p>Adapte en version interactive par Dr FENOHASINA T.J. Felicien (Psychiatre)</p>
+        <p>&copy; 2025 - Centre Ressource de Rehabilitation</p>
+        <p class="license">Licence CC BY-NC-SA 4.0</p>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const calculateBtn = document.getElementById('calculateBtn');
+    const resultsSection = document.getElementById('resultsSection');
+
+    calculateBtn.addEventListener('click', function() {
+        const domains = {
+            orientation: { score: 0, max: 6, name: 'Orientation' },
+            attention: { score: 0, max: 6, name: 'Attention' },
+            memory: { score: 0, max: 5, name: 'Memoire' },
+            language: { score: 0, max: 3, name: 'Langage' },
+            abstraction: { score: 0, max: 2, name: 'Abstraction' },
+            naming: { score: 0, max: 3, name: 'Denomination' },
+            visuospatial: { score: 0, max: 5, name: 'Visuospatial' }
+        };
+
+        let totalScore = 0;
+        let educationBonus = 0;
+
+        // Calculate scores
+        document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
+            const domain = checkbox.dataset.domain;
+            const points = parseInt(checkbox.dataset.points) || 0;
+
+            if (domain === 'education') {
+                educationBonus = points;
+            } else if (domains[domain]) {
+                domains[domain].score += points;
+            }
+        });
+
+        // Cap domain scores at their max
+        Object.keys(domains).forEach(key => {
+            domains[key].score = Math.min(domains[key].score, domains[key].max);
+            totalScore += domains[key].score;
+        });
+
+        // Add education bonus (cap at 30)
+        totalScore = Math.min(totalScore + educationBonus, 30);
+
+        // Display results
+        document.getElementById('totalScore').textContent = totalScore;
+
+        // Interpretation
+        const interpretationBox = document.getElementById('interpretationBox');
+        const interpretationTitle = document.getElementById('interpretationTitle');
+        const interpretationText = document.getElementById('interpretationText');
+
+        if (totalScore >= 26) {
+            interpretationBox.className = 'interpretation-box normal';
+            interpretationTitle.innerHTML = '<i class="fas fa-check-circle" style="color: #4ade80; margin-right: 0.5rem;"></i>Fonctionnement cognitif normal';
+            interpretationText.textContent = 'Votre score suggere un fonctionnement cognitif dans les limites de la normale. Aucun deficit significatif n\'est detecte par ce depistage.';
+        } else if (totalScore >= 18) {
+            interpretationBox.className = 'interpretation-box mild';
+            interpretationTitle.innerHTML = '<i class="fas fa-exclamation-triangle" style="color: #fbbf24; margin-right: 0.5rem;"></i>Deficit cognitif leger possible';
+            interpretationText.textContent = 'Votre score suggere un possible deficit cognitif leger (MCI). Une evaluation neuropsychologique complete est recommandee pour confirmer et caracteriser ces difficultes.';
+        } else {
+            interpretationBox.className = 'interpretation-box moderate';
+            interpretationTitle.innerHTML = '<i class="fas fa-times-circle" style="color: #f87171; margin-right: 0.5rem;"></i>Deficit cognitif significatif probable';
+            interpretationText.textContent = 'Votre score suggere un deficit cognitif significatif. Une consultation neurologique et une evaluation neuropsychologique approfondie sont fortement recommandees.';
+        }
+
+        // Domain scores display
+        const domainScoresDiv = document.getElementById('domainScores');
+        domainScoresDiv.innerHTML = Object.keys(domains).map(key => `
+            <div class="domain-score-card">
+                <h4>${domains[key].name}</h4>
+                <div class="domain-score-value">${domains[key].score} / ${domains[key].max}</div>
+            </div>
+        `).join('');
+
+        // Show results
+        resultsSection.classList.add('visible');
+        resultsSection.scrollIntoView({ behavior: 'smooth' });
+    });
+});
+</script>
+
+</body>
+</html>

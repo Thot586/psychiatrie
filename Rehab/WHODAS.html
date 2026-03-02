@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WHODAS 2.0 - WHO Disability Assessment Schedule</title>
+
+    <!-- Font Awesome pour les icones -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Styles partages -->
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+
+    <!-- Chart.js pour les graphiques -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --cat-main: #0ea5e9;
+            --cat-dark: #0284c7;
+            --cat-light: #38bdf8;
+            --cat-rgb: 14, 165, 233;
+            --cat-readable: #0284c7;
+        }
+        .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
+        .option-btn.selected, .answer-btn.selected { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        .score-circle { border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 30px rgba(var(--cat-rgb), 0.2); }
+        .score-value { color: var(--cat-light); }
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-light); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+        .progress-fill { background: linear-gradient(90deg, var(--cat-main), var(--cat-light)); box-shadow: 0 0 8px rgba(var(--cat-rgb), 0.4); }
+        .likert-options input[type="radio"]:checked + label,
+        .binary-options input[type="radio"]:checked + label,
+        .radio-options input[type="radio"]:checked + label { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+    </style>
+
+</head>
+<body class="light-questionnaire">
+    <!-- Navigation -->
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil">
+                <i class="fas fa-home"></i>
+            </a>
+            <button onclick="history.back()" class="btn-back" title="Retour">
+                <i class="fas fa-arrow-left"></i> <span>Retour</span>
+            </button>
+        </div>
+        <h1>WHODAS 2.0</h1>
+        <span class="badge badge-cat-rehab">REHAB</span>
+    </nav>
+
+    <div class="container">
+        <!-- En-tete -->
+        <header class="glass-card" style="text-align: center; margin-bottom: 1.5rem;">
+            <h2 class="gradient-text">WHO Disability Assessment Schedule 2.0</h2>
+            <p>Evaluation du fonctionnement et du handicap - Version courte (12 items)</p>
+        </header>
+
+        <!-- Informations -->
+        <section class="info-box">
+            <h3><i class="fas fa-info-circle"></i> A propos de ce questionnaire</h3>
+            <p>Le WHODAS 2.0 (World Health Organization Disability Assessment Schedule) est un outil d'evaluation standardise developpe par l'OMS. Il mesure le fonctionnement et le handicap dans <strong>6 domaines de la vie</strong> au cours des <strong>30 derniers jours</strong>.</p>
+            <p style="margin-top: 0.75rem;">Cet outil est base sur la Classification Internationale du Fonctionnement, du handicap et de la sante (CIF) et permet une evaluation transversale applicable a toutes les conditions de sante.</p>
+        </section>
+
+        <!-- Avertissement -->
+        <section class="warning-box">
+            <h3><i class="fas fa-exclamation-triangle"></i> Avertissements importants</h3>
+            <ul style="margin: 0; padding-left: 1.5rem;">
+                <li>Ce questionnaire ne remplace pas une evaluation clinique complete</li>
+                <li>Les resultats sont indicatifs et necessitent une interpretation professionnelle</li>
+                <li>Repondez en pensant a votre situation au cours des 30 derniers jours</li>
+                <li>Tenez compte de l'aide technique ou personnelle dont vous disposez</li>
+            </ul>
+        </section>
+
+        <!-- Controles -->
+        <section class="glass-card">
+            <div class="control-buttons">
+                <button class="btn-secondary" onclick="importData()">
+                    <i class="fas fa-file-import"></i> Importer
+                </button>
+                <button class="btn-secondary" onclick="resetForm()">
+                    <i class="fas fa-redo"></i> Reinitialiser
+                </button>
+            </div>
+            <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="loadFile(event)">
+        </section>
+
+        <!-- Instructions -->
+        <section class="glass-card">
+            <h3 style="margin-bottom: 1rem;"><i class="fas fa-clipboard-list"></i> Instructions</h3>
+            <p style="color: var(--color-text-muted); margin-bottom: 1.5rem;">
+                Au cours des <strong>30 derniers jours</strong>, a quel point avez-vous eu des difficultes pour realiser les activites suivantes ?
+                Tenez compte de la facon dont vous faites habituellement l'activite, en incluant l'utilisation d'aides techniques ou l'aide d'une personne.
+            </p>
+
+            <!-- Domaine 1: Cognition -->
+            <div class="domain-section" id="domain1">
+                <div class="domain-header">
+                    <div class="domain-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="domain-title">
+                        <h3>Domaine 1 - Cognition</h3>
+                        <p>Comprehension et communication</p>
+                    </div>
+                    <span class="domain-score-badge" id="domain1Score">0/8</span>
+                </div>
+                <div id="questions-domain1"></div>
+            </div>
+
+            <!-- Domaine 2: Mobilite -->
+            <div class="domain-section" id="domain2">
+                <div class="domain-header">
+                    <div class="domain-icon">
+                        <i class="fas fa-walking"></i>
+                    </div>
+                    <div class="domain-title">
+                        <h3>Domaine 2 - Mobilite</h3>
+                        <p>Se deplacer et se mouvoir</p>
+                    </div>
+                    <span class="domain-score-badge" id="domain2Score">0/8</span>
+                </div>
+                <div id="questions-domain2"></div>
+            </div>
+
+            <!-- Domaine 3: Soins personnels -->
+            <div class="domain-section" id="domain3">
+                <div class="domain-header">
+                    <div class="domain-icon">
+                        <i class="fas fa-hand-holding-heart"></i>
+                    </div>
+                    <div class="domain-title">
+                        <h3>Domaine 3 - Soins personnels</h3>
+                        <p>Hygiene et autonomie</p>
+                    </div>
+                    <span class="domain-score-badge" id="domain3Score">0/8</span>
+                </div>
+                <div id="questions-domain3"></div>
+            </div>
+
+            <!-- Domaine 4: Relations -->
+            <div class="domain-section" id="domain4">
+                <div class="domain-header">
+                    <div class="domain-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="domain-title">
+                        <h3>Domaine 4 - Relations</h3>
+                        <p>Interactions avec les autres</p>
+                    </div>
+                    <span class="domain-score-badge" id="domain4Score">0/8</span>
+                </div>
+                <div id="questions-domain4"></div>
+            </div>
+
+            <!-- Domaine 5: Activites quotidiennes -->
+            <div class="domain-section" id="domain5">
+                <div class="domain-header">
+                    <div class="domain-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <div class="domain-title">
+                        <h3>Domaine 5 - Activites quotidiennes</h3>
+                        <p>Travail et taches domestiques</p>
+                    </div>
+                    <span class="domain-score-badge" id="domain5Score">0/8</span>
+                </div>
+                <div id="questions-domain5"></div>
+            </div>
+
+            <!-- Domaine 6: Participation -->
+            <div class="domain-section" id="domain6">
+                <div class="domain-header">
+                    <div class="domain-icon">
+                        <i class="fas fa-hands-helping"></i>
+                    </div>
+                    <div class="domain-title">
+                        <h3>Domaine 6 - Participation</h3>
+                        <p>Engagement dans la societe</p>
+                    </div>
+                    <span class="domain-score-badge" id="domain6Score">0/8</span>
+                </div>
+                <div id="questions-domain6"></div>
+            </div>
+        </section>
+
+        <!-- Resultats -->
+        <section id="results" class="results-section" style="display: none;">
+            <h2 style="text-align: center; margin-bottom: 2rem;">
+                <i class="fas fa-chart-bar"></i> Resultats de votre evaluation
+            </h2>
+
+            <!-- Mode de cotation -->
+            <div class="glass-card" style="margin-bottom: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                    <div>
+                        <h4 style="margin: 0 0 0.25rem 0;">Mode de cotation</h4>
+                        <p style="margin: 0; font-size: var(--font-size-sm);">Choisissez le type de score a afficher</p>
+                    </div>
+                    <div class="scoring-toggle">
+                        <button id="simpleScoreBtn" class="active" onclick="toggleScoringMode('simple')">
+                            Score simple (0-48)
+                        </button>
+                        <button id="complexScoreBtn" onclick="toggleScoringMode('complex')">
+                            Score % (0-100)
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Score total -->
+            <div class="score-display">
+                <div class="score-circle">
+                    <span class="score-value" id="totalScore">0</span>
+                </div>
+                <p class="score-label" id="scoreLabel">sur 48 points</p>
+            </div>
+
+            <div id="interpretationBox" class="interpretation"></div>
+
+            <!-- Graphique radar -->
+            <div class="glass-card">
+                <h3 style="margin-bottom: 1rem;"><i class="fas fa-chart-pie"></i> Profil par domaine</h3>
+                <div class="chart-container">
+                    <canvas id="radarChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Scores par domaine -->
+            <div class="glass-card">
+                <h3 style="margin-bottom: 1.5rem;"><i class="fas fa-layer-group"></i> Scores detailles par domaine</h3>
+                <div id="domainResults"></div>
+            </div>
+
+            <!-- Interpretation des niveaux -->
+            <div class="glass-card">
+                <h3 style="margin-bottom: 1rem;"><i class="fas fa-info-circle"></i> Guide d'interpretation</h3>
+                <p style="color: var(--color-text-muted); margin-bottom: 1rem;">
+                    Les seuils ci-dessous sont indicatifs et bases sur le score simple (0-48).
+                </p>
+                <div class="interpretation-grid" id="interpretationGrid">
+                    <div class="interpretation-card" data-level="none">
+                        <div class="interpretation-range">0 - 4</div>
+                        <div class="interpretation-label">Aucun handicap</div>
+                    </div>
+                    <div class="interpretation-card" data-level="mild">
+                        <div class="interpretation-range">5 - 9</div>
+                        <div class="interpretation-label">Handicap leger</div>
+                    </div>
+                    <div class="interpretation-card" data-level="moderate">
+                        <div class="interpretation-range">10 - 14</div>
+                        <div class="interpretation-label">Handicap modere</div>
+                    </div>
+                    <div class="interpretation-card" data-level="severe">
+                        <div class="interpretation-range">15 - 19</div>
+                        <div class="interpretation-label">Handicap severe</div>
+                    </div>
+                    <div class="interpretation-card" data-level="extreme">
+                        <div class="interpretation-range">20+</div>
+                        <div class="interpretation-label">Handicap extreme</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Details supplementaires -->
+            <button class="btn-primary w-full" onclick="toggleDetails()" style="margin-top: 1.5rem;">
+                <i class="fas fa-list"></i> Voir les recommandations detaillees
+                <span id="toggleIcon"><i class="fas fa-chevron-down"></i></span>
+            </button>
+
+            <div id="detailsContent" class="glass-card" style="display: none; margin-top: 1rem;"></div>
+
+            <!-- Export -->
+            <div class="glass-card" style="margin-top: 2rem;">
+                <h3><i class="fas fa-download"></i> Exporter les resultats</h3>
+                <div class="consent-box">
+                    <label>
+                        <input type="checkbox" id="exportConsent">
+                        <span>Je souhaite télécharger mes résultats (questionnaire, réponses, score et date) dans un fichier JSON sur mon appareil. <strong>Ces résultats constituent des données de santé — je m'engage à les conserver de façon sécurisée et à ne les partager qu'avec un professionnel de santé de mon choix.</strong> Aucune donnée n'est transmise à un serveur.</span>
+                    </label>
+                </div>
+                <div class="export-buttons">
+                    <button class="btn-primary" onclick="exportData()">
+                        <i class="fas fa-file-export"></i> Exporter en JSON
+                    </button>
+                    <button class="btn-print" onclick="printResults()">
+                        <i class="fas fa-print"></i> Imprimer
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p><strong>WHODAS 2.0 - WHO Disability Assessment Schedule</strong></p>
+        <p>Developpe par l'Organisation Mondiale de la Sante (OMS), 2010</p>
+        <p>Base sur la Classification Internationale du Fonctionnement, du handicap et de la sante (CIF)</p>
+        <p style="margin-top: 0.5rem;">Adaptation numerique : Dr FENOHASINA | Psychiatre</p>
+        <p style="margin-top: 1rem;">
+            <a href="https://www.who.int/standards/classifications/international-classification-of-functioning-disability-and-health" target="_blank">
+                Documentation officielle OMS
+            </a>
+        </p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../js/app.js"></script>
+    <script>
+        // Configuration des questions WHODAS 2.0 (12 items)
+        const domains = [
+            {
+                id: 1,
+                name: "Cognition",
+                icon: "fa-brain",
+                questions: [
+                    { id: 1, text: "Se concentrer sur quelque chose pendant dix minutes ?" },
+                    { id: 2, text: "Se souvenir de faire des choses importantes ?" }
+                ]
+            },
+            {
+                id: 2,
+                name: "Mobilite",
+                icon: "fa-walking",
+                questions: [
+                    { id: 3, text: "Rester debout pendant de longues periodes comme 30 minutes ?" },
+                    { id: 4, text: "Se deplacer a l'interieur de votre domicile ?" }
+                ]
+            },
+            {
+                id: 3,
+                name: "Soins personnels",
+                icon: "fa-hand-holding-heart",
+                questions: [
+                    { id: 5, text: "Vous laver le corps entier ?" },
+                    { id: 6, text: "Vous habiller ?" }
+                ]
+            },
+            {
+                id: 4,
+                name: "Relations",
+                icon: "fa-users",
+                questions: [
+                    { id: 7, text: "Avoir des relations avec des personnes que vous ne connaissez pas ?" },
+                    { id: 8, text: "Maintenir une amitie ?" }
+                ]
+            },
+            {
+                id: 5,
+                name: "Activites quotidiennes",
+                icon: "fa-home",
+                questions: [
+                    { id: 9, text: "Prendre en charge vos responsabilites domestiques ?" },
+                    { id: 10, text: "Effectuer votre travail ou vos etudes quotidien(ne)s ? (ou vos activites principales)" }
+                ]
+            },
+            {
+                id: 6,
+                name: "Participation",
+                icon: "fa-hands-helping",
+                questions: [
+                    { id: 11, text: "Vous engager dans des activites communautaires (fetes, activites religieuses, etc.) de la meme facon que n'importe qui d'autre ?" },
+                    { id: 12, text: "A quel point avez-vous ete emotionnellement affecte(e) par votre probleme de sante ?" }
+                ]
+            }
+        ];
+
+        const options = [
+            { value: 0, label: "Aucune", description: "Aucune difficulte" },
+            { value: 1, label: "Legere", description: "Difficulte legere" },
+            { value: 2, label: "Moderee", description: "Difficulte moderee" },
+            { value: 3, label: "Severe", description: "Difficulte severe" },
+            { value: 4, label: "Extreme/Impossible", description: "Difficulte extreme ou impossible" }
+        ];
+
+        let answers = new Array(12).fill(null);
+        let scoringMode = 'simple'; // 'simple' or 'complex'
+        let chartInstance = null;
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeQuestions();
+        });
+
+        function initializeQuestions() {
+            domains.forEach(domain => {
+                const container = document.getElementById(`questions-domain${domain.id}`);
+                if (!container) return;
+
+                let html = '';
+                domain.questions.forEach((question, idx) => {
+                    html += `
+                        <div class="question-card" id="question${question.id}">
+                            <div style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem;">
+                                <span class="question-number">${question.id}</span>
+                                <span class="question-text" style="margin-bottom: 0;">${question.text}</span>
+                            </div>
+                            <div class="options-grid">
+                                ${options.map(opt => `
+                                    <button class="option-btn" onclick="selectAnswer(${question.id - 1}, ${opt.value})" id="q${question.id - 1}_opt${opt.value}">
+                                        <strong>${opt.value}</strong> - ${opt.label}
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+            });
+        }
+
+        function selectAnswer(questionIndex, value) {
+            answers[questionIndex] = value;
+
+            // Update UI
+            for (let i = 0; i <= 4; i++) {
+                const btn = document.getElementById(`q${questionIndex}_opt${i}`);
+                if (btn) {
+                    btn.classList.toggle('selected', i === value);
+                }
+            }
+
+            // Mark card as answered
+            const card = document.getElementById(`question${questionIndex + 1}`);
+            if (card) {
+                card.classList.add('answered');
+            }
+
+            // Update domain score badge
+            updateDomainScores();
+            checkCompletion();
+        }
+
+        function updateDomainScores() {
+            domains.forEach(domain => {
+                const startIdx = (domain.id - 1) * 2;
+                const domainAnswers = answers.slice(startIdx, startIdx + 2);
+                const answeredCount = domainAnswers.filter(a => a !== null).length;
+
+                if (answeredCount > 0) {
+                    const score = domainAnswers.reduce((sum, val) => sum + (val || 0), 0);
+                    const badge = document.getElementById(`domain${domain.id}Score`);
+                    if (badge) {
+                        badge.textContent = `${score}/8`;
+                        badge.classList.add('visible');
+                    }
+                }
+            });
+        }
+
+        function checkCompletion() {
+            const allAnswered = answers.every(a => a !== null);
+
+            if (allAnswered) {
+                updateResults();
+                document.getElementById('results').style.display = 'block';
+                document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function calculateScores() {
+            const totalSimple = answers.reduce((sum, val) => sum + (val || 0), 0);
+
+            // Complex scoring: convert to 0-100 scale
+            const totalComplex = Math.round((totalSimple / 48) * 100);
+
+            // Domain scores
+            const domainScores = domains.map(domain => {
+                const startIdx = (domain.id - 1) * 2;
+                const domainAnswers = answers.slice(startIdx, startIdx + 2);
+                const simple = domainAnswers.reduce((sum, val) => sum + (val || 0), 0);
+                const complex = Math.round((simple / 8) * 100);
+                return {
+                    name: domain.name,
+                    icon: domain.icon,
+                    simple: simple,
+                    complex: complex,
+                    maxSimple: 8,
+                    maxComplex: 100
+                };
+            });
+
+            return {
+                total: {
+                    simple: totalSimple,
+                    complex: totalComplex
+                },
+                domains: domainScores
+            };
+        }
+
+        function getInterpretation(score) {
+            // Using simple score thresholds
+            if (score <= 4) {
+                return {
+                    level: "Aucun handicap",
+                    className: "low",
+                    description: "Votre fonctionnement est normal ou quasi-normal dans les domaines evalues.",
+                    action: "Maintenir les bonnes pratiques actuelles. Surveillance de routine."
+                };
+            } else if (score <= 9) {
+                return {
+                    level: "Handicap leger",
+                    className: "low",
+                    description: "Vous presentez des difficultes legeres dans certains domaines de fonctionnement.",
+                    action: "Identifier les domaines concernes et envisager des adaptations mineures si necessaire."
+                };
+            } else if (score <= 14) {
+                return {
+                    level: "Handicap modere",
+                    className: "moderate",
+                    description: "Vous presentez des difficultes moderees qui peuvent impacter votre vie quotidienne.",
+                    action: "Une evaluation approfondie est recommandee. Envisager un accompagnement adapte."
+                };
+            } else if (score <= 19) {
+                return {
+                    level: "Handicap severe",
+                    className: "high",
+                    description: "Vous presentez des difficultes importantes dans plusieurs domaines de fonctionnement.",
+                    action: "Un accompagnement specialise est recommande. Evaluation multidisciplinaire conseillée."
+                };
+            } else {
+                return {
+                    level: "Handicap extreme",
+                    className: "critical",
+                    description: "Vous presentez des difficultes majeures qui impactent significativement votre autonomie.",
+                    action: "Prise en charge globale necessaire. Coordination des soins et accompagnement intensif recommandes."
+                };
+            }
+        }
+
+        function updateResults() {
+            const scores = calculateScores();
+            const interpretation = getInterpretation(scores.total.simple);
+
+            // Update total score display
+            if (scoringMode === 'simple') {
+                document.getElementById('totalScore').textContent = scores.total.simple;
+                document.getElementById('scoreLabel').textContent = 'sur 48 points';
+            } else {
+                document.getElementById('totalScore').textContent = scores.total.complex + '%';
+                document.getElementById('scoreLabel').textContent = 'de handicap';
+            }
+
+            // Update interpretation
+            const interpretationBox = document.getElementById('interpretationBox');
+            interpretationBox.className = `interpretation ${interpretation.className}`;
+            interpretationBox.innerHTML = `
+                <h3>${interpretation.level}</h3>
+                <p><strong>Interpretation :</strong> ${interpretation.description}</p>
+                <p><strong>Recommandation :</strong> ${interpretation.action}</p>
+            `;
+
+            // Update interpretation grid
+            const cards = document.querySelectorAll('.interpretation-card');
+            cards.forEach(card => card.classList.remove('active'));
+
+            let activeLevel;
+            if (scores.total.simple <= 4) activeLevel = 'none';
+            else if (scores.total.simple <= 9) activeLevel = 'mild';
+            else if (scores.total.simple <= 14) activeLevel = 'moderate';
+            else if (scores.total.simple <= 19) activeLevel = 'severe';
+            else activeLevel = 'extreme';
+
+            const activeCard = document.querySelector(`.interpretation-card[data-level="${activeLevel}"]`);
+            if (activeCard) activeCard.classList.add('active');
+
+            // Update domain results
+            const domainResultsContainer = document.getElementById('domainResults');
+            domainResultsContainer.innerHTML = scores.domains.map(domain => {
+                const score = scoringMode === 'simple' ? domain.simple : domain.complex;
+                const max = scoringMode === 'simple' ? domain.maxSimple : domain.maxComplex;
+                const percentage = (domain.simple / 8) * 100;
+
+                return `
+                    <div class="domain-result-card">
+                        <div class="domain-result-header">
+                            <div class="domain-result-name">
+                                <i class="fas ${domain.icon}"></i>
+                                <span>${domain.name}</span>
+                            </div>
+                            <div class="domain-result-score">${score}${scoringMode === 'complex' ? '%' : '/' + max}</div>
+                        </div>
+                        <div class="score-bar-container">
+                            <div class="score-bar">
+                                <div class="score-bar-fill" style="width: ${percentage}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Update radar chart
+            updateRadarChart(scores.domains);
+
+            // Update detailed recommendations
+            updateDetailedRecommendations(scores, interpretation);
+        }
+
+        function updateRadarChart(domainScores) {
+            const ctx = document.getElementById('radarChart').getContext('2d');
+
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            const labels = domainScores.map(d => d.name);
+            const data = scoringMode === 'simple'
+                ? domainScores.map(d => d.simple)
+                : domainScores.map(d => d.complex);
+            const maxValue = scoringMode === 'simple' ? 8 : 100;
+
+            chartInstance = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Niveau de difficulte',
+                        data: data,
+                        backgroundColor: 'rgba(14, 165, 233, 0.2)',
+                        borderColor: 'rgba(14, 165, 233, 0.8)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(14, 165, 233, 1)',
+                        pointBorderColor: '#fff',
+                        pointRadius: 5,
+                        pointHoverRadius: 7
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            min: 0,
+                            max: maxValue,
+                            ticks: {
+                                stepSize: scoringMode === 'simple' ? 2 : 25,
+                                color: '#94a3b8',
+                                backdropColor: 'transparent'
+                            },
+                            grid: {
+                                color: 'rgba(148, 163, 184, 0.2)'
+                            },
+                            angleLines: {
+                                color: 'rgba(148, 163, 184, 0.2)'
+                            },
+                            pointLabels: {
+                                color: '#e2e8f0',
+                                font: {
+                                    size: 12,
+                                    weight: '500'
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                            titleColor: '#f8fafc',
+                            bodyColor: '#e2e8f0',
+                            borderColor: 'rgba(14, 165, 233, 0.3)',
+                            borderWidth: 1,
+                            callbacks: {
+                                label: function(context) {
+                                    const suffix = scoringMode === 'simple' ? '/8' : '%';
+                                    return 'Score: ' + context.parsed.r + suffix;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateDetailedRecommendations(scores, interpretation) {
+            const detailsContent = document.getElementById('detailsContent');
+
+            // Find problematic domains (score > 4 for simple, > 50% for complex)
+            const problematicDomains = scores.domains.filter(d => d.simple > 4);
+
+            let recommendationsHtml = `
+                <h3 style="margin-bottom: 1.5rem;">Recommandations personnalisees</h3>
+            `;
+
+            if (problematicDomains.length > 0) {
+                recommendationsHtml += `
+                    <div class="warning-box" style="margin-bottom: 1.5rem;">
+                        <h4 style="color: #fbbf24; margin-bottom: 0.5rem;">
+                            <i class="fas fa-exclamation-circle"></i> Domaines necessitant une attention particuliere
+                        </h4>
+                        <ul style="margin: 0; padding-left: 1.5rem;">
+                            ${problematicDomains.map(d => `<li>${d.name} (score: ${d.simple}/8)</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+
+            // Domain-specific recommendations
+            const domainRecommendations = {
+                'Cognition': {
+                    title: 'Strategies cognitives',
+                    tips: [
+                        'Utiliser des aide-memoire (agendas, rappels sur telephone)',
+                        'Fractionner les taches complexes en etapes simples',
+                        'Amenager un environnement calme pour la concentration',
+                        'Envisager une evaluation neuropsychologique si les difficultes persistent'
+                    ]
+                },
+                'Mobilite': {
+                    title: 'Ameliorer la mobilite',
+                    tips: [
+                        'Consulter un kinesitherapeute pour un programme adapte',
+                        'Evaluer le besoin d\'aides techniques (canne, deambulateur)',
+                        'Adapter l\'environnement domestique (barres d\'appui, rampes)',
+                        'Pratiquer une activite physique adaptee regulierement'
+                    ]
+                },
+                'Soins personnels': {
+                    title: 'Autonomie dans les soins',
+                    tips: [
+                        'Evaluer le besoin d\'aides techniques pour la toilette',
+                        'Envisager l\'intervention d\'un ergotherapeute',
+                        'Organiser l\'espace de vie pour faciliter les activites',
+                        'Considerer une aide a domicile si necessaire'
+                    ]
+                },
+                'Relations': {
+                    title: 'Ameliorer les relations sociales',
+                    tips: [
+                        'Participer a des groupes de soutien ou activites communautaires',
+                        'Envisager un accompagnement psychologique (TCC, groupe)',
+                        'Developper des strategies de communication',
+                        'Maintenir un contact regulier avec les proches'
+                    ]
+                },
+                'Activites quotidiennes': {
+                    title: 'Gestion du quotidien',
+                    tips: [
+                        'Etablir des routines quotidiennes structurees',
+                        'Utiliser des outils de planification et d\'organisation',
+                        'Deleguer certaines taches si possible',
+                        'Envisager un accompagnement pour le retour a l\'emploi si necessaire'
+                    ]
+                },
+                'Participation': {
+                    title: 'Inclusion sociale',
+                    tips: [
+                        'Identifier les activites communautaires accessibles',
+                        'Rejoindre des associations ou groupes d\'entraide',
+                        'Travailler sur l\'estime de soi et la confiance',
+                        'Envisager un soutien psychologique pour l\'impact emotionnel'
+                    ]
+                }
+            };
+
+            // Add recommendations for problematic domains
+            problematicDomains.forEach(domain => {
+                const recs = domainRecommendations[domain.name];
+                if (recs) {
+                    recommendationsHtml += `
+                        <div class="info-box" style="margin-bottom: 1rem;">
+                            <h4 style="color: var(--color-primary-light); margin-bottom: 0.75rem;">
+                                <i class="fas ${domain.icon}"></i> ${recs.title}
+                            </h4>
+                            <ul style="margin: 0; padding-left: 1.5rem;">
+                                ${recs.tips.map(tip => `<li style="margin-bottom: 0.25rem;">${tip}</li>`).join('')}
+                            </ul>
+                        </div>
+                    `;
+                }
+            });
+
+            // General information
+            recommendationsHtml += `
+                <div class="glass-card" style="margin-top: 1.5rem; background: var(--color-bg-card);">
+                    <h4 style="color: var(--color-text-primary); margin-bottom: 1rem;">
+                        <i class="fas fa-info-circle"></i> Comprendre les scores WHODAS 2.0
+                    </h4>
+                    <p style="color: var(--color-text-muted); line-height: 1.8; margin-bottom: 1rem;">
+                        <strong>Score simple (0-48) :</strong> Somme directe des reponses. Plus le score est eleve, plus le handicap est important.<br>
+                        <strong>Score complexe (0-100%) :</strong> Conversion en pourcentage pour faciliter la comparaison.
+                    </p>
+                    <p style="color: var(--color-text-muted); line-height: 1.8;">
+                        <strong>Les 6 domaines du WHODAS 2.0 :</strong><br>
+                        - <strong>Cognition :</strong> Comprehension, memoire, concentration<br>
+                        - <strong>Mobilite :</strong> Deplacement, station debout<br>
+                        - <strong>Soins personnels :</strong> Hygiene, habillement<br>
+                        - <strong>Relations :</strong> Interactions sociales<br>
+                        - <strong>Activites quotidiennes :</strong> Travail, taches domestiques<br>
+                        - <strong>Participation :</strong> Engagement communautaire, impact emotionnel
+                    </p>
+                </div>
+            `;
+
+            detailsContent.innerHTML = recommendationsHtml;
+        }
+
+        function toggleScoringMode(mode) {
+            scoringMode = mode;
+
+            document.getElementById('simpleScoreBtn').classList.toggle('active', mode === 'simple');
+            document.getElementById('complexScoreBtn').classList.toggle('active', mode === 'complex');
+
+            if (answers.every(a => a !== null)) {
+                updateResults();
+            }
+        }
+
+        function toggleDetails() {
+            const content = document.getElementById('detailsContent');
+            const icon = document.getElementById('toggleIcon');
+            const isVisible = content.style.display !== 'none';
+
+            content.style.display = isVisible ? 'none' : 'block';
+            icon.innerHTML = isVisible ? '<i class="fas fa-chevron-down"></i>' : '<i class="fas fa-chevron-up"></i>';
+        }
+
+        function resetForm() {
+            answers = new Array(12).fill(null);
+
+            document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+            document.querySelectorAll('.question-card').forEach(card => card.classList.remove('answered'));
+            document.querySelectorAll('.domain-score-badge').forEach(badge => {
+                badge.classList.remove('visible');
+                badge.textContent = '0/8';
+            });
+
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('detailsContent').style.display = 'none';
+            document.getElementById('exportConsent').checked = false;
+
+            if (chartInstance) {
+                chartInstance.destroy();
+                chartInstance = null;
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function importData() {
+            document.getElementById('fileInput').click();
+        }
+
+        function loadFile(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        if (data.answers && Array.isArray(data.answers) && data.answers.length === 12) {
+                            answers = data.answers;
+
+                            answers.forEach((value, index) => {
+                                if (value !== null) {
+                                    selectAnswer(index, value);
+                                }
+                            });
+
+                            if (data.scoringMode) {
+                                toggleScoringMode(data.scoringMode);
+                            }
+                        } else {
+                            alert("Format de fichier invalide. Veuillez importer un fichier WHODAS 2.0 valide.");
+                        }
+                    } catch (error) {
+                        alert("Erreur lors de l'importation du fichier: " + error.message);
+                    }
+                };
+                reader.readAsText(file);
+            }
+            event.target.value = '';
+        }
+
+        function exportData() {
+            const consent = document.getElementById('exportConsent').checked;
+            if (!consent) {
+                alert("Veuillez cocher la case de consentement avant d''exporter.");
+                return;
+            }
+
+            const scores = calculateScores();
+            const interpretation = getInterpretation(scores.total.simple);
+
+            const data = {
+                questionnaire: "WHODAS 2.0",
+                version: "12 items",
+                date: new Date().toISOString(),
+                answers: answers,
+                scoringMode: scoringMode,
+                scores: {
+                    simple: scores.total.simple,
+                    complex: scores.total.complex,
+                    domains: scores.domains.map(d => ({
+                        name: d.name,
+                        simple: d.simple,
+                        complex: d.complex
+                    }))
+                },
+                interpretation: interpretation.level
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `WHODAS2_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

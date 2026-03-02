@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questionnaire de Satisfaction - Plan de Suivi Individualise (PSI)</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <style>
+        /* Badge et couleurs Rehab - Sky Blue */
+        .badge-rehab {
+            background: rgba(14, 165, 233, 0.15);
+            color: #38bdf8;
+            border: 1px solid rgba(14, 165, 233, 0.3);
+        }
+        .question-number { background: linear-gradient(135deg, #0ea5e9, #0284c7); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(14, 165, 233, 0.15); }
+        .score-circle { border-color: #0ea5e9; box-shadow: var(--neo-pressed), 0 0 30px rgba(14, 165, 233, 0.2); }
+        .score-value { color: #38bdf8; }
+        .btn-primary { border-color: #0ea5e9; color: #38bdf8; }
+        .btn-primary:hover { background: linear-gradient(135deg, #0ea5e9, #0284c7); }
+        .progress-fill { background: linear-gradient(90deg, #0ea5e9, #38bdf8); box-shadow: 0 0 8px rgba(14, 165, 233, 0.4); }
+
+        /* Header Section */
+        .header-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header-section h2 {
+            color: var(--color-text-primary);
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .header-section p {
+            color: var(--color-text-muted);
+            font-size: 1.1em;
+        }
+
+        /* Input groups */
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+
+        .input-group input,
+        .input-group textarea {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--color-border);
+            border-radius: 10px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            color: var(--color-text-primary);
+        }
+
+        .input-group input:focus,
+        .input-group textarea:focus {
+            outline: none;
+            border-color: #0ea5e9;
+            box-shadow: 0 0 15px rgba(14, 165, 233, 0.2);
+        }
+
+        .input-group input::placeholder,
+        .input-group textarea::placeholder {
+            color: var(--color-text-muted);
+        }
+
+        /* Question Card styling */
+        .question-card {
+            margin-bottom: 25px;
+            padding: 25px;
+            background: var(--color-glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--color-border);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .question-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .question-card.error {
+            border-color: #dc3545;
+            box-shadow: 0 0 15px rgba(220, 53, 69, 0.3);
+        }
+
+        .question-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .question-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 35px;
+            height: 35px;
+            color: white;
+            border-radius: 50%;
+            font-weight: bold;
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            color: var(--color-text-primary);
+            font-weight: 600;
+        }
+
+        .question-prompt {
+            font-size: 1.1em;
+            color: var(--color-text-muted);
+            margin-bottom: 20px;
+            padding-left: 50px;
+        }
+
+        /* Satisfaction Scale */
+        .satisfaction-scale {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0 10px;
+        }
+
+        .satisfaction-btn {
+            background: none;
+            border: none;
+            font-size: 2.5em;
+            cursor: pointer;
+            transition: transform 0.2s ease, filter 0.2s;
+            filter: grayscale(80%);
+            opacity: 0.7;
+        }
+
+        .satisfaction-btn:hover {
+            transform: scale(1.2);
+            filter: grayscale(0%);
+            opacity: 1;
+        }
+
+        .satisfaction-btn.selected {
+            transform: scale(1.2);
+            filter: grayscale(0%);
+            opacity: 1;
+        }
+
+        .satisfaction-labels {
+            display: flex;
+            justify-content: space-between;
+            color: var(--color-text-muted);
+            font-size: 0.9em;
+            padding: 0 10px;
+            margin-bottom: 25px;
+        }
+
+        /* Sub Questions Grid */
+        .sub-questions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+            border-top: 1px solid var(--color-border);
+            padding-top: 20px;
+        }
+
+        .sub-question p {
+            font-weight: 500;
+            color: var(--color-text-primary);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .options-binary {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .option-btn {
+            padding: 10px 25px;
+            border: 1px solid var(--color-border);
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+
+        .option-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border-color: #0ea5e9;
+        }
+
+        .option-btn.selected.yes {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            border-color: #27ae60;
+        }
+
+        .option-btn.selected.no {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+            border-color: #dc3545;
+        }
+
+        /* Results Section */
+        .results-section {
+            background: var(--color-glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--color-border);
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 30px;
+            display: none;
+            animation: slideUp 0.5s ease;
+        }
+
+        .results-section.show {
+            display: block;
+        }
+
+        .results-section h2 {
+            color: var(--color-text-primary);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        /* Summary Grid */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .summary-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 5px solid #0ea5e9;
+        }
+
+        .summary-item h4 {
+            font-size: 1.1em;
+            color: var(--color-text-primary);
+            margin-bottom: 15px;
+        }
+
+        .summary-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            font-size: 0.95em;
+        }
+
+        .summary-details div {
+            line-height: 1.5;
+            color: var(--color-text-muted);
+        }
+
+        .summary-details strong {
+            color: var(--color-text-primary);
+        }
+
+        .summary-item .comment {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--color-border);
+            font-style: italic;
+            color: var(--color-text-muted);
+        }
+
+        /* Radar Chart Container */
+        #radarChartContainer {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 1px solid var(--color-border);
+        }
+
+        /* Action Plan */
+        #actionPlan {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 5px solid #f39c12;
+        }
+
+        #actionPlan h3 {
+            margin-bottom: 15px;
+            color: #f1c40f;
+        }
+
+        #actionPlan ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #actionPlan li {
+            padding: 10px;
+            border-bottom: 1px solid var(--color-border);
+            font-weight: 500;
+            color: var(--color-text-primary);
+        }
+
+        #actionPlan li:last-child {
+            border-bottom: none;
+        }
+
+        #actionPlan li.priority {
+            font-weight: bold;
+            color: #ff6b6b;
+        }
+
+        #actionPlan li.priority::before {
+            content: '';
+            margin-right: 8px;
+        }
+
+        #actionPlan p {
+            color: var(--color-text-primary);
+        }
+
+        /* Control Buttons */
+        .control-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-secondary {
+            background: var(--color-glass-bg);
+            color: var(--color-text-primary);
+            border: 1px solid var(--color-border);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Consent Box */
+        .consent-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 1px solid var(--color-border);
+        }
+
+        .consent-box label {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            cursor: pointer;
+            color: var(--color-text-primary);
+        }
+
+        .consent-box input[type="checkbox"] {
+            margin-top: 5px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #0ea5e9;
+        }
+
+        /* Export Buttons */
+        .export-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        /* Export Card */
+        .export-card {
+            background: var(--color-glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--color-border);
+            border-radius: 16px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+
+        .export-card h3 {
+            color: var(--color-text-primary);
+            margin-bottom: 15px;
+        }
+
+        /* Validation Message */
+        #validationMessage {
+            color: #ff6b6b;
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: bold;
+            display: none;
+        }
+
+        /* Print styles */
+        @media print {
+            .navigation-bar, .control-buttons, .consent-box, .btn-print, .footer {
+                display: none !important;
+            }
+            body {
+                background: white !important;
+                padding: 0 !important;
+            }
+            .glass-card, .results-section, .question-card {
+                box-shadow: none !important;
+                break-inside: avoid;
+                background: white !important;
+                border: 1px solid #ddd !important;
+            }
+            .question-text, .summary-item h4, .input-group label {
+                color: #333 !important;
+            }
+            .summary-details div, .question-prompt {
+                color: #555 !important;
+            }
+            .results-section {
+                display: block !important;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .question-prompt { padding-left: 0; text-align: center; }
+            .question-header { flex-direction: column; }
+        }
+
+        /* Animations */
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body class="light-questionnaire">
+    <div class="container">
+        <!-- Navigation Bar -->
+        <nav class="navigation-bar">
+            <div class="nav-buttons">
+                <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+                <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+            </div>
+            <h1>Questionnaire PSI</h1>
+            <span class="badge badge-rehab">Rehab</span>
+        </nav>
+
+        <div class="header-section">
+            <h2><i class="fas fa-clipboard-check"></i> Questionnaire de Satisfaction</h2>
+            <p>Plan de Suivi Individualise (PSI)</p>
+        </div>
+
+        <div class="glass-card">
+            <h2><i class="fas fa-info-circle"></i> A propos de ce questionnaire</h2>
+            <p style="margin: 15px 0; line-height: 1.6; color: var(--color-text-muted);">
+                Cet outil a pour but de recueillir votre satisfaction concernant differents aspects de votre vie et de votre suivi.
+                Vos reponses nous aideront a mieux comprendre vos besoins, a definir ensemble vos objectifs de soins et a personnaliser votre accompagnement.
+            </p>
+        </div>
+
+        <div class="glass-card">
+            <div class="control-buttons">
+                <button class="btn btn-primary" onclick="importData()">
+                    <i class="fas fa-file-import"></i> Importer un questionnaire
+                </button>
+                <button class="btn btn-secondary" onclick="resetForm()">
+                    <i class="fas fa-sync-alt"></i> Reinitialiser
+                </button>
+            </div>
+            <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="loadFile(event)">
+        </div>
+
+        <div class="glass-card" id="questionsSection">
+            <div class="input-group">
+                <label for="patientName">Nom et Prenom</label>
+                <input type="text" id="patientName" placeholder="Entrez le nom et prenom">
+            </div>
+             <div class="input-group">
+                <label for="date">Date</label>
+                <input type="date" id="date">
+            </div>
+            <div id="questions"></div>
+
+            <!-- Final Feedback Questions -->
+            <div class="question-card">
+                <div class="question-header">
+                    <span class="question-number"><i class="fas fa-comment"></i></span>
+                    <h3 class="question-text">Comment vous etes-vous senti pendant cet entretien ?</h3>
+                </div>
+                <div class="satisfaction-scale" id="senti_scale">
+                    <button class="satisfaction-btn" title="Pas bien du tout" onclick="selectEntretienSenti(1)">😞</button>
+                    <button class="satisfaction-btn" title="Moyen" onclick="selectEntretienSenti(2)">😐</button>
+                    <button class="satisfaction-btn" title="Bien" onclick="selectEntretienSenti(3)">🙂</button>
+                    <button class="satisfaction-btn" title="Tres bien" onclick="selectEntretienSenti(4)">😁</button>
+                </div>
+                <div class="satisfaction-labels">
+                    <span>Pas bien du tout</span>
+                    <span>Tres bien</span>
+                </div>
+                 <div class="input-group">
+                    <label for="sentiComment">Commentaires</label>
+                    <textarea id="sentiComment" rows="2" placeholder="Exprimez-vous librement..."></textarea>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-header">
+                    <span class="question-number"><i class="fas fa-lightbulb"></i></span>
+                    <h3 class="question-text">Avez-vous trouve cet entretien utile pour definir vos objectifs de soins ?</h3>
+                </div>
+                <div class="satisfaction-scale" id="utile_scale">
+                    <button class="satisfaction-btn" title="Pas du tout utile" onclick="selectEntretienUtile(1)">😞</button>
+                    <button class="satisfaction-btn" title="Peu utile" onclick="selectEntretienUtile(2)">😐</button>
+                    <button class="satisfaction-btn" title="Utile" onclick="selectEntretienUtile(3)">🙂</button>
+                    <button class="satisfaction-btn" title="Tres utile" onclick="selectEntretienUtile(4)">😁</button>
+                </div>
+                <div class="satisfaction-labels">
+                    <span>Pas du tout utile</span>
+                    <span>Tres utile</span>
+                </div>
+                <div class="input-group">
+                    <label for="utileComment">Commentaires</label>
+                    <textarea id="utileComment" rows="2" placeholder="Qu'est-ce qui a ete utile ou pourrait etre ameliore ?"></textarea>
+                </div>
+            </div>
+
+            <div id="validationMessage"></div>
+            <button class="btn btn-primary btn-submit" onclick="showResults()">
+                <i class="fas fa-check"></i> Valider et voir la synthese
+            </button>
+        </div>
+
+        <div id="results" class="results-section">
+            <h2><i class="fas fa-chart-pie"></i> Synthese de la satisfaction</h2>
+
+            <div id="radarChartContainer">
+                <canvas id="satisfactionRadarChart"></canvas>
+            </div>
+
+            <div id="actionPlan" style="margin-bottom: 30px;"></div>
+
+            <div id="summary" class="summary-grid"></div>
+
+            <div class="export-card">
+                <h3><i class="fas fa-save"></i> Exporter la synthese</h3>
+                <div class="consent-box">
+                    <label>
+                        <input type="checkbox" id="exportConsent">
+                        <span>Je souhaite télécharger mes résultats (questionnaire, réponses, score et date) dans un fichier JSON sur mon appareil. <strong>Ces résultats constituent des données de santé — je m'engage à les conserver de façon sécurisée et à ne les partager qu'avec un professionnel de santé de mon choix.</strong> Aucune donnée n'est transmise à un serveur.</span>
+                    </label>
+                </div>
+                <div class="export-buttons">
+                    <button class="btn btn-primary" onclick="exportData()">
+                        <i class="fas fa-download"></i> Exporter en JSON
+                    </button>
+                    <button class="btn-print" onclick="printResults()">
+                        <i class="fas fa-print"></i> Imprimer
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+             <p>
+                <strong>Source :</strong> Inspire des principes du Plan de Suivi Individualise (PSI) developpes dans le cadre de la rehabilitation psychosociale en France, notamment au sein d'etablissements comme le Centre Hospitalier Le Vinatier.
+            </p>
+            <p>
+                <strong>Adaptation numerique :</strong> Dr FENOHASINA | Psychiatre - FFI
+            </p>
+            <small>2025 - Tous droits reserves</small>
+        </footer>
+    </div>
+
+    <script>
+        const satisfactionLevels = [
+            { emoji: '😞', text: 'Pas du tout satisfait' },
+            { emoji: '😐', text: 'Peu satisfait' },
+            { emoji: '🙂', text: 'Moyennement satisfait' },
+            { emoji: '😊', text: 'Satisfait' },
+            { emoji: '😁', text: 'Tres satisfait' }
+        ];
+
+        const sentiLevels = [
+            { emoji: '😞', text: 'Pas bien du tout' },
+            { emoji: '😐', text: 'Moyen' },
+            { emoji: '🙂', text: 'Bien' },
+            { emoji: '😁', text: 'Tres bien' }
+        ];
+
+        const utileLevels = [
+            { emoji: '😞', text: 'Pas du tout utile' },
+            { emoji: '😐', text: 'Peu utile' },
+            { emoji: '🙂', text: 'Utile' },
+            { emoji: '😁', text: 'Tres utile' }
+        ];
+
+        const questions = [
+            { id: 'lieu_vie', title: 'Lieu de vie', prompt: "Etes-vous satisfait(e) de votre lieu de vie ?" },
+            { id: 'quotidien', title: 'Quotidien', prompt: "Etes-vous satisfait(e) de la maniere dont vous gerez l'entretien de votre logement et de vos affaires personnelles ?" },
+            { id: 'argent_papiers', title: "Argent/Papiers", prompt: "Etes-vous satisfait(e) de la maniere dont vous gerez votre budget et les documents administratifs ?" },
+            { id: 'deplacements', title: 'Deplacements', prompt: "Etes-vous satisfait(e) de vos moyens de deplacements et de votre autonomie ?" },
+            { id: 'sante', title: 'Sante', prompt: "Etes-vous satisfait(e) de la maniere dont vous gerez votre sante et vos traitements ?" },
+            { id: 'maladie_symptomes', title: 'Maladie/Symptomes', prompt: "Etes-vous satisfait(e) de la maniere de gerer votre maladie ?" },
+            { id: 'traitement', title: 'Traitement', prompt: "Etes-vous satisfait(e) de vos traitements ?" },
+            { id: 'addiction', title: 'Addiction', prompt: "Etes-vous satisfait(e) de votre gestion de la consommation de substances (tabac, alcool, etc.) ?" },
+            { id: 'cognitif', title: 'Cognition', prompt: "Etes-vous satisfait(e) de vos capacites cognitives (attention, memoire, organisation, etc.) ?" },
+            { id: 'relations', title: 'Relations', prompt: "Etes-vous satisfait(e) de la qualite de vos relations avec les autres (amicales, familiales, sentimentales) ?" },
+            { id: 'loisirs', title: 'Loisirs', prompt: "Etes-vous satisfait(e) de la facon dont vous occupez votre temps libre ?" },
+            { id: 'formation_emploi', title: 'Formation/Emploi', prompt: "Etes-vous satisfait(e) de votre niveau de formation et/ou de votre situation professionnelle ?" }
+        ];
+
+        let answers = new Array(questions.length).fill(null).map(() => ({
+            satisfaction: null,
+            evolution: null,
+            aide: null,
+            priorite: null
+        }));
+        let entretienSenti = null;
+        let entretienUtile = null;
+        let satisfactionChart = null;
+
+
+        function initializeQuestions() {
+            const container = document.getElementById('questions');
+            container.innerHTML = '';
+
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-card';
+                questionDiv.innerHTML = `
+                    <div class="question-header">
+                        <span class="question-number">${index + 1}</span>
+                        <h3 class="question-text">${q.title}</h3>
+                    </div>
+                    <p class="question-prompt">${q.prompt}</p>
+
+                    <div class="satisfaction-scale" id="satisfaction_${index}">
+                        ${satisfactionLevels.map((level, i) => `
+                            <button class="satisfaction-btn" title="${level.text}" onclick="selectSatisfaction(${index}, ${i + 1})">${level.emoji}</button>
+                        `).join('')}
+                    </div>
+                    <div class="satisfaction-labels">
+                        <span>Pas du tout</span>
+                        <span>Tres satisfait</span>
+                    </div>
+
+                    <div class="sub-questions-grid">
+                        <div class="sub-question">
+                            <p>Evolution souhaitee ?</p>
+                            <div class="options-binary" id="evolution_${index}">
+                                <button class="option-btn no" onclick="selectSubAnswer(${index}, 'evolution', false)">Non</button>
+                                <button class="option-btn yes" onclick="selectSubAnswer(${index}, 'evolution', true)">Oui</button>
+                            </div>
+                        </div>
+                        <div class="sub-question">
+                            <p>Besoin d'aide ?</p>
+                            <div class="options-binary" id="aide_${index}">
+                                <button class="option-btn no" onclick="selectSubAnswer(${index}, 'aide', false)">Non</button>
+                                <button class="option-btn yes" onclick="selectSubAnswer(${index}, 'aide', true)">Oui</button>
+                            </div>
+                        </div>
+                        <div class="sub-question">
+                            <p>Est-ce une priorite ?</p>
+                            <div class="options-binary" id="priorite_${index}">
+                                <button class="option-btn no" onclick="selectSubAnswer(${index}, 'priorite', false)">Non</button>
+                                <button class="option-btn yes" onclick="selectSubAnswer(${index}, 'priorite', true)">Oui</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function selectSatisfaction(qIndex, value) {
+            answers[qIndex].satisfaction = value;
+            const buttons = document.querySelectorAll(`#satisfaction_${qIndex} .satisfaction-btn`);
+            buttons.forEach((btn, i) => {
+                btn.classList.toggle('selected', (i + 1) === value);
+            });
+        }
+
+        function selectSubAnswer(qIndex, key, value) {
+            answers[qIndex][key] = value;
+            const buttons = document.querySelectorAll(`#${key}_${qIndex} .option-btn`);
+            buttons.forEach(btn => {
+                const isYesButton = btn.classList.contains('yes');
+                btn.classList.toggle('selected', (isYesButton && value) || (!isYesButton && !value));
+            });
+        }
+
+        function selectEntretienSenti(value) {
+            entretienSenti = value;
+            const buttons = document.querySelectorAll(`#senti_scale .satisfaction-btn`);
+            buttons.forEach((btn, i) => {
+                btn.classList.toggle('selected', (i + 1) === value);
+            });
+        }
+
+        function selectEntretienUtile(value) {
+            entretienUtile = value;
+            const buttons = document.querySelectorAll(`#utile_scale .satisfaction-btn`);
+            buttons.forEach((btn, i) => {
+                btn.classList.toggle('selected', (i + 1) === value);
+            });
+        }
+
+        function showResults(bypassValidation = false) {
+            if (!bypassValidation) {
+                // 1. Clear previous validation states
+                document.querySelectorAll('.question-card.error').forEach(card => card.classList.remove('error'));
+                const validationMessage = document.getElementById('validationMessage');
+                validationMessage.style.display = 'none';
+
+                // 2. Check for completion
+                let isComplete = true;
+                let firstErrorElement = null;
+
+                answers.forEach((answer, index) => {
+                    const card = document.querySelectorAll('#questions .question-card')[index];
+                    if (answer.satisfaction === null || answer.evolution === null || answer.aide === null || answer.priorite === null) {
+                        isComplete = false;
+                        card.classList.add('error');
+                        if (!firstErrorElement) firstErrorElement = card;
+                    }
+                });
+
+                const sentiCard = document.getElementById('senti_scale').closest('.question-card');
+                if (entretienSenti === null) {
+                    isComplete = false;
+                    sentiCard.classList.add('error');
+                    if (!firstErrorElement) firstErrorElement = sentiCard;
+                }
+
+                const utileCard = document.getElementById('utile_scale').closest('.question-card');
+                if (entretienUtile === null) {
+                    isComplete = false;
+                    utileCard.classList.add('error');
+                    if (!firstErrorElement) firstErrorElement = utileCard;
+                }
+
+                // 3. If incomplete, show errors and stop
+                if (!isComplete) {
+                    validationMessage.textContent = "Veuillez repondre a toutes les questions en surbrillance avant de valider.";
+                    validationMessage.style.display = 'block';
+                    if (firstErrorElement) {
+                        firstErrorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                    return;
+                }
+            }
+
+            const resultsSection = document.getElementById('results');
+            const summaryContainer = document.getElementById('summary');
+            summaryContainer.innerHTML = '';
+
+            // Render summary cards
+            answers.forEach((ans, index) => {
+                const q = questions[index];
+                const summaryItem = document.createElement('div');
+                summaryItem.className = 'summary-item';
+
+                const satisfactionText = ans.satisfaction ? satisfactionLevels[ans.satisfaction - 1].emoji + ' ' + satisfactionLevels[ans.satisfaction - 1].text : 'Non repondu';
+
+                summaryItem.innerHTML = `
+                    <h4>${index + 1}. ${q.title}</h4>
+                    <div class="summary-details">
+                        <div><strong>Satisfaction :</strong> ${satisfactionText}</div>
+                        <div><strong>Evolution souhaitee :</strong> ${ans.evolution ? 'Oui' : 'Non'}</div>
+                        <div><strong>Besoin d'aide :</strong> ${ans.aide ? 'Oui' : 'Non'}</div>
+                        <div><strong>Priorite :</strong> ${ans.priorite ? 'Oui' : 'Non'}</div>
+                    </div>
+                `;
+                summaryContainer.appendChild(summaryItem);
+            });
+
+            // Render feedback summary
+            const feedbackSummary = document.createElement('div');
+            feedbackSummary.className = 'summary-item';
+            feedbackSummary.style.borderColor = '#27ae60';
+
+            const sentiText = entretienSenti ? sentiLevels[entretienSenti - 1].emoji + ' ' + sentiLevels[entretienSenti - 1].text : 'Non repondu';
+            const utileText = entretienUtile ? utileLevels[entretienUtile - 1].emoji + ' ' + utileLevels[entretienUtile - 1].text : 'Non repondu';
+            const sentiComment = document.getElementById('sentiComment').value;
+            const utileComment = document.getElementById('utileComment').value;
+
+            feedbackSummary.innerHTML = `
+                <h4>Feedback sur l'entretien</h4>
+                <div class="summary-details">
+                    <div><strong>Ressenti :</strong> ${sentiText}</div>
+                    <div><strong>Utilite percue :</strong> ${utileText}</div>
+                </div>
+                ${sentiComment ? `<div class="comment"><strong>Commentaire (Ressenti) :</strong> ${sentiComment.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</div>` : ''}
+                ${utileComment ? `<div class="comment"><strong>Commentaire (Utilite) :</strong> ${utileComment.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</div>` : ''}
+            `;
+            summaryContainer.appendChild(feedbackSummary);
+
+            // Render Action Plan
+            renderActionPlan();
+
+            // Render Radar Chart
+            renderRadarChart();
+
+            resultsSection.classList.add('show');
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function renderActionPlan() {
+            const actionPlanContainer = document.getElementById('actionPlan');
+            const actionItems = answers
+                .map((ans, index) => ({ ...ans, title: questions[index].title }))
+                .filter(ans => ans.aide === true);
+
+            if (actionItems.length === 0) {
+                actionPlanContainer.innerHTML = "<h3><i class='fas fa-star'></i> Plan d'action</h3><p>Aucun besoin d'aide specifique n'a ete identifie. C'est une excellente nouvelle !</p>";
+                return;
+            }
+
+            actionItems.sort((a, b) => (b.priorite - a.priorite));
+
+            let html = "<h3><i class='fas fa-bullseye'></i> Plan d'action : Axes a travailler</h3><ul>";
+            actionItems.forEach(item => {
+                html += `<li class="${item.priorite ? 'priority' : ''}"><i class="fas fa-${item.priorite ? 'exclamation-triangle' : 'arrow-right'}"></i> ${item.title}</li>`;
+            });
+            html += '</ul>';
+            actionPlanContainer.innerHTML = html;
+        }
+
+        function renderRadarChart() {
+            const ctx = document.getElementById('satisfactionRadarChart').getContext('2d');
+            const labels = questions.map(q => q.title);
+            const data = answers.map(a => a.satisfaction);
+
+            if (satisfactionChart) {
+                satisfactionChart.destroy();
+            }
+
+            satisfactionChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Niveau de Satisfaction',
+                        data: data,
+                        backgroundColor: 'rgba(14, 165, 233, 0.2)',
+                        borderColor: 'rgba(14, 165, 233, 1)',
+                        pointBackgroundColor: 'rgba(14, 165, 233, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(14, 165, 233, 1)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: {
+                        r: {
+                            angleLines: {
+                                color: 'rgba(148, 163, 184, 0.3)'
+                            },
+                            grid: {
+                                color: 'rgba(148, 163, 184, 0.3)'
+                            },
+                            pointLabels: {
+                                font: {
+                                    size: 11,
+                                    weight: 'bold'
+                                },
+                                color: '#94a3b8'
+                            },
+                            ticks: {
+                                beginAtZero: true,
+                                min: 0,
+                                max: 5,
+                                stepSize: 1,
+                                backdropColor: 'rgba(15, 23, 42, 0.75)',
+                                color: '#94a3b8'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                font: {
+                                    size: 14
+                                },
+                                color: '#e2e8f0'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function resetForm() {
+            answers = new Array(questions.length).fill(null).map(() => ({
+                satisfaction: null, evolution: null, aide: null, priorite: null
+            }));
+            entretienSenti = null;
+            entretienUtile = null;
+
+            if (satisfactionChart) {
+                satisfactionChart.destroy();
+                satisfactionChart = null;
+            }
+
+            document.querySelectorAll('.satisfaction-btn.selected, .option-btn.selected').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+
+            document.getElementById('patientName').value = '';
+            document.getElementById('date').value = '';
+            document.getElementById('sentiComment').value = '';
+            document.getElementById('utileComment').value = '';
+            document.getElementById('results').classList.remove('show');
+            document.getElementById('exportConsent').checked = false;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function exportData() {
+            const consent = document.getElementById('exportConsent').checked;
+            if (!consent) {
+                alert("Veuillez cocher la case de consentement avant d''exporter.");
+                return;
+            }
+
+            const data = {
+                questionnaire: "PSI-Satisfaction",
+                patientName: document.getElementById('patientName').value,
+                date: document.getElementById('date').value,
+                responses: answers.map((ans, index) => ({
+                    domaine: questions[index].title,
+                    satisfaction: ans.satisfaction,
+                    satisfaction_text: ans.satisfaction ? satisfactionLevels[ans.satisfaction - 1].text : null,
+                    evolution_souhaitee: ans.evolution,
+                    besoin_aide: ans.aide,
+                    priorite: ans.priorite
+                })),
+                feedbackEntretien: {
+                    ressenti: entretienSenti,
+                    ressenti_text: entretienSenti ? sentiLevels[entretienSenti - 1].text : null,
+                    ressenti_commentaire: document.getElementById('sentiComment').value,
+                    utilite: entretienUtile,
+                    utilite_text: entretienUtile ? utileLevels[entretienUtile - 1].text : null,
+                    utilite_commentaire: document.getElementById('utileComment').value
+                }
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            const dateStr = new Date().toISOString().split('T')[0];
+            a.download = `PSI_Satisfaction_${document.getElementById('patientName').value.replace(/ /g,'_') || 'anonyme'}_${dateStr}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function importData() {
+            document.getElementById('fileInput').click();
+        }
+
+        function loadFile(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        if (data.questionnaire === "PSI-Satisfaction" && data.responses) {
+                            resetForm();
+                            document.getElementById('patientName').value = data.patientName || '';
+                            document.getElementById('date').value = data.date || '';
+
+                            data.responses.forEach((response, index) => {
+                                const questionMatch = questions.find(q => q.title === response.domaine);
+                                if (questionMatch) {
+                                    const qIndex = questions.indexOf(questionMatch);
+                                    if(response.satisfaction) selectSatisfaction(qIndex, response.satisfaction);
+                                    if(response.evolution_souhaitee !== null) selectSubAnswer(qIndex, 'evolution', response.evolution_souhaitee);
+                                    if(response.besoin_aide !== null) selectSubAnswer(qIndex, 'aide', response.besoin_aide);
+                                    if(response.priorite !== null) selectSubAnswer(qIndex, 'priorite', response.priorite);
+                                }
+                            });
+
+                            if (data.feedbackEntretien) {
+                                if(data.feedbackEntretien.ressenti) selectEntretienSenti(data.feedbackEntretien.ressenti);
+                                if(data.feedbackEntretien.utilite) selectEntretienUtile(data.feedbackEntretien.utilite);
+                                document.getElementById('sentiComment').value = data.feedbackEntretien.ressenti_commentaire || '';
+                                document.getElementById('utileComment').value = data.feedbackEntretien.utilite_commentaire || '';
+                            }
+
+                            showResults(true);
+                            alert("Donnees importees avec succes ! La synthese est maintenant affichee.");
+                        } else {
+                            alert("Le fichier ne semble pas etre un export valide du questionnaire PSI-Satisfaction.");
+                        }
+                    } catch (error) {
+                         alert("Erreur lors de la lecture du fichier : " + error.message);
+                    }
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        function printResults() {
+            window.print();
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeQuestions();
+            document.getElementById('date').valueAsDate = new Date();
+        });
+    </script>
+</body>
+</html>

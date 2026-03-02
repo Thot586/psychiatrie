@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Trauma - Questionnaires</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .portal-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+    .portal-card {
+        background: linear-gradient(145deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-xl);
+        padding: 1.5rem;
+        text-decoration: none;
+        display: block;
+        transition: all var(--transition-slow);
+    }
+    .portal-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--color-border-active);
+        box-shadow: var(--shadow-glow);
+    }
+    .portal-card h3 { color: var(--color-text-primary); margin-bottom: 0.5rem; }
+    .portal-card p { color: var(--color-text-muted); font-size: var(--font-size-sm); }
+    .section-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius-lg);
+        font-weight: 600;
+        font-size: var(--font-size-lg);
+        margin-bottom: 1.5rem;
+        color: white;
+    }
+    .portal-card .card-description {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 1rem;
+        border-radius: var(--radius-md);
+        margin-bottom: 1rem;
+        border: 1px solid var(--color-border);
+    }
+    .portal-card .card-subtitle {
+        color: var(--color-text-muted);
+        font-size: var(--font-size-sm);
+        font-style: italic;
+        margin-bottom: 0.75rem;
+    }
+    .portal-card .btn-start {
+        display: inline-block;
+        padding: 0.5rem 1.25rem;
+        border-radius: var(--radius-md);
+        font-weight: 600;
+        text-align: center;
+        transition: all var(--transition-normal);
+        text-decoration: none;
+        margin-top: auto;
+    }
+    .portal-card.disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    .portal-card.disabled:hover {
+        transform: none;
+        box-shadow: none;
+    }
+    .badge-coming {
+        display: inline-block;
+        background: rgba(251, 191, 36, 0.2);
+        color: #fbbf24;
+        font-size: var(--font-size-xs);
+        padding: 0.25rem 0.5rem;
+        border-radius: var(--radius-sm);
+        font-weight: 500;
+        margin-left: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navigation-bar">
+    <div class="nav-buttons">
+        <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+        <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+    </div>
+    <h1>Trauma</h1>
+    <span class="badge badge-cat-trauma">Trauma</span>
+  </nav>
+
+  <div class="container">
+
+    <header class="page-header">
+      <p class="subtitle">
+        Évaluation du stress post-traumatique, suivi des symptômes et exploration de l'histoire traumatique.
+      </p>
+    </header>
+
+    <div class="alert alert-warning">
+      <div class="alert-icon">
+        <i class="fas fa-exclamation-triangle"></i>
+      </div>
+      <div class="alert-content">
+        <h3>Avertissement Important</h3>
+        <p>Ces outils sont des questionnaires de dépistage et ne constituent en aucun cas un diagnostic. Si vous êtes en détresse, contactez un professionnel de santé ou appelez le 3114 (numéro national de prévention du suicide).</p>
+      </div>
+    </div>
+
+    <section class="section">
+      <div class="section-badge" style="background: #6366f1;">
+        <i class="fas fa-search"></i>Aide au Dépistage
+      </div>
+      <div class="portal-grid">
+
+        <a href="PCL-5.html" class="portal-card">
+          <h3>PCL-5</h3>
+          <p class="card-subtitle">PTSD Checklist for DSM-5</p>
+          <div class="card-description">
+            <p>Questionnaire de référence pour évaluer les symptômes du TSPT selon les critères du DSM-5. 20 items explorant les reviviscences, l'évitement, les altérations cognitives et l'hyperactivité.</p>
+          </div>
+          <span class="btn-start" style="background: #6366f1; color: white;">
+            Commencer le test &rarr;
+          </span>
+        </a>
+
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-badge" style="background: #8b5cf6;">
+        <i class="fas fa-chart-line"></i>Pour le Suivi
+      </div>
+      <div class="portal-grid">
+
+        <a href="IES-R.html" class="portal-card">
+          <h3>IES-R</h3>
+          <p class="card-subtitle">Impact of Event Scale-Revised</p>
+          <div class="card-description">
+            <p>Échelle de 22 items mesurant l'impact psychologique d'un événement traumatique : intrusion, évitement et hyperactivation. Idéal pour le suivi thérapeutique.</p>
+          </div>
+          <span class="btn-start" style="background: #8b5cf6; color: white;">
+            Commencer le test &rarr;
+          </span>
+        </a>
+
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-badge" style="background: #a855f7;">
+        <i class="fas fa-history"></i>Anamnèse Traumatique
+      </div>
+      <div class="portal-grid">
+
+        <a href="CTQ.html" class="portal-card">
+          <h3>CTQ</h3>
+          <p class="card-subtitle">Childhood Trauma Questionnaire</p>
+          <div class="card-description">
+            <p>Questionnaire rétrospectif de 28 items évaluant les traumatismes de l'enfance : abus émotionnel, physique, sexuel, négligence émotionnelle et physique.</p>
+          </div>
+          <span class="btn-start" style="background: #a855f7; color: white;">
+            Commencer le test &rarr;
+          </span>
+        </a>
+
+      </div>
+    </section>
+
+  </div>
+
+  <footer class="footer">
+    <p>Dr. FENOHASINA T.J. Felicien (Psychiatre)</p>
+    <p>&copy; 2025 - Centre Ressource de Rehabilitation</p>
+    <p class="license">Licence CC BY-NC-SA 4.0</p>
+  </footer>
+
+</body>
+</html>

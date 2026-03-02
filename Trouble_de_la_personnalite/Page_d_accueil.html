@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Troubles de la Personnalité - Ressources</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .portal-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+    .portal-card {
+        background: linear-gradient(145deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-xl);
+        padding: 1.5rem;
+        text-decoration: none;
+        display: block;
+        transition: all var(--transition-slow);
+    }
+    .portal-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--color-border-active);
+        box-shadow: var(--shadow-glow);
+    }
+    .portal-card h3 { color: var(--color-text-primary); margin-bottom: 0.5rem; }
+    .portal-card p { color: var(--color-text-muted); font-size: var(--font-size-sm); }
+    .section-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius-lg);
+        font-weight: 600;
+        font-size: var(--font-size-lg);
+        margin-bottom: 1.5rem;
+        color: white;
+    }
+    .section-badge-general { background: #6366f1; }
+    .section-badge-depistage { background: #f59e0b; }
+    .section-badge-suivi { background: #f97316; }
+    .section-badge-therapeutique { background: #eab308; }
+    .section-badge-ressources { background: #64748b; }
+    .subsection-title {
+        color: var(--color-text-secondary);
+        font-size: var(--font-size-base);
+        font-weight: 600;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .card-subtitle { color: var(--color-text-muted); font-style: italic; font-size: var(--font-size-sm); margin-bottom: 0.75rem; }
+    .card-description {
+        background: rgba(15, 23, 42, 0.5);
+        padding: 1rem;
+        border-radius: var(--radius-md);
+        margin-bottom: 1rem;
+        flex-grow: 1;
+        border: 1px solid var(--color-border);
+    }
+    .card-description p { margin: 0; }
+    .btn-test {
+        display: inline-block;
+        padding: 0.5rem 1.25rem;
+        border-radius: var(--radius-md);
+        font-weight: 600;
+        text-align: center;
+        transition: all var(--transition-normal);
+        text-decoration: none;
+    }
+    .btn-test-indigo { background: #6366f1; color: white; }
+    .btn-test-indigo:hover { background: #4f46e5; }
+    .btn-test-amber { background: #f59e0b; color: white; }
+    .btn-test-amber:hover { background: #d97706; }
+    .btn-test-orange { background: #f97316; color: white; }
+    .btn-test-orange:hover { background: #ea580c; }
+    .btn-test-yellow { background: #eab308; color: white; }
+    .btn-test-yellow:hover { background: #ca8a04; }
+    .btn-test-gray { background: #64748b; color: white; }
+    .btn-test-gray:hover { background: #475569; }
+  </style>
+</head>
+<body>
+
+  <nav class="navigation-bar">
+    <div class="nav-buttons">
+        <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+        <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+    </div>
+    <h1>Troubles de la Personnalité</h1>
+    <span class="badge badge-cat-perso">Personnalité</span>
+  </nav>
+
+  <main class="container" style="max-width: 1200px;">
+
+    <header class="text-center" style="margin-bottom: 3rem;">
+      <p style="color: var(--color-text-secondary); font-size: var(--font-size-lg); max-width: 800px; margin: 0 auto;">
+        Questionnaires de dépistage dimensionnel, outils spécifiques au trouble borderline, schémas de Young et thérapie dialectique.
+      </p>
+    </header>
+
+    <div class="glass-card" style="border-left: 4px solid #eab308; margin-bottom: 3rem;">
+      <div style="display: flex; align-items: flex-start; gap: 1rem;">
+        <i class="fas fa-exclamation-triangle" style="color: #eab308; font-size: 1.5rem;"></i>
+        <div>
+          <h2 style="color: var(--color-text-primary); margin-bottom: 0.5rem;">Avertissement Important</h2>
+          <p style="color: var(--color-text-secondary); font-size: var(--font-size-sm);">Ces outils sont des questionnaires de dépistage et ne constituent en aucun cas un diagnostic. Seul un professionnel de santé qualifié peut poser un diagnostic. Veuillez consulter un médecin ou un psychologue pour toute question médicale.</p>
+        </div>
+      </div>
+    </div>
+
+    <section style="margin-bottom: 3rem;">
+      <span class="section-badge section-badge-general"><i class="fas fa-search"></i> Dépistage Général des Troubles de la Personnalité</span>
+      <div class="portal-grid">
+
+        <a href="SAPAS.html" class="portal-card">
+          <h3>SAPAS</h3>
+          <p class="card-subtitle">Standardised Assessment of Personality - Abbreviated Scale</p>
+          <div class="card-description">
+            <p>Dépistage ultra-rapide en 8 questions (oui/non). Identifie la présence probable d'un trouble de la personnalité, tous types confondus.</p>
+          </div>
+          <span class="btn-test btn-test-indigo">Commencer le test &rarr;</span>
+        </a>
+
+        <a href="PID-5-BF.html" class="portal-card">
+          <h3>PID-5-BF</h3>
+          <p class="card-subtitle">Personality Inventory for DSM-5 - Brief Form</p>
+          <div class="card-description">
+            <p>Évaluation dimensionnelle des 5 domaines de personnalité pathologique du DSM-5 : affectivité négative, détachement, antagonisme, désinhibition et psychoticisme. 25 items.</p>
+          </div>
+          <span class="btn-test btn-test-indigo">Commencer le test &rarr;</span>
+        </a>
+
+      </div>
+    </section>
+
+    <section style="margin-bottom: 3rem;">
+      <span class="section-badge section-badge-depistage"><i class="fas fa-search"></i> Trouble Borderline - Dépistage</span>
+      <div class="portal-grid">
+
+        <a href="BPQ.html" class="portal-card">
+          <h3>BPQ</h3>
+          <p class="card-subtitle">Borderline Personality Questionnaire</p>
+          <div class="card-description">
+            <p>Questionnaire de dépistage spécifique des traits de personnalité borderline, évaluant l'instabilité émotionnelle, relationnelle et identitaire.</p>
+          </div>
+          <span class="btn-test btn-test-amber">Commencer le test &rarr;</span>
+        </a>
+
+      </div>
+    </section>
+
+    <section style="margin-bottom: 3rem;">
+      <span class="section-badge section-badge-suivi"><i class="fas fa-chart-line"></i> Trouble Borderline - Suivi</span>
+      <div class="portal-grid">
+
+        <a href="ZAN-BPD.html" class="portal-card">
+          <h3>ZAN-BPD</h3>
+          <p class="card-subtitle">Zanarini Rating Scale for BPD</p>
+          <div class="card-description">
+            <p>Échelle clinique pour évaluer la sévérité des symptômes borderline et suivre leur évolution. <strong style="color: #f59e0b;">Hétéro-questionnaire (clinicien).</strong></p>
+          </div>
+          <span class="btn-test btn-test-orange">Commencer le test &rarr;</span>
+        </a>
+
+        <a href="BSL-23.html" class="portal-card">
+          <h3>BSL-23</h3>
+          <p class="card-subtitle">Borderline Symptom List-23</p>
+          <div class="card-description">
+            <p>Auto-questionnaire de 23 items évaluant la sévérité des symptômes borderline au cours de la dernière semaine. Idéal pour le suivi thérapeutique.</p>
+          </div>
+          <span class="btn-test btn-test-orange">Commencer le test &rarr;</span>
+        </a>
+
+      </div>
+    </section>
+
+    <section style="margin-bottom: 3rem;">
+      <span class="section-badge section-badge-therapeutique"><i class="fas fa-brain"></i> Évaluation Thérapeutique</span>
+      <div class="portal-grid">
+
+        <a href="PBQ.html" class="portal-card">
+          <h3>PBQ</h3>
+          <p class="card-subtitle">Personality Belief Questionnaire (Beck)</p>
+          <div class="card-description">
+            <p>Identifie les croyances centrales associées à chaque type de trouble de la personnalité : évitant, dépendant, obsessionnel, narcissique, antisocial, histrionique, schizoïde, paranoïaque.</p>
+          </div>
+          <span class="btn-test btn-test-yellow">Commencer le test &rarr;</span>
+        </a>
+
+        <a href="ysq-l3-questionnaire.html" class="portal-card">
+          <h3>YSQ-L3</h3>
+          <p class="card-subtitle">Young Schema Questionnaire</p>
+          <div class="card-description">
+            <p>Questionnaire complet évaluant les 18 schémas précoces inadaptés de Young, fondement de la thérapie des schémas.</p>
+          </div>
+          <span class="btn-test btn-test-yellow">Commencer le test &rarr;</span>
+        </a>
+
+        <a href="TCD.html" class="portal-card">
+          <h3>TCD</h3>
+          <p class="card-subtitle">Thérapie Comportementale Dialectique</p>
+          <div class="card-description">
+            <p>Ressources sur la TCD de Linehan : compétences de régulation émotionnelle, tolérance à la détresse, pleine conscience et efficacité interpersonnelle.</p>
+          </div>
+          <span class="btn-test btn-test-yellow">Consulter &rarr;</span>
+        </a>
+
+      </div>
+    </section>
+
+    <section style="margin-bottom: 3rem;">
+      <span class="section-badge section-badge-ressources"><i class="fas fa-book"></i> Ressources</span>
+      <div class="portal-grid">
+
+        <a href="Trouble_personnalite.html" class="portal-card">
+          <h3>Guide Trouble de la Personnalité</h3>
+          <p class="card-subtitle">Ressource éducative</p>
+          <div class="card-description">
+            <p>Guide sur les troubles de la personnalité : définitions, types, critères diagnostiques et approches thérapeutiques.</p>
+          </div>
+          <span class="btn-test btn-test-gray">Consulter &rarr;</span>
+        </a>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p>Dr. FENOHASINA T.J. Félicien (Psychiatre)</p>
+    <p>&copy; 2025 - Centre Ressource de Réhabilitation</p>
+    <p style="font-size: var(--font-size-xs); color: var(--color-text-muted); margin-top: 0.5rem;">Licence CC BY-NC-SA 4.0</p>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Troubles de l'Humeur - Questionnaires</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .portal-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+    .portal-card {
+        background: linear-gradient(145deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-xl);
+        padding: 1.5rem;
+        text-decoration: none;
+        display: block;
+        transition: all var(--transition-slow);
+    }
+    .portal-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--color-border-active);
+        box-shadow: var(--shadow-glow);
+    }
+    .portal-card h3 { color: var(--color-text-primary); margin-bottom: 0.5rem; }
+    .portal-card p { color: var(--color-text-muted); font-size: var(--font-size-sm); }
+    .section-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius-lg);
+        font-weight: 600;
+        font-size: var(--font-size-lg);
+        margin-bottom: 1.5rem;
+        color: white;
+    }
+    .section-badge-depistage { background: #3b82f6; }
+    .section-badge-suivi { background: #10b981; }
+    .section-badge-bipolar { background: #6366f1; }
+    .card-subtitle { color: var(--color-text-muted); font-style: italic; font-size: var(--font-size-sm); margin-bottom: 0.75rem; }
+    .card-description {
+        background: rgba(15, 23, 42, 0.5);
+        padding: 1rem;
+        border-radius: var(--radius-md);
+        margin-bottom: 1rem;
+        flex-grow: 1;
+        border: 1px solid var(--color-border);
+    }
+    .card-description p { margin: 0; }
+    .btn-test {
+        display: inline-block;
+        padding: 0.5rem 1.25rem;
+        border-radius: var(--radius-md);
+        font-weight: 600;
+        text-align: center;
+        transition: all var(--transition-normal);
+        text-decoration: none;
+    }
+    .btn-test-blue { background: #3b82f6; color: white; }
+    .btn-test-blue:hover { background: #2563eb; }
+    .btn-test-indigo { background: #6366f1; color: white; }
+    .btn-test-indigo:hover { background: #4f46e5; }
+    .btn-test-emerald { background: #10b981; color: white; }
+    .btn-test-emerald:hover { background: #059669; }
+    .subsection-title {
+        color: var(--color-text-secondary);
+        font-size: var(--font-size-base);
+        font-weight: 600;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navigation-bar">
+    <div class="nav-buttons">
+        <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+        <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+    </div>
+    <h1>Troubles de l'Humeur</h1>
+    <span class="badge badge-cat-humeur">Humeur</span>
+  </nav>
+
+  <main class="container" style="max-width: 1200px;">
+
+    <header class="text-center" style="margin-bottom: 3rem;">
+      <p style="color: var(--color-text-secondary); font-size: var(--font-size-lg); max-width: 800px; margin: 0 auto;">
+        Questionnaires de depistage et de suivi pour la depression et le trouble bipolaire.
+      </p>
+    </header>
+
+    <div class="glass-card" style="border-left: 4px solid #eab308; margin-bottom: 3rem;">
+      <div style="display: flex; align-items: flex-start; gap: 1rem;">
+        <i class="fas fa-exclamation-triangle" style="color: #eab308; font-size: 1.5rem;"></i>
+        <div>
+          <h2 style="color: var(--color-text-primary); margin-bottom: 0.5rem;">Avertissement Important</h2>
+          <p style="color: var(--color-text-secondary); font-size: var(--font-size-sm);">Ces outils sont des questionnaires de depistage et ne constituent en aucun cas un diagnostic. Seul un professionnel de sante qualifie peut poser un diagnostic. Veuillez consulter un medecin ou un psychologue pour toute question medicale.</p>
+        </div>
+      </div>
+    </div>
+
+    <section style="margin-bottom: 3rem;">
+      <span class="section-badge section-badge-depistage"><i class="fas fa-search"></i> Aide au Depistage</span>
+
+      <h3 class="subsection-title"><i class="fas fa-cloud-rain" style="color: #3b82f6;"></i> Depression</h3>
+      <div class="portal-grid" style="margin-bottom: 2rem;">
+
+        <a href="PHQ-2.html" class="portal-card">
+          <h3>PHQ-2</h3>
+          <p class="card-subtitle">Patient Health Questionnaire-2</p>
+          <div class="card-description">
+            <p>Ultra-depistage rapide de la depression en 2 questions. Ideal comme premier filtre : un score &ge; 3 oriente vers le PHQ-9 complet.</p>
+          </div>
+          <span class="btn-test btn-test-blue">Commencer le test &rarr;</span>
+        </a>
+
+        <a href="PHQ-9.html" class="portal-card">
+          <h3>PHQ-9</h3>
+          <p class="card-subtitle">Patient Health Questionnaire-9</p>
+          <div class="card-description">
+            <p>Questionnaire de reference pour le depistage de la depression. Evalue la severite des symptomes depressifs sur les 2 dernieres semaines.</p>
+          </div>
+          <span class="btn-test btn-test-blue">Commencer le test &rarr;</span>
+        </a>
+
+      </div>
+
+      <h3 class="subsection-title"><i class="fas fa-stethoscope" style="color: #3b82f6;"></i> Mixte Anxiete-Depression</h3>
+      <div class="portal-grid" style="margin-bottom: 2rem;">
+
+        <a href="HADS.html" class="portal-card">
+          <h3>HADS</h3>
+          <p class="card-subtitle">Hospital Anxiety and Depression Scale</p>
+          <div class="card-description">
+            <p>Echelle hospitaliere de 14 items evaluant simultanement l'anxiete et la depression. Double score (0-21 par dimension). Recommande par la HAS.</p>
+          </div>
+          <span class="btn-test btn-test-blue">Commencer le test &rarr;</span>
+        </a>
+
+      </div>
+
+      <h3 class="subsection-title"><i class="fas fa-balance-scale" style="color: #6366f1;"></i> Bipolarite</h3>
+      <div class="portal-grid">
+
+        <a href="MDQ.html" class="portal-card">
+          <h3>MDQ</h3>
+          <p class="card-subtitle">Mood Disorder Questionnaire</p>
+          <div class="card-description">
+            <p>Outil de depistage du trouble bipolaire. Explore les antecedents d'episodes maniaques ou hypomaniaques.</p>
+          </div>
+          <span class="btn-test btn-test-indigo">Commencer le test &rarr;</span>
+        </a>
+
+        <a href="HCL-32.html" class="portal-card">
+          <h3>HCL-32</h3>
+          <p class="card-subtitle">Hypomania Checklist-32</p>
+          <div class="card-description">
+            <p>Questionnaire sensible pour detecter l'hypomanie, particulierement utile pour identifier le trouble bipolaire de type II.</p>
+          </div>
+          <span class="btn-test btn-test-indigo">Commencer le test &rarr;</span>
+        </a>
+
+      </div>
+    </section>
+
+    <section style="margin-bottom: 3rem;">
+      <span class="section-badge section-badge-suivi"><i class="fas fa-chart-line"></i> Pour le Suivi</span>
+
+      <h3 class="subsection-title"><i class="fas fa-cloud-rain" style="color: #10b981;"></i> Depression</h3>
+      <div class="portal-grid" style="margin-bottom: 2rem;">
+
+        <a href="MADRS.html" class="portal-card">
+          <h3>MADRS</h3>
+          <p class="card-subtitle">Montgomery-Asberg Depression Rating Scale</p>
+          <div class="card-description">
+            <p>Echelle de reference pour evaluer la severite de la depression et suivre l'evolution sous traitement. <strong style="color: #f59e0b;">Hetero-questionnaire (clinicien).</strong></p>
+          </div>
+          <span class="btn-test btn-test-emerald">Commencer l'evaluation &rarr;</span>
+        </a>
+
+        <a href="BDI-II.html" class="portal-card">
+          <h3>BDI-II</h3>
+          <p class="card-subtitle">Beck Depression Inventory II</p>
+          <div class="card-description">
+            <p>Auto-questionnaire de 21 items pour mesurer l'intensite de la depression. Largement utilise en recherche et en clinique.</p>
+          </div>
+          <span class="btn-test btn-test-emerald">Commencer le test &rarr;</span>
+        </a>
+
+      </div>
+
+      <h3 class="subsection-title"><i class="fas fa-balance-scale" style="color: #6366f1;"></i> Bipolarite</h3>
+      <div class="portal-grid">
+
+        <a href="YMRS.html" class="portal-card">
+          <h3>YMRS</h3>
+          <p class="card-subtitle">Young Mania Rating Scale</p>
+          <div class="card-description">
+            <p>Echelle de reference pour evaluer la severite des symptomes maniaques et suivre l'evolution sous traitement. 11 items. <strong style="color: #f59e0b;">Hetero-questionnaire (clinicien).</strong></p>
+          </div>
+          <span class="btn-test btn-test-indigo">Commencer l'evaluation &rarr;</span>
+        </a>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p>Dr. FENOHASINA T.J. Felicien (Psychiatre)</p>
+    <p>&copy; 2025 - Centre Ressource de Rehabilitation</p>
+    <p style="font-size: var(--font-size-xs); color: var(--color-text-muted); margin-top: 0.5rem;">Licence CC BY-NC-SA 4.0</p>
+  </footer>
+
+</body>
+</html>

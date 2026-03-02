@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AQ-50 - Quotient du Spectre Autistique</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <style>
+        :root {
+            --cat-main: #8b5cf6;
+            --cat-dark: #7c3aed;
+            --cat-light: #a78bfa;
+            --cat-rgb: 139, 92, 246;
+            --cat-readable: #7c3aed;
+        }
+        .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
+        .option-btn.selected, .answer-btn.selected { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        .score-circle { border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 30px rgba(var(--cat-rgb), 0.2); }
+        .score-value { color: var(--cat-light); }
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-light); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+        .progress-fill { background: linear-gradient(90deg, var(--cat-main), var(--cat-light)); box-shadow: 0 0 8px rgba(var(--cat-rgb), 0.4); }
+        .likert-options input[type="radio"]:checked + label,
+        .binary-options input[type="radio"]:checked + label,
+        .radio-options input[type="radio"]:checked + label { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+    </style>
+
+</head>
+<body class="light-questionnaire">
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil">
+                <i class="fas fa-home"></i>
+            </a>
+            <button onclick="history.back()" class="btn-back" title="Retour">
+                <i class="fas fa-arrow-left"></i> <span>Retour</span>
+            </button>
+        </div>
+        <h1>AQ-50</h1>
+        <span class="badge badge-cat-tnd">TND</span>
+    </nav>
+
+    <main class="container">
+        <header class="header-glow" style="text-align: center; margin-bottom: 2rem;">
+            <h1><i class="fas fa-puzzle-piece"></i> Quotient du Spectre Autistique (AQ-50)</h1>
+            <p class="subtitle">Outil de dépistage des traits autistiques</p>
+        </header>
+
+        <section class="glass-card info-box">
+            <h2><i class="fas fa-info-circle"></i> Instructions</h2>
+            <p>Indiquez votre degré d'accord pour chaque affirmation. <strong>Toutes les questions doivent être complétées</strong> pour calculer les scores. Cet outil est un dépistage, non un diagnostic.</p>
+        </section>
+
+        <section class="glass-card">
+            <div class="control-buttons">
+                <label class="btn-primary" for="file-import" style="cursor: pointer;">
+                    <i class="fas fa-file-import"></i> Importer
+                </label>
+                <input type="file" id="file-import" accept=".json" style="display:none"/>
+                <button class="btn-secondary" onclick="resetForm()">
+                    <i class="fas fa-redo"></i> Réinitialiser
+                </button>
+            </div>
+        </section>
+
+        <form id="aq-form">
+            <section class="glass-card">
+                <div id="qwrap"></div>
+
+                <div style="text-align: center; margin-top: 1.5rem;">
+                    <button type="submit" class="btn-primary" style="padding: 1rem 2rem;">
+                        <i class="fas fa-calculator"></i> Calculer les résultats
+                    </button>
+                    <p id="valmsg" class="validation" style="display: none; color: var(--color-danger); margin-top: 1rem;">
+                        Veuillez répondre à toutes les questions.
+                    </p>
+                </div>
+            </section>
+
+            <section id="results" class="glass-card results-section" style="display: none;">
+                <h2 style="text-align: center; margin-bottom: 2rem;"><i class="fas fa-chart-pie"></i> Résultats</h2>
+
+                <div class="score-display">
+                    <div class="score-circle">
+                        <span class="score-number" id="totalscore">0</span>
+                        <span class="score-label">sur 50</span>
+                    </div>
+                </div>
+
+                <div class="progress-bar" style="margin: 1.5rem 0;">
+                    <div class="progress-fill" id="fill" style="width: 0%;"></div>
+                    <div class="threshold-markers">
+                        <span style="left: 52%;">26</span>
+                        <span style="left: 58%;">29</span>
+                        <span style="left: 64%;">32</span>
+                    </div>
+                </div>
+
+                <div id="interpretationBox" class="interpretation"></div>
+
+                <details class="glass-card" style="margin-top: 1.5rem; background: rgba(255,255,255,0.05);">
+                    <summary style="cursor: pointer; font-weight: 600;"><i class="fas fa-book"></i> Interprétation détaillée</summary>
+                    <div style="padding-top: 1rem;">
+                        <p id="interp-long"></p>
+                        <p id="prox-line" style="margin-top: 1rem; opacity: 0.8;"></p>
+                    </div>
+                </details>
+
+                <details class="glass-card" style="margin-top: 1rem; background: rgba(255,255,255,0.05);">
+                    <summary style="cursor: pointer; font-weight: 600;"><i class="fas fa-chart-bar"></i> Domaines (compétences 0-10)</summary>
+                    <div class="subs-grid" style="padding-top: 1rem;">
+                        <div class="sub-card"><strong>Compétences sociales</strong><br><span id="comp-social">10</span>/10</div>
+                        <div class="sub-card"><strong>Flexibilité attentionnelle</strong><br><span id="comp-switch">10</span>/10</div>
+                        <div class="sub-card"><strong>Attention aux détails</strong><br><span id="comp-detail">10</span>/10</div>
+                        <div class="sub-card"><strong>Communication</strong><br><span id="comp-comm">10</span>/10</div>
+                        <div class="sub-card"><strong>Imagination</strong><br><span id="comp-imag">10</span>/10</div>
+                    </div>
+                </details>
+
+                <div class="glass-card" style="margin-top: 1.5rem; background: rgba(255,255,255,0.05);">
+                    <h3><i class="fas fa-download"></i> Exporter</h3>
+                    <div class="consent-box">
+                    <label>
+                        <input type="checkbox" id="exportConsent">
+                        <span>Je souhaite télécharger mes résultats (questionnaire, réponses, score et date) dans un fichier JSON sur mon appareil. <strong>Ces résultats constituent des données de santé — je m'engage à les conserver de façon sécurisée et à ne les partager qu'avec un professionnel de santé de mon choix.</strong> Aucune donnée n'est transmise à un serveur.</span>
+                    </label>
+                </div>
+                    <div class="export-buttons">
+                        <button type="button" id="btn-export" class="btn-primary" disabled>
+                            <i class="fas fa-file-export"></i> Exporter
+                        </button>
+                        <button type="button" class="btn-print" onclick="printResults()">
+                            <i class="fas fa-print"></i> Imprimer
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </form>
+    </main>
+
+    <footer class="footer">
+        <p><strong>AQ-50 - Autism Spectrum Quotient</strong></p>
+        <p style="margin: 0.5rem 0;"><strong>Auteurs :</strong> Baron-Cohen et al., 2001 - Autism Research Centre, Cambridge</p>
+        <p><strong>Adaptation numérique :</strong> Dr FENOHASINA | Psychiatre</p>
+        <small>Licence CC BY-NC-SA 4.0</small>
+    </footer>
+
+    <script src="../js/app.js"></script>
+    <script>
+        const questions = [
+            "Je préfère réaliser des activités avec d'autres personnes plutôt que seul(e).",
+            "Je préfère tout faire continuellement de la même manière.",
+            "Quand j'essaye d'imaginer quelque chose, il est très facile de m'en représenter une image mentalement.",
+            "Je suis fréquemment tellement absorbé(e) par une chose que je perds tout le reste de vue.",
+            "Mon attention est souvent attirée par des bruits discrets que les autres ne remarquent pas.",
+            "Je fais habituellement attention aux numéros de plaques d'immatriculation ou à d'autres types d'informations de ce genre.",
+            "Les gens me disent souvent que ce que j'ai dit était impoli, même quand je pense moi que c'était poli.",
+            "Quand je lis une histoire, je peux facilement imaginer à quoi les personnages pourraient ressembler.",
+            "Je suis fasciné(e) par les dates.",
+            "Au sein d'un groupe, je peux facilement suivre les conversations de plusieurs personnes à la fois.",
+            "Je trouve les situations de la vie en société faciles.",
+            "J'ai tendance à remarquer certains détails que les autres ne voient pas.",
+            "Je préfèrerais aller dans une bibliothèque plutôt qu'à une fête.",
+            "Je trouve facile d'inventer des histoires.",
+            "Je suis plus facilement attiré(e) par les gens que par les objets.",
+            "J'ai tendance à avoir des centres d'intérêt très importants. Je me tracasse lorsque je ne peux m'y consacrer.",
+            "J'apprécie le bavardage en société.",
+            "Quand je parle, il n'est pas toujours facile pour les autres de placer un mot.",
+            "Je suis fasciné(e) par les chiffres.",
+            "Quand je lis une histoire, je trouve qu'il est difficile de me représenter les intentions des personnages.",
+            "Je n'aime pas particulièrement lire des romans.",
+            "Je trouve qu'il est difficile de se faire de nouveaux amis.",
+            "Je remarque sans cesse des schémas réguliers dans les choses qui m'entourent.",
+            "Je préfèrerais aller au théâtre qu'au musée.",
+            "Cela ne me dérange pas si mes habitudes quotidiennes sont perturbées.",
+            "Je remarque souvent que je ne sais pas comment entretenir une conversation.",
+            "Je trouve qu'il est facile de « lire entre les lignes » lorsque quelqu'un me parle.",
+            "Je me concentre habituellement plus sur l'ensemble d'une image que sur les petits détails de celle-ci.",
+            "Je ne suis pas très doué(e) pour me souvenir des numéros de téléphone.",
+            "Je ne remarque habituellement pas les petits changements dans une situation ou dans l'apparence de quelqu'un.",
+            "Je sais m'en rendre compte quand mon interlocuteur s'ennuie.",
+            "Je trouve qu'il est facile de faire plus d'une chose à la fois.",
+            "Quand je parle au téléphone, je ne suis pas sûr(e) de savoir quand c'est à mon tour de parler.",
+            "J'aime faire les choses de manière spontanée.",
+            "Je suis souvent le(la) dernier(ère) à comprendre le sens d'une blague.",
+            "Je trouve qu'il est facile de décoder ce que les autres pensent ou ressentent juste en regardant leur visage.",
+            "Si je suis interrompu(e), je peux facilement revenir à ce que j'étais en train de faire.",
+            "Je suis doué(e) pour le bavardage en société.",
+            "Les gens me disent souvent que je répète continuellement les mêmes choses.",
+            "Quand j'étais enfant, j'aimais habituellement jouer à des jeux de rôle avec les autres.",
+            "J'aime collectionner des informations sur des catégories de choses.",
+            "Je trouve qu'il est difficile de s'imaginer dans la peau d'un autre.",
+            "J'aime planifier avec soin toute activité à laquelle je participe.",
+            "J'aime les événements sociaux.",
+            "Je trouve qu'il est difficile de décoder les intentions des autres.",
+            "Les nouvelles situations me rendent anxieux(se).",
+            "J'aime rencontrer de nouvelles personnes.",
+            "Je suis une personne qui a le sens de la diplomatie.",
+            "Je ne suis pas très doué(e) pour me souvenir des dates de naissance des gens.",
+            "Je trouve qu'il est très facile de jouer à des jeux de rôle avec des enfants."
+        ];
+
+        const responses = [
+            {label: 'Tout à fait d\'accord', value: 'totally_agree'},
+            {label: 'Plutôt d\'accord', value: 'slightly_agree'},
+            {label: 'Plutôt pas d\'accord', value: 'slightly_disagree'},
+            {label: 'Pas du tout d\'accord', value: 'totally_disagree'}
+        ];
+
+        const agreeScored = [2,4,5,6,7,9,12,13,16,18,19,20,21,22,23,26,33,35,39,41,42,43,45,46];
+        const disagreeScored = [1,3,8,10,11,14,15,17,24,25,27,28,29,30,31,32,34,36,37,38,40,44,47,48,49,50];
+
+        const SUBSCALES = {
+            social: [1,11,13,15,22,36,44,45,47,48],
+            switching: [2,4,10,16,25,32,34,37,43,46],
+            detail: [5,6,9,12,19,23,28,29,30,49],
+            communication: [7,17,18,26,27,31,33,35,38,39],
+            imagination: [3,8,14,20,21,24,40,41,42,50]
+        };
+
+        const qwrap = document.getElementById('qwrap');
+        questions.forEach((t, i) => {
+            const idx = i + 1;
+            const div = document.createElement('div');
+            div.className = 'question-card';
+            div.innerHTML = `
+                <span class="question-number">${idx}</span>
+                <div class="question-text">${t}</div>
+                <div class="options-grid">
+                    ${responses.map(r => `
+                        <div>
+                            <input type="radio" id="q${idx}_${r.value}" name="q${idx}" value="${r.value}" style="display:none"/>
+                            <label for="q${idx}_${r.value}" class="option-btn">${r.label}</label>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            qwrap.appendChild(div);
+        });
+
+        document.querySelectorAll('.options-grid label').forEach(label => {
+            label.addEventListener('click', function() {
+                const name = this.previousElementSibling.name;
+                document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
+                    r.nextElementSibling.classList.remove('selected');
+                });
+                this.classList.add('selected');
+            });
+        });
+
+        function scoreItem(i, ans) {
+            const isAgree = (ans === 'totally_agree' || ans === 'slightly_agree');
+            if (agreeScored.includes(i) && isAgree) return 1;
+            if (disagreeScored.includes(i) && !isAgree) return 1;
+            return 0;
+        }
+
+        function sumSubscale(subset, answers) {
+            return subset.reduce((acc, i) => acc + scoreItem(i, answers[`q${i}`]), 0);
+        }
+
+        function getInterpretation(total) {
+            if (total < 26) return { level: "Faible", className: "low", description: "Probabilité faible de traits autistiques cliniquement significatifs." };
+            if (total <= 31) return { level: "Modérée", className: "moderate", description: "Probabilité modérée. Une évaluation clinique peut être utile." };
+            return { level: "Élevée", className: "high", description: "Probabilité élevée. Une évaluation spécialisée est recommandée." };
+        }
+
+        function interpretationLong(total) {
+            if (total < 26) return "Votre score est inférieur à 26. Cette zone est associée à une probabilité plutôt faible de traits autistiques cliniquement significatifs.";
+            if (total <= 28) return "Votre score est entre 26 et 28, zone sensible au repérage. On recommande d'explorer le contexte avec un professionnel.";
+            if (total <= 31) return "Votre score est entre 29 et 31 (compromis sensibilité/spécificité). L'interprétation dépend du contexte clinique.";
+            return "Votre score est ≥ 32 (zone spécifique). Si accompagné d'un retentissement significatif, une évaluation standardisée est indiquée.";
+        }
+
+        function thresholdProximity(total) {
+            const thresholds = [26, 29, 32];
+            let closest = thresholds.reduce((a, b) => Math.abs(total - a) < Math.abs(total - b) ? a : b);
+            const d = Math.abs(total - closest);
+            if (d === 0) return `Score exactement au repère ${closest}. De petites variations peuvent changer l'interprétation.`;
+            if (d <= 3) return `Score à ${d} points du repère ${closest}.`;
+            return `Score éloigné des repères immédiats.`;
+        }
+
+        const form = document.getElementById('aq-form');
+        const valmsg = document.getElementById('valmsg');
+        const results = document.getElementById('results');
+
+        function computeAndRender(answers) {
+            for (let i = 1; i <= questions.length; i++) {
+                if (!answers[`q${i}`]) {
+                    valmsg.style.display = 'block';
+                    results.style.display = 'none';
+                    return false;
+                }
+            }
+            valmsg.style.display = 'none';
+
+            let total = 0;
+            for (let i = 1; i <= questions.length; i++) total += scoreItem(i, answers[`q${i}`]);
+
+            const s_social = sumSubscale(SUBSCALES.social, answers);
+            const s_switch = sumSubscale(SUBSCALES.switching, answers);
+            const s_detail = sumSubscale(SUBSCALES.detail, answers);
+            const s_comm = sumSubscale(SUBSCALES.communication, answers);
+            const s_imag = sumSubscale(SUBSCALES.imagination, answers);
+
+            document.getElementById('comp-social').textContent = 10 - s_social;
+            document.getElementById('comp-switch').textContent = 10 - s_switch;
+            document.getElementById('comp-detail').textContent = 10 - s_detail;
+            document.getElementById('comp-comm').textContent = 10 - s_comm;
+            document.getElementById('comp-imag').textContent = 10 - s_imag;
+
+            document.getElementById('totalscore').textContent = total;
+            document.getElementById('fill').style.width = (total / 50 * 100) + '%';
+
+            const interp = getInterpretation(total);
+            const interpretationBox = document.getElementById('interpretationBox');
+            interpretationBox.className = `interpretation ${interp.className}`;
+            let interpHTML = `<h3>Probabilité ${interp.level}</h3><p>${interp.description}</p>`;
+            interpHTML += `
+                <div class="threshold-note">
+                    <i class="fas fa-info-circle"></i> <strong>Note de transparence :</strong> Seul le seuil ≥ 32 est issu de la validation originale de Baron-Cohen et al. (2001). Les repères intermédiaires (26, 29) sont des repères cliniques ajoutés pour affiner l'interprétation et ne proviennent pas de l'étude de validation.
+                </div>
+            `;
+            interpretationBox.innerHTML = interpHTML;
+
+            document.getElementById('interp-long').textContent = interpretationLong(total);
+            document.getElementById('prox-line').textContent = thresholdProximity(total);
+
+            results.style.display = 'block';
+            results.scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('btn-export').disabled = !document.getElementById('consent').checked;
+            return true;
+        }
+
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            const fd = new FormData(form);
+            const answers = {};
+            for (const [k, v] of fd.entries()) answers[k] = v;
+            computeAndRender(answers);
+        });
+
+        document.getElementById('file-import').addEventListener('change', ev => {
+            const f = ev.target.files?.[0];
+            if (!f) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    for (let i = 1; i <= questions.length; i++) {
+                        const v = data[`q${i}`];
+                        if (v) {
+                            const r = document.querySelector(`input[name="q${i}"][value="${v}"]`);
+                            if (r) {
+                                r.checked = true;
+                                r.nextElementSibling.classList.add('selected');
+                            }
+                        }
+                    }
+                    computeAndRender(data);
+                } catch { alert("Fichier invalide."); }
+                finally { ev.target.value = ''; }
+            };
+            reader.readAsText(f);
+        });
+
+        document.getElementById('consent').addEventListener('change', function() {
+            document.getElementById('btn-export').disabled = !this.checked;
+        });
+
+        document.getElementById('btn-export').addEventListener('click', () => {
+            if (!document.getElementById('consent').checked) return;
+            const fd = new FormData(form);
+            const answers = {};
+            for (const [k, v] of fd.entries()) answers[k] = v;
+            const blob = new Blob([JSON.stringify(answers, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'AQ50_' + new Date().toISOString().split('T')[0] + '.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        function resetForm() {
+            form.reset();
+            document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+            results.style.display = 'none';
+            valmsg.style.display = 'none';
+        }
+    </script>
+</body>
+</html>

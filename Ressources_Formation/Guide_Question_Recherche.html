@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide Question de Recherche</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap');
+
+        .guide-section { margin-bottom: 2rem; }
+        .guide-card {
+            background: var(--surface-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .guide-card h3 { color: var(--color-text-primary); }
+        .guide-card p, .guide-card li { color: var(--color-text-muted); }
+
+        /* Step Navigation */
+        .step-nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+        .step-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            background: var(--surface-table);
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            color: var(--color-text-muted);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .step-btn:hover {
+            border-color: var(--color-primary);
+            color: var(--color-text-primary);
+        }
+        .step-btn.active {
+            background: rgba(14, 165, 233, 0.15);
+            border-color: var(--color-primary);
+            color: var(--accent-teal);
+        }
+        .step-btn .step-number {
+            width: 24px;
+            height: 24px;
+            background: var(--color-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-size-xs);
+            font-weight: 700;
+            color: white;
+        }
+        .step-btn.active .step-number { background: var(--color-primary-light); color: var(--color-bg-primary); }
+
+        /* Content sections */
+        .step-content { display: none; animation: fadeIn 0.5s ease-in-out; }
+        .step-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Accordion */
+        .accordion-button {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 1rem 1.25rem;
+            background: var(--surface-table);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            color: var(--color-text-primary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .accordion-button:hover {
+            background: var(--surface-input);
+            border-color: var(--color-border-hover);
+        }
+        .accordion-button.open .accordion-arrow { transform: rotate(180deg); }
+        .accordion-arrow { transition: transform 0.3s ease; color: var(--color-text-muted); }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, padding 0.5s ease;
+            background: var(--surface-inset);
+            border: 1px solid var(--color-border);
+            border-top: none;
+            border-radius: 0 0 var(--radius-md) var(--radius-md);
+        }
+        .accordion-content p { padding: 1rem 1.25rem; margin: 0; color: var(--color-text-muted); }
+
+        /* Decision Tree */
+        .decision-node { transition: opacity 0.5s ease, transform 0.5s ease; }
+        .decision-node.hidden { opacity: 0; transform: scale(0.95); pointer-events: none; position: absolute; }
+        .decision-option {
+            width: 100%;
+            text-align: left;
+            padding: 1rem;
+            background: var(--color-bg-card);
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-md);
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 0.75rem;
+        }
+        .decision-option:hover {
+            background: rgba(14, 165, 233, 0.1);
+            border-color: var(--color-primary);
+        }
+        .result-box {
+            padding: 1.5rem;
+            background: rgba(34, 197, 94, 0.1);
+            border: 2px solid rgba(34, 197, 94, 0.3);
+            border-radius: var(--radius-lg);
+        }
+        .result-box h3 { color: var(--accent-green); margin-bottom: 0.5rem; }
+        .result-box p { color: var(--color-text-muted); }
+
+        /* Framework tabs */
+        .framework-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--color-border);
+            margin-bottom: 1.5rem;
+        }
+        .framework-tab-button {
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            color: var(--color-text-muted);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .framework-tab-button.active-tab {
+            color: var(--accent-teal);
+            border-bottom-color: var(--color-primary);
+        }
+        .framework-tab-content { display: none; }
+        .framework-tab-content.active { display: block; }
+
+        /* Example cards */
+        .example-card {
+            background: var(--surface-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .example-card h5 { color: var(--color-text-primary); margin-bottom: 0.5rem; }
+        .example-card .italic { font-style: italic; color: var(--color-text-muted); margin-bottom: 1rem; }
+        .example-card .analysis {
+            font-size: var(--font-size-xs);
+            color: var(--color-text-dimmed);
+            margin-top: auto;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--color-border);
+        }
+
+        /* Workshop */
+        .workshop-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 1.5rem;
+        }
+        .workshop-card {
+            background: var(--surface-table);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+        }
+        .workshop-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            color: var(--color-text-secondary);
+            font-size: var(--font-size-sm);
+            transition: all var(--transition-normal);
+        }
+        .workshop-input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+        }
+        .preview-box {
+            background: rgba(14, 165, 233, 0.1);
+            border: 1px solid rgba(14, 165, 233, 0.3);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+        .solution-box {
+            background: var(--surface-table);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Quiz */
+        .quiz-item { margin-bottom: 2rem; }
+        .quiz-item h4 { color: var(--color-text-primary); margin-bottom: 1rem; }
+        .quiz-option {
+            padding: 1rem;
+            background: var(--color-bg-card);
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-md);
+            margin-bottom: 0.75rem;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .quiz-option:hover { background: rgba(14, 165, 233, 0.1); border-color: var(--color-primary); }
+        .quiz-option.selected { background: rgba(14, 165, 233, 0.2); border-color: var(--color-primary); }
+        .quiz-option.correct { background: rgba(34, 197, 94, 0.2); border-color: var(--color-success); }
+        .quiz-option.incorrect { background: rgba(239, 68, 68, 0.2); border-color: var(--color-danger); }
+        .feedback-box { transition: opacity 0.3s; padding: 1rem; border-radius: var(--radius-md); margin-top: 1rem; font-size: var(--font-size-sm); }
+        .feedback-box.success { background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); color: var(--accent-green); }
+        .feedback-box.error { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: var(--accent-red); }
+
+        /* Comparison table */
+        .comparison-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+        .comparison-table th, .comparison-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--color-border);
+        }
+        .comparison-table th {
+            background: rgba(14, 165, 233, 0.1);
+            color: var(--accent-teal);
+            font-weight: 600;
+            font-size: var(--font-size-xs);
+            text-transform: uppercase;
+        }
+        .comparison-table td { color: var(--color-text-muted); font-size: var(--font-size-sm); }
+        .comparison-table tr:hover td { background: var(--surface-table); }
+
+        /* Checklist */
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background: var(--surface-table);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            margin-bottom: 0.75rem;
+            transition: all 0.3s ease;
+        }
+        .checklist-item:hover { background: var(--surface-input); }
+        .checklist-item input[type="checkbox"] {
+            width: 1.25rem;
+            height: 1.25rem;
+            margin-right: 1rem;
+            accent-color: var(--color-primary);
+        }
+        .checklist-item label { color: var(--color-text-secondary); font-size: var(--font-size-sm); cursor: pointer; }
+
+        /* Drag drop */
+        .draggable-item {
+            padding: 0.75rem 1rem;
+            background: var(--color-bg-card);
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-md);
+            cursor: grab;
+            transition: all 0.3s ease;
+        }
+        .draggable-item:active { cursor: grabbing; }
+        .drop-zone {
+            min-height: 80px;
+            padding: 1.5rem;
+            background: rgba(14, 165, 233, 0.05);
+            border: 2px dashed rgba(14, 165, 233, 0.3);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-text-dimmed);
+            transition: all 0.3s ease;
+        }
+        .drop-zone.drag-over { background: rgba(14, 165, 233, 0.15); border-color: var(--color-primary); }
+        .drop-zone.correct { background: rgba(34, 197, 94, 0.1); border-color: var(--color-success); border-style: solid; }
+        .drop-zone.incorrect { background: rgba(239, 68, 68, 0.1); border-color: var(--color-danger); }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .workshop-container { grid-template-columns: 1fr; }
+            .step-nav { flex-direction: column; align-items: stretch; }
+            .step-btn { justify-content: center; }
+        }
+    </style>
+</head>
+<body class="light-questionnaire">
+
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+            <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+        </div>
+        <h1>Guide Question de Recherche</h1>
+        <span class="badge badge-cat-recherche">Recherche</span>
+    </nav>
+
+    <div class="container">
+        <header class="page-header">
+            <p class="subtitle">Parcours pédagogique en 5 étapes pour maîtriser la formulation de questions de recherche selon les cadres PICO, SPIDER et autres.</p>
+        </header>
+
+        <!-- Step Navigation -->
+        <nav class="step-nav">
+            <button class="step-btn active" data-step="1">
+                <span class="step-number">1</span>
+                <span>Fondamentaux</span>
+            </button>
+            <button class="step-btn" data-step="2">
+                <span class="step-number">2</span>
+                <span>Choisir son Cadre</span>
+            </button>
+            <button class="step-btn" data-step="3">
+                <span class="step-number">3</span>
+                <span>Maîtriser les Composantes</span>
+            </button>
+            <button class="step-btn" data-step="4">
+                <span class="step-number">4</span>
+                <span>S'exercer</span>
+            </button>
+            <button class="step-btn" data-step="5">
+                <span class="step-number">5</span>
+                <span>Valider et Affiner</span>
+            </button>
+        </nav>
+
+        <main>
+            <!-- ETAPE 1: Fondamentaux -->
+            <section id="step-1" class="step-content active">
+                <div class="glass-card">
+                    <h2><i class="fas fa-lightbulb" style="color: var(--color-primary); margin-right: 0.5rem;"></i>Étape 1 : Comprendre les Fondamentaux</h2>
+                    <p style="color: var(--color-text-muted); margin-bottom: 1.5rem;">Pourquoi une bonne question de recherche est-elle cruciale ? Quelles sont ses qualités essentielles ?</p>
+
+                    <div class="guide-card">
+                        <h3><i class="fas fa-star" style="color: #fbbf24; margin-right: 0.5rem;"></i>L'Importance de la Question de Recherche</h3>
+                        <p style="line-height: 1.8;">La formulation de la question de recherche est l'étape la plus critique de toute synthèse de la connaissance. Elle est la <strong>clé de voûte</strong> qui détermine la rigueur, la pertinence et la validité de vos travaux. Une question bien posée est un gage de transparence et de fiabilité.</p>
+                        <ul style="margin-top: 1rem; padding-left: 1.5rem;">
+                            <li>Elle <strong>guide votre méthodologie</strong> : stratégie de recherche, critères d'inclusion</li>
+                            <li>Elle <strong>clarifie vos objectifs</strong> pour vous et vos lecteurs</li>
+                            <li>Elle <strong>facilite l'interprétation</strong> des résultats</li>
+                            <li>Elle permet une <strong>reproductibilité</strong> de votre travail</li>
+                        </ul>
+                    </div>
+
+                    <div class="guide-card">
+                        <h3><i class="fas fa-gem" style="color: #a855f7; margin-right: 0.5rem;"></i>Les 3 Qualités d'une Bonne Question</h3>
+                        <div class="feature-grid">
+                            <div style="padding: 1rem; background: rgba(34, 197, 94, 0.1); border-radius: var(--radius-md); border: 1px solid rgba(34, 197, 94, 0.3);">
+                                <h4 style="color: #4ade80; margin-bottom: 0.5rem;"><i class="fas fa-eye"></i> Clarté</h4>
+                                <p style="font-size: var(--font-size-sm);">La question doit être sans ambiguïté. Chaque terme doit être défini précisément.</p>
+                            </div>
+                            <div style="padding: 1rem; background: rgba(14, 165, 233, 0.1); border-radius: var(--radius-md); border: 1px solid rgba(14, 165, 233, 0.3);">
+                                <h4 style="color: #38bdf8; margin-bottom: 0.5rem;"><i class="fas fa-crosshairs"></i> Focalisation</h4>
+                                <p style="font-size: var(--font-size-sm);">Ni trop large (impossible à traiter), ni trop étroite (pas assez de littérature).</p>
+                            </div>
+                            <div style="padding: 1rem; background: rgba(251, 191, 36, 0.1); border-radius: var(--radius-md); border: 1px solid rgba(251, 191, 36, 0.3);">
+                                <h4 style="color: #fbbf24; margin-bottom: 0.5rem;"><i class="fas fa-check-double"></i> Faisabilité</h4>
+                                <p style="font-size: var(--font-size-sm);">Les ressources et la littérature disponibles doivent permettre d'y répondre.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="guide-card">
+                        <h3><i class="fas fa-code-branch" style="color: #ec4899; margin-right: 0.5rem;"></i>Quantitatif vs Qualitatif</h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                            <div style="padding: 1rem; background: rgba(14, 165, 233, 0.05); border-radius: var(--radius-md); border-left: 4px solid #0ea5e9;">
+                                <h4 style="color: var(--color-primary-light); margin-bottom: 0.5rem;">Approche Quantitative</h4>
+                                <p style="font-size: var(--font-size-sm);"><strong>Objectif :</strong> Mesurer l'efficacité, évaluer la causalité</p>
+                                <p style="font-size: var(--font-size-sm);"><strong>Données :</strong> Numériques, statistiques</p>
+                                <p style="font-size: var(--font-size-sm);"><strong>Cadres :</strong> PICO, PECO, PICOT</p>
+                            </div>
+                            <div style="padding: 1rem; background: rgba(168, 85, 247, 0.05); border-radius: var(--radius-md); border-left: 4px solid #a855f7;">
+                                <h4 style="color: #c084fc; margin-bottom: 0.5rem;">Approche Qualitative</h4>
+                                <p style="font-size: var(--font-size-sm);"><strong>Objectif :</strong> Comprendre une expérience, un processus</p>
+                                <p style="font-size: var(--font-size-sm);"><strong>Données :</strong> Textuelles, thèmes, interprétations</p>
+                                <p style="font-size: var(--font-size-sm);"><strong>Cadres :</strong> SPIDER, SPICE, PICo (JBI)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 2rem;">
+                        <button class="btn-primary" onclick="goToStep(2)">
+                            Étape suivante : Choisir son Cadre <i class="fas fa-arrow-right" style="margin-left: 0.5rem;"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ETAPE 2: Choisir son Cadre -->
+            <section id="step-2" class="step-content">
+                <div class="glass-card">
+                    <h2><i class="fas fa-compass" style="color: var(--color-primary); margin-right: 0.5rem;"></i>Étape 2 : Choisir son Cadre</h2>
+                    <p style="color: var(--color-text-muted); margin-bottom: 1.5rem;">Répondez aux questions suivantes pour identifier le cadre de formulation le plus adapté à votre recherche.</p>
+
+                    <div id="decision-tree-container" style="position: relative; min-height: 250px;">
+                        <!-- Decision Tree Nodes -->
+                        <div id="node-start" class="decision-node" style="padding: 1.5rem; background: rgba(30, 41, 59, 0.5); border: 1px solid var(--color-border); border-radius: var(--radius-lg); width: 100%;">
+                            <p style="font-weight: 600; font-size: var(--font-size-lg); color: var(--color-text-primary); margin-bottom: 1rem;"><i class="fas fa-question-circle" style="color: var(--color-primary); margin-right: 0.5rem;"></i>Quel est l'objectif principal de votre revue ?</p>
+                            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                <button onclick="showNode('quant')" class="decision-option"><i class="fas fa-chart-bar" style="margin-right: 0.5rem; color: var(--color-primary);"></i>Évaluer l'efficacité ou l'effet d'une intervention / exposition</button>
+                                <button onclick="showNode('qual')" class="decision-option"><i class="fas fa-comments" style="margin-right: 0.5rem; color: var(--color-primary);"></i>Comprendre une expérience, une perception, un processus ou un contexte</button>
+                            </div>
+                        </div>
+
+                        <div id="node-quant" class="decision-node hidden" style="padding: 1.5rem; background: rgba(30, 41, 59, 0.5); border: 1px solid var(--color-border); border-radius: var(--radius-lg); width: 100%;">
+                            <p style="font-weight: 600; font-size: var(--font-size-lg); color: var(--color-text-primary); margin-bottom: 1rem;"><i class="fas fa-flask" style="color: var(--color-primary); margin-right: 0.5rem;"></i>Quel type d'évaluation quantitative réalisez-vous ?</p>
+                            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                <button onclick="showResult('result-pico')" class="decision-option"><i class="fas fa-chevron-right" style="margin-right: 0.5rem; color: var(--color-primary);"></i>Je compare une intervention délibérée (traitement, programme) à une alternative</button>
+                                <button onclick="showResult('result-peco')" class="decision-option"><i class="fas fa-chevron-right" style="margin-right: 0.5rem; color: var(--color-primary);"></i>J'étudie l'effet d'une exposition subie (facteur de risque, environnement)</button>
+                            </div>
+                        </div>
+
+                        <div id="node-qual" class="decision-node hidden" style="padding: 1.5rem; background: rgba(30, 41, 59, 0.5); border: 1px solid var(--color-border); border-radius: var(--radius-lg); width: 100%;">
+                            <p style="font-weight: 600; font-size: var(--font-size-lg); color: var(--color-text-primary); margin-bottom: 1rem;"><i class="fas fa-user-friends" style="color: var(--color-primary); margin-right: 0.5rem;"></i>Quel est votre focus qualitatif principal ?</p>
+                            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                <button onclick="showResult('result-spider')" class="decision-option"><i class="fas fa-chevron-right" style="margin-right: 0.5rem; color: var(--color-primary);"></i>L'expérience vécue par un échantillon et la manière dont elle a été étudiée (méthodologie)</button>
+                                <button onclick="showResult('result-spice')" class="decision-option"><i class="fas fa-chevron-right" style="margin-right: 0.5rem; color: var(--color-primary);"></i>L'évaluation d'un service ou programme en insistant sur le contexte et le point de vue des acteurs</button>
+                                <button onclick="showResult('result-pico-qual')" class="decision-option"><i class="fas fa-chevron-right" style="margin-right: 0.5rem; color: var(--color-primary);"></i>Un phénomène d'intérêt pour une population dans un contexte donné (approche JBI)</button>
+                            </div>
+                        </div>
+
+                        <!-- Results -->
+                        <div id="result-pico" class="decision-node hidden result-box">
+                            <h3><i class="fas fa-check-circle" style="margin-right: 0.5rem;"></i>Le cadre PICO est recommandé</h3>
+                            <p>Idéal pour structurer les questions sur l'efficacité des interventions. Pensez aussi à ses variantes <strong>PICOT</strong> (avec Timeframe) ou <strong>PICOS</strong> (avec Study Design).</p>
+                            <p style="margin-top: 1rem;"><strong>P</strong>opulation - <strong>I</strong>ntervention - <strong>C</strong>omparison - <strong>O</strong>utcome</p>
+                        </div>
+                        <div id="result-peco" class="decision-node hidden result-box">
+                            <h3><i class="fas fa-check-circle" style="margin-right: 0.5rem;"></i>Le cadre PECO est recommandé</h3>
+                            <p>Spécifiquement adapté aux questions d'étiologie et de facteurs de risque, où l'on remplace l'Intervention par une <strong>Exposition</strong>.</p>
+                            <p style="margin-top: 1rem;"><strong>P</strong>opulation - <strong>E</strong>xposition - <strong>C</strong>omparison - <strong>O</strong>utcome</p>
+                        </div>
+                        <div id="result-spider" class="decision-node hidden result-box">
+                            <h3><i class="fas fa-check-circle" style="margin-right: 0.5rem;"></i>Le cadre SPIDER est recommandé</h3>
+                            <p>Parfait pour synthétiser la recherche qualitative en se concentrant sur l'Échantillon, le Phénomène d'Intérêt, le Devis, l'Évaluation et le Type de Recherche.</p>
+                            <p style="margin-top: 1rem;"><strong>S</strong>ample - <strong>P</strong>henomenon of <strong>I</strong>nterest - <strong>D</strong>esign - <strong>E</strong>valuation - <strong>R</strong>esearch Type</p>
+                        </div>
+                        <div id="result-spice" class="decision-node hidden result-box">
+                            <h3><i class="fas fa-check-circle" style="margin-right: 0.5rem;"></i>Le cadre SPICE est recommandé</h3>
+                            <p>Utilisez SPICE pour évaluer des services ou des interventions, en mettant l'accent sur le Contexte, la Perspective des acteurs, l'Intervention, la Comparaison et l'Évaluation.</p>
+                            <p style="margin-top: 1rem;"><strong>S</strong>etting - <strong>P</strong>erspective - <strong>I</strong>ntervention - <strong>C</strong>omparison - <strong>E</strong>valuation</p>
+                        </div>
+                        <div id="result-pico-qual" class="decision-node hidden result-box">
+                            <h3><i class="fas fa-check-circle" style="margin-right: 0.5rem;"></i>Le cadre PICo (JBI) est recommandé</h3>
+                            <p>L'approche du Joanna Briggs Institute avec PICo (Population, Phénomène d'Intérêt, Contexte) est excellente pour cadrer les revues qualitatives de manière claire et systématique.</p>
+                            <p style="margin-top: 1rem;"><strong>P</strong>opulation - Phenomenon of <strong>I</strong>nterest - <strong>Co</strong>ntext</p>
+                        </div>
+                    </div>
+
+                    <button onclick="resetTree()" class="btn-secondary" style="margin-top: 1rem;"><i class="fas fa-redo" style="margin-right: 0.5rem;"></i>Recommencer</button>
+
+                    <div style="display: flex; justify-content: space-between; margin-top: 2rem; flex-wrap: wrap; gap: 1rem;">
+                        <button class="btn-secondary" onclick="goToStep(1)">
+                            <i class="fas fa-arrow-left" style="margin-right: 0.5rem;"></i> Étape précédente
+                        </button>
+                        <button class="btn-primary" onclick="goToStep(3)">
+                            Étape suivante <i class="fas fa-arrow-right" style="margin-left: 0.5rem;"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ETAPE 3: Maîtriser les Composantes -->
+            <section id="step-3" class="step-content">
+                <div class="glass-card">
+                    <h2><i class="fas fa-layer-group" style="color: var(--color-primary); margin-right: 0.5rem;"></i>Étape 3 : Maîtriser les Composantes</h2>
+                    <p style="color: var(--color-text-muted); margin-bottom: 1.5rem;">Explorez en détail les composantes de chaque cadre avec des explications et exemples commentés.</p>
+
+                    <div class="framework-tabs">
+                        <button class="framework-tab-button active-tab" data-target="pico-content">PICO (Quantitatif)</button>
+                        <button class="framework-tab-button" data-target="spider-content">SPIDER (Qualitatif)</button>
+                    </div>
+
+                    <!-- PICO Content -->
+                    <div id="pico-content" class="framework-tab-content active">
+                        <h3 style="margin-bottom: 1rem;"><i class="fas fa-chart-bar" style="color: var(--color-primary); margin-right: 0.5rem;"></i>Le Cadre PICO</h3>
+                        <p style="color: var(--color-text-muted); margin-bottom: 1.5rem;">L'outil de référence pour les revues systématiques évaluant l'efficacité des interventions.</p>
+
+                        <!-- PICO Accordion -->
+                        <div id="pico-accordion" style="margin-bottom: 2rem;">
+                            <div style="margin-bottom: 0.5rem;">
+                                <button type="button" class="accordion-button" data-accordion-target="acc-pico-p">
+                                    <span style="color: var(--color-primary-light);">P - Population</span>
+                                    <i class="fas fa-chevron-down accordion-arrow"></i>
+                                </button>
+                                <div id="acc-pico-p" class="accordion-content">
+                                    <p>Le groupe de sujets concerné (âge, sexe, pathologie, contexte). <strong>Qui sont les sujets de l'étude ?</strong> Soyez spécifique : "adultes > 65 ans" plutôt que "personnes âgées".</p>
+                                </div>
+                            </div>
+                            <div style="margin-bottom: 0.5rem;">
+                                <button type="button" class="accordion-button" data-accordion-target="acc-pico-i">
+                                    <span style="color: var(--color-primary-light);">I - Intervention</span>
+                                    <i class="fas fa-chevron-down accordion-arrow"></i>
+                                </button>
+                                <div id="acc-pico-i" class="accordion-content">
+                                    <p>L'action principale évaluée (traitement, programme, thérapie). <strong>Quelle est l'intervention testée ?</strong> Précisez la durée, la fréquence, le dosage si pertinent.</p>
+                                </div>
+                            </div>
+                            <div style="margin-bottom: 0.5rem;">
+                                <button type="button" class="accordion-button" data-accordion-target="acc-pico-c">
+                                    <span style="color: var(--color-primary-light);">C - Comparison</span>
+                                    <i class="fas fa-chevron-down accordion-arrow"></i>
+                                </button>
+                                <div id="acc-pico-c" class="accordion-content">
+                                    <p>L'alternative à laquelle l'intervention est comparée (placebo, soins standards, autre intervention). <strong>Par rapport à quoi ?</strong> Un comparateur explicite renforce la question.</p>
+                                </div>
+                            </div>
+                            <div style="margin-bottom: 0.5rem;">
+                                <button type="button" class="accordion-button" data-accordion-target="acc-pico-o">
+                                    <span style="color: var(--color-primary-light);">O - Outcome</span>
+                                    <i class="fas fa-chevron-down accordion-arrow"></i>
+                                </button>
+                                <div id="acc-pico-o" class="accordion-content">
+                                    <p>Le résultat mesurable pour évaluer l'effet (mortalité, qualité de vie, douleur). <strong>Quel est le critère de jugement ?</strong> Spécifiez l'échelle ou l'outil de mesure si possible.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h4 style="margin: 1.5rem 0 1rem;"><i class="fas fa-lightbulb" style="color: #fbbf24; margin-right: 0.5rem;"></i>Exemples Commentés (PICO)</h4>
+                        <div class="feature-grid">
+                            <div class="example-card">
+                                <h5><i class="fas fa-check-circle" style="margin-right: 0.5rem; color: var(--color-success);"></i>Bien Formulé</h5>
+                                <p class="italic">"Chez les adultes (> 65 ans) souffrant d'arthrose du genou modérée (P), une thérapie par exercices aquatiques de 12 semaines (I) comparée à l'absence d'exercice (C) réduit-elle la douleur (EVA) et améliore-t-elle la fonction physique (WOMAC) (O)?"</p>
+                                <p class="analysis">Chaque composant est précis, délimité et mesurable, ce qui rend la revue réalisable et rigoureuse.</p>
+                            </div>
+                            <div class="example-card">
+                                <h5><i class="fas fa-times-circle" style="margin-right: 0.5rem; color: var(--color-danger);"></i>Trop Vague</h5>
+                                <p class="italic">"L'exercice est-il bon pour l'arthrose?"</p>
+                                <p class="analysis">Question impossible à traiter : "L'exercice" et "bon" sont trop larges, la population et la comparaison sont indéfinies.</p>
+                            </div>
+                            <div class="example-card">
+                                <h5><i class="fas fa-exclamation-circle" style="margin-right: 0.5rem; color: var(--color-warning);"></i>À Améliorer</h5>
+                                <p class="italic">"Chez les patients diabétiques, les applis mobiles aident-elles?"</p>
+                                <p class="analysis">Manque de précision. Problèmes: quel type de diabète/appli? Comparé à quoi? Quel critère pour "aider"? À reformuler en spécifiant chaque élément (ex: HbA1c après 6 mois).</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SPIDER Content -->
+                    <div id="spider-content" class="framework-tab-content">
+                        <h3 style="margin-bottom: 1rem;"><i class="fas fa-comments" style="color: #a855f7; margin-right: 0.5rem;"></i>Le Cadre SPIDER</h3>
+                        <p style="color: var(--color-text-muted); margin-bottom: 1.5rem;">Une structure plus souple et pertinente pour la recherche qualitative.</p>
+
+                        <!-- SPIDER Accordion -->
+                        <div id="spider-accordion" style="margin-bottom: 2rem;">
+                            <div style="margin-bottom: 0.5rem;">
+                                <button type="button" class="accordion-button" data-accordion-target="acc-spider-s">
+                                    <span style="color: #c084fc;">S - Sample</span>
+                                    <i class="fas fa-chevron-down accordion-arrow"></i>
+                                </button>
+                                <div id="acc-spider-s" class="accordion-content">
+                                    <p>L'échantillon de personnes. Privilégié à "Population" car souvent plus petit et non probabiliste en qualitatif. Ex: "infirmières nouvellement diplômées".</p>
+                                </div>
+                            </div>
+                            <div style="margin-bottom: 0.5rem;">
+                                <button type="button" class="accordion-button" data-accordion-target="acc-spider-pi">
+                                    <span style="color: #c084fc;">PI - Phenomenon of Interest</span>
+                                    <i class="fas fa-chevron-down accordion-arrow"></i>
+                                </button>
+                                <div id="acc-spider-pi" class="accordion-content">
+                                    <p>Le phénomène au cœur de la recherche (expériences, perceptions, processus). Remplace "Intervention". Ex: "transition vers la pratique professionnelle".</p>
+                                </div>
+                            </div>
+                            <div style="margin-bottom: 0.5rem;">
+                                <button type="button" class="accordion-button" data-accordion-target="acc-spider-d">
+                                    <span style="color: #c084fc;">D - Design</span>
+                                    <i class="fas fa-chevron-down accordion-arrow"></i>
+                                </button>
+                                <div id="acc-spider-d" class="accordion-content">
+                                    <p>Le devis de recherche utilisé dans les études primaires (entretiens, ethnographie, focus group, phénoménologie).</p>
+                                </div>
+                            </div>
+                            <div style="margin-bottom: 0.5rem;">
+                                <button type="button" class="accordion-button" data-accordion-target="acc-spider-e">
+                                    <span style="color: #c084fc;">E - Évaluation</span>
+                                    <i class="fas fa-chevron-down accordion-arrow"></i>
+                                </button>
+                                <div id="acc-spider-e" class="accordion-content">
+                                    <p>Les résultats qualitatifs (attitudes, croyances, points de vue). Remplace "Outcome". Ex: "perceptions sur l'équilibre vie pro/perso".</p>
+                                </div>
+                            </div>
+                            <div style="margin-bottom: 0.5rem;">
+                                <button type="button" class="accordion-button" data-accordion-target="acc-spider-r">
+                                    <span style="color: #c084fc;">R - Research Type</span>
+                                    <i class="fas fa-chevron-down accordion-arrow"></i>
+                                </button>
+                                <div id="acc-spider-r" class="accordion-content">
+                                    <p>Le type de recherche à inclure (qualitative, mixte). Aide à filtrer les études pertinentes.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h4 style="margin: 1.5rem 0 1rem;"><i class="fas fa-lightbulb" style="color: #fbbf24; margin-right: 0.5rem;"></i>Exemples Commentés (SPIDER)</h4>
+                        <div class="feature-grid">
+                            <div class="example-card">
+                                <h5><i class="fas fa-check-circle" style="margin-right: 0.5rem; color: var(--color-success);"></i>Bien Formulé</h5>
+                                <p class="italic">"Quelles sont les expériences (E) des infirmières nouvellement diplômées (S) concernant la transition vers la pratique professionnelle (PI), explorées via des études qualitatives (R) utilisant des entretiens (D)?"</p>
+                                <p class="analysis">Clair, structuré et focalisé. Chaque composant guide efficacement la recherche des études pertinentes.</p>
+                            </div>
+                            <div class="example-card">
+                                <h5><i class="fas fa-times-circle" style="margin-right: 0.5rem; color: var(--color-danger);"></i>Trop Vague</h5>
+                                <p class="italic">"Que pensent les gens du changement climatique?"</p>
+                                <p class="analysis">Question inexploitable. "Les gens", "penser" et "changement climatique" sont trop vastes et ambigus. Aucun devis spécifié.</p>
+                            </div>
+                            <div class="example-card">
+                                <h5><i class="fas fa-exclamation-circle" style="margin-right: 0.5rem; color: var(--color-warning);"></i>À Améliorer</h5>
+                                <p class="italic">"Comment les patients vivent-ils avec une maladie chronique?"</p>
+                                <p class="analysis">Bon début mais doit être focalisé. Quelle maladie? Quel aspect de "vivre avec"? Quelles évaluations? À reformuler pour cibler un phénomène précis (ex: stratégies d'adaptation).</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; margin-top: 2rem; flex-wrap: wrap; gap: 1rem;">
+                        <button class="btn-secondary" onclick="goToStep(2)">
+                            <i class="fas fa-arrow-left" style="margin-right: 0.5rem;"></i> Étape précédente
+                        </button>
+                        <button class="btn-primary" onclick="goToStep(4)">
+                            Étape suivante <i class="fas fa-arrow-right" style="margin-left: 0.5rem;"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ETAPE 4: S'exercer -->
+            <section id="step-4" class="step-content">
+                <div class="glass-card">
+                    <h2><i class="fas fa-hammer" style="color: var(--color-primary); margin-right: 0.5rem;"></i>Étape 4 : S'exercer</h2>
+                    <p style="color: var(--color-text-muted); margin-bottom: 1.5rem;">Passez de la théorie à la pratique. Utilisez nos constructeurs pour formuler pas à pas vos propres questions.</p>
+
+                    <div class="workshop-container">
+                        <!-- Atelier PICO -->
+                        <div class="workshop-card">
+                            <h3 style="margin-bottom: 0.5rem;"><i class="fas fa-flask" style="color: var(--color-primary); margin-right: 0.5rem;"></i>Atelier PICO : Mentorat Étudiant</h3>
+                            <p style="font-size: var(--font-size-sm); color: var(--color-text-muted); margin-bottom: 1.5rem;">Une équipe pédagogique s'interroge sur l'impact des programmes de mentorat par les pairs sur la réussite des étudiants de première année à l'université.</p>
+                            <div id="form-pico" style="display: flex; flex-direction: column; gap: 1rem;">
+                                <div>
+                                    <label style="display: block; margin-bottom: 0.5rem; font-size: var(--font-size-sm); font-weight: 600; color: var(--color-text-secondary);">P - Population</label>
+                                    <input type="text" id="pico-p" class="workshop-input" placeholder="Ex: étudiants de première année..." data-workshop-id="pico">
+                                </div>
+                                <div>
+                                    <label style="display: block; margin-bottom: 0.5rem; font-size: var(--font-size-sm); font-weight: 600; color: var(--color-text-secondary);">I - Intervention</label>
+                                    <input type="text" id="pico-i" class="workshop-input" placeholder="Ex: programme de mentorat..." data-workshop-id="pico">
+                                </div>
+                                <div>
+                                    <label style="display: block; margin-bottom: 0.5rem; font-size: var(--font-size-sm); font-weight: 600; color: var(--color-text-secondary);">C - Comparison</label>
+                                    <input type="text" id="pico-c" class="workshop-input" placeholder="Ex: absence de programme..." data-workshop-id="pico">
+                                </div>
+                                <div>
+                                    <label style="display: block; margin-bottom: 0.5rem; font-size: var(--font-size-sm); font-weight: 600; color: var(--color-text-secondary);">O - Outcome</label>
+                                    <input type="text" id="pico-o" class="workshop-input" placeholder="Ex: taux de réussite, taux d'abandon..." data-workshop-id="pico">
+                                </div>
+                            </div>
+                            <div class="preview-box">
+                                <p style="font-size: var(--font-size-sm); font-weight: 600; color: var(--color-primary-light); margin-bottom: 0.5rem;">Votre question :</p>
+                                <p id="preview-pico" style="font-size: var(--font-size-sm); color: var(--color-text-secondary); font-style: italic; min-height: 40px;">...</p>
+                            </div>
+                            <div style="margin-top: 1rem;">
+                                <button class="btn-secondary solution-button" data-target="solution-pico"><i class="fas fa-lightbulb" style="margin-right: 0.5rem;"></i>Voir la réponse type</button>
+                                <div id="solution-pico" class="solution-box" style="display: none; margin-top: 0.5rem;">
+                                    <p style="font-size: var(--font-size-sm); font-weight: 600; color: var(--color-text-primary); margin-bottom: 0.5rem;">Réponse Suggérée :</p>
+                                    <p style="font-size: var(--font-size-sm); font-style: italic; color: var(--color-text-muted);">"Chez les étudiants universitaires de première année (P), la participation à un programme de mentorat par les pairs structuré (I) comparée à l'absence de programme de mentorat (C) améliore-t-elle le taux de réussite académique (moyenne générale) et réduit-elle le taux d'abandon (O)?"</p>
+                                    <p style="font-size: var(--font-size-xs); margin-top: 0.5rem; color: var(--color-text-dimmed);">Cette question est bien formulée car elle cible une population précise, une intervention "structurée" (réduisant l'hétérogénéité), un comparateur logique, et des critères de jugement clairs et quantifiables.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Atelier SPIDER -->
+                        <div class="workshop-card">
+                            <h3 style="margin-bottom: 0.5rem;"><i class="fas fa-flask" style="color: #a855f7; margin-right: 0.5rem;"></i>Atelier SPIDER : Télétravail</h3>
+                            <p style="font-size: var(--font-size-sm); color: var(--color-text-muted); margin-bottom: 1.5rem;">Une sociologue veut comprendre l'expérience du télétravail à temps plein imposé pendant la pandémie, notamment son impact sur l'équilibre vie pro/perso.</p>
+                            <div id="form-spider" style="display: flex; flex-direction: column; gap: 1rem;">
+                                <div>
+                                    <label style="display: block; margin-bottom: 0.5rem; font-size: var(--font-size-sm); font-weight: 600; color: var(--color-text-secondary);">S - Sample</label>
+                                    <input type="text" id="spider-s" class="workshop-input" placeholder="Ex: employés de bureau..." data-workshop-id="spider">
+                                </div>
+                                <div>
+                                    <label style="display: block; margin-bottom: 0.5rem; font-size: var(--font-size-sm); font-weight: 600; color: var(--color-text-secondary);">PI - Phenomenon of Interest</label>
+                                    <input type="text" id="spider-pi" class="workshop-input" placeholder="Ex: télétravail à temps plein..." data-workshop-id="spider">
+                                </div>
+                                <div>
+                                    <label style="display: block; margin-bottom: 0.5rem; font-size: var(--font-size-sm); font-weight: 600; color: var(--color-text-secondary);">D - Design</label>
+                                    <input type="text" id="spider-d" class="workshop-input" placeholder="Ex: entretiens, journaux de bord..." data-workshop-id="spider">
+                                </div>
+                                <div>
+                                    <label style="display: block; margin-bottom: 0.5rem; font-size: var(--font-size-sm); font-weight: 600; color: var(--color-text-secondary);">E - Évaluation</label>
+                                    <input type="text" id="spider-e" class="workshop-input" placeholder="Ex: perceptions sur l'équilibre vie pro/perso..." data-workshop-id="spider">
+                                </div>
+                                <div>
+                                    <label style="display: block; margin-bottom: 0.5rem; font-size: var(--font-size-sm); font-weight: 600; color: var(--color-text-secondary);">R - Research Type</label>
+                                    <input type="text" id="spider-r" class="workshop-input" placeholder="Ex: études qualitatives..." data-workshop-id="spider">
+                                </div>
+                            </div>
+                            <div class="preview-box" style="border-color: rgba(168, 85, 247, 0.3); background: rgba(168, 85, 247, 0.1);">
+                                <p style="font-size: var(--font-size-sm); font-weight: 600; color: #c084fc; margin-bottom: 0.5rem;">Votre question :</p>
+                                <p id="preview-spider" style="font-size: var(--font-size-sm); color: var(--color-text-secondary); font-style: italic; min-height: 40px;">...</p>
+                            </div>
+                            <div style="margin-top: 1rem;">
+                                <button class="btn-secondary solution-button" data-target="solution-spider"><i class="fas fa-lightbulb" style="margin-right: 0.5rem;"></i>Voir la réponse type</button>
+                                <div id="solution-spider" class="solution-box" style="display: none; margin-top: 0.5rem;">
+                                    <p style="font-size: var(--font-size-sm); font-weight: 600; color: var(--color-text-primary); margin-bottom: 0.5rem;">Réponse Suggérée :</p>
+                                    <p style="font-size: var(--font-size-sm); font-style: italic; color: var(--color-text-muted);">"Comment les employés de bureau (S) ont-ils perçu l'impact (E) du télétravail à temps plein pendant la pandémie (PI) sur leur équilibre vie pro/perso, selon des études qualitatives (R) utilisant des entretiens (D)?"</p>
+                                    <p style="font-size: var(--font-size-xs); margin-top: 0.5rem; color: var(--color-text-dimmed);">Cette question est efficace car elle cible un échantillon, un phénomène et un contexte précis. L'évaluation est focalisée et le devis et type de recherche sont spécifiés, ce qui facilite la recherche.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quiz Section -->
+                    <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--color-border);">
+                        <h3 style="margin-bottom: 1rem;"><i class="fas fa-gamepad" style="color: #10b981; margin-right: 0.5rem;"></i>Quiz : Testez vos Connaissances</h3>
+                        <p style="color: var(--color-text-muted); margin-bottom: 1.5rem;">Évaluez votre compréhension avec ces exercices interactifs.</p>
+
+                        <div id="quiz-container">
+                            <!-- Quiz 1 -->
+                            <div id="q1" class="quiz-item">
+                                <p style="color: var(--color-text-muted); margin-bottom: 0.5rem;">Un chercheur veut synthétiser des études pour déterminer si une nouvelle application de méditation est plus efficace qu'un enregistrement audio de relaxation standard pour réduire l'anxiété auto-déclarée chez les étudiants universitaires pendant les périodes d'examens.</p>
+                                <h4>Quel cadre est le plus approprié pour formuler cette question de recherche ?</h4>
+                                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                    <div class="quiz-option" data-quiz-id="q1" data-option="PICO">PICO</div>
+                                    <div class="quiz-option" data-quiz-id="q1" data-option="SPIDER">SPIDER</div>
+                                </div>
+                                <div id="feedback-q1" class="feedback-box" style="opacity: 0;"></div>
+                            </div>
+
+                            <!-- Quiz 2 -->
+                            <div id="q2" class="quiz-item">
+                                <p style="color: var(--color-text-muted); margin-bottom: 0.5rem;">Une équipe de sociologues souhaite comprendre comment les travailleurs indépendants (freelances) perçoivent et gèrent l'insécurité financière. Ils prévoient de synthétiser des études basées sur des entretiens approfondis.</p>
+                                <h4>Quel cadre est le plus approprié ?</h4>
+                                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                    <div class="quiz-option" data-quiz-id="q2" data-option="PICO">PICO</div>
+                                    <div class="quiz-option" data-quiz-id="q2" data-option="SPIDER">SPIDER</div>
+                                </div>
+                                <div id="feedback-q2" class="feedback-box" style="opacity: 0;"></div>
+                            </div>
+
+                            <!-- Quiz 3 - Drag and Drop -->
+                            <div id="q3" class="quiz-item">
+                                <h4>Analysez la question PICO suivante :</h4>
+                                <div style="padding: 1rem; background: rgba(30, 41, 59, 0.5); border: 1px dashed var(--color-border); border-radius: var(--radius-lg); text-align: center; color: var(--color-text-muted); font-style: italic; margin: 1rem 0;">
+                                   Chez les <strong>patients adultes souffrant d'insomnie chronique</strong>, est-ce qu'une <strong>thérapie cognitivo-comportementale (TCC)</strong>, comparée à des <strong>somnifères (zopiclone)</strong>, améliore la <strong>qualité du sommeil mesurée par le PSQI</strong> ?
+                                </div>
+                                <h4>Identifiez la composante 'Comparison' dans la question ci-dessus.</h4>
+                                <div id="target-q3" class="drop-zone">
+                                    Déposez la bonne composante ici
+                                </div>
+                                <div style="margin-top: 1rem; display: flex; flex-wrap: wrap; gap: 0.75rem;">
+                                    <div class="draggable-item" draggable="true" data-component-name="P" data-component-text="patients adultes souffrant d'insomnie chronique">
+                                        <span style="font-weight: 700; color: var(--color-primary-light);">P:</span> patients adultes souffrant d'insomnie chronique
+                                    </div>
+                                    <div class="draggable-item" draggable="true" data-component-name="I" data-component-text="thérapie cognitivo-comportementale (TCC)">
+                                        <span style="font-weight: 700; color: var(--color-primary-light);">I:</span> thérapie cognitivo-comportementale (TCC)
+                                    </div>
+                                    <div class="draggable-item" draggable="true" data-component-name="C" data-component-text="somnifères (zopiclone)">
+                                        <span style="font-weight: 700; color: var(--color-primary-light);">C:</span> somnifères (zopiclone)
+                                    </div>
+                                    <div class="draggable-item" draggable="true" data-component-name="O" data-component-text="qualité du sommeil mesurée par le PSQI">
+                                        <span style="font-weight: 700; color: var(--color-primary-light);">O:</span> qualité du sommeil mesurée par le PSQI
+                                    </div>
+                                </div>
+                                <div id="feedback-q3" class="feedback-box" style="opacity: 0;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; margin-top: 2rem; flex-wrap: wrap; gap: 1rem;">
+                        <button class="btn-secondary" onclick="goToStep(3)">
+                            <i class="fas fa-arrow-left" style="margin-right: 0.5rem;"></i> Étape précédente
+                        </button>
+                        <button class="btn-primary" onclick="goToStep(5)">
+                            Étape suivante <i class="fas fa-arrow-right" style="margin-left: 0.5rem;"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ETAPE 5: Valider et Affiner -->
+            <section id="step-5" class="step-content">
+                <div class="glass-card">
+                    <h2><i class="fas fa-clipboard-check" style="color: var(--color-primary); margin-right: 0.5rem;"></i>Étape 5 : Valider et Affiner</h2>
+                    <p style="color: var(--color-text-muted); margin-bottom: 1.5rem;">Utilisez ces outils pour comparer les approches et évaluer la qualité de votre question.</p>
+
+                    <!-- Tableau Comparatif -->
+                    <div style="margin-bottom: 2rem;">
+                        <h3 style="margin-bottom: 1rem;"><i class="fas fa-columns" style="color: var(--color-primary); margin-right: 0.5rem;"></i>Tableau Comparatif : PICO vs SPIDER</h3>
+                        <p style="color: var(--color-text-muted); margin-bottom: 1rem;">Ce tableau synthétise les différences fondamentales entre les deux approches.</p>
+                        <div style="overflow-x: auto; border-radius: var(--radius-lg); border: 1px solid var(--color-border);">
+                            <table class="comparison-table">
+                                <thead>
+                                    <tr>
+                                        <th>Caractéristique</th>
+                                        <th>Cadre PICO (Quantitatif)</th>
+                                        <th>Cadre SPIDER (Qualitatif)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="font-weight: 600; color: var(--color-text-secondary);">Objectif</td>
+                                        <td>Mesurer l'efficacité, la causalité (déductif)</td>
+                                        <td>Comprendre une expérience, un processus (inductif)</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 600; color: var(--color-text-secondary);">Type de Données</td>
+                                        <td>Numériques, statistiques, mesures</td>
+                                        <td>Textuelles, thèmes, concepts, interprétations</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 600; color: var(--color-text-secondary);">Flexibilité</td>
+                                        <td>Faible. Question fixée a priori</td>
+                                        <td>Élevée. Question peut être affinée de manière itérative</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 600; color: var(--color-text-secondary);">Composantes</td>
+                                        <td>Population, Intervention, Comparison, Outcome</td>
+                                        <td>Sample, Phenomenon of Interest, Design, Évaluation, Research Type</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 600; color: var(--color-text-secondary);">Origine</td>
+                                        <td>Médecine Basée sur les Preuves (EBM)</td>
+                                        <td>Sciences Sociales, Santé Qualitative</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Checklist -->
+                    <div style="padding-top: 2rem; border-top: 1px solid var(--color-border);">
+                        <h3 style="margin-bottom: 1rem;"><i class="fas fa-tasks" style="color: #10b981; margin-right: 0.5rem;"></i>Checklist d'Auto-évaluation</h3>
+                        <p style="color: var(--color-text-muted); margin-bottom: 1.5rem;">Votre question est-elle prête ? Utilisez cette checklist en 10 points pour vous en assurer.</p>
+                        <div>
+                            <div class="checklist-item">
+                                <input id="check-0" type="checkbox">
+                                <label for="check-0">Clarté : La question est-elle sans ambiguïté ?</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input id="check-1" type="checkbox">
+                                <label for="check-1">Focalisation : N'est-elle ni trop large, ni trop étroite ?</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input id="check-2" type="checkbox">
+                                <label for="check-2">Alignement : Le cadre (PICO/SPIDER) correspond-il à l'objectif ?</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input id="check-3" type="checkbox">
+                                <label for="check-3">Définition : Chaque composante est-elle clairement définie ?</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input id="check-4" type="checkbox">
+                                <label for="check-4">Faisabilité : Les ressources et la littérature sont-elles suffisantes ?</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input id="check-5" type="checkbox">
+                                <label for="check-5">Pertinence : La réponse comblera-t-elle un manque de connaissances important ?</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input id="check-6" type="checkbox">
+                                <label for="check-6">Nouveauté : Une revue similaire n'existe-t-elle pas déjà (vérifier PROSPERO) ?</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input id="check-7" type="checkbox">
+                                <label for="check-7">Éthique : La question ne soulève-t-elle pas de problème éthique majeur ?</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input id="check-8" type="checkbox">
+                                <label for="check-8">Traductibilité : La question se décompose-t-elle facilement en mots-clés de recherche ?</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input id="check-9" type="checkbox">
+                                <label for="check-9">Intérêt : La question est-elle suffisamment motivante pour l'équipe ?</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Call to Action -->
+                    <div class="alert alert-success" style="margin-top: 2rem;">
+                        <div class="alert-icon">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <div class="alert-content">
+                            <h3>Prêt à Tester Votre Question ?</h3>
+                            <p>Utilisez notre <strong>Testeur de Question</strong> pour obtenir une analyse automatique de votre question de recherche : détection des composantes, score de qualité et suggestions d'amélioration.</p>
+                            <a href="Testeur_Question.html" class="btn-primary" style="display: inline-block; margin-top: 1rem;">
+                                <i class="fas fa-flask" style="margin-right: 0.5rem;"></i>Accéder au Testeur
+                            </a>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: flex-start; margin-top: 2rem;">
+                        <button class="btn-secondary" onclick="goToStep(4)">
+                            <i class="fas fa-arrow-left" style="margin-right: 0.5rem;"></i> Étape précédente
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <p>Dr. FENOHASINA T.J. Felicien (Psychiatre)</p>
+        <p>&copy; 2025 - Centre Ressource de Réhabilitation</p>
+        <p class="license">Licence CC BY-NC-SA 4.0</p>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Quiz data
+    const quizAnswers = {
+        q1: { answer: 'PICO', correct: "<strong>Correct !</strong> Le cadre PICO est idéal ici car la question vise à évaluer l'<strong>efficacité</strong> d'une <strong>Intervention</strong> (l'application) par rapport à une <strong>Comparaison</strong> (l'audio standard) sur un <strong>Outcome</strong> mesurable (l'anxiété) dans une <strong>Population</strong> définie (les étudiants).", incorrect: "<strong>Incorrect.</strong> Le cadre le plus approprié est PICO. La question ne cherche pas à comprendre une 'expérience' (ce qui relèverait de SPIDER), mais à mesurer l'efficacité d'une intervention. PICO est spécifiquement conçu pour ce type de question comparative et quantitative." },
+        q2: { answer: 'SPIDER', correct: "<strong>Excellent !</strong> SPIDER est le cadre parfait. La question porte sur la compréhension d'une expérience (<strong>Phénomène d'Intérêt</strong>: gestion de l'insécurité) au sein d'un <strong>Échantillon</strong> spécifique (travailleurs indépendants), en utilisant un <strong>Devis</strong> qualitatif (entretiens) pour <strong>Évaluer</strong> leurs perceptions.", incorrect: "<strong>Incorrect.</strong> Le cadre SPIDER est le bon choix. La question est exploratoire et vise à comprendre une expérience, non à mesurer l'effet d'une intervention. Il n'y a pas d'Intervention, de Comparaison ou d'Outcome quantifiable, ce qui rend PICO inadapté." }
+    };
+
+    // Step Navigation
+    const stepBtns = document.querySelectorAll('.step-btn');
+    const stepContents = document.querySelectorAll('.step-content');
+
+    window.goToStep = function(stepNum) {
+        stepBtns.forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.step == stepNum);
+        });
+        stepContents.forEach(content => {
+            content.classList.toggle('active', content.id === `step-${stepNum}`);
+        });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    stepBtns.forEach(btn => {
+        btn.addEventListener('click', () => goToStep(btn.dataset.step));
+    });
+
+    // Decision Tree
+    window.showNode = function(nodeId) {
+        document.querySelectorAll('.decision-node').forEach(node => {
+            node.classList.add('hidden');
+        });
+        document.getElementById('node-' + nodeId).classList.remove('hidden');
+    };
+
+    window.showResult = function(resultId) {
+        document.querySelectorAll('.decision-node').forEach(node => {
+            node.classList.add('hidden');
+        });
+        document.getElementById(resultId).classList.remove('hidden');
+    };
+
+    window.resetTree = function() {
+        document.querySelectorAll('.decision-node').forEach(node => {
+            node.classList.add('hidden');
+        });
+        document.getElementById('node-start').classList.remove('hidden');
+    };
+
+    // Framework Tabs
+    document.querySelectorAll('.framework-tab-button').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.framework-tab-button').forEach(t => t.classList.remove('active-tab'));
+            tab.classList.add('active-tab');
+            const targetId = tab.dataset.target;
+            document.querySelectorAll('.framework-tab-content').forEach(content => {
+                content.classList.toggle('active', content.id === targetId);
+            });
+        });
+    });
+
+    // Accordions
+    document.querySelectorAll('.accordion-button').forEach(button => {
+        button.addEventListener('click', () => {
+            const contentId = button.dataset.accordionTarget;
+            const content = document.getElementById(contentId);
+            const isOpen = button.classList.toggle('open');
+            content.style.maxHeight = isOpen ? content.scrollHeight + "px" : null;
+            content.style.paddingTop = isOpen ? "1.25rem" : "0";
+            content.style.paddingBottom = isOpen ? "1.25rem" : "0";
+        });
+    });
+
+    // Solution buttons
+    document.querySelectorAll('.solution-button').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const targetId = btn.dataset.target;
+            const el = document.getElementById(targetId);
+            el.style.display = el.style.display === 'none' ? 'block' : 'none';
+        });
+    });
+
+    // Workshop inputs
+    document.querySelectorAll('.workshop-input').forEach(input => {
+        input.addEventListener('input', () => {
+            const workshopId = input.dataset.workshopId;
+            const form = document.getElementById(`form-${workshopId}`);
+            const inputs = form.querySelectorAll('input');
+            let previewText = '';
+            inputs.forEach(inp => {
+                if (inp.value) {
+                    const label = inp.id.split('-')[1].toUpperCase();
+                    previewText += `${inp.value} (${label}) `;
+                }
+            });
+            document.getElementById(`preview-${workshopId}`).textContent = previewText.trim() || '...';
+        });
+    });
+
+    // Quiz MCQ
+    document.querySelectorAll('.quiz-option').forEach(option => {
+        option.addEventListener('click', () => {
+            const quizId = option.dataset.quizId;
+            const selectedOption = option.dataset.option;
+            const quizItem = quizAnswers[quizId];
+            if (!quizItem) return;
+
+            const feedbackDiv = document.getElementById(`feedback-${quizId}`);
+
+            // Remove previous selections
+            document.querySelectorAll(`[data-quiz-id="${quizId}"]`).forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+            option.classList.add('selected');
+
+            if (selectedOption === quizItem.answer) {
+                feedbackDiv.innerHTML = quizItem.correct;
+                feedbackDiv.className = 'feedback-box success';
+                feedbackDiv.style.opacity = '1';
+                option.classList.add('correct');
+            } else {
+                feedbackDiv.innerHTML = quizItem.incorrect;
+                feedbackDiv.className = 'feedback-box error';
+                feedbackDiv.style.opacity = '1';
+                option.classList.add('incorrect');
+                document.querySelector(`[data-quiz-id="${quizId}"][data-option="${quizItem.answer}"]`).classList.add('correct');
+            }
+        });
+    });
+
+    // Drag and Drop
+    let draggedItem = null;
+    document.addEventListener('dragstart', (e) => {
+        if (e.target.classList.contains('draggable-item')) {
+            draggedItem = e.target;
+            setTimeout(() => { e.target.style.opacity = '0.5'; }, 0);
+        }
+    });
+    document.addEventListener('dragend', (e) => {
+        if (e.target.classList.contains('draggable-item')) {
+            e.target.style.opacity = '1';
+        }
+    });
+
+    const dropZone = document.getElementById('target-q3');
+    if (dropZone) {
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('drag-over');
+        });
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('drag-over');
+        });
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('drag-over');
+            if (draggedItem) {
+                const componentName = draggedItem.dataset.componentName;
+                const feedbackDiv = document.getElementById('feedback-q3');
+                dropZone.innerHTML = draggedItem.innerHTML;
+
+                if (componentName === 'C') {
+                    dropZone.classList.add('correct');
+                    dropZone.classList.remove('incorrect');
+                    feedbackDiv.innerHTML = "<strong>Bravo !</strong> Vous avez correctement identifié la Comparison (C) : les somnifères (zopiclone) sont le comparateur contre lequel la TCC est évaluée.";
+                    feedbackDiv.className = 'feedback-box success';
+                } else {
+                    dropZone.classList.add('incorrect');
+                    dropZone.classList.remove('correct');
+                    feedbackDiv.innerHTML = `<strong>Incorrect.</strong> Vous avez sélectionné ${componentName}, mais la bonne réponse était C (Comparison). La Comparison dans cette question est 'somnifères (zopiclone)'.`;
+                    feedbackDiv.className = 'feedback-box error';
+                }
+                feedbackDiv.style.opacity = '1';
+            }
+        });
+    }
+});
+</script>
+
+</body>
+</html>

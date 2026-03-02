@@ -3,101 +3,273 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Un projet explorant la psychiatrie intégrative, les effets contextuels et la dimension transculturelle du soin, par des professionnels du Centre Hospitalier Le Vinatier et du Centre Ressource Réhabilitation.">
-    <title>Psychiatrie Intégrative & Effets Contextuels - Un Portail</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,700&display=swap" rel="stylesheet">
+    <meta name="description" content="Questionnaires et ressources en psychiatrie - Outils de dépistage et guides éducatifs pour les professionnels de santé mentale.">
+    <title>Questionnaires et Ressources en Psychiatrie</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8fafc; /* bg-slate-50 */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
         }
-        .title-font {
-            font-family: 'Source Serif 4', serif;
+        .category-card {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
         }
-        .card-link {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.03), transparent);
+            transition: left 0.5s ease;
         }
-        .card-link:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        .category-card:hover::before {
+            left: 100%;
         }
+        .category-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(148, 163, 184, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        .category-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+        .category-card:hover .category-icon {
+            transform: scale(1.1);
+        }
+        .category-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #f8fafc;
+            margin-bottom: 0.75rem;
+        }
+        .category-description {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+        .category-count {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 20px;
+            color: #e2e8f0;
+            font-size: 0.85rem;
+        }
+        /* Couleurs par catégorie */
+        .cat-tnd .category-icon { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+        .cat-humeur .category-icon { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .cat-anxiete .category-icon { background: linear-gradient(135deg, #10b981, #059669); }
+        .cat-personnalite .category-icon { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .cat-substance .category-icon { background: linear-gradient(135deg, #ec4899, #db2777); }
+        .cat-trauma .category-icon { background: linear-gradient(135deg, #6366f1, #4f46e5); }
+        .cat-crise .category-icon { background: linear-gradient(135deg, #5b7fa6, #3e6b99); }
+        .cat-enfant .category-icon { background: linear-gradient(135deg, #14b8a6, #0d9488); }
+        .cat-rehab .category-icon { background: linear-gradient(135deg, #0ea5e9, #0284c7); }
+        .cat-guides .category-icon { background: linear-gradient(135deg, #64748b, #475569); }
+        .cat-psychose .category-icon { background: linear-gradient(135deg, #7c3aed, #5b21b6); }
+        .cat-clinique .category-icon { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .cat-recherche .category-icon { background: linear-gradient(135deg, #10b981, #059669); }
     </style>
 </head>
-<body class="text-slate-800 antialiased">
-    <div class="flex flex-col min-h-screen">
-        <main class="flex-grow">
-            <div class="max-w-4xl mx-auto text-center px-4 py-16 md:py-24">
-                <header class="mb-12">
-                    <h1 class="title-font text-4xl md:text-5xl font-bold text-slate-800 mb-4">Psychiatrie, Culture & Contexte</h1>
-                    <p class="text-lg text-slate-600 max-w-3xl mx-auto">
-                        Une exploration de la psychiatrie intégrative, des effets contextuels et de la dimension transculturelle du soin.
-                    </p>
-                </header>
+<body>
+    <header class="header-glow">
+        <div class="max-w-xl mx-auto text-center relative z-10">
+            <span class="badge badge-primary mb-4" style="display: inline-block; margin-bottom: 1.5rem;">
+                CENTRE HOSPITALIER LE VINATIER
+            </span>
+            <h1 class="gradient-text" style="margin-bottom: 1rem;">
+                Questionnaires et Ressources en Psychiatrie
+            </h1>
+            <p style="font-size: 1.125rem; max-width: 700px; margin: 0 auto;">
+                Outils de dépistage, questionnaires psychométriques et guides éducatifs pour les professionnels de santé mentale.
+            </p>
+        </div>
+    </header>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <!-- Carte Psychiatrie Intégrative -->
-                    <a href="https://thot586.github.io/psychiatrie/Transculturelle/Psychiatrie_integrative.html" class="card-link block bg-white p-8 rounded-xl shadow-lg border border-slate-200 text-left">
-                        <h2 class="title-font text-2xl font-semibold text-blue-700 mb-3">Psychiatrie Intégrative</h2>
-                        <p class="text-slate-600 mb-4">
-                            Dépasser le modèle bio-psycho-social en intégrant la culture et la politique pour une pratique réflexive, contextualisée et éthiquement informée.
-                        </p>
-                        <span class="font-semibold text-blue-600 hover:text-blue-700">Consulter le document →</span>
-                    </a>
+    <main style="max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem;" class="relative z-10">
 
-                    <!-- Carte Effets Contextuels -->
-                    <a href="https://thot586.github.io/psychiatrie/Transculturelle/Effets_contextuels.html" class="card-link block bg-white p-8 rounded-xl shadow-lg border border-slate-200 text-left">
-                        <h2 class="title-font text-2xl font-semibold text-teal-700 mb-3">Effets Contextuels</h2>
-                        <p class="text-slate-600 mb-4">
-                            Analyser l'impact de la relation, des rituels et des attentes sur la guérison, et explorer les enjeux cliniques et transculturels du placebo.
-                        </p>
-                        <span class="font-semibold text-teal-600 hover:text-teal-700">Consulter le document →</span>
-                    </a>
-                </main>
-            </div>
-        </main>
+        <section class="warning-box" style="margin-bottom: 3rem;">
+            <h3><i class="fas fa-exclamation-triangle" style="margin-right: 0.5rem;"></i>Avertissement important</h3>
+            <ul style="margin: 0; padding-left: 1.5rem;">
+                <li>Ces questionnaires sont des outils d'aide au dépistage et ne remplacent pas un diagnostic médical.</li>
+                <li>Consultez un professionnel de santé pour toute interprétation des résultats.</li>
+                <li>Les données restent sur votre appareil et ne sont pas transmises à un serveur.</li>
+            </ul>
+        </section>
 
-        <!-- Footer unifié -->
-        <footer class="bg-slate-900 text-slate-300 text-sm border-t border-slate-700 py-8 px-4">
-            <div class="max-w-6xl mx-auto">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
-                    <!-- Logos -->
-                    <div class="flex justify-center md:justify-start items-center gap-6">
-                        <a href="https://www.ch-le-vinatier.fr" target="_blank" rel="noopener noreferrer" title="Centre Hospitalier Le Vinatier">
-                            <img class="h-20 w-auto" src="https://d2q79iu7y748jz.cloudfront.net/s/_squarelogo/256x256/e079f7cf4939908ea9a07ce40d529d0b" alt="Logo Centre Hospitalier Le Vinatier">
-                        </a>
-                        <a href="https://centre-ressource-rehabilitation.org" target="_blank" rel="noopener noreferrer" title="Centre Ressource Réhabilitation">
-                            <img class="h-16 w-auto" src="https://faustinebrunet.com/images/RS/creation-nouveau-logo-domaine-sante-mentale.jpg" alt="Logo Centre Ressource Réhabilitation">
-                        </a>
-                         <a href="https://www.facebook.com/Psykozy?locale=fr_FR" target="_blank" rel="noopener noreferrer" title="Psy-kôzy">
-                            <img class="h-16 w-auto" src="https://cdn-assets.inwink.com/fe065c87-0643-42fc-8b5d-4d94b5d12c11/a1904f78-1bca-466d-a9f4-8ac9fde06c0c" alt="Logo Psy-kôzy">
-                        </a>
-                    </div>
+        <section class="category-grid">
 
-                    <!-- Auteurs -->
-                    <div class="text-center text-slate-400 space-y-2">
-                        <h3 class="font-semibold text-white mb-3">Auteurs</h3>
-                        <p>Dr FENOHASINA T.J. Felicien (Psychiatre, FFI)</p>
-                        <p>GAUDELUS Baptiste (Infirmier, Pratique Avancée)</p>
-                        <p>Prof. FRANCK Nicolas (Psychiatre, PU-PH)</p>
-                        <p>CENTRE RESSOURCE DE REHABILITATION</p>
-                    </div>
-
-                    <!-- Licence et date -->
-                    <div class="text-center md:text-right text-slate-400">
-                         <div class="flex items-center justify-center md:justify-end gap-2 mb-2">
-                            <img class="h-5 w-auto" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Cc-by-nc-sa_icon.svg/120px-Cc-by-nc-sa_icon.svg.png" alt="Icône Creative Commons BY-NC-SA">
-                            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr" target="_blank" rel="noopener noreferrer" class="underline hover:text-white">
-                                Licence CC BY-NC-SA 4.0
-                            </a>
-                        </div>
-                        <p>Dernière mise à jour : 22 juin 2025</p>
-                    </div>
+            <a href="TND/Page_d_accueil.html" class="category-card cat-tnd">
+                <div class="category-icon">
+                    <i class="fas fa-brain"></i>
                 </div>
-            </div>
-        </footer>
-    </div>
+                <h2 class="category-title">Troubles Neurodéveloppementaux</h2>
+                <p class="category-description">Autisme, TDAH, et autres troubles du développement neurologique.</p>
+                <span class="category-count"><i class="fas fa-file-alt"></i> 9 questionnaires</span>
+            </a>
+
+            <a href="Trouble_de_l_humeur/Page_d_accueil.html" class="category-card cat-humeur">
+                <div class="category-icon">
+                    <i class="fas fa-cloud-rain"></i>
+                </div>
+                <h2 class="category-title">Troubles de l'Humeur</h2>
+                <p class="category-description">Dépression, bipolarité, hypomanie et variations de l'humeur.</p>
+                <span class="category-count"><i class="fas fa-file-alt"></i> 9 questionnaires</span>
+            </a>
+
+            <a href="Trouble_anxieux/Page_d_accueil.html" class="category-card cat-anxiete">
+                <div class="category-icon">
+                    <i class="fas fa-wind"></i>
+                </div>
+                <h2 class="category-title">Troubles Anxieux</h2>
+                <p class="category-description">Anxiété généralisée, TOC, phobie sociale, panique et troubles anxieux.</p>
+                <span class="category-count"><i class="fas fa-file-alt"></i> 6 questionnaires</span>
+            </a>
+
+            <a href="Trouble_de_la_personnalite/Page_d_accueil.html" class="category-card cat-personnalite">
+                <div class="category-icon">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <h2 class="category-title">Troubles de la Personnalité</h2>
+                <p class="category-description">Dépistage dimensionnel, trouble borderline, schémas de Young et thérapie dialectique.</p>
+                <span class="category-count"><i class="fas fa-file-alt"></i> 9 ressources</span>
+            </a>
+
+            <a href="Trouble_d_usage_substance/Page_d_accueil.html" class="category-card cat-substance">
+                <div class="category-icon">
+                    <i class="fas fa-wine-glass-alt"></i>
+                </div>
+                <h2 class="category-title">Troubles d'Usage de Substance</h2>
+                <p class="category-description">Alcool, cannabis, drogues, tabac, adolescents — dépistage et ressources cliniques.</p>
+                <span class="category-count"><i class="fas fa-file-alt"></i> 11 ressources</span>
+            </a>
+
+            <a href="Trauma/Page_d_accueil.html" class="category-card cat-trauma">
+                <div class="category-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h2 class="category-title">Trauma</h2>
+                <p class="category-description">Stress post-traumatique, trauma complexe et séquelles psychotraumatiques.</p>
+                <span class="category-count"><i class="fas fa-file-alt"></i> 3 questionnaires</span>
+            </a>
+
+            <a href="Crise_suicidaire/Page_d_accueil.html" class="category-card cat-crise">
+                <div class="category-icon">
+                    <i class="fas fa-exclamation-circle"></i>
+                </div>
+                <h2 class="category-title">Crise Suicidaire</h2>
+                <p class="category-description">Évaluation du risque suicidaire et conduite à tenir.</p>
+                <span class="category-count"><i class="fas fa-file-alt"></i> 3 ressources</span>
+            </a>
+
+            <!-- Enfant/Ado -->
+            <a href="Enfant_ado/Page_d_accueil.html" class="category-card cat-enfant">
+                <div class="category-icon">
+                    <i class="fas fa-child"></i>
+                </div>
+                <h2 class="category-title">Enfant & Adolescent</h2>
+                <p class="category-description">Questionnaires enfant/ado, guidance parentale, dépression, anxiété, écrans.</p>
+                <span class="category-count"><i class="fas fa-file-alt"></i> 8 ressources</span>
+            </a>
+
+            <a href="Rehab/Page_d_accueil.html" class="category-card cat-rehab">
+                <div class="category-icon">
+                    <i class="fas fa-clipboard-check"></i>
+                </div>
+                <h2 class="category-title">Réhabilitation</h2>
+                <p class="category-description">PSI, cognition, qualité de vie, insight, fonctionnement social, empowerment.</p>
+                <span class="category-count"><i class="fas fa-file-alt"></i> 13 ressources</span>
+            </a>
+
+            <a href="Guides/Page_d_accueil.html" class="category-card cat-guides">
+                <div class="category-icon">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <h2 class="category-title">Guides & Ressources</h2>
+                <p class="category-description">Sommeil, coping, burnout, psychiatrie transculturelle, outils de recherche.</p>
+                <span class="category-count"><i class="fas fa-file-alt"></i> 15 ressources</span>
+            </a>
+
+            <a href="Cas_Cliniques/Page_d_accueil.html" class="category-card cat-clinique">
+                <div class="category-icon">
+                    <i class="fas fa-user-md"></i>
+                </div>
+                <h2 class="category-title">Cas Cliniques</h2>
+                <p class="category-description">Vignettes cliniques interactives pour la formation pratique en psychiatrie.</p>
+                <span class="category-count"><i class="fas fa-file-alt"></i> 4 cas</span>
+            </a>
+
+            <a href="Psychose/Page_d_accueil.html" class="category-card cat-psychose">
+                <div class="category-icon">
+                    <i class="fas fa-eye"></i>
+                </div>
+                <h2 class="category-title">Psychose</h2>
+                <p class="category-description">Dépistage prodrome, suivi des symptômes psychotiques, impression clinique.</p>
+                <span class="category-count"><i class="fas fa-file-alt"></i> 4 questionnaires</span>
+            </a>
+
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <div class="footer-logos">
+            <a href="https://www.ch-le-vinatier.fr" target="_blank" rel="noopener noreferrer" class="footer-logo-link">
+                <img src="images/logos/vinatier.png" alt="Logo Centre Hospitalier Le Vinatier">
+                <span>Centre Hospitalier Le Vinatier</span>
+            </a>
+            <a href="https://centre-ressource-rehabilitation.org" target="_blank" rel="noopener noreferrer" class="footer-logo-link">
+                <img src="images/logos/crr.jpg" alt="Logo Centre Ressource Réhabilitation">
+                <span>Centre Ressource Réhabilitation</span>
+            </a>
+            <a href="https://www.facebook.com/Psykozy?locale=fr_FR" target="_blank" rel="noopener noreferrer" class="footer-logo-link">
+                <img src="images/logos/psykozy.png" alt="Logo Psy-kôzy">
+                <span>Psy-kôzy</span>
+            </a>
+        </div>
+        <div style="margin-bottom: 1rem;">
+            <p><strong>Développeur</strong></p>
+            <p>Dr FENOHASINA T.J. Felicien (Psychiatre - Analyste de données - Développeur d'application Web)</p>
+        </div>
+        <div class="flex justify-center items-center gap-2" style="margin-bottom: 0.5rem;">
+            <img style="height: 20px; width: auto;" src="images/icons/cc-by-nc-sa.png" alt="Icône Creative Commons BY-NC-SA">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr" target="_blank" rel="noopener noreferrer">
+                Licence CC BY-NC-SA 4.0
+            </a>
+        </div>
+        <p>Centre Ressource de Réhabilitation • Dernière mise à jour : Février 2026</p>
+    </footer>
+
+    <script src="js/app.js"></script>
 </body>
 </html>

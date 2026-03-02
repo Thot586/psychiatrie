@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PANSS - Échelle des Syndromes Positifs et Négatifs</title>
+
+    <!-- Font Awesome pour les icônes -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Styles partagés -->
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <style>
+        :root {
+            --cat-main: #7c3aed;
+            --cat-dark: #6d28d9;
+            --cat-light: #a78bfa;
+            --cat-rgb: 124, 58, 237;
+            --cat-readable: #6d28d9;
+        }
+        .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
+        .option-btn.selected, .answer-btn.selected { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        .score-circle { border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 30px rgba(var(--cat-rgb), 0.2); }
+        .score-value { color: var(--cat-light); }
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-light); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+        .progress-fill { background: linear-gradient(90deg, var(--cat-main), var(--cat-light)); box-shadow: 0 0 8px rgba(var(--cat-rgb), 0.4); }
+        .likert-options input[type="radio"]:checked + label,
+        .binary-options input[type="radio"]:checked + label,
+        .radio-options input[type="radio"]:checked + label { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+    </style>
+
+</head>
+<body class="light-questionnaire">
+    <!-- Navigation -->
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil">
+                <i class="fas fa-home"></i>
+            </a>
+            <button onclick="history.back()" class="btn-back" title="Retour">
+                <i class="fas fa-arrow-left"></i> <span>Retour</span>
+            </button>
+        </div>
+        <h1>PANSS</h1>
+        <span class="badge badge-cat-psychose">Psychose</span>
+    </nav>
+
+    <div class="container">
+        <!-- En-tête -->
+        <header class="glass-card" style="text-align: center; margin-bottom: 1.5rem;">
+            <h2 class="gradient-text">Positive And Negative Syndrome Scale</h2>
+            <p>Échelle des Syndromes Positifs et Négatifs - 30 items</p>
+        </header>
+
+        <!-- Information hétéro-évaluation -->
+        <section class="hetero-box">
+            <h3><i class="fas fa-user-md"></i> Hétéro-questionnaire clinicien</h3>
+            <p>La PANSS est une échelle d'<strong>hétéro-évaluation</strong> complétée par le clinicien. Elle permet d'évaluer la sévérité des syndromes positifs, négatifs et de la psychopathologie générale dans la schizophrénie et les troubles psychotiques apparentés.</p>
+            <ul style="margin: 0.75rem 0 0 1.5rem; padding: 0;">
+                <li>Hétéro-questionnaire clinicien. Chaque item est coté de 1 (absent) à 7 (extrême) sur la base d'un entretien clinique structuré.</li>
+                <li>Basée sur l'entretien clinique et l'observation comportementale</li>
+                <li>3 sous-échelles : Positive (P), Négative (N) et Psychopathologie Générale (G)</li>
+            </ul>
+        </section>
+
+        <!-- Avertissement -->
+        <section class="warning-box">
+            <h3><i class="fas fa-exclamation-triangle"></i> Avertissements importants</h3>
+            <ul style="margin: 0; padding-left: 1.5rem;">
+                <li>Cette échelle nécessite une formation à son utilisation</li>
+                <li>L'évaluation doit être réalisée par un professionnel de santé qualifié</li>
+                <li>Les résultats doivent être interprétés dans le contexte clinique global</li>
+                <li>Un score élevé à l'échelle positive ou négative nécessite une prise en charge adaptée</li>
+            </ul>
+        </section>
+
+        <!-- Contrôles -->
+        <section class="glass-card">
+            <div class="control-buttons">
+                <button class="btn-secondary" onclick="importData()">
+                    <i class="fas fa-file-import"></i> Importer
+                </button>
+                <button class="btn-secondary" onclick="resetForm()">
+                    <i class="fas fa-redo"></i> Réinitialiser
+                </button>
+            </div>
+            <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="loadFile(event)">
+        </section>
+
+        <!-- Instructions -->
+        <section class="glass-card">
+            <h3 style="margin-bottom: 1rem;">Évaluez chaque symptôme selon son intensité observée ou rapportée :</h3>
+
+            <!-- Questions générées par JS -->
+            <div id="questions"></div>
+        </section>
+
+        <!-- Résultats -->
+        <section id="results" class="results-section" style="display: none;">
+            <h2 style="text-align: center; margin-bottom: 2rem;">
+                <i class="fas fa-chart-bar"></i> Résultats de l'évaluation
+            </h2>
+
+            <div class="score-display">
+                <div class="score-circle psychose">
+                    <span class="score-value" id="totalScore">0</span>
+                </div>
+                <p class="score-label">sur 210 points (score total)</p>
+            </div>
+
+            <div id="interpretationBox" class="interpretation"></div>
+
+            <!-- Scores par sous-échelle -->
+            <div class="glass-card" style="margin-top: 1.5rem;">
+                <h3 style="margin-bottom: 1rem;"><i class="fas fa-layer-group"></i> Scores par sous-échelle</h3>
+                <div id="subscaleScores"></div>
+            </div>
+
+            <!-- Indice composite -->
+            <div class="glass-card" style="margin-top: 1.5rem;">
+                <h3 style="margin-bottom: 1rem;"><i class="fas fa-balance-scale"></i> Indice composite (P - N)</h3>
+                <div id="compositeIndex"></div>
+            </div>
+
+            <button class="btn-primary w-full" onclick="toggleDetails()" style="margin-top: 1.5rem;">
+                <i class="fas fa-list"></i> Voir le détail des items
+                <span id="toggleIcon"><i class="fas fa-chevron-down"></i></span>
+            </button>
+
+            <div id="detailsContent" class="glass-card" style="display: none; margin-top: 1rem;"></div>
+
+            <!-- Export -->
+            <div class="glass-card" style="margin-top: 2rem;">
+                <h3><i class="fas fa-download"></i> Exporter les résultats</h3>
+                <div class="consent-box">
+                    <label>
+                        <input type="checkbox" id="exportConsent">
+                        <span>J'atteste avoir informé la personne concernée de cet export et obtenu son accord. <strong>Ces résultats constituent des données de santé — je m'engage à les conserver de façon sécurisée et à ne les partager qu'avec des professionnels de santé autorisés.</strong> Aucune donnée n'est transmise à un serveur.</span>
+                    </label>
+                </div>
+                <div class="export-buttons">
+                    <button class="btn-primary" onclick="exportData()">
+                        <i class="fas fa-file-export"></i> Exporter en JSON
+                    </button>
+                    <button class="btn-print" onclick="printResults()">
+                        <i class="fas fa-print"></i> Imprimer
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p><strong>PANSS - Positive And Negative Syndrome Scale</strong></p>
+        <p>Auteurs : Kay SR, Fiszbein A, Opler LA (1987)</p>
+        <p>Adaptation numérique : Dr FENOHASINA | Psychiatre</p>
+        <p style="margin-top: 1rem;">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr" target="_blank">
+                Licence CC BY-NC-SA 4.0
+            </a>
+        </p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../js/app.js"></script>
+    <script>
+        // Définition des 30 items PANSS répartis en 3 sous-échelles
+        const questions = [
+            // Échelle Positive (P1-P7)
+            { id: "P1", text: "Idées délirantes", subscale: "positive" },
+            { id: "P2", text: "Désorganisation conceptuelle", subscale: "positive" },
+            { id: "P3", text: "Activité hallucinatoire", subscale: "positive" },
+            { id: "P4", text: "Excitation", subscale: "positive" },
+            { id: "P5", text: "Idées de grandeur", subscale: "positive" },
+            { id: "P6", text: "Méfiance/Persécution", subscale: "positive" },
+            { id: "P7", text: "Hostilité", subscale: "positive" },
+            // Échelle Négative (N1-N7)
+            { id: "N1", text: "Émoussement affectif", subscale: "negative" },
+            { id: "N2", text: "Retrait émotionnel", subscale: "negative" },
+            { id: "N3", text: "Mauvais contact", subscale: "negative" },
+            { id: "N4", text: "Repli social passif/apathique", subscale: "negative" },
+            { id: "N5", text: "Difficultés d'abstraction", subscale: "negative" },
+            { id: "N6", text: "Manque de spontanéité et de fluidité dans la conversation", subscale: "negative" },
+            { id: "N7", text: "Pensée stéréotypée", subscale: "negative" },
+            // Psychopathologie Générale (G1-G16)
+            { id: "G1", text: "Préoccupations somatiques", subscale: "general" },
+            { id: "G2", text: "Anxiété", subscale: "general" },
+            { id: "G3", text: "Sentiments de culpabilité", subscale: "general" },
+            { id: "G4", text: "Tension", subscale: "general" },
+            { id: "G5", text: "Maniérisme et troubles de la posture", subscale: "general" },
+            { id: "G6", text: "Dépression", subscale: "general" },
+            { id: "G7", text: "Ralentissement moteur", subscale: "general" },
+            { id: "G8", text: "Non-coopération", subscale: "general" },
+            { id: "G9", text: "Contenu inhabituel de la pensée", subscale: "general" },
+            { id: "G10", text: "Désorientation", subscale: "general" },
+            { id: "G11", text: "Manque d'attention", subscale: "general" },
+            { id: "G12", text: "Manque de jugement et de prise de conscience", subscale: "general" },
+            { id: "G13", text: "Trouble de la volition", subscale: "general" },
+            { id: "G14", text: "Mauvais contrôle pulsionnel", subscale: "general" },
+            { id: "G15", text: "Préoccupation excessive de soi", subscale: "general" },
+            { id: "G16", text: "Évitement social actif", subscale: "general" }
+        ];
+
+        // Options de cotation (1-7)
+        const options = [
+            { value: 1, label: "Absent" },
+            { value: 2, label: "Minime" },
+            { value: 3, label: "Léger" },
+            { value: 4, label: "Modéré" },
+            { value: 5, label: "Mod. sévère" },
+            { value: 6, label: "Sévère" },
+            { value: 7, label: "Extrême" }
+        ];
+
+        // Sous-échelles
+        const subscales = {
+            positive: { name: "Échelle Positive", items: [0, 1, 2, 3, 4, 5, 6], maxScore: 49 },
+            negative: { name: "Échelle Négative", items: [7, 8, 9, 10, 11, 12, 13], maxScore: 49 },
+            general: { name: "Psychopathologie Générale", items: [14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], maxScore: 112 }
+        };
+
+        // Titres des sections
+        const sectionHeaders = {
+            positive: "Échelle Positive (P1-P7)",
+            negative: "Échelle Négative (N1-N7)",
+            general: "Psychopathologie Générale (G1-G16)"
+        };
+
+        let answers = new Array(30).fill(null);
+
+        function initializeQuestions() {
+            const container = document.getElementById('questions');
+            container.innerHTML = '';
+
+            let currentSubscale = '';
+
+            questions.forEach((question, index) => {
+                // Ajouter un en-tête de section si nouvelle sous-échelle
+                if (question.subscale !== currentSubscale) {
+                    currentSubscale = question.subscale;
+                    const sectionHeader = document.createElement('div');
+                    sectionHeader.className = 'section-header';
+                    sectionHeader.style.cssText = 'background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; padding: 0.75rem 1rem; border-radius: var(--radius-md); margin: 1.5rem 0 1rem 0; font-weight: 600; font-size: var(--font-size-md);';
+                    if (index === 0) {
+                        sectionHeader.style.marginTop = '0';
+                    }
+                    sectionHeader.innerHTML = `<i class="fas fa-layer-group"></i> ${sectionHeaders[currentSubscale]}`;
+                    container.appendChild(sectionHeader);
+                }
+
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-card';
+
+                questionDiv.innerHTML = `
+                    <div style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 0.75rem;">
+                        <span class="question-number">${question.id}</span>
+                        <span class="question-text" style="margin-bottom: 0; display: block;">${question.text}</span>
+                    </div>
+                    <div class="scale-options">
+                        ${options.map(opt => `
+                            <button class="option-btn" onclick="selectAnswer(${index}, ${opt.value})" id="q${index}_opt${opt.value}">
+                                <strong>${opt.value}</strong>
+                                ${opt.label}
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function selectAnswer(questionIndex, value) {
+            answers[questionIndex] = value;
+
+            // Mise à jour visuelle des boutons
+            for (let i = 1; i <= 7; i++) {
+                const btn = document.getElementById(`q${questionIndex}_opt${i}`);
+                btn.classList.toggle('selected', i === value);
+            }
+
+            // Marquer la carte comme répondue
+            const cards = document.querySelectorAll('.question-card');
+            cards[questionIndex].classList.add('answered');
+
+            checkCompletion();
+        }
+
+        function checkCompletion() {
+            const allAnswered = answers.every(a => a !== null);
+
+            if (allAnswered) {
+                updateResults();
+                document.getElementById('results').style.display = 'block';
+                document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function calculateScore() {
+            return answers.reduce((sum, val) => sum + (val || 0), 0);
+        }
+
+        function calculateSubscaleScores() {
+            const scores = {};
+            for (const [key, sub] of Object.entries(subscales)) {
+                const itemScores = sub.items.map(idx => answers[idx] || 0);
+                scores[key] = {
+                    score: itemScores.reduce((a, b) => a + b, 0),
+                    maxScore: sub.maxScore,
+                    name: sub.name,
+                    items: sub.items
+                };
+            }
+            return scores;
+        }
+
+        function getInterpretation(score) {
+            if (score <= 58) return {
+                level: "Symptômes minimes",
+                className: "low",
+                description: "Les symptômes psychotiques sont minimes ou absents.",
+                action: "Surveillance clinique de routine recommandée. Maintien du traitement actuel."
+            };
+            if (score <= 75) return {
+                level: "Symptômes légers",
+                className: "moderate",
+                description: "Présence de symptômes psychotiques légers nécessitant un suivi.",
+                action: "Suivi ambulatoire régulier recommandé. Évaluer la nécessité d'un ajustement thérapeutique."
+            };
+            if (score <= 95) return {
+                level: "Symptômes modérés",
+                className: "high",
+                description: "Symptômes psychotiques modérés avec impact fonctionnel probable.",
+                action: "Renforcement du suivi recommandé. Envisager une optimisation du traitement antipsychotique."
+            };
+            if (score <= 120) return {
+                level: "Symptômes modérément sévères",
+                className: "high",
+                description: "Symptômes psychotiques modérément sévères avec impact fonctionnel significatif.",
+                action: "Traitement actif recommandé. Réévaluation du schéma thérapeutique. Envisager une prise en charge intensive."
+            };
+            return {
+                level: "Symptômes sévères",
+                className: "critical",
+                description: "Symptômes psychotiques sévères nécessitant une prise en charge urgente.",
+                action: "Évaluation psychiatrique approfondie recommandée. Envisager une hospitalisation si nécessaire."
+            };
+        }
+
+        function updateResults() {
+            const score = calculateScore();
+            const interpretation = getInterpretation(score);
+            const subScores = calculateSubscaleScores();
+
+            document.getElementById('totalScore').textContent = score;
+
+            // Interprétation
+            const interpretationBox = document.getElementById('interpretationBox');
+            interpretationBox.className = `interpretation ${interpretation.className}`;
+            interpretationBox.innerHTML = `
+                <h3>${interpretation.level}</h3>
+                <p><strong>Interprétation :</strong> ${interpretation.description}</p>
+                <p><strong>Recommandation :</strong> ${interpretation.action}</p>
+            `;
+
+            // Scores par sous-échelle
+            const subContainer = document.getElementById('subscaleScores');
+            subContainer.innerHTML = '';
+
+            for (const [key, sub] of Object.entries(subScores)) {
+                const percentage = (sub.score / sub.maxScore) * 100;
+                let fillClass = 'low';
+                if (percentage > 60) fillClass = 'high';
+                else if (percentage > 35) fillClass = 'moderate';
+
+                subContainer.innerHTML += `
+                    <div class="dimension-card">
+                        <h4>${sub.name}</h4>
+                        <div class="dimension-score">
+                            <span class="score-value">${sub.score}</span>
+                            <div class="dimension-bar">
+                                <div class="dimension-fill ${fillClass}" style="width: ${percentage}%;"></div>
+                            </div>
+                            <span style="color: var(--color-text-dimmed); font-size: var(--font-size-sm);">/ ${sub.maxScore}</span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Indice composite (P - N)
+            const positiveScore = subScores.positive.score;
+            const negativeScore = subScores.negative.score;
+            const composite = positiveScore - negativeScore;
+            const compositeContainer = document.getElementById('compositeIndex');
+
+            let compositeInterpretation = '';
+            let compositeColor = '';
+            if (composite > 0) {
+                compositeInterpretation = 'Prédominance du syndrome positif';
+                compositeColor = 'var(--color-warning)';
+            } else if (composite < 0) {
+                compositeInterpretation = 'Prédominance du syndrome négatif';
+                compositeColor = 'var(--color-info, #3b82f6)';
+            } else {
+                compositeInterpretation = 'Équilibre entre syndromes positif et négatif';
+                compositeColor = 'var(--color-success)';
+            }
+
+            compositeContainer.innerHTML = `
+                <div style="text-align: center; padding: 1rem;">
+                    <div style="font-size: 2.5rem; font-weight: 700; color: ${compositeColor}; margin-bottom: 0.5rem;">
+                        ${composite > 0 ? '+' : ''}${composite}
+                    </div>
+                    <p style="color: var(--color-text-dimmed); margin: 0;">
+                        Positif (${positiveScore}) − Négatif (${negativeScore}) = <strong>${composite > 0 ? '+' : ''}${composite}</strong>
+                    </p>
+                    <p style="margin-top: 0.5rem; font-weight: 500; color: ${compositeColor};">
+                        ${compositeInterpretation}
+                    </p>
+                </div>
+            `;
+
+            // Détails des items
+            const detailsContent = document.getElementById('detailsContent');
+            let detailsHTML = '<h3 style="margin-bottom: 1rem;">Détail des réponses par item :</h3>';
+
+            // Regrouper par sous-échelle
+            const subscaleKeys = ['positive', 'negative', 'general'];
+            const subscaleLabels = {
+                positive: 'Échelle Positive',
+                negative: 'Échelle Négative',
+                general: 'Psychopathologie Générale'
+            };
+
+            subscaleKeys.forEach(key => {
+                detailsHTML += `<h4 style="margin: 1rem 0 0.5rem 0; color: var(--cat-readable);">${subscaleLabels[key]}</h4>`;
+                subscales[key].items.forEach(idx => {
+                    const q = questions[idx];
+                    detailsHTML += `
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--color-bg-card); border-radius: var(--radius-md); margin-bottom: 0.5rem;">
+                            <span style="flex: 1;">${q.id}. ${q.text}</span>
+                            <span style="font-weight: 600; color: ${answers[idx] >= 5 ? 'var(--color-danger)' : answers[idx] >= 3 ? 'var(--color-warning)' : 'var(--color-success)'};">
+                                ${answers[idx] || '-'}/7
+                            </span>
+                        </div>
+                    `;
+                });
+            });
+
+            detailsContent.innerHTML = detailsHTML;
+        }
+
+        function toggleDetails() {
+            const content = document.getElementById('detailsContent');
+            const icon = document.getElementById('toggleIcon');
+            const isVisible = content.style.display !== 'none';
+
+            content.style.display = isVisible ? 'none' : 'block';
+            icon.innerHTML = isVisible ? '<i class="fas fa-chevron-down"></i>' : '<i class="fas fa-chevron-up"></i>';
+        }
+
+        function resetForm() {
+            answers = new Array(30).fill(null);
+
+            document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+            document.querySelectorAll('.question-card').forEach(card => card.classList.remove('answered'));
+
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('detailsContent').style.display = 'none';
+            document.getElementById('exportConsent').checked = false;
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function importData() {
+            document.getElementById('fileInput').click();
+        }
+
+        function loadFile(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        if (data.answers && Array.isArray(data.answers)) {
+                            answers = data.answers;
+
+                            answers.forEach((value, index) => {
+                                if (value !== null) {
+                                    selectAnswer(index, value);
+                                }
+                            });
+                        }
+                    } catch (error) {
+                        alert("Erreur lors de l'importation du fichier");
+                    }
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        function exportData() {
+            const consent = document.getElementById('exportConsent').checked;
+            if (!consent) {
+                alert("Veuillez cocher la case de consentement avant d''exporter.");
+                return;
+            }
+
+            const score = calculateScore();
+            const interpretation = getInterpretation(score);
+            const subScores = calculateSubscaleScores();
+            const composite = subScores.positive.score - subScores.negative.score;
+
+            const data = {
+                questionnaire: "PANSS",
+                version: "30 items",
+                date: new Date().toISOString(),
+                evaluationType: "Hétéro-questionnaire clinicien",
+                answers: answers,
+                answerDetails: questions.map((q, i) => ({
+                    item: q.id,
+                    text: q.text,
+                    score: answers[i],
+                    subscale: q.subscale
+                })),
+                totalScore: score,
+                maxScore: 210,
+                subscaleScores: {
+                    positive: subScores.positive.score,
+                    negative: subScores.negative.score,
+                    general: subScores.general.score
+                },
+                compositeIndex: composite,
+                interpretation: interpretation.level
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `PANSS_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeQuestions();
+        });
+    </script>
+</body>
+</html>

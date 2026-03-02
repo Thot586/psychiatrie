@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questionnaire HCL-32 - Depistage des symptomes hypomaniaques</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <style>
+        :root {
+            --cat-main: #3b82f6;
+            --cat-dark: #2563eb;
+            --cat-light: #60a5fa;
+            --cat-rgb: 59, 130, 246;
+            --cat-readable: #2563eb;
+        }
+        .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
+        .option-btn.selected, .answer-btn.selected { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        .score-circle { border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 30px rgba(var(--cat-rgb), 0.2); }
+        .score-value { color: var(--cat-light); }
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-light); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+        .progress-fill { background: linear-gradient(90deg, var(--cat-main), var(--cat-light)); box-shadow: 0 0 8px rgba(var(--cat-rgb), 0.4); }
+        .likert-options input[type="radio"]:checked + label,
+        .binary-options input[type="radio"]:checked + label,
+        .radio-options input[type="radio"]:checked + label { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+    </style>
+
+</head>
+<body class="light-questionnaire">
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+            <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+        </div>
+        <h1>HCL-32</h1>
+        <span class="badge badge-cat-humeur">Humeur</span>
+    </nav>
+
+    <div class="container">
+        <div class="glass-card" style="text-align: center; margin-bottom: 2rem;">
+            <h2 style="margin-bottom: 0.5rem;">Questionnaire HCL-32</h2>
+            <p style="margin: 0;">Depistage des symptomes d'hypomanie</p>
+        </div>
+
+        <div class="glass-card">
+            <h3><i class="fas fa-info-circle"></i> A propos de ce questionnaire</h3>
+            <p style="line-height: 1.6;">
+                L'echelle HCL-32 (Hypomania Checklist-32) est un outil de depistage concu pour aider a identifier les personnes qui ont pu connaitre des episodes d'hypomanie, un symptome cle des troubles du spectre bipolaire. Repondez aux questions en pensant aux periodes ou vous vous sentiez "au top", plein(e) d'energie.
+            </p>
+            <div class="warning-box" style="margin-top: 1.5rem;">
+                <h3><i class="fas fa-exclamation-triangle"></i> Avertissements importants</h3>
+                <ul>
+                    <li>Cet auto-questionnaire est un outil de depistage et <strong>ne constitue pas un diagnostic</strong>.</li>
+                    <li>Il ne remplace en aucun cas une evaluation par un professionnel de sante qualifie (medecin, psychiatre).</li>
+                    <li>Les resultats doivent etre interpretes avec prudence et discutes avec un professionnel.</li>
+                    <li>En cas de detresse psychologique ou de pensees suicidaires, contactez le <strong>3114</strong> (gratuit, 24h/7j).</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <div class="control-buttons">
+                <button class="btn btn-primary" onclick="importData()"><i class="fas fa-file-import"></i> Importer un questionnaire</button>
+                <button class="btn btn-secondary" onclick="resetForm()"><i class="fas fa-redo"></i> Reinitialiser</button>
+            </div>
+            <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="loadFile(event)">
+        </div>
+
+        <!-- Part 1 -->
+        <div class="glass-card">
+            <h3 class="part-title"><i class="fas fa-clipboard-list"></i> Partie 1 : Symptomes</h3>
+            <p style="margin-bottom: 1.5rem;">Les questions suivantes concernent les periodes ou vous etiez "au top", plein(e) d'energie. Cochez "Oui" si l'affirmation s'applique a vous pendant ces periodes.</p>
+            <div id="part1-questions"></div>
+        </div>
+
+        <!-- Part 2 -->
+        <div class="glass-card">
+            <h3 class="part-title"><i class="fas fa-chart-line"></i> Partie 2 : Impact et consequences</h3>
+            <p style="margin-bottom: 1.5rem;">Ces questions portent sur l'impact global de ces periodes "au top" sur votre vie.</p>
+            <div id="part2-questions"></div>
+        </div>
+
+        <!-- Results -->
+        <div id="results" class="results-section glass-card">
+            <h2 style="text-align: center; margin-bottom: 2rem;"><i class="fas fa-chart-bar"></i> Resultats de votre evaluation</h2>
+
+            <div class="score-display" style="text-align: center;">
+                <div class="score-circle">
+                    <span class="score-number" id="totalScore">0</span>
+                    <span class="score-label">sur 32</span>
+                </div>
+            </div>
+
+            <div id="interpretationBox" class="interpretation"></div>
+            <div id="part2Summary" class="details-content show" style="margin-top: 1.5rem;"></div>
+
+            <button class="details-toggle" onclick="toggleDetails()">
+                <i class="fas fa-clipboard-list"></i> Voir les pistes diagnostiques differentielles <span id="toggleIcon">&#9660;</span>
+            </button>
+
+            <div id="detailsContent" class="details-content"></div>
+
+            <div style="margin-top: 2rem;">
+                <h3><i class="fas fa-save"></i> Exporter les resultats</h3>
+                <div class="consent-box">
+                    <label>
+                        <input type="checkbox" id="exportConsent">
+                        <span>Je souhaite télécharger mes résultats (questionnaire, réponses, score et date) dans un fichier JSON sur mon appareil. <strong>Ces résultats constituent des données de santé — je m'engage à les conserver de façon sécurisée et à ne les partager qu'avec un professionnel de santé de mon choix.</strong> Aucune donnée n'est transmise à un serveur.</span>
+                    </label>
+                </div>
+                <div class="export-buttons">
+                    <button class="btn btn-primary" onclick="exportData()"><i class="fas fa-download"></i> Exporter en JSON</button>
+                    <button class="btn-print" onclick="printResults()"><i class="fas fa-print"></i> Imprimer</button>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p><strong>HCL-32 - Hypomania Checklist-32</strong></p>
+            <p><strong>Auteurs originaux :</strong> Jules Angst, et al. (2005). The HCL-32: towards a self-assessment tool for hypomanic symptoms in outpatients. <em>Journal of Affective Disorders, 88</em>(2), 217-233.</p>
+            <p><strong>Adaptation numerique :</strong> Dr FENOHASINA | Psychiatre - FFI</p>
+            <small>&copy; 2025 - Tous droits reserves</small>
+        </footer>
+    </div>
+
+<script>
+    const part1Questions = [
+        "Je dors moins.",
+        "J'ai plus d'energie et je suis plus actif(ve).",
+        "Je suis plus sur(e) de moi.",
+        "J'apprecie plus mon travail.",
+        "Je suis plus sociable (plus d'appels telephoniques, je sors plus).",
+        "Je veux voyager et je voyage plus.",
+        "J'ai tendance a conduire plus vite.",
+        "Je depense plus d'argent ou trop d'argent.",
+        "Je prends plus de risques dans ma vie quotidienne.",
+        "Je suis physiquement plus actif(ve) (sport, etc.).",
+        "Je planifie plus d'activites.",
+        "J'ai plus d'idees, je suis plus creatif(ve).",
+        "Je suis moins timide ou inhibe(e).",
+        "Je porte des vetements plus colores et plus extravagants.",
+        "Je veux rencontrer et faire connaissance avec plus de gens.",
+        "Je suis plus interesse(e) par le sexe ou j'ai plus d'activites sexuelles.",
+        "Je flirte plus ou je suis plus familier(e) avec les autres.",
+        "Je parle plus.",
+        "Je pense plus vite.",
+        "Je prends des decisions plus facilement.",
+        "Mes pensees sautent d'un sujet a l'autre.",
+        "Je suis plus impatient(e) et/ou je m'enerve plus facilement.",
+        "Je me dispute plus facilement.",
+        "Mon humeur est meilleure, plus optimiste.",
+        "Je bois plus de cafe.",
+        "Je fume plus de cigarettes.",
+        "Je bois plus d'alcool.",
+        "Je prends plus de medicaments (sedatifs, anxiolytiques, stimulants).",
+        "Je suis de meilleure humeur le matin.",
+        "Mes sens sont plus vifs (odorat, gout, ouie).",
+        "Je suis plus facilement distrait(e).",
+        "Mon humeur change rapidement et je deviens irritable."
+    ];
+
+    const part2Questions = [
+        {
+            id: 'impact',
+            text: "Globalement, quel a ete l'impact de ces periodes sur votre vie ?",
+            options: ["Aucun probleme", "Problemes mineurs", "Problemes moderes", "Problemes serieux"]
+        },
+        {
+            id: 'reaction',
+            text: "Comment les autres ont-ils reagi a ces periodes ?",
+            options: ["Pas de reaction", "Amuses / positifs", "Inquiets", "Enerves / negatifs"]
+        },
+        {
+            id: 'duration',
+            text: "En moyenne, combien de temps durait une de ces periodes ?",
+            options: ["1 jour", "2-3 jours", "4-7 jours", "> 1 semaine"]
+        },
+        {
+            id: 'feeling',
+            text: "Compare a votre etat habituel, comment vous sentiez-vous pendant ces periodes ?",
+            options: ["Mieux que d'habitude", "Pareil", "Moins bien"]
+        }
+    ];
+
+    let answersPart1 = new Array(32).fill(null);
+    let answersPart2 = {};
+
+    function initializeForm() {
+        const containerP1 = document.getElementById('part1-questions');
+        containerP1.innerHTML = '';
+        part1Questions.forEach((q, i) => {
+            containerP1.innerHTML += `
+                <div class="question-card question-card-binary" id="question-card-p1-${i}">
+                    <div class="question-text"><span class="question-number">${i + 1}</span> ${q}</div>
+                    <div class="options-group">
+                        <button class="option-btn" id="q${i}_opt1" onclick="selectAnswerPart1(${i}, 1)">Oui</button>
+                        <button class="option-btn" id="q${i}_opt0" onclick="selectAnswerPart1(${i}, 0)">Non</button>
+                    </div>
+                </div>
+            `;
+        });
+
+        const containerP2 = document.getElementById('part2-questions');
+        containerP2.innerHTML = '';
+        part2Questions.forEach(q => {
+            containerP2.innerHTML += `
+                <div class="question-card" id="question-card-p2-${q.id}">
+                    <div class="question-text">${q.text}</div>
+                    <div class="options-grid" id="options_${q.id}">
+                        ${q.options.map((opt, i) => `
+                            <button class="option-btn" id="q2_${q.id}_opt${i}" onclick="selectAnswerPart2('${q.id}', ${i}, ${q.options.length})">${opt}</button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    function selectAnswerPart1(index, value) {
+        answersPart1[index] = value;
+        document.getElementById(`q${index}_opt1`).classList.toggle('selected', value === 1);
+        document.getElementById(`q${index}_opt0`).classList.toggle('selected', value === 0);
+
+        const card = document.getElementById(`question-card-p1-${index}`);
+        if (card) card.classList.add('answered');
+
+        checkCompletion();
+    }
+
+    function selectAnswerPart2(id, value, numOptions) {
+        answersPart2[id] = part2Questions.find(q => q.id === id).options[value];
+        for(let i=0; i < numOptions; i++) {
+            document.getElementById(`q2_${id}_opt${i}`).classList.toggle('selected', i === value);
+        }
+
+        const card = document.getElementById(`question-card-p2-${id}`);
+        if (card) card.classList.add('answered');
+
+        checkCompletion();
+    }
+
+    function checkCompletion() {
+        const part1Complete = answersPart1.every(a => a !== null);
+        const part2Complete = Object.keys(answersPart2).length === part2Questions.length;
+
+        if (part1Complete && part2Complete) {
+            document.getElementById('results').classList.add('show');
+            updateResults();
+            // Scroll to results
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+
+    function calculateScore() {
+        return answersPart1.reduce((sum, val) => sum + (val || 0), 0);
+    }
+
+    function getInterpretation(score) {
+        if (score >= 14) {
+            return {
+                level: "Positif",
+                className: "positive",
+                description: "Le score suggere la presence possible d'episodes d'hypomanie passes. Cela ne constitue pas un diagnostic, mais indique qu'une evaluation par un professionnel de la sante est fortement recommandee pour explorer davantage ces symptomes."
+            };
+        }
+        return {
+            level: "Negatif",
+            className: "negative",
+            description: "Le score ne suggere pas de symptomes significatifs d'hypomanie passee. Continuez a surveiller votre humeur et consultez un professionnel si vous avez des inquietudes."
+        };
+    }
+
+    function getDifferentials(score) {
+        if (score < 14) return [];
+        return [
+            { name: "Trouble bipolaire de type II", description: "Caracterise par au moins un episode hypomaniaque et un episode depressif majeur. L'HCL-32 est specifiquement concu pour depister ce trouble." },
+            { name: "Cyclothymie", description: "Nombreux episodes hypomaniaques et depressifs qui ne remplissent pas les criteres complets d'un episode majeur, sur une duree d'au moins 2 ans." },
+            { name: "TDAH (Trouble du deficit de l'attention avec hyperactivite)", description: "Peut presenter des symptomes de distractibilite, d'impulsivite et d'hyperactivite qui peuvent chevaucher ceux de l'hypomanie, mais le TDAH est un etat plus chronique et moins episodique." },
+            { name: "Trouble de la personnalite borderline", description: "Caracterise par une instabilite de l'humeur, des relations et de l'image de soi. Les changements d'humeur sont souvent plus rapides et reactifs aux evenements interpersonnels." },
+            { name: "Trouble de la personnalite narcissique", description: "Peut inclure une confiance en soi elevee et une diminution du besoin de sommeil, mais est generalement associee a un besoin d'admiration et a un manque d'empathie." },
+            { name: "Trouble lie a l'usage de substances", description: "L'intoxication ou le sevrage de certaines substances (ex: stimulants, alcool) peut mimer des symptomes hypomaniaques." }
+        ];
+    }
+
+    function updateResults() {
+        const score = calculateScore();
+        const interpretation = getInterpretation(score);
+        const differentials = getDifferentials(score);
+
+        document.getElementById('totalScore').textContent = score;
+
+        const interpretationBox = document.getElementById('interpretationBox');
+        interpretationBox.className = `interpretation ${interpretation.className}`;
+        interpretationBox.innerHTML = `
+            <h3 style="margin-bottom: 0.75rem;">Depistage ${interpretation.level}</h3>
+            <p>${interpretation.description}</p>
+        `;
+
+        const summaryContainer = document.getElementById('part2Summary');
+        summaryContainer.innerHTML = `<h3 style="margin-bottom: 1rem; text-align: center;">Resume de l'impact</h3>`;
+        part2Questions.forEach(q => {
+            const answer = answersPart2[q.id] || "Non repondu";
+            summaryContainer.innerHTML += `
+                <div class="part2-summary-item">
+                    <p><strong>${q.text}</strong><br>${answer}</p>
+                </div>
+            `;
+        });
+
+        const detailsContent = document.getElementById('detailsContent');
+        if (differentials.length > 0) {
+            detailsContent.innerHTML = `
+                <h3 style="margin-bottom: 1.5rem;">Pistes diagnostiques differentielles a explorer avec un professionnel :</h3>
+                ${differentials.map(diff => `
+                    <div class="differential-item">
+                        <h4>${diff.name}</h4>
+                        <p>${diff.description}</p>
+                    </div>
+                `).join('')}
+            `;
+            document.querySelector('.details-toggle').style.display = 'flex';
+        } else {
+            document.querySelector('.details-toggle').style.display = 'none';
+        }
+    }
+
+    function toggleDetails() {
+        const content = document.getElementById('detailsContent');
+        const icon = document.getElementById('toggleIcon');
+        const isShown = content.classList.toggle('show');
+        icon.innerHTML = isShown ? '&#9650;' : '&#9660;';
+    }
+
+    function resetForm() {
+        answersPart1.fill(null);
+        answersPart2 = {};
+
+        document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+        document.querySelectorAll('.question-card').forEach(card => card.classList.remove('answered'));
+        document.getElementById('results').classList.remove('show');
+        document.getElementById('detailsContent').classList.remove('show');
+        document.getElementById('exportConsent').checked = false;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function importData() {
+        document.getElementById('fileInput').click();
+    }
+
+    function loadFile(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const data = JSON.parse(e.target.result);
+                if (data.questionnaire === "HCL-32" && data.answersPart1 && data.answersPart2) {
+                    resetForm(); // Reset before loading new data
+
+                    answersPart1 = data.answersPart1;
+                    answersPart2 = data.answersPart2;
+
+                    // Update UI
+                    answersPart1.forEach((val, i) => { if(val !== null) selectAnswerPart1(i, val); });
+                    Object.keys(answersPart2).forEach(key => {
+                        const question = part2Questions.find(q => q.id === key);
+                        if (question) {
+                            const optionIndex = question.options.indexOf(answersPart2[key]);
+                            if (optionIndex > -1) {
+                                selectAnswerPart2(key, optionIndex, question.options.length);
+                            }
+                        }
+                    });
+                } else {
+                    alert("Le fichier ne semble pas etre un questionnaire HCL-32 valide.");
+                }
+            } catch (error) {
+                alert("Erreur lors de la lecture du fichier. Assurez-vous qu'il est au format JSON correct.");
+            }
+        };
+        reader.readAsText(file);
+    }
+
+    function exportData() {
+        if (!document.getElementById('exportConsent').checked) {
+            alert("Veuillez cocher la case de consentement avant d''exporter.");
+            return;
+        }
+
+        const score = calculateScore();
+        const interpretation = getInterpretation(score);
+
+        const data = {
+            questionnaire: "HCL-32",
+            date: new Date().toISOString(),
+            answersPart1: answersPart1,
+            answersPart2: answersPart2,
+            score: score,
+            interpretation: interpretation.level
+        };
+
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `HCL32_${new Date().toISOString().split('T')[0]}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
+    // Fonction d'impression
+    function printResults() {
+        const results = document.getElementById('results');
+        if (results) results.style.display = 'block';
+        window.print();
+    }
+
+    document.addEventListener('DOMContentLoaded', initializeForm);
+</script>
+</body>
+</html>

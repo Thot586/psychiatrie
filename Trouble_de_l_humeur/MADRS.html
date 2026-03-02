@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MADRS - Montgomery-Asberg Depression Rating Scale</title>
+
+    <!-- Font Awesome pour les icônes -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Styles partagés -->
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <style>
+        :root {
+            --cat-main: #3b82f6;
+            --cat-dark: #2563eb;
+            --cat-light: #60a5fa;
+            --cat-rgb: 59, 130, 246;
+            --cat-readable: #2563eb;
+        }
+        .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
+        .option-btn.selected, .answer-btn.selected { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        .score-circle { border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 30px rgba(var(--cat-rgb), 0.2); }
+        .score-value { color: var(--cat-light); }
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-light); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+        .progress-fill { background: linear-gradient(90deg, var(--cat-main), var(--cat-light)); box-shadow: 0 0 8px rgba(var(--cat-rgb), 0.4); }
+        .likert-options input[type="radio"]:checked + label,
+        .binary-options input[type="radio"]:checked + label,
+        .radio-options input[type="radio"]:checked + label { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+    </style>
+
+</head>
+<body class="light-questionnaire">
+    <!-- Navigation -->
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil">
+                <i class="fas fa-home"></i>
+            </a>
+            <button onclick="history.back()" class="btn-back" title="Retour">
+                <i class="fas fa-arrow-left"></i> <span>Retour</span>
+            </button>
+        </div>
+        <h1>MADRS</h1>
+        <span class="badge badge-cat-humeur">Humeur</span>
+    </nav>
+
+    <div class="container">
+        <!-- En-tête -->
+        <header class="glass-card" style="text-align: center; margin-bottom: 1.5rem;">
+            <h2 class="gradient-text">Montgomery-Asberg Depression Rating Scale</h2>
+            <p>Échelle d'évaluation de la dépression - 10 items</p>
+        </header>
+
+        <!-- Informations -->
+        <section class="info-box">
+            <h3><i class="fas fa-user-md"></i> Hétéro-évaluation clinique</h3>
+            <p>La MADRS est une échelle d'<strong>hétéro-évaluation</strong> cotée par le clinicien lors d'un entretien semi-structuré. Elle évalue la sévérité des symptômes dépressifs au cours des <strong>7 derniers jours</strong>.</p>
+            <p style="margin-top: 0.75rem;"><strong>Instructions :</strong> Évaluez chaque item en vous basant sur l'observation clinique et les réponses du patient. Chaque item est coté de 0 à 6, avec des points d'ancrage à 0, 2, 4 et 6. Les scores intermédiaires (1, 3, 5) peuvent être utilisés.</p>
+        </section>
+
+        <!-- Avertissement -->
+        <section class="warning-box">
+            <h3><i class="fas fa-exclamation-triangle"></i> Avertissements importants</h3>
+            <ul style="margin: 0; padding-left: 1.5rem;">
+                <li>Cette échelle doit être administrée par un professionnel de santé formé</li>
+                <li>L'item 10 (idées suicidaires) nécessite une évaluation approfondie du risque</li>
+                <li>Les résultats doivent être interprétés dans le contexte clinique global</li>
+                <li><strong>Numéro national de prévention du suicide : 3114</strong> (gratuit, 24h/7j)</li>
+            </ul>
+        </section>
+
+        <!-- Contrôles -->
+        <section class="glass-card">
+            <div class="control-buttons">
+                <button class="btn-secondary" onclick="importData()">
+                    <i class="fas fa-file-import"></i> Importer
+                </button>
+                <button class="btn-secondary" onclick="resetForm()">
+                    <i class="fas fa-redo"></i> Réinitialiser
+                </button>
+            </div>
+            <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="loadFile(event)">
+        </section>
+
+        <!-- Instructions -->
+        <section class="glass-card">
+            <h3 style="margin-bottom: 1rem;">Cotez chaque item de 0 à 6 en fonction de l'intensité des symptômes observés ou rapportés par le patient :</h3>
+
+            <!-- Questions générées par JS -->
+            <div id="questions"></div>
+        </section>
+
+        <!-- Résultats -->
+        <section id="results" class="results-section" style="display: none;">
+            <h2 style="text-align: center; margin-bottom: 2rem;">
+                <i class="fas fa-chart-bar"></i> Résultats de l'évaluation
+            </h2>
+
+            <div class="score-display">
+                <div class="score-circle">
+                    <span class="score-value" id="totalScore">0</span>
+                </div>
+                <p class="score-label">sur 60 points</p>
+            </div>
+
+            <div id="interpretationBox" class="interpretation"></div>
+
+            <button class="btn-primary w-full" onclick="toggleDetails()" style="margin-top: 1.5rem;">
+                <i class="fas fa-list"></i> Voir les détails et recommandations
+                <span id="toggleIcon"><i class="fas fa-chevron-down"></i></span>
+            </button>
+
+            <div id="detailsContent" class="glass-card" style="display: none; margin-top: 1rem;"></div>
+
+            <!-- Export -->
+            <div class="glass-card" style="margin-top: 2rem;">
+                <h3><i class="fas fa-download"></i> Exporter les résultats</h3>
+                <div class="consent-box">
+                    <label>
+                        <input type="checkbox" id="exportConsent">
+                        <span>J'atteste avoir informé la personne concernée de cet export et obtenu son accord. <strong>Ces résultats constituent des données de santé — je m'engage à les conserver de façon sécurisée et à ne les partager qu'avec des professionnels de santé autorisés.</strong> Aucune donnée n'est transmise à un serveur.</span>
+                    </label>
+                </div>
+                <div class="export-buttons">
+                    <button class="btn-primary" onclick="exportData()">
+                        <i class="fas fa-file-export"></i> Exporter en JSON
+                    </button>
+                    <button class="btn-print" onclick="printResults()">
+                        <i class="fas fa-print"></i> Imprimer
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p><strong>MADRS - Montgomery-Asberg Depression Rating Scale</strong></p>
+        <p>Auteurs originaux : S.A. Montgomery et M. Asberg (1979)</p>
+        <p>Adaptation numérique : Dr FENOHASINA | Psychiatre</p>
+        <p style="margin-top: 1rem;">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr" target="_blank">
+                Licence CC BY-NC-SA 4.0
+            </a>
+        </p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../js/app.js"></script>
+    <script>
+        const questions = [
+            {
+                title: "Tristesse apparente",
+                description: "Correspond au découragement, à la dépression et au désespoir (plus qu'un simple cafard passager) reflétés par la parole, la mimique et la posture. Coter selon la profondeur et l'incapacité à se dérider.",
+                anchors: [
+                    "0 - Pas de tristesse",
+                    "2 - Paraît abattu mais se déride sans difficulté",
+                    "4 - Paraît triste et malheureux la plupart du temps",
+                    "6 - Paraît malheureux tout le temps. Extrêmement accablé"
+                ]
+            },
+            {
+                title: "Tristesse exprimée",
+                description: "Correspond à l'expression d'une humeur dépressive, que celle-ci soit apparente ou non. Inclut le cafard, le découragement ou le sentiment de détresse sans espoir. Coter selon l'intensité, la durée et le degré auquel l'humeur est dite être influencée par les événements.",
+                anchors: [
+                    "0 - Tristesse occasionnelle en rapport avec les circonstances",
+                    "2 - Triste ou cafardeux, mais se déride sans difficulté",
+                    "4 - Sentiment envahissant de tristesse ou de dépression",
+                    "6 - Tristesse, désespoir ou découragement permanents ou sans fluctuation"
+                ]
+            },
+            {
+                title: "Tension intérieure",
+                description: "Correspond aux sentiments de malaise mal défini, d'irritabilité, d'agitation intérieure, de tension nerveuse allant jusqu'à la panique, l'effroi ou l'angoisse.",
+                anchors: [
+                    "0 - Calme. Tension intérieure seulement passagère",
+                    "2 - Sentiments occasionnels d'irritabilité et de malaise mal défini",
+                    "4 - Sentiments continuels de tension intérieure ou panique intermittente que le patient ne peut maîtriser qu'avec difficulté",
+                    "6 - Effroi ou angoisse sans relache. Panique envahissante"
+                ]
+            },
+            {
+                title: "Reduction du sommeil",
+                description: "Correspond à une réduction de la durée ou de la profondeur du sommeil par comparaison avec le sommeil du patient lorsqu'il n'est pas malade.",
+                anchors: [
+                    "0 - Dort comme d'habitude",
+                    "2 - Légère difficulté à s'endormir ou sommeil légèrement réduit, léger ou agité",
+                    "4 - Sommeil réduit ou interrompu au moins 2 heures",
+                    "6 - Moins de 2 ou 3 heures de sommeil"
+                ]
+            },
+            {
+                title: "Reduction de l'appetit",
+                description: "Correspond au sentiment d'une perte de l'appétit comparé à l'appétit habituel. Coter l'absence de désir de nourriture ou le besoin de se forcer pour manger.",
+                anchors: [
+                    "0 - Appétit normal ou augmenté",
+                    "2 - Appétit légèrement diminué",
+                    "4 - Pas d'appétit. La nourriture est sans goût",
+                    "6 - Nécessité d'être poussé à manger"
+                ]
+            },
+            {
+                title: "Difficultés de concentration",
+                description: "Correspond aux difficultés à rassembler ses pensées allant jusqu'à l'incapacité à se concentrer. Coter selon l'intensité, la fréquence et le degré d'incapacité.",
+                anchors: [
+                    "0 - Pas de difficulté de concentration",
+                    "2 - Difficultés occasionnelles à rassembler ses pensées",
+                    "4 - Difficultés à se concentrer et à maintenir son attention, ce qui réduit la capacité à lire ou à soutenir une conversation",
+                    "6 - Incapacité de lire ou de converser sans grande difficulté"
+                ]
+            },
+            {
+                title: "Lassitude",
+                description: "Correspond à une difficulté à se mettre en train ou une lenteur à commencer et à accomplir les activités quotidiennes.",
+                anchors: [
+                    "0 - Guère de difficulté à se mettre en route. Pas de lenteur",
+                    "2 - Difficultés à commencer des activités",
+                    "4 - Difficultés à commencer des activités routinières qui sont poursuivies avec effort",
+                    "6 - Lassitude complète. Incapable de faire quoi que ce soit sans aide"
+                ]
+            },
+            {
+                title: "Incapacite a ressentir",
+                description: "Correspond à l'expérience subjective d'une réduction d'intérêt pour le monde environnant, ou les activités qui donnent normalement du plaisir.",
+                anchors: [
+                    "0 - Intérêt normal pour le monde environnant et les autres personnes",
+                    "2 - Réduction de la capacité à prendre plaisir aux choses qui, normalement, font plaisir",
+                    "4 - Perte d'intérêt pour le monde environnant. Perte de sentiments pour les amis et les connaissances",
+                    "6 - Expérience d'être émotionnellement paralysé, incapacité à ressentir de la colère, du chagrin ou du plaisir, et impossibilité complète, voire douloureuse, de sentir quelque chose pour les proches parents et amis"
+                ]
+            },
+            {
+                title: "Pensées pessimistes",
+                description: "Correspond aux idées de culpabilité, d'infériorité, d'auto-accusation, de péché, de remords et de ruine.",
+                anchors: [
+                    "0 - Pas de pensées pessimistes",
+                    "2 - Idées intermittentes d'échec, d'auto-accusation ou d'auto-dépréciation",
+                    "4 - Auto-accusations persistantes ou idées de culpabilité ou péché précises mais encore rationnelles. Pessimisme croissant à propos du futur",
+                    "6 - Idées délirantes de ruine, de remords ou péché inexpiable. Auto-accusations absurdes et inébranlables"
+                ]
+            },
+            {
+                title: "Idées de suicide",
+                description: "Correspond au sentiment que la vie ne vaut pas la peine d'être vécue, qu'une mort naturelle serait la bienvenue, idées de suicide et préparatifs au suicide.",
+                anchors: [
+                    "0 - Jouit de la vie ou la prend comme elle vient",
+                    "2 - Fatigué de la vie. Idées de suicide seulement passagères",
+                    "4 - Il vaudrait mieux être mort. Les idées de suicide sont courantes et le suicide est considéré comme une solution possible, mais sans projet ou intention précis",
+                    "6 - Projets explicites de suicide si l'occasion se présente. Préparation active au suicide"
+                ],
+                isCritical: true
+            }
+        ];
+
+        // Options 0 à 6
+        const optionLabels = ["0", "1", "2", "3", "4", "5", "6"];
+
+        let answers = new Array(10).fill(null);
+
+        function initializeQuestions() {
+            const container = document.getElementById('questions');
+            container.innerHTML = '';
+
+            questions.forEach((question, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-card';
+
+                let criticalWarning = '';
+                if (question.isCritical) {
+                    criticalWarning = `
+                        <div class="danger-box" style="margin-top: 1rem; margin-bottom: 1rem;">
+                            <h3><i class="fas fa-shield-alt"></i> Item critique - Risque suicidaire</h3>
+                            <p>Cet item nécessite une évaluation approfondie. En cas de réponse positive (score >= 2), une évaluation du risque suicidaire complète est indispensable. Numéro national de prévention du suicide : <strong>3114</strong></p>
+                        </div>
+                    `;
+                }
+
+                questionDiv.innerHTML = `
+                    <div style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem;">
+                        <span class="question-number">${index + 1}</span>
+                        <div>
+                            <span class="question-text" style="margin-bottom: 0; font-weight: 600;">${question.title}</span>
+                            <p style="color: var(--color-text-muted); font-size: var(--font-size-sm); margin-top: 0.5rem; margin-bottom: 0;">${question.description}</p>
+                        </div>
+                    </div>
+                    ${criticalWarning}
+                    <div class="info-box" style="margin-bottom: 1rem; padding: 1rem;">
+                        <h4 style="margin-bottom: 0.5rem; font-size: var(--font-size-sm);"><i class="fas fa-anchor"></i> Points d'ancrage :</h4>
+                        <ul style="margin: 0; padding-left: 1rem; font-size: var(--font-size-xs);">
+                            ${question.anchors.map(anchor => `<li style="margin-bottom: 0.25rem;">${anchor}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div class="options-grid" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                        ${optionLabels.map((label, optIndex) => `
+                            <button class="option-btn" onclick="selectAnswer(${index}, ${optIndex})" id="q${index}_opt${optIndex}" style="min-width: 50px; flex: 0 0 auto;">
+                                <strong>${label}</strong>
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function selectAnswer(questionIndex, value) {
+            answers[questionIndex] = value;
+
+            for (let i = 0; i <= 6; i++) {
+                const btn = document.getElementById(`q${questionIndex}_opt${i}`);
+                btn.classList.toggle('selected', i === value);
+            }
+
+            // Marquer la carte comme répondue
+            const cards = document.querySelectorAll('.question-card');
+            cards[questionIndex].classList.add('answered');
+
+            checkCompletion();
+        }
+
+        function checkCompletion() {
+            const allAnswered = answers.every(a => a !== null);
+
+            if (allAnswered) {
+                updateResults();
+                document.getElementById('results').style.display = 'block';
+                document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function calculateScore() {
+            return answers.reduce((sum, val) => sum + (val || 0), 0);
+        }
+
+        function getInterpretation(score) {
+            if (score <= 6) return {
+                level: "Absence de dépression",
+                className: "low",
+                description: "Les symptômes dépressifs sont absents ou minimes.",
+                action: "Pas de traitement spécifique nécessaire. Surveillance de routine."
+            };
+            if (score <= 19) return {
+                level: "Dépression légère",
+                className: "low",
+                description: "Présence de symptômes dépressifs légers.",
+                action: "Considérer un soutien psychologique. Surveillance active recommandée. Psychothérapie à envisager."
+            };
+            if (score <= 34) return {
+                level: "Dépression modérée",
+                className: "moderate",
+                description: "Symptômes dépressifs modérés nécessitant une intervention thérapeutique.",
+                action: "Traitement antidépresseur et/ou psychothérapie recommandés. Suivi régulier indispensable."
+            };
+            return {
+                level: "Dépression sévère",
+                className: "critical",
+                description: "Symptômes dépressifs sévères nécessitant une prise en charge intensive.",
+                action: "Traitement antidépresseur indiqué. Évaluer le risque suicidaire. Envisager une hospitalisation si nécessaire. Suivi rapproché obligatoire."
+            };
+        }
+
+        function getRecommendations(score) {
+            const recommendations = [];
+
+            // Analyser les réponses par item
+            const item10Score = answers[9]; // Idées suicidaires
+
+            if (item10Score !== null && item10Score >= 2) {
+                recommendations.push({
+                    priority: "URGENTE",
+                    title: "Évaluation du risque suicidaire",
+                    action: "Le patient présente des idées suicidaires. Réaliser une évaluation complète du risque suicidaire (RUD, C-SSRS). Considérer une surveillance renforcée ou une hospitalisation."
+                });
+            }
+
+            if (score <= 6) {
+                recommendations.push({
+                    priority: "Standard",
+                    title: "Suivi de routine",
+                    action: "Maintenir une surveillance clinique habituelle. Réévaluation en cas de modification symptomatique."
+                });
+            } else if (score <= 19) {
+                recommendations.push({
+                    priority: "Modérée",
+                    title: "Prise en charge ambulatoire",
+                    action: "Proposer un soutien psychothérapeutique (TCC, thérapie de soutien). Réévaluation à 2-4 semaines."
+                });
+                recommendations.push({
+                    priority: "À évaluer",
+                    title: "Facteurs de stress",
+                    action: "Identifier et traiter les facteurs précipitants ou perpétuants éventuels."
+                });
+            } else if (score <= 34) {
+                recommendations.push({
+                    priority: "Élevée",
+                    title: "Traitement antidépresseur",
+                    action: "Initiation d'un traitement antidépresseur recommandée (ISRS en première intention). Combiner avec une psychothérapie si possible."
+                });
+                recommendations.push({
+                    priority: "Élevée",
+                    title: "Suivi rapproché",
+                    action: "Consultation de suivi à 1-2 semaines pour évaluer la tolérance et l'adhérence au traitement."
+                });
+            } else {
+                recommendations.push({
+                    priority: "URGENTE",
+                    title: "Prise en charge intensive",
+                    action: "Traitement antidépresseur à instaurer rapidement. Évaluer la nécessité d'une hospitalisation. Suivi pluri-hebdomadaire initial."
+                });
+                recommendations.push({
+                    priority: "URGENTE",
+                    title: "Évaluation psychiatrique spécialisée",
+                    action: "Avis psychiatrique urgent recommandé pour adapter la stratégie thérapeutique."
+                });
+            }
+
+            // Recommandations basées sur des items spécifiques
+            if (answers[3] !== null && answers[3] >= 4) { // Sommeil
+                recommendations.push({
+                    priority: "Associée",
+                    title: "Troubles du sommeil",
+                    action: "Troubles du sommeil significatifs. Considérer une hygiène du sommeil et éventuellement un traitement hypnotique court terme."
+                });
+            }
+
+            if (answers[4] !== null && answers[4] >= 4) { // Appetit
+                recommendations.push({
+                    priority: "Associée",
+                    title: "Troubles de l'appétit",
+                    action: "Troubles de l'appétit importants. Surveiller le poids. Envisager un avis diététique si nécessaire."
+                });
+            }
+
+            return recommendations;
+        }
+
+        function updateResults() {
+            const score = calculateScore();
+            const interpretation = getInterpretation(score);
+            const recommendations = getRecommendations(score);
+
+            document.getElementById('totalScore').textContent = score;
+
+            const interpretationBox = document.getElementById('interpretationBox');
+            interpretationBox.className = `interpretation ${interpretation.className}`;
+            interpretationBox.innerHTML = `
+                <h3>${interpretation.level}</h3>
+                <p><strong>Interprétation :</strong> ${interpretation.description}</p>
+                <p><strong>Recommandation :</strong> ${interpretation.action}</p>
+            `;
+
+            const detailsContent = document.getElementById('detailsContent');
+
+            // Détail des scores par item
+            let itemDetails = '<h3 style="margin-bottom: 1rem;">Détail des scores par item :</h3>';
+            itemDetails += '<div style="display: grid; gap: 0.5rem;">';
+            questions.forEach((q, i) => {
+                const itemScore = answers[i] !== null ? answers[i] : '-';
+                const isHighScore = answers[i] !== null && answers[i] >= 4;
+                const isCriticalItem = q.isCritical && answers[i] !== null && answers[i] >= 2;
+                let badgeClass = isHighScore ? 'badge-warning' : 'badge-primary';
+                if (isCriticalItem) badgeClass = 'badge-danger';
+
+                itemDetails += `
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; background: var(--color-bg-card); border-radius: var(--radius-sm);">
+                        <span style="font-size: var(--font-size-sm);">${i + 1}. ${q.title}</span>
+                        <span class="badge ${badgeClass}">${itemScore}/6</span>
+                    </div>
+                `;
+            });
+            itemDetails += '</div>';
+
+            // Recommandations
+            let recommendationsHTML = '';
+            if (recommendations.length > 0) {
+                recommendationsHTML = '<h3 style="margin-top: 1.5rem; margin-bottom: 1rem;">Recommandations thérapeutiques :</h3>';
+                recommendations.forEach(rec => {
+                    let boxClass = 'info-box';
+                    if (rec.priority === 'URGENTE') boxClass = 'danger-box';
+                    else if (rec.priority === 'Élevée') boxClass = 'warning-box';
+
+                    recommendationsHTML += `
+                        <div class="${boxClass}" style="margin-bottom: 0.75rem;">
+                            <h4 style="margin-bottom: 0.5rem;">${rec.title} <span class="badge badge-${rec.priority === 'URGENTE' ? 'danger' : rec.priority === 'Élevée' ? 'warning' : 'primary'}" style="font-size: 0.7rem;">${rec.priority}</span></h4>
+                            <p style="margin: 0; font-size: var(--font-size-sm);">${rec.action}</p>
+                        </div>
+                    `;
+                });
+            }
+
+            detailsContent.innerHTML = itemDetails + recommendationsHTML;
+        }
+
+        function toggleDetails() {
+            const content = document.getElementById('detailsContent');
+            const icon = document.getElementById('toggleIcon');
+            const isVisible = content.style.display !== 'none';
+
+            content.style.display = isVisible ? 'none' : 'block';
+            icon.innerHTML = isVisible ? '<i class="fas fa-chevron-down"></i>' : '<i class="fas fa-chevron-up"></i>';
+        }
+
+        function resetForm() {
+            answers = new Array(10).fill(null);
+
+            document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+            document.querySelectorAll('.question-card').forEach(card => card.classList.remove('answered'));
+
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('detailsContent').style.display = 'none';
+            document.getElementById('exportConsent').checked = false;
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function importData() {
+            document.getElementById('fileInput').click();
+        }
+
+        function loadFile(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        if (data.answers && Array.isArray(data.answers)) {
+                            answers = data.answers;
+
+                            answers.forEach((value, index) => {
+                                if (value !== null) {
+                                    selectAnswer(index, value);
+                                }
+                            });
+                        }
+                    } catch (error) {
+                        alert("Erreur lors de l'importation du fichier");
+                    }
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        function exportData() {
+            const consent = document.getElementById('exportConsent').checked;
+            if (!consent) {
+                alert("Veuillez cocher la case de consentement avant d''exporter.");
+                return;
+            }
+
+            const score = calculateScore();
+            const interpretation = getInterpretation(score);
+
+            const data = {
+                questionnaire: "MADRS",
+                version: "Montgomery-Asberg Depression Rating Scale",
+                date: new Date().toISOString(),
+                answers: answers,
+                itemScores: questions.map((q, i) => ({
+                    item: i + 1,
+                    title: q.title,
+                    score: answers[i]
+                })),
+                totalScore: score,
+                maxScore: 60,
+                interpretation: interpretation.level,
+                severity: interpretation.className
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `MADRS_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeQuestions();
+        });
+    </script>
+</body>
+</html>

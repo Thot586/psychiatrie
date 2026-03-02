@@ -2,193 +2,968 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Chosen Palette: Harmonie Sereine (Fonds neutres en pierre, accents de sarcelle et d'ambre) -->
-    <!-- Application Structure Plan: La structure reste un tableau de bord thématique. -->
-    <!-- Visualization & Content Choices: 
-    -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <meta nâme="viewport" content="width=device-width, initial-scale=1.0">
     <title>Analyse des Effets Contextuels en Médecine et Psychiatrie</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.tailwindcss.com/3.4.1?plugins=typography"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
+        /* Override primary color to teal — scoped to body, not :root */
+        body.light-questionnaire {
+            --color-primary: #14b8a6;
+            --color-primary-dark: #0d9488;
+            --color-primary-light: #2dd4bf;
+            --color-primary-glow: rgba(20, 184, 166, 0.15);
+            --color-border-active: rgba(20, 184, 166, 0.3);
+        }
+
         body { font-family: 'Inter', sans-serif; }
-        .chart-container { position: relative; width: 100%; max-width: 300px; margin-left: auto; margin-right: auto; height: 300px; }
-        .nav-link { transition: all 0.3s ease; border-bottom: 2px solid transparent; }
-        .nav-link.active { border-bottom-color: #0d9488; color: #0f766e; }
-        .content-section { display: none; }
-        .content-section.active { display: block; animation: fadeIn 0.5s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .interactive-diagram-button.active { background-color: #0f766e; color: white; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); }
-        .modal { transition: opacity 0.25s ease; }
-        .modal-active { display: flex; }
-        .modal-content-body { animation: scaleIn 0.3s ease-out; }
-        @keyframes scaleIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+        }
+
+        /* Sections styling - scroll-based navigation */
+        section {
+            padding-top: 4rem;
+            padding-bottom: 4rem;
+            position: relative;
+            scroll-margin-top: 80px;
+        }
+
+        section:nth-of-type(odd) {
+            background: var(--surface-section-a);
+        }
+
+        section:nth-of-type(even) {
+            background: var(--surface-section-b);
+        }
+
+        body {
+            scroll-behavior: smooth;
+        }
+
+        /* Interactive Mechanism Buttons */
+        .interactive-diagram-button {
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-full);
+            font-weight: 600;
+            font-size: var(--font-size-sm);
+            color: var(--color-text-muted);
+            background: var(--surface-input);
+            border: 1px solid var(--color-border);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .interactive-diagram-button:hover {
+            background: rgba(20, 184, 166, 0.2);
+            border-color: var(--color-primary);
+            color: var(--color-primary-light);
+        }
+
+        .interactive-diagram-button.active {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+            color: white;
+            border-color: var(--color-primary);
+            box-shadow: 0 4px 15px rgba(20, 184, 166, 0.3);
+        }
+
+        /* Modal Styles */
+        .modal {
+            transition: opacity 0.25s ease;
+        }
+
+        .modal-active {
+            display: flex;
+        }
+
+        .modal-content-body {
+            animation: scaleIn 0.3s ease-out;
+        }
+
+        @keyfrâmes scaleIn {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        /* Cultural Cards */
+        .culture-card {
+            background: var(--surface-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .culture-card::after {
+            content: '\f054';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--color-primary);
+            opacity: 0.5;
+            transition: all 0.3s ease;
+        }
+
+        .culture-card:hover {
+            border-color: var(--color-primary);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4), 0 0 20px rgba(20, 184, 166, 0.1);
+        }
+
+        .culture-card:hover::after {
+            opacity: 1;
+            right: 0.75rem;
+        }
+
+        .culture-card h4 {
+            color: var(--accent-teal);
+            margin-bottom: 0.5rem;
+            padding-right: 1.5rem;
+        }
+
+        .culture-card .region {
+            color: var(--accent-amber);
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+        }
+
+        .culture-card .click-hint {
+            display: block;
+            margin-top: 0.75rem;
+            font-size: 0.75rem;
+            color: var(--color-text-dimmed);
+            font-style: italic;
+            transition: color 0.3s ease;
+        }
+
+        .culture-card:hover .click-hint {
+            color: var(--color-primary-light);
+        }
+
+        /* Glossary Entry */
+        .glossary-entry {
+            background: var(--surface-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .glossary-entry h4 {
+            color: var(--accent-teal);
+            font-size: var(--font-size-base);
+            margin-bottom: 0.5rem;
+        }
+
+        .glossary-entry p {
+            color: var(--color-text-muted);
+            font-size: var(--font-size-sm);
+            margin: 0;
+        }
+
+        /* Tables */
+        .dark-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--surface-table);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+        }
+
+        .dark-table th {
+            background: var(--surface-table-header);
+            color: var(--color-text-primary);
+            font-weight: 600;
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .dark-table td {
+            padding: 1rem;
+            color: var(--color-text-muted);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .dark-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .dark-table tr:hover td {
+            background: rgba(20, 184, 166, 0.05);
+        }
+
+        /* Teal highlight boxes */
+        .teal-highlight {
+            background: linear-gradient(145deg, rgba(20, 184, 166, 0.1), rgba(20, 184, 166, 0.05));
+            border: 1px solid rgba(20, 184, 166, 0.3);
+            border-left: 4px solid var(--color-primary);
+            border-radius: var(--radius-md);
+            padding: 1rem 1.25rem;
+        }
+
+        .teal-highlight strong {
+            color: var(--accent-teal);
+        }
+
+        /* Amber/Warning boxes for dark theme */
+        .amber-box {
+            background: var(--surface-amber);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+        }
+
+        .amber-box h4 {
+            color: var(--accent-amber);
+        }
+
+        .amber-box p {
+            color: var(--color-text-muted);
+        }
+
+        /* Red/Danger boxes for dark theme */
+        .red-box {
+            background: var(--surface-red);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+        }
+
+        .red-box h3, .red-box h4 {
+            color: var(--accent-red);
+        }
+
+        .red-box p, .red-box li {
+            color: var(--color-text-muted);
+        }
+
+        /* Green boxes */
+        .green-box {
+            background: var(--surface-green);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+        }
+
+        .green-box span {
+            color: var(--accent-green);
+        }
+
+        /* Yellow boxes */
+        .yellow-box {
+            background: var(--surface-yellow);
+            border: 1px solid rgba(234, 179, 8, 0.3);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+        }
+
+        .yellow-box span {
+            color: var(--accent-yellow);
+        }
+
+        /* Orange boxes */
+        .orange-box {
+            background: var(--surface-orange);
+            border: 1px solid rgba(249, 115, 22, 0.3);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+        }
+
+        .orange-box span {
+            color: var(--accent-orange);
+        }
+
+        /* Stone/Neutral boxes */
+        .stone-box {
+            background: var(--surface-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+        }
+
+        /* Mechanism text container */
+        .mechanism-text {
+            background: var(--surface-inset);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            min-height: 180px;
+            transition: all 0.3s ease;
+        }
+
+        .mechanism-text h4 {
+            color: var(--accent-teal);
+            font-size: var(--font-size-lg);
+            margin-bottom: 0.5rem;
+        }
+
+        /* References list */
+        .references-list {
+            background: var(--surface-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            max-height: 65vh;
+            overflow-y: auto;
+        }
+
+        .references-list p {
+            color: var(--color-text-muted);
+            font-size: var(--font-size-sm);
+            margin-bottom: 0.75rem;
+            line-height: 1.6;
+        }
+
+        .references-list em {
+            color: var(--color-text-secondary);
+        }
+
+        /* Practice cards */
+        .practice-card {
+            background: var(--surface-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .practice-card.teal-border {
+            border: 2px solid var(--color-primary);
+            box-shadow: 0 0 20px rgba(20, 184, 166, 0.1);
+        }
+
+        .practice-card.red-border {
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .practice-card h3 {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .practice-card .subtitle {
+            text-align: center;
+            color: var(--color-text-dimmed);
+            font-size: var(--font-size-sm);
+            margin-bottom: 1.5rem;
+        }
+
+        .practice-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .practice-card li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            color: var(--color-text-muted);
+        }
+
+        .practice-card li .icon {
+            font-size: 1.5rem;
+            line-height: 1;
+        }
+
+        .practice-card li .icon.teal {
+            color: var(--color-primary-light);
+        }
+
+        .practice-card li .icon.red {
+            color: var(--accent-red);
+        }
+
+        /* Ethical red boxes */
+        .ethical-box {
+            background: var(--surface-red);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: var(--radius-lg);
+            padding: 1rem;
+        }
+
+        .ethical-box p {
+            color: var(--accent-red);
+            font-weight: 600;
+            margin: 0;
+        }
+
+        /* Questions list */
+        .questions-list {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+            color: var(--color-text-secondary);
+        }
+
+        .questions-list li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Grid layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+        }
+
+        .grid-5 {
+            display: grid;
+            grid-template-columns: 2fr 3fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 1024px) {
+            .grid-2, .grid-3, .grid-4, .grid-5 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            nav { display: none !important; }
+            body { background: white !important; }
+            .content-section { display: block !important; }
+            .navigation-bar { display: none !important; }
+        }
+
+        /* Main container */
+        .main-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Header section */
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-header h1 {
+            font-size: var(--font-size-4xl);
+            color: var(--accent-teal);
+            margin-bottom: 0.75rem;
+        }
+
+        .page-header p {
+            font-size: var(--font-size-lg);
+            color: var(--color-text-muted);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Section titles */
+        .section-title {
+            font-size: var(--font-size-3xl);
+            color: var(--accent-teal);
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: var(--font-size-2xl);
+            color: var(--color-text-primary);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        /* Content cards */
+        .content-card {
+            background: var(--surface-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .content-card:hover {
+            border-color: var(--color-border-hover);
+        }
+
+        .content-card h4 {
+            color: var(--color-text-primary);
+            font-size: var(--font-size-lg);
+            margin-bottom: 0.5rem;
+        }
+
+        .content-card p {
+            color: var(--color-text-muted);
+            font-size: var(--font-size-sm);
+            margin: 0;
+        }
+
+        /* Chart cards */
+        .chart-card {
+            background: var(--surface-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-xl);
+            padding: 1.5rem;
+        }
+
+        .chart-card h3 {
+            text-align: center;
+            color: var(--color-text-secondary);
+            font-size: var(--font-size-xl);
+            margin-bottom: 1rem;
+        }
+
+        .chart-card .chart-note {
+            text-align: center;
+            color: var(--color-text-dimmed);
+            font-size: var(--font-size-sm);
+            margin-top: 1rem;
+        }
+
+        /* Max widths */
+        .max-w-4xl {
+            max-width: 56rem;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .max-w-5xl {
+            max-width: 64rem;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Spacing */
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .mb-8 { margin-bottom: 2rem; }
+        .mb-12 { margin-bottom: 3rem; }
+        .mb-16 { margin-bottom: 4rem; }
+        .mt-6 { margin-top: 1.5rem; }
+        .mt-12 { margin-top: 3rem; }
+        .mt-16 { margin-top: 4rem; }
+
+        /* Text alignment */
+        .text-center { text-align: center; }
+        .text-left { text-align: left; }
+
+        /* Flex utilities */
+        .flex-center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .flex-wrap {
+            flex-wrap: wrap;
+        }
+
+        .gap-2 { gap: 0.5rem; }
+        .gap-4 { gap: 1rem; }
+        .gap-6 { gap: 1.5rem; }
+        .gap-8 { gap: 2rem; }
+
+        /* Prose styling for modal content */
+        .prose p {
+            margin-bottom: 1rem;
+            line-height: 1.7;
+        }
+
+        .prose strong {
+            color: var(--color-text-primary);
+        }
+
+        /* Sidebar Navigation */
+        .sidebar-nav {
+            position: fixed;
+            left: 0;
+            top: 60px;
+            width: 220px;
+            height: calc(100vh - 60px);
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.98), rgba(30, 41, 59, 0.98));
+            border-right: 1px solid var(--color-border);
+            padding: 1rem 0;
+            overflow-y: auto;
+            z-index: 100;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-nav li {
+            margin: 0;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.25rem;
+            color: var(--color-text-muted);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-nav a:hover {
+            background: rgba(20, 184, 166, 0.1);
+            color: var(--color-text-primary);
+            border-left-color: var(--color-primary);
+        }
+
+        .sidebar-nav a.active {
+            background: rgba(20, 184, 166, 0.15);
+            color: var(--color-primary-light);
+            border-left-color: var(--color-primary);
+            font-weight: 500;
+        }
+
+        .sidebar-nav a i {
+            width: 18px;
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--color-primary-light);
+            opacity: 0.7;
+        }
+
+        .sidebar-nav a:hover i,
+        .sidebar-nav a.active i {
+            opacity: 1;
+        }
+
+        .sidebar-toggle {
+            display: none;
+            position: fixed;
+            left: 10px;
+            top: 70px;
+            z-index: 101;
+            background: var(--color-primary);
+            border: none;
+            border-radius: var(--radius-md);
+            padding: 0.5rem 0.75rem;
+            color: white;
+            cursor: pointer;
+        }
+
+        .main-container {
+            margin-left: 220px;
+            transition: margin-left 0.3s ease;
+        }
+
+        @media (max-width: 1024px) {
+            .sidebar-nav {
+                transform: translateX(-100%);
+            }
+            .sidebar-nav.open {
+                transform: translateX(0);
+            }
+            .sidebar-toggle {
+                display: block;
+            }
+            .main-container {
+                margin-left: 0;
+            }
+        }
+
+        /* Citation links */
+        .cite-link {
+            color: var(--color-primary-light);
+            text-decoration: none;
+            cursor: pointer;
+            border-bottom: 1px dotted var(--color-primary-light);
+            transition: all 0.2s ease;
+        }
+
+        .cite-link:hover {
+            color: var(--color-primary);
+            border-bottom-style: solid;
+        }
+
+        /* Reference items with anchors */
+        .ref-item {
+            scroll-margin-top: 100px;
+            padding: 0.5rem 0.75rem;
+            border-radius: var(--radius-md);
+            transition: background 0.3s ease;
+        }
+
+        .ref-item:target,
+        .ref-item.highlighted {
+            background: rgba(20, 184, 166, 0.2);
+            border-left: 3px solid var(--color-primary);
+        }
+
+        .ref-item .ref-actions {
+            display: inline-flex;
+            gap: 0.5rem;
+            margin-left: 0.5rem;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .ref-item:hover .ref-actions {
+            opacity: 1;
+        }
+
+        .ref-action-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            background: rgba(20, 184, 166, 0.2);
+            color: var(--color-primary-light);
+            text-decoration: none;
+            font-size: 0.75rem;
+            transition: all 0.2s ease;
+        }
+
+        .ref-action-btn:hover {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        /* Reference external links */
+        .ref-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            height: 22px;
+            margin-left: 0.5rem;
+            border-radius: 4px;
+            background: rgba(20, 184, 166, 0.15);
+            color: var(--color-primary-light);
+            text-decoration: none;
+            font-size: 0.7rem;
+            transition: all 0.2s ease;
+            vertical-align: middle;
+        }
+
+        .ref-link:hover {
+            background: var(--color-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* Citation back-link marker */
+        .cite-marker {
+            scroll-margin-top: 100px;
+        }
+
+        .cite-marker.highlighted {
+            background: rgba(20, 184, 166, 0.2);
+            padding: 0.25rem;
+            border-radius: var(--radius-sm);
+        }
+
+        /* Print styles update */
+        @media print {
+            .sidebar-nav, .sidebar-toggle { display: none !important; }
+            .main-container { margin-left: 0 !important; }
+        }
     </style>
 </head>
-<body class="bg-stone-50 text-slate-800 antialiased">
+<body class="light-questionnaire">
 
-    <div id="app" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+    <!-- Navigation Bar -->
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+            <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+        </div>
+        <h1>Effets Contextuels</h1>
+        <button onclick="window.print()" class="btn-secondary" style="padding: 0.5rem 1rem;">
+            <i class="fas fa-print"></i> Imprimer
+        </button>
+    </nav>
 
-        <header class="text-center mb-12 md:mb-16">
-            <h1 class="text-4xl md:text-5xl font-bold text-teal-900 mb-3">Analyse des Effets Contextuels en Médecine</h1>
-            <p class="text-lg text-slate-600 max-w-3xl mx-auto">Synthèse des mécanismes, implications cliniques et enjeux transculturels.</p>
+    <button class="sidebar-toggle" onclick="toggleSidebar()" title="Menu">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <nav class="sidebar-nav" id="sidebar">
+        <ul>
+            <li><a href="#introduction"><i class="fas fa-book-open"></i> Introduction</a></li>
+            <li><a href="#mechanisms"><i class="fas fa-cogs"></i> Mécanismes</a></li>
+            <li><a href="#culture"><i class="fas fa-globe-africa"></i> Dimension Culturelle</a></li>
+            <li><a href="#practice"><i class="fas fa-stethoscope"></i> Pratique Clinique</a></li>
+            <li><a href="#resources"><i class="fas fa-bookmark"></i> Ressources</a></li>
+        </ul>
+    </nav>
+
+    <div class="main-container">
+
+        <header class="page-header">
+            <h1>Analyse des Effets Contextuels en Médecine</h1>
+            <p>Synthèse des mécanismes, implications cliniques et enjeux transculturels.</p>
         </header>
-
-        <nav class="relative flex justify-center border-b border-slate-200 mb-12 md:mb-16" aria-label="Navigation principale">
-            <!-- Logo Maison positionné à gauche -->
-            <div class="absolute left-0 inset-y-0 flex items-center">
-                 <a href="https://thot586.github.io/psychiatrie/" aria-label="Retour à la page d'accueil" class="text-slate-500 hover:text-teal-700 transition-colors p-2 rounded-full hover:bg-slate-100">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
-                    </svg>
-                </a>
-            </div>
-            <!-- Conteneur flex pour les boutons de navigation, pour les garder centrés -->
-            <div class="flex flex-wrap justify-center">
-                <button data-target="introduction" class="nav-link active font-semibold py-4 px-5 text-slate-600 hover:text-teal-700">Introduction</button>
-                <button data-target="mechanisms" class="nav-link font-semibold py-4 px-5 text-slate-600 hover:text-teal-700">Mécanismes</button>
-                <button data-target="culture" class="nav-link font-semibold py-4 px-5 text-slate-600 hover:text-teal-700">Dimension Culturelle</button>
-                <button data-target="practice" class="nav-link font-semibold py-4 px-5 text-slate-600 hover:text-teal-700">Pratique Clinique</button>
-                <button data-target="resources" class="nav-link font-semibold py-4 px-5 text-slate-600 hover:text-teal-700">Ressources</button>
-            </div>
-        </nav>
 
         <main>
             <!-- Section Introduction -->
-            <section id="introduction" class="content-section active">
-                <div class="max-w-4xl mx-auto mb-12">
-                    <h2 class="text-3xl font-bold text-teal-800 mb-4 text-center">Problématique et Intérêt pour le Patient</h2>
-                    <p class="text-slate-700 leading-relaxed text-left mb-6">
-                        Le soin est bien plus qu'une intervention technique. La relation, les attentes, le cadre et les rituels sont des composantes actives de la guérison. Cependant, une approche biomédicale stricte peut négliger l'expérience vécue du patient, définie par l'OMS comme un état de bien-être qui n'est pas seulement l'absence de maladie (WHO, 1948). Ignorer le contexte social et personnel peut mener à des soins perçus comme impersonnels et moins efficaces.
+            <section id="introduction">
+                <div class="max-w-4xl mb-12">
+                    <h2 class="section-title">Problématique et Intérêt pour le Patient</h2>
+                    <p class="text-left mb-6" style="color: var(--color-text-muted); line-height: 1.7;">
+                        Le soin est bien plus qu'une intervention technique. La relation, les attentes, le cadre et les rituels sont des composantés actives de la guérison. Cependant, une approche biomedicale stricte peut négliger l'expérience vécue du patient, définie par l'OMS comme un état de bien-être qui n'est pas seulement l'absence de maladie (WHO, 1948). Ignorer le contexte social et personnel peut mener a des soins percus comme impersonnels et moins efficaces.
                     </p>
-                    <p class="text-slate-700 leading-relaxed text-left bg-teal-50 border-l-4 border-teal-500 p-4 rounded-r-lg">
-                        <strong>L'enjeu pour le patient est majeur :</strong> comprendre et maîtriser les effets contextuels permet de passer d'une posture de soin passive à un partenariat thérapeutique actif. Pour les cliniciens, cela signifie mobiliser éthiquement ces leviers pour renforcer l'alliance, améliorer l'observance et optimiser les résultats. Pour les patients, c'est l'opportunité de voir leur expérience (leur <em>illness</em>) et leur rôle social (leur <em>sickness</em>) reconnus comme parties intégrantes du processus de guérison.
-                    </p>
+                    <div class="teal-highlight">
+                        <strong>L'enjeu pour le patient est majeur :</strong> comprendre et maîtriser les effets contextuels permet de passer d'une posture de soin passive a un partenariat thérapeutique actif. Pour les cliniciens, cela signifie mobiliser éthiquement ces leviers pour renforcer l'alliance, améliorer l'observance et optimiser les résultats. Pour les patients, c'est l'opportunite de voir leur expérience (leur <em>illness</em>) et leur rôle social (leur <em>sickness</em>) reconnus comme parties intégrantes du processus de guérison.
+                    </div>
                 </div>
 
-                <div class="max-w-5xl mx-auto mb-16">
-                    <h3 class="text-2xl font-bold text-center text-teal-800 mb-8">Définitions Fondamentales</h3>
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div class="bg-white p-6 rounded-lg shadow-md">
-                            <h4 class="font-semibold text-lg text-slate-800 mb-2">Effet Placebo vs. Réponse Placebo</h4>
-                            <p class="text-sm text-slate-600">L'<strong>effet placebo</strong> est le changement psychobiologique réel attribuable aux attentes positives (Colloca & Barsky, 2020). La <strong>réponse placebo</strong> est le changement global observé, qui inclut l'effet placebo mais aussi l'évolution naturelle de la maladie et d'autres facteurs non spécifiques (Cashin et al., 2024).</p>
+                <div class="max-w-5xl mb-16">
+                    <h3 class="section-subtitle">Définitions Fondâmentales</h3>
+                    <div class="grid-2 mb-6">
+                        <div class="content-card">
+                            <h4>Effet Placebo vs. Réponse Placebo</h4>
+                            <p>L'<strong>effet placebo</strong> est le changement psychobiologique réel attribuable aux attentes positives (Colloca & Barsky, 2020). La <strong>réponse placebo</strong> est le changement global observé, qui inclut l'effet placebo mais aussi l'évolution naturelle de la maladie et d'autres facteurs non spécifiques (Cashin et al., 2024).</p>
                         </div>
-                        <div class="bg-white p-6 rounded-lg shadow-md">
-                            <h4 class="font-semibold text-lg text-slate-800 mb-2">Effet Nocebo</h4>
-                            <p class="text-sm text-slate-600">C'est le phénomène inverse : une conséquence négative (ex: douleur accrue) déclenchée par des attentes péjoratives concernant un traitement, même inerte (Colloca & Barsky, 2020).</p>
+                        <div class="content-card">
+                            <h4>Effet Nocebo</h4>
+                            <p>C'est le phénomène inverse : une consequence negative (ex: douleur accrue) déclenchée par des attentes péjoratives concernant un traitement, même inerte (Colloca & Barsky, 2020).</p>
                         </div>
-                        <div class="bg-white p-6 rounded-lg shadow-md md:col-span-2">
-                             <h4 class="font-semibold text-lg text-slate-800 mb-2">Effets Contextuels</h4>
-                            <p class="text-sm text-slate-600">Terme large englobant tous les facteurs du soin au-delà de l'intervention spécifique : la chaleur du soignant, la réputation de l'hôpital, le rituel de soin. L'effet placebo est une composante des effets contextuels (Di Blasi et al., 2001; Kaptchuk et al., 2008).</p>
+                    </div>
+                    <div class="content-card">
+                        <h4>Effets Contextuels</h4>
+                        <p>Terme large englobant tous les facteurs du soin au-delà de l'intervention spécifique : la chaleur du soignant, la réputation de l'hôpital, le rituel de soin. L'effet placebo est une composanté des effets contextuels (Di Blasi et al., 2001; Kaptchuk et al., 2008).</p>
+                    </div>
+                </div>
+
+                <div class="max-w-5xl mb-16">
+                    <h3 class="section-subtitle">Les Trois Dimensions de la Maladie</h3>
+                    <div class="grid-3">
+                        <div class="amber-box text-center">
+                            <h4>Disease</h4>
+                            <p>L'anomalie biologique. La perspective du médecin (Eisenberg, 1977).</p>
+                        </div>
+                        <div class="amber-box text-center">
+                            <h4>Illness</h4>
+                            <p>L'expérience subjective, vécue. La perspective du patient (Eisenberg, 1977).</p>
+                        </div>
+                        <div class="amber-box text-center">
+                            <h4>Sickness</h4>
+                            <p>Le rôle social de la personne malade. La perspective de la société (Eisenberg, 1977).</p>
                         </div>
                     </div>
                 </div>
-                
-                <div class="max-w-5xl mx-auto mb-16">
-                     <h3 class="text-2xl font-bold text-center text-teal-800 mb-8">Les Trois Dimensions de la Maladie</h3>
-                     <div class="grid md:grid-cols-3 gap-4 text-center">
-                        <div class="bg-amber-50 p-4 rounded-lg border border-amber-200">
-                             <h4 class="font-semibold text-amber-900">Disease</h4>
-                             <p class="text-sm text-amber-800">L'anomalie biologique. La perspective du médecin (Eisenberg, 1977).</p>
-                        </div>
-                         <div class="bg-amber-50 p-4 rounded-lg border border-amber-200">
-                             <h4 class="font-semibold text-amber-900">Illness</h4>
-                             <p class="text-sm text-amber-800">L'expérience subjective, vécue. La perspective du patient (Eisenberg, 1977).</p>
-                        </div>
-                         <div class="bg-amber-50 p-4 rounded-lg border border-amber-200">
-                             <h4 class="font-semibold text-amber-900">Sickness</h4>
-                             <p class="text-sm text-amber-800">Le rôle social de la personne malade. La perspective de la société (Eisenberg, 1977).</p>
-                        </div>
-                     </div>
-                </div>
-                
-                <div class="grid md:grid-cols-2 gap-12 items-center mb-16">
-                    <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-100">
-                        <h3 class="text-xl font-semibold text-center text-slate-700 mb-4">Impact des Effets Contextuels en Psychiatrie</h3>
+
+                <div class="grid-2 gap-8 mb-16">
+                    <div class="chart-card">
+                        <h3>Impact des Effets Contextuels en Psychiatrie</h3>
                         <div class="chart-container">
                             <canvas id="placeboChart"></canvas>
                         </div>
-                         <p class="text-center text-sm text-slate-500 mt-4">Dans les essais sur les antidépresseurs, la réponse au placebo peut représenter <strong>30 à 45%</strong> de l'effet total (Furukawa et al., 2016).</p>
+                        <p class="chart-note">Dans les essais sur les antidepresseurs, la réponse au placebo peut représenter <strong>30 a 45%</strong> de l'effet total (Furukawa et al., 2016).</p>
                     </div>
-                    <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-100">
-                        <h3 class="text-xl font-semibold text-center text-slate-700 mb-4">Impact des Effets Contextuels en Médecine</h3>
-                         <div class="chart-container">
+                    <div class="chart-card">
+                        <h3>Impact des Effets Contextuels en Médecine</h3>
+                        <div class="chart-container">
                             <canvas id="contextChart"></canvas>
                         </div>
-                        <p class="text-center text-sm text-slate-500 mt-4">Dans l'arthrose du genou, <strong>75%</strong> de l'amélioration de la douleur est attribuable aux effets contextuels (Zou et al., 2016).</p>
+                        <p class="chart-note">Dans l'arthrose du genou, <strong>75%</strong> de l'âmelioration de la douleur est attribuable aux effets contextuels (Zou et al., 2016).</p>
                     </div>
                 </div>
 
-                <div class="max-w-5xl mx-auto">
-                    <h2 class="text-3xl font-bold text-teal-800 mb-8 text-center">Nuances & Lignes Rouges : Articuler Biomédical et Contextuel</h2>
-                    
-                    <div class="bg-red-50 border-l-4 border-red-500 p-6 rounded-r-lg mb-8">
-                        <h3 class="text-xl font-bold text-red-800 mb-3">Primauté du Biomédical : Situations Non Négociables</h3>
-                        <p class="text-red-700 mb-4">Dans certaines situations, l'approche biomédicale est prioritaire et vitale. Tenter de la remplacer par une approche uniquement contextuelle serait une faute professionnelle grave.</p>
-                        <ul class="list-disc list-inside space-y-2 text-red-900">
-                            <li><strong>Urgences vitales :</strong> Infarctus du myocarde, AVC, traumatisme grave, intoxication aiguë. La rapidité et la technicité du soin priment (par ex., thrombolyse, chirurgie) (Thygesen et al., 2018).</li>
-                            <li><strong>Maladies infectieuses à potentiel épidémique :</strong> Les antibiotiques pour les infections bactériennes sévères ou la vaccination pour la prévention des épidémies (ex: rougeole) relèvent de la santé publique et ne sont pas optionnels (Fine et al., 2011).</li>
-                            <li><strong>Troubles psychiatriques aigus avec perte de jugement :</strong> Dans une phase aiguë de psychose avec perte de contact avec la réalité ou risque imminent pour le patient ou autrui, un traitement pharmacologique rapide est indispensable pour assurer la sécurité et permettre l'accès à d'autres soins (Gaebel et al., 2021).</li>
+                <div class="max-w-5xl">
+                    <h2 class="section-title mb-8">Nuances & Lignes Rouges : Articuler Biomedical et Contextuel</h2>
+
+                    <div class="red-box mb-8">
+                        <h3 class="mb-4"><i class="fas fa-exclamation-triangle" style="margin-right: 0.5rem;"></i>Primauté du Biomedical : Situations Non Négociables</h3>
+                        <p class="mb-4">Dans certaines situations, l'approche biomedicale est prioritaire et vitale. Tenter de la remplacer par une approche uniquement contextuelle serait une faute professionnelle grave.</p>
+                        <ul style="list-style: disc; padding-left: 1.5rem;">
+                            <li class="mb-2"><strong style="color: #f87171;">Urgences vitales :</strong> Infarctus du myocarde, AVC, traumatisme grave, intoxication aigue. La rapidite et la technicité du soin priment (par ex., thrombolyse, chirurgie) (Thygesen et al., 2018).</li>
+                            <li class="mb-2"><strong style="color: #f87171;">Maladies infectieuses a potentiel épidémique :</strong> Les antibiotiques pour les infections bactériennes sévères ou la vaccination pour la prévention des épidémies (ex: rougeole) relèvent de la santé publique et ne sont pas optionnels (Fine et al., 2011).</li>
+                            <li><strong style="color: #f87171;">Troubles psychiatriques aigus avec perte de jugement :</strong> Dans une phase aigue de psychose avec perte de contact avec la réalité ou risque imminent pour le patient ou autrui, un traitement pharmacologique rapide est indispensable pour assurer la sécurité et permettre l'acces a d'autres soins (Gaebel et al., 2021).</li>
                         </ul>
                     </div>
 
-                    <div class="bg-stone-100 p-6 rounded-lg">
-                        <h3 class="text-xl font-bold text-teal-800 mb-3">Domaines d'Intégration Contextuelle</h3>
-                        <p class="text-slate-700 mb-4">Dans de nombreuses affection, notamment chroniques, l'articulation entre le biomédical et le contextuel est la clé. L'un ne remplace pas l'autre, ils se potentialisent mutuellement.</p>
-                        <div class="space-y-3">
-                            <div class="flex items-start p-3 bg-green-100 border border-green-200 rounded-md">
-                                <span class="text-green-600 font-bold mr-3">✔</span>
-                                <p class="text-sm text-green-800"><strong>Maladies chroniques stabilisées (diabète, HTA...) :</strong> L'éducation thérapeutique, le soutien à l'observance et le renforcement de l'alliance (effets contextuels) sont aussi importants que la prescription pharmacologique elle-même.</p>
+                    <div class="stone-box">
+                        <h3 style="color: var(--color-primary-light); margin-bottom: 1rem;">Domaines d'Integration Contextuelle</h3>
+                        <p class="mb-4" style="color: var(--color-text-muted);">Dans de nombreuses affection, notamment chroniques, l'articulation entre le biomedical et le contextuel est la cle. L'un ne remplace pas l'autre, ils se potentialisent mutuellement.</p>
+                        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            <div class="green-box" style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                                <span style="font-weight: bold; font-size: 1.25rem;">&#10004;</span>
+                                <p style="margin: 0;"><strong>Maladies chroniques stabilisées (diabete, HTA...) :</strong> L'éducation thérapeutique, le soutien a l'observance et le renforcement de l'alliance (effets contextuels) sont aussi importants que la prescription pharmacologique elle-même.</p>
                             </div>
-                             <div class="flex items-start p-3 bg-yellow-100 border border-yellow-200 rounded-md">
-                                <span class="text-yellow-600 font-bold mr-3">!</span>
-                                <p class="text-sm text-yellow-800"><strong>Douleurs chroniques non cancéreuses :</strong> Le contexte (attentes, relation thérapeutique) module puissamment la perception de la douleur. Les approches non pharmacologiques (TCC, hypnose, méditation) sont centrales mais ne doivent pas retarder un diagnostic étiologique (Colloca et al., 2017).</p>
+                            <div class="yellow-box" style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                                <span style="font-weight: bold; font-size: 1.25rem;">!</span>
+                                <p style="margin: 0;"><strong>Douleurs chroniques non cancéreuses :</strong> Le contexte (attentes, relation thérapeutique) module puissamment la perception de la douleur. Les approches non pharmacologiques (TCC, hypnose, meditation) sont centrales mais ne doivent pas retarder un diagnostic étiologique (Colloca et al., 2017).</p>
                             </div>
-                             <div class="flex items-start p-3 bg-orange-100 border border-orange-200 rounded-md">
-                                <span class="text-orange-600 font-bold mr-3">⚠</span>
-                                <p class="text-sm text-orange-800"><strong>Focus sur le spectre de la schizophrénie :</strong> Une approche intégrée est indispensable. Le tableau ci-dessous détaille la complémentarité des approches.</p>
+                            <div class="orange-box" style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                                <span style="font-weight: bold; font-size: 1.25rem;">&#9888;</span>
+                                <p style="margin: 0;"><strong>Focus sur le spectre de la schizophrenie :</strong> Une approche intégrée est indispensable. Le tableau ci-dessous détaille la complémentarité des approches.</p>
                             </div>
                         </div>
 
-                        <div class="mt-6 overflow-x-auto">
-                             <table class="min-w-full bg-white border border-gray-200 text-sm">
-                                <thead class="bg-gray-50">
+                        <div class="mt-6" style="overflow-x: auto;">
+                            <table class="dark-table">
+                                <thead>
                                     <tr>
-                                        <th class="p-3 font-semibold text-left">Approche</th>
-                                        <th class="p-3 font-semibold text-left">Rôle et Place</th>
-                                        <th class="p-3 font-semibold text-left">Source Clé</th>
+                                        <th>Approche</th>
+                                        <th>Role et Place</th>
+                                        <th>Source Cle</th>
                                     </tr>
                                 </thead>
-                                <tbody class="divide-y divide-gray-200">
+                                <tbody>
                                     <tr>
-                                        <td class="p-3 font-medium text-teal-700">Traitement Pharmacologique</td>
-                                        <td class="p-3">Essentiel pour gérer les symptômes positifs (délire, hallucinations), surtout en phase aiguë. La décision d'arrêt ou de réduction se fait en collaboration.</td>
-                                        <td class="p-3 italic">Leucht et al. (2017)</td>
+                                        <td style="color: var(--color-primary-light); font-weight: 500;">Traitement Pharmacologique</td>
+                                        <td>Essentiel pour gérer les symptômes positifs (délire, hallucinations), surtout en phase aigue. La décision d'arrêt ou de réduction se fait en collaboration.</td>
+                                        <td style="font-style: italic;">Leucht et al. (2013)</td>
                                     </tr>
                                     <tr>
-                                        <td class="p-3 font-medium text-teal-700">Thérapies Psychosociales (TCCp, Psychoéducation)</td>
-                                        <td class="p-3">Aident à gérer les symptômes résiduels, à comprendre la maladie, à prévenir les rechutes et à améliorer le fonctionnement.</td>
-                                        <td class="p-3 italic">Jauhar et al. (2014)</td>
+                                        <td style="color: var(--color-primary-light); font-weight: 500;">Therapies Psychosociales (TCCp, Psychoéducation)</td>
+                                        <td>Aident a gérer les symptômes résiduels, a comprendre la maladie, a prévenir les rechutes et a améliorer le fonctionnement.</td>
+                                        <td style="font-style: italic;">Jauhar et al. (2014)</td>
                                     </tr>
                                     <tr>
-                                        <td class="p-3 font-medium text-teal-700">Remédiation Cognitive & Entraînement aux Habiletés Sociales</td>
-                                        <td class="p-3">Ciblent les déficits cognitifs et sociaux pour améliorer l'autonomie et la qualité de vie.</td>
-                                        <td class="p-3 italic">Wykes et al. (2011)</td>
-                                    </tr>
-                                     <tr>
-                                        <td class="p-3 font-medium text-teal-700">Approches centrées sur l'expérience des voix (ex: Dialogue avec les voix)</td>
-                                        <td class="p-3">Visent à changer la relation de la personne à ses voix, en réduisant la détresse et en trouvant un sens à l'expérience, plutôt qu'en visant uniquement leur élimination.</td>
-                                        <td class="p-3 italic">Romme & Escher (2000)</td>
+                                        <td style="color: var(--color-primary-light); font-weight: 500;">Remédiation Cognitive & Entrainement aux Habiletes Sociales</td>
+                                        <td>Ciblent les déficits cognitifs et sociaux pour améliorer l'autonomie et la qualite de vie.</td>
+                                        <td style="font-style: italic;">Wykes et al. (2011)</td>
                                     </tr>
                                     <tr>
-                                        <td class="p-3 font-medium text-teal-700">Soutien social, Rituels, Croyances</td>
-                                        <td class="p-3">Le soutien de la communauté et les cadres de sens culturels (prière, rituels) peuvent être une ressource majeure pour le patient, à condition qu'ils n'interfèrent pas avec les soins nécessaires.</td>
-                                         <td class="p-3 italic">Eack & Newhill (2007)</td>
+                                        <td style="color: var(--color-primary-light); font-weight: 500;">Approches centrées sur l'expérience des voix (ex: Dialogue avec les voix)</td>
+                                        <td>Visent a changer la relation de la personne a ses voix, en réduisant la détresse et en trouvant un sens a l'expérience, plutôt qu'en visant uniquement leur élimination.</td>
+                                        <td style="font-style: italic;">Romme & Escher (2000)</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color: var(--color-primary-light); font-weight: 500;">Soutien social, Rituels, Croyances</td>
+                                        <td>Le soutien de la communaute et les cadres de sens culturels (prière, rituels) peuvent etre une ressource majeure pour le patient, a condition qu'ils n'interfèrent pas avec les soins nécessaires.</td>
+                                        <td style="font-style: italic;">Eack & Newhill (2007)</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -198,125 +973,133 @@
             </section>
 
             <!-- Section Mécanismes -->
-            <section id="mechanisms" class="content-section">
-                 <div class="text-center max-w-4xl mx-auto mb-16">
-                    <h2 class="text-3xl font-bold text-teal-800 mb-4">La Biologie de la Croyance</h2>
-                    <p class="text-slate-700 leading-relaxed">
+            <section id="mechanisms">
+                <div class="text-center max-w-4xl mb-16">
+                    <h2 class="section-title">La Biologie de la Croyance</h2>
+                    <p style="color: var(--color-text-muted); line-height: 1.7;">
                         Les effets contextuels ne sont pas imaginaires ; ils déclenchent des cascades neurobiologiques et psychologiques réelles et mesurables. Cette section détaille comment les attentes et le conditionnement se traduisent en changements concrets dans l'organisme, via des mécanismes neurobiologiques et psychologiques distincts.
                     </p>
                 </div>
 
-                <div class="grid lg:grid-cols-2 gap-12">
-                    <div class="bg-white p-8 rounded-xl shadow-lg border border-slate-100">
-                        <h3 class="text-2xl font-semibold mb-6 text-center text-slate-700">La Pharmacie Interne du Cerveau</h3>
-                        <div class="flex justify-center space-x-2 mb-6 flex-wrap gap-2">
-                             <button data-mechanism-group="neuro" data-mechanism="opioid" class="interactive-diagram-button active text-sm font-semibold bg-slate-200 text-slate-700 px-4 py-2 rounded-full transition hover:bg-teal-600 hover:text-white">Opioïdes</button>
-                             <button data-mechanism-group="neuro" data-mechanism="dopamine" class="interactive-diagram-button text-sm font-semibold bg-slate-200 text-slate-700 px-4 py-2 rounded-full transition hover:bg-teal-600 hover:text-white">Dopamine</button>
-                             <button data-mechanism-group="neuro" data-mechanism="pni" class="interactive-diagram-button text-sm font-semibold bg-slate-200 text-slate-700 px-4 py-2 rounded-full transition hover:bg-teal-600 hover:text-white">PNI</button>
+                <div class="grid-2 gap-8">
+                    <div class="chart-card">
+                        <h3>La Pharmacie Interne du Cerveau</h3>
+                        <div class="flex-center flex-wrap gap-2 mb-6">
+                            <button data-mechanism-group="neuro" data-mechanism="opioid" class="interactive-diagram-button active">Opioides</button>
+                            <button data-mechanism-group="neuro" data-mechanism="dopamine" class="interactive-diagram-button">Dopamine</button>
+                            <button data-mechanism-group="neuro" data-mechanism="pni" class="interactive-diagram-button">PNI</button>
                         </div>
-                        <div id="neuro-text" class="text-slate-600 min-h-[180px] p-4 bg-stone-50 rounded-lg transition-all duration-300">
-                            <h4 class="font-bold text-teal-700 text-lg mb-2">Le système opioïdergique :</h4>
-                            <p>Activé par les attentes de soulagement de la douleur. Le cerveau libère ses propres "morphines" (endorphines), ce qui explique l'analgésie placebo. Cet effet peut être bloqué par la naloxone (Amanzio & Benedetti, 1999).</p>
+                        <div id="neuro-text" class="mechanism-text">
+                            <h4>Le système opioïdergique :</h4>
+                            <p style="color: var(--color-text-muted);">Active par les attentes de soulagement de la douleur. Le cerveau libère ses propres "morphines" (endorphines), ce qui explique l'analgésie placebo. Cet effet peut etre bloqué par la naloxone (Amanzio & Benedetti, 1999).</p>
                         </div>
                     </div>
-                     <div class="bg-white p-8 rounded-xl shadow-lg border border-slate-100">
-                        <h3 class="text-2xl font-semibold mb-6 text-center text-slate-700">Les Engrenages de l'Esprit</h3>
-                         <div class="flex justify-center space-x-2 mb-6 flex-wrap gap-2">
-                             <button data-mechanism-group="psycho" data-mechanism="expectations" class="interactive-diagram-button active text-sm font-semibold bg-slate-200 text-slate-700 px-4 py-2 rounded-full transition hover:bg-teal-600 hover:text-white">Attentes</button>
-                             <button data-mechanism-group="psycho" data-mechanism="conditioning" class="interactive-diagram-button text-sm font-semibold bg-slate-200 text-slate-700 px-4 py-2 rounded-full transition hover:bg-teal-600 hover:text-white">Conditionnement</button>
-                             <button data-mechanism-group="psycho" data-mechanism="meaning" class="interactive-diagram-button text-sm font-semibold bg-slate-200 text-slate-700 px-4 py-2 rounded-full transition hover:bg-teal-600 hover:text-white">Construction de sens</button>
+                    <div class="chart-card">
+                        <h3>Les Engrenages de l'Esprit</h3>
+                        <div class="flex-center flex-wrap gap-2 mb-6">
+                            <button data-mechanism-group="psycho" data-mechanism="expectations" class="interactive-diagram-button active">Attentes</button>
+                            <button data-mechanism-group="psycho" data-mechanism="conditioning" class="interactive-diagram-button">Conditionnement</button>
+                            <button data-mechanism-group="psycho" data-mechanism="meaning" class="interactive-diagram-button">Construction de sens</button>
                         </div>
-                         <div id="psycho-text" class="text-slate-600 min-h-[180px] p-4 bg-stone-50 rounded-lg transition-all duration-300">
-                             <h4 class="font-bold text-teal-700 text-lg mb-2">Les attentes et la suggestion :</h4>
-                             <p>Le mécanisme le plus puissant. Les informations verbales et non-verbales créent des attentes qui activent directement les circuits de la récompense et de la modulation de la douleur (Kirsch, 1985).</p>
+                        <div id="psycho-text" class="mechanism-text">
+                            <h4>Les attentes et la suggestion :</h4>
+                            <p style="color: var(--color-text-muted);">Le mécanisme le plus puissant. Les informations verbales et non-verbales créent des attentes qui activent directement les circuits de la récompense et de la modulation de la douleur (Kirsch, 1985).</p>
                         </div>
                     </div>
                 </div>
             </section>
 
             <!-- Section Culture -->
-            <section id="culture" class="content-section">
-                <div class="text-center max-w-4xl mx-auto mb-16">
-                    <h2 class="text-3xl font-bold text-teal-800 mb-4">Cartographie Culturelle de la Souffrance</h2>
-                    <p class="text-slate-700 leading-relaxed">
-                        La maladie est une expérience universelle, mais la manière de la vivre et de lui donner un sens est profondément culturelle. Chaque société développe ses propres "idiomes de détresse". Les présentations suivantes illustrent comment différentes cultures conçoivent et répondent à la souffrance psychique.
+            <section id="culture">
+                <div class="text-center max-w-4xl mb-16">
+                    <h2 class="section-title">Cartographie Culturelle de la Souffrance</h2>
+                    <p style="color: var(--color-text-muted); line-height: 1.7;">
+                        La maladie est une expérience universelle, mais la maniere de la vivre et de lui donner un sens est profondement culturelle. Chaque société développe ses propres "idiomes de détresse". Les presentations suivantes illustrent comment différentes cultures conçoivent et répondent a la souffrance psychique.
                     </p>
                 </div>
-                <div id="culture-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- Les cartes culturelles seront insérées ici par JS -->
+                <div id="culture-grid" class="grid-3 gap-6">
+                    <!-- Les cartes culturelles seront inserees ici par JS -->
                 </div>
             </section>
 
             <!-- Section Pratique -->
-            <section id="practice" class="content-section">
-                 <div class="text-center max-w-4xl mx-auto mb-16">
-                    <h2 class="text-3xl font-bold text-teal-800 mb-4">De la Théorie à l'Action Clinique</h2>
-                     <p class="text-slate-700 leading-relaxed">
-                        L'intégration de ces connaissances dans la pratique quotidienne n'implique pas l'abandon de la science, mais son enrichissement par une posture de réflexivité et d'humilité. L'objectif est une médecine scientifiquement rigoureuse, humainement humble et culturellement informée.
+            <section id="practice">
+                <div class="text-center max-w-4xl mb-16">
+                    <h2 class="section-title">De la Théorie a l'Action Clinique</h2>
+                    <p style="color: var(--color-text-muted); line-height: 1.7;">
+                        L'integration de ces connaissances dans la pratique quotidienne n'implique pas l'abandon de la science, mais son enrichissement par une posture de réflexivité et d'humilité. L'objectif est une médecine scientifiquement rigoureuse, humainement humble et culturellement informée.
                     </p>
                 </div>
-                 <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-                     <div class="bg-white p-8 rounded-xl shadow-lg border-2 border-teal-500">
-                         <h3 class="text-xl font-bold text-center text-teal-800 mb-4">À Adopter : L'Humilité Culturelle</h3>
-                         <p class="text-sm text-center text-slate-500 mb-6">Un processus dynamique et un engagement à vie (Tervalon & Murray-Garcia, 1998).</p>
-                        <ul class="space-y-4 text-slate-600">
-                            <li class="flex items-start"><span class="text-teal-600 mr-3 text-2xl leading-none" title="Valider">&#10003;</span><span>Auto-évaluation constante de ses propres biais.</span></li>
-                            <li class="flex items-start"><span class="text-teal-600 mr-3 text-2xl leading-none" title="Valider">&#10003;</span><span>Correction des déséquilibres de pouvoir inhérents à la relation de soin.</span></li>
-                            <li class="flex items-start"><span class="text-teal-600 mr-3 text-2xl leading-none" title="Valider">&#10003;</span><span>Le patient est l'expert de sa propre expérience et de sa culture.</span></li>
+                <div class="grid-2 gap-8 max-w-5xl">
+                    <div class="practice-card teal-border">
+                        <h3 style="color: var(--color-primary-light);"><i class="fas fa-check-circle" style="margin-right: 0.5rem;"></i>A Adopter : L'Humilité Culturelle</h3>
+                        <p class="subtitle">Un processus dynamique et un engagement a vie (Tervalon & Murray-Garcia, 1998).</p>
+                        <ul>
+                            <li><span class="icon teal">&#10003;</span><span>Auto-evaluation constante de ses propres biais.</span></li>
+                            <li><span class="icon teal">&#10003;</span><span>Correction des déséquilibres de pouvoir inhérents a la relation de soin.</span></li>
+                            <li><span class="icon teal">&#10003;</span><span>Le patient est l'expert de sa propre expérience et de sa culture.</span></li>
                         </ul>
                     </div>
-                    <div class="bg-white p-8 rounded-xl shadow-lg border border-red-200">
-                        <h3 class="text-xl font-bold text-center text-red-800 mb-4">À Éviter : La Compétence Culturelle</h3>
-                        <p class="text-sm text-center text-slate-500 mb-6">Une "check-list" de faits sur une culture.</p>
-                        <ul class="space-y-4 text-slate-600">
-                            <li class="flex items-start"><span class="text-red-500 mr-3 text-2xl leading-none" title="Rejeter">&times;</span><span>Risque de stéréotypes et de simplification abusive.</span></li>
-                            <li class="flex items-start"><span class="text-red-500 mr-3 text-2xl leading-none" title="Rejeter">&times;</span><span>Crée un faux sentiment de maîtrise et clôt le dialogue.</span></li>
-                            <li class="flex items-start"><span class="text-red-500 mr-3 text-2xl leading-none" title="Rejeter">&times;</span><span>Positionne le clinicien en "expert" de la culture de l'autre.</span></li>
+                    <div class="practice-card red-border">
+                        <h3 style="color: #f87171;"><i class="fas fa-times-circle" style="margin-right: 0.5rem;"></i>A Éviter : La Compétence Culturelle</h3>
+                        <p class="subtitle">Une "check-list" de faits sur une culture.</p>
+                        <ul>
+                            <li><span class="icon red">&times;</span><span>Risque de stéréotypes et de simplification abusive.</span></li>
+                            <li><span class="icon red">&times;</span><span>Cree un faux sentiment de maîtrise et clot le dialogue.</span></li>
+                            <li><span class="icon red">&times;</span><span>Positionne le clinicien en "expert" de la culture de l'autre.</span></li>
                         </ul>
                     </div>
                 </div>
-                <div class="mt-12 bg-stone-100 p-8 rounded-lg max-w-5xl mx-auto">
-                    <h3 class="text-xl font-bold text-slate-800 mb-4">Comment éliciter le modèle du patient ?</h3>
-                    <p class="text-slate-600 mb-4">L'anthropologue Arthur Kleinman propose une série de questions ouvertes pour explorer respectueusement l'expérience du patient (Kleinman et al., 1978). L'objectif n'est pas de "corriger" ses croyances mais de négocier un plan de soin partagé. Exemples :</p>
-                    <ul class="list-disc list-inside space-y-2 text-slate-700">
-                        <li>"Quel nom donnez-vous à votre problème ?"</li>
-                        <li>"Qu'est-ce qui, selon vous, a causé ce problème ?"</li>
+                <div class="mt-12 stone-box max-w-5xl">
+                    <h3 style="color: var(--color-text-primary); margin-bottom: 1rem;"><i class="fas fa-comment-medical" style="color: var(--color-primary-light); margin-right: 0.5rem;"></i>Comment éliciter le modèle du patient ?</h3>
+                    <p style="color: var(--color-text-muted); margin-bottom: 1rem;">L'anthropologue Arthur Kleinman propose une série de questions ouvertes pour explorer respectueusement l'expérience du patient (Kleinman et al., 1978). L'objectif n'est pas de "corriger" ses croyances mais de négocier un plan de soin partagé. Exemples :</p>
+                    <ul class="questions-list">
+                        <li>"Quel nom donnez-vous a votre problème ?"</li>
+                        <li>"Qu'est-ce qui, selon vous, a cause ce problème ?"</li>
                         <li>"Quelles sont vos plus grandes craintes concernant cette maladie ?"</li>
                         <li>"Quel type de traitement pensez-vous devoir recevoir ?"</li>
                     </ul>
                 </div>
-                <div class="mt-16 max-w-5xl mx-auto">
-                     <h3 class="text-2xl font-bold text-center text-slate-800 mb-6">Les Lignes Rouges Éthiques</h3>
-                    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 text-center">
-                        <div class="bg-red-100 border border-red-200 p-4 rounded-lg"><p class="font-semibold text-red-800">Ne jamais abandonner la rigueur scientifique.</p></div>
-                        <div class="bg-red-100 border border-red-200 p-4 rounded-lg"><p class="font-semibold text-red-800">Ne jamais cautionner des pratiques nuisibles.</p></div>
-                        <div class="bg-red-100 border border-red-200 p-4 rounded-lg"><p class="font-semibold text-red-800">Ne jamais utiliser la tromperie ou la manipulation.</p></div>
-                        <div class="bg-red-100 border border-red-200 p-4 rounded-lg"><p class="font-semibold text-red-800">Ne jamais ignorer les injustices structurelles.</p></div>
+                <div class="mt-16 max-w-5xl">
+                    <h3 class="section-subtitle"><i class="fas fa-ban" style="color: #f87171; margin-right: 0.5rem;"></i>Les Lignes Rouges Éthiques</h3>
+                    <div class="grid-4 gap-4">
+                        <div class="ethical-box text-center">
+                            <p>Ne jamais abandonner la rigueur scientifique.</p>
+                        </div>
+                        <div class="ethical-box text-center">
+                            <p>Ne jamais cautionner des pratiques nuisibles.</p>
+                        </div>
+                        <div class="ethical-box text-center">
+                            <p>Ne jamais utiliser la tromperie ou la manipulation.</p>
+                        </div>
+                        <div class="ethical-box text-center">
+                            <p>Ne jamais ignorer les injustices structurelles.</p>
+                        </div>
                     </div>
                 </div>
             </section>
 
             <!-- Section Ressources -->
-            <section id="resources" class="content-section">
-                <div class="text-center max-w-4xl mx-auto mb-12">
-                    <h2 class="text-3xl font-bold text-teal-800 mb-4">Ressources : Glossaire et Bibliographie</h2>
-                    <p class="text-slate-700 leading-relaxed">
-                       Cette section présente les définitions des concepts clés ainsi que la bibliographie qui a servi de base à ce document.
+            <section id="resources">
+                <div class="text-center max-w-4xl mb-12">
+                    <h2 class="section-title">Ressources : Glossaire et Bibliographie</h2>
+                    <p style="color: var(--color-text-muted); line-height: 1.7;">
+                        Cette section présente les définitions des concepts cles ainsi que la bibliographie qui a servi de base a ce document.
                     </p>
                 </div>
-                <div class="grid lg:grid-cols-5 gap-8">
-                    <div class="lg:col-span-2">
-                        <h3 class="text-2xl font-semibold mb-4 text-slate-700">Glossaire</h3>
-                        <input type="text" id="glossary-search" placeholder="Rechercher un terme..." class="mb-4 w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:outline-none">
-                        <div id="glossary-list" class="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
-                            <!-- Le glossaire sera inséré ici par JS -->
+                <div class="grid-5 gap-8">
+                    <div>
+                        <h3 style="color: var(--color-text-secondary); margin-bottom: 1rem;"><i class="fas fa-book" style="color: var(--color-primary-light); margin-right: 0.5rem;"></i>Glossaire</h3>
+                        <input type="text" id="glossary-search" placeholder="Rechercher un terme..." class="input mb-4">
+                        <div id="glossary-list" style="max-height: 60vh; overflow-y: auto; padding-right: 0.5rem;">
+                            <!-- Le glossaire sera insere ici par JS -->
                         </div>
                     </div>
-                    <div class="lg:col-span-3">
-                         <h3 class="text-2xl font-semibold mb-4 text-slate-700">Bibliographie</h3>
-                         <div id="references-list" class="bg-white p-6 rounded-lg shadow-sm border border-slate-100 text-sm space-y-3 max-h-[65vh] overflow-y-auto prose prose-sm">
-                            <!-- Les références seront insérées ici par JS -->
-                         </div>
+                    <div>
+                        <h3 style="color: var(--color-text-secondary); margin-bottom: 1rem;"><i class="fas fa-file-alt" style="color: var(--color-primary-light); margin-right: 0.5rem;"></i>Bibliographie</h3>
+                        <div id="references-list" class="references-list">
+                            <!-- Les references seront inserees ici par JS -->
+                        </div>
                     </div>
                 </div>
             </section>
@@ -324,129 +1107,191 @@
     </div>
 
     <!-- Modale pour la culture -->
-    <div id="culture-modal" class="modal fixed inset-0 bg-black bg-opacity-70 items-center justify-center p-4 hidden z-50">
-        <div class="modal-content-body bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto" id="modal-content-wrapper">
-            <div class="p-6 sm:p-8">
-                <div class="flex justify-between items-start mb-4">
-                    <h3 id="modal-title" class="text-2xl font-bold text-teal-800"></h3>
-                    <button id="modal-close" class="text-3xl text-slate-500 hover:text-slate-800 leading-none">&times;</button>
+    <div id="culture-modal" class="modal fixed inset-0 bg-black bg-opacity-70 items-center justify-center p-4 hidden z-50" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; padding: 1rem; z-index: 1000;">
+        <div class="modal-content-body" id="modal-content-wrapper" style="background: linear-gradient(145deg, var(--color-bg-dark-secondary), var(--color-bg-dark)); border: 1px solid var(--color-border); border-radius: var(--radius-xl); width: 100%; max-width: 42rem; max-height: 90vh; overflow-y: auto;">
+            <div style="padding: 1.5rem 2rem;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                    <h3 id="modal-title" style="font-size: var(--font-size-2xl); color: var(--color-primary-light);"></h3>
+                    <button id="modal-close" style="font-size: 2rem; color: var(--color-text-dimmed); background: none; border: none; cursor: pointer; line-height: 1;">&times;</button>
                 </div>
-                <p id="modal-region" class="text-sm font-semibold text-amber-600 mb-4"></p>
-                <div id="modal-content" class="text-slate-700 prose prose-slate"></div>
+                <p id="modal-region" style="font-size: var(--font-size-sm); font-weight: 600; color: #fbbf24; margin-bottom: 1rem;"></p>
+                <div id="modal-content" class="prose" style="color: var(--color-text-muted);"></div>
             </div>
         </div>
     </div>
 
-     <footer class="bg-slate-900 text-slate-300 text-sm border-t border-slate-700 py-6 px-4">
-        <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center md:items-start justify-between gap-6">
-    
-        <!-- LOGO GAUCHE : VINATIER -->
-        <div class="flex-shrink-0">
-          <a href="https://www.ch-le-vinatier.fr" target="_blank" rel="noopener noreferrer">
-            <img class="h-20 md:h-24 w-auto"
-                 src="https://d2q79iu7y748jz.cloudfront.net/s/_squarelogo/256x256/e079f7cf4939908ea9a07ce40d529d0b"
-                 alt="Logo Centre Hospitalier Le Vinatier">
-          </a>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-logos">
+            <a href="https://www.ch-le-vinatier.fr" target="_blank" rel="noopener noreferrer">
+                <img src="../images/logos/vinatier.png" alt="Logo Centre Hospitalier Le Vinatier" style="height: 60px;">
+            </a>
+            <a href="https://www.facebook.com/Psykozy?locale=fr_FR" target="_blank" rel="noopener noreferrer">
+                <img src="../images/logos/psykozy.png" alt="Logo Psy-kozy" style="height: 50px;">
+            </a>
+            <a href="https://centre-ressource-rehabilitation.org" target="_blank" rel="noopener noreferrer">
+                <img src="../images/logos/crr.jpg" alt="Logo Centre Ressource Réhabilitation" style="height: 50px;">
+            </a>
         </div>
-    
-        <!-- TEXTE CENTRAL -->
-        <div class="flex-1 text-center md:text-left space-y-2">
         <p>Dr FENOHASINA T.J. Felicien (Psychiatre - FFI) ;</p>
         <p>SIMON Antoine (Sociologue - Ingénieur Hospitalier) ;</p>
         <p>GAUDELUS Baptiste (Infirmier en Pratique Avancée).</p>
-        <div class="flex items-center justify-center md:justify-start gap-2">
-         <img class="h-5 w-auto"
-               src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Cc-by-nc-sa_icon.svg/120px-Cc-by-nc-sa_icon.svg.png"
-               alt="Icône Creative Commons BY-NC-SA">
-           <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr"
-           target="_blank" rel="noopener noreferrer"
-           class="underline hover:text-white">Licence CC BY-NC-SA 4.0</a> –
-         Dernière mise à jour : 21 juin 2025.
-          </div>
-        </div>
-    
-    
-        <!-- LOGOS DROITS : CRR -->
-        <div class="flex items-center gap-6 flex-shrink-0">
-          <a href="https://www.facebook.com/Psykozy?locale=fr_FR" target="_blank" rel="noopener noreferrer">
-            <img class="h-16 md:h-20 w-auto" 
-                 src="https://cdn-assets.inwink.com/fe065c87-0643-42fc-8b5d-4d94b5d12c11/a1904f78-1bca-466d-a9f4-8ac9fde06c0c"
-                 alt="Logo Psy-kôzy">
-          </a>
-          <a href="https://centre-ressource-rehabilitation.org" target="_blank" rel="noopener noreferrer">
-            <img class="h-16 md:h-20 w-auto"
-                 src="https://faustinebrunet.com/images/RS/creation-nouveau-logo-domaine-sante-mentale.jpg"
-                 alt="Logo Centre Ressource Réhabilitation">
-          </a>
-    
-        </div>
-    
-      </div>
+        <p style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-top: 0.5rem;">
+            <img src="../images/icons/cc-by-nc-sa.png" alt="Icône Creative Commons BY-NC-SA" style="height: 20px;">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr" target="_blank" rel="noopener noreferrer">Licence CC BY-NC-SA 4.0</a> - Dernière mise a jour : 21 juin 2025.
+        </p>
     </footer>
 
     <script>
+    // Sidebar toggle function
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('open');
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
         // --- DATA ---
         const placeboData = {
-            labels: ['Réponse Placebo', 'Effet Actif du Médicament'],
-            datasets: [{ data: [40, 60], backgroundColor: ['#fbbf24', '#14b8a6'], borderColor: '#f8fafc', borderWidth: 4 }]
+            labels: ['Réponse Placebo', 'Effet Actif du Médicâment'],
+            datasets: [{
+                data: [40, 60],
+                backgroundColor: ['#fbbf24', '#14b8a6'],
+                borderColor: 'rgba(15, 23, 42, 0.8)',
+                borderWidth: 3
+            }]
         };
         const contextData = {
             labels: ['Effets Contextuels', 'Effet Spécifique du Traitement'],
-            datasets: [{ data: [75, 25], backgroundColor: ['#fbbf24', '#14b8a6'], borderColor: '#f8fafc', borderWidth: 4 }]
+            datasets: [{
+                data: [75, 25],
+                backgroundColor: ['#fbbf24', '#14b8a6'],
+                borderColor: 'rgba(15, 23, 42, 0.8)',
+                borderWidth: 3
+            }]
         };
         const chartOptions = {
-            responsive: true, maintainAspectRatio: false, cutout: '70%',
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '70%',
             plugins: {
-                legend: { position: 'bottom', labels: { font: { size: 14, family: 'Inter' }, color: '#475569' } },
-                tooltip: { bodyFont: { family: 'Inter' }, titleFont: { family: 'Inter' } }
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        font: { size: 13, family: 'Inter' },
+                        color: '#94a3b8',
+                        padding: 15
+                    }
+                },
+                tooltip: {
+                    bodyFont: { family: 'Inter' },
+                    titleFont: { family: 'Inter' },
+                    backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                    borderColor: 'rgba(255, 255, 255, 0.1)',
+                    borderWidth: 1
+                }
             }
         };
 
         const mechanismsContent = {
             neuro: {
-                opioid: { title: 'Le système opioïdergique :', text: 'Activé par les attentes de soulagement de la douleur. Le cerveau libère ses propres "morphines" (endorphines), ce qui explique l\'analgésie placebo. Cet effet peut être bloqué par la naloxone (Amanzio & Benedetti, 1999).' },
-                dopamine: { title: 'Le système dopaminergique :', text: 'Fondamental pour la récompense et l\'anticipation. Un placebo peut déclencher une libération de dopamine chez les patients parkinsoniens, améliorant leurs symptômes moteurs en réponse à l\'attente d\'un bénéfice (Benedetti et al., 2011).' },
-                pni: { title: 'L\'axe Psycho-Neuro-Immunologique (PNI) :', text: 'La réduction du stress par un contexte de soin positif peut diminuer le cortisol et moduler la réponse immunitaire. Une immunosuppression peut même être "apprise" par conditionnement (Ader & Cohen, 1982).' }
+                opioid: { title: 'Le système opioïdergique :', text: 'Active par les attentes de soulagement de la douleur. Le cerveau libère ses propres "morphines" (endorphines), ce qui explique l\'analgésie placebo. Cet effet peut etre bloqué par la naloxone (Amanzio & Benedetti, 1999).' },
+                dopamine: { title: 'Le système dopaminergique :', text: 'Fondâmental pour la récompense et l\'anticipation. Un placebo peut déclencher une libération de dopamine chez les patients parkinsoniens, améliorant leurs symptômes moteurs en réponse a l\'attente d\'un bénéfice (Benedetti et al., 2011).' },
+                pni: { title: 'L\'axe Psycho-Neuro-Immunologique (PNI) :', text: 'La réduction du stress par un contexte de soin positif peut diminuer le cortisol et moduler la réponse immunitaire. Une immunosuppression peut même etre "apprise" par conditionnement (Ader & Cohen, 1982).' }
             },
             psycho: {
                 expectations: { title: 'Les attentes et la suggestion :', text: 'Le mécanisme le plus puissant. Les informations verbales et non-verbales créent des attentes qui activent directement les circuits cérébraux de la récompense et de la modulation de la douleur (Kirsch, 1985).' },
-                conditioning: { title: 'Le conditionnement (classique et opérant) :', text: 'L\'association répétée d\'un stimulus neutre (ex: une pilule) avec un médicament actif peut conférer au stimulus seul la capacité de déclencher une réponse physiologique similaire (Moerman, 2002).' },
-                meaning: { title: 'La construction de sens (meaning-making) :', text: 'Le rituel de soin fournit un cadre interprétatif qui transforme une expérience chaotique en un problème gérable. Donner un sens à la souffrance la rend plus supportable (Moerman, 2002).' }
+                conditioning: { title: 'Le conditionnement (classique et opérant) :', text: 'L\'association répétée d\'un stimulus neutre (ex: une pilule) avec un médicâment actif peut conférer au stimulus seul la capacité de déclencher une réponse physiologique similaire (Moerman, 2002).' },
+                meaning: { title: 'La construction de sens (meaning-making) :', text: 'Le rituel de soin fournit un cadre interprétatif qui transforme une expérience chaotique en un problème gérable. Donner un sens a la souffrance la rend plus supportable (Moerman, 2002).' }
             }
         };
-        
+
         const culturalData = [
             {
-                id: 'zar', title: 'Zār / Possession par les esprits', region: 'Afrique du Nord/Est, Moyen-Orient',
-                content: `<p><strong>Manifestations :</strong> Épisodes dissociatifs, changements de conscience. La souffrance est attribuée à une entité externe (Helman, 1978).</p><p><strong>Bénéfices Potentiels :</strong> Fournit une explication cohérente, déculpabilise l'individu et mobilise un rituel de guérison communautaire.</p><p><strong>Risques & Limites :</strong> Retard de soins pour des pathologies biologiques. Risque de diagnostic erroné de psychose.</p><p><strong>Implications Cliniques :</strong> Ne pas confronter directement le modèle, mais évaluer les risques et collaborer avec les guérisseurs traditionnels si possible.</p>`
+                id: 'zar', title: 'Zar / Possession par les esprits', region: 'Afrique du Nord/Est, Moyen-Orient',
+                content: `<p><strong>Manifestations :</strong> Episodes dissociatifs, changements de conscience. La souffrance est attribuée a une entité externe (Helman, 1978).</p><p><strong>Bénéfices Potentiels :</strong> Fournit une explication cohérente, déculpabilise l'individu et mobilise un rituel de guérison communautaire.</p><p><strong>Risques & Limites :</strong> Retard de soins pour des pathologies biologiques. Risque de diagnostic erroné de psychose.</p><p><strong>Implications Cliniques :</strong> Ne pas confronter directement le modèle, mais évaluer les risques et collaborer avec les guérisseurs traditionnels si possible.</p>`
             },
             {
                 id: 'susto', title: 'Susto ("Frayeur")', region: 'Amérique Latine',
-                content: `<p><strong>Manifestations :</strong> Perte d'appétit, apathie, faiblesse, troubles du sommeil. Lié à la croyance que l'âme a été effrayée et a quitté le corps suite à un événement traumatisant (Rubel et al., 1984).</p><p><strong>Bénéfices Potentiels :</strong> Reconnaît l'impact du trauma et légitime la souffrance qui en résulte, mobilisant des rituels de "rappel de l'âme".</p><p><strong>Risques & Limites :</strong> Peut masquer des affections médicales comme la malnutrition, l'anémie ou une dépression sévère.</p><p><strong>Implications Cliniques :</strong> Valider l'expérience traumatique du patient tout en réalisant un bilan médical complet pour exclure d'autres causes.</p>`
+                content: `<p><strong>Manifestations :</strong> Perte d'appétit, apathie, faiblesse, troubles du sommeil. Lié à la croyance que l'âme a ete effrayée et a quitté le corps suite a un évènement traumatisant (Rubel et al., 1984).</p><p><strong>Bénéfices Potentiels :</strong> Reconnait l'impact du trauma et légitime la souffrance qui en résulte, mobilisant des rituels de "rappel de l'âme".</p><p><strong>Risques & Limites :</strong> Peut masquer des affections medicales comme la malnutrition, l'anémie ou une dépression sévère.</p><p><strong>Implications Cliniques :</strong> Valider l'expérience traumatique du patient tout en réalisant un bilan medical complet pour exclure d'autres causes.</p>`
             },
             {
                 id: 'kufungisisa', title: 'Kufungisisa ("Penser trop")', region: 'Zimbabwe et autres régions d\'Afrique',
-                content: `<p><strong>Manifestations :</strong> Idiome de détresse pour l'anxiété, la dépression. Ruminations, soucis excessifs, symptômes somatiques (par ex. maux de tête) (Kirmayer & Bhugra, 2009).</p><p><strong>Bénéfices Potentiels :</strong> Langage culturellement accepté pour parler de la souffrance mentale sans terminologie stigmatisante.</p><p><strong>Risques & Limites :</strong> Risque de ne pas reconnaître la sévérité du trouble sous-jacent (ex: dépression majeure).</p><p><strong>Implications Cliniques :</strong> Reconnaître l'idiome comme un marqueur potentiel et explorer en profondeur l'impact fonctionnel.</p>`
+                content: `<p><strong>Manifestations :</strong> Idiome de détresse pour l'anxiété, la dépression. Ruminations, soucis excessifs, symptômes somatiques (par ex. maux de tête) (Kirmayer & Bhugra, 2009).</p><p><strong>Bénéfices Potentiels :</strong> Langage culturellement accepté pour parler de la souffrance mentale sans terminologie stigmatisanté.</p><p><strong>Risques & Limites :</strong> Risque de ne pas reconnaître la sévérité du trouble sous-jacent (ex: dépression majeure).</p><p><strong>Implications Cliniques :</strong> Reconnaître l'idiome comme un marqueur potentiel et explorer en profondeur l'impact fonctionnel.</p>`
             },
             {
                 id: 'taijin', title: 'Taijin Kyofusho', region: 'Japon, Corée',
-                content: `<p><strong>Manifestations :</strong> Anxiété sociale intense centrée sur la peur d'offenser ou de gêner les autres par son apparence, son odeur ou ses actions (Kirmayer, 1991).</p><p><strong>Bénéfices Potentiels :</strong> Reflète l'importance culturelle de l'harmonie sociale et de l'interdépendance.</p><p><strong>Risques & Limites :</strong> Peut mener à un isolement social sévère et être confondu avec un trouble d'anxiété sociale occidental, bien que le focus soit différent (peur de gêner autrui vs. peur d'être jugé).</p><p><strong>Implications Cliniques :</strong> Adapter les approches thérapeutiques (ex. TCC) pour aborder la peur d'offenser les autres plutôt que la seule peur du jugement personnel.</p>`
+                content: `<p><strong>Manifestations :</strong> Anxiété sociale intense centrée sur la peur d'offenser ou de gêner les autres par son apparence, son odeur ou ses actions (Kirmayer, 1991).</p><p><strong>Bénéfices Potentiels :</strong> Reflète l'importance culturelle de l'harmonie sociale et de l'interdépendance.</p><p><strong>Risques & Limites :</strong> Peut mener a un isolement social sévère et etre confondu avec un trouble d'anxiété sociale occidental, bien que le focus soit différent (peur de gêner autrui vs. peur d'etre jugé).</p><p><strong>Implications Cliniques :</strong> Adapter les approches thérapeutiques (ex. TCC) pour aborder la peur d'offenser les autres plutôt que la seule peur du jugement personnel.</p>`
             },
             {
                 id: 'harmonie', title: 'Harmonie & Équilibre', region: 'Cultures d\'Asie de l\'Est',
-                content: `<p><strong>Manifestations :</strong> La détresse est vue comme un déséquilibre (Yin/Yang). Tendance à la somatisation pour maintenir l'harmonie sociale (Kirmayer, 2001).</p><p><strong>Bénéfices Potentiels :</strong> Modèle holistique, forte valorisation du soutien familial.</p><p><strong>Risques & Limites :</strong> Stigmatisation de la recherche d'aide professionnelle (vue comme une "perte de face").</p><p><strong>Implications Cliniques :</strong> Être attentif aux plaintes somatiques, impliquer la famille, utiliser des approches valorisant l'équilibre.</p>`
+                content: `<p><strong>Manifestations :</strong> La détresse est vue comme un déséquilibre (Yin/Yang). Tendance a la somatisation pour maintenir l'harmonie sociale (Kirmayer, 2001).</p><p><strong>Bénéfices Potentiels :</strong> Modèle holistique, forte valorisation du soutien familial.</p><p><strong>Risques & Limites :</strong> Stigmatisation de la recherche d'aide professionnelle (vue comme une "perte de face").</p><p><strong>Implications Cliniques :</strong> Etre attentif aux plaintes somatiques, impliquer la famille, utiliser des approches valorisant l'équilibre.</p>`
             },
             {
                 id: 'ataque', title: 'Ataque de Nervios ("Attaque de nerfs")', region: 'Populations latino-américaines',
                 content: `<p><strong>Manifestations :</strong> Épisodes intenses de détresse émotionnelle (cris, pleurs), souvent déclenchés par un stress familial (American Psychiatric Association, 2013).</p><p><strong>Bénéfices Potentiels :</strong> Expression cathartique socialement comprise qui mobilise le soutien de l'entourage.</p><p><strong>Risques & Limites :</strong> Peut être confondu avec un trouble panique ou une épilepsie.</p><p><strong>Implications Cliniques :</strong> Ne pas pathologiser immédiatement. Resituer l'épisode dans son contexte culturel et évaluer les troubles sous-jacents une fois la crise passée.</p>`
+            },
+            {
+                id: 'amok', title: 'Amok', region: 'Malaisie, Indonésie, Philippines',
+                content: `<p><strong>Manifestations :</strong> Épisode dissociatif violent et soudain, caractérisé par un comportement agressif incontrôlable, souvent précédé d'une période de rumination (Simons & Hughes, 1985).</p><p><strong>Statut :</strong> <span style="color: #f87171;">Pathologique</span></p><p><strong>Risques & Limites :</strong> Danger immédiat pour le patient et autrui. Peut masquer une psychose, une intoxication ou un traumatisme crânien.</p><p><strong>Implications Cliniques :</strong> Évaluation de sécurité prioritaire. Diagnostic différentiel avec trouble explosif intermittent, psychose ou intoxication.</p>`
+            },
+            {
+                id: 'koro', title: 'Koro', region: 'Asie du Sud-Est, Chine',
+                content: `<p><strong>Manifestations :</strong> Peur intense et soudaine que les organes génitaux se rétractent dans le corps et que cela entraîne la mort. Peut survenir en épidémies (Tseng, 2006).</p><p><strong>Statut :</strong> <span style="color: #f87171;">Pathologique</span></p><p><strong>Risques & Limites :</strong> Anxiété extrême, comportements d'auto-mutilation pour "retenir" les organes.</p><p><strong>Implications Cliniques :</strong> Rassurance, psychoéducation. Exclure troubles anxieux, troubles psychotiques ou dysmorphophobie.</p>`
+            },
+            {
+                id: 'latah', title: 'Latah', region: 'Malaisie, Indonésie',
+                content: `<p><strong>Manifestations :</strong> Réponse de sursaut exagérée, avec écholalie, échopraxie et obéissance automatique. Plus fréquent chez les femmes d'âge moyen (Simons & Hughes, 1985).</p><p><strong>Statut :</strong> <span style="color: #f87171;">Pathologique</span></p><p><strong>Risques & Limites :</strong> Vulnérabilité à l'exploitation. Peut être déclenché intentionnellement par l'entourage.</p><p><strong>Implications Cliniques :</strong> Évaluation du contexte social. Diagnostic différentiel avec troubles dissociatifs ou neurologiques.</p>`
+            },
+            {
+                id: 'dhat', title: 'Dhat', region: 'Inde, Asie du Sud',
+                content: `<p><strong>Manifestations :</strong> Anxiété sévère liée à la croyance de perdre du sperme (par les urines, la nuit), associée à une fatigue intense, une faiblesse et des troubles de l'humeur (Tseng, 2006).</p><p><strong>Statut :</strong> <span style="color: #f87171;">Pathologique</span></p><p><strong>Risques & Limites :</strong> Isolement social, consultations médicales répétées, traitements inappropriés.</p><p><strong>Implications Cliniques :</strong> Psychoéducation sur la physiologie. Explorer anxiété sous-jacente, dépression ou TOC.</p>`
+            },
+            {
+                id: 'hikikomori', title: 'Hikikomori', region: 'Japon (puis mondial)',
+                content: `<p><strong>Manifestations :</strong> Retrait social prolongé (>6 mois), confinement au domicile, refus de participer à la vie sociale ou professionnelle. Touche principalement les jeunes adultes (Lee, 2001).</p><p><strong>Statut :</strong> <span style="color: #f87171;">Pathologique</span></p><p><strong>Risques & Limites :</strong> Détérioration du fonctionnement social, comorbidités psychiatriques fréquentes (dépression, phobie sociale).</p><p><strong>Implications Cliniques :</strong> Approche progressive, implication familiale, évaluation des comorbidités. Éviter la pression excessive.</p>`
+            },
+            {
+                id: 'hwabyung', title: 'Hwabyung ("Maladie de la colère")', region: 'Corée',
+                content: `<p><strong>Manifestations :</strong> Syndrome de somatisation lié à la suppression chronique de la colère. Symptômes : sensation de masse dans l'épigastre, chaleur, palpitations, insomnie (Kirmayer, 2001).</p><p><strong>Statut :</strong> <span style="color: #f87171;">Pathologique</span></p><p><strong>Risques & Limites :</strong> Chronicisation, comorbidité dépressive fréquente.</p><p><strong>Implications Cliniques :</strong> Valider l'expérience émotionnelle. Explorer les conflits interpersonnels. Thérapies axées sur l'expression émotionnelle.</p>`
+            },
+            {
+                id: 'shenjing', title: 'Shenjing Shuairuo (Neurasthénie)', region: 'Chine',
+                content: `<p><strong>Manifestations :</strong> Fatigue physique et mentale, troubles de la concentration, céphalées, troubles du sommeil, irritabilité. Terme encore largement utilisé en Chine (Lee, 2001).</p><p><strong>Statut :</strong> <span style="color: #f87171;">Pathologique</span></p><p><strong>Risques & Limites :</strong> Peut masquer une dépression majeure ou un trouble anxieux généralisé.</p><p><strong>Implications Cliniques :</strong> Utiliser le terme local pour établir l'alliance. Évaluation approfondie pour dépression/anxiété.</p>`
+            },
+            {
+                id: 'brainfag', title: 'Brain Fag', region: 'Afrique de l\'Ouest (Nigeria)',
+                content: `<p><strong>Manifestations :</strong> Syndrome d'épuisement mental chez les étudiants : difficultés de concentration, sensation de brûlure ou de pression dans la tête, vision floue (Kirmayer & Bhugra, 2009).</p><p><strong>Statut :</strong> <span style="color: #f87171;">Pathologique</span></p><p><strong>Risques & Limites :</strong> Échec scolaire, somatisation persistante.</p><p><strong>Implications Cliniques :</strong> Évaluer le stress académique et les attentes familiales. Techniques de gestion du stress.</p>`
+            },
+            {
+                id: 'pibloktoq', title: 'Pibloktoq (Hystérie arctique)', region: 'Peuples Inuit (Arctique)',
+                content: `<p><strong>Manifestations :</strong> Épisode dissociatif soudain avec comportement agité, cris, fuite dans le froid, déshabillage, parfois suivi d'amnésie (Simons & Hughes, 1985).</p><p><strong>Statut :</strong> <span style="color: #f87171;">Pathologique</span></p><p><strong>Risques & Limites :</strong> Danger d'hypothermie, blessures. Possibles carences nutritionnelles (vitamine A, calcium).</p><p><strong>Implications Cliniques :</strong> Sécurisation immédiate. Évaluation nutritionnelle et médicale complète.</p>`
+            },
+            {
+                id: 'nervios', title: 'Nervios', region: 'Amérique latine',
+                content: `<p><strong>Manifestations :</strong> État général de détresse avec symptômes somatiques variés (céphalées, tremblements, troubles digestifs), émotionnels (tristesse, irritabilité) et cognitifs (Kirmayer, 2001).</p><p><strong>Statut :</strong> <span style="color: #f87171;">Pathologique</span></p><p><strong>Risques & Limites :</strong> Terme très large pouvant masquer des troubles spécifiques (dépression, anxiété, TSPT).</p><p><strong>Implications Cliniques :</strong> Évaluation détaillée des symptômes. Ne pas se contenter du diagnostic de "nervios".</p>`
+            },
+            {
+                id: 'bouffee', title: 'Bouffée Délirante', region: 'Afrique de l\'Ouest, Caraïbes, France',
+                content: `<p><strong>Manifestations :</strong> Épisode psychotique bref et intense avec début brutal, symptômes polymorphes (hallucinations, délire), évolution favorable avec récupération complète (American Psychiatric Association, 2013).</p><p><strong>Statut :</strong> <span style="color: #f87171;">Pathologique</span></p><p><strong>Risques & Limites :</strong> Nécessite hospitalisation. Diagnostic différentiel avec schizophrénie débutante.</p><p><strong>Implications Cliniques :</strong> Traitement antipsychotique bref. Suivi pour évaluer le risque de récidive ou d'évolution vers une schizophrénie.</p>`
+            },
+            {
+                id: 'tromba', title: 'Tromba', region: 'Madagascar (Sakalava)',
+                content: `<p><strong>Manifestations :</strong> Possession rituelle par des esprits royaux ancestraux. La personne possédée entre en transe et "devient" l'esprit, parlant et agissant en son nom (Sharp, 1993).</p><p><strong>Statut :</strong> <span style="color: #4ade80;">NON pathologique</span> - Pratique culturelle valorisée</p><p><strong>Fonction sociale :</strong> Le Tromba remplit des fonctions importantes : guérison, conseil, résolution de conflits, lien avec les ancêtres. Les médiums Tromba sont respectés dans la société.</p><p><strong>Distinction avec la pathologie :</strong> Culturellement distingué de "adala" (folie). Le Tromba est contrôlé, ritualisé, socialement intégré et valorisé. Majoritairement féminin.</p><p><strong>Implications Cliniques :</strong> Ne pas pathologiser. Respecter la pratique culturelle. S'assurer qu'il n'y a pas de souffrance associée ou de détresse fonctionnelle.</p>`
+            },
+            {
+                id: 'ambalavelona', title: 'Ambalavelona', region: 'Madagascar (Bezanozano)',
+                content: `<p><strong>Manifestations :</strong> Croyance en une possession avec symptômes de type hystérique collectif. Trouble dissociatif avec connotation négative dans la culture Bezanozano (Poirier, 1987).</p><p><strong>Statut :</strong> <span style="color: #f87171;">Pathologique</span> - Connotation négative</p><p><strong>Distinction avec le Tromba :</strong> Contrairement au Tromba (valorisé, ritualisé), l'Ambalavelona est considéré comme une affliction nécessitant une intervention. Il s'apparente à une hystérie collective.</p><p><strong>Risques & Limites :</strong> Contagion sociale, perturbation de la communauté, souffrance individuelle.</p><p><strong>Implications Cliniques :</strong> Prise en charge thérapeutique nécessaire. Travailler avec les guérisseurs traditionnels. Approche à la fois culturelle et clinique.</p>`
+            },
+            {
+                id: 'windigo', title: 'Windigo', region: 'Premières Nations (Amérique du Nord)',
+                content: `<p><strong>Manifestations :</strong> Peur intense de devenir cannibale, croyance d'être possédé par un esprit cannibale (Windigo). Associé à l'isolement hivernal et à la famine historique (Simons & Hughes, 1985).</p><p><strong>Statut :</strong> <span style="color: #f87171;">Pathologique</span></p><p><strong>Risques & Limites :</strong> Anxiété sévère, comportements d'évitement, risque suicidaire historiquement rapporté.</p><p><strong>Implications Cliniques :</strong> Aujourd'hui très rare. Évaluer dans le contexte culturel. Approche respectueuse des traditions autochtones.</p>`
             }
         ];
-        
+
         const glossaryData = [
-            { term: 'Compétence Culturelle', def: 'Approche visant à doter les soignants de connaissances factuelles sur divers groupes culturels. Critiquée pour son risque de simplification.' },
-            { term: 'Disease (Maladie-processus)', def: 'Concept biomédical désignant une anomalie biologique. La perspective objective du médecin.' },
-            { term: 'ECR (Essai Contrôlé Randomisé)', def: 'Protocole expérimental visant à isoler l\'effet spécifique d\'un traitement en le comparant à un placebo ou à un autre traitement.' },
+            { term: 'Compétence Culturelle', def: 'Approche visant a doter les soignants de connaissances factuelles sur divers groupes culturels. Critiquée pour son risque de simplification.' },
+            { term: 'Disease (Maladie-processus)', def: 'Concept biomedical désignant une anomalie biologique. La perspective objective du médecin.' },
+            { term: 'ECR (Essai Contrôle Randomise)', def: 'Protocole expérimental visant a isoler l\'effet spécifique d\'un traitement en le comparant a un placebo ou a un autre traitement.' },
             { term: 'Effet Contextuel', def: 'Changement de santé résultant de l\'ensemble des facteurs du soin (relation, rituel, attentes), au-delà de l\'intervention spécifique.' },
             { term: 'Effet Placebo / Nocebo', def: 'Conséquence psychobiologique bénéfique (placebo) ou néfaste (nocebo) déclenchée par les attentes du patient.' },
             { term: 'Humilité Culturelle', def: 'Posture éthique et processus dynamique impliquant l\'auto-évaluation et le partenariat avec le patient.' },
@@ -459,37 +1304,42 @@
         ];
 
         const referencesData = [
-            'Ader, R., & Cohen, N. (1982). Behaviorally conditioned immunosuppression and murine systemic lupus erythematosus. <em>Science, 215</em>(4539), 1534–1536.',
-            'Amanzio, M., & Benedetti, F. (1999). Neuropharmacological dissection of placebo analgesia: expectation- and conditioning-related effects. <em>Journal of Neuroscience, 19</em>(1), 484–494.',
+            'Ader, R., & Cohen, N. (1982). Behaviorally conditioned immunosuppression and murine systemic lupus erythematosus. <em>Science, 215</em>(4539), 1534-1536. <a href="https://doi.org/10.1126/science.7071953" target="_blank" class="ref-link" title="Voir l\'article"><i class="fas fa-external-link-alt"></i></a>',
+            'Amanzio, M., & Benedetti, F. (1999). Neuropharmacological dissection of placebo analgesia: expectation- and conditioning-related effects. <em>Journal of Neuroscience, 19</em>(1), 484-494. <a href="https://doi.org/10.1523/JNEUROSCI.19-01-00484.1999" target="_blank" class="ref-link" title="Voir l\'article"><i class="fas fa-external-link-alt"></i></a>',
             'American Psychiatric Association. (2013). <em>Diagnostic and statistical manual of mental disorders (5th ed.)</em>. American Psychiatric Publishing.',
             'Benedetti, F. (2009). <em>Placebo effects: Understanding the mechanisms in health and disease</em>. Oxford University Press.',
-            'Benedetti, F., Carlino, E., & Pollo, A. (2011). How placebos change the patient’s brain. <em>Neuropsychopharmacology, 36</em>(1), 339–354.',
-            'Cashin, A. G., Bagg, M. K., Richards, B., et al. (2024). Contextual effects: how to, and how not to, quantify them. <em>Journal of Clinical Epidemiology, 166</em>, 111226.',
-            'Colloca, L., & Barsky, A. J. (2020). Placebo and nocebo effects. <em>New England Journal of Medicine, 382</em>(6), 554–561.',
-            'Colloca, L., Ludman, T., Bouhassira, D., et al. (2017). Neuropathic pain. <em>Nature Reviews Disease Primers, 3</em>, 17002.',
-            'Di Blasi, Z., Harkness, E., Ernst, E., Georgiou, A., & Kleijnen, J. (2001). Influence of context effects on health outcomes: a systematic review. <em>The Lancet, 357</em>(9258), 757–762.',
-            'Eack, S. M., & Newhill, C. E. (2007). Psychosocial treatment for schizophrenia: A review of the evidence. <em>Social Work, 52</em>(2), 159-172.',
-            'Eisenberg, L. (1977). Disease and illness: distinctions between professional and popular ideas of sickness. <em>Culture, medicine and psychiatry, 1</em>(1), 9–23.',
-            'Fine, P., Eames, K., & Heymann, D. L. (2011). "Herd immunity": a rough guide. <em>Clinical infectious diseases, 52</em>(7), 911–916.',
-            'Furukawa, T. A., Cipriani, A., Cowen, P. J., et al. (2016). Placebo response rates in antidepressant trials: a systematic review of published and unpublished double-blind, randomised controlled trials. <em>The Lancet Psychiatry, 3</em>(11), 1059–1066.',
-            'Gaebel, W., Stricker, J., & Kerst, A. (2021). WPA-SPTR guidelines on the treatment of schizophrenia and their implementation. <em>World Journal of Psychiatry, 11</em>(12), 1184–1195.',
-            'Helman, C. G. (1978). "Feed a cold, starve a fever"—folk models of infection in an English suburban community, and their relation to medical treatment. <em>Culture, Medicine and Psychiatry, 2</em>(2), 107–137.',
-            'Jauhar, S., McKenna, P. J., Radua, J., et al. (2014). Cognitive–behavioural therapy for the symptoms of schizophrenia: systematic review and meta-analysis with examination of potential bias. <em>The British Journal of Psychiatry, 204</em>(1), 20–29.',
-            'Kaptchuk, T. J., Kelley, J. M., Conboy, L. A., et al. (2008). Components of placebo effect: randomised controlled trial in patients with irritable bowel syndrome. <em>Bmj, 336</em>(7651), 999–1003.',
-            'Kirsch, I. (1985). Response expectancy as a determinant of experience and behavior. <em>American Psychologist, 40</em>(11), 1189–1202.',
-            'Kirmayer, L. J. (1991). The place of culture in psychiatric nosology: Taijin kyofusho and depression in Japan. <em>Journal of Nervous and Mental Disease, 179</em>(1), 19-25.',
+            'Benedetti, F., Carlino, E., & Pollo, A. (2011). How placebos change the patient\'s brain. <em>Neuropsychopharmacology, 36</em>(1), 339-354. <a href="https://doi.org/10.1038/npp.2010.81" target="_blank" class="ref-link" title="Voir l\'article"><i class="fas fa-external-link-alt"></i></a>',
+            'Cashin, A. G., Bagg, M. K., Richards, B., et al. (2024). Contextual effects: how to, and how not to, quantify them. <em>Journal of Clinical Epidemiology, 166</em>, 111226. <a href="https://doi.org/10.1016/j.jclinepi.2023.111226" target="_blank" class="ref-link" title="Voir l\'article"><i class="fas fa-external-link-alt"></i></a>',
+            'Colloca, L., & Barsky, A. J. (2020). Placebo and nocebo effects. <em>New England Journal of Medicine, 382</em>(6), 554-561. <a href="https://doi.org/10.1056/NEJMra1907805" target="_blank" class="ref-link" title="Voir l\'article"><i class="fas fa-external-link-alt"></i></a>',
+            'Colloca, L., Ludman, T., Bouhassira, D., et al. (2017). Neuropathic pain. <em>Nature Reviews Disease Primers, 3</em>, 17002. <a href="https://doi.org/10.1038/nrdp.2017.2" target="_blank" class="ref-link" title="Voir l\'article"><i class="fas fa-external-link-alt"></i></a>',
+            'Di Blasi, Z., Harkness, E., Ernst, E., Georgiou, A., & Kleijnen, J. (2001). Influence of context effects on health outcomes: a systematic review. <em>The Lancet, 357</em>(9258), 757-762. <a href="https://doi.org/10.1016/S0140-6736(00)04169-6" target="_blank" class="ref-link" title="Voir l\'article"><i class="fas fa-external-link-alt"></i></a>',
+            'Eack, S. M., & Newhill, C. E. (2007). Psychosocial treatment for schizophrenia: A review of the evidence. <em>Social Work, 52</em>(2), 159-172. <a href="https://doi.org/10.1093/sw/52.2.159" target="_blank" class="ref-link" title="Voir l\'article"><i class="fas fa-external-link-alt"></i></a>',
+            'Eisenberg, L. (1977). Disease and illness: distinctions between professional and popular ideas of sickness. <em>Culture, medicine and psychiatry, 1</em>(1), 9-23. <a href="https://doi.org/10.1007/BF00114808" target="_blank" class="ref-link" title="Voir l\'article"><i class="fas fa-external-link-alt"></i></a>',
+            'Fine, P., Eames, K., & Heymann, D. L. (2011). "Herd immunity": a rough guide. <em>Clinical infectious diseases, 52</em>(7), 911-916. <a href="https://doi.org/10.1093/cid/cir007" target="_blank" class="ref-link" title="Voir l\'article"><i class="fas fa-external-link-alt"></i></a>',
+            'Furukawa, T. A., Cipriani, A., Cowen, P. J., et al. (2016). Placebo response rates in antidepressant trials: a systematic review of published and unpublished double-blind, randomised controlled trials. <em>The Lancet Psychiatry, 3</em>(11), 1059-1066. <a href="https://doi.org/10.1016/S2215-0366(16)30307-8" target="_blank" class="ref-link" title="Voir l\'article"><i class="fas fa-external-link-alt"></i></a>',
+            'Gaebel, W., Stricker, J., & Kerst, A. (2021). WPA-SPTR guidelines on the treatment of schizophrenia and their implementation. <em>World Journal of Psychiatry, 11</em>(12), 1184-1195. <a href="https://doi.org/10.5498/wjp.v11.i12.1184" target="_blank" class="ref-link" title="Voir l\'article"><i class="fas fa-external-link-alt"></i></a>',
+            'Helman, C. G. (1978). "Feed a cold, starve a fever"-folk models of infection in an English suburban community, and their relation to medical treatment. <em>Culture, Medicine and Psychiatry, 2</em>(2), 107-137. <a href="https://doi.org/10.1007/BF00054580" target="_blank" class="ref-link" title="Voir l\'article"><i class="fas fa-external-link-alt"></i></a>',
+            'Jauhar, S., McKenna, P. J., Radua, J., et al. (2014). Cognitive-behavioural therapy for the symptoms of schizophrenia: systematic review and meta-analysis with examination of potential bias. <em>The British Journal of Psychiatry, 204</em>(1), 20-29. <a href="https://doi.org/10.1192/bjp.bp.112.116285" target="_blank" class="ref-link" title="Voir l\'article"><i class="fas fa-external-link-alt"></i></a>',
+            'Kaptchuk, T. J., Kelley, J. M., Conboy, L. A., et al. (2008). Components of placebo effect: randomised controlled trial in patients with irritable bowel syndrome. <em>BMJ, 336</em>(7651), 999-1003. <a href="https://doi.org/10.1136/bmj.39524.439618.25" target="_blank" class="ref-link" title="Voir l\'article"><i class="fas fa-external-link-alt"></i></a>',
+            'Kirsch, I. (1985). Response expectancy as a determinant of experience and behavior. <em>American Psychologist, 40</em>(11), 1189-1202. <a href="https://doi.org/10.1037/0003-066X.40.11.1189" target="_blank" class="ref-link" title="Voir l\'article"><i class="fas fa-external-link-alt"></i></a>',
+            'Kirmayer, L. J. (1991). The place of culture in psychiatric nosology: Taijin kyofusho and depression in Japan. <em>Journal of Nervous and Mental Disease, 179</em>(1), 19-25. <a href="https://doi.org/10.1097/00005053-199101000-00005" target="_blank" class="ref-link" title="Voir l\'article"><i class="fas fa-external-link-alt"></i></a>',
             'Kirmayer, L. J. (2001). Cultural variations in the clinical presentation of depression and anxiety: implications for diagnosis and treatment. <em>Journal of clinical psychiatry, 62</em>(Suppl 13), 22-28.',
             'Kirmayer, L. J., & Bhugra, D. (2009). Explanatory models of illness. In D. Bhugra & K. Bhui (Eds.), <em>Textbook of cultural psychiatry</em> (pp. 147-156). Cambridge University Press.',
-            'Kleinman, A., Eisenberg, L., & Good, B. (1978). Culture, illness, and care: clinical lessons from anthropologic and cross-cultural research. <em>Annals of internal medicine, 88</em>(2), 251–258.',
-            'Leucht, S., Cipriani, A., Spineli, L., et al. (2017). Comparative efficacy and tolerability of 15 antipsychotic drugs in schizophrenia: a multiple-treatments meta-analysis. <em>The Lancet, 382</em>(9896), 951-962.',
+            'Kleinman, A., Eisenberg, L., & Good, B. (1978). Culture, illness, and care: clinical lessons from anthropologic and cross-cultural research. <em>Annals of internal medicine, 88</em>(2), 251-258. <a href="https://doi.org/10.7326/0003-4819-88-2-251" target="_blank" class="ref-link" title="Voir l\'article"><i class="fas fa-external-link-alt"></i></a>',
+            'Leucht, S., Cipriani, A., Spineli, L., et al. (2013). Comparative efficacy and tolerability of 15 antipsychotic drugs in schizophrenia: a multiple-treatments meta-analysis. <em>The Lancet, 382</em>(9896), 951-962. <a href="https://doi.org/10.1016/S0140-6736(13)60733-3" target="_blank" class="ref-link" title="Voir l\'article"><i class="fas fa-external-link-alt"></i></a>',
             'Moerman, D. E. (2002). <em>Meaning, medicine, and the "placebo effect"</em>. Cambridge University Press.',
             'Romme, M., & Escher, S. (2000). <em>Making sense of voices: A guide for mental health professionals working with voice-hearers</em>. Mind.',
             'Rubel, A. J., O\'Nell, C. W., & Collado-Ardon, R. (1984). <em>Susto, a folk illness</em>. University of California Press.',
-            'Tervalon, M., & Murray-García, J. (1998). Cultural humility versus cultural competence: A critical distinction in defining physician training outcomes in multicultural education. <em>Journal of health care for the poor and underserved, 9</em>(2), 117–125.',
-            'Thygesen, K., Alpert, J. S., Jaffe, A. S., et al. (2018). Fourth universal definition of myocardial infarction (2018). <em>Journal of the American College of Cardiology, 72</em>(18), 2231–2264.',
+            'Tervalon, M., & Murray-Garcia, J. (1998). Cultural humility versus cultural competence: A critical distinction in defining physician training outcomes in multicultural education. <em>Journal of health care for the poor and underserved, 9</em>(2), 117-125. <a href="https://doi.org/10.1353/hpu.2010.0233" target="_blank" class="ref-link" title="Voir l\'article"><i class="fas fa-external-link-alt"></i></a>',
+            'Thygesen, K., Alpert, J. S., Jaffe, A. S., et al. (2018). Fourth universal definition of myocardial infarction (2018). <em>Journal of the American College of Cardiology, 72</em>(18), 2231-2264. <a href="https://doi.org/10.1016/j.jacc.2018.08.1038" target="_blank" class="ref-link" title="Voir l\'article"><i class="fas fa-external-link-alt"></i></a>',
             'World Health Organization. (1948). <em>Preamble to the Constitution of the World Health Organization as adopted by the International Health Conference, New York, 19-22 June, 1946; signed on 22 July 1946 by the representatives of 61 States (Official Records of the World Health Organization, no. 2, p. 100) and entered into force on 7 April 1948</em>.',
-            'Wykes, T., Huddy, V., Cellard, C., et al. (2011). A meta-analysis of cognitive remediation for schizophrenia: methodology and effect sizes. <em>Psychological bulletin, 137</em>(6), 1025–1041.',
-            'Zou, K., Wong, J., Abdullah, N., et al. (2016). Examination of overall treatment effect and the proportion attributable to contextual effect in osteoarthritis: meta-analysis of randomised controlled trials. <em>Annals of the rheumatic diseases, 75</em>(11), 1964–1970.',
+            'Wykes, T., Huddy, V., Cellard, C., et al. (2011). A meta-analysis of cognitive remediation for schizophrenia: methodology and effect sizes. <em>Psychological bulletin, 137</em>(6), 1025-1041. <a href="https://doi.org/10.1037/a0023935" target="_blank" class="ref-link" title="Voir l\'article"><i class="fas fa-external-link-alt"></i></a>',
+            'Zou, K., Wong, J., Abdullah, N., et al. (2016). Examination of overall treatment effect and the proportion attributable to contextual effect in osteoarthritis: meta-analysis of randomised controlled trials. <em>Annals of the rheumatic diseases, 75</em>(11), 1964-1970. <a href="https://doi.org/10.1136/annrheumdis-2015-208387" target="_blank" class="ref-link" title="Voir l\'article"><i class="fas fa-external-link-alt"></i></a>',
+            'Simons, R. C., & Hughes, C. C. (Eds.). (1985). <em>The culture-bound syndromes: Folk illnesses of psychiatric and anthropological interest</em>. Springer. <a href="https://doi.org/10.1007/978-94-009-5251-5" target="_blank" class="ref-link" title="Voir l\'article"><i class="fas fa-external-link-alt"></i></a>',
+            'Tseng, W. S. (2006). From peculiar psychiatric disorders through culture-bound syndromes to culture-related specific syndromes. <em>Transcultural Psychiatry, 43</em>(4), 554-576. <a href="https://doi.org/10.1177/1363461506070781" target="_blank" class="ref-link" title="Voir l\'article"><i class="fas fa-external-link-alt"></i></a>',
+            'Lee, S. (2001). From diversity to unity: The classification of mental disorders in 21st-century China. <em>Psychiatric Clinics of North America, 24</em>(3), 421-431. <a href="https://doi.org/10.1016/S0193-953X(05)70238-0" target="_blank" class="ref-link" title="Voir l\'article"><i class="fas fa-external-link-alt"></i></a>',
+            'Sharp, L. A. (1993). <em>The possessed and the dispossessed: Spirits, identity, and power in a Madagascar migrant town</em>. University of California Press.',
+            'Poirier, J. (1987). Tromba et Ambalavelona chez les Bezanozano. In <em>Ethnologiques. Hommages à Marcel Griaule</em>. Paris: Hermann.',
         ];
 
         // --- INITIALIZATION ---
@@ -503,8 +1353,8 @@
         const cultureGrid = document.getElementById('culture-grid');
         culturalData.forEach(item => {
             const card = document.createElement('div');
-            card.className = 'bg-white p-5 rounded-xl shadow-lg border border-slate-100 cursor-pointer hover:shadow-xl hover:border-teal-400 transition-all duration-300 transform hover:-translate-y-1';
-            card.innerHTML = `<h4 class="font-bold text-teal-800 text-lg">${item.title}</h4><p class="text-sm text-amber-600 font-semibold">${item.region}</p>`;
+            card.className = 'culture-card';
+            card.innerHTML = `<h4>${item.title}</h4><p class="region">${item.region}</p><span class="click-hint"><i class="fas fa-mouse-pointer"></i> Cliquez pour en savoir plus</span>`;
             card.addEventListener('click', () => openCultureModal(item));
             cultureGrid.appendChild(card);
         });
@@ -513,29 +1363,103 @@
         const renderGlossary = (items) => {
             glossaryList.innerHTML = '';
             if (items.length === 0) {
-                glossaryList.innerHTML = `<p class="text-center text-slate-500">Aucun terme trouvé.</p>`;
+                glossaryList.innerHTML = `<p style="text-align: center; color: var(--color-text-dimmed);">Aucun terme trouvé.</p>`;
                 return;
             }
             items.sort((a, b) => a.term.localeCompare(b.term)).forEach(item => {
                 const entry = document.createElement('div');
-                entry.className = 'bg-white p-4 rounded-lg shadow-sm border border-slate-100';
-                entry.innerHTML = `<h4 class="font-semibold text-teal-800">${item.term}</h4><p class="text-slate-600 text-sm">${item.def}</p>`;
+                entry.classNâme = 'glossary-entry';
+                entry.innerHTML = `<h4>${item.term}</h4><p>${item.def}</p>`;
                 glossaryList.appendChild(entry);
             });
         };
         renderGlossary(glossaryData);
 
         const referencesList = document.getElementById('references-list');
-        referencesData.sort().forEach(ref => {
+        const citationMap = new Map(); // Map to store author -> ref id
+
+        referencesData.sort().forEach((ref, index) => {
+            const refId = `ref-${index}`;
             const p = document.createElement('p');
-            p.innerHTML = ref;
+            p.classNâme = 'ref-item';
+            p.id = refId;
+
+            // Extract author nâme(s) and year for citation mapping
+            const authorMatch = ref.match(/^([^(]+)\s*\((\d{4})/);
+            if (authorMatch) {
+                const authorKey = authorMatch[1].trim().replace(/,\s*&.*$/, '').replace(/,.*$/, '').split(',')[0].trim();
+                const year = authorMatch[2];
+                const citationKey = `${authorKey}, ${year}`;
+                citationMap.set(citationKey, refId);
+
+                // Also add variations
+                if (ref.includes(' & ')) {
+                    const fullAuthors = authorMatch[1].trim();
+                    citationMap.set(`${fullAuthors.replace(/,\s*$/, '')}, ${year}`, refId);
+                }
+                if (ref.includes(' et al')) {
+                    citationMap.set(`${authorKey} et al., ${year}`, refId);
+                    citationMap.set(`${authorKey} et al, ${year}`, refId);
+                }
+            }
+
+            // Extract DOI or URL for external link
+            let externalUrl = '';
+            const doiMatch = ref.match(/doi[:\s]*([^\s<]+)/i);
+            if (doiMatch) {
+                externalUrl = `https://doi.org/${doiMatch[1]}`;
+            }
+
+            p.innerHTML = `${ref}
+                <span class="ref-actions">
+                    ${externalUrl ? `<a href="${externalUrl}" target="_blank" class="ref-action-btn" title="Voir l'article"><i class="fas fa-external-link-alt"></i></a>` : ''}
+                </span>`;
+
             referencesList.appendChild(p);
         });
 
+        // Setup citation links after references are rendered
+        setupCitationLinks(citationMap);
+
         // --- EVENT LISTENERS ---
-        const navLinks = document.querySelectorAll('.nav-link');
-        navLinks.forEach(link => link.addEventListener('click', handleNavClick));
-        
+        const sidebarLinks = document.querySelectorAll('.sidebar-nav a');
+
+        // Scroll-spy: Update sidebar active state based on scroll position
+        function setupSidebarActiveState() {
+            const sections = document.querySelectorAll('section[id]');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 120;
+                    if (scrollY >= sectionTop) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                sidebarLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${current}`) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        }
+
+        setupSidebarActiveState();
+
+        // Sidebar navigation - close on mobile after click
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 1024) {
+                    document.getElementById('sidebar').classList.remove('open');
+                }
+            });
+        });
+
+        // Set initial active state for sidebar
+        sidebarLinks[0]?.classList.add('active');
+
         const mechanismButtons = document.querySelectorAll('.interactive-diagram-button');
         mechanismButtons.forEach(button => button.addEventListener('click', handleMechanismClick));
 
@@ -548,36 +1472,23 @@
         modal.addEventListener('click', (e) => { if (e.target === modal) closeCultureModal(); });
 
         // --- HANDLER FUNCTIONS ---
-        function handleNavClick(e) {
-            const target = e.currentTarget.dataset.target;
-            navLinks.forEach(l => l.classList.remove('active'));
-            e.currentTarget.classList.add('active');
-
-            document.querySelectorAll('.content-section').forEach(section => {
-                section.classList.remove('active');
-                if (section.id === target) {
-                    section.classList.add('active');
-                }
-            });
-        }
-
         function handleMechanismClick(e) {
             const button = e.currentTarget;
             const group = button.dataset.mechanismGroup;
             const mechanismKey = button.dataset.mechanism;
-            
+
             document.querySelectorAll(`[data-mechanism-group="${group}"]`).forEach(btn => btn.classList.remove('active'));
             button.classList.add('active');
-            
+
             const content = mechanismsContent[group][mechanismKey];
             const textElement = document.getElementById(`${group}-text`);
-            textElement.innerHTML = `<h4 class="font-bold text-teal-700 text-lg mb-2">${content.title}</h4><p>${content.text}</p>`;
+            textElement.innerHTML = `<h4>${content.title}</h4><p style="color: var(--color-text-muted);">${content.text}</p>`;
         }
 
         function handleGlossarySearch(e) {
             const searchTerm = e.target.value.toLowerCase();
-            const filteredData = glossaryData.filter(item => 
-                item.term.toLowerCase().includes(searchTerm) || 
+            const filteredData = glossaryData.filter(item =>
+                item.term.toLowerCase().includes(searchTerm) ||
                 item.def.toLowerCase().includes(searchTerm)
             );
             renderGlossary(filteredData);
@@ -587,15 +1498,106 @@
             document.getElementById('modal-title').textContent = item.title;
             document.getElementById('modal-region').textContent = item.region;
             document.getElementById('modal-content').innerHTML = item.content;
-            modal.classList.remove('hidden');
+            modal.style.display = 'flex';
             modal.classList.add('modal-active');
             document.body.style.overflow = 'hidden';
         }
 
         function closeCultureModal() {
-            modal.classList.add('hidden');
+            modal.style.display = 'none';
             modal.classList.remove('modal-active');
             document.body.style.overflow = 'auto';
+        }
+
+        // Citation link system
+        function setupCitationLinks(citationMap) {
+            // Find all content sections to transform citations
+            const contentSections = document.querySelectorAll('.content-section, .page-header, .content-card, .mechanism-text, .teal-highlight, .stone-box, .red-box');
+
+            contentSections.forEach(section => {
+                transformCitationsInElement(section, citationMap);
+            });
+        }
+
+        function transformCitationsInElement(element, citationMap) {
+            const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, null, false);
+            const nodesToReplace = [];
+
+            while (walker.nextNode()) {
+                const node = walker.currentNode;
+                // Pattern: (Author, Year) or (Author et al., Year)
+                const citationPattern = /\(([A-Za-zÀ-ÿ\-]+(?:\s*(?:&|et al\.?|,)\s*[A-Za-zÀ-ÿ\-]+)*),?\s*(\d{4})\)/g;
+
+                if (citationPattern.test(node.textContent)) {
+                    nodesToReplace.push(node);
+                }
+            }
+
+            nodesToReplace.forEach(node => {
+                const parent = node.parentNode;
+                if (!parent || parent.classList?.contains('cite-link') || parent.tagNâme === 'A') return;
+
+                const citationPattern = /\(([A-Za-zÀ-ÿ\-]+(?:\s*(?:&|et al\.?|,)\s*[A-Za-zÀ-ÿ\-]+)*),?\s*(\d{4})\)/g;
+                const text = node.textContent;
+                const fragment = document.createDocumentFragment();
+                let lastIndex = 0;
+                let match;
+
+                citationPattern.lastIndex = 0;
+                while ((match = citationPattern.exec(text)) !== null) {
+                    // Add text before match
+                    if (match.index > lastIndex) {
+                        fragment.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
+                    }
+
+                    const author = match[1].trim();
+                    const year = match[2];
+                    const citationKey = `${author}, ${year}`;
+
+                    // Try to find the reference
+                    let refId = citationMap.get(citationKey);
+
+                    // Try variations if not found
+                    if (!refId) {
+                        const firstAuthor = author.split(/\s*(?:&|,|et al)/)[0].trim();
+                        refId = citationMap.get(`${firstAuthor}, ${year}`);
+                    }
+                    if (!refId) {
+                        refId = citationMap.get(`${author} et al., ${year}`);
+                    }
+
+                    if (refId) {
+                        const link = document.createElement('a');
+                        link.href = `#${refId}`;
+                        link.classNâme = 'cite-link';
+                        link.textContent = match[0];
+                        link.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            const refElement = document.getElementById(refId);
+                            if (refElement) {
+                                // Scroll directly to reference
+                                refElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                refElement.classList.add('highlighted');
+                                setTimeout(() => refElement.classList.remove('highlighted'), 2000);
+                            }
+                        });
+                        fragment.appendChild(link);
+                    } else {
+                        fragment.appendChild(document.createTextNode(match[0]));
+                    }
+
+                    lastIndex = match.index + match[0].length;
+                }
+
+                // Add remaining text
+                if (lastIndex < text.length) {
+                    fragment.appendChild(document.createTextNode(text.slice(lastIndex)));
+                }
+
+                if (fragment.childNodes.length > 0) {
+                    parent.replaceChild(fragment, node);
+                }
+            });
         }
     });
     </script>

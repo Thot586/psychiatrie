@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHQ-2 - Dépistage rapide de la dépression</title>
+
+    <!-- Font Awesome pour les icônes -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Styles partagés -->
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <style>
+        :root {
+            --cat-main: #3b82f6;
+            --cat-dark: #2563eb;
+            --cat-light: #60a5fa;
+            --cat-rgb: 59, 130, 246;
+            --cat-readable: #2563eb;
+        }
+        .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
+        .option-btn.selected, .answer-btn.selected { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        .score-circle { border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 30px rgba(var(--cat-rgb), 0.2); }
+        .score-value { color: var(--cat-light); }
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-light); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+        .progress-fill { background: linear-gradient(90deg, var(--cat-main), var(--cat-light)); box-shadow: 0 0 8px rgba(var(--cat-rgb), 0.4); }
+        .likert-options input[type="radio"]:checked + label,
+        .binary-options input[type="radio"]:checked + label,
+        .radio-options input[type="radio"]:checked + label { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+    </style>
+
+</head>
+<body class="light-questionnaire">
+    <!-- Navigation -->
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil">
+                <i class="fas fa-home"></i>
+            </a>
+            <button onclick="history.back()" class="btn-back" title="Retour">
+                <i class="fas fa-arrow-left"></i> <span>Retour</span>
+            </button>
+        </div>
+        <h1>PHQ-2</h1>
+        <span class="badge badge-cat-humeur">Humeur</span>
+    </nav>
+
+    <div class="container">
+        <!-- En-tête -->
+        <header class="glass-card" style="text-align: center; margin-bottom: 1.5rem;">
+            <h2 class="gradient-text">Dépistage rapide de la dépression</h2>
+            <p>Évaluation rapide en 2 questions</p>
+        </header>
+
+        <!-- Informations -->
+        <section class="info-box">
+            <h3><i class="fas fa-info-circle"></i> À propos de ce questionnaire</h3>
+            <p>Le PHQ-2 est un outil de dépistage ultra-court validé scientifiquement pour détecter rapidement un épisode dépressif majeur. Il évalue vos expériences au cours des <strong>2 dernières semaines</strong>. Un score positif doit être complété par le PHQ-9.</p>
+        </section>
+
+        <!-- Avertissement -->
+        <section class="warning-box">
+            <h3><i class="fas fa-exclamation-triangle"></i> Avertissements importants</h3>
+            <ul style="margin: 0; padding-left: 1.5rem;">
+                <li>Ce questionnaire ne remplace pas une consultation médicale</li>
+                <li>En cas de pensées suicidaires, contactez immédiatement un professionnel de santé</li>
+                <li>Les résultats sont indicatifs et nécessitent une interprétation clinique</li>
+                <li><strong>Numéro national de prévention du suicide : 3114</strong> (gratuit, 24h/7j)</li>
+            </ul>
+        </section>
+
+        <!-- Contrôles -->
+        <section class="glass-card">
+            <div class="control-buttons">
+                <button class="btn-secondary" onclick="importData()">
+                    <i class="fas fa-file-import"></i> Importer
+                </button>
+                <button class="btn-secondary" onclick="resetForm()">
+                    <i class="fas fa-redo"></i> Réinitialiser
+                </button>
+            </div>
+            <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="loadFile(event)">
+        </section>
+
+        <!-- Instructions -->
+        <section class="glass-card">
+            <h3 style="margin-bottom: 1rem;">Au cours des 2 dernières semaines, selon quelle fréquence avez-vous été gêné(e) par les problèmes suivants ?</h3>
+
+            <!-- Questions générées par JS -->
+            <div id="questions"></div>
+        </section>
+
+        <!-- Résultats -->
+        <section id="results" class="results-section" style="display: none;">
+            <h2 style="text-align: center; margin-bottom: 2rem;">
+                <i class="fas fa-chart-bar"></i> Résultats de votre évaluation
+            </h2>
+
+            <div class="score-display">
+                <div class="score-circle">
+                    <span class="score-value" id="totalScore">0</span>
+                </div>
+                <p class="score-label">sur 6 points</p>
+            </div>
+
+            <div id="interpretationBox" class="interpretation"></div>
+
+            <button class="btn-primary w-full" onclick="toggleDetails()" style="margin-top: 1.5rem;">
+                <i class="fas fa-list"></i> Voir les détails
+                <span id="toggleIcon"><i class="fas fa-chevron-down"></i></span>
+            </button>
+
+            <div id="detailsContent" class="glass-card" style="display: none; margin-top: 1rem;"></div>
+
+            <!-- Export -->
+            <div class="glass-card" style="margin-top: 2rem;">
+                <h3><i class="fas fa-download"></i> Exporter les résultats</h3>
+                <div class="consent-box">
+                    <label>
+                        <input type="checkbox" id="exportConsent">
+                        <span>Je souhaite télécharger mes résultats (questionnaire, réponses, score et date) dans un fichier JSON sur mon appareil. <strong>Ces résultats constituent des données de santé — je m'engage à les conserver de façon sécurisée et à ne les partager qu'avec un professionnel de santé de mon choix.</strong> Aucune donnée n'est transmise à un serveur.</span>
+                    </label>
+                </div>
+                <div class="export-buttons">
+                    <button class="btn-primary" onclick="exportData()">
+                        <i class="fas fa-file-export"></i> Exporter en JSON
+                    </button>
+                    <button class="btn-print" onclick="printResults()">
+                        <i class="fas fa-print"></i> Imprimer
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p><strong>PHQ-2 - Patient Health Questionnaire-2</strong></p>
+        <p>Auteurs : Kroenke K, Spitzer RL, Williams JBW (2003)</p>
+        <p>Adaptation numérique : Dr FENOHASINA | Psychiatre</p>
+        <p style="margin-top: 1rem;">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr" target="_blank">
+                Licence CC BY-NC-SA 4.0
+            </a>
+        </p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../js/app.js"></script>
+    <script>
+        const questions = [
+            "Peu d'intérêt ou de plaisir à faire les choses",
+            "Être triste, déprimé(e) ou désespéré(e)"
+        ];
+
+        const options = [
+            { value: 0, label: "Jamais" },
+            { value: 1, label: "Plusieurs jours" },
+            { value: 2, label: "Plus de la moitié du temps" },
+            { value: 3, label: "Presque tous les jours" }
+        ];
+
+        let answers = new Array(2).fill(null);
+
+        function initializeQuestions() {
+            const container = document.getElementById('questions');
+            container.innerHTML = '';
+
+            questions.forEach((question, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-card';
+
+                questionDiv.innerHTML = `
+                    <div style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem;">
+                        <span class="question-number">${index + 1}</span>
+                        <span class="question-text" style="margin-bottom: 0;">${question}</span>
+                    </div>
+                    <div class="options-grid">
+                        ${options.map(opt => `
+                            <button class="option-btn" onclick="selectAnswer(${index}, ${opt.value})" id="q${index}_opt${opt.value}">
+                                <strong>${opt.value}</strong> - ${opt.label}
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function selectAnswer(questionIndex, value) {
+            answers[questionIndex] = value;
+
+            for (let i = 0; i < 4; i++) {
+                const btn = document.getElementById(`q${questionIndex}_opt${i}`);
+                btn.classList.toggle('selected', i === value);
+            }
+
+            // Marquer la carte comme répondue
+            const cards = document.querySelectorAll('.question-card');
+            cards[questionIndex].classList.add('answered');
+
+            checkCompletion();
+        }
+
+        function checkCompletion() {
+            const allAnswered = answers.every(a => a !== null);
+
+            if (allAnswered) {
+                updateResults();
+                document.getElementById('results').style.display = 'block';
+                document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function calculateScore() {
+            return answers.reduce((sum, val) => sum + (val || 0), 0);
+        }
+
+        function getInterpretation(score) {
+            if (score <= 2) return {
+                level: "Dépistage négatif",
+                className: "low",
+                description: "Le dépistage est négatif. Les symptômes dépressifs sont peu probables.",
+                action: "Pas de nécessité d'évaluation complémentaire immédiate. Surveillance de routine."
+            };
+            return {
+                level: "Dépistage positif - Compléter avec le PHQ-9",
+                className: "high",
+                description: "Le dépistage est positif. Un épisode dépressif majeur est possible.",
+                action: "Il est recommandé de compléter l'évaluation avec le PHQ-9 pour confirmer et évaluer la sévérité des symptômes dépressifs."
+            };
+        }
+
+        function updateResults() {
+            const score = calculateScore();
+            const interpretation = getInterpretation(score);
+
+            document.getElementById('totalScore').textContent = score;
+
+            const interpretationBox = document.getElementById('interpretationBox');
+            interpretationBox.className = `interpretation ${interpretation.className}`;
+            interpretationBox.innerHTML = `
+                <h3>${interpretation.level}</h3>
+                <p><strong>Interprétation :</strong> ${interpretation.description}</p>
+                <p><strong>Recommandation :</strong> ${interpretation.action}</p>
+            `;
+
+            const detailsContent = document.getElementById('detailsContent');
+            detailsContent.innerHTML = `
+                <h3 style="margin-bottom: 1rem;">Détail des réponses :</h3>
+                ${questions.map((q, i) => `
+                    <div class="info-box" style="margin-bottom: 0.75rem;">
+                        <h4 style="color: var(--color-primary-light); margin-bottom: 0.5rem;">Question ${i + 1} : ${q}</h4>
+                        <p style="margin: 0;"><strong>Réponse :</strong> ${options[answers[i]].label} (${answers[i]} point${answers[i] > 1 ? 's' : ''})</p>
+                    </div>
+                `).join('')}
+                <div class="info-box" style="margin-top: 1rem;">
+                    <h4 style="color: var(--color-primary-light); margin-bottom: 0.5rem;">Interprétation du seuil</h4>
+                    <p style="margin: 0;">Un score <strong>&ge; 3</strong> indique un dépistage positif et nécessite une évaluation complémentaire par le PHQ-9.</p>
+                </div>
+            `;
+        }
+
+        function toggleDetails() {
+            const content = document.getElementById('detailsContent');
+            const icon = document.getElementById('toggleIcon');
+            const isVisible = content.style.display !== 'none';
+
+            content.style.display = isVisible ? 'none' : 'block';
+            icon.innerHTML = isVisible ? '<i class="fas fa-chevron-down"></i>' : '<i class="fas fa-chevron-up"></i>';
+        }
+
+        function resetForm() {
+            answers = new Array(2).fill(null);
+
+            document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+            document.querySelectorAll('.question-card').forEach(card => card.classList.remove('answered'));
+
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('detailsContent').style.display = 'none';
+            document.getElementById('exportConsent').checked = false;
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function importData() {
+            document.getElementById('fileInput').click();
+        }
+
+        function loadFile(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        if (data.answers && Array.isArray(data.answers)) {
+                            answers = data.answers;
+
+                            answers.forEach((value, index) => {
+                                if (value !== null) {
+                                    selectAnswer(index, value);
+                                }
+                            });
+                        }
+                    } catch (error) {
+                        alert("Erreur lors de l'importation du fichier");
+                    }
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        function exportData() {
+            const consent = document.getElementById('exportConsent').checked;
+            if (!consent) {
+                alert("Veuillez cocher la case de consentement avant d'exporter.");
+                return;
+            }
+
+            const score = calculateScore();
+            const interpretation = getInterpretation(score);
+
+            const data = {
+                questionnaire: "PHQ-2",
+                date: new Date().toISOString(),
+                answers: answers,
+                score: score,
+                interpretation: interpretation.level
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `PHQ2_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeQuestions();
+        });
+    </script>
+</body>
+</html>

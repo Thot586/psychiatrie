@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CGI - Clinical Global Impression</title>
+
+    <!-- Font Awesome pour les icônes -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Styles partagés -->
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <style>
+        :root {
+            --cat-main: #7c3aed;
+            --cat-dark: #6d28d9;
+            --cat-light: #a78bfa;
+            --cat-rgb: 124, 58, 237;
+            --cat-readable: #6d28d9;
+        }
+        .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
+        .option-btn.selected, .answer-btn.selected { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        .score-circle { border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 30px rgba(var(--cat-rgb), 0.2); }
+        .score-value { color: var(--cat-light); }
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-light); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+        .progress-fill { background: linear-gradient(90deg, var(--cat-main), var(--cat-light)); box-shadow: 0 0 8px rgba(var(--cat-rgb), 0.4); }
+        .likert-options input[type="radio"]:checked + label,
+        .binary-options input[type="radio"]:checked + label,
+        .radio-options input[type="radio"]:checked + label { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+    </style>
+
+</head>
+<body class="light-questionnaire">
+    <!-- Navigation -->
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil">
+                <i class="fas fa-home"></i>
+            </a>
+            <button onclick="history.back()" class="btn-back" title="Retour">
+                <i class="fas fa-arrow-left"></i> <span>Retour</span>
+            </button>
+        </div>
+        <h1>CGI</h1>
+        <span class="badge badge-cat-psychose">Psychose</span>
+    </nav>
+
+    <div class="container">
+        <!-- En-tête -->
+        <header class="glass-card" style="text-align: center; margin-bottom: 1.5rem;">
+            <span class="hetero-badge">
+                <i class="fas fa-user-md"></i> HÉTÉRO-ÉVALUATION
+            </span>
+            <h2 class="gradient-text" style="background: linear-gradient(135deg, #7c3aed, #9333ea); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Clinical Global Impression</h2>
+            <p>Évaluation globale du patient par le clinicien - 3 items</p>
+        </header>
+
+        <!-- Informations -->
+        <section class="info-box">
+            <h3><i class="fas fa-info-circle"></i> À propos de cette échelle</h3>
+            <p>Le CGI (Clinical Global Impression) est une échelle d'<strong>hétéro-évaluation</strong> clinique rapide permettant au clinicien d'évaluer :</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+                <li><strong>CGI-S</strong> : La sévérité actuelle de la maladie</li>
+                <li><strong>CGI-I</strong> : L'amélioration globale depuis le début du traitement</li>
+                <li><strong>CGI-E</strong> : L'index d'efficacité thérapeutique (rapport bénéfice/risque)</li>
+            </ul>
+            <p style="margin-top: 0.5rem;">Cette échelle est particulièrement utile pour le <strong>suivi longitudinal</strong> des patients en psychiatrie.</p>
+        </section>
+
+        <!-- Avertissement -->
+        <section class="warning-box">
+            <h3><i class="fas fa-exclamation-triangle"></i> Avertissements importants</h3>
+            <ul style="margin: 0; padding-left: 1.5rem;">
+                <li>Cette échelle est destinée aux <strong>professionnels de santé</strong></li>
+                <li>L'évaluation repose sur le jugement clinique global</li>
+                <li>Le CGI-I nécessite une évaluation initiale de référence</li>
+                <li>Le CGI-E n'est pertinent qu'en cas de traitement en cours</li>
+            </ul>
+        </section>
+
+        <!-- Contrôles -->
+        <section class="glass-card">
+            <div class="control-buttons">
+                <button class="btn-secondary" onclick="importData()">
+                    <i class="fas fa-file-import"></i> Importer
+                </button>
+                <button class="btn-secondary" onclick="resetForm()">
+                    <i class="fas fa-redo"></i> Réinitialiser
+                </button>
+            </div>
+            <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="loadFile(event)">
+        </section>
+
+        <!-- CGI-S -->
+        <section class="glass-card">
+            <div class="question-card">
+                <div style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem;">
+                    <span class="question-number" style="background: linear-gradient(135deg, #7c3aed, #9333ea);">1</span>
+                    <div>
+                        <h3 style="margin: 0; color: #7c3aed;">CGI-S - Sévérité de la maladie</h3>
+                        <p class="question-text" style="margin-top: 0.5rem;">Compte tenu de votre expérience clinique totale avec ce type de patient, quel est le niveau de sévérité actuel de la maladie mentale du patient ?</p>
+                    </div>
+                </div>
+                <div class="options-grid" id="cgiSOptions"></div>
+            </div>
+        </section>
+
+        <!-- CGI-I -->
+        <section class="glass-card">
+            <div class="question-card">
+                <div style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem;">
+                    <span class="question-number" style="background: linear-gradient(135deg, #7c3aed, #9333ea);">2</span>
+                    <div>
+                        <h3 style="margin: 0; color: #7c3aed;">CGI-I - Amélioration globale</h3>
+                        <p class="question-text" style="margin-top: 0.5rem;">Par rapport à l'état du patient au début du traitement, comment évaluez-vous le changement actuel ?</p>
+                    </div>
+                </div>
+                <div class="options-grid" id="cgiIOptions"></div>
+            </div>
+        </section>
+
+        <!-- CGI-E -->
+        <section class="glass-card">
+            <div class="question-card">
+                <div style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem;">
+                    <span class="question-number" style="background: linear-gradient(135deg, #7c3aed, #9333ea);">3</span>
+                    <div>
+                        <h3 style="margin: 0; color: #7c3aed;">CGI-E - Index d'efficacité thérapeutique</h3>
+                        <p class="question-text" style="margin-top: 0.5rem;">Comment évaluez-vous le rapport efficacité/effets indésirables du traitement ?</p>
+                    </div>
+                </div>
+
+                <div class="info-box" style="margin-bottom: 1rem;">
+                    <p><strong>Instructions :</strong> Sélectionnez la case correspondant à la combinaison effet thérapeutique / effets indésirables.</p>
+                </div>
+
+                <!-- Matrice CGI-E Desktop -->
+                <div class="cgi-matrix" id="cgiEMatrix">
+                    <div class="matrix-header">
+                        <span>Effet thérapeutique</span>
+                        <span>Aucun effet indésirable</span>
+                        <span>N'interfèrent pas significativement</span>
+                        <span>Interfèrent significativement</span>
+                        <span>Dépassent l'effet thérapeutique</span>
+                    </div>
+                    <!-- Les lignes seront générées par JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Résultats -->
+        <section id="results" class="results-section" style="display: none;">
+            <h2 style="text-align: center; margin-bottom: 2rem;">
+                <i class="fas fa-chart-bar"></i> Résultats de l'évaluation
+            </h2>
+
+            <div class="score-grid">
+                <div class="score-card">
+                    <h4>CGI-S</h4>
+                    <div class="score-value" id="scoreCGIS">-</div>
+                    <div class="score-label">Sévérité</div>
+                </div>
+                <div class="score-card">
+                    <h4>CGI-I</h4>
+                    <div class="score-value" id="scoreCGII">-</div>
+                    <div class="score-label">Amélioration</div>
+                </div>
+                <div class="score-card">
+                    <h4>CGI-E</h4>
+                    <div class="score-value" id="scoreCGIE">-</div>
+                    <div class="score-label">Efficacité</div>
+                </div>
+            </div>
+
+            <div class="interpretation-grid" id="interpretations"></div>
+
+            <button class="btn-primary w-full" onclick="toggleDetails()" style="margin-top: 1.5rem; background: linear-gradient(135deg, #7c3aed, #9333ea);">
+                <i class="fas fa-list"></i> Voir les détails d'interprétation
+                <span id="toggleIcon"><i class="fas fa-chevron-down"></i></span>
+            </button>
+
+            <div id="detailsContent" class="glass-card" style="display: none; margin-top: 1rem;"></div>
+
+            <!-- Export -->
+            <div class="glass-card" style="margin-top: 2rem;">
+                <h3><i class="fas fa-download"></i> Exporter les résultats</h3>
+                <div class="consent-box">
+                    <label>
+                        <input type="checkbox" id="exportConsent">
+                        <span>J'atteste avoir informé la personne concernée de cet export et obtenu son accord. <strong>Ces résultats constituent des données de santé — je m'engage à les conserver de façon sécurisée et à ne les partager qu'avec des professionnels de santé autorisés.</strong> Aucune donnée n'est transmise à un serveur.</span>
+                    </label>
+                </div>
+                <div class="export-buttons">
+                    <button class="btn-primary" onclick="exportData()" style="background: linear-gradient(135deg, #7c3aed, #9333ea);">
+                        <i class="fas fa-file-export"></i> Exporter en JSON
+                    </button>
+                    <button class="btn-print" onclick="printResults()">
+                        <i class="fas fa-print"></i> Imprimer
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p><strong>CGI - Clinical Global Impression</strong></p>
+        <p>Auteur original : William Guy (1976), NIMH</p>
+        <p>Adaptation numérique : Dr FENOHASINA | Psychiatre</p>
+        <p style="margin-top: 1rem;">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr" target="_blank">
+                Licence CC BY-NC-SA 4.0
+            </a>
+        </p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../js/app.js"></script>
+    <script>
+        // Options CGI-S
+        const cgiSOptions = [
+            { value: 1, label: "Normal, pas du tout malade" },
+            { value: 2, label: "À la limite de la maladie mentale" },
+            { value: 3, label: "Légèrement malade" },
+            { value: 4, label: "Modérément malade" },
+            { value: 5, label: "Manifestement malade" },
+            { value: 6, label: "Gravement malade" },
+            { value: 7, label: "Parmi les patients les plus malades" }
+        ];
+
+        // Options CGI-I
+        const cgiIOptions = [
+            { value: 0, label: "Non évalué (première visite)" },
+            { value: 1, label: "Très fortement amélioré" },
+            { value: 2, label: "Fortement amélioré" },
+            { value: 3, label: "Légèrement amélioré" },
+            { value: 4, label: "Pas de changement" },
+            { value: 5, label: "Légèrement aggravé" },
+            { value: 6, label: "Fortement aggravé" },
+            { value: 7, label: "Très fortement aggravé" }
+        ];
+
+        // Matrice CGI-E
+        const therapeuticEffects = [
+            { value: 1, label: "Marqué: amélioration complète ou quasi-complète" },
+            { value: 2, label: "Modéré: amélioration partielle" },
+            { value: 3, label: "Minime: légère amélioration" },
+            { value: 4, label: "Inchangé ou aggravé" }
+        ];
+
+        const sideEffects = [
+            { value: 1, label: "Aucun" },
+            { value: 2, label: "N'interfèrent pas significativement" },
+            { value: 3, label: "Interfèrent significativement" },
+            { value: 4, label: "Dépassent l'effet thérapeutique" }
+        ];
+
+        // Variables d'etat
+        let cgiS = null;
+        let cgiI = null;
+        let cgiE = null; // {therapeutic: 1-4, sideEffects: 1-4, score: 1-16}
+
+        // Initialisation CGI-S
+        function initializeCGIS() {
+            const container = document.getElementById('cgiSOptions');
+            container.innerHTML = cgiSOptions.map(opt => `
+                <button class="option-btn psychose" onclick="selectCGIS(${opt.value})" id="cgis_${opt.value}">
+                    <strong>${opt.value}</strong> - ${opt.label}
+                </button>
+            `).join('');
+        }
+
+        // Initialisation CGI-I
+        function initializeCGII() {
+            const container = document.getElementById('cgiIOptions');
+            container.innerHTML = cgiIOptions.map(opt => `
+                <button class="option-btn psychose" onclick="selectCGII(${opt.value})" id="cgii_${opt.value}">
+                    <strong>${opt.value}</strong> - ${opt.label}
+                </button>
+            `).join('');
+        }
+
+        // Initialisation matrice CGI-E
+        function initializeCGIE() {
+            const container = document.getElementById('cgiEMatrix');
+
+            // Garder le header et ajouter les lignes
+            const headerHTML = container.innerHTML;
+
+            let rowsHTML = '';
+            therapeuticEffects.forEach((effect, rowIndex) => {
+                rowsHTML += `
+                    <div class="matrix-row">
+                        <div class="matrix-row-label">${effect.label}</div>
+                        ${sideEffects.map((side, colIndex) => {
+                            const score = (rowIndex * 4) + colIndex + 1;
+                            return `<button class="matrix-btn" onclick="selectCGIE(${effect.value}, ${side.value}, ${score})" id="cgie_${effect.value}_${side.value}">${score}</button>`;
+                        }).join('')}
+                    </div>
+                `;
+            });
+
+            container.innerHTML = headerHTML + rowsHTML;
+        }
+
+        // Selection CGI-S
+        function selectCGIS(value) {
+            cgiS = value;
+
+            // Reset tous les boutons
+            cgiSOptions.forEach(opt => {
+                document.getElementById(`cgis_${opt.value}`).classList.remove('selected');
+            });
+
+            // Selectionner le bon
+            document.getElementById(`cgis_${value}`).classList.add('selected');
+
+            checkCompletion();
+        }
+
+        // Selection CGI-I
+        function selectCGII(value) {
+            cgiI = value;
+
+            // Reset tous les boutons
+            cgiIOptions.forEach(opt => {
+                document.getElementById(`cgii_${opt.value}`).classList.remove('selected');
+            });
+
+            // Selectionner le bon
+            document.getElementById(`cgii_${value}`).classList.add('selected');
+
+            checkCompletion();
+        }
+
+        // Selection CGI-E
+        function selectCGIE(therapeutic, sideEffect, score) {
+            cgiE = {
+                therapeutic: therapeutic,
+                sideEffects: sideEffect,
+                score: score
+            };
+
+            // Reset tous les boutons de la matrice
+            therapeuticEffects.forEach(t => {
+                sideEffects.forEach(s => {
+                    document.getElementById(`cgie_${t.value}_${s.value}`).classList.remove('selected');
+                });
+            });
+
+            // Selectionner le bon
+            document.getElementById(`cgie_${therapeutic}_${sideEffect}`).classList.add('selected');
+
+            checkCompletion();
+        }
+
+        // Verification completion
+        function checkCompletion() {
+            // Au moins CGI-S doit etre rempli pour afficher les resultats
+            if (cgiS !== null) {
+                updateResults();
+                document.getElementById('results').style.display = 'block';
+            }
+        }
+
+        // Interpretation CGI-S
+        function interpretCGIS(score) {
+            if (score <= 2) return {
+                level: "Pas de maladie significative",
+                className: "low",
+                description: "Le patient ne présente pas de symptômes significatifs de maladie mentale."
+            };
+            if (score <= 4) return {
+                level: "Maladie légère à modérée",
+                className: "moderate",
+                description: "Symptômes présents mais impact fonctionnel limité."
+            };
+            return {
+                level: "Maladie sévère",
+                className: "high",
+                description: "Symptômes importants avec impact fonctionnel significatif. Prise en charge intensive recommandée."
+            };
+        }
+
+        // Interpretation CGI-I
+        function interpretCGII(score) {
+            if (score === 0) return {
+                level: "Non évalué",
+                className: "neutral",
+                description: "Première évaluation, pas de comparaison possible."
+            };
+            if (score <= 2) return {
+                level: "Amélioration significative",
+                className: "low",
+                description: "Le traitement montre une efficacité notable."
+            };
+            if (score === 3) return {
+                level: "Amélioration légère",
+                className: "moderate",
+                description: "Amélioration perceptible mais limitée. Réévaluation du traitement à considérer."
+            };
+            if (score === 4) return {
+                level: "Pas de changement",
+                className: "moderate",
+                description: "État clinique stable. Réévaluer la stratégie thérapeutique."
+            };
+            return {
+                level: "Aggravation",
+                className: "high",
+                description: "Détérioration de l'état clinique. Modification du traitement nécessaire."
+            };
+        }
+
+        // Interpretation CGI-E
+        function interpretCGIE(score) {
+            if (score <= 4) return {
+                level: "Bon rapport bénéfice/risque",
+                className: "low",
+                description: "Le traitement est efficace avec des effets indésirables acceptables."
+            };
+            if (score <= 8) return {
+                level: "Rapport bénéfice/risque modéré",
+                className: "moderate",
+                description: "Efficacité présente mais effets indésirables à surveiller."
+            };
+            if (score <= 12) return {
+                level: "Rapport bénéfice/risque défavorable",
+                className: "high",
+                description: "Effets indésirables importants ou efficacité insuffisante. Adaptation thérapeutique recommandée."
+            };
+            return {
+                level: "Rapport bénéfice/risque très défavorable",
+                className: "critical",
+                description: "Les effets indésirables dépassent les bénéfices. Changement de traitement à envisager."
+            };
+        }
+
+        // Mise a jour des resultats
+        function updateResults() {
+            // CGI-S
+            if (cgiS !== null) {
+                document.getElementById('scoreCGIS').textContent = cgiS;
+                const interpS = interpretCGIS(cgiS);
+                updateInterpretationDisplay('S', interpS);
+            }
+
+            // CGI-I
+            if (cgiI !== null) {
+                document.getElementById('scoreCGII').textContent = cgiI === 0 ? 'N/E' : cgiI;
+                const interpI = interpretCGII(cgiI);
+                updateInterpretationDisplay('I', interpI);
+            } else {
+                document.getElementById('scoreCGII').textContent = '-';
+            }
+
+            // CGI-E
+            if (cgiE !== null) {
+                document.getElementById('scoreCGIE').textContent = cgiE.score;
+                const interpE = interpretCGIE(cgiE.score);
+                updateInterpretationDisplay('E', interpE);
+            } else {
+                document.getElementById('scoreCGIE').textContent = '-';
+            }
+
+            updateDetailsContent();
+        }
+
+        function updateInterpretationDisplay(type, interp) {
+            const container = document.getElementById('interpretations');
+            let existingItem = document.getElementById(`interp_${type}`);
+
+            const html = `
+                <div class="interpretation-item" id="interp_${type}">
+                    <h4>CGI-${type}: ${interp.level}</h4>
+                    <p>${interp.description}</p>
+                </div>
+            `;
+
+            if (existingItem) {
+                existingItem.outerHTML = html;
+            } else {
+                container.innerHTML += html;
+            }
+        }
+
+        function updateDetailsContent() {
+            const content = document.getElementById('detailsContent');
+
+            let html = '<h3 style="margin-bottom: 1rem;">Guide d\'interprétation détaillé</h3>';
+
+            html += `
+                <div class="info-box" style="margin-bottom: 1rem;">
+                    <h4 style="color: #7c3aed;">CGI-S (Sévérité)</h4>
+                    <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+                        <li><strong>1-2</strong> : Pas de maladie significative</li>
+                        <li><strong>3-4</strong> : Maladie légère à modérée</li>
+                        <li><strong>5-7</strong> : Maladie sévère</li>
+                    </ul>
+                </div>
+
+                <div class="info-box" style="margin-bottom: 1rem;">
+                    <h4 style="color: #7c3aed;">CGI-I (Amélioration)</h4>
+                    <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+                        <li><strong>1-2</strong> : Amélioration significative</li>
+                        <li><strong>3</strong> : Amélioration légère</li>
+                        <li><strong>4</strong> : Pas de changement</li>
+                        <li><strong>5-7</strong> : Aggravation</li>
+                        <li><strong>0</strong> : Non évalué (première visite)</li>
+                    </ul>
+                </div>
+
+                <div class="info-box" style="margin-bottom: 1rem;">
+                    <h4 style="color: #7c3aed;">CGI-E (Index d'efficacité)</h4>
+                    <p style="margin-bottom: 0.5rem;">Score de 1 à 16 combinant l'effet thérapeutique (lignes) et les effets indésirables (colonnes) :</p>
+                    <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+                        <li><strong>1-4</strong> : Bon rapport bénéfice/risque</li>
+                        <li><strong>5-8</strong> : Rapport modéré</li>
+                        <li><strong>9-12</strong> : Rapport défavorable</li>
+                        <li><strong>13-16</strong> : Rapport très défavorable</li>
+                    </ul>
+                </div>
+            `;
+
+            if (cgiE !== null) {
+                const therapeuticLabel = therapeuticEffects[cgiE.therapeutic - 1].label;
+                const sideEffectLabel = sideEffects[cgiE.sideEffects - 1].label;
+
+                html += `
+                    <div class="warning-box">
+                        <h4>Détail CGI-E actuel</h4>
+                        <p><strong>Effet thérapeutique :</strong> ${therapeuticLabel}</p>
+                        <p><strong>Effets indésirables :</strong> ${sideEffectLabel}</p>
+                    </div>
+                `;
+            }
+
+            content.innerHTML = html;
+        }
+
+        function toggleDetails() {
+            const content = document.getElementById('detailsContent');
+            const icon = document.getElementById('toggleIcon');
+            const isVisible = content.style.display !== 'none';
+
+            content.style.display = isVisible ? 'none' : 'block';
+            icon.innerHTML = isVisible ? '<i class="fas fa-chevron-down"></i>' : '<i class="fas fa-chevron-up"></i>';
+        }
+
+        function resetForm() {
+            cgiS = null;
+            cgiI = null;
+            cgiE = null;
+
+            // Reset boutons CGI-S
+            cgiSOptions.forEach(opt => {
+                document.getElementById(`cgis_${opt.value}`).classList.remove('selected');
+            });
+
+            // Reset boutons CGI-I
+            cgiIOptions.forEach(opt => {
+                document.getElementById(`cgii_${opt.value}`).classList.remove('selected');
+            });
+
+            // Reset matrice CGI-E
+            therapeuticEffects.forEach(t => {
+                sideEffects.forEach(s => {
+                    document.getElementById(`cgie_${t.value}_${s.value}`).classList.remove('selected');
+                });
+            });
+
+            // Reset affichage
+            document.getElementById('scoreCGIS').textContent = '-';
+            document.getElementById('scoreCGII').textContent = '-';
+            document.getElementById('scoreCGIE').textContent = '-';
+            document.getElementById('interpretations').innerHTML = '';
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('detailsContent').style.display = 'none';
+            document.getElementById('exportConsent').checked = false;
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function importData() {
+            document.getElementById('fileInput').click();
+        }
+
+        function loadFile(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const data = JSON.parse(e.target.result);
+
+                        if (data.cgiS !== null && data.cgiS !== undefined) {
+                            selectCGIS(data.cgiS);
+                        }
+                        if (data.cgiI !== null && data.cgiI !== undefined) {
+                            selectCGII(data.cgiI);
+                        }
+                        if (data.cgiE && data.cgiE.therapeutic && data.cgiE.sideEffects) {
+                            selectCGIE(data.cgiE.therapeutic, data.cgiE.sideEffects, data.cgiE.score);
+                        }
+                    } catch (error) {
+                        alert("Erreur lors de l'importation du fichier");
+                    }
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        function exportData() {
+            const consent = document.getElementById('exportConsent').checked;
+            if (!consent) {
+                alert("Veuillez cocher la case de consentement avant d''exporter.");
+                return;
+            }
+
+            const data = {
+                questionnaire: "CGI",
+                date: new Date().toISOString(),
+                cgiS: cgiS,
+                cgiI: cgiI,
+                cgiE: cgiE,
+                interpretations: {
+                    severity: cgiS !== null ? interpretCGIS(cgiS).level : null,
+                    improvement: cgiI !== null ? interpretCGII(cgiI).level : null,
+                    efficacy: cgiE !== null ? interpretCGIE(cgiE.score).level : null
+                }
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `CGI_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function printResults() {
+            window.print();
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCGIS();
+            initializeCGII();
+            initializeCGIE();
+        });
+    </script>
+</body>
+</html>

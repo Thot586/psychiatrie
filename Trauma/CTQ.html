@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CTQ - Childhood Trauma Questionnaire</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --cat-main: #6366f1;
+            --cat-dark: #4f46e5;
+            --cat-light: #818cf8;
+            --cat-rgb: 99, 102, 241;
+            --cat-readable: #4f46e5;
+        }
+        .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
+        .option-btn.selected, .answer-btn.selected { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        .score-circle { border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 30px rgba(var(--cat-rgb), 0.2); }
+        .score-value { color: var(--cat-light); }
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-light); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+        .progress-fill { background: linear-gradient(90deg, var(--cat-main), var(--cat-light)); box-shadow: 0 0 8px rgba(var(--cat-rgb), 0.4); }
+        .likert-options input[type="radio"]:checked + label,
+        .binary-options input[type="radio"]:checked + label,
+        .radio-options input[type="radio"]:checked + label { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+    </style>
+
+</head>
+<body class="light-questionnaire">
+    <!-- Navigation -->
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+            <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+        </div>
+        <h1>CTQ</h1>
+        <span class="badge badge-cat-trauma">Trauma</span>
+    </nav>
+
+    <main class="container">
+        <!-- Header -->
+        <header class="header-glow" style="text-align: center; margin-bottom: 2rem;">
+            <h1><i class="fas fa-child"></i> Childhood Trauma Questionnaire</h1>
+            <p class="subtitle">Questionnaire sur les Traumatismes de l'Enfance (CTQ-SF)</p>
+        </header>
+
+        <!-- Instructions -->
+        <section class="glass-card" id="instructions-section">
+            <h2><i class="fas fa-info-circle"></i> Instructions</h2>
+            <p>Ce questionnaire porte sur certaines de vos expériences durant votre enfance et votre adolescence.</p>
+            <p>Pour chaque affirmation, indiquez à quelle fréquence elle correspondait à votre vécu en utilisant l'échelle suivante :</p>
+            <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                <li><strong>1 = Jamais vrai</strong></li>
+                <li><strong>2 = Rarement vrai</strong></li>
+                <li><strong>3 = Parfois vrai</strong></li>
+                <li><strong>4 = Souvent vrai</strong></li>
+                <li><strong>5 = Très souvent vrai</strong></li>
+            </ul>
+            <p style="color: var(--color-text-muted); font-size: var(--font-size-sm);">Répondez le plus honnêtement possible. Il n'y a pas de bonnes ou mauvaises réponses.</p>
+            <button class="btn-primary" onclick="startQuestionnaire()" style="margin-top: 1.5rem;">
+                <i class="fas fa-play"></i> Commencer le questionnaire
+            </button>
+        </section>
+
+        <!-- Progress Bar -->
+        <div class="progress-container" id="progress-container" style="display: none;">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <span class="progress-text" id="progress-text">0 / 28</span>
+        </div>
+
+        <!-- Questions -->
+        <section id="questions-section" style="display: none;"></section>
+
+        <!-- Navigation Buttons -->
+        <div class="navigation-buttons" id="nav-buttons" style="display: none;">
+            <button class="btn-secondary" id="prev-btn" onclick="previousQuestion()" disabled>
+                <i class="fas fa-arrow-left"></i> Précédent
+            </button>
+            <button class="btn-primary" id="next-btn" onclick="nextQuestion()">
+                Suivant <i class="fas fa-arrow-right"></i>
+            </button>
+            <button class="btn-primary" id="submit-btn" onclick="calculateResults()" style="display: none;">
+                <i class="fas fa-calculator"></i> Calculer les résultats
+            </button>
+        </div>
+
+        <!-- Results -->
+        <section class="glass-card" id="results-section" style="display: none;">
+            <h2 style="text-align: center; margin-bottom: 1.5rem;"><i class="fas fa-chart-bar"></i> Résultats CTQ</h2>
+
+            <div style="display: flex; justify-content: center; margin-bottom: 2rem;">
+                <div class="score-circle" style="width: 120px; height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 50%;">
+                    <span style="font-size: 2rem; font-weight: 700; color: white;" id="total-score">0</span>
+                    <span style="font-size: 0.75rem; color: rgba(255,255,255,0.8);">Score Total</span>
+                </div>
+            </div>
+
+            <h3 style="margin-bottom: 1rem; color: var(--color-text-secondary);"><i class="fas fa-list-ul"></i> Scores par sous-échelle</h3>
+            <div id="subscales-results"></div>
+
+            <div class="warning-reverse">
+                <h4><i class="fas fa-exclamation-triangle"></i> Note sur la validité</h4>
+                <p>Ce questionnaire contient des items de minimisation/déni. Un score élevé à ces items peut indiquer une tendance à minimiser les expériences traumatiques.</p>
+            </div>
+
+            <!-- Interpretation -->
+            <div class="glass-card" style="margin-top: 1.5rem; border-left: 4px solid #6366f1;">
+                <h3><i class="fas fa-clipboard-list"></i> Interprétation</h3>
+                <div id="interpretation-text"></div>
+            </div>
+
+            <!-- Actions -->
+            <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; flex-wrap: wrap;">
+                <button class="btn-secondary" onclick="window.print()">
+                    <i class="fas fa-print"></i> Imprimer
+                </button>
+                <button class="btn-secondary" onclick="resetQuestionnaire()">
+                    <i class="fas fa-redo"></i> Recommencer
+                </button>
+                <button class="btn-primary" onclick="exportResults()">
+                    <i class="fas fa-download"></i> Exporter
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p><strong>&copy; Bernstein et al. (1994, 2003) - Childhood Trauma Questionnaire (CTQ)</strong></p>
+        <p>Adapte en version interactive par Dr FENOHASINA T.J. Felicien (Psychiatre)</p>
+        <p>&copy; 2025 - Centre Ressource de Rehabilitation</p>
+        <p class="license">Licence CC BY-NC-SA 4.0</p>
+    </footer>
+
+    <script>
+        // CTQ-SF Questions (28 items)
+        // Items are grouped by subscale:
+        // Emotional Abuse (EA): 3, 8, 14, 18, 25
+        // Physical Abuse (PA): 9, 11, 12, 15, 17
+        // Sexual Abuse (SA): 20, 21, 23, 24, 27
+        // Emotional Neglect (EN): 5, 7, 13, 19, 28 (REVERSED)
+        // Physical Neglect (PN): 1, 2, 4, 6, 26 (items 1, 2, 4, 26 are REVERSED)
+        // Minimization/Denial (MD): 10, 16, 22
+
+        const questions = [
+            { id: 1, text: "Je n'ai pas eu assez à manger.", subscale: "PN", reversed: false },
+            { id: 2, text: "Je savais qu'il y avait quelqu'un pour prendre soin de moi et me proteger.", subscale: "PN", reversed: true },
+            { id: 3, text: "Des membres de ma famille m'ont traité(e) de 'stupide', 'paresseux(se)' ou 'laid(e)'.", subscale: "EA", reversed: false },
+            { id: 4, text: "Mes parents étaient trop ivres ou drogué(e)s pour s'occuper de la famille.", subscale: "PN", reversed: false },
+            { id: 5, text: "Il y avait quelqu'un dans ma famille qui m'aidait à me sentir important(e) ou spécial(e).", subscale: "EN", reversed: true },
+            { id: 6, text: "Je devais porter des vetements sales.", subscale: "PN", reversed: false },
+            { id: 7, text: "Je me sentais aimé(e).", subscale: "EN", reversed: true },
+            { id: 8, text: "J'ai pensé que mes parents auraient souhaité que je ne sois jamais né(e).", subscale: "EA", reversed: false },
+            { id: 9, text: "J'ai été frappé(e) si fort par un membre de ma famille que j'ai dû voir un médecin ou aller à l'hôpital.", subscale: "PA", reversed: false },
+            { id: 10, text: "Il n'y avait rien que j'aurais voulu changer dans ma famille.", subscale: "MD", reversed: false },
+            { id: 11, text: "Des membres de ma famille m'ont frappé(e) si fort que j'en ai eu des bleus ou des marques.", subscale: "PA", reversed: false },
+            { id: 12, text: "J'ai été puni(e) avec une ceinture, un bâton, une corde ou un autre objet dur.", subscale: "PA", reversed: false },
+            { id: 13, text: "Les membres de ma famille prenaient soin les uns des autres.", subscale: "EN", reversed: true },
+            { id: 14, text: "Des membres de ma famille m'ont dit des choses blessantes ou insultantes.", subscale: "EA", reversed: false },
+            { id: 15, text: "Je crois avoir été maltraité(e) physiquement.", subscale: "PA", reversed: false },
+            { id: 16, text: "J'ai eu une enfance parfaite.", subscale: "MD", reversed: false },
+            { id: 17, text: "J'ai été frappé(e) ou battu(e) si fort que quelqu'un l'a remarqué (un professeur, un voisin, un médecin).", subscale: "PA", reversed: false },
+            { id: 18, text: "J'ai eu l'impression que quelqu'un dans ma famille me détestait.", subscale: "EA", reversed: false },
+            { id: 19, text: "Les membres de ma famille se sentaient proches les uns des autres.", subscale: "EN", reversed: true },
+            { id: 20, text: "Quelqu'un a essayé de me toucher sexuellement ou de me faire toucher.", subscale: "SA", reversed: false },
+            { id: 21, text: "Quelqu'un m'a menacé(e) de me faire du mal ou de raconter des mensonges sur moi si je ne faisais pas quelque chose de sexuel avec lui/elle.", subscale: "SA", reversed: false },
+            { id: 22, text: "J'ai eu la meilleure famille du monde.", subscale: "MD", reversed: false },
+            { id: 23, text: "Quelqu'un a essayé de me faire faire des choses sexuelles ou de me faire regarder des choses sexuelles.", subscale: "SA", reversed: false },
+            { id: 24, text: "Quelqu'un m'a agressé(e) sexuellement.", subscale: "SA", reversed: false },
+            { id: 25, text: "Je crois avoir été maltraité(e) émotionnellement.", subscale: "EA", reversed: false },
+            { id: 26, text: "Il y avait quelqu'un pour m'emmener chez le medecin si j'en avais besoin.", subscale: "PN", reversed: true },
+            { id: 27, text: "Je crois avoir été abusé(e) sexuellement.", subscale: "SA", reversed: false },
+            { id: 28, text: "Ma famille était une source de force et de soutien.", subscale: "EN", reversed: true }
+        ];
+
+        const subscaleInfo = {
+            EA: { name: "Abus Émotionnel", cutoffs: { none: 8, low: 9, moderate: 13, severe: 16 } },
+            PA: { name: "Abus Physique", cutoffs: { none: 7, low: 8, moderate: 10, severe: 13 } },
+            SA: { name: "Abus Sexuel", cutoffs: { none: 5, low: 6, moderate: 8, severe: 13 } },
+            EN: { name: "Négligence Émotionnelle", cutoffs: { none: 9, low: 10, moderate: 15, severe: 18 } },
+            PN: { name: "Négligence Physique", cutoffs: { none: 7, low: 8, moderate: 10, severe: 13 } },
+            MD: { name: "Minimisation/Déni", cutoffs: { none: 0, low: 1, moderate: 2, severe: 3 } }
+        };
+
+        const options = [
+            { value: 1, label: "Jamais vrai" },
+            { value: 2, label: "Rarement vrai" },
+            { value: 3, label: "Parfois vrai" },
+            { value: 4, label: "Souvent vrai" },
+            { value: 5, label: "Très souvent vrai" }
+        ];
+
+        let currentQuestion = 0;
+        let answers = {};
+
+        function startQuestionnaire() {
+            document.getElementById('instructions-section').style.display = 'none';
+            document.getElementById('progress-container').style.display = 'flex';
+            document.getElementById('questions-section').style.display = 'block';
+            document.getElementById('nav-buttons').style.display = 'flex';
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const q = questions[currentQuestion];
+            const section = document.getElementById('questions-section');
+
+            section.innerHTML = `
+                <div class="question-card ${answers[q.id] !== undefined ? 'answered' : ''}">
+                    <div class="question-header">
+                        <span class="question-number">${currentQuestion + 1}</span>
+                        <span class="question-text">${q.text}</span>
+                    </div>
+                    <div class="options-container">
+                        ${options.map(opt => `
+                            <button class="option-btn ${answers[q.id] === opt.value ? 'selected' : ''}"
+                                    onclick="selectAnswer(${q.id}, ${opt.value})">
+                                <span class="option-value">${opt.value}</span>
+                                <span class="option-label">${opt.label}</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            updateProgress();
+            updateNavButtons();
+        }
+
+        function selectAnswer(questionId, value) {
+            answers[questionId] = value;
+            renderQuestion();
+        }
+
+        function updateProgress() {
+            const answered = Object.keys(answers).length;
+            const total = questions.length;
+            const percentage = (answered / total) * 100;
+
+            document.getElementById('progress-fill').style.width = percentage + '%';
+            document.getElementById('progress-text').textContent = `${answered} / ${total}`;
+        }
+
+        function updateNavButtons() {
+            document.getElementById('prev-btn').disabled = currentQuestion === 0;
+
+            const isLastQuestion = currentQuestion === questions.length - 1;
+            const allAnswered = Object.keys(answers).length === questions.length;
+
+            document.getElementById('next-btn').style.display = isLastQuestion ? 'none' : 'flex';
+            document.getElementById('submit-btn').style.display = isLastQuestion ? 'flex' : 'none';
+            document.getElementById('submit-btn').disabled = !allAnswered;
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                renderQuestion();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                renderQuestion();
+            }
+        }
+
+        function calculateResults() {
+            // Calculate subscale scores
+            const subscaleScores = {
+                EA: 0, PA: 0, SA: 0, EN: 0, PN: 0, MD: 0
+            };
+
+            questions.forEach(q => {
+                let score = answers[q.id];
+                // Reverse score for reversed items (1->5, 2->4, 3->3, 4->2, 5->1)
+                if (q.reversed) {
+                    score = 6 - score;
+                }
+                subscaleScores[q.subscale] += score;
+            });
+
+            // Calculate total (excluding MD)
+            const totalScore = subscaleScores.EA + subscaleScores.PA + subscaleScores.SA + subscaleScores.EN + subscaleScores.PN;
+
+            displayResults(subscaleScores, totalScore);
+        }
+
+        function getSeverityLevel(subscale, score) {
+            const cutoffs = subscaleInfo[subscale].cutoffs;
+            if (score <= cutoffs.none) return { level: "none", label: "Aucun/Minimal", class: "severity-none" };
+            if (score <= cutoffs.low) return { level: "low", label: "Léger", class: "severity-low" };
+            if (score <= cutoffs.moderate) return { level: "moderate", label: "Modéré", class: "severity-moderate" };
+            return { level: "severe", label: "Sévère", class: "severity-severe" };
+        }
+
+        function displayResults(subscaleScores, totalScore) {
+            document.getElementById('questions-section').style.display = 'none';
+            document.getElementById('nav-buttons').style.display = 'none';
+            document.getElementById('progress-container').style.display = 'none';
+            document.getElementById('results-section').style.display = 'block';
+
+            document.getElementById('total-score').textContent = totalScore;
+
+            // Display subscale results
+            const subscalesDiv = document.getElementById('subscales-results');
+            let subscalesHTML = '';
+
+            const mainSubscales = ['EA', 'PA', 'SA', 'EN', 'PN'];
+            mainSubscales.forEach(key => {
+                const info = subscaleInfo[key];
+                const score = subscaleScores[key];
+                const maxScore = 25; // 5 items * 5 max
+                const percentage = (score / maxScore) * 100;
+                const severity = getSeverityLevel(key, score);
+
+                subscalesHTML += `
+                    <div class="subscale-card">
+                        <div class="subscale-header">
+                            <span class="subscale-name">${info.name}</span>
+                            <span class="subscale-score">${score}/25 <span class="severity-badge ${severity.class}">${severity.label}</span></span>
+                        </div>
+                        <div class="subscale-bar">
+                            <div class="subscale-fill ${severity.level}" style="width: ${percentage}%"></div>
+                        </div>
+                        <p class="subscale-interpretation">Seuils: Aucun ≤${info.cutoffs.none}, Léger ${info.cutoffs.none + 1}-${info.cutoffs.low}, Modéré ${info.cutoffs.low + 1}-${info.cutoffs.moderate}, Sévère >${info.cutoffs.moderate}</p>
+                    </div>
+                `;
+            });
+
+            // Add MD subscale separately
+            const mdScore = subscaleScores.MD;
+            subscalesHTML += `
+                <div class="subscale-card" style="border-color: rgba(251, 191, 36, 0.3);">
+                    <div class="subscale-header">
+                        <span class="subscale-name" style="color: #fbbf24;">${subscaleInfo.MD.name}</span>
+                        <span class="subscale-score" style="color: #fbbf24;">${mdScore}/15</span>
+                    </div>
+                    <p class="subscale-interpretation">Un score ≥10 suggère une possible minimisation ou déni des expériences traumatiques.</p>
+                </div>
+            `;
+
+            subscalesDiv.innerHTML = subscalesHTML;
+
+            // Generate interpretation
+            generateInterpretation(subscaleScores, totalScore);
+
+            // Scroll to results
+            document.getElementById('results-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function generateInterpretation(subscaleScores, totalScore) {
+            let interpretation = '';
+            const significantTraumas = [];
+
+            const mainSubscales = ['EA', 'PA', 'SA', 'EN', 'PN'];
+            mainSubscales.forEach(key => {
+                const severity = getSeverityLevel(key, subscaleScores[key]);
+                if (severity.level === 'moderate' || severity.level === 'severe') {
+                    significantTraumas.push({
+                        name: subscaleInfo[key].name,
+                        level: severity.label
+                    });
+                }
+            });
+
+            if (significantTraumas.length === 0) {
+                interpretation = `<p style="color: #34d399;"><i class="fas fa-check-circle"></i> Les scores obtenus ne suggèrent pas de traumatismes significatifs durant l'enfance. Cependant, ce questionnaire est un outil de dépistage et ne remplace pas une évaluation clinique complète.</p>`;
+            } else {
+                interpretation = `<p><i class="fas fa-exclamation-circle" style="color: #f87171;"></i> Les résultats suggèrent des expériences traumatiques potentiellement significatives dans les domaines suivants :</p><ul style="margin: 1rem 0; padding-left: 1.5rem;">`;
+                significantTraumas.forEach(t => {
+                    interpretation += `<li><strong>${t.name}</strong> : niveau ${t.level.toLowerCase()}</li>`;
+                });
+                interpretation += `</ul><p style="color: var(--color-text-muted);">Ces résultats méritent une exploration approfondie avec un professionnel de santé mentale spécialisé dans le trauma.</p>`;
+            }
+
+            if (subscaleScores.MD >= 10) {
+                interpretation += `<p style="margin-top: 1rem; color: #fbbf24;"><i class="fas fa-exclamation-triangle"></i> <strong>Note :</strong> Le score de minimisation/déni est élevé (${subscaleScores.MD}/15), ce qui peut indiquer une tendance à sous-évaluer les expériences traumatiques.</p>`;
+            }
+
+            document.getElementById('interpretation-text').innerHTML = interpretation;
+        }
+
+        function resetQuestionnaire() {
+            currentQuestion = 0;
+            answers = {};
+            document.getElementById('results-section').style.display = 'none';
+            document.getElementById('instructions-section').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function exportResults() {
+            const subscaleScores = { EA: 0, PA: 0, SA: 0, EN: 0, PN: 0, MD: 0 };
+            questions.forEach(q => {
+                let score = answers[q.id];
+                if (q.reversed) score = 6 - score;
+                subscaleScores[q.subscale] += score;
+            });
+            const totalScore = subscaleScores.EA + subscaleScores.PA + subscaleScores.SA + subscaleScores.EN + subscaleScores.PN;
+
+            let exportText = `CTQ - Childhood Trauma Questionnaire\n`;
+            exportText += `Date: ${new Date().toLocaleDateString('fr-FR')}\n\n`;
+            exportText += `SCORE TOTAL: ${totalScore}/125\n\n`;
+            exportText += `SCORES PAR SOUS-ÉCHELLE:\n`;
+
+            const mainSubscales = ['EA', 'PA', 'SA', 'EN', 'PN'];
+            mainSubscales.forEach(key => {
+                const severity = getSeverityLevel(key, subscaleScores[key]);
+                exportText += `- ${subscaleInfo[key].name}: ${subscaleScores[key]}/25 (${severity.label})\n`;
+            });
+            exportText += `- ${subscaleInfo.MD.name}: ${subscaleScores.MD}/15\n`;
+
+            const blob = new Blob([exportText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `CTQ_resultats_${new Date().toISOString().split('T')[0]}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

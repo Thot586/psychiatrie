@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testeur de Question de Recherche</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap');
+
+        .tester-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .framework-selector {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .framework-option {
+            flex: 1;
+            min-width: 200px;
+            padding: 1.25rem;
+            background: var(--surface-table);
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .framework-option:hover {
+            border-color: var(--color-border-hover);
+            background: var(--surface-input);
+        }
+
+        .framework-option.selected {
+            border-color: var(--color-primary);
+            background: rgba(14, 165, 233, 0.15);
+        }
+
+        .framework-option h4 {
+            color: var(--color-text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .framework-option p {
+            color: var(--color-text-muted);
+            font-size: var(--font-size-xs);
+            margin: 0;
+        }
+
+        .question-input {
+            width: 100%;
+            min-height: 120px;
+            padding: 1rem;
+            background: var(--color-bg-card);
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            color: var(--color-text-secondary);
+            font-size: var(--font-size-base);
+            font-family: inherit;
+            resize: vertical;
+            transition: all 0.3s ease;
+        }
+
+        .question-input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.15);
+        }
+
+        .question-input::placeholder {
+            color: var(--color-text-dimmed);
+        }
+
+        .analyze-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #0ea5e9, #06b6d4);
+            border: none;
+            border-radius: var(--radius-lg);
+            color: white;
+            font-size: var(--font-size-base);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .analyze-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(14, 165, 233, 0.3);
+        }
+
+        .analyze-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Results Section */
+        .results-section {
+            display: none;
+            margin-top: 2rem;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .results-section.visible {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Score Display */
+        .score-container {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            padding: 1.5rem;
+            background: var(--surface-table);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-xl);
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .score-circle {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            flex-shrink: 0;
+        }
+
+        .score-circle svg {
+            transform: rotate(-90deg);
+            width: 120px;
+            height: 120px;
+        }
+
+        .score-circle .bg {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.1);
+            stroke-width: 10;
+        }
+
+        .score-circle .progress {
+            fill: none;
+            stroke-width: 10;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1s ease-out, stroke 0.3s ease;
+        }
+
+        .score-value {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--color-text-primary);
+        }
+
+        .score-details {
+            flex: 1;
+        }
+
+        .score-details h3 {
+            color: var(--color-text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .score-details p {
+            color: var(--color-text-muted);
+            font-size: var(--font-size-sm);
+        }
+
+        .score-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-md);
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .score-badge.excellent { background: rgba(34, 197, 94, 0.2); color: var(--accent-green); }
+        .score-badge.good { background: rgba(14, 165, 233, 0.2); color: #38bdf8; }
+        .score-badge.fair { background: rgba(251, 191, 36, 0.2); color: var(--accent-amber); }
+        .score-badge.poor { background: rgba(239, 68, 68, 0.2); color: var(--accent-red); }
+
+        /* Components Analysis */
+        .components-grid {
+            display: grid;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .component-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--surface-table);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            transition: all 0.3s ease;
+        }
+
+        .component-item.found {
+            border-color: rgba(34, 197, 94, 0.5);
+            background: rgba(34, 197, 94, 0.05);
+        }
+
+        .component-item.missing {
+            border-color: rgba(239, 68, 68, 0.5);
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        .component-item.partial {
+            border-color: rgba(251, 191, 36, 0.5);
+            background: rgba(251, 191, 36, 0.05);
+        }
+
+        .component-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 0.875rem;
+        }
+
+        .component-item.found .component-icon {
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--accent-green);
+        }
+
+        .component-item.missing .component-icon {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--accent-red);
+        }
+
+        .component-item.partial .component-icon {
+            background: rgba(251, 191, 36, 0.2);
+            color: var(--accent-amber);
+        }
+
+        .component-content {
+            flex: 1;
+        }
+
+        .component-content h4 {
+            color: var(--color-text-primary);
+            font-size: var(--font-size-sm);
+            margin-bottom: 0.25rem;
+        }
+
+        .component-content p {
+            color: var(--color-text-muted);
+            font-size: var(--font-size-xs);
+            margin: 0;
+        }
+
+        .component-extract {
+            background: rgba(14, 165, 233, 0.1);
+            padding: 0.5rem 0.75rem;
+            border-radius: var(--radius-sm);
+            margin-top: 0.5rem;
+            font-style: italic;
+            color: var(--accent-teal);
+            font-size: var(--font-size-xs);
+        }
+
+        /* Suggestions */
+        .suggestions-box {
+            background: var(--surface-table);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .suggestions-box h3 {
+            color: var(--color-text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .suggestion-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion-item i {
+            color: var(--accent-amber);
+            margin-top: 0.1rem;
+        }
+
+        .suggestion-item span {
+            color: var(--color-text-muted);
+            font-size: var(--font-size-sm);
+        }
+
+        /* Reformulated Question */
+        .reformulated-box {
+            background: linear-gradient(145deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.05));
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+        }
+
+        .reformulated-box h3 {
+            color: var(--accent-green);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .reformulated-question {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            font-style: italic;
+            color: var(--color-text-secondary);
+            line-height: 1.8;
+        }
+
+        .reformulated-question .highlight {
+            background: rgba(34, 197, 94, 0.2);
+            padding: 0.1rem 0.3rem;
+            border-radius: 3px;
+            color: var(--accent-green);
+        }
+
+        .reformulated-question .placeholder {
+            background: rgba(251, 191, 36, 0.2);
+            padding: 0.1rem 0.3rem;
+            border-radius: 3px;
+            color: var(--accent-amber);
+        }
+
+        /* Examples */
+        .examples-section {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--color-border);
+        }
+
+        .example-btn {
+            padding: 0.5rem 1rem;
+            background: var(--surface-table);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            color: var(--color-text-muted);
+            font-size: var(--font-size-xs);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0.25rem;
+        }
+
+        .example-btn:hover {
+            background: var(--surface-input);
+            border-color: var(--color-border-hover);
+            color: var(--color-text-primary);
+        }
+
+        @media (max-width: 768px) {
+            .score-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            .framework-selector {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body class="light-questionnaire">
+
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+            <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+        </div>
+        <h1>Testeur de Question</h1>
+        <span class="badge badge-cat-recherche">Recherche</span>
+    </nav>
+
+    <div class="container">
+        <header class="page-header">
+            <p class="subtitle">Analysez votre question de recherche et obtenez des suggestions d'amélioration instantanées.</p>
+        </header>
+
+        <div class="tester-container">
+            <!-- Main Input Section -->
+            <div class="glass-card">
+                <h2><i class="fas fa-flask" style="color: var(--color-primary); margin-right: 0.5rem;"></i>Testeur de Question de Recherche</h2>
+
+                <!-- Framework Selection -->
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.75rem; font-weight: 600; color: var(--color-text-secondary);">
+                        <i class="fas fa-th-large" style="margin-right: 0.5rem;"></i>Sélectionnez votre cadre :
+                    </label>
+                    <div class="framework-selector">
+                        <div class="framework-option selected" data-framework="PICO">
+                            <h4><i class="fas fa-chart-bar" style="margin-right: 0.5rem; color: #0ea5e9;"></i>PICO</h4>
+                            <p>Population, Intervention, Comparison, Outcome</p>
+                        </div>
+                        <div class="framework-option" data-framework="SPIDER">
+                            <h4><i class="fas fa-comments" style="margin-right: 0.5rem; color: #a855f7;"></i>SPIDER</h4>
+                            <p>Sample, Phenomenon of Interest, Design, Évaluation, Research Type</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question Input -->
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.75rem; font-weight: 600; color: var(--color-text-secondary);">
+                        <i class="fas fa-edit" style="margin-right: 0.5rem;"></i>Entrez votre question de recherche :
+                    </label>
+                    <textarea id="questionInput" class="question-input" placeholder="Ex: Chez les adultes souffrant de dépression (P), la thérapie cognitivo-comportementale (I) comparée aux antidépresseurs seuls (C) améliore-t-elle la qualité de vie (O) ?"></textarea>
+                </div>
+
+                <button id="analyzeBtn" class="analyze-btn">
+                    <i class="fas fa-search"></i>Analyser ma question
+                </button>
+
+                <!-- Examples -->
+                <div class="examples-section">
+                    <p style="color: var(--color-text-muted); font-size: var(--font-size-sm); margin-bottom: 0.75rem;">
+                        <i class="fas fa-lightbulb" style="color: #fbbf24; margin-right: 0.5rem;"></i>Essayez avec ces exemples :
+                    </p>
+                    <div>
+                        <button class="example-btn" data-framework="PICO" data-question="Chez les adultes (> 65 ans) souffrant d'arthrose du genou modérée, une thérapie par exercices aquatiques de 12 semaines comparée à l'absence d'exercice réduit-elle la douleur (EVA) et améliore-t-elle la fonction physique (WOMAC)?">PICO - Bien formulé</button>
+                        <button class="example-btn" data-framework="PICO" data-question="L'exercice est-il bon pour l'arthrose?">PICO - Trop vague</button>
+                        <button class="example-btn" data-framework="SPIDER" data-question="Quelles sont les expériences des infirmières nouvellement diplômées concernant la transition vers la pratique professionnelle, explorées via des études qualitatives utilisant des entretiens?">SPIDER - Bien formulé</button>
+                        <button class="example-btn" data-framework="SPIDER" data-question="Que pensent les gens du changement climatique?">SPIDER - Trop vague</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div id="resultsSection" class="results-section">
+                <!-- Score -->
+                <div class="score-container">
+                    <div class="score-circle">
+                        <svg viewBox="0 0 120 120">
+                            <circle class="bg" cx="60" cy="60" r="50"/>
+                            <circle id="scoreProgress" class="progress" cx="60" cy="60" r="50" stroke-dasharray="314" stroke-dashoffset="314"/>
+                        </svg>
+                        <span id="scoreValue" class="score-value">0%</span>
+                    </div>
+                    <div class="score-details">
+                        <h3>Score Global</h3>
+                        <p id="scoreDescription">Analyse en cours...</p>
+                        <span id="scoreBadge" class="score-badge">-</span>
+                    </div>
+                </div>
+
+                <!-- Components Analysis -->
+                <div class="glass-card">
+                    <h3 style="margin-bottom: 1rem;"><i class="fas fa-puzzle-piece" style="color: var(--color-primary); margin-right: 0.5rem;"></i>Analyse des Composantes</h3>
+                    <div id="componentsGrid" class="components-grid">
+                        <!-- Dynamically filled -->
+                    </div>
+                </div>
+
+                <!-- Suggestions -->
+                <div id="suggestionsBox" class="suggestions-box" style="display: none;">
+                    <h3><i class="fas fa-lightbulb" style="color: #fbbf24;"></i>Suggestions d'Amélioration</h3>
+                    <div id="suggestionsList">
+                        <!-- Dynamically filled -->
+                    </div>
+                </div>
+
+                <!-- Reformulated Question -->
+                <div id="reformulatedBox" class="reformulated-box" style="display: none;">
+                    <h3><i class="fas fa-magic"></i>Question Reformulée (suggestion)</h3>
+                    <div id="reformulatedQuestion" class="reformulated-question">
+                        <!-- Dynamically filled -->
+                    </div>
+                    <p style="font-size: var(--font-size-xs); color: var(--color-text-dimmed); margin-top: 1rem;">
+                        <i class="fas fa-info-circle" style="margin-right: 0.5rem;"></i>Les éléments entre <span class="placeholder">[crochets]</span> sont à préciser selon votre contexte.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Link to Guide -->
+            <div class="alert alert-info" style="margin-top: 2rem;">
+                <div class="alert-icon">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <div class="alert-content">
+                    <h3>Besoin d'aide ?</h3>
+                    <p>Consultez notre <strong>Guide pédagogique</strong> pour apprendre à formuler des questions de recherche selon les cadres PICO, SPIDER et autres.</p>
+                    <a href="Guide_Question_Recherche.html" class="btn-secondary" style="display: inline-block; margin-top: 0.75rem;">
+                        <i class="fas fa-graduation-cap" style="margin-right: 0.5rem;"></i>Accéder au Guide
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>Dr. FENOHASINA T.J. Felicien (Psychiatre)</p>
+        <p>&copy; 2025 - Centre Ressource de Réhabilitation</p>
+        <p class="license">Licence CC BY-NC-SA 4.0</p>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let selectedFramework = 'PICO';
+
+    // Pattern definitions for analysis
+    const PATTERNS = {
+        PICO: {
+            P: {
+                name: 'Population',
+                patterns: [
+                    /chez (les |des |l[ea]s? )?([^,]+)/i,
+                    /patients? (atteints?|souffrant|avec|diagnostiques?|ayant)/i,
+                    /adultes?|enfants?|adolescents?|personnes? agees?|sujets?|individus?/i,
+                    /([0-9]+)\s*(ans?|mois)/i,
+                    /hommes?|femmes?|hospitalis[eé]s?/i
+                ],
+                suggestions: [
+                    "Précisez la population cible (âge, sexe, pathologie, contexte)",
+                    "Utilisez des critères démographiques spécifiques (ex: 'adultes > 65 ans')"
+                ]
+            },
+            I: {
+                name: 'Intervention',
+                patterns: [
+                    /th[ée]rapie|traitement|programme|intervention|m[ée]dicament|chirurgie/i,
+                    /TCC|EMDR|mindfulness|antid[ée]presseur|exercice|psychoth[ée]rapie/i,
+                    /administrer|recevoir|participer|suivre|beneficier/i,
+                    /semaines?|mois|s[ée]ances?/i
+                ],
+                suggestions: [
+                    "Spécifiez l'intervention évaluée (traitement, programme, thérapie)",
+                    "Ajoutez des détails sur la durée, fréquence ou dosage si pertinent"
+                ]
+            },
+            C: {
+                name: 'Comparison',
+                patterns: [
+                    /compar[ée][es]? [àa]/i,
+                    /versus|vs\.?|par rapport [àa]/i,
+                    /placebo|soins (habituels|standards)|absence|sans|liste d'attente/i,
+                    /traitement (standard|habituel|de référence)/i,
+                    /groupe (t[ée]moin|contr[ôo]le)/i
+                ],
+                suggestions: [
+                    "Ajoutez un comparateur explicite (placebo, soins habituels, autre intervention)",
+                    "Précisez 'comparé à [quoi]' pour renforcer la question"
+                ]
+            },
+            O: {
+                name: 'Outcome',
+                patterns: [
+                    /am[ée]liore|r[ée]duit|diminue|augmente|modifie|influence/i,
+                    /efficace|efficacit[ée]|effet|impact/i,
+                    /score|[ée]chelle|taux|niveau|fr[ée]quence|dur[ée]e/i,
+                    /anxi[ée]t[ée]|d[ée]pression|qualit[ée] de vie|douleur|fonctionnement/i,
+                    /EVA|WOMAC|HAD|BDI|PHQ|GAD/i
+                ],
+                suggestions: [
+                    "Définissez un critère de jugement mesurable (score, échelle, taux)",
+                    "Spécifiez l'outil de mesure utilisé (ex: EVA, HAD, PHQ-9)"
+                ]
+            }
+        },
+        SPIDER: {
+            S: {
+                name: 'Sample',
+                patterns: [
+                    /chez (les |des |l[ea]s? )?([^,]+)/i,
+                    /[ée]chantillon|participants?|r[ée]pondants?/i,
+                    /infirmi[èe]res?|m[ée]decins?|patients?|[ée]tudiants?|employ[ée]s?/i,
+                    /travailleurs?|professionnels?|soignants?/i
+                ],
+                suggestions: [
+                    "Précisez l'échantillon cible (profession, contexte, caractéristiques)",
+                    "En qualitatif, privilégiez 'échantillon' à 'population'"
+                ]
+            },
+            PI: {
+                name: 'Phenomenon of Interest',
+                patterns: [
+                    /exp[ée]riences?|perceptions?|v[ée]cu|ressenti/i,
+                    /comprendre|explorer|d[ée]crire|analyser/i,
+                    /processus|transition|adaptation|gestion/i,
+                    /concernant|[àa] propos de|face [àa]/i
+                ],
+                suggestions: [
+                    "Définissez clairement le phénomène d'intérêt (expérience, perception, processus)",
+                    "Focalisez sur un aspect spécifique plutôt qu'un thème trop large"
+                ]
+            },
+            D: {
+                name: 'Design',
+                patterns: [
+                    /entretiens?|interviews?|focus groups?/i,
+                    /ethnographie|ph[ée]nom[ée]nologie|grounded theory/i,
+                    /observation|journaux? de bord|r[ée]cits? de vie/i,
+                    /analyse th[ée]matique|analyse de contenu/i
+                ],
+                suggestions: [
+                    "Spécifiez le devis méthodologique (entretiens, focus groups, ethnographie)",
+                    "Indiquez le type d'analyse qualitative prévu"
+                ]
+            },
+            E: {
+                name: 'Évaluation',
+                patterns: [
+                    /perceptions?|attitudes?|croyances?|opinions?/i,
+                    /points? de vue|perspectives?|significations?/i,
+                    /v[ée]cu|exp[ée]riences?|sentiments?/i,
+                    /barri[èe]res?|facilitateurs?|facteurs?/i
+                ],
+                suggestions: [
+                    "Précisez ce que vous évaluez (perceptions, attitudes, croyances)",
+                    "Définissez les résultats qualitatifs attendus"
+                ]
+            },
+            R: {
+                name: 'Research Type',
+                patterns: [
+                    /qualitati[fv]e?s?|mixte/i,
+                    /[ée]tudes? qualitatives?/i,
+                    /recherche qualitative/i
+                ],
+                suggestions: [
+                    "Spécifiez le type de recherche (qualitative, mixte)",
+                    "Ajoutez 'selon des études qualitatives' pour clarifier"
+                ]
+            }
+        }
+    };
+
+    // Quality issues patterns
+    const QUALITY_ISSUES = [
+        { pattern: /est[- ]ce (que |qu')?[a-z]+ (bon|bien|efficace|utile)\??$/i, issue: "Question trop vague - évitez les termes comme 'bon', 'bien', 'efficace' sans précision" },
+        { pattern: /les gens|tout le monde|on/i, issue: "Population trop vague - précisez qui sont les sujets" },
+        { pattern: /\?.*\?/i, issue: "Double question détectée - focalisez sur une seule question" },
+        { pattern: /^[^?]+[^?]$/i, issue: "Format non interrogatif - reformulez sous forme de question" },
+        { pattern: /aide[nt]?[- ]?(t[- ]?ils?|elles?)?|marche[nt]?[- ]?(t[- ]?ils?|elles?)?/i, issue: "Outcome non mesurable - précisez comment vous mesurez le résultat" }
+    ];
+
+    // Framework Selection
+    document.querySelectorAll('.framework-option').forEach(option => {
+        option.addEventListener('click', () => {
+            document.querySelectorAll('.framework-option').forEach(o => o.classList.remove('selected'));
+            option.classList.add('selected');
+            selectedFramework = option.dataset.framework;
+        });
+    });
+
+    // Example buttons
+    document.querySelectorAll('.example-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const framework = btn.dataset.framework;
+            const question = btn.dataset.question;
+
+            // Select framework
+            document.querySelectorAll('.framework-option').forEach(o => {
+                o.classList.toggle('selected', o.dataset.framework === framework);
+            });
+            selectedFramework = framework;
+
+            // Fill question
+            document.getElementById('questionInput').value = question;
+        });
+    });
+
+    // Analyze button
+    document.getElementById('analyzeBtn').addEventListener('click', analyzeQuestion);
+
+    function analyzeQuestion() {
+        const question = document.getElementById('questionInput').value.trim();
+        if (!question) {
+            alert('Veuillez entrer une question de recherche.');
+            return;
+        }
+
+        const results = analyze(question, selectedFramework);
+        displayResults(results);
+    }
+
+    function analyze(question, framework) {
+        const patterns = PATTERNS[framework];
+        const components = {};
+        let totalScore = 0;
+        const maxScore = Object.keys(patterns).length * 25; // 25 points per component
+        const suggestions = [];
+        const issues = [];
+
+        // Analyze each component
+        for (const [key, config] of Object.entries(patterns)) {
+            let found = false;
+            let extract = null;
+            let isPartial = false;
+
+            for (const pattern of config.patterns) {
+                const match = question.match(pattern);
+                if (match) {
+                    found = true;
+                    extract = match[0];
+
+                    // Check if the match is too vague
+                    if (extract.length < 10 && !extract.match(/EVA|TCC|EMDR|PHQ|GAD|BDI/i)) {
+                        isPartial = true;
+                    }
+                    break;
+                }
+            }
+
+            if (found && !isPartial) {
+                totalScore += 25;
+            } else if (found && isPartial) {
+                totalScore += 15;
+                suggestions.push(`${config.name}: Détecté mais pourrait être plus précis`);
+            } else {
+                suggestions.push(...config.suggestions);
+            }
+
+            components[key] = {
+                name: config.name,
+                found: found,
+                partial: isPartial,
+                extract: extract
+            };
+        }
+
+        // Check for quality issues
+        for (const issue of QUALITY_ISSUES) {
+            if (issue.pattern.test(question)) {
+                issues.push(issue.issue);
+                totalScore = Math.max(0, totalScore - 10);
+            }
+        }
+
+        // Check question structure
+        if (question.includes('?')) {
+            totalScore += 5;
+        }
+
+        // Check length (not too short)
+        if (question.length > 50) {
+            totalScore += 5;
+        }
+
+        const finalScore = Math.round((totalScore / (maxScore + 10)) * 100);
+
+        return {
+            score: Math.min(100, Math.max(0, finalScore)),
+            components: components,
+            suggestions: [...new Set(suggestions)], // Remove duplicates
+            issues: issues,
+            framework: framework,
+            originalQuestion: question
+        };
+    }
+
+    function displayResults(results) {
+        const resultsSection = document.getElementById('resultsSection');
+        resultsSection.classList.add('visible');
+
+        // Animate score
+        const scoreValue = document.getElementById('scoreValue');
+        const scoreProgress = document.getElementById('scoreProgress');
+        const scoreBadge = document.getElementById('scoreBadge');
+        const scoreDescription = document.getElementById('scoreDescription');
+
+        // Calculate stroke color and offset
+        const circumference = 314; // 2 * PI * 50
+        const offset = circumference - (results.score / 100) * circumference;
+
+        let color, badge, description;
+        if (results.score >= 80) {
+            color = '#4ade80';
+            badge = 'Excellent';
+            description = 'Votre question est bien structurée et contient toutes les composantes essentielles.';
+        } else if (results.score >= 60) {
+            color = '#38bdf8';
+            badge = 'Bon';
+            description = 'Votre question est correcte mais pourrait être améliorée sur certains points.';
+        } else if (results.score >= 40) {
+            color = '#fbbf24';
+            badge = 'À améliorer';
+            description = 'Votre question nécessite des précisions sur plusieurs composantes.';
+        } else {
+            color = '#f87171';
+            badge = 'À revoir';
+            description = 'Votre question est trop vague et doit être reformulée significativement.';
+        }
+
+        // Animate score
+        setTimeout(() => {
+            scoreProgress.style.strokeDashoffset = offset;
+            scoreProgress.style.stroke = color;
+            scoreValue.textContent = results.score + '%';
+            scoreBadge.textContent = badge;
+            scoreBadge.className = 'score-badge ' + badge.toLowerCase().replace(' ', '-').replace('à', 'a');
+            scoreDescription.textContent = description;
+        }, 100);
+
+        // Display components
+        const componentsGrid = document.getElementById('componentsGrid');
+        componentsGrid.innerHTML = '';
+
+        for (const [key, comp] of Object.entries(results.components)) {
+            const status = comp.found ? (comp.partial ? 'partial' : 'found') : 'missing';
+            const icon = comp.found ? (comp.partial ? 'exclamation' : 'check') : 'times';
+
+            let statusText = comp.found ? (comp.partial ? 'Détecté (à préciser)' : 'Détecté') : 'Non détecté';
+
+            componentsGrid.innerHTML += `
+                <div class="component-item ${status}">
+                    <div class="component-icon">
+                        <i class="fas fa-${icon}"></i>
+                    </div>
+                    <div class="component-content">
+                        <h4>${key} - ${comp.name}</h4>
+                        <p>${statusText}</p>
+                        ${comp.extract ? `<div class="component-extract">"${comp.extract}"</div>` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Display suggestions
+        const allSuggestions = [...results.issues, ...results.suggestions];
+        const suggestionsBox = document.getElementById('suggestionsBox');
+        const suggestionsList = document.getElementById('suggestionsList');
+
+        if (allSuggestions.length > 0) {
+            suggestionsBox.style.display = 'block';
+            suggestionsList.innerHTML = allSuggestions.map(s => `
+                <div class="suggestion-item">
+                    <i class="fas fa-arrow-right"></i>
+                    <span>${s}</span>
+                </div>
+            `).join('');
+        } else {
+            suggestionsBox.style.display = 'none';
+        }
+
+        // Generate reformulated question
+        const reformulatedBox = document.getElementById('reformulatedBox');
+        const reformulatedQuestion = document.getElementById('reformulatedQuestion');
+
+        if (results.score < 80) {
+            reformulatedBox.style.display = 'block';
+            reformulatedQuestion.innerHTML = generateReformulation(results);
+        } else {
+            reformulatedBox.style.display = 'none';
+        }
+
+        // Scroll to results
+        resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function generateReformulation(results) {
+        const comps = results.components;
+
+        if (results.framework === 'PICO') {
+            const p = comps.P.extract ? `<span class="highlight">${comps.P.extract}</span>` : '<span class="placeholder">[Population à préciser]</span>';
+            const i = comps.I.extract ? `<span class="highlight">${comps.I.extract}</span>` : '<span class="placeholder">[Intervention à préciser]</span>';
+            const c = comps.C.extract ? `<span class="highlight">${comps.C.extract}</span>` : '<span class="placeholder">[Comparateur à préciser]</span>';
+            const o = comps.O.extract ? `<span class="highlight">${comps.O.extract}</span>` : '<span class="placeholder">[Outcome à préciser]</span>';
+
+            return `Chez ${p}, ${i} comparé à ${c} ${comps.O.found ? 'améliore-t-elle' : '[effet attendu]'} ${o} ?`;
+        } else {
+            const s = comps.S.extract ? `<span class="highlight">${comps.S.extract}</span>` : '<span class="placeholder">[Échantillon à préciser]</span>';
+            const pi = comps.PI.extract ? `<span class="highlight">${comps.PI.extract}</span>` : '<span class="placeholder">[Phénomène d\'intérêt à préciser]</span>';
+            const d = comps.D.extract ? `<span class="highlight">${comps.D.extract}</span>` : '<span class="placeholder">[Devis à préciser]</span>';
+            const e = comps.E.extract ? `<span class="highlight">${comps.E.extract}</span>` : '<span class="placeholder">[Évaluation à préciser]</span>';
+            const r = comps.R.extract ? `<span class="highlight">${comps.R.extract}</span>` : '<span class="placeholder">études qualitatives</span>';
+
+            return `Quelles sont ${e} de ${s} concernant ${pi}, explorées via des ${r} utilisant ${d} ?`;
+        }
+    }
+});
+</script>
+
+</body>
+</html>

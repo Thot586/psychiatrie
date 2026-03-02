@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protocoles de Sevrage en Addictologie</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <style>
+        :root {
+            --cat-main: #0ea5e9;
+            --cat-dark: #0284c7;
+            --cat-light: #38bdf8;
+            --cat-rgb: 14, 165, 233;
+            --cat-readable: #0284c7;
+        }
+
+        /* Onglets */
+        .tab-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .tab-btn {
+            padding: 0.6rem 1.2rem;
+            border: 2px solid rgba(var(--cat-rgb), 0.3);
+            border-radius: var(--radius-md);
+            background: white;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #6b7280;
+            transition: all 0.2s;
+        }
+        .tab-btn.active {
+            background: rgba(var(--cat-rgb), 0.1);
+            border-color: var(--cat-main);
+            color: var(--cat-readable);
+        }
+        .tab-btn:hover:not(.active) { border-color: rgba(var(--cat-rgb), 0.5); }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+
+        /* Tableaux */
+        .protocol-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; margin-top: 1rem; }
+        .protocol-table th {
+            background: rgba(var(--cat-rgb), 0.12);
+            color: var(--cat-readable);
+            padding: 0.7rem 0.9rem;
+            text-align: left;
+            border: 1px solid rgba(var(--cat-rgb), 0.2);
+            font-weight: 700;
+        }
+        .protocol-table td {
+            padding: 0.6rem 0.9rem;
+            border: 1px solid #e5e7eb;
+            vertical-align: top;
+            color: #374151;
+        }
+        .protocol-table tr:nth-child(even) td { background: #f9fafb; }
+
+        /* Info cards */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .info-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: var(--radius-md);
+            padding: 1rem;
+        }
+        .info-card h4 {
+            color: var(--cat-readable);
+            margin-bottom: 0.6rem;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .info-card ul { padding-left: 1.1rem; }
+        .info-card li { font-size: 0.85rem; color: #374151; margin-bottom: 0.35rem; }
+
+        /* Badge sévérité */
+        .sev-badge {
+            display: inline-block;
+            padding: 0.15rem 0.6rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .sev-mild    { background: #d1fae5; color: #065f46; }
+        .sev-moderate{ background: #fef9c3; color: #713f12; }
+        .sev-severe  { background: #fee2e2; color: #991b1b; }
+
+        /* Alerte */
+        .alert-protocol {
+            padding: 0.9rem;
+            border-radius: var(--radius-md);
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 0.7rem;
+        }
+        .alert-protocol.danger { background: #fef2f2; border: 1px solid #fca5a5; }
+        .alert-protocol.warning { background: #fffbeb; border: 1px solid #fcd34d; }
+        .alert-protocol.info { background: #eff6ff; border: 1px solid #93c5fd; }
+        .alert-protocol i { font-size: 1.1rem; flex-shrink: 0; margin-top: 0.1rem; }
+        .alert-protocol.danger i { color: #dc2626; }
+        .alert-protocol.warning i { color: #d97706; }
+        .alert-protocol.info i { color: #2563eb; }
+        .alert-protocol p { font-size: 0.88rem; color: #374151; }
+
+        /* Score CIWA */
+        .ciwa-item {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: var(--radius-md);
+            padding: 0.9rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .ciwa-name { font-weight: 600; color: #374151; font-size: 0.9rem; }
+        .ciwa-range { font-size: 0.8rem; color: #6b7280; }
+        .ciwa-max {
+            background: rgba(var(--cat-rgb), 0.1);
+            color: var(--cat-readable);
+            padding: 0.2rem 0.6rem;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            font-size: 0.82rem;
+        }
+
+        /* Décision flowchart */
+        .flowchart {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            margin-top: 1rem;
+        }
+        .flow-box {
+            background: white;
+            border: 2px solid rgba(var(--cat-rgb), 0.3);
+            border-radius: var(--radius-md);
+            padding: 0.9rem 1.1rem;
+            font-size: 0.88rem;
+            color: #374151;
+            position: relative;
+        }
+        .flow-box.decision {
+            background: rgba(var(--cat-rgb), 0.06);
+            border-color: var(--cat-main);
+            font-weight: 600;
+        }
+        .flow-box.action {
+            background: #f0fdf4;
+            border-color: #22c55e;
+        }
+        .flow-arrow {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--cat-readable);
+            padding: 0.15rem;
+        }
+
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-readable); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+    </style>
+</head>
+<body class="light-questionnaire">
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+            <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+        </div>
+        <h1>Protocoles de Sevrage</h1>
+        <span class="badge badge-cat-substance">Substance</span>
+    </nav>
+
+    <main class="container">
+        <header class="header-glow" style="text-align: center; margin-bottom: 2rem;">
+            <h1><i class="fas fa-hospital"></i> Protocoles de Sevrage en Addictologie</h1>
+            <p class="subtitle">Référentiels cliniques : sevrage alcoolique, tabagique et opioïdes</p>
+        </header>
+
+        <section class="glass-card info-box">
+            <h2><i class="fas fa-user-md"></i> Destiné aux professionnels de santé</h2>
+            <p>Ces protocoles sont des références cliniques destinées aux professionnels de santé (médecins, infirmiers, pharmaciens). Ils ne remplacent pas le jugement clinique individuel ni les protocoles institutionnels locaux.</p>
+        </section>
+
+        <section class="glass-card warning-box">
+            <h3><i class="fas fa-exclamation-triangle"></i> Précautions générales</h3>
+            <ul>
+                <li>Tout sevrage d'une dépendance physique sévère nécessite une <strong>supervision médicale</strong></li>
+                <li>Le sevrage alcoolique et opioïde peut engager le pronostic vital sans prise en charge adaptée</li>
+                <li>Évaluer systématiquement les comorbidités psychiatriques et somatiques</li>
+                <li>Adapter la modalité (ambulatoire vs hospitalière) au score de sévérité</li>
+            </ul>
+        </section>
+
+        <!-- Onglets -->
+        <section class="glass-card">
+            <div class="tab-bar">
+                <button class="tab-btn active" onclick="showTab('alcool')">
+                    <i class="fas fa-wine-glass-alt"></i> Sevrage Alcool
+                </button>
+                <button class="tab-btn" onclick="showTab('tabac')">
+                    <i class="fas fa-smoking-ban"></i> Sevrage Tabac
+                </button>
+                <button class="tab-btn" onclick="showTab('opioides')">
+                    <i class="fas fa-capsules"></i> Sevrage Opioïdes (TSO)
+                </button>
+            </div>
+
+            <!-- ===== ALCOOL ===== -->
+            <div id="tab-alcool" class="tab-panel active">
+                <h2 style="color: var(--cat-readable); margin-bottom: 1.5rem;"><i class="fas fa-wine-glass-alt"></i> Sevrage Alcoolique</h2>
+
+                <div class="alert-protocol danger">
+                    <i class="fas fa-skull-crossbones"></i>
+                    <p><strong>Risque vital.</strong> Le sevrage alcoolique peut se compliquer d'un delirium tremens (mortalité 5–15% sans traitement) et de crises épileptiques. Ne jamais initier un sevrage brutal sans évaluation médicale préalable.</p>
+                </div>
+
+                <h3 style="margin-bottom: 0.75rem;">Score CIWA-Ar — Évaluation de la sévérité</h3>
+                <p style="font-size: 0.88rem; color: #6b7280; margin-bottom: 0.75rem;">Clinical Institute Withdrawal Assessment for Alcohol, Revised. Réalisé toutes les 1–4h en phase de sevrage actif.</p>
+
+                <div class="ciwa-item">
+                    <div>
+                        <div class="ciwa-name">Nausées / Vomissements</div>
+                        <div class="ciwa-range">0 = aucune, 7 = vomissements répétés</div>
+                    </div>
+                    <span class="ciwa-max">/7</span>
+                </div>
+                <div class="ciwa-item">
+                    <div>
+                        <div class="ciwa-name">Tremblements</div>
+                        <div class="ciwa-range">0 = absents, 7 = sévères même sans extension</div>
+                    </div>
+                    <span class="ciwa-max">/7</span>
+                </div>
+                <div class="ciwa-item">
+                    <div>
+                        <div class="ciwa-name">Sueurs paroxystiques</div>
+                        <div class="ciwa-range">0 = aucune, 7 = sueurs profuses</div>
+                    </div>
+                    <span class="ciwa-max">/7</span>
+                </div>
+                <div class="ciwa-item">
+                    <div>
+                        <div class="ciwa-name">Anxiété</div>
+                        <div class="ciwa-range">0 = aucune, 7 = panique aiguë</div>
+                    </div>
+                    <span class="ciwa-max">/7</span>
+                </div>
+                <div class="ciwa-item">
+                    <div>
+                        <div class="ciwa-name">Agitation</div>
+                        <div class="ciwa-range">0 = normale, 7 = forcément agité</div>
+                    </div>
+                    <span class="ciwa-max">/7</span>
+                </div>
+                <div class="ciwa-item">
+                    <div>
+                        <div class="ciwa-name">Troubles de la perception tactile</div>
+                        <div class="ciwa-range">0 = aucun, 7 = hallucinations tactiles continues</div>
+                    </div>
+                    <span class="ciwa-max">/7</span>
+                </div>
+                <div class="ciwa-item">
+                    <div>
+                        <div class="ciwa-name">Troubles de la perception auditive</div>
+                        <div class="ciwa-range">0 = absents, 7 = hallucinations auditives continues</div>
+                    </div>
+                    <span class="ciwa-max">/7</span>
+                </div>
+                <div class="ciwa-item">
+                    <div>
+                        <div class="ciwa-name">Troubles de la perception visuelle</div>
+                        <div class="ciwa-range">0 = absents, 7 = hallucinations visuelles continues</div>
+                    </div>
+                    <span class="ciwa-max">/7</span>
+                </div>
+                <div class="ciwa-item">
+                    <div>
+                        <div class="ciwa-name">Céphalées</div>
+                        <div class="ciwa-range">0 = aucune, 7 = extrêmement sévères</div>
+                    </div>
+                    <span class="ciwa-max">/7</span>
+                </div>
+                <div class="ciwa-item">
+                    <div>
+                        <div class="ciwa-name">Orientation (date, lieu, personne)</div>
+                        <div class="ciwa-range">0 = orienté, 4 = désorienté</div>
+                    </div>
+                    <span class="ciwa-max">/4</span>
+                </div>
+
+                <div style="margin-top: 1rem; padding: 1rem; background: rgba(var(--cat-rgb), 0.08); border-radius: var(--radius-md);">
+                    <strong>Score total maximum : 67 points</strong>
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem;">
+                        <span class="sev-badge sev-mild"><8 : Léger — ambulatoire possible</span>
+                        <span class="sev-badge sev-moderate">8–15 : Modéré — ambulatoire surveillé</span>
+                        <span class="sev-badge sev-severe">≥16 : Sévère — hospitalisation recommandée</span>
+                        <span class="sev-badge sev-severe" style="background: #dc2626; color: white;">≥20 : Delirium — hospitalisation urgente</span>
+                    </div>
+                </div>
+
+                <h3 style="margin: 1.5rem 0 0.75rem;">Algorithme de prise en charge</h3>
+                <div class="flowchart">
+                    <div class="flow-box decision">
+                        <i class="fas fa-question-circle"></i> Facteurs de risque de sevrage sévère ?
+                        <div style="font-weight: 400; font-size: 0.82rem; margin-top: 0.3rem; color: #6b7280;">Antécédent delirium tremens, épilepsie, consommation > 15 US/jour, CIWA ≥ 10, comorbidité sévère, isolement social</div>
+                    </div>
+                    <div class="flow-arrow">↓ Non</div>
+                    <div class="flow-box action">
+                        <strong>Sevrage ambulatoire</strong> — BZD per os (diazépam 10–20 mg/8h J1, décroissance progressive sur 5–7 jours) + Vitamine B1 500 mg/jour PO + suivi J1, J3, J5
+                    </div>
+                    <div class="flow-arrow">↓ Oui ou CIWA ≥ 16</div>
+                    <div class="flow-box" style="border-color: #dc2626; background: #fef2f2;">
+                        <strong>Hospitalisation</strong> — Diazépam IV ou PO titré sur CIWA (10–20 mg/4–6h) + Thiamine IV (500 mg × 3/j, 3 jours) + Hydratation IV + surveillance neurologique et cardiorespiratoire
+                    </div>
+                </div>
+
+                <h3 style="margin: 1.5rem 0 0.75rem;">Protocole BZD — Schéma indicatif</h3>
+                <div style="overflow-x: auto;">
+                    <table class="protocol-table">
+                        <thead>
+                            <tr><th>Jour</th><th>Diazépam PO (sevrage léger-modéré)</th><th>Remarques</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>J1</td><td>10 mg × 3–4/jour = 30–40 mg/24h</td><td>CIWA toutes les 4–8h</td></tr>
+                            <tr><td>J2</td><td>10 mg × 3/jour = 30 mg/24h</td><td>Adapter si CIWA &lt; 8</td></tr>
+                            <tr><td>J3</td><td>10 mg × 2/jour = 20 mg/24h</td><td></td></tr>
+                            <tr><td>J4</td><td>10 mg × 2/jour = 20 mg/24h</td><td></td></tr>
+                            <tr><td>J5</td><td>10 mg × 1/jour = 10 mg/24h</td><td></td></tr>
+                            <tr><td>J6–J7</td><td>Arrêt progressif ou 5 mg/jour</td><td>Réévaluer à J7</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="info-grid" style="margin-top: 1rem;">
+                    <div class="info-card">
+                        <h4><i class="fas fa-capsules"></i> Vitamine B1 (Thiamine)</h4>
+                        <ul>
+                            <li>500 mg IV × 3/jour (3 jours) en hospitalisation</li>
+                            <li>100–300 mg/jour PO en ambulatoire</li>
+                            <li>Prévention encéphalopathie de Gayet-Wernicke</li>
+                            <li><strong>Toujours avant</strong> tout apport glucosé IV</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h4><i class="fas fa-pills"></i> Médicaments anti-craving post-sevrage</h4>
+                        <ul>
+                            <li><strong>Naltrexone</strong> 50 mg/j — réduit envie alcool</li>
+                            <li><strong>Acamprosate</strong> — maintien de l'abstinence</li>
+                            <li><strong>Nalméfène</strong> — réduction de la consommation (prn)</li>
+                            <li><strong>Baclofène</strong> — AMM en France (hors indications classiques)</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h4><i class="fas fa-exclamation-triangle" style="color: #dc2626;"></i> Signes d'alerte DT</h4>
+                        <ul>
+                            <li>Hyperthermie, tachycardie &gt; 120/min</li>
+                            <li>HTA sévère, sueurs profuses</li>
+                            <li>Confusion, hallucinations visuelles</li>
+                            <li>Convulsions généralisées</li>
+                            <li>CIWA ≥ 20</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== TABAC ===== -->
+            <div id="tab-tabac" class="tab-panel">
+                <h2 style="color: #64748b; margin-bottom: 1.5rem;"><i class="fas fa-smoking-ban"></i> Sevrage Tabagique</h2>
+
+                <div class="alert-protocol info">
+                    <i class="fas fa-info-circle"></i>
+                    <p>Contrairement à l'alcool et aux opioïdes, le sevrage tabagique n'est pas physiquement dangereux. Il est cependant très inconfortable (irritabilité, anxiété, insomnie, craving intense les premières 72h) et nécessite un soutien adapté.</p>
+                </div>
+
+                <h3 style="margin-bottom: 0.75rem;">Évaluation de la dépendance (Fagerström)</h3>
+                <div style="overflow-x: auto;">
+                    <table class="protocol-table">
+                        <thead>
+                            <tr><th>Score Fagerström</th><th>Niveau de dépendance</th><th>Stratégie recommandée</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>0–2</td><td><span class="sev-badge sev-mild">Faible</span></td><td>Conseil minimal, arrêt sans substitution possible</td></tr>
+                            <tr><td>3–4</td><td><span class="sev-badge sev-moderate">Modérée</span></td><td>TCC + substituts nicotiniques PO (gommes, pastilles)</td></tr>
+                            <tr><td>5–6</td><td><span class="sev-badge sev-moderate">Moyenne</span></td><td>Patch + substitut nicotinique oral (bi-thérapie)</td></tr>
+                            <tr><td>7–10</td><td><span class="sev-badge sev-severe">Forte à très forte</span></td><td>Varénicline en 1re intention + TCC + suivi renforcé</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 style="margin: 1.5rem 0 0.75rem;">Substituts nicotiniques</h3>
+                <div style="overflow-x: auto;">
+                    <table class="protocol-table">
+                        <thead>
+                            <tr><th>Forme</th><th>Dosages</th><th>Indication</th><th>Durée recommandée</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Patch (timbre)</strong></td>
+                                <td>7 mg, 14 mg, 21 mg/24h</td>
+                                <td>Traitement de fond, dépendance ≥ 10 cig/jour</td>
+                                <td>8–12 semaines, décroissance progressive</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Gomme à mâcher</strong></td>
+                                <td>2 mg, 4 mg (4 mg si &gt;20 cig/jour)</td>
+                                <td>Craving ponctuel, association avec patch</td>
+                                <td>Selon besoins, max 24 gommes/jour</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Pastille / Comprimé</strong></td>
+                                <td>1,5 mg, 2 mg, 4 mg</td>
+                                <td>Alternative aux gommes, discret</td>
+                                <td>Idem gommes</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Inhaleur</strong></td>
+                                <td>10 mg/cartouche</td>
+                                <td>Substitut du geste et de la sensation orale</td>
+                                <td>6–12 semaines</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Spray nasal</strong></td>
+                                <td>0,5 mg/pulvérisation</td>
+                                <td>Dépendance forte, action très rapide</td>
+                                <td>3–6 mois</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 style="margin: 1.5rem 0 0.75rem;">Médicaments de prescription</h3>
+                <div class="info-grid">
+                    <div class="info-card" style="border-color: #0284c7;">
+                        <h4><i class="fas fa-pills"></i> Varénicline (Champix®)</h4>
+                        <ul>
+                            <li><strong>Mécanisme :</strong> Agoniste partiel récepteurs nAChR α4β2</li>
+                            <li><strong>Posologie :</strong> 0,5 mg × 1/j J1–J3, 0,5 mg × 2/j J4–J7, puis 1 mg × 2/j × 12 semaines</li>
+                            <li><strong>Efficacité :</strong> Odds ratio abstinence ~3× vs placebo</li>
+                            <li><strong>Attention :</strong> Rêves vivaces, nausées (prendre avec repas), surveiller humeur</li>
+                            <li>Remboursé SS sur ordonnance médecin</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h4><i class="fas fa-pills"></i> Bupropion (Zyban®)</h4>
+                        <ul>
+                            <li><strong>Mécanisme :</strong> Inhibiteur recapture dopamine/noradrénaline</li>
+                            <li><strong>Posologie :</strong> 150 mg × 1/j × 6 jours, puis 150 mg × 2/j × 7–12 semaines</li>
+                            <li><strong>CI :</strong> Antécédent convulsions, trouble bipolaire non stabilisé, anorexie/boulimie</li>
+                            <li>2e intention si CI à varénicline</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3 style="margin: 1.5rem 0 0.75rem;">Protocole ambulatoire — Schéma indicatif</h3>
+                <div style="overflow-x: auto;">
+                    <table class="protocol-table">
+                        <thead>
+                            <tr><th>Semaine</th><th>Action</th><th>Soutien</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>S-2</td><td>Date d'arrêt fixée, bilan Fagerström</td><td>Consultation initiale</td></tr>
+                            <tr><td>S-1</td><td>Si varénicline : débuter 1 semaine avant l'arrêt</td><td>Identification des situations à risque</td></tr>
+                            <tr><td>J0 (Arrêt)</td><td>Démarrage substituts nicotiniques / médicament</td><td>Appel 3989 ou entourage informé</td></tr>
+                            <tr><td>S1–S4</td><td>Suivi hebdomadaire, ajustement doses</td><td>TCC ou groupe de soutien</td></tr>
+                            <tr><td>S5–S12</td><td>Maintien traitement, prévention rechute</td><td>Consultation mensuelle</td></tr>
+                            <tr><td>S12–S24</td><td>Décroissance substituts si abstinence maintenue</td><td>Suivi selon besoins</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="alert-protocol warning" style="margin-top: 1rem;">
+                    <i class="fas fa-brain"></i>
+                    <p><strong>Psychiatrie :</strong> Le sevrage tabagique peut démasquer ou aggraver un trouble anxieux, dépressif ou psychotique. Surveiller l'état mental et ajuster les psychotropes (clozapine, olanzapine : niveaux plasmatiques augmentent à l'arrêt du tabac).</p>
+                </div>
+            </div>
+
+            <!-- ===== OPIOÏDES ===== -->
+            <div id="tab-opioides" class="tab-panel">
+                <h2 style="color: #7c3aed; margin-bottom: 1.5rem;"><i class="fas fa-capsules"></i> Traitement de Substitution aux Opioïdes (TSO)</h2>
+
+                <div class="alert-protocol warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p><strong>Le sevrage brutal des opioïdes n'est pas mortel</strong> (contrairement à l'alcool) mais est extrêmement inconfortable. Le TSO améliore le pronostic vital (réduction surdosage × 2–3), la rétention en soins et la qualité de vie.</p>
+                </div>
+
+                <h3 style="margin-bottom: 0.75rem;">Syndrome de sevrage opioïdes — COWS</h3>
+                <p style="font-size: 0.88rem; color: #6b7280; margin-bottom: 0.75rem;">Clinical Opiate Withdrawal Scale. Score ≥ 12 = indication TSO ou traitement symptomatique.</p>
+                <div style="overflow-x: auto;">
+                    <table class="protocol-table">
+                        <thead>
+                            <tr><th>Signe</th><th>Score</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Fréquence cardiaque</td><td>0 (≤80) / 1 (81–100) / 2 (101–120) / 4 (&gt;120)</td></tr>
+                            <tr><td>Sudation (sans hyperthermie)</td><td>0 / 1 (légère) / 2 (modérée) / 3 (profuse)</td></tr>
+                            <tr><td>Agitation</td><td>0 / 1 (légère) / 3 (fréquente) / 5 (incapable de rester assis)</td></tr>
+                            <tr><td>Mydriase</td><td>0 / 1 (3–4 mm) / 2 (≥4 mm) / 5 (maximale)</td></tr>
+                            <tr><td>Frissons, chair de poule</td><td>0 / 3 (horripilation) / 5 (tremblement fort)</td></tr>
+                            <tr><td>Bâillements</td><td>0 / 1 (&lt;1/min) / 2 (1/min) / 4 (fréquent)</td></tr>
+                            <tr><td>Anxiété / irritabilité</td><td>0 / 1 (légère) / 2 (modérée) / 4 (panique)</td></tr>
+                            <tr><td>Douleurs musculo-articulaires</td><td>0 / 1 (légères) / 2 (modérées) / 4 (insupportables)</td></tr>
+                            <tr><td>Rhinorrhée / larmoiement</td><td>0 / 1 (légère) / 2 (modérée) / 4 (profuse)</td></tr>
+                            <tr><td>Troubles gastro-intestinaux</td><td>0 / 1 (crampes) / 2 (nausées) / 3 (vomissements) / 5 (diarrhées)</td></tr>
+                            <tr><td>Craving</td><td>0 / 1 (léger) / 2 (modéré) / 4 (intense)</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="margin-top: 0.75rem; padding: 0.75rem; background: rgba(var(--cat-rgb), 0.08); border-radius: var(--radius-md);">
+                    <span class="sev-badge sev-mild">5–12 : Léger</span>
+                    <span class="sev-badge sev-moderate" style="margin-left: 0.5rem;">13–24 : Modéré</span>
+                    <span class="sev-badge sev-severe" style="margin-left: 0.5rem;">25–36 : Modéré–sévère</span>
+                    <span class="sev-badge sev-severe" style="margin-left: 0.5rem; background: #7c3aed; color: white;">&gt;36 : Sévère</span>
+                </div>
+
+                <h3 style="margin: 1.5rem 0 0.75rem;">Buprénorphine (Subutex® / Suboxone®)</h3>
+                <div class="info-grid">
+                    <div class="info-card" style="border-color: #7c3aed;">
+                        <h4 style="color: #7c3aed;"><i class="fas fa-syringe"></i> Initiation</h4>
+                        <ul>
+                            <li><strong>Attendre</strong> : signes de sevrage modérés (COWS ≥ 8–12) avant 1re dose</li>
+                            <li>Délai minimum après dernière héroïne : 8–12h</li>
+                            <li>Délai après méthadone : 24–48h</li>
+                            <li><strong>Dose initiale :</strong> 2–4 mg SL. Attendre 1–2h. Si pas de précipitation, 2–4 mg supplémentaires</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h4><i class="fas fa-chart-line"></i> Titration (J1–J14)</h4>
+                        <ul>
+                            <li>Augmenter par paliers de 2–4 mg/jour</li>
+                            <li>Dose habituelle : <strong>8–16 mg/jour</strong></li>
+                            <li>Max : 24–32 mg/jour (cas exceptionnels)</li>
+                            <li>Administration sublinguale (ne pas avaler)</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h4><i class="fas fa-check-circle"></i> Suboxone® (bupré + naloxone)</h4>
+                        <ul>
+                            <li>Association 4:1 avec naloxone</li>
+                            <li>Dissuade l'injection IV (naloxone précipite sevrage IV)</li>
+                            <li>Préféré pour les patients à risque de détournement</li>
+                            <li>Mêmes posologies que Subutex</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3 style="margin: 1.5rem 0 0.75rem;">Méthadone</h3>
+                <div class="info-grid">
+                    <div class="info-card" style="border-color: #0284c7;">
+                        <h4 style="color: #0284c7;"><i class="fas fa-hospital-user"></i> Initiation (hospitalière recommandée)</h4>
+                        <ul>
+                            <li>Initiation <strong>en centre prescripteur</strong> (CSAPA, addictologie hospitalière)</li>
+                            <li>Dose initiale : <strong>20–30 mg/jour maximum</strong> (risque QTc)</li>
+                            <li>Délai 12h après dernière dose d'héroïne</li>
+                            <li>ECG obligatoire avant initiation</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h4><i class="fas fa-chart-line"></i> Titration</h4>
+                        <ul>
+                            <li>Augmentation max 5–10 mg/semaine</li>
+                            <li>Dose cible habituelle : <strong>60–120 mg/jour</strong></li>
+                            <li>Surveillance ECG à 30 mg, 60 mg, dose stable</li>
+                            <li>QTc max acceptable : &lt; 500 ms</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h4><i class="fas fa-exclamation-triangle" style="color: #dc2626;"></i> Précautions</h4>
+                        <ul>
+                            <li>Demi-vie longue (24–36h) : accumulation risque</li>
+                            <li>Surdosage 3 premiers jours (ré-évaluation J1, J3)</li>
+                            <li>Interactions QTc majeures (voir tableau interactions)</li>
+                            <li>Dispensation quotidienne en pharmacie initialement</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3 style="margin: 1.5rem 0 0.75rem;">Comparaison Buprénorphine vs Méthadone</h3>
+                <div style="overflow-x: auto;">
+                    <table class="protocol-table">
+                        <thead>
+                            <tr><th>Critère</th><th>Buprénorphine (Subutex/Suboxone)</th><th>Méthadone</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Type d'agonisme</td><td>Agoniste partiel µ (plafond)</td><td>Agoniste complet µ (pas de plafond)</td></tr>
+                            <tr><td>Risque de surdosage seul</td><td>Faible (effet plafond)</td><td>Élevé (courbe dose-réponse linéaire)</td></tr>
+                            <tr><td>Risque avec BZD / alcool</td><td>Très élevé (CI)</td><td>Très élevé (CI)</td></tr>
+                            <tr><td>QTc</td><td>Pas d'effet clinique significatif</td><td>Allongement, surveillance ECG requise</td></tr>
+                            <tr><td>Initiation ambulatoire</td><td>Oui (en cabinet médecin)</td><td>Réservée aux centres spécialisés</td></tr>
+                            <tr><td>Contraintes dispensation</td><td>Ordonnance 28 jours, dispensation 7 jours</td><td>Ordonnance 14 jours, dispensation quotidienne</td></tr>
+                            <tr><td>Préférence si</td><td>Dépendance héroïne légère-modérée, patient stable</td><td>Dépendance sévère, échec buprénorphine, prescription IV</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="alert-protocol info" style="margin-top: 1rem;">
+                    <i class="fas fa-info-circle"></i>
+                    <p><strong>Durée du TSO :</strong> Il n'y a pas de durée fixe. Le TSO est un traitement chronique maintenu tant qu'il est bénéfique. L'arrêt progressif peut être envisagé après plusieurs années de stabilité, à la demande du patient, avec accompagnement soutenu.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Résumé contact -->
+        <section class="glass-card">
+            <h2><i class="fas fa-network-wired"></i> Orientation en pratique</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h4><i class="fas fa-map-marker-alt"></i> CSAPA</h4>
+                    <ul>
+                        <li>Initiation et suivi TSO</li>
+                        <li>Sevrage alcool et tabac accompagné</li>
+                        <li>Psychothérapie addictologique</li>
+                        <li>Accessible sans ordonnance</li>
+                    </ul>
+                </div>
+                <div class="info-card">
+                    <h4><i class="fas fa-hospital"></i> Unité d'addictologie hospitalière</h4>
+                    <ul>
+                        <li>Sevrage alcool sévère (DT)</li>
+                        <li>Initiation méthadone</li>
+                        <li>Comorbidités psychiatriques sévères</li>
+                        <li>Séjour court (5–10 jours) ou HDJ</li>
+                    </ul>
+                </div>
+                <div class="info-card">
+                    <h4><i class="fas fa-user-md"></i> Médecin généraliste</h4>
+                    <ul>
+                        <li>Initiation buprénorphine (dès formation)</li>
+                        <li>Sevrage tabac (varénicline, substituts)</li>
+                        <li>Sevrage alcool léger-modéré</li>
+                        <li>Relai long terme du TSO</li>
+                    </ul>
+                </div>
+                <div class="info-card">
+                    <h4><i class="fas fa-phone"></i> Contacts urgence</h4>
+                    <ul>
+                        <li><strong>15</strong> — SAMU surdosage opioïdes</li>
+                        <li><strong>0 800 23 13 13</strong> — Drogues Info Service</li>
+                        <li><strong>3989</strong> — Tabac Info Service</li>
+                        <li><strong>0 980 980 930</strong> — Alcool Info Service</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p><strong>Protocoles de Sevrage en Addictologie</strong></p>
+        <p style="margin: 0.5rem 0;"><strong>Références :</strong> HAS, ANSM, SFA (Société Française d'Addictologie), Fédération Addiction, EMCDDA</p>
+        <p><strong>Adaptation numérique :</strong> Dr FENOHASINA | Psychiatre</p>
+        <small>Licence CC BY-NC-SA 4.0 — Destiné aux professionnels de santé</small>
+    </footer>
+
+    <script src="../js/app.js"></script>
+    <script>
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('tab-' + tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+    </script>
+</body>
+</html>

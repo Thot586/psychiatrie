@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Réduction des Risques - Conduites Addictives</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <style>
+        :root {
+            --cat-main: #ec4899;
+            --cat-dark: #db2777;
+            --cat-light: #f9a8d4;
+            --cat-rgb: 236, 72, 153;
+            --cat-readable: #db2777;
+        }
+
+        /* Accordéon */
+        .accordion-item {
+            border: 1px solid rgba(var(--cat-rgb), 0.2);
+            border-radius: var(--radius-md);
+            margin-bottom: 0.75rem;
+            overflow: hidden;
+        }
+        .accordion-header {
+            width: 100%;
+            background: rgba(var(--cat-rgb), 0.08);
+            border: none;
+            padding: 1rem 1.25rem;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--cat-readable);
+            transition: background 0.2s;
+        }
+        .accordion-header:hover { background: rgba(var(--cat-rgb), 0.14); }
+        .accordion-header.open { background: rgba(var(--cat-rgb), 0.15); }
+        .accordion-body {
+            display: none;
+            padding: 1.25rem;
+            border-top: 1px solid rgba(var(--cat-rgb), 0.15);
+            background: rgba(255,255,255,0.6);
+        }
+        .accordion-body.open { display: block; }
+
+        /* Grille substance */
+        .substance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .substance-card {
+            background: white;
+            border: 2px solid rgba(var(--cat-rgb), 0.25);
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
+        }
+        .substance-card h4 {
+            color: var(--cat-readable);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .substance-card ul { padding-left: 1.25rem; }
+        .substance-card li { margin-bottom: 0.4rem; color: #374151; font-size: 0.9rem; }
+
+        /* Alerte */
+        .alert-rdr {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 0.75rem;
+        }
+        .alert-rdr i { color: #d97706; font-size: 1.25rem; flex-shrink: 0; margin-top: 0.1rem; }
+
+        /* Unités alcool */
+        .unit-visual {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+        }
+        .unit-box {
+            background: white;
+            border: 1px solid rgba(var(--cat-rgb), 0.3);
+            border-radius: var(--radius-md);
+            padding: 0.75rem 1rem;
+            text-align: center;
+            min-width: 110px;
+        }
+        .unit-box .unit-icon { font-size: 1.5rem; display: block; margin-bottom: 0.25rem; }
+        .unit-box .unit-label { font-size: 0.78rem; color: #374151; }
+        .unit-box .unit-vol { font-size: 0.85rem; font-weight: 700; color: var(--cat-readable); }
+
+        /* Naloxone box */
+        .naloxone-steps {
+            counter-reset: step-counter;
+            list-style: none;
+            padding: 0;
+        }
+        .naloxone-steps li {
+            counter-increment: step-counter;
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            align-items: flex-start;
+        }
+        .naloxone-steps li::before {
+            content: counter(step-counter);
+            background: #dc2626;
+            color: white;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+            font-size: 0.9rem;
+        }
+        .naloxone-steps li .step-content { color: #374151; font-size: 0.9rem; padding-top: 0.25rem; }
+        .naloxone-steps li .step-content strong { display: block; font-size: 0.95rem; margin-bottom: 0.15rem; color: #111827; }
+
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-readable); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+
+        .tag-rdr {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin: 0.1rem;
+        }
+        .tag-green { background: #d1fae5; color: #065f46; }
+        .tag-yellow { background: #fef9c3; color: #713f12; }
+        .tag-red { background: #fee2e2; color: #991b1b; }
+        .tag-blue { background: #dbeafe; color: #1e40af; }
+    </style>
+</head>
+<body class="light-questionnaire">
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+            <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+        </div>
+        <h1>Réduction des Risques</h1>
+        <span class="badge badge-cat-substance">Substance</span>
+    </nav>
+
+    <main class="container">
+        <header class="header-glow" style="text-align: center; margin-bottom: 2rem;">
+            <h1><i class="fas fa-shield-alt"></i> Réduction des Risques</h1>
+            <p class="subtitle">Fiches pratiques pour réduire les risques liés aux conduites addictives</p>
+        </header>
+
+        <section class="glass-card info-box">
+            <h2><i class="fas fa-info-circle"></i> Principes de la réduction des risques</h2>
+            <p>La réduction des risques (RdR) est une approche pragmatique et non moralisatrice qui vise à minimiser les dommages liés à l'usage de substances, sans exiger l'abstinence immédiate. Elle s'appuie sur les besoins réels des personnes et reconnaît que tout usage de substance comporte des risques modulables.</p>
+            <div style="margin-top: 0.75rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                <span class="tag-rdr tag-green"><i class="fas fa-check"></i> Non moralisatrice</span>
+                <span class="tag-rdr tag-blue"><i class="fas fa-hands-helping"></i> Centrée sur la personne</span>
+                <span class="tag-rdr tag-yellow"><i class="fas fa-balance-scale"></i> Pragmatique</span>
+                <span class="tag-rdr tag-green"><i class="fas fa-heart"></i> Basée sur les preuves</span>
+            </div>
+        </section>
+
+        <section class="glass-card warning-box">
+            <h3><i class="fas fa-phone-alt"></i> Ressources d'urgence</h3>
+            <ul>
+                <li><strong>SAMU : 15</strong> — urgence médicale, surdosage</li>
+                <li><strong>Drogues Info Service : 0 800 23 13 13</strong> (gratuit, anonyme, 24h/24)</li>
+                <li><strong>Addictions France : 3114</strong> (prévention suicide, crises)</li>
+                <li><strong>CSAPA</strong> local — Centre de Soins, Accompagnement et Prévention en Addictologie</li>
+            </ul>
+        </section>
+
+        <!-- ALCOOL -->
+        <section class="glass-card">
+            <h2 style="color: var(--cat-readable);"><i class="fas fa-wine-glass-alt"></i> Alcool</h2>
+
+            <h3 style="margin: 1.5rem 0 0.75rem;">Unités standard (US)</h3>
+            <p style="color: #374151; font-size: 0.9rem;">1 unité standard = 10 g d'alcool pur = environ 1 verre "standard" servi dans un bar.</p>
+            <div class="unit-visual">
+                <div class="unit-box">
+                    <span class="unit-icon">🍺</span>
+                    <span class="unit-label">Bière 5°</span>
+                    <span class="unit-vol">25 cl = 1 US</span>
+                </div>
+                <div class="unit-box">
+                    <span class="unit-icon">🍷</span>
+                    <span class="unit-label">Vin 12°</span>
+                    <span class="unit-vol">10 cl = 1 US</span>
+                </div>
+                <div class="unit-box">
+                    <span class="unit-icon">🥃</span>
+                    <span class="unit-label">Whisky 40°</span>
+                    <span class="unit-vol">3 cl = 1 US</span>
+                </div>
+                <div class="unit-box">
+                    <span class="unit-icon">🍸</span>
+                    <span class="unit-label">Cocktail</span>
+                    <span class="unit-vol">Variable</span>
+                </div>
+                <div class="unit-box">
+                    <span class="unit-icon">🍾</span>
+                    <span class="unit-label">Bouteille vin</span>
+                    <span class="unit-vol">75 cl = 7 US</span>
+                </div>
+                <div class="unit-box">
+                    <span class="unit-icon">🍻</span>
+                    <span class="unit-label">Canette 6,5°</span>
+                    <span class="unit-vol">50 cl = 3,3 US</span>
+                </div>
+            </div>
+
+            <h3 style="margin: 1.5rem 0 0.75rem;">Repères de consommation à faible risque (OMS / Santé Publique France)</h3>
+            <div class="substance-grid">
+                <div class="substance-card">
+                    <h4><i class="fas fa-calendar-week"></i> Par semaine</h4>
+                    <ul>
+                        <li>Maximum <strong>10 verres/semaine</strong></li>
+                        <li>Pas plus de <strong>2 verres/jour</strong></li>
+                        <li>Au moins <strong>2 jours sans alcool</strong> par semaine</li>
+                    </ul>
+                </div>
+                <div class="substance-card">
+                    <h4><i class="fas fa-ban"></i> À éviter absolument</h4>
+                    <ul>
+                        <li>Grossesse (tout niveau est à risque)</li>
+                        <li>Prise de médicaments psychoactifs</li>
+                        <li>Conduite automobile ou d'engins</li>
+                        <li>Travaux en hauteur ou tâches dangereuses</li>
+                    </ul>
+                </div>
+                <div class="substance-card">
+                    <h4><i class="fas fa-lightbulb"></i> Stratégies de réduction</h4>
+                    <ul>
+                        <li>Alterner avec des boissons sans alcool</li>
+                        <li>Boire lentement (tenir un verre longtemps)</li>
+                        <li>Manger avant et pendant</li>
+                        <li>Planifier ses jours sans alcool à l'avance</li>
+                        <li>Informer son entourage de son projet</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="accordion-item" style="margin-top: 1.5rem;">
+                <button class="accordion-header" onclick="toggleAccordion(this)">
+                    <span><i class="fas fa-exclamation-circle"></i> Signes d'alerte d'une dépendance</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="accordion-body">
+                    <ul style="color: #374151;">
+                        <li>Besoin impérieux de boire (craving)</li>
+                        <li>Incapacité à s'arrêter une fois commencé</li>
+                        <li>Tremblements, sueurs, anxiété au réveil soulagés par l'alcool</li>
+                        <li>Consommation en cachette ou seul</li>
+                        <li>Négliger ses obligations (travail, famille) à cause de l'alcool</li>
+                        <li>Augmentation de la tolérance (besoin de plus pour le même effet)</li>
+                    </ul>
+                    <div class="alert-rdr" style="margin-top: 1rem;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p><strong>Attention :</strong> un sevrage alcoolique brutal peut être dangereux (convulsions, delirium tremens). Ne jamais arrêter brutalement sans avis médical en cas de consommation importante et ancienne.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CANNABIS -->
+        <section class="glass-card">
+            <h2 style="color: #059669;"><i class="fas fa-leaf"></i> Cannabis</h2>
+
+            <div class="substance-grid">
+                <div class="substance-card">
+                    <h4 style="color: #059669;"><i class="fas fa-fire"></i> Modes de consommation</h4>
+                    <ul>
+                        <li><strong>Fumé (joint)</strong> : risque pulmonaire, pic rapide, durée 2–3h</li>
+                        <li><strong>Vapoté</strong> : moins de combustion, risques respiratoires réduits</li>
+                        <li><strong>Comestibles</strong> : effet retardé (1–2h), plus difficile à doser → risque de surdosage</li>
+                        <li><strong>Concentrés (huile, résine)</strong> : forte teneur en THC, risque plus élevé</li>
+                    </ul>
+                </div>
+                <div class="substance-card">
+                    <h4 style="color: #059669;"><i class="fas fa-sliders-h"></i> Facteurs modulant le risque</h4>
+                    <ul>
+                        <li>Ratio THC/CBD (CBD protecteur)</li>
+                        <li>Fréquence et âge de début (avant 16 ans = risque ↑)</li>
+                        <li>Usage en association avec tabac ou alcool</li>
+                        <li>Antécédents psychiatriques personnels ou familiaux</li>
+                        <li>Contexte social (usage solitaire vs festif)</li>
+                    </ul>
+                </div>
+                <div class="substance-card">
+                    <h4 style="color: #059669;"><i class="fas fa-shield-alt"></i> Réduire les risques</h4>
+                    <ul>
+                        <li>Préférer les produits à faible teneur en THC</li>
+                        <li>Ne pas mélanger avec alcool ou tabac</li>
+                        <li>Ne pas conduire (illégal, risque × 2)</li>
+                        <li>Éviter l'usage quotidien</li>
+                        <li>Ne jamais consommer seul en cas de vulnérabilité</li>
+                        <li>Planifier des pauses (jours, semaines sans)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="accordion-item" style="margin-top: 1rem;">
+                <button class="accordion-header" onclick="toggleAccordion(this)">
+                    <span><i class="fas fa-brain"></i> Effets sur la santé mentale</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="accordion-body">
+                    <ul style="color: #374151;">
+                        <li><strong>Court terme :</strong> anxiété, attaque de panique, désorientation, troubles de la mémoire de travail</li>
+                        <li><strong>Long terme (usage régulier) :</strong> syndrome amotivationnel, dépression, risque de trouble psychotique chez les personnes vulnérables (RR ×2–4 si usage régulier avant 18 ans)</li>
+                        <li><strong>Syndrome de sevrage :</strong> irritabilité, insomnie, diminution de l'appétit, anxiété (1–2 semaines)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- TABAC -->
+        <section class="glass-card">
+            <h2 style="color: #64748b;"><i class="fas fa-smoking"></i> Tabac</h2>
+
+            <div class="substance-grid">
+                <div class="substance-card">
+                    <h4 style="color: #64748b;"><i class="fas fa-list-check"></i> Stratégies d'arrêt progressif</h4>
+                    <ul>
+                        <li>Repousser la première cigarette de la journée (progressivement)</li>
+                        <li>Identifier et éviter les situations déclenchantes</li>
+                        <li>Remplacer par des activités incompatibles (sport, respiration)</li>
+                        <li>Se fixer une date d'arrêt avec un soutien</li>
+                    </ul>
+                </div>
+                <div class="substance-card">
+                    <h4 style="color: #64748b;"><i class="fas fa-capsules"></i> Substituts nicotiniques</h4>
+                    <ul>
+                        <li><strong>Patchs</strong> : 7/14/21 mg — action de fond (24h)</li>
+                        <li><strong>Gommes / Pastilles</strong> : action rapide, envies ponctuelles</li>
+                        <li><strong>Inhaleurs</strong> : reproduit le geste, action rapide</li>
+                        <li>Remboursés SS jusqu'à 150€/an sur ordonnance</li>
+                    </ul>
+                </div>
+                <div class="substance-card">
+                    <h4 style="color: #64748b;"><i class="fas fa-pills"></i> Traitements médicamenteux</h4>
+                    <ul>
+                        <li><strong>Varénicline (Champix)</strong> : agoniste partiel récepteurs nAChR, très efficace, sur ordonnance</li>
+                        <li><strong>Bupropion (Zyban)</strong> : alternative si contre-indication varénicline</li>
+                        <li>Durée : 12 semaines (renouvelable)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="alert-rdr" style="margin-top: 1rem;">
+                <i class="fas fa-info-circle" style="color: #2563eb;"></i>
+                <p><strong>Tabac Info Service :</strong> <strong>3989</strong> — numéro national d'aide à l'arrêt du tabac, gratuit, du lundi au samedi 8h–20h.</p>
+            </div>
+        </section>
+
+        <!-- NALOXONE / OPIOÏDES -->
+        <section class="glass-card">
+            <h2 style="color: #dc2626;"><i class="fas fa-first-aid"></i> Surdosage aux opioïdes — Naloxone</h2>
+
+            <div class="alert-rdr" style="background: #fee2e2; border-color: #dc2626;">
+                <i class="fas fa-exclamation-triangle" style="color: #dc2626;"></i>
+                <p><strong>URGENCE VITALE.</strong> En cas de suspicion de surdosage aux opioïdes, appeler immédiatement le <strong>15 (SAMU)</strong>. La naloxone est un antidote disponible sans ordonnance en pharmacie.</p>
+            </div>
+
+            <h3 style="margin: 1.5rem 0 0.75rem;">Reconnaître un surdosage</h3>
+            <div class="substance-grid">
+                <div class="substance-card" style="border-color: #dc2626;">
+                    <h4 style="color: #dc2626;"><i class="fas fa-eye"></i> Signes caractéristiques</h4>
+                    <ul>
+                        <li>Inconscience ou difficile à réveiller</li>
+                        <li>Myosis (pupilles très petites en "pointe d'épingle")</li>
+                        <li>Bradypnée (respiration lente &lt; 8/min) ou gasping</li>
+                        <li>Cyanose (lèvres bleutées)</li>
+                        <li>Ronflement ou gargouillis respiratoire</li>
+                    </ul>
+                </div>
+                <div class="substance-card">
+                    <h4 style="color: #dc2626;"><i class="fas fa-syringe"></i> Naloxone disponible sous</h4>
+                    <ul>
+                        <li><strong>Nalscue®</strong> : spray nasal (1,8 mg/dose)</li>
+                        <li><strong>Prenoxad®</strong> : solution injectable (1 mg/1 ml)</li>
+                        <li>Sans ordonnance en pharmacie</li>
+                        <li>Gratuit dans les CAARUD et CSAPA</li>
+                        <li>Durée d'action : 30–90 minutes</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3 style="margin: 1.5rem 0 0.75rem;">Protocole d'urgence</h3>
+            <ol class="naloxone-steps">
+                <li>
+                    <div class="step-content">
+                        <strong>Appeler le 15 (SAMU)</strong>
+                        Signaler le surdosage suspecté et votre localisation précise
+                    </div>
+                </li>
+                <li>
+                    <div class="step-content">
+                        <strong>Position latérale de sécurité (PLS)</strong>
+                        Si la personne respire mais inconsciente — pour éviter fausse route
+                    </div>
+                </li>
+                <li>
+                    <div class="step-content">
+                        <strong>Administrer la naloxone</strong>
+                        Spray nasal : 1 dose dans une narine. Injectable : 0,4–0,8 mg IV/IM/SC
+                    </div>
+                </li>
+                <li>
+                    <div class="step-content">
+                        <strong>Surveiller la réponse (2–3 minutes)</strong>
+                        Si pas d'amélioration : répéter une dose. Attention : délai court, peut se re-surdoser après disparition naloxone
+                    </div>
+                </li>
+                <li>
+                    <div class="step-content">
+                        <strong>Rester avec la personne</strong>
+                        Jusqu'à l'arrivée des secours. Ne jamais laisser seule
+                    </div>
+                </li>
+            </ol>
+
+            <div class="alert-rdr" style="margin-top: 0.5rem;">
+                <i class="fas fa-info-circle" style="color: #2563eb;"></i>
+                <p><strong>Kit Naloxone</strong> disponible gratuitement dans les CAARUD (Centres d'Accueil et d'Accompagnement à la Réduction des risques pour Usagers de Drogues) et CSAPA locaux, ainsi qu'en pharmacie sans ordonnance.</p>
+            </div>
+        </section>
+
+        <!-- POLYSUBSTANCES -->
+        <section class="glass-card">
+            <h2 style="color: #7c3aed;"><i class="fas fa-random"></i> Polyconsommation — Principes généraux</h2>
+            <p style="color: #374151; margin-bottom: 1rem;">L'association de plusieurs substances majore les risques de manière souvent imprévisible. Quelques principes de précaution :</p>
+            <div class="substance-grid">
+                <div class="substance-card" style="border-color: #dc2626;">
+                    <h4 style="color: #dc2626;"><i class="fas fa-times-circle"></i> Associations à éviter</h4>
+                    <ul>
+                        <li><strong>Alcool + opioïdes</strong> : dépression respiratoire synergique, fatale</li>
+                        <li><strong>Alcool + benzodiazépines</strong> : sédation et dépression respiratoire ↑↑</li>
+                        <li><strong>Stimulants + alcool</strong> : masque l'ivresse, toxicité cardiaque</li>
+                        <li><strong>MDMA + alcool</strong> : déshydratation, hyperthermie</li>
+                    </ul>
+                </div>
+                <div class="substance-card">
+                    <h4 style="color: #7c3aed;"><i class="fas fa-check-circle"></i> Règles générales</h4>
+                    <ul>
+                        <li>Ne jamais consommer seul (en cas de problème)</li>
+                        <li>Commencer par de petites doses (effet imprévisible)</li>
+                        <li>Prévenir un proche de confiance</li>
+                        <li>Éviter la conduite</li>
+                        <li>Avoir la naloxone à portée si opioïdes</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- RESSOURCES -->
+        <section class="glass-card">
+            <h2><i class="fas fa-link"></i> Ressources et contacts utiles</h2>
+            <div class="substance-grid">
+                <div class="substance-card">
+                    <h4><i class="fas fa-phone-alt"></i> Lignes d'écoute</h4>
+                    <ul>
+                        <li><strong>0 800 23 13 13</strong> — Drogues Info Service (gratuit, 24h/24)</li>
+                        <li><strong>3989</strong> — Tabac Info Service</li>
+                        <li><strong>0 980 980 930</strong> — Alcool Info Service</li>
+                        <li><strong>3114</strong> — Numéro national prévention suicide</li>
+                    </ul>
+                </div>
+                <div class="substance-card">
+                    <h4><i class="fas fa-map-marker-alt"></i> Structures de soins</h4>
+                    <ul>
+                        <li><strong>CSAPA</strong> — soins, accompagnement, prévention en addictologie</li>
+                        <li><strong>CAARUD</strong> — réduction des risques, kits naloxone</li>
+                        <li><strong>Hôpital de jour addictologie</strong></li>
+                        <li><strong>Consultation de tabacologie</strong> (sur ordonnance)</li>
+                    </ul>
+                </div>
+                <div class="substance-card">
+                    <h4><i class="fas fa-globe"></i> Sites de référence</h4>
+                    <ul>
+                        <li>drogues.gouv.fr (MILDECA)</li>
+                        <li>federationaddiction.fr</li>
+                        <li>tabac-info-service.fr</li>
+                        <li>alcool-info-service.fr</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p><strong>Réduction des Risques — Conduites Addictives</strong></p>
+        <p style="margin: 0.5rem 0;"><strong>Références :</strong> MILDECA, OFDT, Fédération Addictions, OMS</p>
+        <p><strong>Adaptation numérique :</strong> Dr FENOHASINA | Psychiatre</p>
+        <small>Licence CC BY-NC-SA 4.0</small>
+    </footer>
+
+    <script src="../js/app.js"></script>
+    <script>
+        function toggleAccordion(header) {
+            const body = header.nextElementSibling;
+            const isOpen = body.classList.contains('open');
+            // Fermer tous les accordéons du même parent
+            const parentCard = header.closest('.glass-card');
+            parentCard.querySelectorAll('.accordion-header').forEach(h => h.classList.remove('open'));
+            parentCard.querySelectorAll('.accordion-body').forEach(b => b.classList.remove('open'));
+            if (!isOpen) {
+                header.classList.add('open');
+                body.classList.add('open');
+            }
+            const icon = header.querySelector('.fa-chevron-down, .fa-chevron-up');
+            parentCard.querySelectorAll('.accordion-header .fa-chevron-up').forEach(i => {
+                i.classList.remove('fa-chevron-up'); i.classList.add('fa-chevron-down');
+            });
+            if (!isOpen && icon) { icon.classList.remove('fa-chevron-down'); icon.classList.add('fa-chevron-up'); }
+        }
+    </script>
+</body>
+</html>

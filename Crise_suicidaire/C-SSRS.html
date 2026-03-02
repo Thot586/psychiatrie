@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C-SSRS - Évaluation du Risque Suicidaire</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <style>
+        :root {
+            --cat-main: #5b7fa6;
+            --cat-dark: #3e6b99;
+            --cat-light: #7da3c9;
+            --cat-rgb: 91, 127, 166;
+            --cat-readable: #3e6b99;
+        }
+        .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
+        .option-btn.selected, .answer-btn.selected { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        .score-circle { border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 30px rgba(var(--cat-rgb), 0.2); }
+        .score-value { color: var(--cat-light); }
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-light); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+        .progress-fill { background: linear-gradient(90deg, var(--cat-main), var(--cat-light)); box-shadow: 0 0 8px rgba(var(--cat-rgb), 0.4); }
+        .likert-options input[type="radio"]:checked + label,
+        .binary-options input[type="radio"]:checked + label,
+        .radio-options input[type="radio"]:checked + label { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+    </style>
+
+</head>
+<body class="light-questionnaire">
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil">
+                <i class="fas fa-home"></i>
+            </a>
+            <button onclick="history.back()" class="btn-back" title="Retour">
+                <i class="fas fa-arrow-left"></i> Retour
+            </button>
+        </div>
+        <h1>C-SSRS</h1>
+        <span class="badge badge-cat-crise">Crise</span>
+    </nav>
+
+    <main class="container">
+        <!-- En-tête -->
+        <header class="header-glow" style="text-align: center; margin-bottom: 2rem;">
+            <h1><i class="fas fa-shield-alt"></i> Questionnaire C-SSRS</h1>
+            <p class="subtitle">Échelle Columbia d'évaluation du risque suicidaire</p>
+        </header>
+
+        <!-- Ressources d'urgence -->
+        <section class="glass-card danger-box">
+            <h3><i class="fas fa-ambulance"></i> RESSOURCES D'URGENCE 24H/24</h3>
+            <ul>
+                <li>Ligne nationale de prévention du suicide : <strong class="phone-number">3114</strong> (gratuit)</li>
+                <li>SAMU : <strong class="phone-number">15</strong></li>
+                <li>SOS Amitié : <strong class="phone-number">09 72 39 40 50</strong></li>
+                <li>Suicide Écoute : <strong class="phone-number">01 45 39 40 00</strong></li>
+                <li>En cas d'urgence immédiate, rendez-vous aux urgences les plus proches</li>
+            </ul>
+        </section>
+
+        <!-- Informations -->
+        <section class="glass-card info-box">
+            <h2><i class="fas fa-info-circle"></i> À propos</h2>
+            <p style="margin: 15px 0; line-height: 1.6;">
+                Le C-SSRS est un outil validé scientifiquement pour évaluer le risque suicidaire.
+                Il évalue les idées suicidaires, leur intensité et les comportements suicidaires.
+                <strong>Cet outil aide les professionnels mais ne remplace pas une évaluation clinique.</strong>
+            </p>
+        </section>
+
+        <!-- Avertissements -->
+        <section class="glass-card warning-box">
+            <h3><i class="fas fa-exclamation-triangle"></i> Avertissements</h3>
+            <ul>
+                <li>Ce questionnaire aborde des sujets sensibles</li>
+                <li>Si vous êtes en détresse, contactez immédiatement le 3114</li>
+                <li>Les résultats nécessitent une interprétation par un professionnel</li>
+                <li>En cas de risque élevé, une consultation urgente est nécessaire</li>
+            </ul>
+        </section>
+
+        <!-- Contrôles -->
+        <section class="glass-card">
+            <div class="control-buttons">
+                <button class="btn-danger" onclick="showEmergencyResources()">
+                    <i class="fas fa-phone-alt"></i> Aide immédiate
+                </button>
+                <button class="btn-primary" onclick="importData()">
+                    <i class="fas fa-file-import"></i> Importer
+                </button>
+                <button class="btn-secondary" onclick="resetForm()">
+                    <i class="fas fa-redo"></i> Réinitialiser
+                </button>
+            </div>
+            <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="loadFile(event)">
+        </section>
+
+        <!-- Sélection période -->
+        <section class="glass-card">
+            <h2><i class="fas fa-calendar-alt"></i> Période d'évaluation</h2>
+            <div class="period-selector">
+                <button class="period-btn" onclick="selectPeriod(this, 'lifetime')">Toute la vie</button>
+                <button class="period-btn" onclick="selectPeriod(this, 'past_year')">Dernière année</button>
+                <button class="period-btn selected" onclick="selectPeriod(this, 'past_month')">Dernier mois</button>
+                <button class="period-btn" onclick="selectPeriod(this, 'past_week')">Dernière semaine</button>
+            </div>
+        </section>
+
+        <!-- Section 1: Idéation -->
+        <section class="glass-card question-section active" id="ideationSection">
+            <h2><i class="fas fa-brain"></i> Section 1 : Idéation suicidaire</h2>
+            <p style="margin-bottom: 1.5rem; opacity: 0.8;">Répondez selon la période sélectionnée.</p>
+            <div id="ideationQuestions"></div>
+            <button class="btn-primary next-btn" onclick="proceedToIntensity()" style="display: none;" id="intensityBtn">
+                <i class="fas fa-arrow-right"></i> Continuer vers l'intensité
+            </button>
+        </section>
+
+        <!-- Section 2: Intensité -->
+        <section class="glass-card question-section" id="intensitySection">
+            <h2><i class="fas fa-chart-bar"></i> Section 2 : Intensité de l'idéation</h2>
+            <p style="margin-bottom: 1.5rem; opacity: 0.8;">Évaluez l'intensité de vos idées suicidaires.</p>
+
+            <div class="question-card">
+                <span class="question-number">1</span>
+                <div class="question-text">Fréquence des idées suicidaires</div>
+                <select class="form-select" id="frequency">
+                    <option value="0">Moins d'une fois par semaine</option>
+                    <option value="1">Une fois par semaine</option>
+                    <option value="2">2-5 fois par semaine</option>
+                    <option value="3">Quotidiennement</option>
+                    <option value="4">Plusieurs fois par jour</option>
+                </select>
+            </div>
+
+            <div class="question-card">
+                <span class="question-number">2</span>
+                <div class="question-text">Durée des idées suicidaires</div>
+                <select class="form-select" id="duration">
+                    <option value="0">Fugaces - quelques secondes</option>
+                    <option value="1">Moins de 1 heure</option>
+                    <option value="2">1-4 heures</option>
+                    <option value="3">4-8 heures</option>
+                    <option value="4">Plus de 8 heures ou continues</option>
+                </select>
+            </div>
+
+            <div class="question-card">
+                <span class="question-number">3</span>
+                <div class="question-text">Contrôlabilité</div>
+                <select class="form-select" id="controllability">
+                    <option value="0">Peut facilement les contrôler</option>
+                    <option value="1">Peut les contrôler avec peu de difficulté</option>
+                    <option value="2">Peut les contrôler avec difficulté</option>
+                    <option value="3">Peut les contrôler avec beaucoup de difficulté</option>
+                    <option value="4">Ne peut pas les contrôler</option>
+                </select>
+            </div>
+
+            <div class="question-card">
+                <span class="question-number">4</span>
+                <div class="question-text">Raisons de ne pas passer à l'acte</div>
+                <select class="form-select" id="deterrents">
+                    <option value="0">Les raisons de ne pas le faire l'emportent définitivement</option>
+                    <option value="1">Les raisons de ne pas le faire l'emportent</option>
+                    <option value="2">Incertain</option>
+                    <option value="3">Les raisons de le faire l'emportent</option>
+                    <option value="4">Les raisons de le faire l'emportent définitivement</option>
+                </select>
+            </div>
+
+            <div class="question-card">
+                <span class="question-number">5</span>
+                <div class="question-text">Niveau de détresse associé</div>
+                <select class="form-select" id="distress">
+                    <option value="0">Aucune détresse</option>
+                    <option value="1">Détresse minime</option>
+                    <option value="2">Détresse modérée</option>
+                    <option value="3">Détresse importante</option>
+                    <option value="4">Détresse extrême</option>
+                </select>
+            </div>
+
+            <button class="btn-primary next-btn" onclick="proceedToBehavior()">
+                <i class="fas fa-arrow-right"></i> Continuer vers les comportements
+            </button>
+        </section>
+
+        <!-- Section 3: Comportements -->
+        <section class="glass-card question-section" id="behaviorSection">
+            <h2><i class="fas fa-exclamation-circle"></i> Section 3 : Comportements suicidaires</h2>
+            <p style="margin-bottom: 1.5rem; opacity: 0.8;">Cette section évalue les comportements et actes préparatoires.</p>
+            <div id="behaviorQuestions"></div>
+            <button class="btn-primary next-btn" onclick="calculateResults()">
+                <i class="fas fa-chart-pie"></i> Voir les résultats
+            </button>
+        </section>
+
+        <!-- Résultats -->
+        <section id="results" class="glass-card results-section" style="display: none;">
+            <h2 style="text-align: center; margin-bottom: 2rem;"><i class="fas fa-clipboard-check"></i> Résultats de l'évaluation</h2>
+
+            <div id="riskLevel" class="interpretation"></div>
+
+            <div class="info-box" style="margin-top: 1.5rem;">
+                <h4><i class="fas fa-tasks"></i> Plan d'action recommandé</h4>
+                <ul id="actionPlan"></ul>
+            </div>
+
+            <!-- Export -->
+            <div class="glass-card" style="margin-top: 2rem; background: rgba(255,255,255,0.05);">
+                <h3><i class="fas fa-download"></i> Exporter les résultats</h3>
+                <div class="consent-box">
+                    <label>
+                        <input type="checkbox" id="exportConsent">
+                        <span>Je souhaite télécharger mes résultats (questionnaire, réponses, score et date) dans un fichier JSON sur mon appareil. <strong>Ces résultats constituent des données de santé — je m'engage à les conserver de façon sécurisée et à ne les partager qu'avec un professionnel de santé de mon choix.</strong> Aucune donnée n'est transmise à un serveur.</span>
+                    </label>
+                </div>
+                <div class="export-buttons">
+                    <button class="btn-primary" onclick="exportData()">
+                        <i class="fas fa-file-export"></i> Exporter en JSON
+                    </button>
+                    <button class="btn-print" onclick="printResults()">
+                        <i class="fas fa-print"></i> Imprimer
+                    </button>
+                </div>
+            </div>
+
+            <!-- Rappel urgence -->
+            <div class="danger-box" style="margin-top: 1.5rem;">
+                <h4><i class="fas fa-hands-helping"></i> Rappel des ressources</h4>
+                <ul>
+                    <li>Ligne nationale : <strong>3114</strong></li>
+                    <li>Un professionnel peut vous aider</li>
+                    <li>N'hésitez jamais à demander de l'aide</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p><strong>C-SSRS - Columbia-Suicide Severity Rating Scale</strong></p>
+        <p style="margin: 0.5rem 0;">
+            <strong>Auteurs :</strong> Dr Kelly Posner, Dr Camille Melvin et collègues - Columbia University (2011)
+        </p>
+        <p><strong>Adaptation numérique :</strong> Dr FENOHASINA | Psychiatre</p>
+        <small>Licence CC BY-NC-SA 4.0 | Usage réservé aux professionnels de santé</small>
+    </footer>
+
+    <script src="../js/app.js"></script>
+    <script>
+        let currentPeriod = 'past_month';
+        let ideationAnswers = {};
+        let intensityAnswers = {};
+        let behaviorAnswers = {};
+
+        const ideationQuestions = [
+            { id: 'wish_dead', text: "Avez-vous souhaité être mort(e) ou souhaité pouvoir vous endormir et ne pas vous réveiller ?", risk: 1 },
+            { id: 'suicidal_thoughts', text: "Avez-vous réellement eu des idées de vous suicider ?", risk: 2 },
+            { id: 'suicidal_intent', text: "Avez-vous pensé à comment vous pourriez faire cela ?", risk: 3, showIf: 'suicidal_thoughts' },
+            { id: 'suicidal_intent_plan', text: "Avez-vous eu ces pensées et avez-vous eu une certaine intention d'agir en fonction d'elles ?", risk: 4, showIf: 'suicidal_intent' },
+            { id: 'suicidal_intent_specific_plan', text: "Avez-vous commencé à élaborer ou avez-vous élaboré les détails sur comment vous suicider ? Avez-vous l'intention de mettre ce plan à exécution ?", risk: 5, showIf: 'suicidal_intent_plan' }
+        ];
+
+        const behaviorQuestions = [
+            { id: 'preparatory_acts', text: "Avez-vous fait quelque chose pour vous préparer à mettre fin à vos jours ?", examples: "Ex: collecté des médicaments, obtenu une arme, donné des biens, écrit une note..." },
+            { id: 'aborted_attempt', text: "Avez-vous commencé quelque chose mais quelqu'un ou quelque chose vous a arrêté(e) ?", examples: "Ex: été interrompu(e) ou changé d'avis" },
+            { id: 'interrupted_attempt', text: "Avez-vous commencé mais vous vous êtes arrêté(e) vous-même ?", examples: "Ex: monté sur le rebord mais n'avez pas sauté" },
+            { id: 'actual_attempt', text: "Avez-vous fait une tentative de suicide ?", critical: true },
+            { id: 'self_injury', text: "Vous êtes-vous fait du mal sans intention de mourir ?", examples: "Ex: coupures, brûlures" }
+        ];
+
+        function initializeIdeationQuestions() {
+            const container = document.getElementById('ideationQuestions');
+            container.innerHTML = '';
+
+            ideationQuestions.forEach((question, index) => {
+                const isHighRisk = question.risk >= 4;
+                const questionDiv = document.createElement('div');
+                questionDiv.className = `question-card ${isHighRisk ? 'high-risk' : ''}`;
+                questionDiv.id = `question_${question.id}`;
+
+                if (question.showIf && !ideationAnswers[question.showIf]) {
+                    questionDiv.style.display = 'none';
+                }
+
+                questionDiv.innerHTML = `
+                    <span class="question-number ${isHighRisk ? 'high-risk' : ''}">${index + 1}</span>
+                    <div class="question-text">${question.text}</div>
+                    <div class="options-binary">
+                        <button class="option-btn" onclick="answerIdeation('${question.id}', false)">Non</button>
+                        <button class="option-btn yes" onclick="answerIdeation('${question.id}', true)">Oui</button>
+                    </div>
+                `;
+
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function initializeBehaviorQuestions() {
+            const container = document.getElementById('behaviorQuestions');
+            container.innerHTML = '';
+
+            behaviorQuestions.forEach((question, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = `question-card ${question.critical ? 'high-risk' : ''}`;
+                questionDiv.id = `question_${question.id}`;
+
+                questionDiv.innerHTML = `
+                    <span class="question-number ${question.critical ? 'high-risk' : ''}">${index + 1}</span>
+                    <div class="question-text">
+                        ${question.text}
+                        ${question.examples ? `<div style="margin-top: 0.5rem; font-size: 0.9em; opacity: 0.7; font-style: italic;">${question.examples}</div>` : ''}
+                    </div>
+                    <div class="options-binary">
+                        <button class="option-btn" onclick="answerBehavior('${question.id}', false)">Non</button>
+                        <button class="option-btn yes" onclick="answerBehavior('${question.id}', true)">Oui</button>
+                    </div>
+                `;
+
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function selectPeriod(btn, period) {
+            currentPeriod = period;
+            document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+        }
+
+        function answerIdeation(questionId, value) {
+            ideationAnswers[questionId] = value;
+
+            let hideRest = false;
+            ideationQuestions.forEach(q => {
+                if (hideRest) {
+                    document.getElementById(`question_${q.id}`).style.display = 'none';
+                    ideationAnswers[q.id] = false;
+                } else if (q.showIf === questionId) {
+                    const qDiv = document.getElementById(`question_${q.id}`);
+                    if (value) {
+                        qDiv.style.display = 'block';
+                    } else {
+                        qDiv.style.display = 'none';
+                        ideationAnswers[q.id] = false;
+                        hideRest = true;
+                    }
+                }
+            });
+
+            document.getElementById('intensityBtn').style.display =
+                Object.values(ideationAnswers).some(a => a === true) ? 'block' : 'none';
+
+            updateButtonStyling(questionId, value);
+        }
+
+        function answerBehavior(questionId, value) {
+            behaviorAnswers[questionId] = value;
+            updateButtonStyling(questionId, value);
+        }
+
+        function updateButtonStyling(questionId, value) {
+            const questionDiv = document.getElementById(`question_${questionId}`);
+            if (questionDiv) {
+                const buttons = questionDiv.querySelectorAll('.option-btn');
+                buttons.forEach(btn => btn.classList.remove('selected'));
+                const buttonToSelect = value ? buttons[1] : buttons[0];
+                if (buttonToSelect) buttonToSelect.classList.add('selected');
+            }
+        }
+
+        function proceedToIntensity() {
+            document.getElementById('ideationSection').classList.remove('active');
+            const intensitySection = document.getElementById('intensitySection');
+            intensitySection.classList.add('active');
+            intensitySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function proceedToBehavior() {
+            intensityAnswers = {
+                frequency: parseInt(document.getElementById('frequency').value),
+                duration: parseInt(document.getElementById('duration').value),
+                controllability: parseInt(document.getElementById('controllability').value),
+                deterrents: parseInt(document.getElementById('deterrents').value),
+                distress: parseInt(document.getElementById('distress').value)
+            };
+
+            document.getElementById('intensitySection').classList.remove('active');
+            const behaviorSection = document.getElementById('behaviorSection');
+            behaviorSection.classList.add('active');
+            behaviorSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            initializeBehaviorQuestions();
+        }
+
+        function calculateResults() {
+            let riskLevel = 'low';
+            let riskScore = 0;
+
+            ideationQuestions.forEach(q => {
+                if (ideationAnswers[q.id]) riskScore = Math.max(riskScore, q.risk);
+            });
+
+            if (riskScore > 0 && Object.keys(intensityAnswers).length > 0) {
+                const intensityScore = Object.values(intensityAnswers).reduce((a, b) => a + b, 0) / 5;
+                riskScore += intensityScore;
+            }
+
+            const hasAttempt = behaviorAnswers.actual_attempt;
+            const hasPreparatory = behaviorAnswers.preparatory_acts;
+            const hasAbortedOrInterrupted = behaviorAnswers.aborted_attempt || behaviorAnswers.interrupted_attempt;
+
+            if (hasAttempt) {
+                riskLevel = 'critical';
+            } else if (hasPreparatory || ideationAnswers.suicidal_intent_specific_plan) {
+                riskLevel = 'high';
+            } else if (hasAbortedOrInterrupted || ideationAnswers.suicidal_intent_plan) {
+                riskLevel = 'moderate';
+            } else if (ideationAnswers.wish_dead || ideationAnswers.suicidal_thoughts) {
+                riskLevel = 'low';
+            }
+
+            if (!Object.values(ideationAnswers).some(v => v) && !Object.values(behaviorAnswers).some(v => v)) {
+                riskLevel = 'low';
+            }
+
+            displayResults(riskLevel);
+        }
+
+        function displayResults(riskLevel) {
+            document.getElementById('behaviorSection').classList.remove('active');
+            document.getElementById('results').style.display = 'block';
+
+            const riskLevelDiv = document.getElementById('riskLevel');
+            const actionPlanList = document.getElementById('actionPlan');
+
+            const riskConfigs = {
+                low: {
+                    title: 'Risque Faible',
+                    description: 'Idées suicidaires vagues et passives, sans plan ni intention.',
+                    className: 'low',
+                    actions: [
+                        'Surveillance de routine et suivi clinique.',
+                        'Renforcer les facteurs de protection (soutien social, raisons de vivre).',
+                        'Explorer et traiter les sources de détresse sous-jacentes.'
+                    ]
+                },
+                moderate: {
+                    title: 'Risque Modéré',
+                    description: 'Idées suicidaires actives avec plan, mais sans intention ou préparation.',
+                    className: 'moderate',
+                    actions: [
+                        '<strong>Évaluation par un professionnel de la santé mentale requise.</strong>',
+                        'Élaborer un plan de sécurité (stratégies de coping, contacts d\'urgence).',
+                        'Augmenter la fréquence des suivis.',
+                        'Informer et impliquer le réseau de soutien (famille, amis).'
+                    ]
+                },
+                high: {
+                    title: 'Risque Élevé',
+                    description: 'Idées suicidaires avec intention et/ou actes préparatoires.',
+                    className: 'high',
+                    actions: [
+                        '<strong>Consultation psychiatrique URGENTE (dans les 24h).</strong>',
+                        '<strong>Ne pas laisser la personne seule.</strong>',
+                        'Restreindre l\'accès aux moyens létaux (médicaments, armes, etc.).',
+                        'Considérer une hospitalisation si la sécurité ne peut être assurée.'
+                    ]
+                },
+                critical: {
+                    title: 'URGENCE MÉDICALE - Risque Critique',
+                    description: 'Tentative de suicide récente ou comportement à haut risque imminent.',
+                    className: 'critical',
+                    actions: [
+                        '<strong>APPELER LE 15 OU SE RENDRE AUX URGENCES IMMÉDIATEMENT.</strong>',
+                        '<strong>Ne JAMAIS laisser la personne seule.</strong>',
+                        'Une hospitalisation est très probable et nécessaire.',
+                        'Supervision constante jusqu\'à l\'arrivée des secours.'
+                    ]
+                }
+            };
+
+            const config = riskConfigs[riskLevel];
+
+            riskLevelDiv.className = `interpretation ${config.className}`;
+            riskLevelDiv.innerHTML = `
+                <h3>${config.title}</h3>
+                <p>${config.description}</p>
+            `;
+
+            actionPlanList.innerHTML = config.actions.map(action => `<li>${action}</li>`).join('');
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function showEmergencyResources() {
+            alert(`RESSOURCES D'URGENCE:\n\n📞 3114 - Ligne nationale de prévention (24h/24)\n📞 15 - SAMU\n📞 09 72 39 40 50 - SOS Amitié\n\n🏥 Rendez-vous aux urgences si nécessaire.`);
+        }
+
+        function resetForm() {
+            ideationAnswers = {};
+            intensityAnswers = {};
+            behaviorAnswers = {};
+
+            document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+            document.querySelectorAll('select').forEach(sel => sel.selectedIndex = 0);
+
+            document.getElementById('ideationSection').classList.add('active');
+            document.getElementById('intensitySection').classList.remove('active');
+            document.getElementById('behaviorSection').classList.remove('active');
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('exportConsent').checked = false;
+            document.getElementById('intensityBtn').style.display = 'none';
+
+            initializeIdeationQuestions();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function importData() {
+            document.getElementById('fileInput').click();
+        }
+
+        function loadFile(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        if (data.questionnaire === "C-SSRS" && data.ideationAnswers) {
+                            resetForm();
+                            ideationAnswers = data.ideationAnswers;
+                            intensityAnswers = data.intensityAnswers || {};
+                            behaviorAnswers = data.behaviorAnswers || {};
+                            currentPeriod = data.period || 'past_month';
+
+                            initializeIdeationQuestions();
+                            Object.keys(ideationAnswers).forEach(key => {
+                                if (ideationAnswers[key]) updateButtonStyling(key, ideationAnswers[key]);
+                            });
+                            alert("Données importées avec succès !");
+                        } else {
+                            alert("Le fichier n'est pas un export C-SSRS valide.");
+                        }
+                    } catch (error) {
+                        alert("Erreur lors de la lecture du fichier.");
+                    }
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        function exportData() {
+            if (!document.getElementById('exportConsent').checked) {
+                alert("Veuillez cocher la case de consentement avant d''exporter.");
+                return;
+            }
+
+            const data = {
+                questionnaire: "C-SSRS",
+                date: new Date().toISOString(),
+                period: currentPeriod,
+                ideationAnswers: ideationAnswers,
+                intensityAnswers: intensityAnswers,
+                behaviorAnswers: behaviorAnswers,
+                confidential: "Ces données sont strictement confidentielles et protégées par le secret médical."
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `CSSRS_CONFIDENTIEL_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeIdeationQuestions();
+        });
+    </script>
+</body>
+</html>

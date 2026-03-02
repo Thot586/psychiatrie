@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EQ - Quotient d'Empathie</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <style>
+        :root {
+            --cat-main: #8b5cf6;
+            --cat-dark: #7c3aed;
+            --cat-light: #a78bfa;
+            --cat-rgb: 139, 92, 246;
+            --cat-readable: #7c3aed;
+        }
+        .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
+        .option-btn.selected, .answer-btn.selected { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        .score-circle { border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 30px rgba(var(--cat-rgb), 0.2); }
+        .score-value { color: var(--cat-light); }
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-light); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+        .progress-fill { background: linear-gradient(90deg, var(--cat-main), var(--cat-light)); box-shadow: 0 0 8px rgba(var(--cat-rgb), 0.4); }
+        .likert-options input[type="radio"]:checked + label,
+        .binary-options input[type="radio"]:checked + label,
+        .radio-options input[type="radio"]:checked + label { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+    </style>
+
+</head>
+<body class="light-questionnaire">
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil">
+                <i class="fas fa-home"></i>
+            </a>
+            <button onclick="history.back()" class="btn-back" title="Retour">
+                <i class="fas fa-arrow-left"></i> <span>Retour</span>
+            </button>
+        </div>
+        <h1>EQ</h1>
+        <span class="badge badge-cat-tnd">TND</span>
+    </nav>
+
+    <main class="container">
+        <header class="header-glow" style="text-align: center; margin-bottom: 2rem;">
+            <h1><i class="fas fa-heart"></i> Quotient d'Empathie (EQ)</h1>
+            <p class="subtitle">Empathy Quotient - Baron-Cohen & Wheelwright (60 questions)</p>
+        </header>
+
+        <section class="glass-card info-box">
+            <h2><i class="fas fa-info-circle"></i> À propos</h2>
+            <p>Le Quotient d'Empathie (EQ) mesure votre capacité d'<strong>empathie cognitive</strong> (comprendre les états mentaux d'autrui) et d'<strong>empathie affective</strong> (résonance émotionnelle). Il a été développé par Baron-Cohen et Wheelwright (2004).</p>
+            <p style="margin-top: 0.5rem;"><strong>Cut-off suggéré :</strong> Un score < 30 peut être associé à certaines conditions neurodéveloppementales.</p>
+        </section>
+
+        <section class="glass-card warning-box">
+            <h3><i class="fas fa-exclamation-triangle"></i> Avertissements</h3>
+            <ul>
+                <li>Ce questionnaire est un outil de recherche, <strong>pas un diagnostic</strong></li>
+                <li>Un score faible n'indique pas nécessairement un problème</li>
+                <li>L'empathie se manifeste de différentes façons selon les individus</li>
+            </ul>
+        </section>
+
+        <section class="glass-card">
+            <div class="control-buttons">
+                <button class="btn-primary" onclick="importData()">
+                    <i class="fas fa-file-import"></i> Importer
+                </button>
+                <button class="btn-secondary" onclick="resetForm()">
+                    <i class="fas fa-redo"></i> Réinitialiser
+                </button>
+            </div>
+            <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="loadFile(event)">
+        </section>
+
+        <section class="glass-card">
+            <h2><i class="fas fa-clipboard-list"></i> Questions</h2>
+            <p style="margin-bottom: 1.5rem; opacity: 0.8;">Indiquez dans quelle mesure vous êtes d'accord avec chaque affirmation.</p>
+            <div id="questions"></div>
+        </section>
+
+        <!-- Résultats -->
+        <section id="results" class="glass-card results-section" style="display: none;">
+            <h2 style="text-align: center; margin-bottom: 2rem;"><i class="fas fa-chart-pie"></i> Résultats</h2>
+
+            <div class="score-display">
+                <div class="score-circle">
+                    <span class="score-number" id="totalScore">0</span>
+                    <span class="score-label">sur 80</span>
+                </div>
+            </div>
+
+            <div id="interpretationBox" class="interpretation"></div>
+
+            <div class="subscale-grid" style="margin-top: 2rem;">
+                <div class="subscale-card">
+                    <h4><i class="fas fa-brain"></i> Empathie cognitive</h4>
+                    <div class="subscale-score"><span id="score-cog">0</span> / <span id="max-cog">0</span></div>
+                    <div class="progress-bar"><div class="progress-fill" id="fill-cog"></div></div>
+                    <p class="subscale-interp" id="interp-cog"></p>
+                    <small style="opacity: 0.7;">Comprendre le point de vue d'autrui</small>
+                </div>
+                <div class="subscale-card">
+                    <h4><i class="fas fa-heart"></i> Empathie affective</h4>
+                    <div class="subscale-score"><span id="score-aff">0</span> / <span id="max-aff">0</span></div>
+                    <div class="progress-bar"><div class="progress-fill" id="fill-aff"></div></div>
+                    <p class="subscale-interp" id="interp-aff"></p>
+                    <small style="opacity: 0.7;">Résonance émotionnelle</small>
+                </div>
+            </div>
+
+            <button class="btn-primary" onclick="toggleDetails()" style="width: 100%; margin-top: 1.5rem;">
+                <i class="fas fa-list-ul"></i> Voir l'interprétation détaillée
+                <span id="toggleIcon"><i class="fas fa-chevron-down"></i></span>
+            </button>
+            <div id="detailsContent" class="details-content" style="display: none;"></div>
+
+            <div class="glass-card" style="margin-top: 2rem; background: rgba(255,255,255,0.05);">
+                <h3><i class="fas fa-download"></i> Exporter</h3>
+                <div class="consent-box">
+                    <label>
+                        <input type="checkbox" id="exportConsent">
+                        <span>Je souhaite télécharger mes résultats (questionnaire, réponses, score et date) dans un fichier JSON sur mon appareil. <strong>Ces résultats constituent des données de santé — je m'engage à les conserver de façon sécurisée et à ne les partager qu'avec un professionnel de santé de mon choix.</strong> Aucune donnée n'est transmise à un serveur.</span>
+                    </label>
+                </div>
+                <div class="export-buttons">
+                    <button class="btn-primary" onclick="exportData()">
+                        <i class="fas fa-file-export"></i> Exporter en JSON
+                    </button>
+                    <button class="btn-print" onclick="printResults()">
+                        <i class="fas fa-print"></i> Imprimer
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p><strong>EQ - Empathy Quotient</strong></p>
+        <p style="margin: 0.5rem 0;"><strong>Auteurs :</strong> Baron-Cohen, S. & Wheelwright, S. (2004)</p>
+        <p><strong>Adaptation numérique :</strong> Dr FENOHASINA | Psychiatre</p>
+        <small>Licence CC BY-NC-SA 4.0</small>
+    </footer>
+
+    <script src="../js/app.js"></script>
+    <script>
+        const questions = [
+            {text: "Je peux facilement dire quand quelqu'un veut entamer une conversation.", empathy: true, reversed: false, type: "cognitive"},
+            {text: "Je préfère les animaux aux êtres humains.", empathy: false, reversed: false, type: null},
+            {text: "J'essaie d'être à la mode.", empathy: false, reversed: false, type: null},
+            {text: "Je trouve difficile d'expliquer aux autres des choses que j'ai comprises facilement et que eux n'ont pas comprises du premier coup.", empathy: true, reversed: true, type: "cognitive"},
+            {text: "Je rêve la plupart des nuits.", empathy: false, reversed: false, type: null},
+            {text: "J'aime prendre soin des autres.", empathy: true, reversed: false, type: "affective"},
+            {text: "J'essaie de résoudre mes problèmes moi-même plutôt que d'en discuter avec d'autres.", empathy: false, reversed: false, type: null},
+            {text: "Je trouve difficile de savoir ce qu'il faut faire dans les relations sociales.", empathy: true, reversed: true, type: "cognitive"},
+            {text: "C'est le matin que je suis le(la) plus efficace.", empathy: false, reversed: false, type: null},
+            {text: "On me dit souvent que je vais trop loin quand j'expose mon point de vue dans une discussion.", empathy: true, reversed: true, type: "affective"},
+            {text: "Cela ne m'ennuie pas trop d'être en retard à un rendez-vous fixé à un ami.", empathy: true, reversed: true, type: "affective"},
+            {text: "Les relations sociales sont si difficiles que j'essaie de ne pas m'en soucier.", empathy: true, reversed: true, type: "affective"},
+            {text: "Je ne ferais jamais rien d'illégal même si ce n'est pas très grave.", empathy: false, reversed: false, type: null},
+            {text: "J'ai souvent du mal à juger si quelque chose est grossier ou familier.", empathy: true, reversed: true, type: "cognitive"},
+            {text: "Dans une conversation, j'ai tendance à me centrer sur mes propres pensées plutôt que sur celles de mon interlocuteur.", empathy: true, reversed: true, type: "cognitive"},
+            {text: "Je préfère les farces aux jeux de mots.", empathy: false, reversed: false, type: null},
+            {text: "Je vis au jour le jour.", empathy: false, reversed: false, type: null},
+            {text: "Quand j'étais enfant, j'aimais couper des vers de terre pour voir ce qui se passe.", empathy: false, reversed: false, type: null},
+            {text: "Je détecte rapidement si quelqu'un dit une chose qui en signifie une autre.", empathy: true, reversed: false, type: "cognitive"},
+            {text: "J'ai de solides convictions sur la moralité.", empathy: false, reversed: false, type: null},
+            {text: "Je ne comprends pas comment des choses vexent tant certaines personnes.", empathy: true, reversed: true, type: "cognitive"},
+            {text: "Il est pour moi facile de me mettre à la place de quelqu'un d'autre.", empathy: true, reversed: false, type: "cognitive"},
+            {text: "Je pense que les bonnes manières sont la meilleure chose que des parents peuvent apprendre à leurs enfants.", empathy: false, reversed: false, type: null},
+            {text: "J'aime agir sur un coup de tête.", empathy: false, reversed: false, type: null},
+            {text: "Je prédis assez bien le ressenti des autres.", empathy: true, reversed: false, type: "cognitive"},
+            {text: "Dans un groupe, je repère facilement quand quelqu'un se sent gêné ou mal à l'aise.", empathy: true, reversed: false, type: "cognitive"},
+            {text: "Si j'offense quelqu'un en parlant, j'estime que c'est son problème et pas le mien.", empathy: true, reversed: true, type: "affective"},
+            {text: "Si quelqu'un me demandait mon avis sur sa coupe de cheveux, je répondrais honnêtement même si elle ne me plaît pas.", empathy: true, reversed: true, type: "affective"},
+            {text: "Je ne comprends pas toujours pourquoi une personne peut être offensée par une remarque.", empathy: true, reversed: true, type: "cognitive"},
+            {text: "On me dit souvent que je suis imprévisible.", empathy: false, reversed: false, type: null},
+            {text: "En groupe, j'aime être le centre d'intérêt.", empathy: false, reversed: false, type: null},
+            {text: "Voir quelqu'un pleurer ne me touche pas vraiment.", empathy: true, reversed: true, type: "affective"},
+            {text: "J'adore parler politique.", empathy: false, reversed: false, type: null},
+            {text: "Je ne mâche pas mes mots, ce qui est souvent pris pour de la grossièreté même si ce n'est pas mon intention.", empathy: true, reversed: true, type: "cognitive"},
+            {text: "En général, je comprends facilement les situations sociales.", empathy: true, reversed: false, type: "cognitive"},
+            {text: "On me dit généralement que je comprends bien les sentiments et les pensées des autres.", empathy: true, reversed: false, type: "cognitive"},
+            {text: "Quand je discute avec quelqu'un, j'essaie de parler de ses expériences plutôt que des miennes.", empathy: true, reversed: false, type: "affective"},
+            {text: "Ça me bouleverse de voir un animal souffrant.", empathy: true, reversed: false, type: "affective"},
+            {text: "Je suis capable de prendre des décisions sans être influencé(e) par les sentiments des autres.", empathy: true, reversed: true, type: "affective"},
+            {text: "Je ne peux pas me détendre sans avoir fait tout ce que j'avais planifié pour la journée.", empathy: false, reversed: false, type: null},
+            {text: "Je remarque facilement si quelqu'un est intéressé ou ennuyé par ce que je dis.", empathy: true, reversed: false, type: "cognitive"},
+            {text: "Lorsque je regarde le journal télévisé, je suis triste de voir des personnes qui souffrent.", empathy: true, reversed: false, type: "affective"},
+            {text: "Mes amis me parlent généralement de leurs problèmes car ils disent que je suis très compréhensif(ve).", empathy: true, reversed: false, type: "affective"},
+            {text: "Je peux sentir quand je dérange les autres, même s'ils ne me le disent pas.", empathy: true, reversed: false, type: "cognitive"},
+            {text: "Je commence souvent de nouveaux passe-temps qui m'ennuient vite et je passe à autre chose.", empathy: false, reversed: false, type: null},
+            {text: "Des fois, on me dit que j'exagère quand je charrie les gens.", empathy: false, reversed: false, type: null},
+            {text: "Je serais bien trop anxieux(se) de monter sur un manège de montagnes russes.", empathy: false, reversed: false, type: null},
+            {text: "On me dit souvent que je suis insensible même si je ne vois pas toujours pourquoi.", empathy: true, reversed: true, type: "affective"},
+            {text: "Si je vois qu'il y a un nouveau venu dans un groupe de personnes, je crois que c'est à elles d'essayer de l'intégrer.", empathy: true, reversed: true, type: "affective"},
+            {text: "D'habitude, je ne m'implique pas émotionnellement lorsque je regarde un film.", empathy: true, reversed: true, type: "affective"},
+            {text: "J'aime être très organisé(e) dans ma vie de tous les jours, et je fais souvent des listes de ce que j'ai à faire.", empathy: false, reversed: false, type: null},
+            {text: "Je peux me mettre à l'écoute du ressenti des autres rapidement et intuitivement.", empathy: true, reversed: false, type: "cognitive"},
+            {text: "Je n'aime pas prendre de risques.", empathy: false, reversed: false, type: null},
+            {text: "Je peux facilement comprendre ce que quelqu'un veut dire.", empathy: true, reversed: false, type: "cognitive"},
+            {text: "Je peux deviner si quelqu'un masque ses émotions.", empathy: true, reversed: false, type: "cognitive"},
+            {text: "Je pèse toujours le pour et le contre avant de prendre une décision.", empathy: false, reversed: false, type: null},
+            {text: "Je n'essaie pas de déchiffrer de façon consciente les règles en jeu dans les situations sociales.", empathy: true, reversed: false, type: "cognitive"},
+            {text: "Je suis bon(ne) pour prédire ce que quelqu'un va faire.", empathy: true, reversed: false, type: "cognitive"},
+            {text: "J'ai tendance à m'impliquer émotionnellement dans les problèmes de mes amis.", empathy: true, reversed: false, type: "affective"},
+            {text: "Habituellement, je comprends le point de vue des autres même si je ne le partage pas.", empathy: true, reversed: false, type: "cognitive"}
+        ];
+
+        const responses = [
+            { label: "Fortement d'accord", value: 1 },
+            { label: "Légèrement d'accord", value: 2 },
+            { label: "Légèrement pas d'accord", value: 3 },
+            { label: "Fortement pas d'accord", value: 4 }
+        ];
+
+        let answers = new Array(60).fill(null);
+
+        function initializeQuestions() {
+            const container = document.getElementById('questions');
+            container.innerHTML = '';
+            questions.forEach((q, index) => {
+                const opts = responses.map(r => `
+                    <button type="button" class="option-btn" onclick="selectAnswer(${index}, ${r.value})" id="q${index}_opt${r.value}">
+                        ${r.label}
+                    </button>
+                `).join('');
+
+                container.innerHTML += `
+                    <div class="question-card" id="q-container-${index}">
+                        <span class="question-number">${index + 1}</span>
+                        <div class="question-text">${q.text}</div>
+                        <div class="options-grid binary">${opts}</div>
+                    </div>
+                `;
+            });
+        }
+
+        function selectAnswer(index, value) {
+            answers[index] = value;
+            responses.forEach(r => {
+                const btn = document.getElementById(`q${index}_opt${r.value}`);
+                if (btn) btn.classList.toggle('selected', r.value === value);
+            });
+            document.getElementById(`q-container-${index}`).classList.remove('missing');
+
+            if (answers.every(a => a !== null)) {
+                updateResults();
+                document.getElementById('results').style.display = 'block';
+                document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function getInterpretation(score) {
+            if (score >= 65) return { level: "Empathie très élevée", className: "low", desc: "Votre score indique un niveau d'empathie très élevé. Vous êtes particulièrement sensible aux émotions d'autrui." };
+            if (score >= 52) return { level: "Empathie élevée", className: "low", desc: "Votre score indique un niveau d'empathie élevé, supérieur à la moyenne." };
+            if (score >= 33) return { level: "Empathie moyenne", className: "moderate", desc: "Votre score se situe dans la moyenne, avec une capacité d'empathie typique." };
+            if (score >= 30) return { level: "Empathie légèrement basse", className: "moderate", desc: "Votre score est légèrement en dessous de la moyenne mais au-dessus du cut-off clinique." };
+            return { level: "Empathie basse", className: "high", desc: "Votre score est inférieur au cut-off de 30. Ce niveau peut être associé à certaines conditions neurodéveloppementales, mais nécessite une évaluation clinique appropriée." };
+        }
+
+        function getSubscoreInterpretation(score, max, type) {
+            const percentage = (score / max) * 100;
+            if (type === "cognitive") {
+                if (percentage >= 75) return "Excellente prise de perspective";
+                if (percentage >= 50) return "Bonne capacité";
+                if (percentage >= 25) return "Capacité modérée";
+                return "Difficulté dans ce domaine";
+            } else {
+                if (percentage >= 75) return "Forte résonance émotionnelle";
+                if (percentage >= 50) return "Réponse émotionnelle appropriée";
+                if (percentage >= 25) return "Résonance modérée";
+                return "Difficulté dans ce domaine";
+            }
+        }
+
+        function updateResults() {
+            let total = 0;
+            let cogScore = 0, affScore = 0;
+            let cogMax = 0, affMax = 0;
+
+            for (let i = 0; i < questions.length; i++) {
+                const q = questions[i];
+                if (!q.empathy) continue;
+
+                const response = answers[i] || 0;
+                let points = 0;
+
+                if (!q.reversed) {
+                    if (response === 1) points = 2;
+                    else if (response === 2) points = 1;
+                } else {
+                    if (response === 4) points = 2;
+                    else if (response === 3) points = 1;
+                }
+
+                total += points;
+
+                if (q.type === "cognitive") {
+                    cogScore += points;
+                    cogMax += 2;
+                } else if (q.type === "affective") {
+                    affScore += points;
+                    affMax += 2;
+                }
+            }
+
+            document.getElementById('totalScore').textContent = total;
+            const interp = getInterpretation(total);
+            const interpretationBox = document.getElementById('interpretationBox');
+            interpretationBox.className = `interpretation ${interp.className}`;
+            interpretationBox.innerHTML = `<h3>${interp.level}</h3><p>${interp.desc}</p>`;
+
+            document.getElementById('score-cog').textContent = cogScore;
+            document.getElementById('max-cog').textContent = cogMax;
+            document.getElementById('fill-cog').style.width = `${(cogScore / cogMax) * 100}%`;
+            document.getElementById('interp-cog').textContent = getSubscoreInterpretation(cogScore, cogMax, "cognitive");
+
+            document.getElementById('score-aff').textContent = affScore;
+            document.getElementById('max-aff').textContent = affMax;
+            document.getElementById('fill-aff').style.width = `${(affScore / affMax) * 100}%`;
+            document.getElementById('interp-aff').textContent = getSubscoreInterpretation(affScore, affMax, "affective");
+
+            document.getElementById('detailsContent').innerHTML = `
+                <h3>Comprendre l'empathie</h3>
+                <div class="info-box">
+                    <h4>Les deux dimensions de l'empathie :</h4>
+                    <ul>
+                        <li><strong>Empathie cognitive :</strong> Comprendre le point de vue et l'état mental d'autrui (théorie de l'esprit)</li>
+                        <li><strong>Empathie affective :</strong> Ressentir une réponse émotionnelle appropriée aux émotions d'autrui</li>
+                    </ul>
+                </div>
+                <div class="info-box" style="margin-top: 1rem;">
+                    <h4>Interprétation des scores</h4>
+                    <ul>
+                        <li><strong>≥ 65 :</strong> Empathie très élevée</li>
+                        <li><strong>52-64 :</strong> Empathie élevée</li>
+                        <li><strong>33-51 :</strong> Empathie moyenne</li>
+                        <li><strong>30-32 :</strong> Légèrement en dessous de la moyenne</li>
+                        <li><strong>< 30 :</strong> Cut-off clinique</li>
+                    </ul>
+                </div>
+                <p style="margin-top: 1rem;"><strong>Note :</strong> Un score faible n'indique pas nécessairement un problème. Les personnes autistes peuvent avoir des scores plus faibles tout en ayant une grande compassion. L'empathie se manifeste de différentes façons selon les individus.</p>
+            `;
+        }
+
+        function toggleDetails() {
+            const content = document.getElementById('detailsContent');
+            const icon = document.getElementById('toggleIcon');
+            const isVisible = content.style.display !== 'none';
+            content.style.display = isVisible ? 'none' : 'block';
+            icon.innerHTML = isVisible ? '<i class="fas fa-chevron-down"></i>' : '<i class="fas fa-chevron-up"></i>';
+        }
+
+        function resetForm() {
+            answers = new Array(60).fill(null);
+            document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+            document.querySelectorAll('.question-card').forEach(card => card.classList.remove('missing'));
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('detailsContent').style.display = 'none';
+            document.getElementById('exportConsent').checked = false;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function importData() { document.getElementById('fileInput').click(); }
+
+        function loadFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data.questionnaire === "EQ" && data.answers) {
+                        answers = data.answers;
+                        initializeQuestions();
+                        answers.forEach((val, i) => { if (val !== null) selectAnswer(i, val); });
+                    }
+                } catch { alert("Fichier invalide."); }
+            };
+            reader.readAsText(file);
+        }
+
+        function exportData() {
+            if (!document.getElementById('exportConsent').checked) {
+                alert("Veuillez cocher la case de consentement avant d''exporter.");
+                return;
+            }
+            let total = 0;
+            let cogScore = 0, affScore = 0, cogMax = 0, affMax = 0;
+            for (let i = 0; i < questions.length; i++) {
+                const q = questions[i];
+                if (!q.empathy) continue;
+                const response = answers[i] || 0;
+                let points = 0;
+                if (!q.reversed) {
+                    if (response === 1) points = 2;
+                    else if (response === 2) points = 1;
+                } else {
+                    if (response === 4) points = 2;
+                    else if (response === 3) points = 1;
+                }
+                total += points;
+                if (q.type === "cognitive") { cogScore += points; cogMax += 2; }
+                else if (q.type === "affective") { affScore += points; affMax += 2; }
+            }
+
+            const data = {
+                questionnaire: "EQ",
+                date: new Date().toISOString(),
+                answers: answers,
+                totalScore: total,
+                subscores: { cognitive: cogScore, affective: affScore },
+                interpretation: getInterpretation(total).level
+            };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `EQ_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        document.addEventListener('DOMContentLoaded', initializeQuestions);
+    </script>
+</body>
+</html>

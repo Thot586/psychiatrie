@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Crise Suicidaire - Ressources</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .portal-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+    .portal-card {
+        background: linear-gradient(145deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-xl);
+        padding: 1.5rem;
+        text-decoration: none;
+        display: block;
+        transition: all var(--transition-slow);
+    }
+    .portal-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--color-border-active);
+        box-shadow: var(--shadow-glow);
+    }
+    .portal-card h3 { color: var(--color-text-primary); margin-bottom: 0.5rem; }
+    .portal-card p { color: var(--color-text-muted); font-size: var(--font-size-sm); }
+    .section-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius-lg);
+        font-weight: 600;
+        font-size: var(--font-size-lg);
+        margin-bottom: 1.5rem;
+        color: white;
+    }
+    .portal-card .card-description {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 1rem;
+        border-radius: var(--radius-md);
+        margin-bottom: 1rem;
+        border: 1px solid var(--color-border);
+    }
+    .portal-card .card-subtitle {
+        color: var(--color-text-muted);
+        font-size: var(--font-size-sm);
+        font-style: italic;
+        margin-bottom: 0.75rem;
+    }
+    .portal-card .btn-start {
+        display: inline-block;
+        padding: 0.5rem 1.25rem;
+        border-radius: var(--radius-md);
+        font-weight: 600;
+        text-align: center;
+        transition: all var(--transition-normal);
+        text-decoration: none;
+        margin-top: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navigation-bar">
+    <div class="nav-buttons">
+        <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+        <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+    </div>
+    <h1>Crise Suicidaire</h1>
+    <span class="badge badge-cat-crise">Crise</span>
+  </nav>
+
+  <div class="container">
+
+    <header class="page-header">
+      <p class="subtitle">
+        Outils d'evaluation du risque suicidaire et ressources pour la prise en charge.
+      </p>
+    </header>
+
+    <div class="alert alert-danger">
+      <div class="alert-icon">
+        <i class="fas fa-phone-alt"></i>
+      </div>
+      <div class="alert-content">
+        <h3>En cas d'urgence</h3>
+        <p>Si vous ou quelqu'un etes en danger immediat, appelez immediatement :</p>
+        <ul style="margin-top: 0.5rem; margin-left: 1rem; list-style: disc;">
+          <li><strong>3114</strong> - Numero national de prevention du suicide (24h/24)</li>
+          <li><strong>15</strong> - SAMU</li>
+          <li><strong>112</strong> - Numero d'urgence europeen</li>
+        </ul>
+      </div>
+    </div>
+
+    <section class="section">
+      <div class="section-badge" style="background: #5b7fa6;">
+        <i class="fas fa-shield-alt"></i> Evaluation du Risque
+      </div>
+      <div class="portal-grid">
+
+        <a href="C-SSRS.html" class="portal-card">
+          <h3>C-SSRS</h3>
+          <p class="card-subtitle">Columbia Suicide Severity Rating Scale</p>
+          <div class="card-description">
+            <p>Echelle de reference (FDA approved) pour evaluer le risque suicidaire. Explore les ideations suicidaires, leur intensite et les comportements suicidaires. <strong style="color: #22c55e;">Utilisable pour l'evaluation initiale ET le suivi.</strong></p>
+          </div>
+          <span class="btn-start" style="background: #5b7fa6; color: white;">
+            Commencer l'evaluation &rarr;
+          </span>
+        </a>
+
+        <a href="RUD.html" class="portal-card">
+          <h3>RUD</h3>
+          <p class="card-subtitle">Risque - Urgence - Dangerosite</p>
+          <div class="card-description">
+            <p>Grille tripartite d'evaluation du potentiel suicidaire. Evalue le risque (facteurs de vulnerabilite), l'urgence (imminence) et la dangerosite (acces aux moyens letaux). <strong style="color: #f59e0b;">Hetero-questionnaire (clinicien).</strong></p>
+          </div>
+          <span class="btn-start" style="background: #5b7fa6; color: white;">
+            Commencer l'evaluation &rarr;
+          </span>
+        </a>
+
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-badge" style="background: #475569;">
+        <i class="fas fa-hospital"></i> Conduite a Tenir
+      </div>
+      <div class="portal-grid">
+
+        <a href="Hospitalisation_Psy_crise_suicidaire.html" class="portal-card">
+          <h3>Hospitalisation en Psychiatrie</h3>
+          <p class="card-subtitle">Guide pour la crise suicidaire</p>
+          <div class="card-description">
+            <p>Guide complet sur les indications d'hospitalisation, les modalites de soins et la prise en charge de la crise suicidaire.</p>
+          </div>
+          <span class="btn-start" style="background: #475569; color: white;">
+            Consulter le guide &rarr;
+          </span>
+        </a>
+
+      </div>
+    </section>
+
+  </div>
+
+  <footer class="footer">
+    <p>Dr. FENOHASINA T.J. Felicien (Psychiatre)</p>
+    <p>&copy; 2025 - Centre Ressource de Rehabilitation</p>
+    <p class="license">Licence CC BY-NC-SA 4.0</p>
+  </footer>
+
+</body>
+</html>

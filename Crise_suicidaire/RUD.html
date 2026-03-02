@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RUD - Risque, Urgence, Dangerosite</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <style>
+        :root {
+            --cat-main: #5b7fa6;
+            --cat-dark: #3e6b99;
+            --cat-light: #7da3c9;
+            --cat-rgb: 91, 127, 166;
+            --cat-readable: #3e6b99;
+        }
+        .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
+        .option-btn.selected, .answer-btn.selected { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        .score-circle { border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 30px rgba(var(--cat-rgb), 0.2); }
+        .score-value { color: var(--cat-light); }
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-light); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+        .progress-fill { background: linear-gradient(90deg, var(--cat-main), var(--cat-light)); box-shadow: 0 0 8px rgba(var(--cat-rgb), 0.4); }
+        .likert-options input[type="radio"]:checked + label,
+        .binary-options input[type="radio"]:checked + label,
+        .radio-options input[type="radio"]:checked + label { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+
+        /* ========================================
+           RUD-specific styles
+           ======================================== */
+        .rud-section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .rud-section-header .section-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+        .rud-section-header h2 {
+            margin: 0;
+        }
+        .rud-section-header p {
+            margin: 0.25rem 0 0 0;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .rud-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+        @media (max-width: 900px) {
+            .rud-cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .rud-card {
+            background: #ffffff;
+            border: 2px solid rgba(0, 0, 0, 0.08);
+            border-radius: var(--neo-radius, 12px);
+            padding: 1.25rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow:
+                4px 4px 10px rgba(0, 0, 0, 0.07),
+                -4px -4px 10px rgba(255, 255, 255, 0.85);
+            position: relative;
+        }
+        .rud-card:hover {
+            transform: translateY(-2px);
+            box-shadow:
+                6px 6px 16px rgba(0, 0, 0, 0.1),
+                -6px -6px 16px rgba(255, 255, 255, 0.9);
+        }
+        .rud-card.selected {
+            box-shadow:
+                inset 3px 3px 7px rgba(0, 0, 0, 0.07),
+                inset -3px -3px 7px rgba(255, 255, 255, 0.85);
+            transform: translateY(0);
+        }
+        .rud-card.selected::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            font-size: 1rem;
+            color: #fff;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Level-specific colors */
+        .rud-card[data-level="faible"].selected {
+            border-color: #22c55e;
+            background: rgba(240, 253, 244, 0.95);
+        }
+        .rud-card[data-level="faible"].selected::after {
+            background: #22c55e;
+        }
+        .rud-card[data-level="faible"] .rud-card-title {
+            color: #15803d;
+        }
+
+        .rud-card[data-level="moyen"].selected {
+            border-color: #f59e0b;
+            background: rgba(255, 251, 235, 0.95);
+        }
+        .rud-card[data-level="moyen"].selected::after {
+            background: #f59e0b;
+        }
+        .rud-card[data-level="moyen"] .rud-card-title {
+            color: #b45309;
+        }
+
+        .rud-card[data-level="eleve"].selected {
+            border-color: #ef4444;
+            background: rgba(254, 242, 242, 0.95);
+        }
+        .rud-card[data-level="eleve"].selected::after {
+            background: #ef4444;
+        }
+        .rud-card[data-level="eleve"] .rud-card-title {
+            color: #b91c1c;
+        }
+
+        .rud-card-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .rud-card-title i {
+            font-size: 0.85rem;
+        }
+
+        .rud-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .rud-card ul li {
+            padding: 0.3rem 0;
+            font-size: 0.88rem;
+            line-height: 1.45;
+            padding-left: 1.1rem;
+            position: relative;
+        }
+        .rud-card ul li::before {
+            content: '\2022';
+            position: absolute;
+            left: 0;
+            font-weight: 700;
+        }
+        .rud-card[data-level="faible"] ul li::before { color: #15803d; }
+        .rud-card[data-level="moyen"] ul li::before { color: #b45309; }
+        .rud-card[data-level="eleve"] ul li::before { color: #b91c1c; }
+
+        /* Results badges */
+        .rud-result-badges {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin: 1.5rem 0;
+        }
+        .rud-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-radius: var(--neo-radius, 12px);
+            font-weight: 700;
+            min-width: 120px;
+            box-shadow:
+                4px 4px 10px rgba(0, 0, 0, 0.07),
+                -4px -4px 10px rgba(255, 255, 255, 0.85);
+        }
+        .rud-badge .badge-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.35rem;
+            opacity: 0.85;
+        }
+        .rud-badge .badge-value {
+            font-size: 1.35rem;
+        }
+        .rud-badge.level-faible {
+            background: rgba(240, 253, 244, 0.95);
+            border: 2px solid #22c55e;
+            color: #15803d;
+        }
+        .rud-badge.level-moyen {
+            background: rgba(255, 251, 235, 0.95);
+            border: 2px solid #f59e0b;
+            color: #b45309;
+        }
+        .rud-badge.level-eleve {
+            background: rgba(254, 242, 242, 0.95);
+            border: 2px solid #ef4444;
+            color: #b91c1c;
+        }
+
+        /* Action plan */
+        .action-plan-list {
+            list-style: none;
+            padding: 0;
+        }
+        .action-plan-list li {
+            padding: 0.6rem 0;
+            padding-left: 1.75rem;
+            position: relative;
+            line-height: 1.5;
+        }
+        .action-plan-list li::before {
+            content: '\f0da';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            color: var(--cat-main);
+        }
+
+        /* Notes textarea */
+        .notes-textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 1rem;
+            border: 1px solid rgba(0, 0, 0, 0.12);
+            border-radius: var(--neo-radius, 12px);
+            background: #ffffff;
+            color: var(--color-text-primary);
+            font-family: var(--font-family);
+            font-size: 0.95rem;
+            resize: vertical;
+            box-shadow:
+                inset 2px 2px 5px rgba(0, 0, 0, 0.06),
+                inset -2px -2px 5px rgba(255, 255, 255, 0.8);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .notes-textarea:focus {
+            outline: none;
+            border-color: var(--cat-main);
+            box-shadow:
+                inset 2px 2px 5px rgba(0, 0, 0, 0.06),
+                0 0 0 3px rgba(var(--cat-rgb), 0.15);
+        }
+
+        /* Progress indicator */
+        .rud-progress {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+        .rud-progress-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            background: rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        .rud-progress-item.completed {
+            background: rgba(34, 197, 94, 0.1);
+            border-color: rgba(34, 197, 94, 0.3);
+            color: #15803d;
+        }
+        .rud-progress-item .check-icon {
+            display: none;
+        }
+        .rud-progress-item.completed .check-icon {
+            display: inline;
+        }
+    </style>
+
+</head>
+<body class="light-questionnaire">
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil">
+                <i class="fas fa-home"></i>
+            </a>
+            <button onclick="history.back()" class="btn-back" title="Retour">
+                <i class="fas fa-arrow-left"></i> Retour
+            </button>
+        </div>
+        <h1>RUD</h1>
+        <span class="badge badge-cat-crise">Crise</span>
+    </nav>
+
+    <main class="container">
+        <!-- En-tete -->
+        <header class="header-glow" style="text-align: center; margin-bottom: 2rem;">
+            <h1><i class="fas fa-exclamation-triangle"></i> RUD - Risque, Urgence, Dangerosite</h1>
+            <p class="subtitle">Grille d'evaluation tripartite du potentiel suicidaire</p>
+        </header>
+
+        <!-- Ressources d'urgence -->
+        <section class="glass-card danger-box">
+            <h3><i class="fas fa-ambulance"></i> RESSOURCES D'URGENCE 24H/24</h3>
+            <ul>
+                <li>Ligne nationale de prevention du suicide : <strong class="phone-number">3114</strong> (gratuit)</li>
+                <li>SAMU : <strong class="phone-number">15</strong></li>
+                <li>SOS Amitie : <strong class="phone-number">09 72 39 40 50</strong></li>
+                <li>Suicide Ecoute : <strong class="phone-number">01 45 39 40 00</strong></li>
+                <li>En cas d'urgence immediate, rendez-vous aux urgences les plus proches</li>
+            </ul>
+        </section>
+
+        <!-- Informations (hetero-box) -->
+        <section class="glass-card info-box">
+            <h2><i class="fas fa-info-circle"></i> A propos</h2>
+            <p style="margin: 15px 0; line-height: 1.6;">
+                Le modele RUD est une grille tripartite d'evaluation du potentiel suicidaire, largement utilisee dans les urgences psychiatriques en France. Il distingue trois dimensions : le Risque (facteurs de vulnerabilite), l'Urgence (imminence du passage a l'acte) et la Dangerosite (acces aux moyens letaux). Cet outil est un hetero-questionnaire destine aux professionnels de sante.
+            </p>
+        </section>
+
+        <!-- Avertissements -->
+        <section class="glass-card warning-box">
+            <h3><i class="fas fa-exclamation-triangle"></i> Avertissements</h3>
+            <ul>
+                <li>Ce questionnaire aborde des sujets sensibles</li>
+                <li>Si vous etes en presence d'un patient en detresse, contactez immediatement le 3114 ou le 15</li>
+                <li>Les resultats necessitent une interpretation par un professionnel</li>
+                <li>En cas de risque eleve, une consultation urgente est necessaire</li>
+                <li>Cet outil aide les professionnels mais ne remplace pas une evaluation clinique complete.</li>
+            </ul>
+        </section>
+
+        <!-- Controles -->
+        <section class="glass-card">
+            <div class="control-buttons">
+                <button class="btn-danger" onclick="showEmergencyResources()">
+                    <i class="fas fa-phone-alt"></i> Aide immediate
+                </button>
+                <button class="btn-primary" onclick="importData()">
+                    <i class="fas fa-file-import"></i> Importer
+                </button>
+                <button class="btn-secondary" onclick="resetForm()">
+                    <i class="fas fa-redo"></i> Reinitialiser
+                </button>
+            </div>
+            <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="loadFile(event)">
+        </section>
+
+        <!-- Progression -->
+        <section class="glass-card">
+            <h3 style="text-align: center; margin-bottom: 0.75rem;"><i class="fas fa-tasks"></i> Progression de l'evaluation</h3>
+            <div class="rud-progress">
+                <div class="rud-progress-item" id="progress-risque">
+                    <i class="fas fa-check-circle check-icon"></i>
+                    <i class="fas fa-shield-alt"></i> Risque
+                </div>
+                <div class="rud-progress-item" id="progress-urgence">
+                    <i class="fas fa-check-circle check-icon"></i>
+                    <i class="fas fa-clock"></i> Urgence
+                </div>
+                <div class="rud-progress-item" id="progress-dangerosite">
+                    <i class="fas fa-check-circle check-icon"></i>
+                    <i class="fas fa-exclamation-triangle"></i> Dangerosite
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================
+             Section 1 : RISQUE
+             ======================================== -->
+        <section class="glass-card" id="section-risque">
+            <div class="rud-section-header">
+                <div class="section-icon" style="background: linear-gradient(135deg, #3b82f6, #2563eb);">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div>
+                    <h2>Section 1 : RISQUE</h2>
+                    <p>Facteurs de risque et de vulnerabilite</p>
+                </div>
+            </div>
+
+            <div class="rud-cards-grid">
+                <!-- Faible -->
+                <div class="rud-card" data-level="faible" data-value="1" data-dimension="risque" onclick="selectLevel(this)">
+                    <div class="rud-card-title"><i class="fas fa-check-circle" style="color: #15803d;"></i> Faible</div>
+                    <ul>
+                        <li>Pas d'antecedent de tentative de suicide</li>
+                        <li>Peu de facteurs de risque identifies</li>
+                        <li>Bon reseau de soutien social</li>
+                        <li>Bonnes capacites d'adaptation</li>
+                        <li>Facteurs de protection presents (projets, liens familiaux, spiritualite)</li>
+                    </ul>
+                </div>
+
+                <!-- Moyen -->
+                <div class="rud-card" data-level="moyen" data-value="2" data-dimension="risque" onclick="selectLevel(this)">
+                    <div class="rud-card-title"><i class="fas fa-exclamation-circle" style="color: #b45309;"></i> Moyen</div>
+                    <ul>
+                        <li>Antecedent(s) de tentative(s) de suicide</li>
+                        <li>Plusieurs facteurs de risque (troubles psychiatriques, isolement, pertes recentes)</li>
+                        <li>Reseau de soutien social fragile</li>
+                        <li>Difficultes d'adaptation recentes</li>
+                        <li>Evenements stressants recents</li>
+                    </ul>
+                </div>
+
+                <!-- Eleve -->
+                <div class="rud-card" data-level="eleve" data-value="3" data-dimension="risque" onclick="selectLevel(this)">
+                    <div class="rud-card-title"><i class="fas fa-times-circle" style="color: #b91c1c;"></i> Eleve</div>
+                    <ul>
+                        <li>Antecedents de tentatives repetees ou recentes</li>
+                        <li>Nombreux facteurs de risque cumules</li>
+                        <li>Trouble psychiatrique severe actif</li>
+                        <li>Isolement social important</li>
+                        <li>Desespoir intense, perte de sens</li>
+                        <li>Abus de substances actif</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================
+             Section 2 : URGENCE
+             ======================================== -->
+        <section class="glass-card" id="section-urgence">
+            <div class="rud-section-header">
+                <div class="section-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div>
+                    <h2>Section 2 : URGENCE</h2>
+                    <p>Imminence du passage a l'acte</p>
+                </div>
+            </div>
+
+            <div class="rud-cards-grid">
+                <!-- Faible -->
+                <div class="rud-card" data-level="faible" data-value="1" data-dimension="urgence" onclick="selectLevel(this)">
+                    <div class="rud-card-title"><i class="fas fa-check-circle" style="color: #15803d;"></i> Faible</div>
+                    <ul>
+                        <li>Ideation suicidaire sans scenario precis</li>
+                        <li>Le patient cherche des solutions a ses problemes</li>
+                        <li>Pense au suicide mais ne veut pas mourir</li>
+                        <li>Pas de date envisagee pour un passage a l'acte</li>
+                        <li>Capacite a se projeter dans l'avenir</li>
+                    </ul>
+                </div>
+
+                <!-- Moyen -->
+                <div class="rud-card" data-level="moyen" data-value="2" data-dimension="urgence" onclick="selectLevel(this)">
+                    <div class="rud-card-title"><i class="fas fa-exclamation-circle" style="color: #b45309;"></i> Moyen</div>
+                    <ul>
+                        <li>Ideation suicidaire avec scenario envisage mais non planifie</li>
+                        <li>Equilibre emotionnel fragile</li>
+                        <li>Sentiment de desespoir important</li>
+                        <li>Le patient envisage le suicide comme une solution possible</li>
+                        <li>Capacite de projection dans l'avenir reduite</li>
+                    </ul>
+                </div>
+
+                <!-- Eleve -->
+                <div class="rud-card" data-level="eleve" data-value="3" data-dimension="urgence" onclick="selectLevel(this)">
+                    <div class="rud-card-title"><i class="fas fa-times-circle" style="color: #b91c1c;"></i> Eleve</div>
+                    <ul>
+                        <li>Planification claire et precise (quand, ou, comment)</li>
+                        <li>Acces aux moyens envisages</li>
+                        <li>Date prevue pour le passage a l'acte</li>
+                        <li>Sentiment de souffrance insupportable</li>
+                        <li>Perception d'un tunnel, pas d'autre issue</li>
+                        <li>Messages d'adieu, don d'objets personnels</li>
+                        <li>Etat de crise aigue</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================
+             Section 3 : DANGEROSITE
+             ======================================== -->
+        <section class="glass-card" id="section-dangerosite">
+            <div class="rud-section-header">
+                <div class="section-icon" style="background: linear-gradient(135deg, #ef4444, #dc2626);">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div>
+                    <h2>Section 3 : DANGEROSITE</h2>
+                    <p>Acces aux moyens letaux et letalite du moyen envisage</p>
+                </div>
+            </div>
+
+            <div class="rud-cards-grid">
+                <!-- Faible -->
+                <div class="rud-card" data-level="faible" data-value="1" data-dimension="dangerosite" onclick="selectLevel(this)">
+                    <div class="rud-card-title"><i class="fas fa-check-circle" style="color: #15803d;"></i> Faible</div>
+                    <ul>
+                        <li>Pas de moyen identifie</li>
+                        <li>Pas d'acces a un moyen letal</li>
+                        <li>Le moyen evoque est peu letal</li>
+                    </ul>
+                </div>
+
+                <!-- Moyen -->
+                <div class="rud-card" data-level="moyen" data-value="2" data-dimension="dangerosite" onclick="selectLevel(this)">
+                    <div class="rud-card-title"><i class="fas fa-exclamation-circle" style="color: #b45309;"></i> Moyen</div>
+                    <ul>
+                        <li>Moyen identifie mais pas immediatement accessible</li>
+                        <li>Acces possible mais non garanti</li>
+                        <li>Letalite moderee du moyen envisage</li>
+                    </ul>
+                </div>
+
+                <!-- Eleve -->
+                <div class="rud-card" data-level="eleve" data-value="3" data-dimension="dangerosite" onclick="selectLevel(this)">
+                    <div class="rud-card-title"><i class="fas fa-times-circle" style="color: #b91c1c;"></i> Eleve</div>
+                    <ul>
+                        <li>Moyen identifie et immediatement accessible</li>
+                        <li>Moyen hautement letal (arme a feu, pendaison, chute de hauteur, medication stockee)</li>
+                        <li>Preparations en cours (stockage de medicaments, reperage de lieu)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bouton calculer -->
+        <section class="glass-card" id="calculate-section" style="text-align: center;">
+            <button class="btn-primary" onclick="calculateResults()" id="btnCalculate" disabled>
+                <i class="fas fa-chart-pie"></i> Voir les resultats
+            </button>
+            <p id="calculate-hint" style="margin-top: 0.75rem; font-size: 0.9rem; opacity: 0.7;">
+                Selectionnez un niveau pour chaque dimension (Risque, Urgence, Dangerosite) avant de voir les resultats.
+            </p>
+        </section>
+
+        <!-- ========================================
+             Resultats
+             ======================================== -->
+        <section id="results" class="glass-card results-section" style="display: none;">
+            <h2 style="text-align: center; margin-bottom: 2rem;"><i class="fas fa-clipboard-check"></i> Resultats de l'evaluation</h2>
+
+            <!-- Badges R, U, D -->
+            <div class="rud-result-badges" id="resultBadges"></div>
+
+            <!-- Interpretation globale -->
+            <div id="globalInterpretation" class="interpretation"></div>
+
+            <!-- Plan d'action -->
+            <div class="info-box" style="margin-top: 1.5rem;">
+                <h4><i class="fas fa-tasks"></i> Plan d'action recommande</h4>
+                <ul id="actionPlan" class="action-plan-list"></ul>
+            </div>
+
+            <!-- Notes cliniques -->
+            <div class="glass-card" style="margin-top: 2rem; background: rgba(255,255,255,0.05);">
+                <h3><i class="fas fa-pen-alt"></i> Notes cliniques</h3>
+                <p style="font-size: 0.9rem; opacity: 0.7; margin-bottom: 0.75rem;">Ajoutez vos observations cliniques complementaires.</p>
+                <textarea class="notes-textarea" id="clinicalNotes" placeholder="Saisissez vos notes cliniques ici..."></textarea>
+            </div>
+
+            <!-- Export -->
+            <div class="glass-card" style="margin-top: 2rem; background: rgba(255,255,255,0.05);">
+                <h3><i class="fas fa-download"></i> Exporter les resultats</h3>
+                <div class="consent-box">
+                    <label>
+                        <input type="checkbox" id="exportConsent">
+                        <span>Je souhaite telecharger les resultats (evaluation, niveaux, date et notes) dans un fichier JSON sur mon appareil. <strong>Ces resultats constituent des donnees de sante -- je m'engage a les conserver de facon securisee et a ne les partager qu'avec un professionnel de sante de mon choix.</strong> Aucune donnee n'est transmise a un serveur.</span>
+                    </label>
+                </div>
+                <div class="export-buttons">
+                    <button class="btn-primary" onclick="exportData()">
+                        <i class="fas fa-file-export"></i> Exporter en JSON
+                    </button>
+                    <button class="btn-print" onclick="printResults()">
+                        <i class="fas fa-print"></i> Imprimer
+                    </button>
+                </div>
+            </div>
+
+            <!-- Rappel urgence -->
+            <div class="danger-box" style="margin-top: 1.5rem;">
+                <h4><i class="fas fa-hands-helping"></i> Rappel des ressources</h4>
+                <ul>
+                    <li>Ligne nationale : <strong>3114</strong></li>
+                    <li>Un professionnel peut vous aider</li>
+                    <li>N'hesitez jamais a demander de l'aide</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p><strong>RUD - Risque, Urgence, Dangerosite</strong></p>
+        <p style="margin: 0.5rem 0;">Modele tripartite d'evaluation du potentiel suicidaire (Seguin, 2004 ; inspire du modele de Shea, 1999)</p>
+        <p><strong>Adaptation numerique :</strong> Dr FENOHASINA | Psychiatre</p>
+        <small>Licence CC BY-NC-SA 4.0 | Usage reserve aux professionnels de sante</small>
+    </footer>
+
+    <script src="../js/app.js"></script>
+    <script>
+        // ========================================
+        // State
+        // ========================================
+        let selections = {
+            risque: null,
+            urgence: null,
+            dangerosite: null
+        };
+
+        // ========================================
+        // Card selection
+        // ========================================
+        function selectLevel(card) {
+            const dimension = card.dataset.dimension;
+            const level = card.dataset.level;
+            const value = parseInt(card.dataset.value);
+
+            // Deselect all cards in this dimension
+            const sectionCards = document.querySelectorAll('.rud-card[data-dimension="' + dimension + '"]');
+            sectionCards.forEach(function(c) { c.classList.remove('selected'); });
+
+            // Select clicked card
+            card.classList.add('selected');
+
+            // Update state
+            selections[dimension] = { level: level, value: value };
+
+            // Update progress
+            updateProgress();
+
+            // Enable/disable calculate button
+            checkAllSelected();
+        }
+
+        // ========================================
+        // Progress update
+        // ========================================
+        function updateProgress() {
+            ['risque', 'urgence', 'dangerosite'].forEach(function(dim) {
+                var el = document.getElementById('progress-' + dim);
+                if (selections[dim]) {
+                    el.classList.add('completed');
+                } else {
+                    el.classList.remove('completed');
+                }
+            });
+        }
+
+        // ========================================
+        // Check if all dimensions are selected
+        // ========================================
+        function checkAllSelected() {
+            var allSelected = selections.risque && selections.urgence && selections.dangerosite;
+            var btn = document.getElementById('btnCalculate');
+            var hint = document.getElementById('calculate-hint');
+
+            btn.disabled = !allSelected;
+            if (allSelected) {
+                hint.textContent = 'Toutes les dimensions sont evaluees. Cliquez pour voir les resultats.';
+                hint.style.color = '#15803d';
+            } else {
+                var missing = [];
+                if (!selections.risque) missing.push('Risque');
+                if (!selections.urgence) missing.push('Urgence');
+                if (!selections.dangerosite) missing.push('Dangerosite');
+                hint.textContent = 'Dimension(s) manquante(s) : ' + missing.join(', ');
+                hint.style.color = '';
+            }
+        }
+
+        // ========================================
+        // Calculate results
+        // ========================================
+        function calculateResults() {
+            if (!selections.risque || !selections.urgence || !selections.dangerosite) return;
+
+            var maxValue = Math.max(
+                selections.risque.value,
+                selections.urgence.value,
+                selections.dangerosite.value
+            );
+
+            var globalLevel;
+            if (maxValue === 3) {
+                globalLevel = 'eleve';
+            } else if (maxValue === 2) {
+                globalLevel = 'moyen';
+            } else {
+                globalLevel = 'faible';
+            }
+
+            displayResults(globalLevel);
+        }
+
+        // ========================================
+        // Display results
+        // ========================================
+        function displayResults(globalLevel) {
+            var resultsSection = document.getElementById('results');
+            resultsSection.style.display = 'block';
+
+            // Badges
+            var badgesContainer = document.getElementById('resultBadges');
+            var dimensions = [
+                { key: 'risque', label: 'R', fullLabel: 'Risque' },
+                { key: 'urgence', label: 'U', fullLabel: 'Urgence' },
+                { key: 'dangerosite', label: 'D', fullLabel: 'Dangerosite' }
+            ];
+
+            badgesContainer.innerHTML = dimensions.map(function(dim) {
+                var sel = selections[dim.key];
+                var levelLabel = sel.level.charAt(0).toUpperCase() + sel.level.slice(1);
+                return '<div class="rud-badge level-' + sel.level + '">' +
+                    '<span class="badge-label">' + dim.fullLabel + '</span>' +
+                    '<span class="badge-value">' + dim.label + ' = ' + levelLabel + '</span>' +
+                    '</div>';
+            }).join('');
+
+            // Global interpretation
+            var interpDiv = document.getElementById('globalInterpretation');
+            var configs = {
+                faible: {
+                    title: 'Potentiel suicidaire faible',
+                    description: 'Toutes les dimensions sont evaluees a un niveau faible. Le risque de passage a l\'acte est faible mais une vigilance clinique reste necessaire.',
+                    className: 'low'
+                },
+                moyen: {
+                    title: 'Potentiel suicidaire moyen',
+                    description: 'Au moins une dimension presente un niveau moyen. Une surveillance active et un renforcement du suivi sont recommandes.',
+                    className: 'high'
+                },
+                eleve: {
+                    title: 'Potentiel suicidaire eleve',
+                    description: 'Au moins une dimension presente un niveau eleve. Des actions immediates sont necessaires pour assurer la securite du patient.',
+                    className: 'critical'
+                }
+            };
+
+            var config = configs[globalLevel];
+            interpDiv.className = 'interpretation ' + config.className;
+            interpDiv.innerHTML = '<h3>' + config.title + '</h3>' +
+                '<p>' + config.description + '</p>';
+
+            // Action plan
+            var actionPlanList = document.getElementById('actionPlan');
+            var actions = {
+                faible: [
+                    'Suivi ambulatoire standard',
+                    'Renforcer les facteurs de protection',
+                    'Informer le patient des ressources d\'aide (3114, medecin traitant, CMP)',
+                    'Reevaluation lors du prochain rendez-vous'
+                ],
+                moyen: [
+                    '<strong>Consultation psychiatrique rapide</strong>',
+                    'Elaboration d\'un plan de securite avec le patient',
+                    'Renforcement du suivi ambulatoire',
+                    'Informer l\'entourage avec accord du patient',
+                    'Reevaluation a court terme (sous 48-72h)'
+                ],
+                eleve: [
+                    '<strong>Hospitalisation a envisager (SSR/SPDRE si necessaire)</strong>',
+                    '<strong>Restriction acces aux moyens letaux</strong>',
+                    'Surveillance constante',
+                    'Evaluation psychiatrique urgente',
+                    'Ne pas laisser le patient seul'
+                ]
+            };
+
+            actionPlanList.innerHTML = actions[globalLevel].map(function(a) {
+                return '<li>' + a + '</li>';
+            }).join('');
+
+            // Scroll to results
+            resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // ========================================
+        // Emergency resources
+        // ========================================
+        function showEmergencyResources() {
+            alert("RESSOURCES D'URGENCE:\n\n3114 - Ligne nationale de prevention (24h/24)\n15 - SAMU\n09 72 39 40 50 - SOS Amitie\n01 45 39 40 00 - Suicide Ecoute\n\nRendez-vous aux urgences si necessaire.");
+        }
+
+        // ========================================
+        // Reset form
+        // ========================================
+        function resetForm() {
+            selections = {
+                risque: null,
+                urgence: null,
+                dangerosite: null
+            };
+
+            document.querySelectorAll('.rud-card').forEach(function(card) {
+                card.classList.remove('selected');
+            });
+            document.querySelectorAll('.rud-progress-item').forEach(function(item) {
+                item.classList.remove('completed');
+            });
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('btnCalculate').disabled = true;
+            document.getElementById('calculate-hint').textContent = 'Selectionnez un niveau pour chaque dimension (Risque, Urgence, Dangerosite) avant de voir les resultats.';
+            document.getElementById('calculate-hint').style.color = '';
+
+            var consent = document.getElementById('exportConsent');
+            if (consent) consent.checked = false;
+
+            var notes = document.getElementById('clinicalNotes');
+            if (notes) notes.value = '';
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ========================================
+        // Import data
+        // ========================================
+        function importData() {
+            document.getElementById('fileInput').click();
+        }
+
+        function loadFile(event) {
+            var file = event.target.files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        var data = JSON.parse(e.target.result);
+                        if (data.questionnaire === "RUD" && data.risque && data.urgence && data.dangerosite) {
+                            resetForm();
+
+                            // Re-select cards based on imported data
+                            var dimensionMap = {
+                                risque: data.risque,
+                                urgence: data.urgence,
+                                dangerosite: data.dangerosite
+                            };
+
+                            ['risque', 'urgence', 'dangerosite'].forEach(function(dim) {
+                                var level = dimensionMap[dim].level;
+                                var card = document.querySelector('.rud-card[data-dimension="' + dim + '"][data-level="' + level + '"]');
+                                if (card) {
+                                    selectLevel(card);
+                                }
+                            });
+
+                            // Restore notes
+                            if (data.notes) {
+                                document.getElementById('clinicalNotes').value = data.notes;
+                            }
+
+                            alert("Donnees importees avec succes !");
+                        } else {
+                            alert("Le fichier n'est pas un export RUD valide.");
+                        }
+                    } catch (error) {
+                        alert("Erreur lors de la lecture du fichier.");
+                    }
+                };
+                reader.readAsText(file);
+            }
+            event.target.value = '';
+        }
+
+        // ========================================
+        // Export data
+        // ========================================
+        function exportData() {
+            if (!document.getElementById('exportConsent').checked) {
+                alert("Veuillez cocher la case de consentement avant d'exporter.");
+                return;
+            }
+
+            var maxValue = Math.max(
+                selections.risque ? selections.risque.value : 0,
+                selections.urgence ? selections.urgence.value : 0,
+                selections.dangerosite ? selections.dangerosite.value : 0
+            );
+
+            var globalLevel;
+            if (maxValue === 3) {
+                globalLevel = 'eleve';
+            } else if (maxValue === 2) {
+                globalLevel = 'moyen';
+            } else {
+                globalLevel = 'faible';
+            }
+
+            var data = {
+                questionnaire: "RUD",
+                date: new Date().toISOString(),
+                risque: selections.risque ? { level: selections.risque.level, value: selections.risque.value } : null,
+                urgence: selections.urgence ? { level: selections.urgence.level, value: selections.urgence.value } : null,
+                dangerosite: selections.dangerosite ? { level: selections.dangerosite.level, value: selections.dangerosite.value } : null,
+                global_level: globalLevel,
+                notes: document.getElementById('clinicalNotes').value || '',
+                confidential: "Ces donnees sont strictement confidentielles et protegees par le secret medical."
+            };
+
+            var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = 'RUD_CONFIDENTIEL_' + new Date().toISOString().split('T')[0] + '.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // ========================================
+        // Print
+        // ========================================
+        function printResults() {
+            window.print();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questionnaire Y-BOCS - Evaluation du Trouble Obsessionnel-Compulsif</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <style>
+        :root {
+            --cat-main: #10b981;
+            --cat-dark: #059669;
+            --cat-light: #34d399;
+            --cat-rgb: 16, 185, 129;
+            --cat-readable: #059669;
+        }
+        .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
+        .option-btn.selected, .answer-btn.selected { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        .score-circle { border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 30px rgba(var(--cat-rgb), 0.2); }
+        .score-value { color: var(--cat-light); }
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-light); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+        .progress-fill { background: linear-gradient(90deg, var(--cat-main), var(--cat-light)); box-shadow: 0 0 8px rgba(var(--cat-rgb), 0.4); }
+        .likert-options input[type="radio"]:checked + label,
+        .binary-options input[type="radio"]:checked + label,
+        .radio-options input[type="radio"]:checked + label { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+    </style>
+
+</head>
+<body class="light-questionnaire">
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+            <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+        </div>
+        <h1>Y-BOCS</h1>
+        <span class="badge badge-cat-anxiete">Anxiete</span>
+    </nav>
+
+    <div class="container">
+        <div class="glass-card" style="text-align: center; margin-bottom: 2rem;">
+            <h2 style="margin-bottom: 0.5rem;">Questionnaire Y-BOCS</h2>
+            <p style="margin: 0;">Echelle d'obsessions-compulsions de Yale-Brown (auto-evaluation)</p>
+        </div>
+
+        <div class="glass-card">
+            <h3><i class="fas fa-info-circle"></i> A propos de ce questionnaire</h3>
+            <p style="line-height: 1.6;">
+                L'echelle Y-BOCS (Goodman et al., 1989) est l'un des outils de reference pour evaluer la severite des symptomes du Trouble Obsessionnel-Compulsif (TOC). Elle mesure l'impact des obsessions (pensees envahissantes) et des compulsions (comportements repetitifs) sur votre vie au cours de la <strong>semaine ecoulee</strong>.
+            </p>
+
+            <div class="control-buttons" style="margin-top: 1.5rem;">
+                <button class="btn btn-primary" onclick="importData()">
+                    <i class="fas fa-file-import"></i> Importer un questionnaire
+                </button>
+                <button class="btn btn-secondary" onclick="resetForm()">
+                    <i class="fas fa-redo"></i> Reinitialiser
+                </button>
+            </div>
+            <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="loadFile(event)">
+
+            <div class="warning-box" style="margin-top: 1.5rem;">
+                <h3><i class="fas fa-exclamation-triangle"></i> Avertissement important</h3>
+                <ul>
+                    <li>Cet auto-questionnaire est un outil d'information et de sensibilisation, <strong>il ne constitue pas un diagnostic</strong>.</li>
+                    <li>Seul un professionnel de sante qualifie (medecin, psychiatre, psychologue) peut poser un diagnostic.</li>
+                    <li>Les resultats sont indicatifs. Une interpretation clinique par un professionnel est necessaire.</li>
+                    <li>Si vous etes en detresse, n'hesitez pas a chercher de l'aide. <strong>Numero national de prevention du suicide : 3114</strong> (gratuit, 24h/7j).</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <h3><i class="fas fa-lightbulb"></i> Pour vous aider a identifier vos symptomes</h3>
+            <p style="margin-bottom: 1rem;">Le TOC peut se manifester de nombreuses facons. Voici des exemples courants d'obsessions et de compulsions pour vous aider a reflechir a vos propres experiences avant de repondre.</p>
+            <details>
+                <summary>Exemples d'obsessions (pensees)</summary>
+                <ul>
+                    <li><strong>Contamination :</strong> Peur des microbes, de la salete, des produits chimiques, de contaminer les autres.</li>
+                    <li><strong>Agressivite :</strong> Peur de se faire du mal ou de faire du mal aux autres (physiquement, verbalement), images violentes.</li>
+                    <li><strong>Symetrie et exactitude :</strong> Besoin imperieux que les choses soient parfaitement alignees, ordonnees, ou "justes".</li>
+                    <li><strong>Religieuses (scrupules) :</strong> Inquietude excessive sur le blaspheme, la moralite, le bien et le mal.</li>
+                    <li><strong>Sexuelles :</strong> Pensees, images ou impulsions sexuelles non desirees, percues comme perverses ou interdites.</li>
+                    <li><strong>Somatiques :</strong> Inquietude excessive concernant une maladie ou une partie du corps.</li>
+                </ul>
+            </details>
+            <details>
+                <summary>Exemples de compulsions (comportements)</summary>
+                <ul>
+                    <li><strong>Lavage / Nettoyage :</strong> Se laver les mains de maniere excessive, nettoyer son environnement de facon ritualisee.</li>
+                    <li><strong>Verification :</strong> Verifier a de multiples reprises les serrures, les appareils menagers, que l'on n'a blesse personne.</li>
+                    <li><strong>Repetition / Comptage :</strong> Repeter une action un certain nombre de fois, compter des objets ou dans sa tete.</li>
+                    <li><strong>Ordre / Arrangement :</strong> Ranger, aligner ou organiser les objets jusqu'a ce que cela semble "parfait".</li>
+                    <li><strong>Rituels mentaux :</strong> Se repeter des mots ou des prieres en silence, neutraliser une "mauvaise" pensee par une "bonne".</li>
+                    <li><strong>Accumulation :</strong> Difficulte a jeter des objets inutiles, conduisant a un encombrement.</li>
+                </ul>
+            </details>
+        </div>
+
+        <div class="glass-card">
+            <h3 style="margin-bottom: 1.5rem;">Veuillez cocher la case correspondant le mieux a votre etat, en moyenne, dans la semaine ecoulee.</h3>
+            <div id="questions"></div>
+        </div>
+
+        <div id="results" class="results-section glass-card">
+            <h2 style="text-align: center; margin-bottom: 2rem;"><i class="fas fa-chart-bar"></i> Vos Resultats</h2>
+
+            <div class="score-display" style="text-align: center;">
+                <div class="score-circle">
+                    <span id="totalScore" class="score-number">0</span>
+                    <span class="score-label">sur 40</span>
+                </div>
+                <div class="sub-scores-display">
+                    <div class="sub-score-box">
+                        <h3>Severite des Obsessions</h3>
+                        <div id="obsessionScore" class="sub-score-value">0 <span>/ 20</span></div>
+                    </div>
+                    <div class="sub-score-box">
+                        <h3>Severite des Compulsions</h3>
+                        <div id="compulsionScore" class="sub-score-value">0 <span>/ 20</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="interpretationBox" class="interpretation"></div>
+
+            <div style="margin-top: 2rem;">
+                <h3><i class="fas fa-save"></i> Exporter les resultats</h3>
+                <div class="consent-box">
+                    <label>
+                        <input type="checkbox" id="exportConsent">
+                        <span>Je souhaite télécharger mes résultats (questionnaire, réponses, score et date) dans un fichier JSON sur mon appareil. <strong>Ces résultats constituent des données de santé — je m'engage à les conserver de façon sécurisée et à ne les partager qu'avec un professionnel de santé de mon choix.</strong> Aucune donnée n'est transmise à un serveur.</span>
+                    </label>
+                </div>
+                <div class="export-buttons">
+                    <button class="btn btn-primary" onclick="exportData()">
+                        <i class="fas fa-download"></i> Exporter en JSON
+                    </button>
+                    <button class="btn-print" onclick="printResults()">
+                        <i class="fas fa-print"></i> Imprimer
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p><strong>Y-BOCS - Yale-Brown Obsessive Compulsive Scale</strong></p>
+            <p><strong>Auteurs originaux :</strong> Goodman, W.K., Price, L.H., Rasmussen, S.A., et al. (1989).</p>
+            <p><strong>Adaptation numerique :</strong> Dr FENOHASINA | Psychiatre - FFI</p>
+            <small>&copy; 2025 - Tous droits reserves</small>
+        </footer>
+    </div>
+
+    <script>
+        const questions = [
+            // Obsessions
+            { type: 'obsession', text: "Combien de temps vos pensees obsedantes occupent-elles votre esprit ? (Combien de temps gagneriez-vous si vous n'aviez pas ces pensees ?)" },
+            { type: 'obsession', text: "Dans quelle mesure vos pensees obsedantes vous genent-elles dans votre vie sociale, professionnelle, ou vos etudes ?" },
+            { type: 'obsession', text: "Quel niveau d'angoisse, d'anxiete ou de detresse ces pensees obsedantes creent-elles en vous ?" },
+            { type: 'obsession', text: "Quel effort faites-vous pour resister a ces pensees obsedantes (les ignorer, les chasser) ?" },
+            { type: 'obsession', text: "Quel controle avez-vous sur vos pensees obsedantes ? (A quel point parvenez-vous a les stopper ou a les detourner ?)" },
+            // Compulsions
+            { type: 'compulsion', text: "Combien de temps passez-vous a accomplir des rituels (comportements compulsifs) ? (Combien de temps de plus que les autres pour les activites quotidiennes ?)" },
+            { type: 'compulsion', text: "Dans quelle mesure vos rituels vous genent-ils dans votre vie sociale, professionnelle ou vos etudes ? Y a-t-il des choses que vous ne faites pas a cause d'eux ?" },
+            { type: 'compulsion', text: "Comment vous sentiriez-vous si on vous empechait de faire vos rituels ? Quel serait votre degre d'anxiete ?" },
+            { type: 'compulsion', text: "Quel effort faites-vous pour resister a vos compulsions ?" },
+            { type: 'compulsion', text: "Quel controle avez-vous sur vos rituels ? (Vous sentez-vous contraint(e) de les accomplir ?)" }
+        ];
+
+        const options = [
+            // Options pour les items 1, 2, 3, 6, 7, 8
+            [
+                { value: 0, label: "Nul / Aucune" },
+                { value: 1, label: "Leger / Faible (ex: < 1h/jour)" },
+                { value: 2, label: "Moyen / Net (ex: 1 a 3h/jour)" },
+                { value: 3, label: "Important / Severe (ex: 3 a 8h/jour)" },
+                { value: 4, label: "Extreme / Invalidant (ex: > 8h/jour)" }
+            ],
+            // Options pour les items 4, 9 (Resistance)
+            [
+                { value: 0, label: "J'essaie toujours de resister" },
+                { value: 1, label: "J'essaie de resister la plupart du temps" },
+                { value: 2, label: "Je fais quelques efforts pour resister" },
+                { value: 3, label: "Je cede sans essayer de controler, mais a contrecoeur" },
+                { value: 4, label: "Je cede completement et volontiers a tout" }
+            ],
+            // Options pour les items 5, 10 (Controle)
+            [
+                { value: 0, label: "Controle total" },
+                { value: 1, label: "Beaucoup de controle (j'y arrive avec un peu d'effort)" },
+                { value: 2, label: "Controle moyen (j'y arrive parfois, avec difficulte)" },
+                { value: 3, label: "Peu de controle (j'arrive rarement a les stopper)" },
+                { value: 4, label: "Aucun controle (je suis totalement depourvu de volonte face a elles)" }
+            ]
+        ];
+
+        let answers = new Array(10).fill(null);
+
+        function getOptionsForQuestion(index) {
+            if (index === 3 || index === 8) return options[1]; // Resistance
+            if (index === 4 || index === 9) return options[2]; // Controle
+            return options[0]; // Duree, Gene, Angoisse
+        }
+
+        function initializeQuestions() {
+            const container = document.getElementById('questions');
+            container.innerHTML = '';
+
+            let obsessionHeader = `<h3 class="section-header"><i class="fas fa-brain"></i> Partie 1 : Vos Obsessions (Pensees)</h3>`;
+            let compulsionHeader = `<h3 class="section-header compulsion"><i class="fas fa-sync-alt"></i> Partie 2 : Vos Compulsions (Comportements)</h3>`;
+
+            questions.forEach((q, index) => {
+                if (index === 0) container.innerHTML += obsessionHeader;
+                if (index === 5) container.innerHTML += compulsionHeader;
+
+                const qDiv = document.createElement('div');
+                qDiv.className = 'question-card';
+                qDiv.id = `question-card-${index}`;
+                const currentOptions = getOptionsForQuestion(index);
+
+                qDiv.innerHTML = `
+                    <div class="question-text"><span class="question-number">${index + 1}</span> ${q.text}</div>
+                    <div class="options-grid" style="flex-direction: column;">
+                        ${currentOptions.map(opt => `
+                            <button class="option-btn" onclick="selectAnswer(${index}, ${opt.value})" id="q${index}_opt${opt.value}">
+                                ${opt.label}
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(qDiv);
+            });
+        }
+
+        function selectAnswer(qIndex, value) {
+            answers[qIndex] = value;
+            const currentOptions = getOptionsForQuestion(qIndex);
+            const card = document.getElementById(`question-card-${qIndex}`);
+
+            currentOptions.forEach(opt => {
+                const btn = document.getElementById(`q${qIndex}_opt${opt.value}`);
+                if (opt.value === value) {
+                    btn.classList.add('selected');
+                } else {
+                    btn.classList.remove('selected');
+                }
+            });
+
+            if (card) {
+                card.classList.add('answered');
+            }
+
+            checkCompletion();
+        }
+
+        function checkCompletion() {
+            const allAnswered = answers.every(a => a !== null);
+            if (allAnswered) {
+                updateResults();
+                document.getElementById('results').classList.add('show');
+                // Scroll to results, but check if user is already there to avoid jarring scroll on import
+                const resultsSection = document.getElementById('results');
+                const resultsRect = resultsSection.getBoundingClientRect();
+                if (resultsRect.top < 0 || resultsRect.bottom > window.innerHeight) {
+                    window.scrollTo({ top: resultsSection.offsetTop, behavior: 'smooth' });
+                }
+            }
+        }
+
+        function calculateScores() {
+            const obsessionScore = answers.slice(0, 5).reduce((sum, val) => sum + val, 0);
+            const compulsionScore = answers.slice(5, 10).reduce((sum, val) => sum + val, 0);
+            const totalScore = obsessionScore + compulsionScore;
+            return { totalScore, obsessionScore, compulsionScore };
+        }
+
+        function getInterpretation(score) {
+            if (score <= 7) return {
+                level: "Subclinique", className: "subclinical",
+                description: "Les symptomes rapportes sont minimes et n'atteignent probablement pas un seuil cliniquement significatif."
+            };
+            if (score <= 15) return {
+                level: "Leger", className: "mild",
+                description: "Les symptomes sont presents et peuvent causer une certaine gene, mais leur impact sur le quotidien reste limite."
+            };
+            if (score <= 23) return {
+                level: "Modere", className: "moderate",
+                description: "Les symptomes sont clairement presents, frequents, et entrainent une interference notable dans la vie quotidienne. Un seuil de 16 est souvent utilise dans les etudes pour identifier un TOC cliniquement significatif."
+            };
+            if (score <= 31) return {
+                level: "Severe", className: "severe",
+                description: "Les symptomes sont envahissants, causent une detresse importante et perturbent considerablement le fonctionnement social, professionnel ou personnel."
+            };
+            return {
+                level: "Extreme", className: "extreme",
+                description: "Les symptomes sont presque constants, extremement invalidants et dominent la quasi-totalite de la vie de la personne."
+            };
+        }
+
+        function updateResults() {
+            const { totalScore, obsessionScore, compulsionScore } = calculateScores();
+            const interpretation = getInterpretation(totalScore);
+
+            document.getElementById('totalScore').textContent = totalScore;
+            document.getElementById('obsessionScore').innerHTML = `${obsessionScore} <span>/ 20</span>`;
+            document.getElementById('compulsionScore').innerHTML = `${compulsionScore} <span>/ 20</span>`;
+
+            const interpretationBox = document.getElementById('interpretationBox');
+            interpretationBox.className = `interpretation ${interpretation.className}`;
+            interpretationBox.innerHTML = `
+                <h3 style="margin-bottom: 0.75rem;">Severite du TOC : ${interpretation.level}</h3>
+                <p style="margin-bottom: 1rem;">${interpretation.description}</p>
+                <p style="font-weight: bold;">Il est fortement recommande de discuter de ces resultats avec un professionnel de sante pour une evaluation complete.</p>
+            `;
+        }
+
+        function resetForm() {
+            answers.fill(null);
+            document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+            document.querySelectorAll('.question-card').forEach(card => card.classList.remove('answered'));
+            document.getElementById('results').classList.remove('show');
+            document.getElementById('exportConsent').checked = false;
+            document.getElementById('fileInput').value = ''; // Reset file input
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function importData() {
+            document.getElementById('fileInput').click();
+        }
+
+        function loadFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data.questionnaire === "Y-BOCS" && Array.isArray(data.answers) && data.answers.length === 10) {
+                        resetForm(); // Clear current state before loading
+                        answers = data.answers;
+
+                        // Update UI based on loaded data
+                        answers.forEach((value, index) => {
+                            if (value !== null) {
+                                selectAnswer(index, value);
+                            }
+                        });
+                    } else {
+                        alert("Le fichier JSON n'est pas valide ou ne correspond pas au format Y-BOCS.");
+                    }
+                } catch (error) {
+                    alert("Erreur lors de la lecture du fichier. Assurez-vous qu'il s'agit d'un fichier JSON valide.");
+                    console.error("JSON Parse Error:", error);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function exportData() {
+            if (!document.getElementById('exportConsent').checked) {
+                alert("Veuillez cocher la case de consentement avant d''exporter.");
+                return;
+            }
+            if (!answers.every(a => a !== null)) {
+                alert("Veuillez repondre a toutes les questions avant d'exporter.");
+                return;
+            }
+
+            const { totalScore, obsessionScore, compulsionScore } = calculateScores();
+            const interpretation = getInterpretation(totalScore);
+
+            const dataToExport = {
+                questionnaire: "Y-BOCS",
+                date: new Date().toISOString(),
+                answers: answers,
+                scores: {
+                    total: totalScore,
+                    obsessions: obsessionScore,
+                    compulsions: compulsionScore
+                },
+                interpretation: {
+                    level: interpretation.level,
+                    description: interpretation.description
+                }
+            };
+
+            const blob = new Blob([JSON.stringify(dataToExport, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Y-BOCS_Resultats_${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function printResults() {
+            // Afficher les resultats avant impression
+            const resultsSection = document.getElementById('results');
+            if (resultsSection) {
+                resultsSection.style.display = 'block';
+            }
+            window.print();
+        }
+
+        document.addEventListener('DOMContentLoaded', initializeQuestions);
+    </script>
+</body>
+</html>

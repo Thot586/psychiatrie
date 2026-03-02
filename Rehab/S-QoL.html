@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S-QoL 18 - Schizophrenia Quality of Life</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --cat-main: #0ea5e9;
+            --cat-dark: #0284c7;
+            --cat-light: #38bdf8;
+            --cat-rgb: 14, 165, 233;
+            --cat-readable: #0284c7;
+        }
+        .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
+        .option-btn.selected, .answer-btn.selected { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        .score-circle { border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 30px rgba(var(--cat-rgb), 0.2); }
+        .score-value { color: var(--cat-light); }
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-light); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+        .progress-fill { background: linear-gradient(90deg, var(--cat-main), var(--cat-light)); box-shadow: 0 0 8px rgba(var(--cat-rgb), 0.4); }
+        .likert-options input[type="radio"]:checked + label,
+        .binary-options input[type="radio"]:checked + label,
+        .radio-options input[type="radio"]:checked + label { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+    </style>
+
+</head>
+<body class="light-questionnaire">
+
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+            <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+        </div>
+        <h1>S-QoL 18</h1>
+        <span class="badge badge-cat-rehab">Qualite de Vie</span>
+    </nav>
+
+    <div class="container">
+        <header class="page-header">
+            <h2 class="page-title">Schizophrenia Quality of Life</h2>
+            <p class="page-subtitle">Questionnaire d'evaluation de la qualite de vie (18 items, 8 dimensions)</p>
+        </header>
+
+        <div class="alert alert-info">
+            <div class="alert-icon">
+                <i class="fas fa-info-circle"></i>
+            </div>
+            <div class="alert-content">
+                <h3>Instructions</h3>
+                <p>Ce questionnaire evalue votre qualite de vie au cours des <strong>4 dernieres semaines</strong>. Repondez selon votre ressenti personnel. Il n'y a pas de bonnes ou mauvaises reponses.</p>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-text">Questions repondues : <span id="progressCount">0</span> / 18</div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+        </div>
+
+        <!-- Questions -->
+        <div id="questionsContainer">
+            <!-- Les questions seront generees par JavaScript -->
+        </div>
+
+        <!-- Submit Button -->
+        <div style="text-align: center; margin: 2rem 0;">
+            <button id="calculateBtn" class="btn-primary" style="padding: 1rem 2rem; font-size: 1.1rem;" disabled>
+                <i class="fas fa-chart-pie" style="margin-right: 0.5rem;"></i>Voir mes resultats
+            </button>
+            <p id="warningText" style="color: var(--color-warning); font-size: var(--font-size-sm); margin-top: 0.5rem;">Veuillez repondre a toutes les questions</p>
+        </div>
+
+        <!-- Results Section -->
+        <div id="resultsSection" class="results-section">
+            <div class="score-display">
+                <div class="total-score" id="totalScore">0</div>
+                <div class="score-label">Score global / 100</div>
+            </div>
+
+            <div class="interpretation-box">
+                <h3><i class="fas fa-info-circle" style="margin-right: 0.5rem;"></i>Interpretation</h3>
+                <p id="interpretationText">Un score plus eleve indique une meilleure qualite de vie. Le score est transforme sur une echelle de 0 a 100.</p>
+            </div>
+
+            <div class="glass-card">
+                <h3 style="margin-bottom: 1rem;"><i class="fas fa-th-large" style="color: #10b981; margin-right: 0.5rem;"></i>Scores par dimension</h3>
+                <div class="dimension-grid" id="dimensionGrid"></div>
+            </div>
+
+            <div class="glass-card" style="margin-top: 1.5rem;">
+                <h3 style="margin-bottom: 1rem;"><i class="fas fa-chart-radar" style="color: #10b981; margin-right: 0.5rem;"></i>Profil de qualite de vie</h3>
+                <div class="chart-container">
+                    <canvas id="radarChart"></canvas>
+                </div>
+            </div>
+
+            <div class="alert alert-warning" style="margin-top: 1.5rem;">
+                <div class="alert-icon">
+                    <i class="fas fa-user-md"></i>
+                </div>
+                <div class="alert-content">
+                    <h3>Suivi recommande</h3>
+                    <p>Discutez de ces resultats avec votre equipe soignante pour identifier les domaines a ameliorer et suivre votre progression dans le temps.</p>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 1.5rem;">
+                <button onclick="location.reload()" class="btn-secondary">
+                    <i class="fas fa-redo" style="margin-right: 0.5rem;"></i>Recommencer le questionnaire
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>Dr. FENOHASINA T.J. Felicien (Psychiatre)</p>
+        <p>&copy; 2025 - Centre Ressource de Rehabilitation</p>
+        <p class="license">Licence CC BY-NC-SA 4.0</p>
+        <p style="font-size: var(--font-size-xs); margin-top: 0.5rem;">Adapte de : Auquier P, et al. (2003). Schizophr Res.</p>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // S-QoL 18 Questions data
+    const questions = [
+        { id: 1, text: "J'ai eu des difficultes a me concentrer sur ce que je faisais", dimension: "PsW", dimensionName: "Bien-etre psychologique", reverse: true },
+        { id: 2, text: "Je me suis senti(e) decourage(e) ou deprime(e)", dimension: "PsW", dimensionName: "Bien-etre psychologique", reverse: true },
+        { id: 3, text: "J'ai eu confiance en moi", dimension: "SE", dimensionName: "Estime de soi", reverse: false },
+        { id: 4, text: "Je me suis senti(e) capable de prendre des decisions", dimension: "SE", dimensionName: "Estime de soi", reverse: false },
+        { id: 5, text: "J'ai eu de bonnes relations avec ma famille", dimension: "RFa", dimensionName: "Relations familiales", reverse: false },
+        { id: 6, text: "Ma famille m'a soutenu(e)", dimension: "RFa", dimensionName: "Relations familiales", reverse: false },
+        { id: 7, text: "J'ai pu voir mes amis autant que je le voulais", dimension: "RFr", dimensionName: "Relations amicales", reverse: false },
+        { id: 8, text: "Je me suis senti(e) proche de mes amis", dimension: "RFr", dimensionName: "Relations amicales", reverse: false },
+        { id: 9, text: "J'ai eu le sentiment de pouvoir faire face aux difficultes", dimension: "RE", dimensionName: "Resilience", reverse: false },
+        { id: 10, text: "J'ai ete capable de gerer mes emotions", dimension: "RE", dimensionName: "Resilience", reverse: false },
+        { id: 11, text: "J'ai eu des problemes de sante physique", dimension: "PhW", dimensionName: "Bien-etre physique", reverse: true },
+        { id: 12, text: "Je me suis senti(e) en forme physiquement", dimension: "PhW", dimensionName: "Bien-etre physique", reverse: false },
+        { id: 13, text: "J'ai pu gerer mon argent moi-meme", dimension: "AU", dimensionName: "Autonomie", reverse: false },
+        { id: 14, text: "J'ai pu faire mes activites quotidiennes seul(e)", dimension: "AU", dimensionName: "Autonomie", reverse: false },
+        { id: 15, text: "J'ai ete satisfait(e) de ma vie sentimentale", dimension: "SL", dimensionName: "Vie sentimentale", reverse: false },
+        { id: 16, text: "J'ai eu des relations intimes satisfaisantes", dimension: "SL", dimensionName: "Vie sentimentale", reverse: false },
+        { id: 17, text: "J'ai eu le sentiment que ma vie avait un sens", dimension: "PsW", dimensionName: "Bien-etre psychologique", reverse: false },
+        { id: 18, text: "J'ai eu de l'espoir pour l'avenir", dimension: "RE", dimensionName: "Resilience", reverse: false }
+    ];
+
+    const options = [
+        { value: 1, label: "Pas du tout" },
+        { value: 2, label: "Un peu" },
+        { value: 3, label: "Moderement" },
+        { value: 4, label: "Beaucoup" },
+        { value: 5, label: "Enormement" }
+    ];
+
+    const answers = {};
+    let radarChart = null;
+
+    // Generate questions
+    const container = document.getElementById('questionsContainer');
+    questions.forEach((q, index) => {
+        const card = document.createElement('div');
+        card.className = 'question-card';
+        card.id = `question-${q.id}`;
+        card.innerHTML = `
+            <span class="dimension-badge">${q.dimensionName}</span>
+            <div class="question-text">
+                <span class="question-number">${index + 1}</span>
+                <span>${q.text}</span>
+            </div>
+            <div class="options-container">
+                ${options.map(opt => `
+                    <button class="option-btn" data-question="${q.id}" data-value="${opt.value}">
+                        ${opt.label}
+                    </button>
+                `).join('')}
+            </div>
+        `;
+        container.appendChild(card);
+    });
+
+    // Handle option selection
+    document.querySelectorAll('.option-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const questionId = this.dataset.question;
+            const value = parseInt(this.dataset.value);
+
+            // Update selection
+            document.querySelectorAll(`[data-question="${questionId}"]`).forEach(b => {
+                b.classList.remove('selected');
+            });
+            this.classList.add('selected');
+
+            // Store answer
+            answers[questionId] = value;
+
+            // Mark card as answered
+            document.getElementById(`question-${questionId}`).classList.add('answered');
+
+            // Update progress
+            updateProgress();
+        });
+    });
+
+    function updateProgress() {
+        const answered = Object.keys(answers).length;
+        const total = questions.length;
+        const percentage = (answered / total) * 100;
+
+        document.getElementById('progressCount').textContent = answered;
+        document.getElementById('progressFill').style.width = `${percentage}%`;
+
+        const calculateBtn = document.getElementById('calculateBtn');
+        const warningText = document.getElementById('warningText');
+
+        if (answered === total) {
+            calculateBtn.disabled = false;
+            warningText.style.display = 'none';
+        } else {
+            calculateBtn.disabled = true;
+            warningText.style.display = 'block';
+        }
+    }
+
+    // Calculate results
+    document.getElementById('calculateBtn').addEventListener('click', function() {
+        // Calculate dimension scores
+        const dimensions = {
+            PsW: { name: "Bien-etre psychologique", items: [], score: 0 },
+            SE: { name: "Estime de soi", items: [], score: 0 },
+            RFa: { name: "Relations familiales", items: [], score: 0 },
+            RFr: { name: "Relations amicales", items: [], score: 0 },
+            RE: { name: "Resilience", items: [], score: 0 },
+            PhW: { name: "Bien-etre physique", items: [], score: 0 },
+            AU: { name: "Autonomie", items: [], score: 0 },
+            SL: { name: "Vie sentimentale", items: [], score: 0 }
+        };
+
+        questions.forEach(q => {
+            let score = answers[q.id];
+            // Reverse score for negative items
+            if (q.reverse) {
+                score = 6 - score;
+            }
+            dimensions[q.dimension].items.push(score);
+        });
+
+        // Calculate dimension means and transform to 0-100
+        let totalSum = 0;
+        let totalItems = 0;
+
+        Object.keys(dimensions).forEach(key => {
+            const items = dimensions[key].items;
+            if (items.length > 0) {
+                const mean = items.reduce((a, b) => a + b, 0) / items.length;
+                // Transform: (mean - 1) / 4 * 100
+                dimensions[key].score = Math.round(((mean - 1) / 4) * 100);
+                totalSum += items.reduce((a, b) => a + b, 0);
+                totalItems += items.length;
+            }
+        });
+
+        // Calculate global score
+        const globalMean = totalSum / totalItems;
+        const globalScore = Math.round(((globalMean - 1) / 4) * 100);
+
+        // Display results
+        document.getElementById('totalScore').textContent = globalScore;
+
+        // Dimension grid
+        const dimensionGrid = document.getElementById('dimensionGrid');
+        dimensionGrid.innerHTML = Object.keys(dimensions).map(key => `
+            <div class="dimension-card">
+                <h4>${dimensions[key].name}</h4>
+                <div class="score">${dimensions[key].score}</div>
+            </div>
+        `).join('');
+
+        // Radar chart
+        const ctx = document.getElementById('radarChart').getContext('2d');
+        if (radarChart) {
+            radarChart.destroy();
+        }
+
+        radarChart = new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: Object.values(dimensions).map(d => d.name),
+                datasets: [{
+                    label: 'Score',
+                    data: Object.values(dimensions).map(d => d.score),
+                    backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                    borderColor: 'rgba(16, 185, 129, 1)',
+                    borderWidth: 2,
+                    pointBackgroundColor: 'rgba(16, 185, 129, 1)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgba(16, 185, 129, 1)'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            stepSize: 25,
+                            color: '#94a3b8'
+                        },
+                        grid: {
+                            color: 'rgba(148, 163, 184, 0.2)'
+                        },
+                        angleLines: {
+                            color: 'rgba(148, 163, 184, 0.2)'
+                        },
+                        pointLabels: {
+                            color: '#cbd5e1',
+                            font: {
+                                size: 11
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+
+        // Interpretation
+        let interpretation = "";
+        if (globalScore >= 75) {
+            interpretation = "Votre score indique une tres bonne qualite de vie globale. Continuez a maintenir ces aspects positifs dans votre quotidien.";
+        } else if (globalScore >= 50) {
+            interpretation = "Votre qualite de vie est moderee. Certains domaines pourraient beneficier d'une attention particuliere. Identifiez avec votre equipe soignante les dimensions a ameliorer.";
+        } else if (globalScore >= 25) {
+            interpretation = "Votre score suggere des difficultes dans plusieurs domaines de votre qualite de vie. Un accompagnement renforce pourrait vous aider a ameliorer votre situation.";
+        } else {
+            interpretation = "Votre qualite de vie semble significativement alteree. Il est important d'en parler avec votre equipe soignante pour mettre en place un soutien adapte.";
+        }
+        document.getElementById('interpretationText').textContent = interpretation;
+
+        // Show results
+        document.getElementById('resultsSection').classList.add('visible');
+        document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
+    });
+});
+</script>
+
+</body>
+</html>

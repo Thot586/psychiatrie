@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guidance Parentale - Outils et Ressources</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="../images/icons/family.png">
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+
+        /* Styles pour les guides */
+        .guide-section { margin-bottom: 2rem; }
+        .guide-card {
+            background: var(--surface-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+        .guide-card:hover {
+            border-color: var(--color-border-active);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+        }
+        .guide-card h3 { color: var(--color-text-primary); margin-bottom: 0.75rem; }
+        .guide-card p, .guide-card li { color: var(--color-text-muted); }
+
+        /* Couleurs Teal pour Enfant/Ado */
+        .badge-enfant { background: rgba(20, 184, 166, 0.15); color: #2dd4bf; border: 1px solid rgba(20, 184, 166, 0.3); }
+
+        /* Header section */
+        .header-section {
+            text-align: center;
+            padding: 3rem 1rem;
+            margin-bottom: 2rem;
+        }
+        .header-section h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #f8fafc 0%, #94a3b8 50%, #f8fafc 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .header-section p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--color-text-muted);
+        }
+
+        /* Grid de guides */
+        .guides-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .guide-link-card {
+            display: block;
+            text-decoration: none;
+            background: var(--surface-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+        .guide-link-card:hover {
+            border-color: rgba(20, 184, 166, 0.5);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 30px rgba(20, 184, 166, 0.1);
+        }
+        .guide-link-card h2 {
+            color: var(--color-text-primary);
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .guide-link-card p {
+            color: var(--color-text-muted);
+            margin-bottom: 1rem;
+        }
+        .guide-link-card .link-arrow {
+            color: #2dd4bf;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .guide-link-card:hover .link-arrow {
+            color: #5eead4;
+        }
+    </style>
+</head>
+<body class="light-questionnaire">
+
+    <!-- Navigation Bar -->
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+            <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+        </div>
+        <h1>Guidance Parentale</h1>
+        <span class="badge badge-success">Enfant/Ado</span>
+    </nav>
+
+    <div class="container">
+        <header class="header-section">
+            <h1>Guidance Parentale</h1>
+            <p>Ressources et outils bases sur les connaissances scientifiques pour accompagner vos enfants et adolescents.</p>
+        </header>
+
+        <main>
+            <div class="guides-grid">
+
+                <a href="Guide_parental_adolescence.html" class="guide-link-card">
+                    <h2>Le Guide de l'Adolescence</h2>
+                    <p>Comprendre le cerveau adolescent, batir la relation, gerer les defis concrets et identifier les signes d'alerte.</p>
+                    <span class="link-arrow">Consulter le guide <i class="fas fa-arrow-right"></i></span>
+                </a>
+
+                <a href="Guide_parental_ecran.html" class="guide-link-card">
+                    <h2>Le Guide sur les Ecrans</h2>
+                    <p>Naviguer dans le monde numerique : guide pratique pour les 0-18 ans, des mythes a la realite scientifique.</p>
+                    <span class="link-arrow">Consulter le guide <i class="fas fa-arrow-right"></i></span>
+                </a>
+
+            </div>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-logos">
+            <a href="https://www.ch-le-vinatier.fr" target="_blank" rel="noopener noreferrer">
+                <img src="../images/logos/vinatier.png" alt="Logo Centre Hospitalier Le Vinatier">
+            </a>
+            <a href="https://www.facebook.com/Psykozy?locale=fr_FR" target="_blank" rel="noopener noreferrer">
+                <img src="../images/logos/psykozy.png" alt="Logo Psy-kozy">
+            </a>
+            <a href="https://centre-ressource-rehabilitation.org" target="_blank" rel="noopener noreferrer">
+                <img src="../images/logos/crr.jpg" alt="Logo Centre Ressource Rehabilitation">
+            </a>
+        </div>
+        <p>Dr FENOHASINA T.J. Felicien (Psychiatre - FFI)</p>
+        <p>
+            <img src="../images/icons/cc-by-nc-sa.png" alt="CC BY-NC-SA" style="height: 20px; vertical-align: middle;">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr" target="_blank" rel="noopener noreferrer">Licence CC BY-NC-SA 4.0</a> -
+            Derniere mise a jour : 01 septembre 2025.
+        </p>
+    </footer>
+
+</body>
+</html>

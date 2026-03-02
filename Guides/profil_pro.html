@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explorateur des Profils Professionnels</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧠</text></svg>">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lexend:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Override font family */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        h1, h2, h3 {
+            font-family: 'Lexend', sans-serif;
+        }
+
+        /* Main container */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem;
+            position: relative;
+            z-index: 10;
+            flex-grow: 1;
+        }
+
+        /* Header section */
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: #14b8a6;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            font-size: 1.125rem;
+            color: var(--color-text-muted);
+        }
+
+        /* Introduction card */
+        .intro-card {
+            background: var(--surface-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-xl);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .intro-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .intro-header h2 {
+            font-size: 1.5rem;
+            color: #14b8a6;
+            margin: 0;
+        }
+
+        .intro-toggle {
+            font-size: 1.5rem;
+            color: #14b8a6;
+            font-weight: bold;
+        }
+
+        .intro-content {
+            margin-top: 1rem;
+        }
+
+        .intro-content p {
+            color: var(--color-text-muted);
+            margin-bottom: 1rem;
+        }
+
+        /* Warning box */
+        .warning-box {
+            background: linear-gradient(145deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.05));
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            border-left: 4px solid #f59e0b;
+            border-radius: var(--radius-lg);
+            padding: 1rem 1.25rem;
+        }
+
+        .warning-box h3 {
+            color: var(--accent-amber);
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .warning-box p {
+            color: var(--color-text-muted);
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        /* Main layout grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 1fr 2fr;
+            }
+        }
+
+        /* Sidebar */
+        .sidebar {
+            margin-bottom: 2rem;
+        }
+
+        @media (min-width: 1024px) {
+            .sidebar {
+                margin-bottom: 0;
+            }
+        }
+
+        .sidebar-title {
+            font-size: 1.5rem;
+            color: #14b8a6;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        @media (min-width: 1024px) {
+            .sidebar-title {
+                text-align: left;
+            }
+        }
+
+        /* Accordion styles */
+        .accordion-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .accordion-item {
+            background: var(--surface-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .accordion-header {
+            padding: 1rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .accordion-header:hover {
+            background: rgba(20, 184, 166, 0.1);
+        }
+
+        .accordion-header.active {
+            background: rgba(20, 184, 166, 0.15);
+            border-left-color: #14b8a6;
+        }
+
+        .accordion-header h3 {
+            font-size: 1rem;
+            color: #14b8a6;
+            margin: 0 0 0.25rem 0;
+        }
+
+        .accordion-header p {
+            font-size: 0.875rem;
+            color: var(--color-text-dimmed);
+            margin: 0;
+        }
+
+        .accordion-header .icon {
+            color: #14b8a6;
+            font-weight: bold;
+            font-size: 1.25rem;
+            transition: transform 0.3s ease;
+        }
+
+        .accordion-header.active .icon {
+            transform: rotate(45deg);
+        }
+
+        /* Details panel */
+        .details-panel {
+            background: var(--surface-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-xl);
+            padding: 1.5rem 2rem;
+            min-height: 500px;
+            scroll-margin-top: 20px;
+        }
+
+        /* Placeholder */
+        .details-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+            color: var(--color-text-dimmed);
+            padding: 4rem 0;
+        }
+
+        .details-placeholder .icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .details-placeholder h3 {
+            font-size: 1.25rem;
+            color: var(--color-text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .details-placeholder p {
+            max-width: 20rem;
+            color: var(--color-text-dimmed);
+        }
+
+        /* Axis details container */
+        .axis-details-container {
+            display: none;
+        }
+
+        .axis-details-container.visible {
+            display: block;
+        }
+
+        .axis-title {
+            font-size: 1.875rem;
+            color: #14b8a6;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Chart container */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto 2rem;
+            height: 80vw;
+            max-height: 350px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+                max-height: 400px;
+            }
+        }
+
+        /* Profile cards grid */
+        .profiles-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .profiles-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* Profile card */
+        .profile-card {
+            background: var(--surface-card);
+            border: 1px solid var(--color-border);
+            border-top: 4px solid #14b8a6;
+            border-radius: var(--radius-xl);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .profile-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-title {
+            font-size: 1.5rem;
+            color: var(--color-text-primary);
+            margin: 0.5rem 0;
+        }
+
+        .profile-summary {
+            color: var(--color-text-muted);
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+
+        /* Tabs */
+        .tabs-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .profile-tab {
+            font-size: 0.875rem;
+            font-weight: 500;
+            padding: 0.5rem 0.75rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--color-border);
+            background: var(--color-bg-card);
+            color: var(--color-text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .profile-tab:hover {
+            background: var(--color-bg-card-hover);
+            border-color: var(--color-border-hover);
+        }
+
+        .profile-tab.tab-active {
+            background: linear-gradient(135deg, #14b8a6, #0d9488);
+            color: white;
+            border-color: #14b8a6;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(20, 184, 166, 0.3);
+        }
+
+        .profile-tab.tab-inactive {
+            background: var(--color-bg-card);
+            color: var(--color-text-muted);
+            border-color: var(--color-border);
+        }
+
+        /* Profile content */
+        .profile-content {
+            display: none;
+            color: var(--color-text-muted);
+            flex-grow: 1;
+        }
+
+        .profile-content.active {
+            display: block;
+        }
+
+        .profile-content p {
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* Footer styles */
+        .footer {
+            border-top: 1px solid var(--color-border);
+            padding: 1.5rem;
+            margin-top: auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        @media (min-width: 768px) {
+            .footer-content {
+                flex-direction: row;
+                align-items: flex-start;
+                justify-content: space-between;
+            }
+        }
+
+        .footer-logo {
+            flex-shrink: 0;
+        }
+
+        .footer-logo img {
+            height: 5rem;
+            width: auto;
+            border-radius: 50%;
+            opacity: 0.9;
+            transition: opacity 0.3s ease;
+        }
+
+        @media (min-width: 768px) {
+            .footer-logo img {
+                height: 6rem;
+            }
+        }
+
+        .footer-logo img:hover {
+            opacity: 1;
+        }
+
+        .footer-text {
+            flex: 1;
+            text-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .footer-text {
+                text-align: left;
+            }
+        }
+
+        .footer-text p {
+            color: var(--color-text-dimmed);
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-license {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        @media (min-width: 768px) {
+            .footer-license {
+                justify-content: flex-start;
+            }
+        }
+
+        .footer-license img {
+            height: 1.25rem;
+            width: auto;
+        }
+
+        .footer-license a {
+            color: var(--color-primary-light);
+            text-decoration: underline;
+        }
+
+        .footer-license a:hover {
+            color: var(--color-text-primary);
+        }
+
+        /* Page wrapper for flex layout */
+        .page-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        @media print {
+            .navigation-bar, .footer { display: none !important; }
+            body { background: white !important; }
+            body::before { display: none !important; }
+            .intro-card, .details-panel, .profile-card, .accordion-item {
+                background: white !important;
+                border: 1px solid #ccc !important;
+                color: black !important;
+            }
+            h1, h2, h3 { color: #0d9488 !important; }
+            p { color: #333 !important; }
+        }
+    </style>
+</head>
+<body class="light-questionnaire">
+    <div class="page-wrapper">
+
+    <!-- Navigation Bar -->
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+            <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+        </div>
+        <h1>Explorateur des Profils Professionnels</h1>
+        <button onclick="window.print()" class="btn-secondary" style="padding: 0.5rem 1rem;">
+            <i class="fas fa-print"></i> Imprimer
+        </button>
+    </nav>
+
+    <div class="main-container">
+
+        <header class="page-header">
+            <h1>Explorateur des Profils Professionnels</h1>
+            <p>Un outil pour comprendre et valoriser la diversité cognitive au travail.</p>
+        </header>
+
+        <section id="intro" class="intro-card">
+            <div class="intro-header" onclick="toggleIntro()">
+                <h2>Introduction & Précautions d'usage</h2>
+                <span id="intro-toggle-icon" class="intro-toggle">-</span>
+            </div>
+            <div id="intro-content" class="intro-content">
+                <p>Cet outil a pour vocation de fournir un langage commun pour mieux comprendre les différents modes de fonctionnement au travail. L'objectif est de transformer la diversité cognitive, souvent source de friction, en un levier de performance et de collaboration.</p>
+                <div class="warning-box">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Avertissement : Des archétypes, pas des boîtes</h3>
+                    <p>Ces profils sont des <strong>archétypes</strong>, pas des étiquettes. Un individu est infiniment plus complexe. Utilisez cet outil non pas comme un diagnostic, mais comme un <strong>point de départ pour le dialogue</strong> et une meilleure compréhension mutuelle.</p>
+                </div>
+            </div>
+        </section>
+
+        <main class="main-grid">
+            <aside class="sidebar">
+                <h2 class="sidebar-title">Axes</h2>
+                <div id="axes-accordion" class="accordion-container">
+                </div>
+            </aside>
+
+            <section id="details" class="details-panel">
+                 <div id="details-placeholder" class="details-placeholder">
+                    <span class="icon"><i class="fas fa-compass"></i></span>
+                    <h3>Sélectionnez un axe pour commencer</h3>
+                    <p>Cliquez sur l'un des axes dans le menu pour explorer les profils correspondants.</p>
+                </div>
+                <div id="axis-details-container" class="axis-details-container"></div>
+            </section>
+        </main>
+
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <!-- Logo -->
+            <div class="footer-logo">
+                <a href="https://www.facebook.com/p/Atelier-de-R%25C3%25A9flexion-100057626852106/?checkpoint_src=any" target="_blank" rel="noopener noreferrer">
+                    <img src="../images/misc/profession.jpg" alt="Logo Atelier de Réflexion">
+                </a>
+            </div>
+
+            <!-- Text -->
+            <div class="footer-text">
+                <p>RASOLONAIVO MIhaja (Philosophe, Admin Page FB Atelier de réflexion) ;</p>
+                <p>Dr FENOHASINA T.J. Félicien (Psychiatre)</p>
+                <div class="footer-license">
+                    <img src="../images/icons/cc-by-nc-sa.png" alt="Icône Creative Commons BY-NC-SA">
+                    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr" target="_blank" rel="noopener noreferrer">Licence CC BY-NC-SA 4.0</a> -
+                    <span style="color: var(--color-text-dimmed);">Dernière mise à jour : 10 juillet 2025.</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    </div>
+
+    <script>
+        const profilsData = {
+            axes: [
+                { id: 'axe1', title: "Traitement de l'Information", description: "Recueillir, organiser et utiliser l'info.", profiles: ['plongeur', 'explorateur'] },
+                { id: 'axe2', title: "Processus d'Action", description: "Passer de la réflexion à la décision.", profiles: ['architecte', 'navigateur'] },
+                { id: 'axe3', title: "Rapport aux Autres", description: "Prioriser la tâche ou l'harmonie du groupe.", profiles: ['pilote', 'catalyseur'] },
+                { id: 'axe4', title: "Rapport a la Nouveaute", description: "Réagir face au changement et à la structure.", profiles: ['pionnier', 'stabilisateur'] }
+            ],
+            profiles: {
+                plongeur: {
+                    title: "Le Plongeur Analytique", summary: "Apporte rigueur et précision pour réduire les risques.", icon: '🔬', chartData: [9, 2, 8, 3, 7, 4, 3, 8],
+                    details: {
+                        fonctionnement: "Aborde les problèmes avec logique, données factuelles et une pensée convergente. Décompose, analyse et évalue de manière critique pour identifier la solution la plus juste.",
+                        forces: "Attention méticuleuse aux détails, capacité à identifier des tendances dans les données, démarche structurée qui apporte clarté et discipline, rôle de 'garde-fou'.",
+                        limites: "Risque de 'paralyse par l'analyse', peut être perçu comme rigide ou excessivement critique, peut négliger les dimensions humaines et émotionnelles.",
+                        leviers: "Développer la flexibilité cognitive et la métacognition ('Quelle est l'information minimale viable?'). Pour l'équipe : fournir des données claires, fixer des délais et valoriser sa rigueur."
+                    }
+                },
+                explorateur: {
+                    title: "L'Explorateur Divergent", summary: "Génère des options et stimule l'innovation.", icon: '💡', chartData: [2, 9, 3, 8, 4, 6, 8, 2],
+                    details: {
+                        fonctionnement: "Générateur d'idées dont la pensée divergente produit une grande quantité d'options variées. À l'aise avec l'ambiguïté, la nouveauté et les approches non conventionnelles.",
+                        forces: "Moteur de l'innovation et de la créativité, capacité à aborder les problèmes sous des angles nouveaux, prévention de la pensée de groupe ('groupthink').",
+                        limites: "Difficulté à se concentrer sur l'exécution d'une seule tâche, idées parfois perçues comme irréalistes, risque d'ennui dans des environnements très structurés.",
+                        leviers: "Apprendre à faire le pont entre divergence et convergence (ex: mind mapping). Pour l'équipe : créer un environnement psychologiquement sûr, utiliser des techniques de brainstorming."
+                    }
+                },
+                architecte: {
+                    title: "L'Architecte Méthodique", summary: "Transforme les stratégies en plans d'action concrets.", icon: '🏗️', chartData: [8, 3, 9, 2, 9, 5, 2, 9],
+                    details: {
+                        fonctionnement: "Incarnation de la haute Conscienciosité. Son mode opératoire est défini par l'organisation, la fiabilité, la planification et un souci constant du détail. Prise de décision délibérée (Système 2).",
+                        forces: "Fiabilité, haute qualité d'exécution, excelle dans l'organisation de projets complexes, persévérance et autodiscipline. Prédicteur le plus robuste de la performance au travail.",
+                        limites: "Peut être rigide et résistant au changement, difficulté face à l'ambiguïté, risque de micro-management, stressé par les situations chaotiques.",
+                        leviers: "Accroître sa flexibilité (ex: planifier l'imprévu), s'entraîner à la délégation. Pour l'équipe : communiquer les changements en amont, l'impliquer dans la création des plans."
+                    }
+                },
+                navigateur: {
+                    title: "Le Navigateur Intuitif", summary: "Prend des décisions rapides dans l'incertitude.", icon: '🧭', chartData: [3, 7, 2, 9, 5, 8, 7, 3],
+                    details: {
+                        fonctionnement: "Prend des décisions rapides basées sur des 'pressentiments' (reconnaissance de schémas non-consciente). Pensée de Système 1 : rapide, automatique, holistique. Capte les signaux faibles.",
+                        forces: "Vitesse de décision, excellente gestion de l'ambiguïté, forte intelligence interpersonnelle, capable de synthétiser des informations complexes de manière holistique.",
+                        limites: "Difficulté à justifier ses décisions de manière factuelle, vulnérable aux biais cognitifs, peut être perçu comme impulsif ou irrationnel.",
+                        leviers: "Pratiquer la métacognition (ex: tenir un 'journal de décisions'). Pour l'équipe : faire confiance à son jugement, l'encourager à expliciter les signaux faibles qu'il perçoit."
+                    }
+                },
+                pilote: {
+                    title: "Le Pilote Orienté Tâche", summary: "Maintient le focus sur les objectifs et les résultats.", icon: '🎯', chartData: [7, 4, 8, 6, 9, 2, 4, 7],
+                    details: {
+                        fonctionnement: "Principalement focalisé sur l'accomplissement des objectifs, le respect des délais et l'efficacité. Définit clairement les rôles, planifie et suit les résultats.",
+                        forces: "Efficacité redoutable pour faire avancer les projets, apporte de la clarté dans les objectifs, maintient l'équipe concentrée sur les priorités.",
+                        limites: "Peut négliger le bien-être et les besoins relationnels de l'équipe, ce qui peut éroder la motivation à long terme. Peut être perçu comme froid ou excessivement directif.",
+                        leviers: "Développer son intelligence relationnelle (ex: planifier du temps pour des interactions informelles), pratiquer l'écoute active. Pour l'équipe : reconnaître son efficacité."
+                    }
+                },
+                catalyseur: {
+                    title: "Le Catalyseur Social", summary: "Construit la confiance et facilite la communication.", icon: '❤️‍🔥', chartData: [4, 6, 3, 5, 2, 9, 6, 5],
+                    details: {
+                        fonctionnement: "Associé à une haute Agréabilité. Attention tournée vers l'harmonie du groupe, la cohésion et le bien-être. Privilégie la collaboration, la coopération et le consensus.",
+                        forces: "Exceptionnel pour créer une forte cohésion d'équipe et un environnement psychologiquement sûr, excellent médiateur, favorise une communication ouverte et durable.",
+                        limites: "Réticent à prendre des décisions impopulaires ou à donner un feedback critique, peut manquer d'assertivité, risque d'être exploité ou de ne pas défendre ses propres intérêts.",
+                        leviers: "Apprendre à distinguer 'être gentil' de 'être efficace'. S'entraîner au feedback constructif et à dire 'non'. Pour l'équipe : reconnaître son rôle de 'glue' sociale, le coacher pour développer son assertivité."
+                    }
+                },
+                pionnier: {
+                    title: "Le Pionnier Adaptatif", summary: "Agit comme un agent du changement et explore de nouvelles opportunités.", icon: '🚀', chartData: [3, 8, 4, 7, 5, 6, 9, 2],
+                    details: {
+                        fonctionnement: "Associé à une haute Ouverture à l'expérience. Curieux, imaginatif, attiré par la nouveauté. Perçoit le changement comme une opportunité stimulante.",
+                        forces: "Capacité d'adaptation exceptionnelle, moteur pour l'innovation, apprend et se développe continuellement tout au long de sa carrière.",
+                        limites: "Aversion pour la routine, peut manquer de discipline pour les tâches répétitives, peut être perçu comme manquant de pragmatisme, son appétit pour le changement peut être déstabilisant.",
+                        leviers: "Apprendre à valoriser aussi les phases d'exécution. S'associer à des profils plus structurés. Pour l'équipe : le positionner comme agent du changement, lui donner des objectifs clairs."
+                    }
+                },
+                stabilisateur: {
+                    title: "Le Stabilisateur Prudent", summary: "Assure la qualité, la fiabilité et la continuité.", icon: '⚓', chartData: [7, 2, 7, 3, 6, 4, 2, 9],
+                    details: {
+                        fonctionnement: "Faible Ouverture à l'expérience. Préférence pour les routines, les traditions et les méthodes éprouvées. Pragmatique, concret, se sent en sécurité dans des environnements prévisibles.",
+                        forces: "Fiabilité et constance dans l'exécution, garantit la continuité et la qualité, excellent pour optimiser les systèmes, apporte un point de vue pragmatique qui sert de contrepoids.",
+                        limites: "Potentielle résistance au changement, peut paraître rigide ou fermé, risque de désengagement si les changements sont trop rapides ou mal expliqués.",
+                        leviers: "Travailler sa perception du changement, se concentrer sur les bénéfices concrets. Pour l'équipe : communiquer le 'pourquoi' du changement, l'impliquer dans l'amélioration des processus."
+                    }
+                },
+            }
+        };
+
+        let chartInstance = null;
+        const chartLabels = ['Rigueur', 'Créativité', 'Planification', 'Agilité', 'Focus Tâche', 'Focus Relation', 'Adaptabilité', 'Stabilité'];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderAccordion();
+        });
+
+        function renderAccordion() {
+            const accordionContainer = document.getElementById('axes-accordion');
+            accordionContainer.innerHTML = '';
+            profilsData.axes.forEach(axe => {
+                const accordionItem = document.createElement('div');
+                accordionItem.className = 'accordion-item';
+                accordionItem.innerHTML = `
+                    <div id="header-${axe.id}" class="accordion-header">
+                        <div>
+                            <h3>${axe.title}</h3>
+                            <p>${axe.description}</p>
+                        </div>
+                        <span class="icon">+</span>
+                    </div>
+                `;
+                accordionContainer.appendChild(accordionItem);
+
+                accordionItem.querySelector('.accordion-header').addEventListener('click', () => handleAccordionClick(axe.id));
+            });
+        }
+
+        function handleAccordionClick(axisId) {
+            const allHeaders = document.querySelectorAll('.accordion-header');
+            const clickedHeader = document.getElementById(`header-${axisId}`);
+
+            allHeaders.forEach(header => {
+                if (header.id !== clickedHeader.id) {
+                    header.classList.remove('active');
+                    header.querySelector('.icon').classList.remove('rotate-45');
+                }
+            });
+
+            clickedHeader.classList.toggle('active');
+            clickedHeader.querySelector('.icon').classList.toggle('rotate-45');
+
+            if (clickedHeader.classList.contains('active')) {
+                showAxisDetails(axisId);
+            } else {
+                hideAxisDetails();
+            }
+        }
+
+        function showAxisDetails(axisId) {
+            document.getElementById('details-placeholder').style.display = 'none';
+            const detailsContainer = document.getElementById('axis-details-container');
+            detailsContainer.classList.add('visible');
+            detailsContainer.style.display = 'block';
+
+            const axis = profilsData.axes.find(a => a.id === axisId);
+            const [profile1Id, profile2Id] = axis.profiles;
+            const profile1 = profilsData.profiles[profile1Id];
+            const profile2 = profilsData.profiles[profile2Id];
+
+            detailsContainer.innerHTML = `
+                <h2 class="axis-title">${axis.title}</h2>
+                <div class="chart-container">
+                    <canvas id="profileChart"></canvas>
+                </div>
+                <div class="profiles-grid">
+                    ${createProfileCard(profile1, profile1Id)}
+                    ${createProfileCard(profile2, profile2Id)}
+                </div>
+            `;
+
+            initializeChart(profile1, profile2);
+            setupTabListeners();
+            if (window.innerWidth < 1024) {
+                 document.getElementById('details').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function hideAxisDetails() {
+            document.getElementById('details-placeholder').style.display = 'flex';
+            const detailsContainer = document.getElementById('axis-details-container');
+            detailsContainer.classList.remove('visible');
+            detailsContainer.style.display = 'none';
+        }
+
+        function createProfileCard(profile, profileId) {
+            return `
+                <div id="profile-card-${profileId}" class="profile-card">
+                    <div class="profile-header">
+                        <span class="profile-icon">${profile.icon}</span>
+                        <h3 class="profile-title">${profile.title}</h3>
+                        <p class="profile-summary">"${profile.summary}"</p>
+                    </div>
+                    <div class="tabs-container">
+                        ${Object.keys(profile.details).map((key, index) => {
+                            const stateClass = index === 0 ? 'tab-active' : 'tab-inactive';
+                            return `<button data-profile="${profileId}" data-tab="${key}" class="profile-tab ${stateClass}">
+                                ${key.charAt(0).toUpperCase() + key.slice(1)}
+                            </button>`;
+                        }).join('')}
+                    </div>
+                    <div class="profile-content-wrapper">
+                        ${Object.entries(profile.details).map(([key, value], index) => `
+                            <div id="content-${profileId}-${key}" class="profile-content ${index === 0 ? 'active' : ''}">
+                                <p>${value}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function setupTabListeners() {
+            document.querySelectorAll('.profile-tab').forEach(tab => {
+                tab.addEventListener('click', (e) => {
+                    const targetProfileId = e.currentTarget.dataset.profile;
+                    const targetTabKey = e.currentTarget.dataset.tab;
+
+                    document.querySelectorAll(`#profile-card-${targetProfileId} .profile-tab`).forEach(t => {
+                        t.classList.remove('tab-active');
+                        t.classList.add('tab-inactive');
+                    });
+
+                    e.currentTarget.classList.add('tab-active');
+                    e.currentTarget.classList.remove('tab-inactive');
+
+                    document.querySelectorAll(`#profile-card-${targetProfileId} .profile-content`).forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    document.getElementById(`content-${targetProfileId}-${targetTabKey}`).classList.add('active');
+                });
+            });
+        }
+
+        function initializeChart(profile1, profile2) {
+            const ctx = document.getElementById('profileChart').getContext('2d');
+            if(chartInstance) chartInstance.destroy();
+            chartInstance = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: chartLabels,
+                    datasets: [
+                        {
+                            label: profile1.title, data: profile1.chartData,
+                            backgroundColor: 'rgba(20, 184, 166, 0.2)', borderColor: 'rgba(20, 184, 166, 1)',
+                            pointBackgroundColor: 'rgba(20, 184, 166, 1)', pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff', pointHoverBorderColor: 'rgba(20, 184, 166, 1)'
+                        },
+                        {
+                            label: profile2.title, data: profile2.chartData,
+                            backgroundColor: 'rgba(251, 146, 60, 0.2)', borderColor: 'rgba(251, 146, 60, 1)',
+                            pointBackgroundColor: 'rgba(251, 146, 60, 1)', pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff', pointHoverBorderColor: 'rgba(251, 146, 60, 1)'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            pointLabels: { font: { size: 12, family: 'Inter' }, color: '#94a3b8' },
+                            ticks: { backdropColor: 'rgba(15, 23, 42, 0.75)', color: '#64748b', stepSize: 2 },
+                            suggestedMin: 0, suggestedMax: 10
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'top', labels: { font: { family: 'Inter' }, color: '#e2e8f0' } },
+                        tooltip: { bodyFont: { family: 'Inter' }, titleFont: { family: 'Lexend' } }
+                    }
+                }
+            });
+        }
+
+        function toggleIntro() {
+            const content = document.getElementById('intro-content');
+            const icon = document.getElementById('intro-toggle-icon');
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                icon.textContent = '-';
+            } else {
+                content.style.display = 'none';
+                icon.textContent = '+';
+            }
+        }
+    </script>
+</body>
+</html>

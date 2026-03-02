@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Échelle d'Estime de Soi de Rosenberg (SERS)</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <style>
+        :root {
+            --cat-main: #0ea5e9;
+            --cat-dark: #0284c7;
+            --cat-light: #38bdf8;
+            --cat-rgb: 14, 165, 233;
+            --cat-readable: #0284c7;
+        }
+        .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
+        .option-btn.selected, .answer-btn.selected { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        .score-circle { border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 30px rgba(var(--cat-rgb), 0.2); }
+        .score-value { color: var(--cat-light); }
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-light); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+        .progress-fill { background: linear-gradient(90deg, var(--cat-main), var(--cat-light)); box-shadow: 0 0 8px rgba(var(--cat-rgb), 0.4); }
+        .likert-options input[type="radio"]:checked + label,
+        .binary-options input[type="radio"]:checked + label,
+        .radio-options input[type="radio"]:checked + label { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+    </style>
+
+</head>
+<body class="light-questionnaire">
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+            <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+        </div>
+        <h1>Échelle d'Estime de Soi</h1>
+        <span class="badge badge-cat-rehab">Rehab</span>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-gem"></i> Échelle d'Estime de Soi</h1>
+            <p>Échelle de Rosenberg (SERS)</p>
+        </div>
+
+        <div class="glass-card">
+            <h2><i class="fas fa-info-circle"></i> À propos de ce questionnaire</h2>
+            <p style="margin: 15px 0; line-height: 1.6;">
+                L'échelle de Rosenberg est l'outil le plus utilisé pour évaluer l'estime de soi globale.
+                L'estime de soi représente le jugement ou l'évaluation que l'on fait de soi-même et de sa valeur personnelle.
+                C'est un facteur essentiel du bien-être psychologique qui influence notre capacité à faire face aux défis,
+                maintenir des relations saines, atteindre nos objectifs et vivre de manière épanouie.
+            </p>
+
+            <div class="self-esteem-facts">
+                <h4><i class="fas fa-sparkles"></i> Les composantes de l'estime de soi</h4>
+                <div class="facts-grid">
+                    <div class="fact-item">
+                        <div class="fact-icon"><i class="fas fa-bullseye"></i></div>
+                        <div class="fact-text">Sentiment de compétence</div>
+                    </div>
+                    <div class="fact-item">
+                        <div class="fact-icon"><i class="fas fa-dumbbell"></i></div>
+                        <div class="fact-text">Sentiment de valeur personnelle</div>
+                    </div>
+                    <div class="fact-item">
+                        <div class="fact-icon"><i class="fas fa-star"></i></div>
+                        <div class="fact-text">Acceptation de soi</div>
+                    </div>
+                    <div class="fact-item">
+                        <div class="fact-icon"><i class="fas fa-shield-alt"></i></div>
+                        <div class="fact-text">Confiance en soi</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <h3><i class="fas fa-exclamation-triangle"></i> Avertissements importants</h3>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Ce questionnaire ne remplace pas une évaluation professionnelle</li>
+                    <li>L'estime de soi peut varier selon les périodes de vie</li>
+                    <li>Une estime de soi faible peut nécessiter un accompagnement psychologique</li>
+                    <li>Répondez de manière spontanée et honnête pour une évaluation fiable</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <div class="control-buttons">
+                <button class="btn btn-primary" onclick="importData()">
+                    <i class="fas fa-file-import"></i> Importer un questionnaire
+                </button>
+                <button class="btn btn-secondary" onclick="resetForm()">
+                    <i class="fas fa-redo"></i> Réinitialiser
+                </button>
+            </div>
+            <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="loadFile(event)">
+        </div>
+
+        <div class="glass-card">
+            <h2 style="margin-bottom: 20px; color: var(--color-text-primary);">Pour chaque affirmation, indiquez à quel point elle vous correspond</h2>
+
+            <div id="questions"></div>
+        </div>
+
+        <div id="results" class="results-section">
+            <div class="glass-card">
+                <h2 style="text-align: center; margin-bottom: 30px; color: var(--color-text-primary);"><i class="fas fa-chart-bar"></i> Résultats de votre évaluation</h2>
+
+                <div class="score-display">
+                    <div class="score-circle">
+                        <span class="score-number" id="totalScore">0</span>
+                        <span class="score-label">sur 40</span>
+                    </div>
+                </div>
+
+                <div id="interpretationBox" class="interpretation"></div>
+
+                <div class="dimensions-analysis">
+                    <h3 style="margin-bottom: 15px; color: var(--color-text-primary);">Analyse des dimensions</h3>
+                    <div class="dimension-item">
+                        <span class="dimension-name"><i class="fas fa-bullseye"></i> Items positifs (valeur personnelle)</span>
+                        <span class="dimension-score" id="positiveScore">0</span>
+                    </div>
+                    <div class="dimension-item">
+                        <span class="dimension-name"><i class="fas fa-sync-alt"></i> Items négatifs (auto-dépréciation)</span>
+                        <span class="dimension-score" id="negativeScore">0</span>
+                    </div>
+                </div>
+
+                <button class="details-toggle" onclick="toggleDetails()">
+                    <i class="fas fa-clipboard-list"></i> Voir les recommandations détaillées
+                    <span id="toggleIcon"><i class="fas fa-chevron-down"></i></span>
+                </button>
+
+                <div id="detailsContent" class="details-content"></div>
+            </div>
+
+            <div class="glass-card" style="margin-top: 30px;">
+                <h3><i class="fas fa-download"></i> Exporter les résultats</h3>
+                <div class="consent-box">
+                    <label>
+                        <input type="checkbox" id="exportConsent">
+                        <span>Je souhaite télécharger mes résultats (questionnaire, réponses, score et date) dans un fichier JSON sur mon appareil. <strong>Ces résultats constituent des données de santé — je m'engage à les conserver de façon sécurisée et à ne les partager qu'avec un professionnel de santé de mon choix.</strong> Aucune donnée n'est transmise à un serveur.</span>
+                    </label>
+                </div>
+                <div class="export-buttons">
+                    <button class="btn btn-primary" onclick="exportData()">
+                        <i class="fas fa-download"></i> Exporter en JSON
+                    </button>
+                    <button class="btn-print" onclick="printResults()">
+                        <i class="fas fa-print"></i> Imprimer
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p><strong>SERS - Self-Esteem Rosenberg Scale</strong></p>
+            <p>
+                <strong>Auteur original :</strong> Dr Morris Rosenberg<br>
+                University of Maryland (1965)
+            </p>
+            <p>
+                <strong>Adaptation numérique :</strong> Dr FENOHASINA | Psychiatre - FFI
+            </p>
+            <p>&copy; 2025 - Tous droits réservés</p>
+        </footer>
+    </div>
+
+    <script>
+        let answers = new Array(10).fill(null);
+
+        const questions = [
+            {
+                id: 1,
+                text: "Je pense que je suis une personne de valeur, au moins égale à n'importe qui d'autre",
+                reversed: false
+            },
+            {
+                id: 2,
+                text: "Je pense que je possède un certain nombre de belles qualités",
+                reversed: false
+            },
+            {
+                id: 3,
+                text: "Tout bien considéré, je suis porté(e) à me considérer comme un(e) raté(e)",
+                reversed: true
+            },
+            {
+                id: 4,
+                text: "Je suis capable de faire les choses aussi bien que la majorité des gens",
+                reversed: false
+            },
+            {
+                id: 5,
+                text: "Je sens peu de raisons d'être fier(e) de moi",
+                reversed: true
+            },
+            {
+                id: 6,
+                text: "J'ai une attitude positive vis-à-vis de moi-même",
+                reversed: false
+            },
+            {
+                id: 7,
+                text: "Dans l'ensemble, je suis satisfait(e) de moi",
+                reversed: false
+            },
+            {
+                id: 8,
+                text: "J'aimerais avoir plus de respect pour moi-même",
+                reversed: true
+            },
+            {
+                id: 9,
+                text: "Parfois je me sens vraiment inutile",
+                reversed: true
+            },
+            {
+                id: 10,
+                text: "Il m'arrive de penser que je suis un(e) bon(ne) a rien",
+                reversed: true
+            }
+        ];
+
+        const options = [
+            { value: 1, label: "Tout à fait en désaccord" },
+            { value: 2, label: "Plutôt en désaccord" },
+            { value: 3, label: "Plutôt en accord" },
+            { value: 4, label: "Tout à fait en accord" }
+        ];
+
+        function initializeQuestions() {
+            const container = document.getElementById('questions');
+            container.innerHTML = '';
+
+            questions.forEach((question, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-card';
+
+                questionDiv.innerHTML = `
+                    <span class="question-number">${question.id}</span>
+                    <div class="question-text">${question.text}</div>
+                    <div class="options-grid">
+                        ${options.map(opt => `
+                            <button class="option-btn" onclick="selectAnswer(${index}, ${opt.value})" id="q${index}_opt${opt.value}">
+                                <span>${opt.label}</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function selectAnswer(questionIndex, value) {
+            answers[questionIndex] = value;
+
+            // Update UI
+            for (let i = 1; i <= 4; i++) {
+                const btn = document.getElementById(`q${questionIndex}_opt${i}`);
+                if (btn) {
+                    if (i === value) {
+                        btn.classList.add('selected');
+                    } else {
+                        btn.classList.remove('selected');
+                    }
+                }
+            }
+
+            checkCompletion();
+        }
+
+        function checkCompletion() {
+            const allAnswered = answers.every(a => a !== null);
+
+            if (allAnswered) {
+                updateResults();
+                document.getElementById('results').classList.add('show');
+                document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function calculateScore() {
+            let totalScore = 0;
+            let positiveScore = 0;
+            let negativeScore = 0;
+
+            questions.forEach((question, index) => {
+                let score = answers[index];
+
+                if (question.reversed) {
+                    // Inverser le score pour les questions negatives
+                    score = 5 - score;
+                    negativeScore += score;
+                } else {
+                    positiveScore += score;
+                }
+
+                totalScore += score;
+            });
+
+            return { total: totalScore, positive: positiveScore, negative: negativeScore };
+        }
+
+        function getInterpretation(score) {
+            if (score < 25) {
+                return {
+                    level: "Estime de soi très faible",
+                    className: "very-low",
+                    description: "Votre estime de soi est très faible. Vous avez tendance à vous dévaloriser et à douter de vos capacités.",
+                    action: "Un travail thérapeutique dans ce domaine semble nécessaire. Consultation psychologique fortement recommandée."
+                };
+            } else if (score <= 31) {
+                return {
+                    level: "Estime de soi faible",
+                    className: "low",
+                    description: "Votre estime de soi est faible. Vous manquez de confiance en vos capacités et votre valeur personnelle.",
+                    action: "Un travail sur l'estime de soi serait bénéfique. Considérer un accompagnement psychologique."
+                };
+            } else if (score <= 34) {
+                return {
+                    level: "Estime de soi moyenne",
+                    className: "average",
+                    description: "Votre estime de soi est dans la moyenne. Vous avez une perception équilibrée de vous-même avec des hauts et des bas.",
+                    action: "Continuer à développer la confiance en soi. Des exercices d'affirmation de soi peuvent être utiles."
+                };
+            } else if (score <= 39) {
+                return {
+                    level: "Estime de soi forte",
+                    className: "high",
+                    description: "Votre estime de soi est forte. Vous avez confiance en vos capacités et une bonne image de vous-même.",
+                    action: "Maintenir cette estime de soi positive. Utiliser cette force pour aider les autres et relever de nouveaux défis."
+                };
+            } else {
+                return {
+                    level: "Estime de soi tres forte",
+                    className: "very-high",
+                    description: "Votre estime de soi est très forte. Vous êtes très affirmé(e) et confiant(e) en votre valeur personnelle.",
+                    action: "Excellente estime de soi. Veiller à rester ouvert(e) aux feedbacks et maintenir l'empathie envers les autres."
+                };
+            }
+        }
+
+        function getRecommendations(score) {
+            const recommendations = [];
+
+            if (score < 25) {
+                recommendations.push({
+                    title: "Thérapie cognitive-comportementale",
+                    content: "La TCC est très efficace pour restructurer les pensées négatives sur soi et développer une image plus positive."
+                });
+                recommendations.push({
+                    title: "Journal de gratitude et de réussites",
+                    content: "Noter quotidiennement 3 choses positives sur soi, ses réussites même petites, et les compliments reçus."
+                });
+                recommendations.push({
+                    title: "Éviter les comparaisons",
+                    content: "Se concentrer sur son propre parcours plutôt que de se comparer aux autres, surtout sur les réseaux sociaux."
+                });
+                recommendations.push({
+                    title: "Thérapie d'acceptation et d'engagement (ACT)",
+                    content: "Apprendre à accepter ses imperfections tout en s'engageant vers ses valeurs personnelles."
+                });
+            } else if (score <= 31) {
+                recommendations.push({
+                    title: "Affirmation de soi",
+                    content: "Pratiquer l'expression de ses besoins, opinions et limites de manière respectueuse mais ferme."
+                });
+                recommendations.push({
+                    title: "Défis progressifs",
+                    content: "Se fixer des objectifs réalisables et progressifs pour construire des succès et renforcer la confiance."
+                });
+                recommendations.push({
+                    title: "Auto-compassion",
+                    content: "Développer la bienveillance envers soi-même, se traiter comme on traiterait un bon ami."
+                });
+            } else if (score <= 34) {
+                recommendations.push({
+                    title: "Développement personnel continu",
+                    content: "Explorer de nouvelles compétences, hobbies ou formations pour enrichir l'image de soi."
+                });
+                recommendations.push({
+                    title: "Cercle social positif",
+                    content: "S'entourer de personnes bienveillantes et soutenantes, limiter les relations toxiques."
+                });
+            } else {
+                recommendations.push({
+                    title: "Mentorat ou coaching",
+                    content: "Utiliser votre confiance pour guider et inspirer les autres, ce qui renforce aussi l'estime de soi."
+                });
+                recommendations.push({
+                    title: "Nouveaux défis",
+                    content: "Sortir de sa zone de confort avec des projets ambitieux pour continuer a grandir."
+                });
+            }
+
+            recommendations.push({
+                title: "Activité physique régulière",
+                content: "L'exercice améliore l'image corporelle, libère des endorphines et renforce le sentiment de compétence. Effet démontré par de nombreuses études."
+            });
+
+            recommendations.push({
+                title: "Thérapies validées scientifiquement",
+                content: "TCC (Thérapie Cognitivo-Comportementale) et thérapies interpersonnelles ont fait leurs preuves pour l'estime de soi."
+            });
+
+            return recommendations;
+        }
+
+        function updateResults() {
+            const scores = calculateScore();
+            const interpretation = getInterpretation(scores.total);
+            const recommendations = getRecommendations(scores.total);
+
+            document.getElementById('totalScore').textContent = scores.total;
+            document.getElementById('positiveScore').textContent = scores.positive;
+            document.getElementById('negativeScore').textContent = scores.negative;
+
+            const interpretationBox = document.getElementById('interpretationBox');
+            interpretationBox.className = `interpretation ${interpretation.className}`;
+            interpretationBox.innerHTML = `
+                <h3 style="margin-bottom: 10px;">${interpretation.level}</h3>
+                <p style="color: var(--color-text-muted);"><strong>Interprétation :</strong> ${interpretation.description}</p>
+                <p style="color: var(--color-text-muted);"><strong>Recommandation :</strong> ${interpretation.action}</p>
+            `;
+
+            const detailsContent = document.getElementById('detailsContent');
+            detailsContent.innerHTML = `
+                <h3 style="margin-bottom: 20px; color: var(--color-text-primary);">Recommandations personnalisées</h3>
+                ${recommendations.map(rec => `
+                    <div class="recommendation-item">
+                        <h4><i class="fas fa-check-circle" style="color: #0ea5e9;"></i> ${rec.title}</h4>
+                        <p>${rec.content}</p>
+                    </div>
+                `).join('')}
+
+                <div style="margin-top: 30px; padding: 20px; background: linear-gradient(145deg, rgba(14, 165, 233, 0.1), rgba(14, 165, 233, 0.05)); border-radius: 10px; border: 1px solid rgba(14, 165, 233, 0.3);">
+                    <h4 style="color: var(--color-text-primary); margin-bottom: 15px;"><i class="fas fa-bookmark"></i> Comprendre les scores</h4>
+                    <p style="color: var(--color-text-muted); line-height: 1.8;">
+                        <strong>Interprétation des scores :</strong><br>
+                        &bull; <strong>&lt; 25</strong> : Estime de soi très faible<br>
+                        &bull; <strong>25-31</strong> : Estime de soi faible<br>
+                        &bull; <strong>31-34</strong> : Estime de soi moyenne<br>
+                        &bull; <strong>34-39</strong> : Estime de soi forte<br>
+                        &bull; <strong>&gt; 39</strong> : Estime de soi très forte<br><br>
+
+                        <strong>Les deux dimensions :</strong><br>
+                        &bull; <strong>Items positifs</strong> : Évaluent l'acceptation de soi et la reconnaissance de ses qualités<br>
+                        &bull; <strong>Items négatifs (inversés)</strong> : Évaluent l'auto-dépréciation et les pensées négatives sur soi<br><br>
+
+                        <em><i class="fas fa-lightbulb" style="color: #0ea5e9;"></i> L'estime de soi est modifiable et peut être améliorée avec du travail personnel et/ou thérapeutique</em>
+                    </p>
+                </div>
+            `;
+        }
+
+        function toggleDetails() {
+            const content = document.getElementById('detailsContent');
+            const icon = document.getElementById('toggleIcon');
+
+            if (content.classList.contains('show')) {
+                content.classList.remove('show');
+                icon.innerHTML = '<i class="fas fa-chevron-down"></i>';
+            } else {
+                content.classList.add('show');
+                icon.innerHTML = '<i class="fas fa-chevron-up"></i>';
+            }
+        }
+
+        function resetForm() {
+            answers = new Array(10).fill(null);
+
+            // Reset UI
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+
+            document.getElementById('results').classList.remove('show');
+            document.getElementById('detailsContent').classList.remove('show');
+            document.getElementById('exportConsent').checked = false;
+        }
+
+        function importData() {
+            document.getElementById('fileInput').click();
+        }
+
+        function loadFile(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        if (data.answers && Array.isArray(data.answers)) {
+                            answers = data.answers;
+
+                            // Update UI
+                            answers.forEach((value, index) => {
+                                if (value !== null) {
+                                    selectAnswer(index, value);
+                                }
+                            });
+                        }
+                    } catch (error) {
+                        alert("Erreur lors de l'importation du fichier");
+                    }
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        function exportData() {
+            const consent = document.getElementById('exportConsent').checked;
+            if (!consent) {
+                alert("Veuillez cocher la case de consentement avant d''exporter.");
+                return;
+            }
+
+            const scores = calculateScore();
+            const interpretation = getInterpretation(scores.total);
+
+            const data = {
+                questionnaire: "SERS - Rosenberg Self-Esteem Scale",
+                date: new Date().toISOString(),
+                answers: answers,
+                scores: {
+                    total: scores.total,
+                    positive_items: scores.positive,
+                    negative_items: scores.negative
+                },
+                interpretation: interpretation.level
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `SERS_Rosenberg_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function printResults() {
+            const details = document.getElementById('detailsContent');
+            if (details) {
+                details.classList.add('show');
+            }
+            window.print();
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeQuestions();
+        });
+    </script>
+</body>
+</html>

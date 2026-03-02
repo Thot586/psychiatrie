@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCARED - Screen for Child Anxiety Related Disorders</title>
+
+    <!-- Font Awesome pour les icones -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Styles partages -->
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <style>
+        :root {
+            --cat-main: #14b8a6;
+            --cat-dark: #0d9488;
+            --cat-light: #2dd4bf;
+            --cat-rgb: 20, 184, 166;
+            --cat-readable: #0d9488;
+        }
+        .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
+        .option-btn.selected, .answer-btn.selected { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        .score-circle { border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 30px rgba(var(--cat-rgb), 0.2); }
+        .score-value { color: var(--cat-light); }
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-light); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+        .progress-fill { background: linear-gradient(90deg, var(--cat-main), var(--cat-light)); box-shadow: 0 0 8px rgba(var(--cat-rgb), 0.4); }
+        .likert-options input[type="radio"]:checked + label,
+        .binary-options input[type="radio"]:checked + label,
+        .radio-options input[type="radio"]:checked + label { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+    </style>
+
+</head>
+<body class="light-questionnaire">
+    <!-- Navigation -->
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil">
+                <i class="fas fa-home"></i>
+            </a>
+            <button onclick="history.back()" class="btn-back" title="Retour">
+                <i class="fas fa-arrow-left"></i> <span>Retour</span>
+            </button>
+        </div>
+        <h1>SCARED</h1>
+        <span class="badge badge-cat-enfant">Enfant/Ado</span>
+    </nav>
+
+    <div class="container">
+        <!-- En-tete -->
+        <header class="glass-card" style="text-align: center; margin-bottom: 1.5rem;">
+            <h2 class="gradient-text">Screen for Child Anxiety Related Disorders</h2>
+            <p>Questionnaire de depistage des troubles anxieux chez l'enfant et l'adolescent (8-18 ans)</p>
+        </header>
+
+        <!-- Informations -->
+        <section class="info-box" style="background: linear-gradient(145deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05)); border-color: rgba(16, 185, 129, 0.3);">
+            <h3 style="color: #34d399;"><i class="fas fa-info-circle"></i> A propos de ce questionnaire</h3>
+            <p>Le SCARED est un <strong>auto-questionnaire</strong> de depistage des troubles anxieux destine aux enfants et adolescents de <strong>8 a 18 ans</strong>. Il peut egalement etre rempli par les parents (version parent).</p>
+            <p style="margin-top: 0.5rem;">Il evalue 41 items repartis en 5 sous-echelles : Trouble panique/Symptomes somatiques, Anxiete generalisee, Anxiete de separation, Phobie sociale et Evitement scolaire.</p>
+        </section>
+
+        <!-- Avertissement -->
+        <section class="warning-box">
+            <h3><i class="fas fa-exclamation-triangle"></i> Avertissements importants</h3>
+            <ul style="margin: 0; padding-left: 1.5rem;">
+                <li>Ce questionnaire est un outil de depistage et ne remplace pas une evaluation clinique complete</li>
+                <li>Les resultats doivent etre interpretes par un professionnel de sante</li>
+                <li>Un score total >= 25 suggere la presence d'un trouble anxieux</li>
+                <li>Les seuils par sous-echelle permettent d'identifier les types specifiques d'anxiete</li>
+            </ul>
+        </section>
+
+        <!-- Controles -->
+        <section class="glass-card">
+            <div class="control-buttons">
+                <button class="btn-secondary" onclick="importData()">
+                    <i class="fas fa-file-import"></i> Importer
+                </button>
+                <button class="btn-secondary" onclick="resetForm()">
+                    <i class="fas fa-redo"></i> Reinitialiser
+                </button>
+            </div>
+            <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="loadFile(event)">
+        </section>
+
+        <!-- Instructions -->
+        <section class="glass-card">
+            <h3 style="margin-bottom: 1rem;">Vous trouverez ci-dessous une liste de phrases qui decrivent comment les gens se sentent. Pour chaque phrase, indiquez si elle est "Pas vrai ou rarement vrai", "Quelquefois vrai" ou "Souvent vrai" pour vous. Repondez a toutes les questions du mieux que vous pouvez, meme si certaines ne semblent pas vous concerner exactement.</h3>
+
+            <!-- Questions generees par JS -->
+            <div id="questions"></div>
+        </section>
+
+        <!-- Resultats -->
+        <section id="results" class="results-section" style="display: none;">
+            <h2 style="text-align: center; margin-bottom: 2rem;">
+                <i class="fas fa-chart-bar"></i> Resultats de l'evaluation
+            </h2>
+
+            <!-- Score total -->
+            <div class="score-display">
+                <div class="score-circle" style="background: linear-gradient(135deg, #10b981, #059669);">
+                    <span class="score-value" id="totalScore">0</span>
+                </div>
+                <p class="score-label">Score total (sur 82)</p>
+            </div>
+
+            <div id="interpretationBox" class="interpretation"></div>
+
+            <!-- Scores par sous-echelle -->
+            <div class="glass-card" style="margin-top: 1.5rem;">
+                <h3 style="margin-bottom: 1rem;"><i class="fas fa-list-ul"></i> Scores par sous-echelle</h3>
+                <div id="subscaleScores"></div>
+            </div>
+
+            <button class="btn-primary w-full" onclick="toggleDetails()" style="margin-top: 1.5rem;">
+                <i class="fas fa-list"></i> Voir les details et interpretations par echelle
+                <span id="toggleIcon"><i class="fas fa-chevron-down"></i></span>
+            </button>
+
+            <div id="detailsContent" class="glass-card" style="display: none; margin-top: 1rem;"></div>
+
+            <!-- Export -->
+            <div class="glass-card" style="margin-top: 2rem;">
+                <h3><i class="fas fa-download"></i> Exporter les resultats</h3>
+                <div class="consent-box">
+                    <label>
+                        <input type="checkbox" id="exportConsent">
+                        <span>Je souhaite télécharger mes résultats (questionnaire, réponses, score et date) dans un fichier JSON sur mon appareil. <strong>Ces résultats constituent des données de santé — je m'engage à les conserver de façon sécurisée et à ne les partager qu'avec un professionnel de santé de mon choix.</strong> Aucune donnée n'est transmise à un serveur.</span>
+                    </label>
+                </div>
+                <div class="export-buttons">
+                    <button class="btn-primary" onclick="exportData()">
+                        <i class="fas fa-file-export"></i> Exporter en JSON
+                    </button>
+                    <button class="btn-print" onclick="printResults()">
+                        <i class="fas fa-print"></i> Imprimer
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p><strong>SCARED - Screen for Child Anxiety Related Disorders</strong></p>
+        <p>Auteurs originaux : Birmaher et al. (1997)</p>
+        <p>Adaptation numerique : Dr FENOHASINA | Psychiatre</p>
+        <p style="margin-top: 1rem;">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr" target="_blank">
+                Licence CC BY-NC-SA 4.0
+            </a>
+        </p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../js/app.js"></script>
+    <script>
+        // Les 41 items du SCARED
+        const questions = [
+            { text: "Quand j'ai peur, j'ai du mal a respirer", subscale: "panic" },
+            { text: "J'ai mal a la tete quand je suis a l'ecole", subscale: "school" },
+            { text: "Je n'aime pas etre avec des gens que je ne connais pas bien", subscale: "social" },
+            { text: "J'ai peur de dormir ailleurs que chez moi", subscale: "separation" },
+            { text: "Je m'inquiete que les autres ne m'aiment pas", subscale: "generalized" },
+            { text: "Quand j'ai peur, j'ai l'impression que je vais m'evanouir", subscale: "panic" },
+            { text: "Je suis nerveux(se)", subscale: "generalized" },
+            { text: "Je suis mes parents partout ou ils vont", subscale: "separation" },
+            { text: "Les gens me disent que j'ai l'air nerveux(se)", subscale: "panic" },
+            { text: "Je me sens nerveux(se) avec des gens que je ne connais pas bien", subscale: "social" },
+            { text: "J'ai mal au ventre a l'ecole", subscale: "school" },
+            { text: "Quand j'ai peur, j'ai l'impression de devenir fou/folle", subscale: "panic" },
+            { text: "Je m'inquiete de dormir seul(e)", subscale: "separation" },
+            { text: "Je m'inquiete d'etre aussi bon(ne) que les autres", subscale: "generalized" },
+            { text: "Quand j'ai peur, les choses semblent irreelles", subscale: "panic" },
+            { text: "Je fais des cauchemars que quelque chose de mal arrive a mes parents", subscale: "separation" },
+            { text: "Je m'inquiete d'aller a l'ecole", subscale: "school" },
+            { text: "Quand j'ai peur, mon coeur bat vite", subscale: "panic" },
+            { text: "Je tremble", subscale: "panic" },
+            { text: "Je fais des cauchemars que quelque chose de mal m'arrive", subscale: "separation" },
+            { text: "Je m'inquiete que les choses tournent mal", subscale: "generalized" },
+            { text: "Quand j'ai peur, je transpire beaucoup", subscale: "panic" },
+            { text: "Je m'inquiete beaucoup", subscale: "generalized" },
+            { text: "J'ai vraiment peur sans raison", subscale: "panic" },
+            { text: "J'ai peur d'etre seul(e) a la maison", subscale: "separation" },
+            { text: "J'ai du mal a parler avec des gens que je ne connais pas bien", subscale: "social" },
+            { text: "Quand j'ai peur, j'ai l'impression d'etouffer", subscale: "panic" },
+            { text: "Les gens me disent que je m'inquiete trop", subscale: "generalized" },
+            { text: "Je n'aime pas etre loin de ma famille", subscale: "separation" },
+            { text: "J'ai peur d'avoir des crises d'angoisse", subscale: "panic" },
+            { text: "Je m'inquiete que quelque chose de mal arrive a mes parents", subscale: "separation" },
+            { text: "Je suis timide avec des gens que je ne connais pas bien", subscale: "social" },
+            { text: "Je m'inquiete de ce qui va se passer", subscale: "generalized" },
+            { text: "Quand j'ai peur, j'ai envie de vomir", subscale: "panic" },
+            { text: "Je m'inquiete de savoir si je fais bien les choses", subscale: "generalized" },
+            { text: "J'ai peur d'aller a l'ecole", subscale: "school" },
+            { text: "Je m'inquiete des choses qui se sont deja passees", subscale: "generalized" },
+            { text: "Quand j'ai peur, j'ai des vertiges", subscale: "panic" },
+            { text: "Je me sens nerveux(se) quand je suis avec d'autres enfants et que je dois faire quelque chose devant eux", subscale: "social" },
+            { text: "Je me sens nerveux(se) quand je vais a des fetes ou des reunions", subscale: "social" },
+            { text: "Je suis timide", subscale: "social" }
+        ];
+
+        const options = [
+            { value: 0, label: "Pas vrai ou rarement vrai" },
+            { value: 1, label: "Quelquefois vrai" },
+            { value: 2, label: "Souvent vrai" }
+        ];
+
+        const subscaleInfo = {
+            panic: {
+                name: "Trouble panique / Symptomes somatiques",
+                items: [1, 6, 9, 12, 15, 18, 19, 22, 24, 27, 30, 34, 38],
+                cutoff: 7,
+                maxScore: 26,
+                color: "#ef4444"
+            },
+            generalized: {
+                name: "Anxiete generalisee",
+                items: [5, 7, 14, 21, 23, 28, 33, 35, 37],
+                cutoff: 9,
+                maxScore: 18,
+                color: "#f59e0b"
+            },
+            separation: {
+                name: "Anxiete de separation",
+                items: [4, 8, 13, 16, 20, 25, 29, 31],
+                cutoff: 5,
+                maxScore: 16,
+                color: "#8b5cf6"
+            },
+            social: {
+                name: "Phobie sociale",
+                items: [3, 10, 26, 32, 39, 40, 41],
+                cutoff: 8,
+                maxScore: 14,
+                color: "#3b82f6"
+            },
+            school: {
+                name: "Evitement scolaire",
+                items: [2, 11, 17, 36],
+                cutoff: 3,
+                maxScore: 8,
+                color: "#10b981"
+            }
+        };
+
+        let answers = new Array(41).fill(null);
+
+        function initializeQuestions() {
+            const container = document.getElementById('questions');
+            container.innerHTML = '';
+
+            questions.forEach((question, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-card';
+
+                const subscaleLabel = subscaleInfo[question.subscale];
+
+                questionDiv.innerHTML = `
+                    <div style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem;">
+                        <span class="question-number" style="background: linear-gradient(135deg, #10b981, #059669);">${index + 1}</span>
+                        <div>
+                            <span class="question-text" style="margin-bottom: 0;">${question.text}</span>
+                            <div style="margin-top: 0.25rem;">
+                                <span style="font-size: 0.75rem; padding: 0.15rem 0.5rem; border-radius: 4px; background: ${subscaleLabel.color}20; color: ${subscaleLabel.color};">
+                                    ${subscaleLabel.name}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="options-grid">
+                        ${options.map(opt => `
+                            <button class="option-btn" onclick="selectAnswer(${index}, ${opt.value})" id="q${index}_opt${opt.value}">
+                                <strong>${opt.value}</strong> - ${opt.label}
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function selectAnswer(questionIndex, value) {
+            answers[questionIndex] = value;
+
+            for (let i = 0; i < 3; i++) {
+                const btn = document.getElementById(`q${questionIndex}_opt${i}`);
+                btn.classList.toggle('selected', i === value);
+            }
+
+            // Marquer la carte comme repondue
+            const cards = document.querySelectorAll('.question-card');
+            cards[questionIndex].classList.add('answered');
+
+            checkCompletion();
+        }
+
+        function checkCompletion() {
+            const allAnswered = answers.every(a => a !== null);
+
+            if (allAnswered) {
+                updateResults();
+                document.getElementById('results').style.display = 'block';
+                document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function calculateSubscaleScore(subscaleKey) {
+            let score = 0;
+            const items = subscaleInfo[subscaleKey].items;
+
+            items.forEach(itemNum => {
+                const answer = answers[itemNum - 1]; // -1 car les indices commencent a 0
+                if (answer !== null) {
+                    score += answer;
+                }
+            });
+
+            return score;
+        }
+
+        function calculateTotalScore() {
+            return answers.reduce((sum, val) => sum + (val || 0), 0);
+        }
+
+        function getSubscaleInterpretation(subscaleKey, score) {
+            const cutoff = subscaleInfo[subscaleKey].cutoff;
+
+            if (score >= cutoff) {
+                return { level: "Significatif", className: "high" };
+            }
+            return { level: "Non significatif", className: "low" };
+        }
+
+        function getTotalInterpretation(score) {
+            if (score < 25) return {
+                level: "Non significatif",
+                className: "low",
+                description: "Le score total est inferieur au seuil clinique.",
+                action: "Pas d'indication d'un trouble anxieux significatif. Surveillance de routine recommandee."
+            };
+            if (score < 30) return {
+                level: "Limite",
+                className: "moderate",
+                description: "Le score total suggere une anxiete moderee.",
+                action: "Une evaluation plus approfondie peut etre utile. Consultation recommandee."
+            };
+            return {
+                level: "Significatif",
+                className: "high",
+                description: "Le score total suggere la presence probable d'un trouble anxieux.",
+                action: "Une evaluation clinique complete est recommandee. Consultation specialisee conseillee."
+            };
+        }
+
+        function updateResults() {
+            const totalScore = calculateTotalScore();
+            const interpretation = getTotalInterpretation(totalScore);
+
+            document.getElementById('totalScore').textContent = totalScore;
+
+            const interpretationBox = document.getElementById('interpretationBox');
+            interpretationBox.className = `interpretation ${interpretation.className}`;
+            interpretationBox.innerHTML = `
+                <h3>Score total : ${interpretation.level}</h3>
+                <p><strong>Interpretation :</strong> ${interpretation.description}</p>
+                <p><strong>Recommandation :</strong> ${interpretation.action}</p>
+                <p style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--color-text-muted);">
+                    <i class="fas fa-info-circle"></i> Seuil clinique : >= 25 points
+                </p>
+            `;
+
+            // Scores par sous-echelle
+            const subscaleContainer = document.getElementById('subscaleScores');
+            let subscaleHTML = '<div style="display: grid; gap: 0.75rem;">';
+
+            for (const [key, info] of Object.entries(subscaleInfo)) {
+                const score = calculateSubscaleScore(key);
+                const interp = getSubscaleInterpretation(key, score);
+                const maxScore = info.maxScore;
+                const percentage = (score / maxScore) * 100;
+                const isAboveCutoff = score >= info.cutoff;
+
+                subscaleHTML += `
+                    <div style="padding: 0.75rem; background: var(--color-bg-card); border-radius: var(--radius-md); border-left: 4px solid ${info.color};">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <span style="font-weight: 600; color: ${info.color};">${info.name}</span>
+                            <span class="badge badge-${interp.className}" style="font-size: 0.75rem;">${interp.level}</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <div style="flex: 1; background: var(--color-bg-tertiary); border-radius: 4px; height: 8px; overflow: hidden;">
+                                <div style="width: ${percentage}%; height: 100%; background: ${isAboveCutoff ? info.color : '#64748b'}; transition: width 0.3s ease;"></div>
+                            </div>
+                            <span style="font-weight: 700; min-width: 60px; text-align: right;">${score}/${maxScore}</span>
+                        </div>
+                        <p style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 0.25rem;">
+                            Seuil : >= ${info.cutoff}
+                        </p>
+                    </div>
+                `;
+            }
+
+            subscaleHTML += '</div>';
+            subscaleContainer.innerHTML = subscaleHTML;
+
+            // Details content
+            updateDetailsContent();
+        }
+
+        function updateDetailsContent() {
+            const detailsContent = document.getElementById('detailsContent');
+
+            let html = '<h3 style="margin-bottom: 1rem;">Interpretation detaillee par echelle</h3>';
+
+            // Interpretation par echelle
+            for (const [key, info] of Object.entries(subscaleInfo)) {
+                const score = calculateSubscaleScore(key);
+                const interp = getSubscaleInterpretation(key, score);
+                const isAboveCutoff = score >= info.cutoff;
+
+                let description = '';
+                switch(key) {
+                    case 'panic':
+                        description = 'Evalue les symptomes physiques de l\'anxiete et les attaques de panique : difficultes respiratoires, palpitations, tremblements, vertiges, nausees.';
+                        break;
+                    case 'generalized':
+                        description = 'Evalue l\'anxiete generale et les inquietudes excessives concernant divers aspects de la vie quotidienne.';
+                        break;
+                    case 'separation':
+                        description = 'Evalue la peur excessive liee a la separation des figures d\'attachement (parents, maison).';
+                        break;
+                    case 'social':
+                        description = 'Evalue la peur des situations sociales et la timidete excessive avec les personnes non familieres.';
+                        break;
+                    case 'school':
+                        description = 'Evalue la peur et l\'evitement lies au contexte scolaire, incluant les plaintes somatiques a l\'ecole.';
+                        break;
+                }
+
+                html += `
+                    <div class="info-box" style="margin-bottom: 0.75rem; border-left: 4px solid ${info.color}; background: linear-gradient(145deg, ${info.color}15, ${info.color}08); border-color: ${info.color}50;">
+                        <h4 style="color: ${info.color}; margin-bottom: 0.5rem;">${info.name}</h4>
+                        <p style="font-size: 0.85rem; margin-bottom: 0.5rem;">${description}</p>
+                        <p><strong>Score obtenu :</strong> ${score}/${info.maxScore} - <strong style="color: ${isAboveCutoff ? '#f87171' : '#4ade80'};">${interp.level}</strong></p>
+                        <p style="font-size: 0.85rem; color: var(--color-text-muted);">Seuil clinique : >= ${info.cutoff}</p>
+                        <p style="font-size: 0.85rem; color: var(--color-text-muted);">Items : ${info.items.join(', ')}</p>
+                    </div>
+                `;
+            }
+
+            // Information supplementaire
+            html += `
+                <div class="warning-box" style="margin-top: 1rem;">
+                    <h4><i class="fas fa-info-circle"></i> Note sur l'interpretation</h4>
+                    <p style="margin-bottom: 0.5rem;">Le <strong>SCARED</strong> est un outil de depistage valide pour les troubles anxieux chez l'enfant et l'adolescent.</p>
+                    <p style="margin-bottom: 0.5rem;">Un <strong>score total >= 25</strong> suggere la presence d'un trouble anxieux.</p>
+                    <p style="margin-bottom: 0;">Les scores des sous-echelles permettent d'orienter vers un type specifique de trouble anxieux, mais seule une evaluation clinique complete permet de poser un diagnostic.</p>
+                </div>
+            `;
+
+            detailsContent.innerHTML = html;
+        }
+
+        function toggleDetails() {
+            const content = document.getElementById('detailsContent');
+            const icon = document.getElementById('toggleIcon');
+            const isVisible = content.style.display !== 'none';
+
+            content.style.display = isVisible ? 'none' : 'block';
+            icon.innerHTML = isVisible ? '<i class="fas fa-chevron-down"></i>' : '<i class="fas fa-chevron-up"></i>';
+        }
+
+        function resetForm() {
+            answers = new Array(41).fill(null);
+
+            document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+            document.querySelectorAll('.question-card').forEach(card => card.classList.remove('answered'));
+
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('detailsContent').style.display = 'none';
+            document.getElementById('exportConsent').checked = false;
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function importData() {
+            document.getElementById('fileInput').click();
+        }
+
+        function loadFile(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        if (data.answers && Array.isArray(data.answers)) {
+                            answers = data.answers;
+
+                            answers.forEach((value, index) => {
+                                if (value !== null) {
+                                    selectAnswer(index, value);
+                                }
+                            });
+                        }
+                    } catch (error) {
+                        alert("Erreur lors de l'importation du fichier");
+                    }
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        function exportData() {
+            const consent = document.getElementById('exportConsent').checked;
+            if (!consent) {
+                alert("Veuillez cocher la case de consentement avant d''exporter.");
+                return;
+            }
+
+            const totalScore = calculateTotalScore();
+            const interpretation = getTotalInterpretation(totalScore);
+
+            const subscaleResults = {};
+            for (const [key, info] of Object.entries(subscaleInfo)) {
+                const score = calculateSubscaleScore(key);
+                const interp = getSubscaleInterpretation(key, score);
+                subscaleResults[key] = {
+                    name: info.name,
+                    score: score,
+                    maxScore: info.maxScore,
+                    cutoff: info.cutoff,
+                    aboveCutoff: score >= info.cutoff,
+                    interpretation: interp.level
+                };
+            }
+
+            const data = {
+                questionnaire: "SCARED",
+                version: "Enfant/Adolescent (8-18 ans)",
+                date: new Date().toISOString(),
+                answers: answers,
+                totalScore: totalScore,
+                maxTotalScore: 82,
+                clinicalCutoff: 25,
+                totalInterpretation: interpretation.level,
+                subscales: subscaleResults
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `SCARED_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeQuestions();
+        });
+    </script>
+</body>
+</html>

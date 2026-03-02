@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIS - Birchwood Insight Scale</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --cat-main: #0ea5e9;
+            --cat-dark: #0284c7;
+            --cat-light: #38bdf8;
+            --cat-rgb: 14, 165, 233;
+            --cat-readable: #0284c7;
+        }
+        .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
+        .option-btn.selected, .answer-btn.selected { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        .score-circle { border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 30px rgba(var(--cat-rgb), 0.2); }
+        .score-value { color: var(--cat-light); }
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-light); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+        .progress-fill { background: linear-gradient(90deg, var(--cat-main), var(--cat-light)); box-shadow: 0 0 8px rgba(var(--cat-rgb), 0.4); }
+        .likert-options input[type="radio"]:checked + label,
+        .binary-options input[type="radio"]:checked + label,
+        .radio-options input[type="radio"]:checked + label { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+    </style>
+
+</head>
+<body class="light-questionnaire">
+
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+            <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+        </div>
+        <h1>BIS</h1>
+        <span class="badge badge-cat-rehab">Insight</span>
+    </nav>
+
+    <div class="container">
+        <header class="page-header">
+            <h2 class="page-title">Birchwood Insight Scale</h2>
+            <p class="page-subtitle">Evaluation de la conscience du trouble en 8 items</p>
+        </header>
+
+        <div class="alert alert-info">
+            <div class="alert-icon">
+                <i class="fas fa-info-circle"></i>
+            </div>
+            <div class="alert-content">
+                <h3>Instructions</h3>
+                <p>Lisez chaque affirmation et indiquez si vous etes <strong>D'accord</strong>, <strong>Incertain(e)</strong>, ou <strong>Pas d'accord</strong>. Repondez selon ce que vous pensez reellement.</p>
+            </div>
+        </div>
+
+        <!-- Questions -->
+        <div id="questionsContainer"></div>
+
+        <!-- Submit Button -->
+        <div style="text-align: center; margin: 2rem 0;">
+            <button id="calculateBtn" class="btn-primary" style="padding: 1rem 2rem; font-size: 1.1rem;" disabled>
+                <i class="fas fa-eye" style="margin-right: 0.5rem;"></i>Voir mes resultats
+            </button>
+            <p id="warningText" style="color: var(--color-warning); font-size: var(--font-size-sm); margin-top: 0.5rem;">Veuillez repondre a toutes les questions</p>
+        </div>
+
+        <!-- Results Section -->
+        <div id="resultsSection" class="results-section">
+            <div class="score-display">
+                <div class="total-score" id="totalScore">0</div>
+                <div class="score-label">Score total / 12</div>
+                <div class="insight-meter">
+                    <div class="insight-fill" id="insightFill" style="width: 0%; background: linear-gradient(90deg, #ef4444, #fbbf24, #22c55e);"></div>
+                </div>
+                <div class="insight-labels">
+                    <span>Insight faible</span>
+                    <span>Insight eleve</span>
+                </div>
+            </div>
+
+            <div id="interpretationBox" class="interpretation-box">
+                <h3 id="interpretationTitle"></h3>
+                <p id="interpretationText"></p>
+            </div>
+
+            <div class="glass-card">
+                <h3 style="margin-bottom: 1rem;"><i class="fas fa-layer-group" style="color: #ec4899; margin-right: 0.5rem;"></i>Scores par dimension</h3>
+                <div class="subscale-grid" id="subscaleGrid"></div>
+            </div>
+
+            <div class="alert alert-info" style="margin-top: 1.5rem;">
+                <div class="alert-icon">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <div class="alert-content">
+                    <h3>A propos de l'insight</h3>
+                    <p>L'insight (conscience du trouble) est un element important du retablissement. Un meilleur insight est souvent associe a une meilleure adherence au traitement et a de meilleurs resultats. Cependant, le developpement de l'insight est un processus graduel qui doit etre accompagne avec bienveillance.</p>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 1.5rem;">
+                <button onclick="location.reload()" class="btn-secondary">
+                    <i class="fas fa-redo" style="margin-right: 0.5rem;"></i>Recommencer le questionnaire
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>Dr. FENOHASINA T.J. Felicien (Psychiatre)</p>
+        <p>&copy; 2025 - Centre Ressource de Rehabilitation</p>
+        <p class="license">Licence CC BY-NC-SA 4.0</p>
+        <p style="font-size: var(--font-size-xs); margin-top: 0.5rem;">Reference : Birchwood M, et al. (1994). Br J Psychiatry.</p>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // BIS Questions - based on Birchwood et al. (1994)
+    const questions = [
+        { id: 1, text: "Certains de mes symptomes sont dus a une maladie ou un probleme de sante mentale", subscale: "awareness", subscaleName: "Conscience de la maladie", reverse: false },
+        { id: 2, text: "Je n'ai pas de probleme de sante mentale", subscale: "awareness", subscaleName: "Conscience de la maladie", reverse: true },
+        { id: 3, text: "Certaines de mes experiences inhabituelles sont dues a une maladie", subscale: "relabeling", subscaleName: "Reattribution des symptomes", reverse: false },
+        { id: 4, text: "Mes experiences inhabituelles sont causees par d'autres personnes ou par des forces exterieures", subscale: "relabeling", subscaleName: "Reattribution des symptomes", reverse: true },
+        { id: 5, text: "Certaines de mes difficultes a penser clairement sont dues a une maladie", subscale: "relabeling", subscaleName: "Reattribution des symptomes", reverse: false },
+        { id: 6, text: "J'ai besoin d'un traitement pour mes problemes", subscale: "treatment", subscaleName: "Necessite du traitement", reverse: false },
+        { id: 7, text: "Mon sejour a l'hopital (ou mon suivi) est necessaire", subscale: "treatment", subscaleName: "Necessite du traitement", reverse: false },
+        { id: 8, text: "Le medecin a raison de me prescrire des medicaments", subscale: "treatment", subscaleName: "Necessite du traitement", reverse: false }
+    ];
+
+    const options = [
+        { value: "agree", label: "D'accord", icon: "fa-check" },
+        { value: "unsure", label: "Incertain(e)", icon: "fa-question" },
+        { value: "disagree", label: "Pas d'accord", icon: "fa-times" }
+    ];
+
+    const answers = {};
+
+    // Generate questions
+    const container = document.getElementById('questionsContainer');
+    questions.forEach((q, index) => {
+        const card = document.createElement('div');
+        card.className = 'question-card';
+        card.id = `question-${q.id}`;
+        card.innerHTML = `
+            <span class="subscale-badge">${q.subscaleName}</span>
+            <div class="question-text">
+                <span class="question-number">${index + 1}</span>
+                <span>${q.text}</span>
+            </div>
+            <div class="options-container">
+                ${options.map(opt => `
+                    <button class="option-btn" data-question="${q.id}" data-value="${opt.value}">
+                        <i class="fas ${opt.icon}" style="margin-right: 0.5rem;"></i>${opt.label}
+                    </button>
+                `).join('')}
+            </div>
+        `;
+        container.appendChild(card);
+    });
+
+    // Handle option selection
+    document.querySelectorAll('.option-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const questionId = this.dataset.question;
+            const value = this.dataset.value;
+
+            // Update selection
+            document.querySelectorAll(`[data-question="${questionId}"]`).forEach(b => {
+                b.classList.remove('selected');
+            });
+            this.classList.add('selected');
+
+            // Store answer
+            answers[questionId] = value;
+
+            // Mark card as answered
+            document.getElementById(`question-${questionId}`).classList.add('answered');
+
+            // Check if all answered
+            checkCompletion();
+        });
+    });
+
+    function checkCompletion() {
+        const answered = Object.keys(answers).length;
+        const total = questions.length;
+
+        const calculateBtn = document.getElementById('calculateBtn');
+        const warningText = document.getElementById('warningText');
+
+        if (answered === total) {
+            calculateBtn.disabled = false;
+            warningText.style.display = 'none';
+        } else {
+            calculateBtn.disabled = true;
+            warningText.style.display = 'block';
+        }
+    }
+
+    // Calculate results
+    document.getElementById('calculateBtn').addEventListener('click', function() {
+        const subscales = {
+            awareness: { name: "Conscience de la maladie", score: 0, max: 4 },
+            relabeling: { name: "Reattribution des symptomes", score: 0, max: 6 },
+            treatment: { name: "Necessite du traitement", score: 0, max: 6 }
+        };
+
+        let totalScore = 0;
+
+        questions.forEach(q => {
+            const answer = answers[q.id];
+            let points = 0;
+
+            // Scoring: Agree=2, Unsure=1, Disagree=0 (reversed for negative items)
+            if (q.reverse) {
+                if (answer === 'disagree') points = 2;
+                else if (answer === 'unsure') points = 1;
+                else points = 0;
+            } else {
+                if (answer === 'agree') points = 2;
+                else if (answer === 'unsure') points = 1;
+                else points = 0;
+            }
+
+            subscales[q.subscale].score += points;
+            totalScore += points;
+        });
+
+        // Update max values based on actual items
+        subscales.awareness.max = 4; // 2 items * 2 points
+        subscales.relabeling.max = 6; // 3 items * 2 points
+        subscales.treatment.max = 6; // 3 items * 2 points
+
+        // Display results
+        document.getElementById('totalScore').textContent = totalScore;
+        document.getElementById('insightFill').style.width = `${(totalScore / 12) * 100}%`;
+
+        // Subscale scores
+        const subscaleGrid = document.getElementById('subscaleGrid');
+        subscaleGrid.innerHTML = Object.values(subscales).map(s => `
+            <div class="subscale-card">
+                <h4>${s.name}</h4>
+                <div class="score">${s.score}</div>
+                <div class="max">/ ${s.max}</div>
+            </div>
+        `).join('');
+
+        // Interpretation
+        const interpretationBox = document.getElementById('interpretationBox');
+        const interpretationTitle = document.getElementById('interpretationTitle');
+        const interpretationText = document.getElementById('interpretationText');
+
+        if (totalScore >= 9) {
+            interpretationBox.className = 'interpretation-box high';
+            interpretationTitle.innerHTML = '<i class="fas fa-check-circle" style="color: #4ade80; margin-right: 0.5rem;"></i>Insight eleve';
+            interpretationText.textContent = "Votre score suggere une bonne conscience de votre etat de sante et de la necessite des soins. C'est un atout important pour votre retablissement.";
+        } else if (totalScore >= 5) {
+            interpretationBox.className = 'interpretation-box moderate';
+            interpretationTitle.innerHTML = '<i class="fas fa-exclamation-circle" style="color: #fbbf24; margin-right: 0.5rem;"></i>Insight modere';
+            interpretationText.textContent = "Votre score suggere une conscience partielle de votre situation. Certains aspects de votre etat de sante ou du traitement peuvent encore etre explores avec votre equipe soignante.";
+        } else {
+            interpretationBox.className = 'interpretation-box low';
+            interpretationTitle.innerHTML = '<i class="fas fa-info-circle" style="color: #f87171; margin-right: 0.5rem;"></i>Insight limite';
+            interpretationText.textContent = "Votre score suggere des difficultes a reconnaitre certains aspects de votre situation. Cela est courant et peut evoluer avec le temps et le dialogue avec votre equipe soignante.";
+        }
+
+        // Show results
+        document.getElementById('resultsSection').classList.add('visible');
+        document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
+    });
+});
+</script>
+
+</body>
+</html>

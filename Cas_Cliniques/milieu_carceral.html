@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Santé Mentale en Milieu Pénitentiaire - Cas Cliniques</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --cat-main: #f59e0b;
+            --cat-dark: #d97706;
+            --cat-light: #fbbf24;
+            --cat-rgb: 245, 158, 11;
+            --cat-readable: #b45309;
+        }
+
+        /* Conteneur sticky pour progression et navigation */
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(15, 23, 42, 0.98);
+            backdrop-filter: blur(10px);
+            margin: 0 -1.5rem;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        /* Step Navigation */
+        .step-nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .step-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            background: var(--surface-table);
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            color: var(--color-text-muted);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .step-btn:hover {
+            border-color: var(--cat-main);
+            color: var(--color-text-primary);
+        }
+        .step-btn.active {
+            background: rgba(var(--cat-rgb), 0.15);
+            border-color: var(--cat-main);
+            color: var(--cat-light);
+        }
+        .step-btn .step-number {
+            width: 24px;
+            height: 24px;
+            background: var(--cat-main);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-size-xs);
+            font-weight: 700;
+            color: white;
+        }
+        .step-btn.active .step-number { background: var(--cat-light); color: var(--color-bg-primary); }
+
+        /* Content sections */
+        .step-content { display: none; animation: fadeIn 0.5s ease-in-out; }
+        .step-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Case Selection */
+        .case-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .case-tab {
+            flex: 1;
+            min-width: 200px;
+            padding: 1rem 1.5rem;
+            background: var(--color-bg-card);
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            color: var(--color-text-muted);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        .case-tab:hover {
+            border-color: var(--color-border-active);
+        }
+        .case-tab.active-blue {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: #3b82f6;
+            color: #1d4ed8;
+        }
+        .case-tab.active-red {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: #ef4444;
+            color: var(--accent-red);
+        }
+        .case-tab h4 { margin: 0 0 0.25rem 0; font-size: 1.1rem; }
+        .case-tab p { margin: 0; font-size: var(--font-size-sm); }
+
+        /* Scenario Box */
+        .scénario-box {
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .scénario-box.blue { border-left: 4px solid #3b82f6; }
+        .scénario-box.red { border-left: 4px solid #ef4444; }
+        .scénario-box p {
+            color: var(--color-text-secondary);
+            line-height: 1.8;
+            margin: 0;
+        }
+
+        /* Accordion */
+        .accordion-button {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 1rem 1.25rem;
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            color: var(--color-text-primary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 0.5rem;
+        }
+        .accordion-button:hover {
+            background: var(--neo-bg-light);
+            border-color: var(--color-border-hover);
+        }
+        .accordion-button.open .accordion-arrow { transform: rotate(180deg); }
+        .accordion-arrow { transition: transform 0.3s ease; color: var(--color-text-muted); }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, padding 0.5s ease;
+            background: var(--color-bg-dark);
+            border: 1px solid var(--color-border);
+            border-top: none;
+            border-radius: 0 0 var(--radius-md) var(--radius-md);
+            margin-bottom: 0.5rem;
+        }
+        .accordion-content-inner { padding: 1rem 1.25rem; }
+        .accordion-content p, .accordion-content li { color: var(--color-text-muted); line-height: 1.7; }
+
+        /* Quiz */
+        .quiz-item { margin-bottom: 2rem; }
+        .quiz-item h4 { color: var(--color-text-primary); margin-bottom: 1rem; }
+        .quiz-context {
+            background: var(--color-bg-card);
+            border: 1px dashed var(--color-border);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            color: var(--color-text-muted);
+            font-style: italic;
+        }
+        .quiz-option {
+            padding: 1rem;
+            background: var(--color-bg-card);
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-md);
+            margin-bottom: 0.75rem;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .quiz-option:hover { background: rgba(var(--cat-rgb), 0.1); border-color: var(--cat-main); }
+        .quiz-option.selected { background: rgba(var(--cat-rgb), 0.2); border-color: var(--cat-main); }
+        .quiz-option.correct { background: rgba(34, 197, 94, 0.2); border-color: var(--color-success); }
+        .quiz-option.incorrect { background: rgba(239, 68, 68, 0.2); border-color: var(--color-danger); }
+        .feedback-box { transition: opacity 0.3s; padding: 1rem; border-radius: var(--radius-md); margin-top: 1rem; font-size: var(--font-size-sm); opacity: 0; }
+        .feedback-box.visible { opacity: 1; }
+        .feedback-box.success { background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); color: var(--accent-green); }
+        .feedback-box.error { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: var(--accent-red); }
+
+        /* Decision Tree */
+        .decision-container { position: relative; min-height: 200px; }
+        .decision-node { transition: opacity 0.5s ease, transform 0.5s ease; }
+        .decision-node.hidden { opacity: 0; transform: scale(0.95); pointer-events: none; position: absolute; top: 0; left: 0; right: 0; }
+        .decision-option {
+            width: 100%;
+            text-align: left;
+            padding: 1rem;
+            background: var(--color-bg-card);
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-md);
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 0.75rem;
+        }
+        .decision-option:hover {
+            background: rgba(var(--cat-rgb), 0.1);
+            border-color: var(--cat-main);
+        }
+        .result-box {
+            padding: 1.5rem;
+            background: rgba(34, 197, 94, 0.1);
+            border: 2px solid rgba(34, 197, 94, 0.3);
+            border-radius: var(--radius-lg);
+        }
+        .result-box h3 { color: var(--accent-green); margin-bottom: 0.5rem; }
+        .result-box p { color: var(--color-text-muted); }
+        .result-box.warning {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: rgba(245, 158, 11, 0.3);
+        }
+        .result-box.warning h3 { color: var(--accent-amber); }
+        .result-box.danger {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+        .result-box.danger h3 { color: var(--accent-red); }
+
+        /* Checklist */
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            margin-bottom: 0.75rem;
+            transition: all 0.3s ease;
+        }
+        .checklist-item:hover { background: var(--neo-bg-light); }
+        .checklist-item input[type="checkbox"] {
+            width: 1.25rem;
+            height: 1.25rem;
+            margin-right: 1rem;
+            accent-color: var(--cat-main);
+            cursor: pointer;
+        }
+        .checklist-item label { color: var(--color-text-secondary); font-size: var(--font-size-sm); cursor: pointer; flex: 1; }
+        .checklist-item.checked label { text-decoration: line-through; opacity: 0.6; }
+
+        /* Comparison Table */
+        .comparison-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+        .comparison-table th, .comparison-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--color-border);
+        }
+        .comparison-table th {
+            background: rgba(var(--cat-rgb), 0.1);
+            color: var(--cat-readable);
+            font-weight: 600;
+            font-size: var(--font-size-xs);
+            text-transform: uppercase;
+        }
+        .comparison-table td { color: var(--color-text-muted); font-size: var(--font-size-sm); }
+        .comparison-table tr:hover td { background: var(--neo-bg-light); }
+
+        /* Feature Grid */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        .feature-card {
+            padding: 1rem;
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+        }
+        .feature-card h4 { color: var(--color-text-primary); margin-bottom: 0.5rem; font-size: 1rem; }
+        .feature-card p { color: var(--color-text-muted); font-size: var(--font-size-sm); margin: 0; }
+        .feature-card.blue { border-left: 4px solid #3b82f6; }
+        .feature-card.red { border-left: 4px solid #ef4444; }
+
+        /* Action list */
+        .action-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .action-list li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--color-border);
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            color: var(--color-text-muted);
+            line-height: 1.6;
+        }
+        .action-list li:last-child { border-bottom: none; }
+        .action-list li::before {
+            content: "\f058";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: var(--accent-green);
+            flex-shrink: 0;
+        }
+
+        /* Key Points Box */
+        .key-points {
+            background: linear-gradient(145deg, rgba(var(--cat-rgb), 0.1), rgba(var(--cat-rgb), 0.05));
+            border: 1px solid rgba(var(--cat-rgb), 0.3);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .key-points h3 {
+            color: var(--cat-readable);
+            margin-bottom: 1rem;
+        }
+        .key-points ul {
+            margin: 0;
+            padding-left: 1.25rem;
+        }
+        .key-points li {
+            color: var(--color-text-secondary);
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* Navigation Buttons */
+        .nav-buttons-bottom {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--color-border);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        /* Case content containers */
+        .case-content { display: none; }
+        .case-content.active { display: block; }
+
+        /* Progress indicator */
+        .progress-bar {
+            height: 6px;
+            background: var(--surface-table);
+            border-radius: 3px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--cat-main), var(--cat-light));
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        @media (max-width: 768px) {
+            .step-nav { flex-direction: column; align-items: stretch; }
+            .step-btn { justify-content: center; }
+            .case-tabs { flex-direction: column; }
+            .comparison-table { font-size: var(--font-size-xs); }
+            .comparison-table th, .comparison-table td { padding: 0.5rem; }
+        }
+
+        @media print {
+            .navigation-bar, footer, .step-nav, .nav-buttons-bottom { display: none !important; }
+            body { background: white !important; }
+            .step-content { display: block !important; }
+        }
+    </style>
+</head>
+<body class="light-questionnaire">
+
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+            <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+        </div>
+        <h1>Santé Mentale en Milieu Pénitentiaire</h1>
+        <span class="badge badge-cat-clinique">Cas Cliniques</span>
+    </nav>
+
+    <div class="container">
+        <header class="page-header">
+            <p class="subtitle">Parcours pédagogique interactif pour le personnel pénitentiaire</p>
+        </header>
+
+        <div class="sticky-header">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 20%;"></div>
+            </div>
+
+            <nav class="step-nav">
+                <button class="step-btn active" data-step="1">
+                    <span class="step-number">1</span>
+                    <span>Contexte</span>
+                </button>
+                <button class="step-btn" data-step="2">
+                    <span class="step-number">2</span>
+                    <span>Observation</span>
+                </button>
+                <button class="step-btn" data-step="3">
+                    <span class="step-number">3</span>
+                    <span>Réflexion</span>
+                </button>
+                <button class="step-btn" data-step="4">
+                    <span class="step-number">4</span>
+                    <span>Action</span>
+                </button>
+                <button class="step-btn" data-step="5">
+                    <span class="step-number">5</span>
+                    <span>Synthèse</span>
+                </button>
+            </nav>
+        </div>
+
+        <main>
+            <!-- ÉTAPE 1: CONTEXTE -->
+            <section id="step-1" class="step-content active">
+                <div class="glass-card">
+                    <h2><i class="fas fa-info-circle" style="color: #f59e0b; margin-right: 0.5rem;"></i>Étape 1 : Contexte</h2>
+                    <p style="color: var(--color-text-muted); margin-bottom: 1.5rem;">Découvrez les deux cas cliniques fictifs illustrant des troubles psychiatriques en milieu carcéral.</p>
+
+                    <div class="case-tabs">
+                        <div class="case-tab active-blue" data-case="koto">
+                            <h4><i class="fas fa-user-lock" style="margin-right: 0.5rem;"></i>Koto</h4>
+                            <p>Trouble intériorisé</p>
+                        </div>
+                        <div class="case-tab" data-case="fara">
+                            <h4><i class="fas fa-bolt" style="margin-right: 0.5rem;"></i>Fara</h4>
+                            <p>Trouble extériorisé</p>
+                        </div>
+                    </div>
+
+                    <div id="case-koto" class="case-content active">
+                        <div class="scenario-box blue">
+                            <h3 style="color: #1d4ed8; margin-bottom: 1rem;"><i class="fas fa-file-alt" style="margin-right: 0.5rem;"></i>Cas 1 : Le silence de Koto</h3>
+                            <p><strong>Koto, 35 ans</strong>, est incarcéré depuis deux ans. Connu pour être habituellement calme et respectueux, son comportement a changé ces derniers mois. Il reste prostré sur sa natte toute la journée, refuse de participer aux promenades et aux activités. Il a beaucoup maigri et néglige son hygiène. Quand on lui parle, il répond à peine, le regard vide. Il a confié à un co-détenu que « tout est fini » pour lui et qu'il ne reverra jamais sa famille.</p>
+                        </div>
+                        <div class="feature-grid">
+                            <div class="feature-card blue">
+                                <h4><i class="fas fa-calendar-alt" style="color: #1d4ed8; margin-right: 0.5rem;"></i>Durée d'incarcération</h4>
+                                <p>2 ans</p>
+                            </div>
+                            <div class="feature-card blue">
+                                <h4><i class="fas fa-exchange-alt" style="color: #1d4ed8; margin-right: 0.5rem;"></i>Type de changement</h4>
+                                <p>Progressif sur plusieurs mois</p>
+                            </div>
+                            <div class="feature-card blue">
+                                <h4><i class="fas fa-user-clock" style="color: #1d4ed8; margin-right: 0.5rem;"></i>Profil antérieur</h4>
+                                <p>Calme, respectueux, participatif</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="case-fara" class="case-content">
+                        <div class="scenario-box red">
+                            <h3 style="color: #b91c1c; margin-bottom: 1rem;"><i class="fas fa-file-alt" style="margin-right: 0.5rem;"></i>Cas 2 : La colère de Fara</h3>
+                            <p><strong>Fara, 28 ans</strong>, est détenue depuis six mois. Elle a toujours eu un caractère « difficile », mais son comportement est de plus en plus problématique. Pour des frustrations mineures (un objet déplacé, une remarque), elle entre dans des colères explosives et disproportionnées. Elle crie, insulte, et a déjà jeté son bol contre un mur. Ces crises sont intenses et soudaines. Après, elle semble parfois regretter, mais le cycle recommence rapidement, créant une tension permanente dans sa cellule.</p>
+                        </div>
+                        <div class="feature-grid">
+                            <div class="feature-card red">
+                                <h4><i class="fas fa-calendar-alt" style="color: #b91c1c; margin-right: 0.5rem;"></i>Durée d'incarcération</h4>
+                                <p>6 mois</p>
+                            </div>
+                            <div class="feature-card red">
+                                <h4><i class="fas fa-bolt" style="color: #b91c1c; margin-right: 0.5rem;"></i>Type de changement</h4>
+                                <p>Aggravation d'un trait préexistant</p>
+                            </div>
+                            <div class="feature-card red">
+                                <h4><i class="fas fa-user-clock" style="color: #b91c1c; margin-right: 0.5rem;"></i>Profil antérieur</h4>
+                                <p>Caractère « difficile »</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="nav-buttons-bottom">
+                        <div></div>
+                        <button class="btn-primary" onclick="goToStep(2)">
+                            Étape suivante : Observation <i class="fas fa-arrow-right" style="margin-left: 0.5rem;"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ÉTAPE 2: OBSERVATION -->
+            <section id="step-2" class="step-content">
+                <div class="glass-card">
+                    <h2><i class="fas fa-eye" style="color: #f59e0b; margin-right: 0.5rem;"></i>Étape 2 : Observation</h2>
+                    <p style="color: var(--color-text-muted); margin-bottom: 1.5rem;">Identifiez les signes d'alerte et comprenez ce qu'ils peuvent signifier.</p>
+
+                    <div class="case-tabs">
+                        <div class="case-tab active-blue" data-case="koto">
+                            <h4>Koto</h4>
+                            <p>Signes intériorisés</p>
+                        </div>
+                        <div class="case-tab" data-case="fara">
+                            <h4>Fara</h4>
+                            <p>Signes extériorisés</p>
+                        </div>
+                    </div>
+
+                    <div id="obs-koto" class="case-content active">
+                        <h3 style="color: #1d4ed8; margin-bottom: 1rem;"><i class="fas fa-exclamation-triangle" style="margin-right: 0.5rem;"></i>Signes d'alerte chez Koto</h3>
+
+                        <div class="accordion-container">
+                            <button type="button" class="accordion-button" data-target="acc-koto-1">
+                                <span><i class="fas fa-user-slash" style="color: #1d4ed8; margin-right: 0.5rem;"></i>Isolement social</span>
+                                <i class="fas fa-chevron-down accordion-arrow"></i>
+                            </button>
+                            <div id="acc-koto-1" class="accordion-content">
+                                <div class="accordion-content-inner">
+                                    <p><strong>Manifestation :</strong> Reste prostré sur sa natte toute la journée, refuse les promenades et activités.</p>
+                                    <p><strong>Signification :</strong> Le retrait social volontaire est un signe cardinal de dépression. Il peut aussi traduire un désespoir profond ou une préparation au passage à l'acte suicidaire.</p>
+                                </div>
+                            </div>
+
+                            <button type="button" class="accordion-button" data-target="acc-koto-2">
+                                <span><i class="fas fa-weight" style="color: #1d4ed8; margin-right: 0.5rem;"></i>Perte de poids et négligence</span>
+                                <i class="fas fa-chevron-down accordion-arrow"></i>
+                            </button>
+                            <div id="acc-koto-2" class="accordion-content">
+                                <div class="accordion-content-inner">
+                                    <p><strong>Manifestation :</strong> Amaigrissement visible, néglige son hygiène personnelle.</p>
+                                    <p><strong>Signification :</strong> La perte d'appétit et le désintérêt pour l'hygiène traduisent une anhédonie (perte de plaisir) et un ralentissement psychomoteur typiques de la dépression sévère.</p>
+                                </div>
+                            </div>
+
+                            <button type="button" class="accordion-button" data-target="acc-koto-3">
+                                <span><i class="fas fa-comment-slash" style="color: #1d4ed8; margin-right: 0.5rem;"></i>Communication réduite</span>
+                                <i class="fas fa-chevron-down accordion-arrow"></i>
+                            </button>
+                            <div id="acc-koto-3" class="accordion-content">
+                                <div class="accordion-content-inner">
+                                    <p><strong>Manifestation :</strong> Répond à peine, regard vide, absence d'émotion (apathie).</p>
+                                    <p><strong>Signification :</strong> L'émoussement affectif et le regard vide peuvent indiquer une dépression mélancolique ou un état de sidération psychique.</p>
+                                </div>
+                            </div>
+
+                            <button type="button" class="accordion-button" data-target="acc-koto-4">
+                                <span style="color: #ef4444;"><i class="fas fa-skull" style="margin-right: 0.5rem;"></i>Verbalisation d'idées noires</span>
+                                <i class="fas fa-chevron-down accordion-arrow"></i>
+                            </button>
+                            <div id="acc-koto-4" class="accordion-content">
+                                <div class="accordion-content-inner">
+                                    <p><strong>Manifestation :</strong> « Tout est fini », « je ne reverrai jamais ma famille ».</p>
+                                    <p style="color: #b91c1c;"><strong>⚠️ ALERTE CRITIQUE :</strong> Ces propos traduisent un désespoir et possiblement des idéations suicidaires. C'est le signe le plus préoccupant, nécessitant une action immédiate.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--color-border);">
+                            <h3 style="margin-bottom: 1rem;"><i class="fas fa-question-circle" style="color: #f59e0b; margin-right: 0.5rem;"></i>Quiz : Testez votre compréhension</h3>
+                            <div class="quiz-item">
+                                <h4>Parmi ces signes, lequel est le PLUS préoccupant chez Koto ?</h4>
+                                <div class="quiz-options" data-quiz="koto-q1" data-answer="B">
+                                    <div class="quiz-option" data-option="A">A) Il reste sur sa natte toute la journée</div>
+                                    <div class="quiz-option" data-option="B">B) Il a confié que « tout est fini » pour lui</div>
+                                    <div class="quiz-option" data-option="C">C) Il refuse les promenades</div>
+                                    <div class="quiz-option" data-option="D">D) Il néglige son hygiène</div>
+                                </div>
+                                <div class="feedback-box" id="feedback-koto-q1"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="obs-fara" class="case-content">
+                        <h3 style="color: #b91c1c; margin-bottom: 1rem;"><i class="fas fa-exclamation-triangle" style="margin-right: 0.5rem;"></i>Signes d'alerte chez Fara</h3>
+
+                        <div class="accordion-container">
+                            <button type="button" class="accordion-button" data-target="acc-fara-1">
+                                <span><i class="fas fa-angry" style="color: #b91c1c; margin-right: 0.5rem;"></i>Irritabilité constante</span>
+                                <i class="fas fa-chevron-down accordion-arrow"></i>
+                            </button>
+                            <div id="acc-fara-1" class="accordion-content">
+                                <div class="accordion-content-inner">
+                                    <p><strong>Manifestation :</strong> Toujours « à fleur de peau », réagit vivement aux moindres frustrations.</p>
+                                    <p><strong>Signification :</strong> L'irritabilité permanente peut être le signe d'un trouble de la personnalité (borderline, antisociale) ou d'un trouble de l'humeur (dépression irritable, épisode mixte).</p>
+                                </div>
+                            </div>
+
+                            <button type="button" class="accordion-button" data-target="acc-fara-2">
+                                <span><i class="fas fa-bomb" style="color: #b91c1c; margin-right: 0.5rem;"></i>Colères explosives</span>
+                                <i class="fas fa-chevron-down accordion-arrow"></i>
+                            </button>
+                            <div id="acc-fara-2" class="accordion-content">
+                                <div class="accordion-content-inner">
+                                    <p><strong>Manifestation :</strong> Réactions de colère soudaines, intenses et disproportionnées par rapport au déclencheur.</p>
+                                    <p><strong>Signification :</strong> La dysrégulation émotionnelle est un critère majeur du trouble de la personnalité borderline. Peut aussi être liée à un TSPT ou à une lésion cérébrale.</p>
+                                </div>
+                            </div>
+
+                            <button type="button" class="accordion-button" data-target="acc-fara-3">
+                                <span><i class="fas fa-hand-rock" style="color: #b91c1c; margin-right: 0.5rem;"></i>Agressivité verbale et physique</span>
+                                <i class="fas fa-chevron-down accordion-arrow"></i>
+                            </button>
+                            <div id="acc-fara-3" class="accordion-content">
+                                <div class="accordion-content-inner">
+                                    <p><strong>Manifestation :</strong> Insultes, menaces, jets d'objets (bol contre le mur).</p>
+                                    <p><strong>Signification :</strong> L'escalade vers l'agressivité physique est un facteur de risque de violence envers soi ou autrui. Nécessite une évaluation de la dangerosité.</p>
+                                </div>
+                            </div>
+
+                            <button type="button" class="accordion-button" data-target="acc-fara-4">
+                                <span><i class="fas fa-sync-alt" style="color: #b91c1c; margin-right: 0.5rem;"></i>Répétition du schéma</span>
+                                <i class="fas fa-chevron-down accordion-arrow"></i>
+                            </button>
+                            <div id="acc-fara-4" class="accordion-content">
+                                <div class="accordion-content-inner">
+                                    <p><strong>Manifestation :</strong> Le cycle crise → regret → nouvelle crise se répète rapidement.</p>
+                                    <p><strong>Signification :</strong> Ce pattern cyclique est caractéristique du trouble de la personnalité borderline, avec une instabilité affective et des difficultés relationnelles chroniques.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--color-border);">
+                            <h3 style="margin-bottom: 1rem;"><i class="fas fa-question-circle" style="color: #f59e0b; margin-right: 0.5rem;"></i>Quiz : Testez votre compréhension</h3>
+                            <div class="quiz-item">
+                                <h4>Comment distinguer ce comportement d'une simple provocation ou d'un « mauvais caractère » ?</h4>
+                                <div class="quiz-options" data-quiz="fara-q1" data-answer="A">
+                                    <div class="quiz-option" data-option="A">A) La répétition du schéma de crises et les regrets après</div>
+                                    <div class="quiz-option" data-option="B">B) Elle crie fort et insulte</div>
+                                    <div class="quiz-option" data-option="C">C) Elle jette des objets</div>
+                                    <div class="quiz-option" data-option="D">D) Elle a toujours eu un caractère difficile</div>
+                                </div>
+                                <div class="feedback-box" id="feedback-fara-q1"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--color-border);">
+                        <h3 style="margin-bottom: 1rem;"><i class="fas fa-columns" style="color: #f59e0b; margin-right: 0.5rem;"></i>Comparaison : Troubles intériorisés vs extériorisés</h3>
+                        <div style="overflow-x: auto; border-radius: var(--radius-lg); border: 1px solid var(--color-border);">
+                            <table class="comparison-table">
+                                <thead>
+                                    <tr>
+                                        <th>Caractéristique</th>
+                                        <th style="color: #1d4ed8;">Koto (Intériorisé)</th>
+                                        <th style="color: #b91c1c;">Fara (Extériorisé)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="font-weight: 600;">Expression</td>
+                                        <td>Repli sur soi, silence</td>
+                                        <td>Explosions, agressivité</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 600;">Impact sur l'entourage</td>
+                                        <td>Peu visible, inquiétude</td>
+                                        <td>Très visible, tension, peur</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 600;">Risque principal</td>
+                                        <td>Suicide, dénutrition</td>
+                                        <td>Violence, auto/hétéro-agression</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 600;">Détection</td>
+                                        <td>Plus difficile (discret)</td>
+                                        <td>Plus facile (bruyant)</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 600;">Urgence</td>
+                                        <td>Élevée (idées noires)</td>
+                                        <td>Élevée (sécurité)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="nav-buttons-bottom">
+                        <button class="btn-secondary" onclick="goToStep(1)">
+                            <i class="fas fa-arrow-left" style="margin-right: 0.5rem;"></i> Étape précédente
+                        </button>
+                        <button class="btn-primary" onclick="goToStep(3)">
+                            Étape suivante : Réflexion <i class="fas fa-arrow-right" style="margin-left: 0.5rem;"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ÉTAPE 3: RÉFLEXION -->
+            <section id="step-3" class="step-content">
+                <div class="glass-card">
+                    <h2><i class="fas fa-brain" style="color: #f59e0b; margin-right: 0.5rem;"></i>Étape 3 : Réflexion clinique</h2>
+                    <p style="color: var(--color-text-muted); margin-bottom: 1.5rem;">Développez votre raisonnement clinique avec cet arbre décisionnel interactif.</p>
+
+                    <h3 style="margin-bottom: 1rem;"><i class="fas fa-sitemap" style="color: #f59e0b; margin-right: 0.5rem;"></i>Arbre décisionnel : Comment interpréter la situation ?</h3>
+
+                    <div class="decision-container" id="decision-tree">
+                        <div id="node-start" class="decision-node">
+                            <p style="font-weight: 600; font-size: var(--font-size-lg); color: var(--color-text-primary); margin-bottom: 1rem;"><i class="fas fa-question-circle" style="color: #f59e0b; margin-right: 0.5rem;"></i>Vous observez un changement de comportement chez un détenu. Comment le caractérisez-vous ?</p>
+                            <div>
+                                <button onclick="showDecisionNode('node-repli')" class="decision-option"><i class="fas fa-user-minus" style="margin-right: 0.5rem; color: #1d4ed8;"></i>Repli sur soi, tristesse, isolement (type Koto)</button>
+                                <button onclick="showDecisionNode('node-agitation')" class="decision-option"><i class="fas fa-bolt" style="margin-right: 0.5rem; color: #b91c1c;"></i>Agitation, colères, agressivité (type Fara)</button>
+                            </div>
+                        </div>
+
+                        <div id="node-repli" class="decision-node hidden">
+                            <p style="font-weight: 600; font-size: var(--font-size-lg); color: var(--color-text-primary); margin-bottom: 1rem;"><i class="fas fa-question-circle" style="color: #1d4ed8; margin-right: 0.5rem;"></i>Le détenu a-t-il verbalisé des idées de désespoir ou de mort ?</p>
+                            <div>
+                                <button onclick="showDecisionResult('result-suicide')" class="decision-option"><i class="fas fa-exclamation-triangle" style="margin-right: 0.5rem; color: #ef4444;"></i>Oui : « tout est fini », « à quoi bon », mention de la mort</button>
+                                <button onclick="showDecisionResult('result-depression')" class="decision-option"><i class="fas fa-cloud-rain" style="margin-right: 0.5rem; color: #1d4ed8;"></i>Non, mais tristesse profonde et retrait persistant</button>
+                            </div>
+                        </div>
+
+                        <div id="node-agitation" class="decision-node hidden">
+                            <p style="font-weight: 600; font-size: var(--font-size-lg); color: var(--color-text-primary); margin-bottom: 1rem;"><i class="fas fa-question-circle" style="color: #b91c1c; margin-right: 0.5rem;"></i>Y a-t-il un risque immédiat pour la sécurité (de la personne ou des autres) ?</p>
+                            <div>
+                                <button onclick="showDecisionResult('result-urgence')" class="decision-option"><i class="fas fa-exclamation-triangle" style="margin-right: 0.5rem; color: #ef4444;"></i>Oui : crise en cours, menaces, jets d'objets</button>
+                                <button onclick="showDecisionResult('result-suivi')" class="decision-option"><i class="fas fa-clipboard-list" style="margin-right: 0.5rem; color: #fbbf24;"></i>Non : entre les crises, mais le pattern se répète</button>
+                            </div>
+                        </div>
+
+                        <div id="result-suicide" class="decision-node hidden result-box danger">
+                            <h3><i class="fas fa-exclamation-circle" style="margin-right: 0.5rem;"></i>URGENCE : Risque suicidaire</h3>
+                            <p>La verbalisation d'idées de mort ou de désespoir nécessite une <strong>action immédiate</strong> :</p>
+                            <ul style="margin-top: 1rem; padding-left: 1.5rem;">
+                                <li>Ne laissez pas la personne seule</li>
+                                <li>Signalez immédiatement au supérieur et au personnel médical</li>
+                                <li>Retirez tout objet potentiellement dangereux si possible</li>
+                                <li>Documentez précisément les propos tenus</li>
+                            </ul>
+                        </div>
+
+                        <div id="result-depression" class="decision-node hidden result-box warning">
+                            <h3><i class="fas fa-cloud-rain" style="margin-right: 0.5rem;"></i>Suspicion de dépression sévère</h3>
+                            <p>Même sans verbalisation explicite d'idées suicidaires, ce tableau clinique nécessite une <strong>évaluation médicale rapide</strong> :</p>
+                            <ul style="margin-top: 1rem; padding-left: 1.5rem;">
+                                <li>Signalez au personnel médical dans les 24-48h</li>
+                                <li>Maintenez une attitude bienveillante et non-jugeante</li>
+                                <li>Restez attentif à toute aggravation</li>
+                                <li>Notez les changements observés pour le suivi</li>
+                            </ul>
+                        </div>
+
+                        <div id="result-urgence" class="decision-node hidden result-box danger">
+                            <h3><i class="fas fa-shield-alt" style="margin-right: 0.5rem;"></i>URGENCE : Sécurité prioritaire</h3>
+                            <p>En cas de crise active avec risque de violence :</p>
+                            <ul style="margin-top: 1rem; padding-left: 1.5rem;">
+                                <li><strong>Sécurité d'abord</strong> : la vôtre, celle des autres détenus</li>
+                                <li>Gardez votre calme, voix posée et basse</li>
+                                <li>N'argumentez pas, phrases courtes</li>
+                                <li>Éloignez les autres si nécessaire</li>
+                                <li>Appelez du renfort selon protocole</li>
+                            </ul>
+                        </div>
+
+                        <div id="result-suivi" class="decision-node hidden result-box warning">
+                            <h3><i class="fas fa-clipboard-check" style="margin-right: 0.5rem;"></i>Suivi et signalement systématique</h3>
+                            <p>Le pattern répétitif de crises nécessite une <strong>évaluation psychiatrique</strong> :</p>
+                            <ul style="margin-top: 1rem; padding-left: 1.5rem;">
+                                <li>Documentez chaque incident (date, déclencheur, intensité)</li>
+                                <li>Signalez au personnel médical pour évaluation</li>
+                                <li>Une fois la crise passée, tentez de comprendre ce qui s'est passé</li>
+                                <li>Possible trouble de la personnalité nécessitant un suivi spécialisé</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <button onclick="resetDecisionTree()" class="btn-secondary" style="margin-top: 1rem;"><i class="fas fa-redo" style="margin-right: 0.5rem;"></i>Recommencer</button>
+
+                    <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--color-border);">
+                        <h3 style="margin-bottom: 1rem;"><i class="fas fa-question-circle" style="color: #f59e0b; margin-right: 0.5rem;"></i>Quiz : Réflexion clinique</h3>
+                        <div class="quiz-item">
+                            <h4>Un collègue vous dit : « Koto fait juste sa tête, il veut qu'on s'occupe de lui ». Que répondez-vous ?</h4>
+                            <div class="quiz-options" data-quiz="reflexion-q1" data-answer="C">
+                                <div class="quiz-option" data-option="A">A) C'est vrai, il faut le laisser tranquille</div>
+                                <div class="quiz-option" data-option="B">B) On verra bien comment ça évolue</div>
+                                <div class="quiz-option" data-option="C">C) Les propos « tout est fini » sont préoccupants, on doit signaler</div>
+                                <div class="quiz-option" data-option="D">D) C'est normal en prison, tout le monde déprime</div>
+                            </div>
+                            <div class="feedback-box" id="feedback-reflexion-q1"></div>
+                        </div>
+                    </div>
+
+                    <div class="nav-buttons-bottom">
+                        <button class="btn-secondary" onclick="goToStep(2)">
+                            <i class="fas fa-arrow-left" style="margin-right: 0.5rem;"></i> Étape précédente
+                        </button>
+                        <button class="btn-primary" onclick="goToStep(4)">
+                            Étape suivante : Action <i class="fas fa-arrow-right" style="margin-left: 0.5rem;"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ÉTAPE 4: ACTION -->
+            <section id="step-4" class="step-content">
+                <div class="glass-card">
+                    <h2><i class="fas fa-hand-paper" style="color: #f59e0b; margin-right: 0.5rem;"></i>Étape 4 : Conduite à tenir</h2>
+                    <p style="color: var(--color-text-muted); margin-bottom: 1.5rem;">Apprenez les actions concrètes à mettre en œuvre face à ces situations.</p>
+
+                    <div class="case-tabs">
+                        <div class="case-tab active-blue" data-case="koto">
+                            <h4>Koto</h4>
+                            <p>Actions pour trouble intériorisé</p>
+                        </div>
+                        <div class="case-tab" data-case="fara">
+                            <h4>Fara</h4>
+                            <p>Actions pour trouble extériorisé</p>
+                        </div>
+                    </div>
+
+                    <div id="action-koto" class="case-content active">
+                        <h3 style="color: #1d4ed8; margin-bottom: 1rem;"><i class="fas fa-check-circle" style="margin-right: 0.5rem;"></i>Conduite à tenir avec Koto</h3>
+
+                        <ul class="action-list">
+                            <li><strong>Approche calme et sans jugement :</strong> « Koto, j'ai remarqué que tu n'allais pas bien ces temps-ci. Est-ce que tu veux en parler ? »</li>
+                            <li><strong>Ne pas forcer la parole :</strong> Montrez simplement que vous êtes présent et disponible. Le silence bienveillant peut suffire.</li>
+                            <li><strong>Signaler systématiquement :</strong> Informez précisément votre supérieur ET le personnel médical, même si vous n'êtes pas soignant.</li>
+                            <li><strong>Ne JAMAIS banaliser :</strong> Les propos sur le désespoir ou la mort doivent toujours être pris au sérieux.</li>
+                            <li><strong>Encourager sans forcer :</strong> « Viens juste t'asseoir avec nous dehors » plutôt que « Il faut que tu sortes ».</li>
+                            <li><strong>Surveiller discrètement :</strong> Soyez attentif aux signes d'aggravation (dons d'objets personnels, rangement inhabituel).</li>
+                        </ul>
+
+                        <div class="alert alert-warning" style="margin-top: 1.5rem;">
+                            <div class="alert-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                            <div class="alert-content">
+                                <h4>Ce qu'il ne faut PAS faire</h4>
+                                <ul style="margin: 0; padding-left: 1.25rem;">
+                                    <li>Dire « Secoue-toi, c'est dans ta tête »</li>
+                                    <li>Ignorer ou minimiser les propos sur la mort</li>
+                                    <li>Le laisser complètement seul</li>
+                                    <li>Promettre de garder ses propos secrets (vous devez signaler)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="action-fara" class="case-content">
+                        <h3 style="color: #b91c1c; margin-bottom: 1rem;"><i class="fas fa-check-circle" style="margin-right: 0.5rem;"></i>Conduite à tenir avec Fara</h3>
+
+                        <h4 style="margin-bottom: 1rem; color: var(--color-text-primary);">Pendant la crise</h4>
+                        <ul class="action-list">
+                            <li><strong>Garder son calme :</strong> Votre propre sérénité peut désamorcer la situation. Voix posée et basse.</li>
+                            <li><strong>Sécurité prioritaire :</strong> La vôtre d'abord, puis celle des autres détenus. Éloignez-les si nécessaire.</li>
+                            <li><strong>Phrases courtes et claires :</strong> « Fara, je t'entends. Respire. » Évitez les longs discours.</li>
+                            <li><strong>Ne pas argumenter :</strong> Ce n'est pas le moment de raisonner ou de chercher à avoir raison.</li>
+                            <li><strong>Donner de l'espace :</strong> Si possible, ne pas la coincer physiquement ou psychologiquement.</li>
+                        </ul>
+
+                        <h4 style="margin: 1.5rem 0 1rem; color: var(--color-text-primary);">Après la crise</h4>
+                        <ul class="action-list">
+                            <li><strong>Débriefing sans jugement :</strong> Une fois calmée, essayez de comprendre ce qui a déclenché la crise.</li>
+                            <li><strong>Signalement systématique :</strong> Chaque incident doit être documenté pour permettre un suivi médical.</li>
+                            <li><strong>Ne pas punir immédiatement :</strong> La sanction n'empêchera pas les crises futures si elles sont d'origine pathologique.</li>
+                        </ul>
+
+                        <div class="alert alert-warning" style="margin-top: 1.5rem;">
+                            <div class="alert-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                            <div class="alert-content">
+                                <h4>Ce qu'il ne faut PAS faire</h4>
+                                <ul style="margin: 0; padding-left: 1.25rem;">
+                                    <li>Répondre à la provocation ou hausser le ton</li>
+                                    <li>Menacer ou humilier publiquement</li>
+                                    <li>Ignorer le pattern répétitif (« c'est son caractère »)</li>
+                                    <li>Utiliser la force excessive sans nécessité</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--color-border);">
+                        <h3 style="margin-bottom: 1rem;"><i class="fas fa-question-circle" style="color: #f59e0b; margin-right: 0.5rem;"></i>Quiz : Mise en pratique</h3>
+                        <div class="quiz-item">
+                            <h4>Fara est en pleine crise, elle crie et a jeté une chaise. Quelle est votre PREMIÈRE action ?</h4>
+                            <div class="quiz-options" data-quiz="action-q1" data-answer="B">
+                                <div class="quiz-option" data-option="A">A) Lui expliquer calmement pourquoi son comportement est inacceptable</div>
+                                <div class="quiz-option" data-option="B">B) Assurer la sécurité (la mienne et celle des autres), garder mon calme</div>
+                                <div class="quiz-option" data-option="C">C) Appeler immédiatement le médecin</div>
+                                <div class="quiz-option" data-option="D">D) La maîtriser physiquement pour la calmer</div>
+                            </div>
+                            <div class="feedback-box" id="feedback-action-q1"></div>
+                        </div>
+                    </div>
+
+                    <div class="nav-buttons-bottom">
+                        <button class="btn-secondary" onclick="goToStep(3)">
+                            <i class="fas fa-arrow-left" style="margin-right: 0.5rem;"></i> Étape précédente
+                        </button>
+                        <button class="btn-primary" onclick="goToStep(5)">
+                            Étape suivante : Synthèse <i class="fas fa-arrow-right" style="margin-left: 0.5rem;"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ÉTAPE 5: SYNTHÈSE -->
+            <section id="step-5" class="step-content">
+                <div class="glass-card">
+                    <h2><i class="fas fa-flag-checkered" style="color: #f59e0b; margin-right: 0.5rem;"></i>Étape 5 : Synthèse</h2>
+                    <p style="color: var(--color-text-muted); margin-bottom: 1.5rem;">Récapitulatif des points essentiels et auto-évaluation de vos acquis.</p>
+
+                    <div class="key-points">
+                        <h3><i class="fas fa-star" style="margin-right: 0.5rem;"></i>Points clés à retenir</h3>
+                        <ul>
+                            <li><strong>Troubles intériorisés (Koto) :</strong> Difficiles à détecter mais tout aussi urgents. Les propos de désespoir = signalement immédiat.</li>
+                            <li><strong>Troubles extériorisés (Fara) :</strong> Visibles mais pas « juste un mauvais caractère ». Le pattern répétitif indique un trouble possible.</li>
+                            <li><strong>Signaler n'est pas trahir :</strong> C'est permettre l'accès aux soins. Vous n'êtes pas médecin, votre rôle est d'alerter.</li>
+                            <li><strong>L'environnement carcéral aggrave :</strong> Isolement, perte de contrôle, éloignement familial sont des facteurs de décompensation.</li>
+                            <li><strong>Vos émotions comptent aussi :</strong> Face à ces situations, parlez-en à vos collègues ou à un superviseur.</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-top: 2rem;">
+                        <h3 style="margin-bottom: 1rem;"><i class="fas fa-tasks" style="color: #4ade80; margin-right: 0.5rem;"></i>Checklist d'auto-évaluation</h3>
+                        <p style="color: var(--color-text-muted); margin-bottom: 1rem;">Cochez les éléments que vous vous sentez capable de faire :</p>
+
+                        <div class="checklist-item">
+                            <input id="check-1" type="checkbox">
+                            <label for="check-1">Je sais reconnaître les signes d'un trouble intériorisé (isolement, tristesse, propos désespérés)</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input id="check-2" type="checkbox">
+                            <label for="check-2">Je sais reconnaître les signes d'un trouble extériorisé (colères, impulsivité, pattern répétitif)</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input id="check-3" type="checkbox">
+                            <label for="check-3">Je comprends l'importance de ne jamais banaliser des propos sur la mort ou le désespoir</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input id="check-4" type="checkbox">
+                            <label for="check-4">Je sais adopter une approche calme et sans jugement face à une personne en souffrance</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input id="check-5" type="checkbox">
+                            <label for="check-5">Je sais gérer ma propre sécurité et celle des autres en cas de crise</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input id="check-6" type="checkbox">
+                            <label for="check-6">Je sais quand et comment signaler une situation préoccupante</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input id="check-7" type="checkbox">
+                            <label for="check-7">Je comprends que ces comportements peuvent être des symptômes de troubles psychiatriques</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input id="check-8" type="checkbox">
+                            <label for="check-8">Je suis prêt(e) à demander du soutien pour moi-même si ces situations me perturbent</label>
+                        </div>
+
+                        <div id="checklist-result" style="margin-top: 1rem; padding: 1rem; background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); display: none;">
+                            <p style="color: #4ade80; margin: 0;"><i class="fas fa-check-circle" style="margin-right: 0.5rem;"></i><span id="checklist-count">0</span>/8 compétences validées</p>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--color-border);">
+                        <h3 style="margin-bottom: 1rem;"><i class="fas fa-book-open" style="color: #f59e0b; margin-right: 0.5rem;"></i>Pour aller plus loin</h3>
+                        <div class="feature-grid">
+                            <div class="feature-card">
+                                <h4><i class="fas fa-phone" style="color: #ef4444; margin-right: 0.5rem;"></i>Numéros utiles</h4>
+                                <p>En cas de crise suicidaire : 3114 (numéro national de prévention du suicide)</p>
+                            </div>
+                            <div class="feature-card">
+                                <h4><i class="fas fa-graduation-cap" style="color: #3b82f6; margin-right: 0.5rem;"></i>Formations</h4>
+                                <p>PSSM (Premiers Secours en Santé Mentale) - formations disponibles pour le personnel pénitentiaire</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-success" style="margin-top: 2rem;">
+                        <div class="alert-icon"><i class="fas fa-medal"></i></div>
+                        <div class="alert-content">
+                            <h4>Félicitations !</h4>
+                            <p>Vous avez terminé ce parcours de sensibilisation. N'hésitez pas à revenir sur les différentes étapes pour consolider vos acquis.</p>
+                        </div>
+                    </div>
+
+                    <div class="nav-buttons-bottom">
+                        <button class="btn-secondary" onclick="goToStep(4)">
+                            <i class="fas fa-arrow-left" style="margin-right: 0.5rem;"></i> Étape précédente
+                        </button>
+                        <button class="btn-primary" onclick="goToStep(1)">
+                            <i class="fas fa-redo" style="margin-right: 0.5rem;"></i> Recommencer le parcours
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-logos">
+            <a href="https://www.ch-le-vinatier.fr" target="_blank" rel="noopener noreferrer">
+                <img src="../images/logos/vinatier-alt.jpg" alt="Logo CH Le Vinatier">
+            </a>
+            <a href="https://www.facebook.com/Psykozy?locale=fr_FR" target="_blank" rel="noopener noreferrer">
+                <img src="../images/logos/psykozy.png" alt="Logo Psy-kôzy">
+            </a>
+            <a href="https://centre-ressource-rehabilitation.org" target="_blank" rel="noopener noreferrer">
+                <img src="../images/logos/crr.jpg" alt="Logo Centre Ressource Réhabilitation">
+            </a>
+        </div>
+        <p>Dr FENOHASINA T.J. Felicien (Psychiatre) | ASSOCIATION PSYKOZY MADAGASCAR</p>
+        <p>Dr MEUNIER Frédéric (Psychiatre) | CH - LE VINATIER</p>
+        <p>
+            <img src="../images/icons/cc-by-nc-sa.png" alt="CC BY-NC-SA" style="height: 20px; vertical-align: middle;">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr" target="_blank" rel="noopener noreferrer">Licence CC BY-NC-SA 4.0</a> - Dernière mise à jour : Février 2025
+        </p>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Quiz data
+    const quizAnswers = {
+        'koto-q1': {
+            answer: 'B',
+            correct: "<strong>Excellent !</strong> La verbalisation « tout est fini » suggère des idées noires, voire suicidaires. C'est le signe le plus préoccupant, nécessitant un signalement immédiat. Les autres signes sont également importants, mais celui-ci indique un risque vital.",
+            incorrect: "<strong>À revoir.</strong> Bien que tous les signes soient préoccupants, la verbalisation « tout est fini » (option B) est la plus critique car elle suggère des idéations suicidaires, ce qui constitue une urgence."
+        },
+        'fara-q1': {
+            answer: 'A',
+            correct: "<strong>Correct !</strong> La répétition du schéma (crise → regret → nouvelle crise) distingue un trouble psychiatrique d'une simple provocation. Une provocation est généralement calculée et ciblée, tandis que ce pattern cyclique incontrôlé suggère une dysrégulation émotionnelle pathologique.",
+            incorrect: "<strong>À revoir.</strong> La bonne réponse est A. La répétition du schéma de crises suivies de regrets est caractéristique d'un trouble de la personnalité, notamment borderline. Les autres options décrivent des comportements ponctuels qui pourraient être une provocation."
+        },
+        'reflexion-q1': {
+            answer: 'C',
+            correct: "<strong>Bravo !</strong> Vous avez raison de ne pas minimiser la situation. Les propos « tout est fini » sont un signal d'alarme qui ne doit jamais être banalisé. Le signalement est une obligation professionnelle et un acte de protection, pas une trahison.",
+            incorrect: "<strong>À revoir.</strong> La réponse C est correcte. Minimiser ou attendre « que ça passe » peut avoir des conséquences dramatiques. Les propos de désespoir doivent toujours être pris au sérieux et signalés, même si le collègue les banalise."
+        },
+        'action-q1': {
+            answer: 'B',
+            correct: "<strong>Parfait !</strong> La sécurité est toujours la priorité en cas de crise. Garder son calme est essentiel pour ne pas escalader la situation. Les explications et le médecin viendront après, une fois la situation sécurisée.",
+            incorrect: "<strong>À revoir.</strong> La bonne réponse est B. En cas de crise active, la sécurité passe avant tout. Expliquer ou raisonner (A) n'est pas efficace pendant une crise. L'intervention physique (D) est un dernier recours. Le médecin (C) sera appelé, mais après avoir sécurisé la situation."
+        }
+    };
+
+    // Step Navigation
+    const stepBtns = document.querySelectorAll('.step-btn');
+    const stepContents = document.querySelectorAll('.step-content');
+    const progressFill = document.getElementById('progressFill');
+
+    window.goToStep = function(stepNum) {
+        stepBtns.forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.step == stepNum);
+        });
+        stepContents.forEach(content => {
+            content.classList.toggle('active', content.id === `step-${stepNum}`);
+        });
+        // Update progress bar
+        progressFill.style.width = (stepNum * 20) + '%';
+        updateCaseDisplay();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    stepBtns.forEach(btn => {
+        btn.addEventListener('click', () => goToStep(btn.dataset.step));
+    });
+
+    // Case Tabs
+    let currentCase = 'koto';
+
+    function updateCaseTabs(caseName) {
+        document.querySelectorAll('.case-tab').forEach(t => {
+            t.classList.remove('active-blue', 'active-red');
+            if (t.dataset.case === caseName) {
+                t.classList.add(caseName === 'koto' ? 'active-blue' : 'active-red');
+            }
+        });
+    }
+
+    function updateCaseDisplay() {
+        const contentPrefixes = ['case-', 'obs-', 'action-'];
+        contentPrefixes.forEach(prefix => {
+            document.querySelectorAll(`[id^="${prefix}"]`).forEach(c => c.classList.remove('active'));
+            const target = document.querySelector(`#${prefix}${currentCase}`);
+            if (target) target.classList.add('active');
+        });
+    }
+
+    document.querySelectorAll('.case-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            currentCase = this.dataset.case;
+            updateCaseTabs(currentCase);
+            updateCaseDisplay();
+        });
+    });
+
+    // Accordions
+    document.querySelectorAll('.accordion-button').forEach(button => {
+        button.addEventListener('click', () => {
+            const targetId = button.dataset.target;
+            const content = document.getElementById(targetId);
+            const isOpen = button.classList.toggle('open');
+
+            if (isOpen) {
+                content.style.maxHeight = content.scrollHeight + "px";
+            } else {
+                content.style.maxHeight = null;
+            }
+        });
+    });
+
+    // Quiz
+    document.querySelectorAll('.quiz-options').forEach(quizContainer => {
+        const quizId = quizContainer.dataset.quiz;
+        const correctAnswer = quizContainer.dataset.answer;
+
+        quizContainer.querySelectorAll('.quiz-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const selectedOption = this.dataset.option;
+                const feedbackDiv = document.getElementById(`feedback-${quizId}`);
+                const quizData = quizAnswers[quizId];
+
+                // Remove previous selections
+                quizContainer.querySelectorAll('.quiz-option').forEach(opt => {
+                    opt.classList.remove('selected', 'correct', 'incorrect');
+                });
+
+                this.classList.add('selected');
+
+                if (selectedOption === correctAnswer) {
+                    feedbackDiv.innerHTML = quizData.correct;
+                    feedbackDiv.className = 'feedback-box success visible';
+                    this.classList.add('correct');
+                } else {
+                    feedbackDiv.innerHTML = quizData.incorrect;
+                    feedbackDiv.className = 'feedback-box error visible';
+                    this.classList.add('incorrect');
+                    // Show correct answer
+                    quizContainer.querySelector(`[data-option="${correctAnswer}"]`).classList.add('correct');
+                }
+            });
+        });
+    });
+
+    // Decision Tree
+    window.showDecisionNode = function(nodeId) {
+        document.querySelectorAll('.decision-node').forEach(node => {
+            node.classList.add('hidden');
+        });
+        document.getElementById(nodeId).classList.remove('hidden');
+    };
+
+    window.showDecisionResult = function(resultId) {
+        document.querySelectorAll('.decision-node').forEach(node => {
+            node.classList.add('hidden');
+        });
+        document.getElementById(resultId).classList.remove('hidden');
+    };
+
+    window.resetDecisionTree = function() {
+        document.querySelectorAll('.decision-node').forEach(node => {
+            node.classList.add('hidden');
+        });
+        document.getElementById('node-start').classList.remove('hidden');
+    };
+
+    // Checklist
+    const checkboxes = document.querySelectorAll('.checklist-item input[type="checkbox"]');
+    const checklistResult = document.getElementById('checklist-result');
+    const checklistCount = document.getElementById('checklist-count');
+
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            this.closest('.checklist-item').classList.toggle('checked', this.checked);
+
+            const checkedCount = document.querySelectorAll('.checklist-item input:checked').length;
+            checklistCount.textContent = checkedCount;
+            checklistResult.style.display = 'block';
+        });
+    });
+});
+</script>
+
+</body>
+</html>

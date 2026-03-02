@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Enfant & Adolescent - Ressources</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .portal-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+    .portal-card {
+        background: linear-gradient(145deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-xl);
+        padding: 1.5rem;
+        text-decoration: none;
+        display: block;
+        transition: all var(--transition-slow);
+    }
+    .portal-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--color-border-active);
+        box-shadow: var(--shadow-glow);
+    }
+    .portal-card h3 { color: var(--color-text-primary); margin-bottom: 0.5rem; }
+    .portal-card p { color: var(--color-text-muted); font-size: var(--font-size-sm); }
+    .section-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius-lg);
+        font-weight: 600;
+        font-size: var(--font-size-lg);
+        margin-bottom: 1.5rem;
+        color: white;
+    }
+    .portal-card .card-description {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 1rem;
+        border-radius: var(--radius-md);
+        margin-bottom: 1rem;
+        border: 1px solid var(--color-border);
+    }
+    .portal-card .card-subtitle {
+        color: var(--color-text-muted);
+        font-size: var(--font-size-sm);
+        font-style: italic;
+        margin-bottom: 0.75rem;
+    }
+    .portal-card .btn-start {
+        display: inline-block;
+        padding: 0.5rem 1.25rem;
+        border-radius: var(--radius-md);
+        font-weight: 600;
+        text-align: center;
+        transition: all var(--transition-normal);
+        text-decoration: none;
+        margin-top: auto;
+    }
+    .highlight-text {
+        color: #f59e0b;
+        font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navigation-bar">
+    <div class="nav-buttons">
+        <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+        <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+    </div>
+    <h1>Enfant & Adolescent</h1>
+    <span class="badge badge-cat-enfant">Enfant/Ado</span>
+  </nav>
+
+  <div class="container">
+
+    <header class="page-header">
+      <p class="subtitle">
+        Questionnaires de depistage et guides pour la pedopsychiatrie, la guidance parentale et l'accompagnement des adolescents.
+      </p>
+    </header>
+
+    <div class="alert alert-warning">
+      <div class="alert-icon">
+        <i class="fas fa-exclamation-triangle"></i>
+      </div>
+      <div class="alert-content">
+        <h3>Avertissement Important</h3>
+        <p>Ces outils sont des ressources educatives et ne remplacent pas une consultation avec un pedopsychiatre ou un professionnel de sante mentale specialise.</p>
+      </div>
+    </div>
+
+    <section class="section">
+      <div class="section-badge" style="background: #0d9488;">
+        <i class="fas fa-search"></i> Aide au Depistage
+      </div>
+
+      <h3 style="color: var(--color-text-secondary); font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+        <i class="fas fa-clipboard-check" style="color: #14b8a6; font-size: 0.9rem;"></i> Depistage Global
+      </h3>
+      <div class="portal-grid" style="margin-bottom: 2rem;">
+
+        <a href="SDQ.html" class="portal-card">
+          <h3>SDQ</h3>
+          <p class="card-subtitle">Strengths and Difficulties Questionnaire</p>
+          <div class="card-description">
+            <p>Questionnaire de 25 items evaluant les difficultes emotionnelles, comportementales et relationnelles ainsi que les forces de l'enfant (4-17 ans). <span class="highlight-text">Hetero-questionnaire (parents).</span></p>
+          </div>
+          <span class="btn-start" style="background: #14b8a6; color: white;">
+            Commencer le test &rarr;
+          </span>
+        </a>
+
+      </div>
+
+      <h3 style="color: var(--color-text-secondary); font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+        <i class="fas fa-cloud-rain" style="color: #06b6d4; font-size: 0.9rem;"></i> Depression
+      </h3>
+      <div class="portal-grid" style="margin-bottom: 2rem;">
+
+        <a href="ADRS.html" class="portal-card">
+          <h3>ADRS</h3>
+          <p class="card-subtitle">Adolescent Depression Rating Scale</p>
+          <div class="card-description">
+            <p>Echelle d'evaluation de la depression chez l'adolescent, adaptee aux specificites developpementales de cette tranche d'age.</p>
+          </div>
+          <span class="btn-start" style="background: #06b6d4; color: white;">
+            Commencer le test &rarr;
+          </span>
+        </a>
+
+        <a href="CDI-2.html" class="portal-card">
+          <h3>CDI-2</h3>
+          <p class="card-subtitle">Children's Depression Inventory 2</p>
+          <div class="card-description">
+            <p>Auto-questionnaire de 28 items evaluant les symptomes depressifs chez l'enfant et l'adolescent (7-17 ans). Evalue les problemes emotionnels et fonctionnels sur les 2 dernieres semaines. <strong style="color: #22c55e;">Peut egalement etre utilise pour le suivi therapeutique.</strong></p>
+          </div>
+          <span class="btn-start" style="background: #06b6d4; color: white;">
+            Commencer le test &rarr;
+          </span>
+        </a>
+
+      </div>
+
+      <h3 style="color: var(--color-text-secondary); font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+        <i class="fas fa-wind" style="color: #10b981; font-size: 0.9rem;"></i> Anxiete
+      </h3>
+      <div class="portal-grid">
+
+        <a href="SCARED.html" class="portal-card">
+          <h3>SCARED</h3>
+          <p class="card-subtitle">Screen for Child Anxiety Related Disorders</p>
+          <div class="card-description">
+            <p>Questionnaire de 41 items depistant les troubles anxieux chez l'enfant : anxiete generalisee, anxiete de separation, phobie sociale, panique.</p>
+          </div>
+          <span class="btn-start" style="background: #10b981; color: white;">
+            Commencer le test &rarr;
+          </span>
+        </a>
+
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-badge" style="background: #0ea5e9;">
+        <i class="fas fa-book-reader"></i>Guides Parentaux
+      </div>
+      <div class="portal-grid">
+
+        <a href="Guidance_parentale.html" class="portal-card">
+          <h3>Guidance Parentale</h3>
+          <p class="card-subtitle">Conseils pour les parents</p>
+          <div class="card-description">
+            <p>Guide pratique pour accompagner les parents dans l'education et le soutien de leurs enfants.</p>
+          </div>
+          <span class="btn-start" style="background: #0ea5e9; color: white;">
+            Consulter &rarr;
+          </span>
+        </a>
+
+        <a href="Guide_parental_adolescence.html" class="portal-card">
+          <h3>Guide Parental Adolescence</h3>
+          <p class="card-subtitle">Accompagner son adolescent</p>
+          <div class="card-description">
+            <p>Guide pour comprendre les enjeux de l'adolescence et accompagner son enfant durant cette periode de transition.</p>
+          </div>
+          <span class="btn-start" style="background: #0ea5e9; color: white;">
+            Consulter &rarr;
+          </span>
+        </a>
+
+        <a href="Guide_parental_ecran.html" class="portal-card">
+          <h3>Guide Parental Ecrans</h3>
+          <p class="card-subtitle">Gerer les ecrans</p>
+          <div class="card-description">
+            <p>Conseils pour encadrer l'utilisation des ecrans par les enfants et adolescents : temps d'ecran, contenus, risques.</p>
+          </div>
+          <span class="btn-start" style="background: #0ea5e9; color: white;">
+            Consulter &rarr;
+          </span>
+        </a>
+
+        <a href="Guide_pour_parents_courageux.html" class="portal-card">
+          <h3>Guide pour Parents Courageux</h3>
+          <p class="card-subtitle">Faire face aux difficultes</p>
+          <div class="card-description">
+            <p>Ressource pour les parents confrontes aux difficultes de leur enfant : troubles du comportement, troubles psychiatriques.</p>
+          </div>
+          <span class="btn-start" style="background: #0ea5e9; color: white;">
+            Consulter &rarr;
+          </span>
+        </a>
+
+      </div>
+    </section>
+
+  </div>
+
+  <footer class="footer">
+    <p>Dr. FENOHASINA T.J. Felicien (Psychiatre)</p>
+    <p>&copy; 2025 - Centre Ressource de Rehabilitation</p>
+    <p class="license">Licence CC BY-NC-SA 4.0</p>
+  </footer>
+
+</body>
+</html>

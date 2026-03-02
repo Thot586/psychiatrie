@@ -1,0 +1,2148 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cas Cliniques - Pédopsychiatrie</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --cat-main: #14b8a6;
+            --cat-dark: #0d9488;
+            --cat-light: #2dd4bf;
+            --cat-rgb: 20, 184, 166;
+            --cat-readable: #0d9488;
+            --cat-light-bg: rgba(20, 184, 166, 0.1);
+            --cat-border: rgba(20, 184, 166, 0.3);
+        }
+
+        /* Conteneur sticky pour progression et navigation */
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(15, 23, 42, 0.98);
+            backdrop-filter: blur(10px);
+            margin: 0 -1.5rem;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--cat-border);
+        }
+
+        /* Navigation par étapes */
+        .step-nav {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 0;
+            padding: 1rem;
+            background: rgba(20, 184, 166, 0.05);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--cat-border);
+        }
+
+        .step-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            font-weight: 500;
+        }
+
+        .step-btn:hover {
+            background: rgba(20, 184, 166, 0.1);
+            border-color: var(--cat-border);
+        }
+
+        .step-btn.active {
+            background: var(--cat-main);
+            color: white;
+            border-color: var(--cat-main);
+        }
+
+        .step-btn .step-number {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .step-btn.active .step-number {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Barre de progression */
+        .progress-container {
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--cat-main), var(--cat-dark));
+            transition: width 0.5s ease;
+            border-radius: 3px;
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 0.5rem;
+            color: var(--color-text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* Contenu des étapes */
+        .step-content {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .step-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Onglets des cas */
+        .case-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .case-tab {
+            flex: 1;
+            min-width: 200px;
+            padding: 1rem 1.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            text-align: center;
+        }
+
+        .case-tab:hover {
+            border-color: var(--cat-main);
+            background: rgba(var(--cat-rgb), 0.04);
+        }
+
+        .case-tab.active {
+            border-color: var(--cat-main);
+            background: var(--cat-light-bg);
+        }
+
+        .case-tab h4 {
+            color: var(--color-text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .case-tab p {
+            color: var(--color-text-muted);
+            font-size: 0.85rem;
+            margin: 0;
+        }
+
+        .case-content {
+            display: none;
+        }
+
+        .case-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* Accordéons */
+        .accordion {
+            margin-bottom: 1rem;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+        }
+
+        .accordion-button {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: none;
+            color: var(--color-text-primary);
+            font-size: 1rem;
+            font-weight: 600;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all var(--transition-normal);
+        }
+
+        .accordion-button:hover {
+            background: rgba(20, 184, 166, 0.1);
+        }
+
+        .accordion-button i {
+            transition: transform 0.3s ease;
+        }
+
+        .accordion-button.active i {
+            transform: rotate(180deg);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: var(--color-bg-dark);
+        }
+
+        .accordion-content.show {
+            max-height: 2000px;
+        }
+
+        .accordion-inner {
+            padding: 1.5rem;
+        }
+
+        /* Cartes de scénario */
+        .scenario-card {
+            background: linear-gradient(145deg, rgba(20, 184, 166, 0.1), rgba(13, 148, 136, 0.05));
+            border: 1px solid var(--cat-border);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .scenario-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .scenario-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--cat-main), var(--cat-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .scenario-title h3 {
+            color: var(--color-text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .scenario-title p {
+            color: var(--color-text-muted);
+            margin: 0;
+        }
+
+        .scenario-body {
+            color: var(--color-text-secondary);
+            line-height: 1.8;
+        }
+
+        .scenario-body p {
+            margin-bottom: 1rem;
+        }
+
+        /* Quiz MCQ */
+        .quiz-container {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .quiz-question {
+            color: var(--color-text-primary);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-size: 1.05rem;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .quiz-option {
+            padding: 1rem 1.25rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            color: var(--color-text-secondary);
+        }
+
+        .quiz-option:hover:not(.disabled) {
+            border-color: var(--cat-border);
+            background: rgba(20, 184, 166, 0.05);
+        }
+
+        .quiz-option.correct {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+        }
+
+        .quiz-option.incorrect {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+        }
+
+        .quiz-option.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .feedback-box {
+            margin-top: 1rem;
+            padding: 1rem 1.25rem;
+            border-radius: var(--radius-md);
+            display: none;
+        }
+
+        .feedback-box.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .feedback-box.correct {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #10b981;
+        }
+
+        .feedback-box.incorrect {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #f87171;
+        }
+
+        /* Arbre décisionnel */
+        .decision-tree {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .decision-node {
+            display: none;
+        }
+
+        .decision-node.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .decision-question {
+            color: var(--color-text-primary);
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .decision-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .decision-option {
+            flex: 1;
+            min-width: 150px;
+            max-width: 250px;
+            padding: 1rem;
+            background: rgba(20, 184, 166, 0.1);
+            border: 2px solid var(--cat-border);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            text-align: center;
+            transition: all var(--transition-normal);
+            color: var(--color-text-secondary);
+        }
+
+        .decision-option:hover {
+            background: rgba(20, 184, 166, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .decision-result {
+            display: none;
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            margin-top: 1rem;
+        }
+
+        .decision-result.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .decision-result.success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .decision-result.warning {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .decision-result.danger {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-restart {
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background: var(--cat-main);
+            border: none;
+            border-radius: var(--radius-md);
+            color: white;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        /* Tableaux comparatifs */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .comparison-table th {
+            background: var(--cat-main);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .comparison-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--color-border);
+            color: var(--color-text-secondary);
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .comparison-table tr:hover {
+            background: rgba(20, 184, 166, 0.05);
+        }
+
+        /* Checklist */
+        .checklist {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .checklist-title {
+            color: var(--color-text-primary);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+        }
+
+        .checklist-item:last-child {
+            border-bottom: none;
+        }
+
+        .checklist-item:hover {
+            background: rgba(20, 184, 166, 0.05);
+            margin: 0 -0.5rem;
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+            border-radius: var(--radius-sm);
+        }
+
+        .checklist-checkbox {
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--color-border);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all var(--transition-normal);
+        }
+
+        .checklist-item.checked .checklist-checkbox {
+            background: var(--cat-main);
+            border-color: var(--cat-main);
+        }
+
+        .checklist-checkbox i {
+            color: white;
+            font-size: 0.75rem;
+            opacity: 0;
+            transition: opacity var(--transition-normal);
+        }
+
+        .checklist-item.checked .checklist-checkbox i {
+            opacity: 1;
+        }
+
+        .checklist-text {
+            color: var(--color-text-secondary);
+            line-height: 1.5;
+        }
+
+        .checklist-item.checked .checklist-text {
+            color: var(--color-text-muted);
+            text-decoration: line-through;
+        }
+
+        .checklist-counter {
+            text-align: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--color-border);
+            color: var(--cat-main);
+            font-weight: 600;
+        }
+
+        /* Info boxes */
+        .info-box {
+            padding: 1rem 1.25rem;
+            border-radius: var(--radius-md);
+            margin-bottom: 1rem;
+        }
+
+        .info-box.teal {
+            background: rgba(20, 184, 166, 0.1);
+            border-left: 4px solid var(--cat-main);
+        }
+
+        .info-box.amber {
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid #f59e0b;
+        }
+
+        .info-box.red {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid #ef4444;
+        }
+
+        .info-box.blue {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid #3b82f6;
+        }
+
+        .info-box-title {
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Points clés */
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .key-point {
+            background: rgba(20, 184, 166, 0.1);
+            border: 1px solid var(--cat-border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+        }
+
+        .key-point h4 {
+            color: var(--cat-main);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .key-point p {
+            color: var(--color-text-secondary);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        /* Navigation entre étapes */
+        .step-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--color-border);
+        }
+
+        .btn-step {
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-lg);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-prev {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--color-border);
+            color: var(--color-text-secondary);
+        }
+
+        .btn-prev:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-next {
+            background: var(--cat-main);
+            border: none;
+            color: white;
+        }
+
+        .btn-next:hover {
+            background: var(--cat-dark);
+        }
+
+        /* Signes d'alerte liste */
+        .alert-signs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+            margin: 1rem 0;
+        }
+
+        .alert-sign {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: var(--radius-md);
+            color: var(--color-text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .alert-sign i {
+            color: #ef4444;
+            margin-top: 0.1rem;
+        }
+
+        /* Mnemonic box */
+        .mnemonic-box {
+            background: linear-gradient(145deg, rgba(20, 184, 166, 0.15), rgba(13, 148, 136, 0.05));
+            border: 2px solid var(--cat-border);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            margin: 1.5rem 0;
+        }
+
+        .mnemonic-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--cat-main);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .mnemonic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+        }
+
+        .mnemonic-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .mnemonic-letter {
+            width: 40px;
+            height: 40px;
+            background: var(--cat-main);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .mnemonic-text {
+            color: var(--color-text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .mnemonic-text strong {
+            color: var(--color-text-primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .step-btn span {
+                display: none;
+            }
+            .step-btn {
+                padding: 0.75rem;
+            }
+            .scenario-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .decision-options {
+                flex-direction: column;
+            }
+            .decision-option {
+                max-width: none;
+            }
+        }
+    </style>
+</head>
+<body class="light-questionnaire">
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+            <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+        </div>
+        <h1>Pédopsychiatrie</h1>
+        <span class="badge badge-cat-clinique">Cas Cliniques</span>
+    </nav>
+
+    <div class="container">
+        <header class="page-header">
+            <p class="page-subtitle">
+                Cas cliniques interactifs en psychiatrie de l'enfant et de l'adolescent : troubles anxieux et dépression.
+            </p>
+        </header>
+
+        <div class="sticky-header">
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 20%;"></div>
+                </div>
+                <p class="progress-text">Étape <span id="currentStep">1</span> sur 5</p>
+            </div>
+
+            <nav class="step-nav">
+                <button class="step-btn active" data-step="1" onclick="goToStep(1)">
+                    <span class="step-number">1</span>
+                    <span>Contexte</span>
+                </button>
+                <button class="step-btn" data-step="2" onclick="goToStep(2)">
+                    <span class="step-number">2</span>
+                    <span>Observation</span>
+                </button>
+                <button class="step-btn" data-step="3" onclick="goToStep(3)">
+                    <span class="step-number">3</span>
+                    <span>Réflexion</span>
+                </button>
+                <button class="step-btn" data-step="4" onclick="goToStep(4)">
+                    <span class="step-number">4</span>
+                    <span>Action</span>
+                </button>
+                <button class="step-btn" data-step="5" onclick="goToStep(5)">
+                    <span class="step-number">5</span>
+                    <span>Synthèse</span>
+                </button>
+            </nav>
+        </div>
+
+        <div class="case-tabs">
+            <div class="case-tab active" data-case="mirana" onclick="selectCase('mirana')">
+                <h4><i class="fas fa-child"></i> Cas 1 : Mirana</h4>
+                <p>Anxiété de l'enfant • 9 ans</p>
+            </div>
+            <div class="case-tab" data-case="tahiry" onclick="selectCase('tahiry')">
+                <h4><i class="fas fa-brain"></i> Cas 2 : Tahiry</h4>
+                <p>Dépression de l'adolescent • 15 ans</p>
+            </div>
+        </div>
+
+        <!-- ==================== ÉTAPE 1 : CONTEXTE ==================== -->
+        <section class="step-content active" id="step-1">
+            <h2 style="color: var(--cat-main); margin-bottom: 1.5rem;">
+                <i class="fas fa-book-open"></i> Étape 1 : Contexte
+            </h2>
+
+            <div class="case-content active" id="case-mirana-1">
+                <div class="scenario-card">
+                    <div class="scenario-header">
+                        <div class="scenario-icon">
+                            <i class="fas fa-child"></i>
+                        </div>
+                        <div class="scenario-title">
+                            <h3>Mirana, 9 ans</h3>
+                            <p>Consultation en CMP pédopsychiatrique • Demande de l'école</p>
+                        </div>
+                    </div>
+                    <div class="scenario-body">
+                        <p><strong>Motif d'adressage :</strong> Refus scolaire depuis 3 semaines. L'école signale des absences répétées et une grande détresse de l'enfant chaque matin à l'arrivée.</p>
+
+                        <p><strong>Antécédents :</strong> Aucun antécédent médical ou psychiatrique particulier. Développement psychomoteur normal. Bonne élève jusqu'à présent (CE2).</p>
+
+                        <p><strong>Contexte familial :</strong> Parents séparés depuis 1 an. Mirana vit principalement avec sa mère (assistante maternelle). Elle voit son père (chauffeur routier) un week-end sur deux. Pas de fratrie.</p>
+
+                        <p><strong>Événement récent :</strong> La grand-mère maternelle, très proche de Mirana, a été hospitalisée il y a 6 semaines pour un AVC. Elle est actuellement en rééducation.</p>
+                    </div>
+                </div>
+
+                <div class="info-box teal">
+                    <div class="info-box-title"><i class="fas fa-lightbulb"></i> Éléments clés à repérer</div>
+                    <ul style="margin: 0; padding-left: 1.5rem; color: var(--color-text-secondary);">
+                        <li>Changement récent de comportement (refus scolaire soudain)</li>
+                        <li>Événement de vie potentiellement traumatisant (hospitalisation de la grand-mère)</li>
+                        <li>Contexte familial fragilisant (séparation parentale récente)</li>
+                        <li>Manifestations somatiques possibles à explorer</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="case-content" id="case-tahiry-1">
+                <div class="scenario-card">
+                    <div class="scenario-header">
+                        <div class="scenario-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="scenario-title">
+                            <h3>Tahiry, 15 ans</h3>
+                            <p>Consultation aux urgences pédiatriques • Automutilations</p>
+                        </div>
+                    </div>
+                    <div class="scenario-body">
+                        <p><strong>Motif de consultation :</strong> Amenée par ses parents après découverte de scarifications sur les avant-bras. La mère a remarqué des traces de coupures en faisant la lessive.</p>
+
+                        <p><strong>Antécédents :</strong> Pas d'antécédent psychiatrique connu. Suivi en CMP à 8 ans pour des difficultés d'apprentissage (arrêté après 6 mois). Pas de traitement en cours.</p>
+
+                        <p><strong>Scolarité :</strong> En classe de 3ème. Élève moyenne jusque-là, mais chute des résultats depuis le 2ème trimestre. Absences fréquentes. Les professeurs signalent un repli sur soi.</p>
+
+                        <p><strong>Contexte familial :</strong> Vit avec ses deux parents et une sœur aînée (19 ans, étudiante, partie vivre en métropole). Relations familiales décrites comme « distantes » par Tahiry. Père très investi dans son travail, mère anxieuse.</p>
+
+                        <p><strong>Observations initiales :</strong> Tahiry répond par monosyllabes. Elle est habillée en noir, capuche relevée. Elle évite le regard. Elle dit « ça va » quand on lui demande comment elle se sent.</p>
+                    </div>
+                </div>
+
+                <div class="info-box red">
+                    <div class="info-box-title"><i class="fas fa-exclamation-triangle"></i> Points de vigilance immédiats</div>
+                    <ul style="margin: 0; padding-left: 1.5rem; color: var(--color-text-secondary);">
+                        <li>Automutilations = signal de détresse majeur</li>
+                        <li>Nécessité d'évaluer le risque suicidaire</li>
+                        <li>Isolement social et familial</li>
+                        <li>Repli sur soi et évitement du contact</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="step-navigation">
+                <div></div>
+                <button class="btn-step btn-next" onclick="goToStep(2)">
+                    Observation <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- ==================== ÉTAPE 2 : OBSERVATION ==================== -->
+        <section class="step-content" id="step-2">
+            <h2 style="color: var(--cat-main); margin-bottom: 1.5rem;">
+                <i class="fas fa-eye"></i> Étape 2 : Observation
+            </h2>
+
+            <div class="case-content active" id="case-mirana-2">
+                <h3 style="color: var(--color-text-primary); margin-bottom: 1rem;">Signes observés chez Mirana</h3>
+
+                <div class="accordion">
+                    <button class="accordion-button">
+                        <span><i class="fas fa-child" style="margin-right: 0.5rem; color: var(--cat-main);"></i> Comportement à la maison</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="accordion-inner">
+                            <ul style="color: var(--color-text-secondary);">
+                                <li>Pleurs et crises de colère chaque matin avant l'école</li>
+                                <li>Dort avec sa mère depuis l'hospitalisation de la grand-mère</li>
+                                <li>Appelle sa mère plusieurs fois par jour quand elle n'est pas avec elle</li>
+                                <li>Vérifie régulièrement que sa mère « va bien »</li>
+                                <li>A recommencé à sucer son pouce (régression)</li>
+                                <li>Cauchemars fréquents (rêve que « maman disparaît »)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-button">
+                        <span><i class="fas fa-school" style="margin-right: 0.5rem; color: var(--cat-main);"></i> Comportement à l'école</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="accordion-inner">
+                            <ul style="color: var(--color-text-secondary);">
+                                <li>S'accroche à sa mère au portail, refuse de la lâcher</li>
+                                <li>Pleure pendant la classe, demande à appeler sa mère</li>
+                                <li>Va plusieurs fois à l'infirmerie pour des maux de ventre</li>
+                                <li>Ne participe plus en classe, semble « ailleurs »</li>
+                                <li>S'isole dans la cour, ne joue plus avec ses amies</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-button">
+                        <span><i class="fas fa-heartbeat" style="margin-right: 0.5rem; color: var(--cat-main);"></i> Plaintes somatiques</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="accordion-inner">
+                            <ul style="color: var(--color-text-secondary);">
+                                <li>Maux de ventre quotidiens le matin (disparaissent le week-end)</li>
+                                <li>Maux de tête fréquents</li>
+                                <li>Nausées avant de partir à l'école</li>
+                                <li>Perte d'appétit au petit-déjeuner</li>
+                                <li>Bilan somatique réalisé par le médecin traitant : normal</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-button">
+                        <span><i class="fas fa-comments" style="margin-right: 0.5rem; color: var(--cat-main);"></i> Verbalisations de Mirana</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="accordion-inner">
+                            <div style="font-style: italic; color: var(--color-text-secondary); padding: 1rem; background: rgba(0,0,0,0.2); border-radius: var(--radius-md);">
+                                <p>« J'ai peur qu'il t'arrive quelque chose comme à mamie. »</p>
+                                <p>« Si je vais à l'école, qui va s'occuper de toi ? »</p>
+                                <p>« J'ai trop mal au ventre, je peux pas y aller. »</p>
+                                <p>« Les autres enfants ne m'aiment plus. »</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quiz Mirana -->
+                <div class="quiz-container">
+                    <p class="quiz-question">
+                        <i class="fas fa-question-circle" style="color: var(--cat-main);"></i>
+                        Quiz : Quel type de trouble anxieux est le plus probable chez Mirana ?
+                    </p>
+                    <div class="quiz-options">
+                        <div class="quiz-option" data-quiz="mirana-q1" data-answer="A">
+                            A) Phobie sociale
+                        </div>
+                        <div class="quiz-option" data-quiz="mirana-q1" data-answer="B">
+                            B) Trouble anxieux de séparation
+                        </div>
+                        <div class="quiz-option" data-quiz="mirana-q1" data-answer="C">
+                            C) Trouble obsessionnel-compulsif
+                        </div>
+                        <div class="quiz-option" data-quiz="mirana-q1" data-answer="D">
+                            D) Trouble panique
+                        </div>
+                    </div>
+                    <div class="feedback-box" id="feedback-mirana-q1"></div>
+                </div>
+            </div>
+
+            <div class="case-content" id="case-tahiry-2">
+                <h3 style="color: var(--color-text-primary); margin-bottom: 1rem;">Signes observés chez Tahiry</h3>
+
+                <div class="accordion">
+                    <button class="accordion-button">
+                        <span><i class="fas fa-cut" style="margin-right: 0.5rem; color: #ef4444;"></i> Automutilations</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="accordion-inner">
+                            <ul style="color: var(--color-text-secondary);">
+                                <li>Scarifications superficielles sur les deux avant-bras</li>
+                                <li>Certaines cicatrices anciennes (plusieurs semaines), d'autres récentes</li>
+                                <li>Utilise une lame de taille-crayon</li>
+                                <li>Dit que « ça soulage » quand elle se sent « trop mal »</li>
+                                <li>Cache les marques avec des manches longues</li>
+                                <li>N'a pas de comportement suicidaire intentionnel (« je ne veux pas mourir »)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-button">
+                        <span><i class="fas fa-brain" style="margin-right: 0.5rem; color: var(--cat-main);"></i> Symptômes thymiques</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="accordion-inner">
+                            <ul style="color: var(--color-text-secondary);">
+                                <li>Tristesse persistante depuis plusieurs mois</li>
+                                <li>Perte d'intérêt pour ses activités (musique, amis, sport)</li>
+                                <li>Sentiment de vide intérieur, d'être « nulle »</li>
+                                <li>Irritabilité marquée, conflits avec les parents</li>
+                                <li>Fatigue permanente malgré un sommeil excessif</li>
+                                <li>Difficultés de concentration à l'école</li>
+                                <li>Idées de mort passives (« à quoi bon »), sans plan suicidaire</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-button">
+                        <span><i class="fas fa-users" style="margin-right: 0.5rem; color: var(--cat-main);"></i> Fonctionnement social</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="accordion-inner">
+                            <ul style="color: var(--color-text-secondary);">
+                                <li>Ne voit plus ses amies depuis 2 mois</li>
+                                <li>Passe beaucoup de temps seule dans sa chambre</li>
+                                <li>Utilise intensivement les réseaux sociaux (seul lien social)</li>
+                                <li>Dit se sentir « incomprise » par tout le monde</li>
+                                <li>Relation conflictuelle avec la mère (« elle ne comprend rien »)</li>
+                                <li>Sentiment d'abandon depuis le départ de la sœur</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-button">
+                        <span><i class="fas fa-quote-left" style="margin-right: 0.5rem; color: var(--cat-main);"></i> Verbalisations de Tahiry</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="accordion-inner">
+                            <div style="font-style: italic; color: var(--color-text-secondary); padding: 1rem; background: rgba(0,0,0,0.2); border-radius: var(--radius-md);">
+                                <p>« Je me coupe parce que sinon j'explose de l'intérieur. »</p>
+                                <p>« Personne ne voit que je vais mal. »</p>
+                                <p>« Ma sœur est partie, elle aussi m'a oubliée. »</p>
+                                <p>« Je ne sers à rien. »</p>
+                                <p>« Parfois je me demande à quoi ça sert de continuer. »</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quiz Tahiry -->
+                <div class="quiz-container">
+                    <p class="quiz-question">
+                        <i class="fas fa-question-circle" style="color: var(--cat-main);"></i>
+                        Quiz : Quelle est la priorité IMMÉDIATE dans l'évaluation de Tahiry ?
+                    </p>
+                    <div class="quiz-options">
+                        <div class="quiz-option" data-quiz="tahiry-q1" data-answer="A">
+                            A) Évaluer le risque suicidaire
+                        </div>
+                        <div class="quiz-option" data-quiz="tahiry-q1" data-answer="B">
+                            B) Rechercher un trouble de la personnalité
+                        </div>
+                        <div class="quiz-option" data-quiz="tahiry-q1" data-answer="C">
+                            C) Demander un bilan neuropsychologique
+                        </div>
+                        <div class="quiz-option" data-quiz="tahiry-q1" data-answer="D">
+                            D) Prescrire un antidépresseur
+                        </div>
+                    </div>
+                    <div class="feedback-box" id="feedback-tahiry-q1"></div>
+                </div>
+            </div>
+
+            <div class="step-navigation">
+                <button class="btn-step btn-prev" onclick="goToStep(1)">
+                    <i class="fas fa-arrow-left"></i> Contexte
+                </button>
+                <button class="btn-step btn-next" onclick="goToStep(3)">
+                    Réflexion <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- ==================== ÉTAPE 3 : RÉFLEXION CLINIQUE ==================== -->
+        <section class="step-content" id="step-3">
+            <h2 style="color: var(--cat-main); margin-bottom: 1.5rem;">
+                <i class="fas fa-lightbulb"></i> Étape 3 : Réflexion clinique
+            </h2>
+
+            <div class="case-content active" id="case-mirana-3">
+                <h3 style="color: var(--color-text-primary); margin-bottom: 1rem;">Arbre décisionnel : Orientation diagnostique</h3>
+
+                <div class="decision-tree" id="tree-mirana">
+                    <div class="decision-node active" id="mirana-node-1">
+                        <p class="decision-question">L'anxiété est-elle centrée sur la séparation d'avec les figures d'attachement ?</p>
+                        <div class="decision-options">
+                            <div class="decision-option" onclick="showMiranaNode('node-2')">
+                                <i class="fas fa-check"></i> Oui
+                            </div>
+                            <div class="decision-option" onclick="showMiranaNode('node-3')">
+                                <i class="fas fa-times"></i> Non
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="decision-node" id="mirana-node-2">
+                        <p class="decision-question">Y a-t-il des évitements sociaux généralisés (pas seulement liés à la séparation) ?</p>
+                        <div class="decision-options">
+                            <div class="decision-option" onclick="showMiranaResult('result-mixte')">
+                                <i class="fas fa-check"></i> Oui, évitements multiples
+                            </div>
+                            <div class="decision-option" onclick="showMiranaResult('result-separation')">
+                                <i class="fas fa-times"></i> Non, uniquement liés à la séparation
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="decision-node" id="mirana-node-3">
+                        <p class="decision-question">L'anxiété est-elle centrée sur quel domaine ?</p>
+                        <div class="decision-options">
+                            <div class="decision-option" onclick="showMiranaResult('result-sociale')">
+                                Situations sociales / Regard d'autrui
+                            </div>
+                            <div class="decision-option" onclick="showMiranaResult('result-generalisee')">
+                                Inquiétudes multiples et diffuses
+                            </div>
+                            <div class="decision-option" onclick="showMiranaResult('result-specifique')">
+                                Objet ou situation spécifique
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="decision-result success" id="mirana-result-separation">
+                        <h4 style="color: #10b981;"><i class="fas fa-check-circle"></i> Trouble anxieux de séparation (F93.0)</h4>
+                        <p style="color: var(--color-text-secondary);">Le tableau clinique de Mirana est caractéristique : anxiété excessive lors de la séparation, soucis irréalistes concernant les proches, refus scolaire, plaintes somatiques, cauchemars de séparation.</p>
+                        <p style="color: var(--color-text-secondary); margin-top: 0.5rem;"><strong>Facteur déclenchant probable :</strong> L'hospitalisation de la grand-mère a réactivé des angoisses de perte, dans un contexte déjà fragilisé par la séparation parentale.</p>
+                        <button class="btn-restart" onclick="restartMiranaTree()">Recommencer</button>
+                    </div>
+
+                    <div class="decision-result warning" id="mirana-result-mixte">
+                        <h4 style="color: #f59e0b;"><i class="fas fa-exclamation-circle"></i> Comorbidité possible</h4>
+                        <p style="color: var(--color-text-secondary);">Un trouble anxieux de séparation peut coexister avec une phobie sociale ou une anxiété généralisée. L'évaluation doit explorer l'ensemble des domaines anxieux.</p>
+                        <button class="btn-restart" onclick="restartMiranaTree()">Recommencer</button>
+                    </div>
+
+                    <div class="decision-result warning" id="mirana-result-sociale">
+                        <h4 style="color: #f59e0b;"><i class="fas fa-info-circle"></i> Phobie sociale à évoquer</h4>
+                        <p style="color: var(--color-text-secondary);">Si l'évitement scolaire est lié à la peur du jugement des autres plutôt qu'à la séparation, envisager une anxiété sociale.</p>
+                        <button class="btn-restart" onclick="restartMiranaTree()">Recommencer</button>
+                    </div>
+
+                    <div class="decision-result warning" id="mirana-result-generalisee">
+                        <h4 style="color: #f59e0b;"><i class="fas fa-info-circle"></i> Anxiété généralisée à évoquer</h4>
+                        <p style="color: var(--color-text-secondary);">Si les inquiétudes sont multiples et concernent de nombreux domaines (santé, performance, avenir...), évoquer un TAG.</p>
+                        <button class="btn-restart" onclick="restartMiranaTree()">Recommencer</button>
+                    </div>
+
+                    <div class="decision-result" id="mirana-result-specifique">
+                        <h4><i class="fas fa-info-circle"></i> Phobie spécifique à évoquer</h4>
+                        <p style="color: var(--color-text-secondary);">Si l'anxiété est focalisée sur un objet ou une situation précise (école elle-même, trajet, etc.), évoquer une phobie spécifique.</p>
+                        <button class="btn-restart" onclick="restartMiranaTree()">Recommencer</button>
+                    </div>
+                </div>
+
+                <h3 style="color: var(--color-text-primary); margin: 2rem 0 1rem;">Critères du Trouble Anxieux de Séparation (DSM-5)</h3>
+
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Critère</th>
+                            <th>Description</th>
+                            <th>Présent chez Mirana</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Détresse excessive lors de la séparation</td>
+                            <td style="color: #10b981;">✓ Crises de pleurs au portail</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Soucis excessifs de perdre les figures d'attachement</td>
+                            <td style="color: #10b981;">✓ « Peur qu'il t'arrive quelque chose »</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Soucis qu'un événement provoque la séparation</td>
+                            <td style="color: #10b981;">✓ Lien avec l'AVC de la grand-mère</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>Refus de quitter la maison / aller à l'école</td>
+                            <td style="color: #10b981;">✓ Refus scolaire depuis 3 semaines</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>Peur d'être seul</td>
+                            <td style="color: #10b981;">✓ Dort avec sa mère</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>Refus de dormir hors de la maison</td>
+                            <td style="color: #f59e0b;">? À explorer</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>Cauchemars de séparation</td>
+                            <td style="color: #10b981;">✓ « Maman disparaît »</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>Plaintes somatiques lors des séparations</td>
+                            <td style="color: #10b981;">✓ Maux de ventre, nausées</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="case-content" id="case-tahiry-3">
+                <h3 style="color: var(--color-text-primary); margin-bottom: 1rem;">Arbre décisionnel : Évaluation du risque suicidaire</h3>
+
+                <div class="decision-tree" id="tree-tahiry">
+                    <div class="decision-node active" id="tahiry-node-1">
+                        <p class="decision-question">Tahiry a-t-elle des idées suicidaires actuelles ?</p>
+                        <div class="decision-options">
+                            <div class="decision-option" onclick="showTahiryNode('node-2')">
+                                <i class="fas fa-check"></i> Oui, idées présentes
+                            </div>
+                            <div class="decision-option" onclick="showTahiryNode('node-4')">
+                                <i class="fas fa-times"></i> Non, pas d'idées actuelles
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="decision-node" id="tahiry-node-2">
+                        <p class="decision-question">Existe-t-il un plan suicidaire élaboré ?</p>
+                        <div class="decision-options">
+                            <div class="decision-option" onclick="showTahiryResult('result-urgent')">
+                                <i class="fas fa-exclamation-triangle"></i> Oui, plan précis
+                            </div>
+                            <div class="decision-option" onclick="showTahiryNode('node-3')">
+                                <i class="fas fa-minus"></i> Idées vagues, pas de plan
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="decision-node" id="tahiry-node-3">
+                        <p class="decision-question">Quels facteurs de protection sont présents ?</p>
+                        <div class="decision-options">
+                            <div class="decision-option" onclick="showTahiryResult('result-modere')">
+                                Peu de facteurs de protection
+                            </div>
+                            <div class="decision-option" onclick="showTahiryResult('result-surveille')">
+                                Facteurs de protection présents
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="decision-node" id="tahiry-node-4">
+                        <p class="decision-question">Les automutilations sont-elles en lien avec une fonction de régulation émotionnelle ?</p>
+                        <div class="decision-options">
+                            <div class="decision-option" onclick="showTahiryResult('result-regulation')">
+                                <i class="fas fa-check"></i> Oui, soulagement émotionnel
+                            </div>
+                            <div class="decision-option" onclick="showTahiryResult('result-complexe')">
+                                <i class="fas fa-question"></i> Autre fonction (punition, etc.)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="decision-result danger" id="tahiry-result-urgent">
+                        <h4 style="color: #ef4444;"><i class="fas fa-exclamation-circle"></i> RISQUE SUICIDAIRE ÉLEVÉ</h4>
+                        <p style="color: var(--color-text-secondary);">Hospitalisation en pédopsychiatrie à envisager. Surveillance rapprochée. Retirer l'accès aux moyens létaux. Informer les parents de la gravité.</p>
+                        <button class="btn-restart" onclick="restartTahiryTree()">Recommencer</button>
+                    </div>
+
+                    <div class="decision-result warning" id="tahiry-result-modere">
+                        <h4 style="color: #f59e0b;"><i class="fas fa-exclamation-triangle"></i> RISQUE MODÉRÉ - Vigilance renforcée</h4>
+                        <p style="color: var(--color-text-secondary);">Suivi ambulatoire rapproché possible si entourage fiable et engagement de la patiente. Contrat de non-passage à l'acte. Rendez-vous rapide en CMP.</p>
+                        <button class="btn-restart" onclick="restartTahiryTree()">Recommencer</button>
+                    </div>
+
+                    <div class="decision-result success" id="tahiry-result-surveille">
+                        <h4 style="color: #10b981;"><i class="fas fa-shield-alt"></i> RISQUE PRÉSENT - Facteurs protecteurs</h4>
+                        <p style="color: var(--color-text-secondary);">Tahiry indique ne pas vouloir mourir. Les automutilations sont une stratégie de régulation, non un équivalent suicidaire. Suivi ambulatoire avec surveillance des facteurs de risque.</p>
+                        <button class="btn-restart" onclick="restartTahiryTree()">Recommencer</button>
+                    </div>
+
+                    <div class="decision-result success" id="tahiry-result-regulation">
+                        <h4 style="color: #10b981;"><i class="fas fa-info-circle"></i> Automutilation = régulation émotionnelle</h4>
+                        <p style="color: var(--color-text-secondary);">Les scarifications de Tahiry semblent avoir une fonction de soulagement émotionnel (« ça soulage »). Ce n'est pas équivalent à une intention suicidaire, mais c'est un signal de souffrance majeure nécessitant une prise en charge.</p>
+                        <button class="btn-restart" onclick="restartTahiryTree()">Recommencer</button>
+                    </div>
+
+                    <div class="decision-result" id="tahiry-result-complexe">
+                        <h4><i class="fas fa-question-circle"></i> Exploration approfondie nécessaire</h4>
+                        <p style="color: var(--color-text-secondary);">Si la fonction des automutilations n'est pas claire (autopunition, dissociation, etc.), une évaluation plus approfondie est nécessaire pour adapter la prise en charge.</p>
+                        <button class="btn-restart" onclick="restartTahiryTree()">Recommencer</button>
+                    </div>
+                </div>
+
+                <h3 style="color: var(--color-text-primary); margin: 2rem 0 1rem;">Dépression de l'adolescent : Spécificités</h3>
+
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Symptôme adulte</th>
+                            <th>Expression chez l'adolescent</th>
+                            <th>Chez Tahiry</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Humeur triste</td>
+                            <td>Irritabilité, colères, conflits</td>
+                            <td style="color: #10b981;">✓ Conflits avec les parents</td>
+                        </tr>
+                        <tr>
+                            <td>Anhédonie</td>
+                            <td>Ennui, « je m'en fiche »</td>
+                            <td style="color: #10b981;">✓ Abandon des activités</td>
+                        </tr>
+                        <tr>
+                            <td>Fatigue</td>
+                            <td>Hypersomnie, « flemme »</td>
+                            <td style="color: #10b981;">✓ Fatigue + sommeil excessif</td>
+                        </tr>
+                        <tr>
+                            <td>Dévalorisation</td>
+                            <td>« Je suis nul(le) »</td>
+                            <td style="color: #10b981;">✓ « Je ne sers à rien »</td>
+                        </tr>
+                        <tr>
+                            <td>Idées suicidaires</td>
+                            <td>Conduites à risque, automutilations</td>
+                            <td style="color: #10b981;">✓ Scarifications</td>
+                        </tr>
+                        <tr>
+                            <td>Retrait social</td>
+                            <td>Isolement, réseaux sociaux excessifs</td>
+                            <td style="color: #10b981;">✓ Plus d'amies, seule en chambre</td>
+                        </tr>
+                        <tr>
+                            <td>Troubles cognitifs</td>
+                            <td>Chute scolaire, absences</td>
+                            <td style="color: #10b981;">✓ Notes en baisse, absences</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Quiz réflexion Tahiry -->
+                <div class="quiz-container">
+                    <p class="quiz-question">
+                        <i class="fas fa-question-circle" style="color: var(--cat-main);"></i>
+                        Quiz : Quel diagnostic principal évoquer chez Tahiry ?
+                    </p>
+                    <div class="quiz-options">
+                        <div class="quiz-option" data-quiz="tahiry-q2" data-answer="A">
+                            A) Trouble de personnalité borderline
+                        </div>
+                        <div class="quiz-option" data-quiz="tahiry-q2" data-answer="B">
+                            B) Épisode dépressif caractérisé
+                        </div>
+                        <div class="quiz-option" data-quiz="tahiry-q2" data-answer="C">
+                            C) Trouble de l'adaptation
+                        </div>
+                        <div class="quiz-option" data-quiz="tahiry-q2" data-answer="D">
+                            D) Schizophrénie débutante
+                        </div>
+                    </div>
+                    <div class="feedback-box" id="feedback-tahiry-q2"></div>
+                </div>
+            </div>
+
+            <div class="step-navigation">
+                <button class="btn-step btn-prev" onclick="goToStep(2)">
+                    <i class="fas fa-arrow-left"></i> Observation
+                </button>
+                <button class="btn-step btn-next" onclick="goToStep(4)">
+                    Action <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- ==================== ÉTAPE 4 : CONDUITE À TENIR ==================== -->
+        <section class="step-content" id="step-4">
+            <h2 style="color: var(--cat-main); margin-bottom: 1.5rem;">
+                <i class="fas fa-hand-holding-medical"></i> Étape 4 : Conduite à tenir
+            </h2>
+
+            <div class="case-content active" id="case-mirana-4">
+                <h3 style="color: var(--color-text-primary); margin-bottom: 1rem;">Prise en charge du trouble anxieux de séparation</h3>
+
+                <div class="info-box teal">
+                    <div class="info-box-title"><i class="fas fa-bullseye"></i> Objectifs thérapeutiques</div>
+                    <ul style="margin: 0; padding-left: 1.5rem; color: var(--color-text-secondary);">
+                        <li>Réduire l'anxiété liée à la séparation</li>
+                        <li>Permettre un retour progressif à l'école</li>
+                        <li>Renforcer le sentiment de sécurité intérieure</li>
+                        <li>Accompagner les parents dans leur attitude</li>
+                    </ul>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-button">
+                        <span><i class="fas fa-users" style="margin-right: 0.5rem; color: var(--cat-main);"></i> Guidance parentale</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="accordion-inner">
+                            <h4 style="color: var(--color-text-primary); margin-bottom: 0.5rem;">Ce qu'il faut faire :</h4>
+                            <ul style="color: var(--color-text-secondary); margin-bottom: 1rem;">
+                                <li>Valider les émotions de l'enfant : « Je comprends que tu aies peur »</li>
+                                <li>Rassurer de façon réaliste, sans minimiser</li>
+                                <li>Maintenir des routines stables et prévisibles</li>
+                                <li>Préparer les séparations à l'avance</li>
+                                <li>Créer des rituels de séparation courts et positifs</li>
+                                <li>Féliciter les efforts de l'enfant, même petits</li>
+                            </ul>
+                            <h4 style="color: var(--color-text-primary); margin-bottom: 0.5rem;">Ce qu'il faut éviter :</h4>
+                            <ul style="color: #f87171;">
+                                <li>Les réassurances excessives (« il ne m'arrivera JAMAIS rien »)</li>
+                                <li>Les départs en cachette</li>
+                                <li>Céder au refus scolaire de façon prolongée</li>
+                                <li>Punir ou forcer brutalement</li>
+                                <li>Transmettre sa propre anxiété</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-button">
+                        <span><i class="fas fa-child" style="margin-right: 0.5rem; color: var(--cat-main);"></i> Thérapie avec l'enfant (TCC)</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="accordion-inner">
+                            <h4 style="color: var(--color-text-primary); margin-bottom: 0.5rem;">Composantes clés :</h4>
+                            <ul style="color: var(--color-text-secondary);">
+                                <li><strong>Psychoéducation :</strong> Expliquer l'anxiété avec des métaphores adaptées</li>
+                                <li><strong>Relaxation :</strong> Respiration ventrale, relaxation musculaire ludique</li>
+                                <li><strong>Exposition graduée :</strong> Hiérarchie des situations anxiogènes</li>
+                                <li><strong>Restructuration cognitive :</strong> « Ma maman sera là quand je rentre »</li>
+                                <li><strong>Résolution de problèmes :</strong> « Que puis-je faire si je me sens mal ? »</li>
+                            </ul>
+                            <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: var(--radius-md); margin-top: 1rem;">
+                                <strong style="color: var(--color-text-primary);">Exemple de hiérarchie d'exposition pour Mirana :</strong>
+                                <ol style="color: var(--color-text-secondary); margin-top: 0.5rem;">
+                                    <li>Rester dans sa chambre 10 min pendant que maman est dans la pièce d'à côté</li>
+                                    <li>Aller à l'école avec maman qui attend 30 min dans la cour</li>
+                                    <li>Maman part après 15 min en classe</li>
+                                    <li>Séparation au portail avec rituel court</li>
+                                    <li>Journée complète à l'école</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-button">
+                        <span><i class="fas fa-school" style="margin-right: 0.5rem; color: var(--cat-main);"></i> Coordination avec l'école</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="accordion-inner">
+                            <ul style="color: var(--color-text-secondary);">
+                                <li>Informer l'enseignant du trouble et du plan de réintégration</li>
+                                <li>Proposer un « adulte ressource » à l'école</li>
+                                <li>Aménager un retour progressif (mi-temps temporaire si nécessaire)</li>
+                                <li>Prévoir un espace de repli si besoin (infirmerie)</li>
+                                <li>Éviter les appels téléphoniques répétés à la mère</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-button">
+                        <span><i class="fas fa-pills" style="margin-right: 0.5rem; color: var(--cat-main);"></i> Traitement médicamenteux ?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="accordion-inner">
+                            <div class="info-box amber">
+                                <p style="color: var(--color-text-secondary);"><strong>En première intention :</strong> La TCC est le traitement de choix. Les médicaments ne sont pas indiqués en première ligne pour le trouble anxieux de séparation chez l'enfant.</p>
+                            </div>
+                            <p style="color: var(--color-text-secondary);"><strong>Si échec de la TCC bien conduite :</strong></p>
+                            <ul style="color: var(--color-text-secondary);">
+                                <li>ISRS (sertraline, fluoxétine) en cas de sévérité importante</li>
+                                <li>Introduction progressive, surveillance de l'activation</li>
+                                <li>Toujours en association avec la psychothérapie</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="case-content" id="case-tahiry-4">
+                <h3 style="color: var(--color-text-primary); margin-bottom: 1rem;">Prise en charge de la dépression de l'adolescent</h3>
+
+                <div class="info-box red">
+                    <div class="info-box-title"><i class="fas fa-exclamation-triangle"></i> Priorités immédiates</div>
+                    <ol style="margin: 0; padding-left: 1.5rem; color: var(--color-text-secondary);">
+                        <li>Évaluer et surveiller le risque suicidaire</li>
+                        <li>Sécuriser l'environnement (retirer moyens létaux)</li>
+                        <li>Informer les parents de la gravité</li>
+                        <li>Mettre en place un suivi rapproché</li>
+                    </ol>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-button">
+                        <span><i class="fas fa-comments" style="margin-right: 0.5rem; color: var(--cat-main);"></i> Aborder les automutilations</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="accordion-inner">
+                            <h4 style="color: var(--color-text-primary); margin-bottom: 0.5rem;">Attitude à adopter :</h4>
+                            <ul style="color: var(--color-text-secondary);">
+                                <li>Attitude neutre, sans jugement ni dramatisation</li>
+                                <li>Explorer la fonction des automutilations (« Qu'est-ce que ça t'apporte ? »)</li>
+                                <li>Valider la souffrance sous-jacente</li>
+                                <li>Ne pas promettre le secret absolu (sécurité prime)</li>
+                                <li>Proposer des alternatives (glace, élastique, dessin rouge...)</li>
+                            </ul>
+                            <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: var(--radius-md); margin-top: 1rem;">
+                                <strong style="color: var(--color-text-primary);">Exemple de verbalisation :</strong>
+                                <p style="color: var(--color-text-secondary); font-style: italic;">« Je comprends que te couper t'aide à gérer des émotions très intenses. On va chercher ensemble d'autres façons de faire quand ça devient trop difficile. »</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-button">
+                        <span><i class="fas fa-user-md" style="margin-right: 0.5rem; color: var(--cat-main);"></i> Alliance thérapeutique</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="accordion-inner">
+                            <h4 style="color: var(--color-text-primary); margin-bottom: 0.5rem;">Clés avec l'adolescent :</h4>
+                            <ul style="color: var(--color-text-secondary);">
+                                <li>Respecter la confidentialité (dans les limites de la sécurité)</li>
+                                <li>Ne pas se positionner « du côté des parents »</li>
+                                <li>Éviter le discours moralisateur</li>
+                                <li>Valoriser l'expertise de l'ado sur lui-même</li>
+                                <li>Être authentique, ne pas « faire jeune »</li>
+                                <li>Accepter les silences, ne pas forcer la parole</li>
+                            </ul>
+                            <h4 style="color: var(--color-text-primary); margin: 1rem 0 0.5rem;">Avec les parents :</h4>
+                            <ul style="color: var(--color-text-secondary);">
+                                <li>Les informer sans trahir la confiance de l'ado</li>
+                                <li>Les aider à ajuster leur attitude (ni surveillance excessive, ni banalisation)</li>
+                                <li>Proposer des entretiens familiaux si conflits importants</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-button">
+                        <span><i class="fas fa-brain" style="margin-right: 0.5rem; color: var(--cat-main);"></i> Psychothérapie</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="accordion-inner">
+                            <div class="key-points">
+                                <div class="key-point">
+                                    <h4><i class="fas fa-check"></i> TCC</h4>
+                                    <p>Activation comportementale, restructuration cognitive, gestion des émotions</p>
+                                </div>
+                                <div class="key-point">
+                                    <h4><i class="fas fa-check"></i> IPT-A</h4>
+                                    <p>Thérapie interpersonnelle adaptée aux ados : travail sur les relations</p>
+                                </div>
+                                <div class="key-point">
+                                    <h4><i class="fas fa-check"></i> TCD-A</h4>
+                                    <p>Dialectique adaptée ados : régulation émotionnelle, tolérance à la détresse</p>
+                                </div>
+                                <div class="key-point">
+                                    <h4><i class="fas fa-check"></i> Familiale</h4>
+                                    <p>Si dysfonctionnements familiaux importants</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-button">
+                        <span><i class="fas fa-pills" style="margin-right: 0.5rem; color: var(--cat-main);"></i> Traitement médicamenteux</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="accordion-inner">
+                            <div class="info-box blue">
+                                <p style="color: var(--color-text-secondary);"><strong>Indication :</strong> Dépression modérée à sévère, ou échec de la psychothérapie seule après 4-6 semaines.</p>
+                            </div>
+                            <h4 style="color: var(--color-text-primary); margin: 1rem 0 0.5rem;">ISRS recommandés chez l'adolescent :</h4>
+                            <table class="comparison-table">
+                                <thead>
+                                    <tr>
+                                        <th>Molécule</th>
+                                        <th>AMM</th>
+                                        <th>Posologie</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Fluoxétine</td>
+                                        <td>≥ 8 ans (seul ISRS avec AMM pédiatrique)</td>
+                                        <td>10-20 mg/j</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sertraline</td>
+                                        <td>Hors AMM mais données favorables</td>
+                                        <td>25-50 mg/j</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Escitalopram</td>
+                                        <td>≥ 12 ans (USA)</td>
+                                        <td>5-10 mg/j</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="info-box amber" style="margin-top: 1rem;">
+                                <div class="info-box-title"><i class="fas fa-exclamation-triangle"></i> Surveillance renforcée</div>
+                                <ul style="margin: 0; padding-left: 1.5rem; color: var(--color-text-secondary);">
+                                    <li>Risque d'activation et de majoration des idées suicidaires en début de traitement</li>
+                                    <li>Surveillance hebdomadaire les 4 premières semaines</li>
+                                    <li>Informer patient et parents des signes d'alerte</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion">
+                    <button class="accordion-button">
+                        <span><i class="fas fa-hospital" style="margin-right: 0.5rem; color: #ef4444;"></i> Indications d'hospitalisation</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="accordion-inner">
+                            <ul style="color: var(--color-text-secondary);">
+                                <li>Risque suicidaire élevé (idées suicidaires avec plan)</li>
+                                <li>Tentative de suicide récente</li>
+                                <li>Refus alimentaire sévère</li>
+                                <li>Symptômes psychotiques associés</li>
+                                <li>Environnement familial non protecteur</li>
+                                <li>Échec de la prise en charge ambulatoire</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-navigation">
+                <button class="btn-step btn-prev" onclick="goToStep(3)">
+                    <i class="fas fa-arrow-left"></i> Réflexion
+                </button>
+                <button class="btn-step btn-next" onclick="goToStep(5)">
+                    Synthèse <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- ==================== ÉTAPE 5 : SYNTHÈSE ==================== -->
+        <section class="step-content" id="step-5">
+            <h2 style="color: var(--cat-main); margin-bottom: 1.5rem;">
+                <i class="fas fa-clipboard-check"></i> Étape 5 : Synthèse
+            </h2>
+
+            <div class="case-content active" id="case-mirana-5">
+                <h3 style="color: var(--color-text-primary); margin-bottom: 1rem;">Points clés - Trouble anxieux de séparation</h3>
+
+                <div class="key-points">
+                    <div class="key-point">
+                        <h4><i class="fas fa-search"></i> Reconnaître</h4>
+                        <p>Détresse à la séparation, refus scolaire, plaintes somatiques, cauchemars de perte</p>
+                    </div>
+                    <div class="key-point">
+                        <h4><i class="fas fa-lightbulb"></i> Comprendre</h4>
+                        <p>Souvent déclenché par un événement (deuil, maladie, séparation parentale)</p>
+                    </div>
+                    <div class="key-point">
+                        <h4><i class="fas fa-users"></i> Impliquer</h4>
+                        <p>La guidance parentale est essentielle : attitude ni rassurante à l'excès, ni punitive</p>
+                    </div>
+                    <div class="key-point">
+                        <h4><i class="fas fa-chart-line"></i> Progresser</h4>
+                        <p>Exposition graduée avec retour progressif à l'école</p>
+                    </div>
+                </div>
+
+                <div class="mnemonic-box">
+                    <div class="mnemonic-title">Mnémonique : « SÉPARE »</div>
+                    <div class="mnemonic-grid">
+                        <div class="mnemonic-item">
+                            <div class="mnemonic-letter">S</div>
+                            <div class="mnemonic-text"><strong>S</strong>outenir sans surprotéger</div>
+                        </div>
+                        <div class="mnemonic-item">
+                            <div class="mnemonic-letter">É</div>
+                            <div class="mnemonic-text"><strong>É</strong>couter les peurs de l'enfant</div>
+                        </div>
+                        <div class="mnemonic-item">
+                            <div class="mnemonic-letter">P</div>
+                            <div class="mnemonic-text"><strong>P</strong>réparer les séparations</div>
+                        </div>
+                        <div class="mnemonic-item">
+                            <div class="mnemonic-letter">A</div>
+                            <div class="mnemonic-text"><strong>A</strong>ménager un retour progressif</div>
+                        </div>
+                        <div class="mnemonic-item">
+                            <div class="mnemonic-letter">R</div>
+                            <div class="mnemonic-text"><strong>R</strong>enforcer les succès</div>
+                        </div>
+                        <div class="mnemonic-item">
+                            <div class="mnemonic-letter">E</div>
+                            <div class="mnemonic-text"><strong>É</strong>cole partenaire</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checklist">
+                    <h4 class="checklist-title"><i class="fas fa-tasks"></i> Checklist d'évaluation - Mirana</h4>
+
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"><i class="fas fa-check"></i></div>
+                        <span class="checklist-text">Explorer le contexte familial et les événements déclenchants</span>
+                    </div>
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"><i class="fas fa-check"></i></div>
+                        <span class="checklist-text">Évaluer la sévérité de l'anxiété et son impact fonctionnel</span>
+                    </div>
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"><i class="fas fa-check"></i></div>
+                        <span class="checklist-text">Éliminer les autres troubles anxieux (phobie sociale, TAG)</span>
+                    </div>
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"><i class="fas fa-check"></i></div>
+                        <span class="checklist-text">Évaluer l'anxiété parentale (transmission intergénérationnelle)</span>
+                    </div>
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"><i class="fas fa-check"></i></div>
+                        <span class="checklist-text">Proposer une guidance parentale</span>
+                    </div>
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"><i class="fas fa-check"></i></div>
+                        <span class="checklist-text">Mettre en place une TCC avec exposition graduée</span>
+                    </div>
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"><i class="fas fa-check"></i></div>
+                        <span class="checklist-text">Coordonner avec l'école (équipe éducative)</span>
+                    </div>
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"><i class="fas fa-check"></i></div>
+                        <span class="checklist-text">Planifier le suivi et évaluer la progression</span>
+                    </div>
+
+                    <div class="checklist-counter">
+                        <span id="mirana-checked">0</span> / 8 éléments validés
+                    </div>
+                </div>
+            </div>
+
+            <div class="case-content" id="case-tahiry-5">
+                <h3 style="color: var(--color-text-primary); margin-bottom: 1rem;">Points clés - Dépression de l'adolescent</h3>
+
+                <div class="key-points">
+                    <div class="key-point">
+                        <h4><i class="fas fa-mask"></i> Repérer</h4>
+                        <p>Irritabilité > tristesse, retrait social, chute scolaire, automutilations</p>
+                    </div>
+                    <div class="key-point">
+                        <h4><i class="fas fa-shield-alt"></i> Sécuriser</h4>
+                        <p>Toujours évaluer le risque suicidaire, même en l'absence de verbalisation</p>
+                    </div>
+                    <div class="key-point">
+                        <h4><i class="fas fa-handshake"></i> Allier</h4>
+                        <p>L'alliance thérapeutique est la clé : confidentialité, non-jugement</p>
+                    </div>
+                    <div class="key-point">
+                        <h4><i class="fas fa-layer-group"></i> Combiner</h4>
+                        <p>Psychothérapie ± ISRS si sévérité modérée à importante</p>
+                    </div>
+                </div>
+
+                <div class="mnemonic-box">
+                    <div class="mnemonic-title">Mnémonique : « ADOCARE »</div>
+                    <div class="mnemonic-grid">
+                        <div class="mnemonic-item">
+                            <div class="mnemonic-letter">A</div>
+                            <div class="mnemonic-text"><strong>A</strong>lliance thérapeutique prioritaire</div>
+                        </div>
+                        <div class="mnemonic-item">
+                            <div class="mnemonic-letter">D</div>
+                            <div class="mnemonic-text"><strong>D</strong>étresse prise au sérieux</div>
+                        </div>
+                        <div class="mnemonic-item">
+                            <div class="mnemonic-letter">O</div>
+                            <div class="mnemonic-text"><strong>O</strong>bjectivité sans jugement</div>
+                        </div>
+                        <div class="mnemonic-item">
+                            <div class="mnemonic-letter">C</div>
+                            <div class="mnemonic-text"><strong>C</strong>onfidentialité respectée</div>
+                        </div>
+                        <div class="mnemonic-item">
+                            <div class="mnemonic-letter">A</div>
+                            <div class="mnemonic-text"><strong>A</strong>utomutilations = signal</div>
+                        </div>
+                        <div class="mnemonic-item">
+                            <div class="mnemonic-letter">R</div>
+                            <div class="mnemonic-text"><strong>R</strong>isque suicidaire évalué</div>
+                        </div>
+                        <div class="mnemonic-item">
+                            <div class="mnemonic-letter">E</div>
+                            <div class="mnemonic-text"><strong>E</strong>ntourage impliqué</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checklist">
+                    <h4 class="checklist-title"><i class="fas fa-tasks"></i> Checklist d'évaluation - Tahiry</h4>
+
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"><i class="fas fa-check"></i></div>
+                        <span class="checklist-text">Évaluer le risque suicidaire (RUD : Risque-Urgence-Dangerosité)</span>
+                    </div>
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"><i class="fas fa-check"></i></div>
+                        <span class="checklist-text">Explorer la fonction des automutilations</span>
+                    </div>
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"><i class="fas fa-check"></i></div>
+                        <span class="checklist-text">Caractériser l'épisode dépressif (durée, sévérité)</span>
+                    </div>
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"><i class="fas fa-check"></i></div>
+                        <span class="checklist-text">Rechercher des comorbidités (anxiété, TCA, substances)</span>
+                    </div>
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"><i class="fas fa-check"></i></div>
+                        <span class="checklist-text">Évaluer le fonctionnement familial</span>
+                    </div>
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"><i class="fas fa-check"></i></div>
+                        <span class="checklist-text">Informer les parents de la gravité</span>
+                    </div>
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"><i class="fas fa-check"></i></div>
+                        <span class="checklist-text">Proposer un plan de soins (psychothérapie ± médicament)</span>
+                    </div>
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"><i class="fas fa-check"></i></div>
+                        <span class="checklist-text">Organiser un suivi rapproché (hebdomadaire au début)</span>
+                    </div>
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"><i class="fas fa-check"></i></div>
+                        <span class="checklist-text">Évaluer l'indication d'hospitalisation</span>
+                    </div>
+
+                    <div class="checklist-counter">
+                        <span id="tahiry-checked">0</span> / 9 éléments validés
+                    </div>
+                </div>
+
+                <div class="info-box red">
+                    <div class="info-box-title"><i class="fas fa-phone-alt"></i> Numéros d'urgence</div>
+                    <ul style="margin: 0; padding-left: 1.5rem; color: var(--color-text-secondary);">
+                        <li><strong>3114</strong> - Numéro national de prévention du suicide (24h/24)</li>
+                        <li><strong>Fil Santé Jeunes</strong> - 0 800 235 236 (anonyme et gratuit)</li>
+                        <li><strong>15 (SAMU)</strong> - En cas d'urgence vitale</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Références -->
+            <div class="accordion" style="margin-top: 2rem;">
+                <button class="accordion-button">
+                    <span><i class="fas fa-book" style="margin-right: 0.5rem; color: var(--cat-main);"></i> Références</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="accordion-content">
+                    <div class="accordion-inner">
+                        <ul style="color: var(--color-text-secondary);">
+                            <li>HAS (2014). Manifestations dépressives à l'adolescence : repérage, diagnostic et prise en charge en soins de premier recours.</li>
+                            <li>HAS (2019). Troubles anxieux chez l'enfant et l'adolescent.</li>
+                            <li>American Academy of Child and Adolescent Psychiatry (AACAP). Practice parameters for assessment and treatment of anxiety disorders and depression.</li>
+                            <li>DSM-5. Manuel diagnostique et statistique des troubles mentaux.</li>
+                            <li>Rapport Morlat (2020). Prévention du suicide chez les jeunes.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-navigation">
+                <button class="btn-step btn-prev" onclick="goToStep(4)">
+                    <i class="fas fa-arrow-left"></i> Action
+                </button>
+                <a href="Page_d_accueil.html" class="btn-step btn-next" style="text-decoration: none;">
+                    Retour aux cas <i class="fas fa-home"></i>
+                </a>
+            </div>
+        </section>
+
+    </div>
+
+    <footer class="footer">
+        <p>Dr. FENOHASINA T.J. Felicien (Psychiatre)</p>
+        <p>&copy; 2025 - Centre Ressource de Réhabilitation</p>
+        <p class="license">Licence CC BY-NC-SA 4.0</p>
+    </footer>
+
+    <script>
+        // ==================== NAVIGATION ====================
+        const stepBtns = document.querySelectorAll('.step-btn');
+        const stepContents = document.querySelectorAll('.step-content');
+        const progressFill = document.getElementById('progressFill');
+        const currentStepSpan = document.getElementById('currentStep');
+        let currentCase = 'mirana';
+
+        window.goToStep = function(stepNum) {
+            stepBtns.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.step == stepNum);
+            });
+            stepContents.forEach(content => {
+                content.classList.toggle('active', content.id === `step-${stepNum}`);
+            });
+            progressFill.style.width = (stepNum * 20) + '%';
+            currentStepSpan.textContent = stepNum;
+
+            // Mettre à jour l'affichage du cas actuel dans la nouvelle étape
+            updateCaseDisplay();
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        // ==================== SÉLECTION DES CAS ====================
+        const caseTabs = document.querySelectorAll('.case-tab');
+
+        window.selectCase = function(caseName) {
+            currentCase = caseName;
+            caseTabs.forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.case === caseName);
+            });
+            updateCaseDisplay();
+        };
+
+        function updateCaseDisplay() {
+            document.querySelectorAll('.case-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            for (let i = 1; i <= 5; i++) {
+                const caseContent = document.getElementById(`case-${currentCase}-${i}`);
+                if (caseContent) {
+                    const stepContent = document.getElementById(`step-${i}`);
+                    if (stepContent && stepContent.classList.contains('active')) {
+                        caseContent.classList.add('active');
+                    }
+                }
+            }
+        }
+
+        // ==================== ACCORDÉONS ====================
+        document.querySelectorAll('.accordion-button').forEach(button => {
+            button.addEventListener('click', () => {
+                button.classList.toggle('active');
+                const content = button.nextElementSibling;
+                content.classList.toggle('show');
+            });
+        });
+
+        // ==================== QUIZ ====================
+        const quizAnswers = {
+            'mirana-q1': {
+                answer: 'B',
+                correct: "<strong>Correct !</strong> Le tableau de Mirana est typique d'un trouble anxieux de séparation : détresse à la séparation, peur de perdre sa mère, refus scolaire, cauchemars de séparation, plaintes somatiques disparaissant le week-end.",
+                incorrect: "<strong>À revoir.</strong> L'anxiété de Mirana est centrée sur la séparation d'avec sa mère et la peur de la perdre (comme sa grand-mère). Il s'agit d'un trouble anxieux de séparation."
+            },
+            'tahiry-q1': {
+                answer: 'A',
+                correct: "<strong>Exact !</strong> Face à des automutilations et des verbalisations comme « à quoi bon continuer », l'évaluation du risque suicidaire est la PRIORITÉ ABSOLUE, même si Tahiry dit ne pas vouloir mourir.",
+                incorrect: "<strong>Attention !</strong> Avant toute autre évaluation, il faut d'abord s'assurer de la sécurité de l'adolescente en évaluant le risque suicidaire. C'est toujours la première priorité face à des automutilations."
+            },
+            'tahiry-q2': {
+                answer: 'B',
+                correct: "<strong>Correct !</strong> Tahiry présente un épisode dépressif caractérisé avec tous les critères : tristesse/irritabilité, anhédonie, fatigue, dévalorisation, idées de mort, retrait social, troubles de concentration, depuis plusieurs mois.",
+                incorrect: "<strong>À revoir.</strong> À 15 ans, on ne pose pas de diagnostic de trouble de personnalité (développement en cours). Le tableau est celui d'un épisode dépressif caractérisé, pas d'un trouble de l'adaptation (trop sévère) ni d'une schizophrénie (pas de symptômes psychotiques)."
+            }
+        };
+
+        document.querySelectorAll('.quiz-option').forEach(option => {
+            option.addEventListener('click', function() {
+                if (this.classList.contains('disabled')) return;
+
+                const quizId = this.dataset.quiz;
+                const selectedAnswer = this.dataset.answer;
+                const quizData = quizAnswers[quizId];
+                const feedbackBox = document.getElementById(`feedback-${quizId}`);
+
+                // Désactiver toutes les options de ce quiz
+                document.querySelectorAll(`[data-quiz="${quizId}"]`).forEach(opt => {
+                    opt.classList.add('disabled');
+                    if (opt.dataset.answer === quizData.answer) {
+                        opt.classList.add('correct');
+                    } else if (opt === this && selectedAnswer !== quizData.answer) {
+                        opt.classList.add('incorrect');
+                    }
+                });
+
+                // Afficher le feedback
+                if (selectedAnswer === quizData.answer) {
+                    feedbackBox.className = 'feedback-box correct show';
+                    feedbackBox.innerHTML = quizData.correct;
+                } else {
+                    feedbackBox.className = 'feedback-box incorrect show';
+                    feedbackBox.innerHTML = quizData.incorrect;
+                }
+            });
+        });
+
+        // ==================== ARBRES DÉCISIONNELS ====================
+        // Arbre Mirana
+        window.showMiranaNode = function(nodeId) {
+            document.querySelectorAll('#tree-mirana .decision-node').forEach(node => {
+                node.classList.remove('active');
+            });
+            document.getElementById(`mirana-${nodeId}`).classList.add('active');
+        };
+
+        window.showMiranaResult = function(resultId) {
+            document.querySelectorAll('#tree-mirana .decision-node').forEach(node => {
+                node.classList.remove('active');
+            });
+            document.querySelectorAll('#tree-mirana .decision-result').forEach(result => {
+                result.classList.remove('show');
+            });
+            document.getElementById(`mirana-${resultId}`).classList.add('show');
+        };
+
+        window.restartMiranaTree = function() {
+            document.querySelectorAll('#tree-mirana .decision-result').forEach(result => {
+                result.classList.remove('show');
+            });
+            document.querySelectorAll('#tree-mirana .decision-node').forEach(node => {
+                node.classList.remove('active');
+            });
+            document.getElementById('mirana-node-1').classList.add('active');
+        };
+
+        // Arbre Tahiry
+        window.showTahiryNode = function(nodeId) {
+            document.querySelectorAll('#tree-tahiry .decision-node').forEach(node => {
+                node.classList.remove('active');
+            });
+            document.getElementById(`tahiry-${nodeId}`).classList.add('active');
+        };
+
+        window.showTahiryResult = function(resultId) {
+            document.querySelectorAll('#tree-tahiry .decision-node').forEach(node => {
+                node.classList.remove('active');
+            });
+            document.querySelectorAll('#tree-tahiry .decision-result').forEach(result => {
+                result.classList.remove('show');
+            });
+            document.getElementById(`tahiry-${resultId}`).classList.add('show');
+        };
+
+        window.restartTahiryTree = function() {
+            document.querySelectorAll('#tree-tahiry .decision-result').forEach(result => {
+                result.classList.remove('show');
+            });
+            document.querySelectorAll('#tree-tahiry .decision-node').forEach(node => {
+                node.classList.remove('active');
+            });
+            document.getElementById('tahiry-node-1').classList.add('active');
+        };
+
+        // ==================== CHECKLISTS ====================
+        window.toggleCheck = function(item) {
+            item.classList.toggle('checked');
+            updateChecklistCounters();
+        };
+
+        function updateChecklistCounters() {
+            // Compteur Mirana
+            const miranaChecked = document.querySelectorAll('#case-mirana-5 .checklist-item.checked').length;
+            const miranaCounter = document.getElementById('mirana-checked');
+            if (miranaCounter) miranaCounter.textContent = miranaChecked;
+
+            // Compteur Tahiry
+            const tahiryChecked = document.querySelectorAll('#case-tahiry-5 .checklist-item.checked').length;
+            const tahiryCounter = document.getElementById('tahiry-checked');
+            if (tahiryCounter) tahiryCounter.textContent = tahiryChecked;
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCaseDisplay();
+        });
+    </script>
+</body>
+</html>

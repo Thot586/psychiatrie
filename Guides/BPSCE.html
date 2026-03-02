@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modèle BPSCE — Bio-Psycho-Social-Culturel-Environnemental</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* ===== Accordion ===== */
+        .accordion-content {
+            display: none;
+            overflow: hidden;
+        }
+
+        .chevron {
+            transition: transform 0.3s ease;
+            width: 1.25rem;
+            height: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .accordion-button.active .chevron {
+            transform: rotate(180deg);
+        }
+
+        .accordion-button {
+            width: 100%;
+            text-align: left;
+            padding: 1rem 1.25rem;
+            background: linear-gradient(135deg, rgba(20, 184, 166, 0.9), rgba(13, 148, 136, 0.9));
+            color: white;
+            font-weight: 600;
+            font-size: 1.05rem;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .accordion-button:hover {
+            background: linear-gradient(135deg, rgba(45, 212, 191, 0.9), rgba(20, 184, 166, 0.9));
+        }
+
+        .accordion-button:focus { outline: none; }
+
+        .accordion-button .section-icon {
+            margin-right: 0.5rem;
+            opacity: 0.9;
+        }
+
+        .accordion-card {
+            background: var(--surface-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            margin-bottom: 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .accordion-card:hover {
+            border-color: rgba(20, 184, 166, 0.3);
+        }
+
+        .accordion-content-inner {
+            padding: 1.5rem;
+            color: var(--color-text-secondary);
+            line-height: 1.8;
+        }
+
+        .accordion-content-inner p {
+            margin-bottom: 1rem;
+            color: var(--color-text-muted);
+        }
+
+        .accordion-content-inner ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .accordion-content-inner li {
+            margin-bottom: 0.5rem;
+            color: var(--color-text-muted);
+        }
+
+        .accordion-content-inner strong {
+            color: var(--color-text-primary);
+        }
+
+        /* ===== Couleurs des dimensions ===== */
+        .dim-bio { color: #22c55e !important; }
+        .dim-psycho { color: #a855f7 !important; }
+        .dim-social { color: #3b82f6 !important; }
+        .dim-culturel { color: #f97316 !important; }
+        .dim-enviro { color: #06b6d4 !important; }
+
+        .bg-bio { background-color: #22c55e; }
+        .bg-psycho { background-color: #a855f7; }
+        .bg-social { background-color: #3b82f6; }
+        .bg-culturel { background-color: #f97316; }
+        .bg-enviro { background-color: #06b6d4; }
+
+        /* ===== Header ===== */
+        .page-header {
+            background: linear-gradient(145deg, rgba(20, 184, 166, 0.15), rgba(13, 148, 136, 0.08));
+            border: 1px solid rgba(20, 184, 166, 0.25);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .page-header h2 {
+            color: var(--color-text-primary);
+            font-size: var(--font-size-2xl);
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: var(--color-text-muted);
+            font-size: var(--font-size-base);
+            margin: 0;
+        }
+
+        /* ===== Pentagone BPSCE ===== */
+        .pentagon-container {
+            position: relative;
+            width: 320px;
+            height: 320px;
+            margin: 2rem auto;
+        }
+
+        .pentagon-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .pentagon-label {
+            position: absolute;
+            padding: 0.35rem 0.75rem;
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-align: center;
+            color: white;
+            white-space: nowrap;
+            transform: translate(-50%, -50%);
+        }
+
+        .pentagon-label.bio { top: 5%; left: 50%; }
+        .pentagon-label.psycho { top: 38%; left: 97%; }
+        .pentagon-label.social { top: 82%; left: 80%; }
+        .pentagon-label.culturel { top: 82%; left: 20%; }
+        .pentagon-label.enviro { top: 38%; left: 3%; }
+
+        .pentagon-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 7rem;
+            height: 7rem;
+            background: linear-gradient(145deg, rgba(20, 184, 166, 0.15), rgba(13, 148, 136, 0.08));
+            border: 2px solid rgba(20, 184, 166, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--color-text-primary);
+            font-weight: 600;
+            font-size: 0.85rem;
+            padding: 0.75rem;
+        }
+
+        /* ===== Key takeaway ===== */
+        .key-takeaway {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(59, 130, 246, 0.03));
+            border-left: 4px solid #3b82f6;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            padding: 1rem 1.25rem;
+            margin: 1.25rem 0;
+        }
+
+        .key-takeaway p {
+            color: var(--color-text-primary) !important;
+            font-weight: 500;
+            margin-bottom: 0 !important;
+        }
+
+        .key-takeaway strong { color: #3b82f6 !important; }
+
+        /* ===== Citation inline ===== */
+        .cite {
+            color: rgba(20, 184, 166, 0.85);
+            font-size: 0.9em;
+        }
+
+        /* ===== Radar / Vignettes ===== */
+        .radar-section {
+            background: var(--surface-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-xl);
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .radar-section h3 {
+            color: var(--color-text-primary);
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .vignette-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            margin: 1rem 0;
+        }
+
+        .vignette-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid rgba(20, 184, 166, 0.4);
+            border-radius: var(--radius-md);
+            background: transparent;
+            color: var(--color-text-muted);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .vignette-btn:hover {
+            border-color: #14b8a6;
+            color: var(--color-text-primary);
+        }
+
+        .vignette-btn.active {
+            background: linear-gradient(135deg, rgba(20, 184, 166, 0.9), rgba(13, 148, 136, 0.9));
+            color: white;
+            border-color: transparent;
+        }
+
+        .vignette-description {
+            background: var(--surface-inset);
+            border-left: 4px solid #14b8a6;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            padding: 1rem 1.25rem;
+            margin: 1rem 0;
+            line-height: 1.7;
+            font-size: 0.9rem;
+            color: var(--color-text-muted);
+        }
+
+        .vignette-description strong {
+            color: var(--color-text-primary);
+        }
+
+        .vignette-title {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--color-text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .radar-synthesis {
+            text-align: center;
+            font-style: italic;
+            color: var(--color-text-muted);
+            font-size: 0.9rem;
+            margin-top: 0.75rem;
+            padding: 0.5rem;
+        }
+
+        .slider-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .slider-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .slider-item label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            min-width: 80px;
+            color: var(--color-text-muted);
+        }
+
+        .slider-item input[type="range"] {
+            flex: 1;
+            accent-color: #14b8a6;
+        }
+
+        .slider-item .slider-value {
+            font-size: 0.85rem;
+            font-weight: 700;
+            min-width: 1.5rem;
+            text-align: right;
+            color: var(--color-text-primary);
+        }
+
+        /* ===== Références ===== */
+        .reference-item {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--color-border);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .reference-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .reference-item p {
+            margin: 0;
+            word-break: break-word;
+        }
+
+        .reference-item a {
+            color: #14b8a6;
+            text-decoration: none;
+        }
+
+        .reference-item a:hover { text-decoration: underline; }
+
+        /* ===== Dimension cards ===== */
+        .dim-card {
+            background: var(--surface-inset);
+            border-radius: var(--radius-md);
+            padding: 1rem 1.25rem;
+            margin-bottom: 0.75rem;
+            border-left: 4px solid;
+        }
+
+        .dim-card h4 {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .dim-card p, .dim-card li {
+            font-size: 0.95rem;
+        }
+
+        /* ===== Print ===== */
+        @media print {
+            nav, .accordion-button, .radar-section { display: none !important; }
+            .accordion-content { display: block !important; }
+            body { background: white !important; }
+            .accordion-card, .accordion-content-inner {
+                background: white !important;
+                color: black !important;
+                border: 1px solid #ccc !important;
+            }
+        }
+    </style>
+</head>
+<body class="light-questionnaire">
+
+    <!-- Navigation Bar -->
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+            <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+        </div>
+        <h1>Modèle BPSCE</h1>
+        <span class="badge badge-cat-guides">Transculturelle</span>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <h2>Du Biopsychosocial au Culturel-Environnemental</h2>
+            <p>Comprendre l'évolution vers un modèle intégratif de la santé mentale</p>
+        </div>
+
+        <div class="space-y-4">
+
+            <!-- ==================== SECTION 1 ==================== -->
+            <div class="accordion-card">
+                <button class="accordion-button">
+                    <span><i class="fas fa-history section-icon"></i>1. Le Modèle Biopsychosocial (BPS) d'Engel (1977)</span>
+                    <svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <div class="accordion-content">
+                    <div class="accordion-content-inner">
+                        <p>En 1977, le psychiatre américain George L. Engel a proposé une alternative au modèle biomédical alors hégémonique en publiant un article fondateur dans <em>Science</em> <span class="cite">(Engel, 1977)</span>. Face à un paradigme qui réduisait la maladie à ses seules composantes biologiques, Engel a théorisé le modèle <strong>Bio-Psycho-Social</strong> (BPS), postulant que la santé et la maladie résultent de l'interaction dynamique de trois niveaux d'organisation :</p>
+
+                        <ul>
+                            <li><strong class="dim-bio">Biologique</strong> — génétique, neurobiologie, physiologie, processus inflammatoires et neurochimiques.</li>
+                            <li><strong class="dim-psycho">Psychologique</strong> — cognitions, émotions, comportements, mécanismes de défense, styles d'attachement, résilience.</li>
+                            <li><strong class="dim-social">Social</strong> — famille, réseau de soutien, statut socio-économique, emploi, relations interpersonnelles.</li>
+                        </ul>
+
+                        <p>Ce modèle a profondément humanisé la médecine en replaçant le patient, dans sa complexité, au centre du soin. Il a ouvert la voie à des approches plus compréhensives et contextuelles de la souffrance psychique <span class="cite">(Borrell-Carrió et al., 2004)</span>.</p>
+
+                        <div class="key-takeaway">
+                            <p><strong>Point clé :</strong> Le modèle BPS a constitué une avancée paradigmatique majeure en médecine, mais il présente des limites importantes qui justifient son extension.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== SECTION 2 ==================== -->
+            <div class="accordion-card">
+                <button class="accordion-button">
+                    <span><i class="fas fa-exclamation-triangle section-icon"></i>2. Les Limites du Modèle BPS</span>
+                    <svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <div class="accordion-content">
+                    <div class="accordion-content-inner">
+                        <p>Malgré son apport considérable, le modèle BPS présente plusieurs limites identifiées par la littérature scientifique :</p>
+
+                        <p><strong>1. Le « Social » reste trop vague.</strong> La dimension sociale est souvent traitée de manière superficielle, sans distinguer les niveaux d'influence ni les mécanismes spécifiques <span class="cite">(Borrell-Carrió et al., 2004)</span>. Berquin (2010) souligne que le BPS est souvent réduit à un « supplément d'empathie » plutôt qu'appliqué comme un véritable cadre analytique <span class="cite">(Berquin, 2010)</span>.</p>
+
+                        <p><strong>2. La culture est subsumée sous le « Social ».</strong> Le modèle originel d'Engel ne distingue pas explicitement la culture comme dimension autonome. Or, comme le montre Fernandez (2012), la culture est souvent réduite à une simple « case à cocher » (ethnicité, religion) plutôt que d'être comprise comme un système dynamique qui façonne activement la perception de la maladie, l'expression des symptômes et le recours aux soins <span class="cite">(Fernandez, 2012)</span>.</p>
+
+                        <p><strong>3. L'environnement physique est absent.</strong> Le modèle BPS ne prend pas en compte l'impact de l'environnement bâti, des toxiques environnementaux ou du changement climatique sur la santé mentale — des facteurs dont la littérature récente démontre l'importance croissante <span class="cite">(Obradovich et al., 2018)</span>.</p>
+
+                        <p><strong>4. Tendance à la fragmentation.</strong> En pratique clinique, les trois dimensions sont souvent abordées de manière juxtaposée plutôt qu'intégrée, conduisant à un « faux holisme » <span class="cite">(Kirmayer, 2023)</span>.</p>
+
+                        <div class="key-takeaway">
+                            <p><strong>Point clé :</strong> Ignorer la culture peut mener à des malentendus diagnostiques, et ignorer l'environnement revient à négliger des déterminants modifiables de la santé mentale.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== SECTION 3 ==================== -->
+            <div class="accordion-card">
+                <button class="accordion-button">
+                    <span><i class="fas fa-expand-arrows-alt section-icon"></i>3. Le Modèle BPSCE : une extension intégrative</span>
+                    <svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <div class="accordion-content">
+                    <div class="accordion-content-inner">
+                        <p>Pour dépasser ces limites, la psychiatrie intégrative et transculturelle propose un modèle étendu : le <strong>Bio-Psycho-Social-Culturel-Environnemental (BPSCE)</strong>. Ce modèle n'ajoute pas simplement deux « cases » au BPS — il reconceptualise la culture et l'environnement comme des matrices de co-détermination dans lesquelles les facteurs biologiques, psychologiques et sociaux prennent forme et sens <span class="cite">(Kirmayer, 2023)</span>.</p>
+
+                        <!-- Pentagone BPSCE -->
+                        <div class="pentagon-container">
+                            <svg class="pentagon-svg" viewBox="0 0 300 300">
+                                <!-- Pentagone -->
+                                <polygon points="150,20 280,115 230,270 70,270 20,115"
+                                    fill="none" stroke="rgba(20,184,166,0.3)" stroke-width="2"/>
+                                <!-- Lignes vers le centre -->
+                                <line x1="150" y1="20" x2="150" y2="150" stroke="rgba(34,197,94,0.3)" stroke-width="1.5" stroke-dasharray="4"/>
+                                <line x1="280" y1="115" x2="150" y2="150" stroke="rgba(168,85,247,0.3)" stroke-width="1.5" stroke-dasharray="4"/>
+                                <line x1="230" y1="270" x2="150" y2="150" stroke="rgba(59,130,246,0.3)" stroke-width="1.5" stroke-dasharray="4"/>
+                                <line x1="70" y1="270" x2="150" y2="150" stroke="rgba(249,115,22,0.3)" stroke-width="1.5" stroke-dasharray="4"/>
+                                <line x1="20" y1="115" x2="150" y2="150" stroke="rgba(6,182,212,0.3)" stroke-width="1.5" stroke-dasharray="4"/>
+                                <!-- Points aux sommets -->
+                                <circle cx="150" cy="20" r="6" fill="#22c55e"/>
+                                <circle cx="280" cy="115" r="6" fill="#a855f7"/>
+                                <circle cx="230" cy="270" r="6" fill="#3b82f6"/>
+                                <circle cx="70" cy="270" r="6" fill="#f97316"/>
+                                <circle cx="20" cy="115" r="6" fill="#06b6d4"/>
+                                <!-- Centre -->
+                                <circle cx="150" cy="150" r="40" fill="rgba(20,184,166,0.08)" stroke="rgba(20,184,166,0.3)" stroke-width="2"/>
+                            </svg>
+                            <span class="pentagon-label bio bg-bio">Bio</span>
+                            <span class="pentagon-label psycho bg-psycho">Psycho</span>
+                            <span class="pentagon-label social bg-social">Social</span>
+                            <span class="pentagon-label culturel bg-culturel">Culturel</span>
+                            <span class="pentagon-label enviro bg-enviro">Environnement</span>
+                            <div class="pentagon-center">Santé de la Personne</div>
+                        </div>
+
+                        <p>Les cinq dimensions sont interconnectées et s'influencent mutuellement. La culture façonne la biologie (via l'épigénétique et les pratiques alimentaires), la psychologie (via les schémas cognitifs culturellement construits), et les relations sociales (via les normes et les rôles sociaux). L'environnement physique affecte la neurobiologie, conditionne les ressources sociales disponibles, et interagit avec les pratiques culturelles <span class="cite">(Kirmayer, 2023 ; Kleinman, 1980)</span>.</p>
+
+                        <div class="key-takeaway">
+                            <p><strong>Point clé :</strong> Le BPSCE n'est pas un simple ajout de « cases » au BPS, mais une reconceptualisation systémique où chaque dimension est à la fois cause et effet des autres.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== SECTION 4 ==================== -->
+            <div class="accordion-card">
+                <button class="accordion-button">
+                    <span><i class="fas fa-globe-africa section-icon"></i>4. La Dimension Culturelle</span>
+                    <svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <div class="accordion-content">
+                    <div class="accordion-content-inner">
+                        <p>Dans sa définition anthropologique fondatrice, la culture est « ce tout complexe qui inclut les connaissances, les croyances, l'art, la morale, le droit, la coutume et toutes les autres capacités et habitudes acquises par l'homme en tant que membre d'une société » <span class="cite">(Tylor, 1871, p. 1)</span>.</p>
+
+                        <p>La culture n'est pas un attribut fixe ou réductible à l'ethnicité. C'est un <strong class="dim-culturel">système dynamique</strong> qui influence la santé mentale à plusieurs niveaux <span class="cite">(Kleinman, 1980 ; Kirmayer, 2012)</span> :</p>
+
+                        <div class="dim-card" style="border-color: #f97316;">
+                            <h4 class="dim-culturel">Impact de la culture sur la santé mentale</h4>
+                            <ul>
+                                <li><strong>Expression des symptômes</strong> — Les manifestations de détresse varient culturellement : somatisation dans certaines cultures asiatiques, expressions émotionnelles directes dans les cultures occidentales.</li>
+                                <li><strong>Modèles explicatifs</strong> — Chaque culture produit ses propres cadres d'interprétation de la souffrance (causes surnaturelles, déséquilibre humoral, stress psychologique, etc.) <span class="cite">(Kleinman, 1980)</span>.</li>
+                                <li><strong>Recours aux soins</strong> — Le choix entre médecine traditionnelle, guérisseur, psychiatre ou soutien communautaire est culturellement déterminé.</li>
+                                <li><strong>Syndromes culturels et idiomes de détresse</strong> — Le DSM-5 reconnaît des concepts culturels de détresse (<em>cultural concepts of distress</em>) qui ne se réduisent pas aux catégories diagnostiques occidentales.</li>
+                            </ul>
+                        </div>
+
+                        <p>Kirmayer (2012) propose le concept d'<strong>humilité culturelle</strong>, qui va au-delà de la « compétence culturelle » : il ne s'agit pas d'acquérir un savoir encyclopédique sur chaque culture, mais de développer une posture d'ouverture, de curiosité et de conscience de ses propres biais culturels <span class="cite">(Kirmayer, 2012)</span>.</p>
+
+                        <div class="key-takeaway">
+                            <p><strong>Point clé :</strong> La culture est une matrice de sens qui façonne l'expérience, l'expression et le traitement de la souffrance — elle ne peut être réduite à une variable démographique.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== SECTION 5 ==================== -->
+            <div class="accordion-card">
+                <button class="accordion-button">
+                    <span><i class="fas fa-leaf section-icon"></i>5. La Dimension Environnementale</span>
+                    <svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <div class="accordion-content">
+                    <div class="accordion-content-inner">
+                        <p>La dimension environnementale, absente du modèle BPS originel, constitue un déterminant majeur de la santé mentale dont l'importance ne cesse de croître dans la littérature scientifique. Elle comprend quatre sous-domaines :</p>
+
+                        <div class="dim-card" style="border-color: #06b6d4;">
+                            <h4 class="dim-enviro"><i class="fas fa-city"></i> Environnement bâti</h4>
+                            <p>Urbanisme, qualité du logement, densité de population, accès aux espaces verts. Les études montrent que l'accès à la nature réduit le cortisol et les symptômes dépressifs.</p>
+                        </div>
+
+                        <div class="dim-card" style="border-color: #06b6d4;">
+                            <h4 class="dim-enviro"><i class="fas fa-tree"></i> Environnement naturel</h4>
+                            <p>Contact avec la nature, biodiversité, biophilie. La perte de biodiversité et le manque d'exposition à la nature sont associés à une augmentation des troubles anxieux et dépressifs.</p>
+                        </div>
+
+                        <div class="dim-card" style="border-color: #06b6d4;">
+                            <h4 class="dim-enviro"><i class="fas fa-skull-crossbones"></i> Toxiques environnementaux</h4>
+                            <p>Pollution atmosphérique, métaux lourds, perturbateurs endocriniens. La pollution de l'air est désormais reconnue comme facteur de risque pour la dépression et les troubles neurodéveloppementaux.</p>
+                        </div>
+
+                        <div class="dim-card" style="border-color: #06b6d4;">
+                            <h4 class="dim-enviro"><i class="fas fa-temperature-high"></i> Changement climatique</h4>
+                            <p>Éco-anxiété, catastrophes naturelles, migrations climatiques. Obradovich et al. (2018) ont démontré empiriquement que l'exposition à des températures élevées, des catastrophes et des conditions météorologiques extrêmes est associée à une augmentation significative des problèmes de santé mentale au niveau populationnel <span class="cite">(Obradovich et al., 2018)</span>.</p>
+                        </div>
+
+                        <p>Cette dimension s'inscrit dans le mouvement <em>Global Mental Health</em> et le paradigme de la santé planétaire (<em>Planetary Health</em>), qui soulignent l'interdépendance entre santé de l'écosystème et santé mentale <span class="cite">(Patel et al., 2018 ; Berry et al., 2018)</span>.</p>
+
+                        <div class="key-takeaway">
+                            <p><strong>Point clé :</strong> L'environnement physique est un déterminant modifiable de la santé mentale, et son intégration dans le modèle clinique ouvre des perspectives de prévention et d'intervention.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== SECTION 6 ==================== -->
+            <div class="accordion-card">
+                <button class="accordion-button">
+                    <span><i class="fas fa-balance-scale section-icon"></i>6. Pourquoi le BPSCE est plus intégratif que le BPS</span>
+                    <svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <div class="accordion-content">
+                    <div class="accordion-content-inner">
+                        <p>Le passage du BPS au BPSCE ne constitue pas un simple ajout quantitatif de dimensions. Il représente un changement qualitatif dans la manière de conceptualiser les interactions entre déterminants de santé :</p>
+
+                        <p><strong>1. Intégration explicite du cadre écosocial de Bronfenbrenner.</strong> Le BPSCE mobilise la théorie des systèmes écologiques <span class="cite">(Bronfenbrenner, 1979)</span> pour structurer la dimension sociale en niveaux emboîtés : <em>microsystème</em> (famille, pairs), <em>mésosystème</em> (interactions entre microsystèmes), <em>exosystème</em> (communauté, médias), <em>macrosystème</em> (culture, politiques de santé, législation) et <em>chronosystème</em> (transitions de vie, événements historiques). Cette structuration permet une analyse plus fine que le « Social » indifférencié du BPS.</p>
+
+                        <p><strong>2. La culture comme matrice, pas comme variable.</strong> Kirmayer (2023) propose un cadre « culturel-écosocial » (<em>cultural-ecosocial systems view</em>) dans lequel l'esprit, le cerveau et la personne sont compris comme situés dans le monde social et constitués par des processus culturels et auto-réflexifs. La culture n'est pas un filtre appliqué aux facteurs « réels » — elle co-constitue la réalité clinique <span class="cite">(Kirmayer, 2023)</span>.</p>
+
+                        <p><strong>3. Ajout des déterminants environnementaux physiques.</strong> Le BPS ignorait l'impact de l'environnement matériel sur la neurobiologie et la santé mentale. Le BPSCE intègre les données de la santé environnementale et de la santé planétaire.</p>
+
+                        <p><strong>4. Compétence structurelle.</strong> Metzl et Hansen (2014) proposent de reartikuler les formulations « culturelles » en termes structurels : les disparités de santé ne sont pas des « différences culturelles » mais le produit de structures de pouvoir (racisme systémique, inégalités économiques, politiques de santé). Le BPSCE intègre cette conscience structurelle <span class="cite">(Metzl &amp; Hansen, 2014)</span>.</p>
+
+                        <p><strong>5. Déterminants sociaux de la santé.</strong> Le BPSCE s'appuie sur les travaux de la Commission de l'OMS sur les déterminants sociaux de la santé, qui démontrent que les inégalités de santé sont le produit de conditions de vie inéquitables — elles-mêmes produites par des structures politiques, économiques et sociales <span class="cite">(Marmot, 2005)</span>.</p>
+
+                        <div class="key-takeaway">
+                            <p><strong>Point clé :</strong> Le BPSCE est un cadre systémique et situé qui dépasse la juxtaposition des dimensions du BPS pour proposer une véritable co-détermination entre biologie, psychologie, contexte social, culture et environnement.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== SECTION 7 ==================== -->
+            <div class="accordion-card">
+                <button class="accordion-button">
+                    <span><i class="fas fa-stethoscope section-icon"></i>7. Implications cliniques</span>
+                    <svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <div class="accordion-content">
+                    <div class="accordion-content-inner">
+                        <p>Le modèle BPSCE a des implications directes pour la pratique clinique quotidienne :</p>
+
+                        <p><strong class="dim-culturel">Humilité culturelle</strong> — Adopter une posture d'écoute et de curiosité face aux cadres de référence du patient, plutôt que de projeter ses propres catégories culturelles <span class="cite">(Kirmayer, 2012)</span>.</p>
+
+                        <p><strong class="dim-culturel">Formulation Culturelle (CFI)</strong> — Utiliser l'Entretien de Formulation Culturelle du DSM-5, un outil structuré pour explorer la perception culturelle de la maladie, les facteurs de stress, les soutiens culturels et la relation au clinicien.</p>
+
+                        <p><strong class="dim-social">Conscience structurelle</strong> — Reconnaître que les disparités de santé ne sont pas des « choix individuels » mais le produit de structures sociales inéquitables. Le clinicien doit être attentif aux barrières structurelles à l'accès aux soins <span class="cite">(Metzl &amp; Hansen, 2014)</span>.</p>
+
+                        <p><strong class="dim-enviro">Évaluation environnementale</strong> — Intégrer dans l'anamnèse des questions sur l'environnement de vie du patient : qualité du logement, exposition aux polluants, accès aux espaces verts, impact perçu du changement climatique.</p>
+
+                        <p><strong class="dim-bio">Décision partagée</strong> — Articuler les données probantes (EBM) avec les valeurs, préférences et contraintes culturelles du patient pour co-construire un plan de soin individualisé.</p>
+
+                        <div class="key-takeaway">
+                            <p><strong>Point clé :</strong> Le clinicien BPSCE est un traducteur entre le langage de la science et l'expérience vécue du patient dans son contexte culturel et environnemental.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== VIGNETTES CLINIQUES BPSCE ==================== -->
+            <div class="radar-section">
+                <h3><i class="fas fa-user-md"></i> Vignettes cliniques BPSCE</h3>
+                <p style="text-align: center; color: var(--color-text-muted); font-size: 0.9rem;">Sélectionnez un cas pour voir comment le modèle BPSCE éclaire la formulation clinique.</p>
+
+                <div class="vignette-buttons">
+                    <button class="vignette-btn active" onclick="selectVignette(0)">Cas A : Dépression post-migration</button>
+                    <button class="vignette-btn" onclick="selectVignette(1)">Cas B : Premier épisode psychotique</button>
+                    <button class="vignette-btn" onclick="selectVignette(2)">Cas C : Éco-anxiété et burnout</button>
+                </div>
+
+                <div class="vignette-description" id="vignetteDesc"></div>
+
+                <div style="max-width: 400px; margin: 0 auto;">
+                    <canvas id="radarChart"></canvas>
+                </div>
+
+                <div class="slider-group">
+                    <div class="slider-item">
+                        <label class="dim-bio">Bio</label>
+                        <input type="range" min="0" max="10" value="4" data-dim="0" oninput="updateRadar(this)">
+                        <span class="slider-value">4</span>
+                    </div>
+                    <div class="slider-item">
+                        <label class="dim-psycho">Psycho</label>
+                        <input type="range" min="0" max="10" value="7" data-dim="1" oninput="updateRadar(this)">
+                        <span class="slider-value">7</span>
+                    </div>
+                    <div class="slider-item">
+                        <label class="dim-social">Social</label>
+                        <input type="range" min="0" max="10" value="8" data-dim="2" oninput="updateRadar(this)">
+                        <span class="slider-value">8</span>
+                    </div>
+                    <div class="slider-item">
+                        <label class="dim-culturel">Culturel</label>
+                        <input type="range" min="0" max="10" value="9" data-dim="3" oninput="updateRadar(this)">
+                        <span class="slider-value">9</span>
+                    </div>
+                    <div class="slider-item">
+                        <label class="dim-enviro">Environnement</label>
+                        <input type="range" min="0" max="10" value="6" data-dim="4" oninput="updateRadar(this)">
+                        <span class="slider-value">6</span>
+                    </div>
+                </div>
+
+                <div class="radar-synthesis" id="radarSynthesis"></div>
+            </div>
+
+            <!-- ==================== SECTION 8 ==================== -->
+            <div class="accordion-card">
+                <button class="accordion-button">
+                    <span><i class="fas fa-bookmark section-icon"></i>8. Références</span>
+                    <svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <div class="accordion-content">
+                    <div class="accordion-content-inner">
+
+                        <div class="reference-item">
+                            <p>Berquin, A. (2010). Le modèle biopsychosocial : beaucoup plus qu'un supplément d'empathie. <em>Revue Médicale Suisse</em>, <em>6</em>(258), 1511–1513. <a href="https://www.revmed.ch/revue-medicale-suisse/2010/revue-medicale-suisse-258/le-modele-biopsychosocial-beaucoup-plus-qu-un-supplement-d-empathie" target="_blank">revmed.ch</a></p>
+                        </div>
+
+                        <div class="reference-item">
+                            <p>Berry, H. L., Waite, T. D., Dear, K. B. G., Capon, A. G., &amp; Murray, V. (2018). The case for systems thinking about climate change and mental health. <em>Nature Climate Change</em>, <em>8</em>(4), 282–290. <a href="https://doi.org/10.1038/s41558-018-0102-4" target="_blank">doi.org</a></p>
+                        </div>
+
+                        <div class="reference-item">
+                            <p>Borrell-Carrió, F., Suchman, A. L., &amp; Epstein, R. M. (2004). The biopsychosocial model 25 years later: Principles, practice, and scientific inquiry. <em>Annals of Family Medicine</em>, <em>2</em>(6), 576–582. <a href="https://doi.org/10.1370/afm.245" target="_blank">doi.org</a></p>
+                        </div>
+
+                        <div class="reference-item">
+                            <p>Bronfenbrenner, U. (1979). <em>The ecology of human development: Experiments by nature and design</em>. Harvard University Press.</p>
+                        </div>
+
+                        <div class="reference-item">
+                            <p>Engel, G. L. (1977). The need for a new medical model: A challenge for biomedicine. <em>Science</em>, <em>196</em>(4286), 129–136. <a href="https://doi.org/10.1126/science.847460" target="_blank">doi.org</a></p>
+                        </div>
+
+                        <div class="reference-item">
+                            <p>Fernandez, G. S. (2012). The status of the "biopsychosocial" model in health psychology: Towards an integrated approach and a critique of cultural conceptions. <em>Open Journal of Medical Psychology</em>, <em>1</em>(4), 13–26. <a href="https://doi.org/10.4236/ojmp.2012.14003" target="_blank">doi.org</a></p>
+                        </div>
+
+                        <div class="reference-item">
+                            <p>Kirmayer, L. J. (2012). Rethinking cultural competence. <em>Transcultural Psychiatry</em>, <em>49</em>(2), 149–164. <a href="https://doi.org/10.1177/1363461512444673" target="_blank">doi.org</a></p>
+                        </div>
+
+                        <div class="reference-item">
+                            <p>Kirmayer, L. J. (2023). A cultural-ecosocial systems view for psychiatry. <em>Frontiers in Psychiatry</em>, <em>14</em>, Article 1031390. <a href="https://doi.org/10.3389/fpsyt.2023.1031390" target="_blank">doi.org</a></p>
+                        </div>
+
+                        <div class="reference-item">
+                            <p>Kleinman, A. (1980). <em>Patients and healers in the context of culture: An exploration of the borderland between anthropology, medicine, and psychiatry</em>. University of California Press.</p>
+                        </div>
+
+                        <div class="reference-item">
+                            <p>Marmot, M. (2005). Social determinants of health inequalities. <em>The Lancet</em>, <em>365</em>(9464), 1099–1104. <a href="https://doi.org/10.1016/S0140-6736(05)71146-6" target="_blank">doi.org</a></p>
+                        </div>
+
+                        <div class="reference-item">
+                            <p>Metzl, J. M., &amp; Hansen, H. (2014). Structural competency: Theorizing a new medical engagement with stigma and inequality. <em>Social Science &amp; Medicine</em>, <em>103</em>, 126–133. <a href="https://doi.org/10.1016/j.socscimed.2013.06.032" target="_blank">doi.org</a></p>
+                        </div>
+
+                        <div class="reference-item">
+                            <p>Obradovich, N., Migliorini, R., Mednick, S. C., &amp; Fowler, J. H. (2018). Empirical evidence of mental health risks posed by climate change. <em>Proceedings of the National Academy of Sciences</em>, <em>115</em>(43), 10953–10958. <a href="https://doi.org/10.1073/pnas.1801528115" target="_blank">doi.org</a></p>
+                        </div>
+
+                        <div class="reference-item">
+                            <p>Patel, V., Saxena, S., Lund, C., Thornicroft, G., Baingana, F., Bolton, P., ... &amp; UnÜtzer, J. (2018). The Lancet Commission on global mental health and sustainable development. <em>The Lancet</em>, <em>392</em>(10157), 1553–1598. <a href="https://doi.org/10.1016/S0140-6736(18)31612-X" target="_blank">doi.org</a></p>
+                        </div>
+
+                        <div class="reference-item">
+                            <p>Tylor, E. B. (1871). <em>Primitive culture: Researches into the development of mythology, philosophy, religion, art, and custom</em>. John Murray.</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Ressource éducative — Modèle Bio-Psycho-Social-Culturel-Environnemental (BPSCE)</p>
+        <p style="font-size: 0.8rem; margin-top: 0.25rem; opacity: 0.7;">Adaptation numérique : Dr FENOHASINA Toto Jean Félicien (Psychiatre - FFI)</p>
+    </footer>
+
+    <script>
+        // ===== Vignettes cliniques =====
+        const dimLabels = ['Biologique', 'Psychologique', 'Social', 'Culturel', 'Environnemental'];
+
+        const vignettes = [
+            {
+                title: 'Cas A — Mme F., 35 ans',
+                subtitle: 'Dépression post-migration',
+                data: [4, 7, 8, 9, 6],
+                description: 'Mme F. a migré il y a 2 ans depuis l\'Afrique de l\'Ouest. Elle présente un épisode dépressif majeur. La dimension <strong>culturelle</strong> est centrale : ses idiomes de détresse (maux de tête, « fatigue du corps ») ne correspondent pas aux critères occidentaux classiques. L\'isolement <strong>social</strong> (perte du réseau familial, barrière linguistique) et les conditions d\'<strong>environnement</strong> (logement précaire en zone urbaine dense) aggravent le tableau. Le facteur <strong>biologique</strong> est modéré (pas d\'antécédents familiaux). Le facteur <strong>psychologique</strong> est élevé (deuil migratoire, sentiment de perte d\'identité).'
+            },
+            {
+                title: 'Cas B — M. K., 22 ans',
+                subtitle: 'Premier épisode psychotique',
+                data: [9, 6, 5, 3, 2],
+                description: 'M. K. présente un premier épisode psychotique avec hallucinations auditives et idées délirantes de persécution. La dimension <strong>biologique</strong> domine (prédisposition génétique, usage de cannabis depuis l\'adolescence, anomalies neurochimiques). Le facteur <strong>psychologique</strong> est significatif (personnalité schizoïde prémorbide, pauvre mentalisation). Le <strong>social</strong> joue un rôle modéré (isolement progressif, décrochage universitaire). Les dimensions <strong>culturelle</strong> et <strong>environnementale</strong> sont moins prépondérantes dans ce cas.'
+            },
+            {
+                title: 'Cas C — Mme L., 50 ans',
+                subtitle: 'Éco-anxiété et burnout',
+                data: [3, 8, 6, 4, 9],
+                description: 'Mme L. est médecin urgentiste, en arrêt depuis 3 mois pour burnout. Elle décrit une anxiété envahissante liée au changement climatique (éco-anxiété) et un sentiment d\'impuissance face aux catastrophes naturelles. La dimension <strong>environnementale</strong> est centrale (vécu direct de canicules en service, exposition médiatique constante). Le facteur <strong>psychologique</strong> est élevé (surinvestissement professionnel, perfectionnisme, ruminations). Le <strong>social</strong> joue un rôle (surcharge de travail, manque de soutien institutionnel). Le <strong>biologique</strong> est faible (pas de comorbidités).'
+            }
+        ];
+
+        let currentVignette = 0;
+
+        // ===== Accordion =====
+        document.addEventListener('DOMContentLoaded', function () {
+            const accordionButtons = document.querySelectorAll('.accordion-button');
+            accordionButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    button.classList.toggle('active');
+                    const content = button.nextElementSibling;
+                    content.style.display = content.style.display === 'block' ? 'none' : 'block';
+                });
+            });
+
+            if (accordionButtons.length > 0) {
+                accordionButtons[0].click();
+            }
+
+            initRadarChart();
+            selectVignette(0);
+        });
+
+        // ===== Chart.js Radar =====
+        let radarChart;
+
+        function initRadarChart() {
+            const ctx = document.getElementById('radarChart');
+            if (!ctx) return;
+
+            const gridColor = 'rgba(0,0,0,0.08)';
+
+            radarChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: dimLabels,
+                    datasets: [{
+                        label: 'Profil BPSCE',
+                        data: vignettes[0].data.slice(),
+                        backgroundColor: 'rgba(20, 184, 166, 0.15)',
+                        borderColor: 'rgba(20, 184, 166, 0.8)',
+                        borderWidth: 2,
+                        pointBackgroundColor: ['#22c55e', '#a855f7', '#3b82f6', '#f97316', '#06b6d4'],
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 6,
+                        pointHoverRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 10,
+                            ticks: {
+                                stepSize: 2,
+                                color: 'rgba(0,0,0,0.5)',
+                                backdropColor: 'transparent',
+                                font: { size: 11 }
+                            },
+                            grid: { color: gridColor },
+                            angleLines: { color: gridColor },
+                            pointLabels: {
+                                color: ['#22c55e', '#a855f7', '#3b82f6', '#f97316', '#06b6d4'],
+                                font: { size: 13, weight: '600' }
+                            }
+                        }
+                    },
+                    plugins: { legend: { display: false } },
+                    animation: { duration: 500, easing: 'easeOutQuart' }
+                }
+            });
+        }
+
+        function selectVignette(index) {
+            currentVignette = index;
+            const v = vignettes[index];
+
+            // Update buttons
+            document.querySelectorAll('.vignette-btn').forEach((btn, i) => {
+                btn.classList.toggle('active', i === index);
+            });
+
+            // Update description
+            document.getElementById('vignetteDesc').innerHTML =
+                '<div class="vignette-title">' + v.title + ' — ' + v.subtitle + '</div>' +
+                '<p style="margin:0">' + v.description + '</p>';
+
+            // Update sliders
+            const sliders = document.querySelectorAll('.slider-item input[type="range"]');
+            sliders.forEach((slider, i) => {
+                slider.value = v.data[i];
+                slider.nextElementSibling.textContent = v.data[i];
+            });
+
+            // Update chart
+            if (radarChart) {
+                radarChart.data.datasets[0].data = v.data.slice();
+                radarChart.update();
+            }
+
+            updateSynthesis();
+        }
+
+        function updateRadar(slider) {
+            const dimIndex = parseInt(slider.dataset.dim);
+            const value = parseInt(slider.value);
+            slider.nextElementSibling.textContent = value;
+            radarChart.data.datasets[0].data[dimIndex] = value;
+            radarChart.update();
+            updateSynthesis();
+        }
+
+        function updateSynthesis() {
+            const data = radarChart.data.datasets[0].data;
+            const max = Math.max(...data);
+            const dominants = [];
+            data.forEach((val, i) => {
+                if (val >= max - 1 && val >= 6) dominants.push(dimLabels[i].toLowerCase());
+            });
+
+            let text = '';
+            if (dominants.length === 1) {
+                text = 'Profil à dominante <strong>' + dominants[0] + '</strong>.';
+            } else if (dominants.length > 1) {
+                const last = dominants.pop();
+                text = 'Profil à dominantes <strong>' + dominants.join(', ') + '</strong> et <strong>' + last + '</strong>.';
+            } else {
+                text = 'Profil équilibré — aucune dimension ne domine nettement.';
+            }
+
+            document.getElementById('radarSynthesis').innerHTML = text;
+        }
+    </script>
+
+</body>
+</html>

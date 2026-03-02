@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urgences Psychiatriques - Cas Cliniques</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --cat-main: #ef4444;
+            --cat-dark: #dc2626;
+            --cat-light: #f87171;
+            --cat-rgb: 239, 68, 68;
+            --cat-readable: #b91c1c;
+        }
+
+        /* Conteneur sticky pour progression et navigation */
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(15, 23, 42, 0.98);
+            backdrop-filter: blur(10px);
+            margin: 0 -1.5rem;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        /* Step Navigation */
+        .step-nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .step-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            background: var(--surface-table);
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            color: var(--color-text-muted);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .step-btn:hover {
+            border-color: var(--cat-main);
+            color: var(--color-text-primary);
+        }
+        .step-btn.active {
+            background: rgba(var(--cat-rgb), 0.15);
+            border-color: var(--cat-main);
+            color: var(--cat-light);
+        }
+        .step-btn .step-number {
+            width: 24px;
+            height: 24px;
+            background: var(--cat-main);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-size-xs);
+            font-weight: 700;
+            color: white;
+        }
+        .step-btn.active .step-number { background: var(--cat-light); color: var(--color-bg-primary); }
+
+        /* Content sections */
+        .step-content { display: none; animation: fadeIn 0.5s ease-in-out; }
+        .step-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Case Selection */
+        .case-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .case-tab {
+            flex: 1;
+            min-width: 200px;
+            padding: 1rem 1.5rem;
+            background: var(--color-bg-card);
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            color: var(--color-text-muted);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        .case-tab:hover {
+            border-color: var(--color-border-active);
+        }
+        .case-tab.active-orange {
+            background: rgba(249, 115, 22, 0.1);
+            border-color: #f97316;
+            color: var(--accent-orange);
+        }
+        .case-tab.active-purple {
+            background: rgba(168, 85, 247, 0.1);
+            border-color: #a855f7;
+            color: #c084fc;
+        }
+        .case-tab h4 { margin: 0 0 0.25rem 0; font-size: 1.1rem; }
+        .case-tab p { margin: 0; font-size: var(--font-size-sm); }
+
+        /* Scenario Box */
+        .scénario-box {
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .scénario-box.orange { border-left: 4px solid #f97316; }
+        .scénario-box.purple { border-left: 4px solid #a855f7; }
+        .scénario-box p {
+            color: var(--color-text-secondary);
+            line-height: 1.8;
+            margin: 0;
+        }
+
+        /* Accordion */
+        .accordion-button {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 1rem 1.25rem;
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            color: var(--color-text-primary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 0.5rem;
+        }
+        .accordion-button:hover {
+            background: var(--neo-bg-light);
+            border-color: var(--color-border-hover);
+        }
+        .accordion-button.open .accordion-arrow { transform: rotate(180deg); }
+        .accordion-arrow { transition: transform 0.3s ease; color: var(--color-text-muted); }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+            background: var(--color-bg-dark);
+            border: 1px solid var(--color-border);
+            border-top: none;
+            border-radius: 0 0 var(--radius-md) var(--radius-md);
+            margin-bottom: 0.5rem;
+        }
+        .accordion-content-inner { padding: 1rem 1.25rem; }
+        .accordion-content p, .accordion-content li { color: var(--color-text-muted); line-height: 1.7; }
+
+        /* Quiz */
+        .quiz-item { margin-bottom: 2rem; }
+        .quiz-item h4 { color: var(--color-text-primary); margin-bottom: 1rem; }
+        .quiz-option {
+            padding: 1rem;
+            background: var(--color-bg-card);
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-md);
+            margin-bottom: 0.75rem;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .quiz-option:hover { background: rgba(var(--cat-rgb), 0.1); border-color: var(--cat-main); }
+        .quiz-option.selected { background: rgba(var(--cat-rgb), 0.2); border-color: var(--cat-main); }
+        .quiz-option.correct { background: rgba(34, 197, 94, 0.2); border-color: var(--color-success); }
+        .quiz-option.incorrect { background: rgba(239, 68, 68, 0.2); border-color: var(--color-danger); }
+        .feedback-box { transition: opacity 0.3s; padding: 1rem; border-radius: var(--radius-md); margin-top: 1rem; font-size: var(--font-size-sm); opacity: 0; }
+        .feedback-box.visible { opacity: 1; }
+        .feedback-box.success { background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); color: var(--accent-green); }
+        .feedback-box.error { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: var(--accent-red); }
+
+        /* Decision Tree */
+        .decision-container { position: relative; min-height: 200px; }
+        .decision-node { transition: opacity 0.5s ease, transform 0.5s ease; }
+        .decision-node.hidden { opacity: 0; transform: scale(0.95); pointer-events: none; position: absolute; top: 0; left: 0; right: 0; }
+        .decision-option {
+            width: 100%;
+            text-align: left;
+            padding: 1rem;
+            background: var(--color-bg-card);
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-md);
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 0.75rem;
+        }
+        .decision-option:hover {
+            background: rgba(var(--cat-rgb), 0.1);
+            border-color: var(--cat-main);
+        }
+        .result-box {
+            padding: 1.5rem;
+            background: rgba(34, 197, 94, 0.1);
+            border: 2px solid rgba(34, 197, 94, 0.3);
+            border-radius: var(--radius-lg);
+        }
+        .result-box h3 { color: var(--accent-green); margin-bottom: 0.5rem; }
+        .result-box p { color: var(--color-text-muted); }
+        .result-box.warning { background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3); }
+        .result-box.warning h3 { color: var(--accent-amber); }
+        .result-box.danger { background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3); }
+        .result-box.danger h3 { color: var(--accent-red); }
+
+        /* Checklist */
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            margin-bottom: 0.75rem;
+            transition: all 0.3s ease;
+        }
+        .checklist-item:hover { background: var(--neo-bg-light); }
+        .checklist-item input[type="checkbox"] {
+            width: 1.25rem;
+            height: 1.25rem;
+            margin-right: 1rem;
+            accent-color: var(--cat-main);
+            cursor: pointer;
+        }
+        .checklist-item label { color: var(--color-text-secondary); font-size: var(--font-size-sm); cursor: pointer; flex: 1; }
+        .checklist-item.checked label { text-decoration: line-through; opacity: 0.6; }
+
+        /* Comparison Table */
+        .comparison-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+        .comparison-table th, .comparison-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--color-border);
+        }
+        .comparison-table th {
+            background: rgba(var(--cat-rgb), 0.1);
+            color: var(--cat-readable);
+            font-weight: 600;
+            font-size: var(--font-size-xs);
+            text-transform: uppercase;
+        }
+        .comparison-table td { color: var(--color-text-muted); font-size: var(--font-size-sm); }
+        .comparison-table tr:hover td { background: var(--neo-bg-light); }
+
+        /* Feature Grid */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        .feature-card {
+            padding: 1rem;
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+        }
+        .feature-card h4 { color: var(--color-text-primary); margin-bottom: 0.5rem; font-size: 1rem; }
+        .feature-card p { color: var(--color-text-muted); font-size: var(--font-size-sm); margin: 0; }
+        .feature-card.orange { border-left: 4px solid #f97316; }
+        .feature-card.purple { border-left: 4px solid #a855f7; }
+
+        /* Action list */
+        .action-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .action-list li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--color-border);
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            color: var(--color-text-muted);
+            line-height: 1.6;
+        }
+        .action-list li:last-child { border-bottom: none; }
+        .action-list li::before {
+            content: "\f058";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: var(--accent-green);
+            flex-shrink: 0;
+        }
+
+        /* Key Points Box */
+        .key-points {
+            background: linear-gradient(145deg, rgba(var(--cat-rgb), 0.1), rgba(var(--cat-rgb), 0.05));
+            border: 1px solid rgba(var(--cat-rgb), 0.3);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .key-points h3 { color: var(--cat-readable); margin-bottom: 1rem; }
+        .key-points ul { margin: 0; padding-left: 1.25rem; }
+        .key-points li { color: var(--color-text-secondary); margin-bottom: 0.5rem; line-height: 1.6; }
+
+        /* Navigation Buttons */
+        .nav-buttons-bottom {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--color-border);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        /* Case content containers */
+        .case-content { display: none; }
+        .case-content.active { display: block; }
+
+        /* Progress indicator */
+        .progress-bar {
+            height: 6px;
+            background: var(--surface-table);
+            border-radius: 3px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--cat-main), var(--cat-light));
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        /* Emergency Protocol Box */
+        .emergency-protocol {
+            background: linear-gradient(145deg, rgba(239, 68, 68, 0.15), rgba(220, 38, 38, 0.1));
+            border: 2px solid rgba(239, 68, 68, 0.4);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .emergency-protocol h4 {
+            color: var(--cat-readable);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .emergency-protocol ol {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+        .emergency-protocol li {
+            color: var(--color-text-secondary);
+            margin-bottom: 0.75rem;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .step-nav { flex-direction: column; align-items: stretch; }
+            .step-btn { justify-content: center; }
+            .case-tabs { flex-direction: column; }
+            .comparison-table { font-size: var(--font-size-xs); }
+            .comparison-table th, .comparison-table td { padding: 0.5rem; }
+        }
+
+        @media print {
+            .navigation-bar, footer, .step-nav, .nav-buttons-bottom { display: none !important; }
+            body { background: white !important; }
+            .step-content { display: block !important; }
+        }
+    </style>
+</head>
+<body class="light-questionnaire">
+
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+            <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+        </div>
+        <h1>Urgences Psychiatriques</h1>
+        <span class="badge badge-cat-clinique">Cas Cliniques</span>
+    </nav>
+
+    <div class="container">
+        <header class="page-header">
+            <p class="subtitle">Parcours pédagogique pour la gestion des urgences en psychiatrie</p>
+        </header>
+
+        <div class="sticky-header">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 20%;"></div>
+            </div>
+
+            <nav class="step-nav">
+                <button class="step-btn active" data-step="1">
+                    <span class="step-number">1</span>
+                    <span>Contexte</span>
+                </button>
+                <button class="step-btn" data-step="2">
+                    <span class="step-number">2</span>
+                    <span>Évaluation</span>
+                </button>
+                <button class="step-btn" data-step="3">
+                    <span class="step-number">3</span>
+                    <span>Diagnostic</span>
+                </button>
+                <button class="step-btn" data-step="4">
+                    <span class="step-number">4</span>
+                    <span>Prise en charge</span>
+                </button>
+                <button class="step-btn" data-step="5">
+                    <span class="step-number">5</span>
+                    <span>Synthèse</span>
+                </button>
+            </nav>
+        </div>
+
+        <main>
+            <!-- ÉTAPE 1: CONTEXTE -->
+            <section id="step-1" class="step-content active">
+                <div class="glass-card">
+                    <h2><i class="fas fa-ambulance" style="color: #ef4444; margin-right: 0.5rem;"></i>Étape 1 : Contexte</h2>
+                    <p style="color: var(--color-text-muted); margin-bottom: 1.5rem;">Découvrez deux situations d'urgence psychiatrique fréquemment rencontrées aux urgences.</p>
+
+                    <div class="case-tabs">
+                        <div class="case-tab active-orange" data-case="agitation">
+                            <h4><i class="fas fa-bolt" style="margin-right: 0.5rem;"></i>Razafindravao</h4>
+                            <p>Agitation aiguë</p>
+                        </div>
+                        <div class="case-tab" data-case="suicide">
+                            <h4><i class="fas fa-heart-broken" style="margin-right: 0.5rem;"></i>Kanto</h4>
+                            <p>Crise suicidaire</p>
+                        </div>
+                    </div>
+
+                    <!-- Agitation Case -->
+                    <div id="case-agitation" class="case-content active">
+                        <div class="scenario-box orange">
+                            <h3 style="color: #fb923c; margin-bottom: 1rem;"><i class="fas fa-file-alt" style="margin-right: 0.5rem;"></i>Cas 1 : L'agitation de Razafindravao</h3>
+                            <p><strong>Razafindravao, 42 ans</strong>, est amené aux urgences par la police après avoir été trouvé en pleine nuit dans la rue, criant des propos incohérents. Il est agité, déambule sans cesse, parle fort et vite. Il affirme être poursuivi par des « ennemis invisibles » et que la radio lui envoie des messages. Il n'a pas dormi depuis plusieurs jours. Son haleine sent l'alcool. Il refuse tout contact et devient menaçant lorsqu'on s'approche de lui. Aucun antécédent psychiatrique connu, mais la famille signale un épisode similaire il y a 5 ans.</p>
+                        </div>
+                        <div class="feature-grid">
+                            <div class="feature-card orange">
+                                <h4><i class="fas fa-user-clock" style="color: #fb923c; margin-right: 0.5rem;"></i>Âge</h4>
+                                <p>42 ans</p>
+                            </div>
+                            <div class="feature-card orange">
+                                <h4><i class="fas fa-car" style="color: #fb923c; margin-right: 0.5rem;"></i>Mode d'arrivée</h4>
+                                <p>Amené par la police</p>
+                            </div>
+                            <div class="feature-card orange">
+                                <h4><i class="fas fa-history" style="color: #fb923c; margin-right: 0.5rem;"></i>Antécédents</h4>
+                                <p>Épisode similaire il y a 5 ans</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Suicide Case -->
+                    <div id="case-suicide" class="case-content">
+                        <div class="scenario-box purple">
+                            <h3 style="color: #c084fc; margin-bottom: 1rem;"><i class="fas fa-file-alt" style="margin-right: 0.5rem;"></i>Cas 2 : La détresse de Kanto</h3>
+                            <p><strong>Kanto, 28 ans</strong>, est admise aux urgences après une intoxication médicamenteuse volontaire (IMV). Elle a ingéré une vingtaine de comprimés de paracétamol après une rupture sentimentale il y a 3 jours. C'est sa colocataire qui l'a trouvée et a appelé les secours. Kanto est consciente mais prostrée, parle peu. Elle dit qu'elle « voulait que ça s'arrête ». Elle a des antécédents de dépression traitée il y a 2 ans. Elle vit seule depuis la rupture, a perdu son emploi le mois dernier, et dit n'avoir « plus personne ».</p>
+                        </div>
+                        <div class="feature-grid">
+                            <div class="feature-card purple">
+                                <h4><i class="fas fa-user-clock" style="color: #c084fc; margin-right: 0.5rem;"></i>Âge</h4>
+                                <p>28 ans</p>
+                            </div>
+                            <div class="feature-card purple">
+                                <h4><i class="fas fa-pills" style="color: #c084fc; margin-right: 0.5rem;"></i>Motif d'admission</h4>
+                                <p>IMV paracétamol (~20 cp)</p>
+                            </div>
+                            <div class="feature-card purple">
+                                <h4><i class="fas fa-history" style="color: #c084fc; margin-right: 0.5rem;"></i>Antécédents</h4>
+                                <p>Dépression traitée il y a 2 ans</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="nav-buttons-bottom">
+                        <div></div>
+                        <button class="btn-primary" onclick="goToStep(2)">
+                            Étape suivante : Évaluation <i class="fas fa-arrow-right" style="margin-left: 0.5rem;"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ÉTAPE 2: ÉVALUATION -->
+            <section id="step-2" class="step-content">
+                <div class="glass-card">
+                    <h2><i class="fas fa-stethoscope" style="color: #ef4444; margin-right: 0.5rem;"></i>Étape 2 : Évaluation clinique</h2>
+                    <p style="color: var(--color-text-muted); margin-bottom: 1.5rem;">Identifiez les éléments clés de l'évaluation en urgence psychiatrique.</p>
+
+                    <div class="case-tabs">
+                        <div class="case-tab active-orange" data-case="agitation">
+                            <h4>Razafindravao</h4>
+                            <p>Évaluation agitation</p>
+                        </div>
+                        <div class="case-tab" data-case="suicide">
+                            <h4>Kanto</h4>
+                            <p>Évaluation crise suicidaire</p>
+                        </div>
+                    </div>
+
+                    <!-- Agitation Évaluation -->
+                    <div id="eval-agitation" class="case-content active">
+                        <h3 style="color: #fb923c; margin-bottom: 1rem;"><i class="fas fa-search" style="margin-right: 0.5rem;"></i>Évaluation de Razafindravao</h3>
+
+                        <div class="accordion-container">
+                            <button type="button" class="accordion-button" data-target="acc-agit-1">
+                                <span><i class="fas fa-shield-alt" style="color: #ef4444; margin-right: 0.5rem;"></i>1. Sécurité immédiate</span>
+                                <i class="fas fa-chevron-down accordion-arrow"></i>
+                            </button>
+                            <div id="acc-agit-1" class="accordion-content">
+                                <div class="accordion-content-inner">
+                                    <p><strong>Questions à se poser :</strong></p>
+                                    <ul>
+                                        <li>Y a-t-il un risque immédiat pour le patient, le personnel ou les autres patients ?</li>
+                                        <li>Le patient est-il armé ou a-t-il accès à des objets dangereux ?</li>
+                                        <li>Faut-il sécuriser l'environnement (retirer objets, augmenter l'espace) ?</li>
+                                    </ul>
+                                    <p><strong>Chez Razafindravao :</strong> Agitation psychomotrice importante, menaces verbales → risque élevé, sécurisation prioritaire.</p>
+                                </div>
+                            </div>
+
+                            <button type="button" class="accordion-button" data-target="acc-agit-2">
+                                <span><i class="fas fa-heartbeat" style="color: #ef4444; margin-right: 0.5rem;"></i>2. Causes organiques</span>
+                                <i class="fas fa-chevron-down accordion-arrow"></i>
+                            </button>
+                            <div id="acc-agit-2" class="accordion-content">
+                                <div class="accordion-content-inner">
+                                    <p><strong>Toujours éliminer une cause organique :</strong></p>
+                                    <ul>
+                                        <li>Constantes vitales (fièvre ? hypoglycémie ? hypoxie ?)</li>
+                                        <li>Intoxication (alcool, drogues, médicaments)</li>
+                                        <li>Sevrage (alcool, benzodiazépines)</li>
+                                        <li>Traumatisme crânien, infection (méningite), trouble métabolique</li>
+                                    </ul>
+                                    <p><strong>Chez Razafindravao :</strong> Haleine alcoolisée + insomnie prolongée → rechercher intoxication et/ou sevrage alcoolique.</p>
+                                </div>
+                            </div>
+
+                            <button type="button" class="accordion-button" data-target="acc-agit-3">
+                                <span><i class="fas fa-brain" style="color: #ef4444; margin-right: 0.5rem;"></i>3. Évaluation psychiatrique</span>
+                                <i class="fas fa-chevron-down accordion-arrow"></i>
+                            </button>
+                            <div id="acc-agit-3" class="accordion-content">
+                                <div class="accordion-content-inner">
+                                    <p><strong>Éléments à rechercher :</strong></p>
+                                    <ul>
+                                        <li>Délire (thèmes ? persécution, grandeur ?)</li>
+                                        <li>Hallucinations (auditives, visuelles ?)</li>
+                                        <li>Désorganisation du discours et du comportement</li>
+                                        <li>Éléments thymiques (manie ? dépression ?)</li>
+                                    </ul>
+                                    <p><strong>Chez Razafindravao :</strong> Idées de persécution + syndrome d'influence (« la radio lui envoie des messages ») → symptômes psychotiques évidents.</p>
+                                </div>
+                            </div>
+
+                            <button type="button" class="accordion-button" data-target="acc-agit-4">
+                                <span><i class="fas fa-users" style="color: #ef4444; margin-right: 0.5rem;"></i>4. Anamnèse</span>
+                                <i class="fas fa-chevron-down accordion-arrow"></i>
+                            </button>
+                            <div id="acc-agit-4" class="accordion-content">
+                                <div class="accordion-content-inner">
+                                    <p><strong>Informations à recueillir (famille, accompagnants) :</strong></p>
+                                    <ul>
+                                        <li>Antécédents psychiatriques personnels et familiaux</li>
+                                        <li>Traitements en cours ou arrêtés récemment</li>
+                                        <li>Facteurs déclenchants (stress, consommation, rupture de traitement)</li>
+                                        <li>Évolution des symptômes (brutal ou progressif ?)</li>
+                                    </ul>
+                                    <p><strong>Chez Razafindravao :</strong> Épisode similaire il y a 5 ans → probable trouble psychotique récurrent.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quiz Agitation -->
+                        <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--color-border);">
+                            <h3 style="margin-bottom: 1rem;"><i class="fas fa-question-circle" style="color: #ef4444; margin-right: 0.5rem;"></i>Quiz : Évaluation en urgence</h3>
+                            <div class="quiz-item">
+                                <h4>Chez un patient agité aux urgences, quelle est la PREMIÈRE chose à évaluer ?</h4>
+                                <div class="quiz-options" data-quiz="agit-q1" data-answer="A">
+                                    <div class="quiz-option" data-option="A">A) La sécurité (risque pour le patient et l'entourage)</div>
+                                    <div class="quiz-option" data-option="B">B) Les antécédents psychiatriques</div>
+                                    <div class="quiz-option" data-option="C">C) Le diagnostic psychiatrique précis</div>
+                                    <div class="quiz-option" data-option="D">D) L'indication d'hospitalisation</div>
+                                </div>
+                                <div class="feedback-box" id="feedback-agit-q1"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Suicide Évaluation -->
+                    <div id="eval-suicide" class="case-content">
+                        <h3 style="color: #c084fc; margin-bottom: 1rem;"><i class="fas fa-search" style="margin-right: 0.5rem;"></i>Évaluation de Kanto</h3>
+
+                        <div class="accordion-container">
+                            <button type="button" class="accordion-button" data-target="acc-sui-1">
+                                <span><i class="fas fa-heartbeat" style="color: #a855f7; margin-right: 0.5rem;"></i>1. Évaluation somatique urgente</span>
+                                <i class="fas fa-chevron-down accordion-arrow"></i>
+                            </button>
+                            <div id="acc-sui-1" class="accordion-content">
+                                <div class="accordion-content-inner">
+                                    <p><strong>Priorité : toxicité du paracétamol</strong></p>
+                                    <ul>
+                                        <li>Dosage paracétamolémie (nomogramme de Rumack-Matthew)</li>
+                                        <li>Bilan hépatique, fonction rénale, coagulation</li>
+                                        <li>Traitement par N-acétylcystéine si indiqué</li>
+                                    </ul>
+                                    <p style="color: #f87171;"><strong>⚠️ IMPORTANT :</strong> L'IMV au paracétamol peut être mortelle même si le patient semble stable initialement. La toxicité hépatique peut apparaître 24-72h après l'ingestion.</p>
+                                </div>
+                            </div>
+
+                            <button type="button" class="accordion-button" data-target="acc-sui-2">
+                                <span><i class="fas fa-skull" style="color: #a855f7; margin-right: 0.5rem;"></i>2. Évaluation du risque suicidaire (RUD)</span>
+                                <i class="fas fa-chevron-down accordion-arrow"></i>
+                            </button>
+                            <div id="acc-sui-2" class="accordion-content">
+                                <div class="accordion-content-inner">
+                                    <p><strong>Modèle RUD (Risque - Urgence - Dangerosité) :</strong></p>
+                                    <ul>
+                                        <li><strong>Risque :</strong> Facteurs de risque (ATCD TS, dépression, isolement, pertes récentes)</li>
+                                        <li><strong>Urgence :</strong> Idéation actuelle, planification, intention de récidive</li>
+                                        <li><strong>Dangerosité :</strong> Létalité du moyen, accès aux moyens, impulsivité</li>
+                                    </ul>
+                                    <p><strong>Chez Kanto :</strong> ATCD dépression + isolement + pertes multiples (emploi, relation) + TS récente = risque élevé.</p>
+                                </div>
+                            </div>
+
+                            <button type="button" class="accordion-button" data-target="acc-sui-3">
+                                <span><i class="fas fa-comments" style="color: #a855f7; margin-right: 0.5rem;"></i>3. Entretien psychiatrique</span>
+                                <i class="fas fa-chevron-down accordion-arrow"></i>
+                            </button>
+                            <div id="acc-sui-3" class="accordion-content">
+                                <div class="accordion-content-inner">
+                                    <p><strong>Questions essentielles (sans jugement) :</strong></p>
+                                    <ul>
+                                        <li>« Qu'est-ce qui vous a amené à faire ce geste ? »</li>
+                                        <li>« Aviez-vous prévu ce geste ? Depuis combien de temps ? »</li>
+                                        <li>« Comment vous sentez-vous maintenant d'être en vie ? »</li>
+                                        <li>« Pensez-vous encore à vous faire du mal ? »</li>
+                                        <li>« Y a-t-il des personnes sur qui vous pouvez compter ? »</li>
+                                    </ul>
+                                    <p><strong>Chez Kanto :</strong> « Je voulais que ça s'arrête » + « plus personne » → désespoir profond, isolement, à explorer.</p>
+                                </div>
+                            </div>
+
+                            <button type="button" class="accordion-button" data-target="acc-sui-4">
+                                <span><i class="fas fa-shield-alt" style="color: #a855f7; margin-right: 0.5rem;"></i>4. Facteurs de protection</span>
+                                <i class="fas fa-chevron-down accordion-arrow"></i>
+                            </button>
+                            <div id="acc-sui-4" class="accordion-content">
+                                <div class="accordion-content-inner">
+                                    <p><strong>Rechercher les raisons de vivre :</strong></p>
+                                    <ul>
+                                        <li>Liens familiaux, amicaux</li>
+                                        <li>Projets, responsabilités</li>
+                                        <li>Croyances (religieuses ou autres)</li>
+                                        <li>Ambivalence face à la mort</li>
+                                    </ul>
+                                    <p><strong>Chez Kanto :</strong> Colocataire qui a appelé les secours → lien à explorer et à renforcer.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quiz Suicide -->
+                        <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--color-border);">
+                            <h3 style="margin-bottom: 1rem;"><i class="fas fa-question-circle" style="color: #ef4444; margin-right: 0.5rem;"></i>Quiz : Évaluation suicidaire</h3>
+                            <div class="quiz-item">
+                                <h4>Dans l'évaluation du risque suicidaire, que signifie le « U » de RUD ?</h4>
+                                <div class="quiz-options" data-quiz="sui-q1" data-answer="B">
+                                    <div class="quiz-option" data-option="A">A) Utilité (les moyens utilisés)</div>
+                                    <div class="quiz-option" data-option="B">B) Urgence (imminence du passage à l'acte)</div>
+                                    <div class="quiz-option" data-option="C">C) Universalité (facteurs communs)</div>
+                                    <div class="quiz-option" data-option="D">D) Unique (particularités du cas)</div>
+                                </div>
+                                <div class="feedback-box" id="feedback-sui-q1"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="nav-buttons-bottom">
+                        <button class="btn-secondary" onclick="goToStep(1)">
+                            <i class="fas fa-arrow-left" style="margin-right: 0.5rem;"></i> Étape précédente
+                        </button>
+                        <button class="btn-primary" onclick="goToStep(3)">
+                            Étape suivante : Diagnostic <i class="fas fa-arrow-right" style="margin-left: 0.5rem;"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ÉTAPE 3: DIAGNOSTIC -->
+            <section id="step-3" class="step-content">
+                <div class="glass-card">
+                    <h2><i class="fas fa-diagnoses" style="color: #ef4444; margin-right: 0.5rem;"></i>Étape 3 : Raisonnement diagnostique</h2>
+                    <p style="color: var(--color-text-muted); margin-bottom: 1.5rem;">Utilisez l'arbre décisionnel pour guider votre réflexion diagnostique.</p>
+
+                    <h3 style="margin-bottom: 1rem;"><i class="fas fa-sitemap" style="color: #ef4444; margin-right: 0.5rem;"></i>Arbre décisionnel</h3>
+
+                    <div class="decision-container" id="decision-tree">
+                        <div id="node-start" class="decision-node">
+                            <p style="font-weight: 600; font-size: var(--font-size-lg); color: var(--color-text-primary); margin-bottom: 1rem;"><i class="fas fa-question-circle" style="color: #ef4444; margin-right: 0.5rem;"></i>Patient aux urgences psychiatriques : quelle présentation clinique ?</p>
+                            <div>
+                                <button onclick="showDecisionNode('node-agit')" class="decision-option"><i class="fas fa-bolt" style="margin-right: 0.5rem; color: #f97316;"></i>Agitation psychomotrice avec symptômes psychotiques</button>
+                                <button onclick="showDecisionNode('node-ts')" class="decision-option"><i class="fas fa-heart-broken" style="margin-right: 0.5rem; color: #a855f7;"></i>Post-tentative de suicide / crise suicidaire</button>
+                            </div>
+                        </div>
+
+                        <div id="node-agit" class="decision-node hidden">
+                            <p style="font-weight: 600; font-size: var(--font-size-lg); color: var(--color-text-primary); margin-bottom: 1rem;"><i class="fas fa-question-circle" style="color: #f97316; margin-right: 0.5rem;"></i>Y a-t-il des signes d'intoxication ou de sevrage ?</p>
+                            <div>
+                                <button onclick="showDecisionResult('result-toxi')" class="decision-option"><i class="fas fa-wine-glass-alt" style="margin-right: 0.5rem; color: #f97316;"></i>Oui : alcool, drogues, signes de sevrage</button>
+                                <button onclick="showDecisionNode('node-psychose')" class="decision-option"><i class="fas fa-brain" style="margin-right: 0.5rem; color: #a855f7;"></i>Non ou contribution partielle</button>
+                            </div>
+                        </div>
+
+                        <div id="node-psychose" class="decision-node hidden">
+                            <p style="font-weight: 600; font-size: var(--font-size-lg); color: var(--color-text-primary); margin-bottom: 1rem;"><i class="fas fa-question-circle" style="color: #a855f7; margin-right: 0.5rem;"></i>Y a-t-il des éléments thymiques associés ?</p>
+                            <div>
+                                <button onclick="showDecisionResult('result-manie')" class="decision-option"><i class="fas fa-arrow-up" style="margin-right: 0.5rem; color: #fbbf24;"></i>Euphorie, mégalomanie, réduction du sommeil → épisode maniaque</button>
+                                <button onclick="showDecisionResult('result-schizo')" class="decision-option"><i class="fas fa-minus" style="margin-right: 0.5rem; color: #60a5fa;"></i>Pas d'élément thymique prédominant → psychose aiguë / schizophrénie</button>
+                            </div>
+                        </div>
+
+                        <div id="node-ts" class="decision-node hidden">
+                            <p style="font-weight: 600; font-size: var(--font-size-lg); color: var(--color-text-primary); margin-bottom: 1rem;"><i class="fas fa-question-circle" style="color: #a855f7; margin-right: 0.5rem;"></i>Quel est le niveau de risque suicidaire actuel ?</p>
+                            <div>
+                                <button onclick="showDecisionResult('result-hospit')" class="decision-option"><i class="fas fa-hospital" style="margin-right: 0.5rem; color: #ef4444;"></i>Élevé : idéation persistante, isolement, moyens accessibles</button>
+                                <button onclick="showDecisionResult('result-ambu')" class="decision-option"><i class="fas fa-home" style="margin-right: 0.5rem; color: #4ade80;"></i>Modéré : ambivalence, soutien présent, alliance thérapeutique</button>
+                            </div>
+                        </div>
+
+                        <div id="result-toxi" class="decision-node hidden result-box warning">
+                            <h3><i class="fas fa-wine-glass-alt" style="margin-right: 0.5rem;"></i>Agitation sur intoxication/sevrage</h3>
+                            <p><strong>Chez Razafindravao :</strong> L'haleine alcoolisée et l'insomnie prolongée suggèrent une composante toxique.</p>
+                            <ul style="margin-top: 1rem; padding-left: 1.5rem;">
+                                <li>Rechercher un sevrage alcoolique (delirium tremens ?)</li>
+                                <li>Bilan toxicologique</li>
+                                <li>Les symptômes psychotiques peuvent être induits par la substance</li>
+                                <li>Réévaluer après désintoxication</li>
+                            </ul>
+                        </div>
+
+                        <div id="result-manie" class="decision-node hidden result-box warning">
+                            <h3><i class="fas fa-arrow-up" style="margin-right: 0.5rem;"></i>Épisode maniaque avec caractéristiques psychotiques</h3>
+                            <p>À évoquer si : euphorie, idées de grandeur, logorrhée, désinhibition + délire/hallucinations.</p>
+                            <ul style="margin-top: 1rem; padding-left: 1.5rem;">
+                                <li>Trouble bipolaire de type I probable</li>
+                                <li>Hospitalisation généralement nécessaire</li>
+                                <li>Traitement : thymorégulateur + antipsychotique</li>
+                            </ul>
+                        </div>
+
+                        <div id="result-schizo" class="decision-node hidden result-box">
+                            <h3><i class="fas fa-brain" style="margin-right: 0.5rem;"></i>Épisode psychotique aigu</h3>
+                            <p><strong>Chez Razafindravao :</strong> Délire de persécution + syndrome d'influence + ATCD d'épisode similaire.</p>
+                            <ul style="margin-top: 1rem; padding-left: 1.5rem;">
+                                <li>Bouffée délirante aiguë ou décompensation schizophrénique</li>
+                                <li>Hospitalisation nécessaire (consentement ou contrainte)</li>
+                                <li>Traitement antipsychotique</li>
+                                <li>Bilan étiologique organique</li>
+                            </ul>
+                        </div>
+
+                        <div id="result-hospit" class="decision-node hidden result-box danger">
+                            <h3><i class="fas fa-hospital" style="margin-right: 0.5rem;"></i>Hospitalisation nécessaire</h3>
+                            <p><strong>Chez Kanto :</strong> Risque élevé (isolement, pertes multiples, TS récente, idéation persistante).</p>
+                            <ul style="margin-top: 1rem; padding-left: 1.5rem;">
+                                <li>Hospitalisation en psychiatrie après stabilisation somatique</li>
+                                <li>Surveillance rapprochée initiale</li>
+                                <li>Traitement antidépresseur à discuter</li>
+                                <li>Travail sur le réseau de soutien</li>
+                            </ul>
+                        </div>
+
+                        <div id="result-ambu" class="decision-node hidden result-box">
+                            <h3><i class="fas fa-home" style="margin-right: 0.5rem;"></i>Prise en charge ambulatoire possible</h3>
+                            <p>Si le risque est modéré avec facteurs protecteurs :</p>
+                            <ul style="margin-top: 1rem; padding-left: 1.5rem;">
+                                <li>Plan de sécurité établi avec le patient</li>
+                                <li>Personne ressource identifiée et contactée</li>
+                                <li>RDV psychiatrie rapproché (48-72h)</li>
+                                <li>Numéro de crise fourni (3114)</li>
+                                <li>Retrait des moyens létaux (médicaments, armes)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <button onclick="resetDecisionTree()" class="btn-secondary" style="margin-top: 1rem;"><i class="fas fa-redo" style="margin-right: 0.5rem;"></i>Recommencer</button>
+
+                    <!-- Comparison Table -->
+                    <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--color-border);">
+                        <h3 style="margin-bottom: 1rem;"><i class="fas fa-columns" style="color: #ef4444; margin-right: 0.5rem;"></i>Diagnostics différentiels de l'agitation</h3>
+                        <div style="overflow-x: auto; border-radius: var(--radius-lg); border: 1px solid var(--color-border);">
+                            <table class="comparison-table">
+                                <thead>
+                                    <tr>
+                                        <th>Étiologie</th>
+                                        <th>Éléments évocateurs</th>
+                                        <th>Examens clés</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="font-weight: 600;">Intoxication alcool/drogues</td>
+                                        <td>Haleine, pupilles, confusion, contexte</td>
+                                        <td>Alcoolémie, toxiques urinaires</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 600;">Sevrage alcoolique</td>
+                                        <td>Tremblements, sueurs, HTA, confusion</td>
+                                        <td>Score CIWA, ionogramme</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 600;">Cause infectieuse</td>
+                                        <td>Fièvre, syndrome méningé</td>
+                                        <td>NFS, CRP, PL si méningite suspectée</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 600;">Cause métabolique</td>
+                                        <td>Diabète connu, insuffisance rénale/hépatique</td>
+                                        <td>Glycémie, iono, bilan rénal/hépatique</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 600;">Épisode maniaque</td>
+                                        <td>Euphorie, mégalomanie, insomnie sans fatigue</td>
+                                        <td>ATCD bipolaires, anamnèse</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 600;">Psychose aiguë</td>
+                                        <td>Délire, hallucinations, désorganisation</td>
+                                        <td>Examen psychiatrique, imagerie si 1er épisode</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="nav-buttons-bottom">
+                        <button class="btn-secondary" onclick="goToStep(2)">
+                            <i class="fas fa-arrow-left" style="margin-right: 0.5rem;"></i> Étape précédente
+                        </button>
+                        <button class="btn-primary" onclick="goToStep(4)">
+                            Étape suivante : Prise en charge <i class="fas fa-arrow-right" style="margin-left: 0.5rem;"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ÉTAPE 4: PRISE EN CHARGE -->
+            <section id="step-4" class="step-content">
+                <div class="glass-card">
+                    <h2><i class="fas fa-hand-holding-medical" style="color: #ef4444; margin-right: 0.5rem;"></i>Étape 4 : Prise en charge</h2>
+                    <p style="color: var(--color-text-muted); margin-bottom: 1.5rem;">Apprenez les protocoles de prise en charge des urgences psychiatriques.</p>
+
+                    <div class="case-tabs">
+                        <div class="case-tab active-orange" data-case="agitation">
+                            <h4>Razafindravao</h4>
+                            <p>Gestion de l'agitation</p>
+                        </div>
+                        <div class="case-tab" data-case="suicide">
+                            <h4>Kanto</h4>
+                            <p>Prise en charge post-TS</p>
+                        </div>
+                    </div>
+
+                    <!-- Agitation Management -->
+                    <div id="pec-agitation" class="case-content active">
+                        <h3 style="color: #fb923c; margin-bottom: 1rem;"><i class="fas fa-procedures" style="margin-right: 0.5rem;"></i>Prise en charge de Razafindravao</h3>
+
+                        <div class="emergency-protocol">
+                            <h4><i class="fas fa-exclamation-triangle"></i> Protocole de désescalade</h4>
+                            <ol>
+                                <li><strong>Sécuriser l'environnement :</strong> Retirer les objets dangereux, prévoir une sortie, appeler du renfort si nécessaire.</li>
+                                <li><strong>Approche verbale :</strong> Voix calme, phrases courtes, se présenter, valider les émotions (« Je vois que vous êtes en colère »).</li>
+                                <li><strong>Offrir des choix :</strong> « Préférez-vous vous asseoir ici ou là-bas ? » - redonne un sentiment de contrôle.</li>
+                                <li><strong>Proposer un traitement oral :</strong> Si le patient accepte, privilégier la voie orale (benzodiazépine ± antipsychotique).</li>
+                                <li><strong>Sédation parentérale :</strong> En dernier recours si échec de la désescalade et danger imminent.</li>
+                            </ol>
+                        </div>
+
+                        <h4 style="margin: 1.5rem 0 1rem; color: var(--color-text-primary);"><i class="fas fa-pills" style="color: #fb923c; margin-right: 0.5rem;"></i>Options thérapeutiques</h4>
+                        <ul class="action-list">
+                            <li><strong>1ère intention (voie orale) :</strong> Diazépam 10-20 mg PO ou Loxapine 50-100 mg PO, à renouveler si besoin.</li>
+                            <li><strong>Si refus ou échec :</strong> Loxapine 50-100 mg IM ou Halopéridol 5-10 mg IM + Benzodiazépine IM.</li>
+                            <li><strong>Surveillance post-sédation :</strong> Constantes vitales toutes les 15 min pendant 1h, puis toutes les heures.</li>
+                            <li><strong>Hydratation :</strong> Prévoir une voie veineuse si sédation prolongée.</li>
+                        </ul>
+
+                        <div class="alert alert-danger" style="margin-top: 1.5rem;">
+                            <div class="alert-icon"><i class="fas fa-exclamation-circle"></i></div>
+                            <div class="alert-content">
+                                <h4>Contention physique</h4>
+                                <p>La contention est un geste médical de dernier recours, prescrit par un médecin, avec réévaluation régulière (toutes les 2h). Elle ne remplace jamais l'approche relationnelle et médicamenteuse.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Suicide Management -->
+                    <div id="pec-suicide" class="case-content">
+                        <h3 style="color: #c084fc; margin-bottom: 1rem;"><i class="fas fa-procedures" style="margin-right: 0.5rem;"></i>Prise en charge de Kanto</h3>
+
+                        <div class="emergency-protocol">
+                            <h4><i class="fas fa-heartbeat"></i> Prise en charge somatique urgente</h4>
+                            <ol>
+                                <li><strong>Dosage paracétamolémie :</strong> À H4 post-ingestion (ou dès que possible si > 4h).</li>
+                                <li><strong>Nomogramme de Rumack-Matthew :</strong> Déterminer la nécessité du traitement.</li>
+                                <li><strong>N-acétylcystéine :</strong> Si indication, débuter le protocole IV ou PO.</li>
+                                <li><strong>Surveillance hépatique :</strong> Bilan hépatique à H24, H48, H72.</li>
+                            </ol>
+                        </div>
+
+                        <h4 style="margin: 1.5rem 0 1rem; color: var(--color-text-primary);"><i class="fas fa-brain" style="color: #c084fc; margin-right: 0.5rem;"></i>Prise en charge psychiatrique</h4>
+                        <ul class="action-list">
+                            <li><strong>Entretien psychiatrique :</strong> Dès que l'état somatique le permet, évaluation complète du risque suicidaire.</li>
+                            <li><strong>Alliance thérapeutique :</strong> Posture empathique, sans jugement, valider la souffrance.</li>
+                            <li><strong>Plan de sécurité :</strong> Co-construire avec le patient un plan pour gérer les moments de crise.</li>
+                            <li><strong>Impliquer l'entourage :</strong> Contacter la colocataire, évaluer le soutien disponible.</li>
+                            <li><strong>Orientation :</strong> Hospitalisation psychiatrique compte tenu du risque élevé.</li>
+                        </ul>
+
+                        <h4 style="margin: 1.5rem 0 1rem; color: var(--color-text-primary);"><i class="fas fa-clipboard-list" style="color: #c084fc; margin-right: 0.5rem;"></i>Éléments du plan de sécurité</h4>
+                        <div class="feature-grid">
+                            <div class="feature-card purple">
+                                <h4>1. Signaux d'alerte</h4>
+                                <p>Identifier les pensées, émotions ou situations qui précèdent une crise.</p>
+                            </div>
+                            <div class="feature-card purple">
+                                <h4>2. Stratégies d'adaptation</h4>
+                                <p>Activités qui aident à traverser le moment difficile (marche, musique, respiration).</p>
+                            </div>
+                            <div class="feature-card purple">
+                                <h4>3. Personnes ressources</h4>
+                                <p>Liste de personnes à contacter avec leurs numéros.</p>
+                            </div>
+                            <div class="feature-card purple">
+                                <h4>4. Professionnels à joindre</h4>
+                                <p>Psychiatre, médecin traitant, 3114, urgences.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quiz Action -->
+                    <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--color-border);">
+                        <h3 style="margin-bottom: 1rem;"><i class="fas fa-question-circle" style="color: #ef4444; margin-right: 0.5rem;"></i>Quiz : Prise en charge</h3>
+                        <div class="quiz-item">
+                            <h4>Dans la gestion de l'agitation, quelle approche doit être tentée EN PREMIER ?</h4>
+                            <div class="quiz-options" data-quiz="pec-q1" data-answer="B">
+                                <div class="quiz-option" data-option="A">A) Sédation médicamenteuse injectable</div>
+                                <div class="quiz-option" data-option="B">B) Désescalade verbale et offre de traitement oral</div>
+                                <div class="quiz-option" data-option="C">C) Contention physique pour sécuriser</div>
+                                <div class="quiz-option" data-option="D">D) Isolement en chambre fermée</div>
+                            </div>
+                            <div class="feedback-box" id="feedback-pec-q1"></div>
+                        </div>
+                    </div>
+
+                    <div class="nav-buttons-bottom">
+                        <button class="btn-secondary" onclick="goToStep(3)">
+                            <i class="fas fa-arrow-left" style="margin-right: 0.5rem;"></i> Étape précédente
+                        </button>
+                        <button class="btn-primary" onclick="goToStep(5)">
+                            Étape suivante : Synthèse <i class="fas fa-arrow-right" style="margin-left: 0.5rem;"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ÉTAPE 5: SYNTHÈSE -->
+            <section id="step-5" class="step-content">
+                <div class="glass-card">
+                    <h2><i class="fas fa-flag-checkered" style="color: #ef4444; margin-right: 0.5rem;"></i>Étape 5 : Synthèse</h2>
+                    <p style="color: var(--color-text-muted); margin-bottom: 1.5rem;">Récapitulatif des points essentiels en urgence psychiatrique.</p>
+
+                    <div class="key-points">
+                        <h3><i class="fas fa-star" style="margin-right: 0.5rem;"></i>Points clés à retenir</h3>
+                        <ul>
+                            <li><strong>Sécurité d'abord :</strong> Évaluer le risque pour le patient, le personnel et l'entourage avant tout.</li>
+                            <li><strong>Éliminer l'organique :</strong> Toute agitation ou confusion peut avoir une cause somatique (intoxication, infection, métabolique).</li>
+                            <li><strong>RUD pour le suicide :</strong> Risque - Urgence - Dangerosité = cadre systématique d'évaluation.</li>
+                            <li><strong>Désescalade avant sédation :</strong> L'approche verbale est toujours la première ligne.</li>
+                            <li><strong>IMV paracétamol :</strong> Toxicité hépatique retardée, traitement par NAC si indiqué.</li>
+                            <li><strong>Plan de sécurité :</strong> Outil concret pour la prévention du suicide.</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-top: 2rem;">
+                        <h3 style="margin-bottom: 1rem;"><i class="fas fa-tasks" style="color: #4ade80; margin-right: 0.5rem;"></i>Checklist d'auto-évaluation</h3>
+                        <p style="color: var(--color-text-muted); margin-bottom: 1rem;">Cochez les compétences acquises :</p>
+
+                        <div class="checklist-item">
+                            <input id="check-1" type="checkbox">
+                            <label for="check-1">Je sais évaluer la sécurité immédiate aux urgences psychiatriques</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input id="check-2" type="checkbox">
+                            <label for="check-2">Je connais les causes organiques à éliminer devant une agitation</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input id="check-3" type="checkbox">
+                            <label for="check-3">Je sais appliquer le modèle RUD pour l'évaluation du risque suicidaire</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input id="check-4" type="checkbox">
+                            <label for="check-4">Je connais les étapes de la désescalade verbale</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input id="check-5" type="checkbox">
+                            <label for="check-5">Je connais les options thérapeutiques pour l'agitation aiguë</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input id="check-6" type="checkbox">
+                            <label for="check-6">Je sais que l'IMV au paracétamol nécessite une prise en charge spécifique</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input id="check-7" type="checkbox">
+                            <label for="check-7">Je sais construire un plan de sécurité avec un patient suicidaire</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input id="check-8" type="checkbox">
+                            <label for="check-8">Je connais les critères d'hospitalisation en psychiatrie</label>
+                        </div>
+
+                        <div id="checklist-result" style="margin-top: 1rem; padding: 1rem; background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); display: none;">
+                            <p style="color: #4ade80; margin: 0;"><i class="fas fa-check-circle" style="margin-right: 0.5rem;"></i><span id="checklist-count">0</span>/8 compétences validées</p>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--color-border);">
+                        <h3 style="margin-bottom: 1rem;"><i class="fas fa-phone" style="color: #ef4444; margin-right: 0.5rem;"></i>Numéros utiles</h3>
+                        <div class="feature-grid">
+                            <div class="feature-card">
+                                <h4><i class="fas fa-phone-alt" style="color: #ef4444; margin-right: 0.5rem;"></i>3114</h4>
+                                <p>Numéro national de prévention du suicide (24h/24)</p>
+                            </div>
+                            <div class="feature-card">
+                                <h4><i class="fas fa-phone-alt" style="color: #ef4444; margin-right: 0.5rem;"></i>15 / 112</h4>
+                                <p>SAMU / Urgences européennes</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-success" style="margin-top: 2rem;">
+                        <div class="alert-icon"><i class="fas fa-medal"></i></div>
+                        <div class="alert-content">
+                            <h4>Parcours terminé !</h4>
+                            <p>Vous avez complété ce module sur les urgences psychiatriques. N'hésitez pas à revoir les étapes pour consolider vos connaissances.</p>
+                        </div>
+                    </div>
+
+                    <div class="nav-buttons-bottom">
+                        <button class="btn-secondary" onclick="goToStep(4)">
+                            <i class="fas fa-arrow-left" style="margin-right: 0.5rem;"></i> Étape précédente
+                        </button>
+                        <button class="btn-primary" onclick="goToStep(1)">
+                            <i class="fas fa-redo" style="margin-right: 0.5rem;"></i> Recommencer le parcours
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <p>Dr. FENOHASINA T.J. Felicien (Psychiatre)</p>
+        <p>&copy; 2025 - Centre Ressource de Réhabilitation</p>
+        <p class="license">Licence CC BY-NC-SA 4.0</p>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const quizAnswers = {
+        'agit-q1': {
+            answer: 'A',
+            correct: "<strong>Correct !</strong> La sécurité est toujours la priorité n°1 aux urgences psychiatriques. Avant tout diagnostic ou traitement, il faut évaluer le risque pour le patient, le personnel et les autres patients.",
+            incorrect: "<strong>À revoir.</strong> La bonne réponse est A. La sécurité doit être évaluée en premier. Les antécédents, le diagnostic et l'indication d'hospitalisation viennent ensuite."
+        },
+        'sui-q1': {
+            answer: 'B',
+            correct: "<strong>Exact !</strong> Le U de RUD signifie Urgence, c'est-à-dire l'imminence du passage à l'acte. On évalue si le patient a des idées suicidaires actuelles, un plan, une intention de passer à l'acte.",
+            incorrect: "<strong>À revoir.</strong> La bonne réponse est B. RUD = Risque (facteurs de risque) - Urgence (imminence) - Dangerosité (létalité du moyen)."
+        },
+        'pec-q1': {
+            answer: 'B',
+            correct: "<strong>Parfait !</strong> La désescalade verbale et l'offre de traitement oral sont toujours la première ligne. La sédation injectable et la contention sont des recours ultimes, uniquement si l'approche relationnelle échoue et qu'il y a danger immédiat.",
+            incorrect: "<strong>À revoir.</strong> La bonne réponse est B. L'approche non médicamenteuse (désescalade verbale) doit toujours être tentée en premier, suivie de l'offre de traitement oral si nécessaire."
+        }
+    };
+
+    // Step Navigation
+    const stepBtns = document.querySelectorAll('.step-btn');
+    const stepContents = document.querySelectorAll('.step-content');
+    const progressFill = document.getElementById('progressFill');
+
+    window.goToStep = function(stepNum) {
+        stepBtns.forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.step == stepNum);
+        });
+        stepContents.forEach(content => {
+            content.classList.toggle('active', content.id === `step-${stepNum}`);
+        });
+        progressFill.style.width = (stepNum * 20) + '%';
+        updateCaseDisplay();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    stepBtns.forEach(btn => {
+        btn.addEventListener('click', () => goToStep(btn.dataset.step));
+    });
+
+    // Case Tabs
+    let currentCase = 'agitation';
+
+    function updateCaseTabs(caseName) {
+        document.querySelectorAll('.case-tab').forEach(t => {
+            t.classList.remove('active-orange', 'active-purple');
+            if (t.dataset.case === caseName) {
+                t.classList.add(caseName === 'agitation' ? 'active-orange' : 'active-purple');
+            }
+        });
+    }
+
+    function updateCaseDisplay() {
+        const contentPrefixes = ['case-', 'eval-', 'pec-'];
+        contentPrefixes.forEach(prefix => {
+            document.querySelectorAll(`[id^="${prefix}"]`).forEach(c => c.classList.remove('active'));
+            const target = document.querySelector(`#${prefix}${currentCase}`);
+            if (target) target.classList.add('active');
+        });
+    }
+
+    document.querySelectorAll('.case-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            currentCase = this.dataset.case;
+            updateCaseTabs(currentCase);
+            updateCaseDisplay();
+        });
+    });
+
+    // Accordions
+    document.querySelectorAll('.accordion-button').forEach(button => {
+        button.addEventListener('click', () => {
+            const targetId = button.dataset.target;
+            const content = document.getElementById(targetId);
+            const isOpen = button.classList.toggle('open');
+            content.style.maxHeight = isOpen ? content.scrollHeight + "px" : null;
+        });
+    });
+
+    // Quiz
+    document.querySelectorAll('.quiz-options').forEach(quizContainer => {
+        const quizId = quizContainer.dataset.quiz;
+        const correctAnswer = quizContainer.dataset.answer;
+
+        quizContainer.querySelectorAll('.quiz-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const selectedOption = this.dataset.option;
+                const feedbackDiv = document.getElementById(`feedback-${quizId}`);
+                const quizData = quizAnswers[quizId];
+
+                quizContainer.querySelectorAll('.quiz-option').forEach(opt => {
+                    opt.classList.remove('selected', 'correct', 'incorrect');
+                });
+
+                this.classList.add('selected');
+
+                if (selectedOption === correctAnswer) {
+                    feedbackDiv.innerHTML = quizData.correct;
+                    feedbackDiv.className = 'feedback-box success visible';
+                    this.classList.add('correct');
+                } else {
+                    feedbackDiv.innerHTML = quizData.incorrect;
+                    feedbackDiv.className = 'feedback-box error visible';
+                    this.classList.add('incorrect');
+                    quizContainer.querySelector(`[data-option="${correctAnswer}"]`).classList.add('correct');
+                }
+            });
+        });
+    });
+
+    // Decision Tree
+    window.showDecisionNode = function(nodeId) {
+        document.querySelectorAll('.decision-node').forEach(node => {
+            node.classList.add('hidden');
+        });
+        document.getElementById(nodeId).classList.remove('hidden');
+    };
+
+    window.showDecisionResult = function(resultId) {
+        document.querySelectorAll('.decision-node').forEach(node => {
+            node.classList.add('hidden');
+        });
+        document.getElementById(resultId).classList.remove('hidden');
+    };
+
+    window.resetDecisionTree = function() {
+        document.querySelectorAll('.decision-node').forEach(node => {
+            node.classList.add('hidden');
+        });
+        document.getElementById('node-start').classList.remove('hidden');
+    };
+
+    // Checklist
+    const checkboxes = document.querySelectorAll('.checklist-item input[type="checkbox"]');
+    const checklistResult = document.getElementById('checklist-result');
+    const checklistCount = document.getElementById('checklist-count');
+
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            this.closest('.checklist-item').classList.toggle('checked', this.checked);
+            const checkedCount = document.querySelectorAll('.checklist-item input:checked').length;
+            checklistCount.textContent = checkedCount;
+            checklistResult.style.display = 'block';
+        });
+    });
+});
+</script>
+
+</body>
+</html>

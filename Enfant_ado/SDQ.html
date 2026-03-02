@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDQ - Strengths and Difficulties Questionnaire</title>
+
+    <!-- Font Awesome pour les icones -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Styles partages -->
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <style>
+        :root {
+            --cat-main: #14b8a6;
+            --cat-dark: #0d9488;
+            --cat-light: #2dd4bf;
+            --cat-rgb: 20, 184, 166;
+            --cat-readable: #0d9488;
+        }
+        .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
+        .option-btn.selected, .answer-btn.selected { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        .score-circle { border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 30px rgba(var(--cat-rgb), 0.2); }
+        .score-value { color: var(--cat-light); }
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-light); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+        .progress-fill { background: linear-gradient(90deg, var(--cat-main), var(--cat-light)); box-shadow: 0 0 8px rgba(var(--cat-rgb), 0.4); }
+        .likert-options input[type="radio"]:checked + label,
+        .binary-options input[type="radio"]:checked + label,
+        .radio-options input[type="radio"]:checked + label { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+    </style>
+
+</head>
+<body class="light-questionnaire">
+    <!-- Navigation -->
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil">
+                <i class="fas fa-home"></i>
+            </a>
+            <button onclick="history.back()" class="btn-back" title="Retour">
+                <i class="fas fa-arrow-left"></i> <span>Retour</span>
+            </button>
+        </div>
+        <h1>SDQ</h1>
+        <span class="badge badge-cat-enfant">Enfant/Ado</span>
+    </nav>
+
+    <div class="container">
+        <!-- En-tete -->
+        <header class="glass-card" style="text-align: center; margin-bottom: 1.5rem;">
+            <h2 class="gradient-text">Strengths and Difficulties Questionnaire</h2>
+            <p>Questionnaire des forces et difficultes - Version Parents (4-17 ans)</p>
+        </header>
+
+        <!-- Informations -->
+        <section class="info-box">
+            <h3><i class="fas fa-info-circle"></i> A propos de ce questionnaire</h3>
+            <p>Le SDQ est un bref questionnaire de depistage des troubles emotionnels et comportementaux chez l'enfant et l'adolescent. Cette <strong>version parents</strong> (hetero-questionnaire) est destinee aux enfants et adolescents de <strong>4 a 17 ans</strong>.</p>
+            <p style="margin-top: 0.5rem;">Il evalue 25 attributs, repartis en 5 echelles de 5 items : symptomes emotionnels, problemes de comportement, hyperactivite/inattention, problemes relationnels avec les pairs, et comportement prosocial.</p>
+        </section>
+
+        <!-- Avertissement -->
+        <section class="warning-box">
+            <h3><i class="fas fa-exclamation-triangle"></i> Avertissements importants</h3>
+            <ul style="margin: 0; padding-left: 1.5rem;">
+                <li>Ce questionnaire est un outil de depistage et ne remplace pas une evaluation clinique complete</li>
+                <li>Les resultats doivent etre interpretes par un professionnel de sante</li>
+                <li>Il s'agit d'un hetero-questionnaire : le parent repond pour l'enfant</li>
+                <li>Une evaluation multimodale (parents, enseignants, enfant) est recommandee</li>
+            </ul>
+        </section>
+
+        <!-- Controles -->
+        <section class="glass-card">
+            <div class="control-buttons">
+                <button class="btn-secondary" onclick="importData()">
+                    <i class="fas fa-file-import"></i> Importer
+                </button>
+                <button class="btn-secondary" onclick="resetForm()">
+                    <i class="fas fa-redo"></i> Reinitialiser
+                </button>
+            </div>
+            <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="loadFile(event)">
+        </section>
+
+        <!-- Instructions -->
+        <section class="glass-card">
+            <h3 style="margin-bottom: 1rem;">Pour chaque affirmation, veuillez indiquer si elle est "Pas vraie", "Un peu vraie" ou "Tres vraie" pour votre enfant. Repondez du mieux que vous pouvez, meme si vous n'etes pas absolument certain(e).</h3>
+
+            <!-- Questions generees par JS -->
+            <div id="questions"></div>
+        </section>
+
+        <!-- Resultats -->
+        <section id="results" class="results-section" style="display: none;">
+            <h2 style="text-align: center; margin-bottom: 2rem;">
+                <i class="fas fa-chart-bar"></i> Resultats de l'evaluation
+            </h2>
+
+            <!-- Score total de difficultes -->
+            <div class="score-display">
+                <div class="score-circle">
+                    <span class="score-value" id="totalScore">0</span>
+                </div>
+                <p class="score-label">Score total de difficultes (sur 40)</p>
+            </div>
+
+            <div id="interpretationBox" class="interpretation"></div>
+
+            <!-- Scores par sous-echelle -->
+            <div class="glass-card" style="margin-top: 1.5rem;">
+                <h3 style="margin-bottom: 1rem;"><i class="fas fa-list-ul"></i> Scores par sous-echelle</h3>
+                <div id="subscaleScores"></div>
+            </div>
+
+            <button class="btn-primary w-full" onclick="toggleDetails()" style="margin-top: 1.5rem;">
+                <i class="fas fa-list"></i> Voir les details et interpretations par echelle
+                <span id="toggleIcon"><i class="fas fa-chevron-down"></i></span>
+            </button>
+
+            <div id="detailsContent" class="glass-card" style="display: none; margin-top: 1rem;"></div>
+
+            <!-- Export -->
+            <div class="glass-card" style="margin-top: 2rem;">
+                <h3><i class="fas fa-download"></i> Exporter les resultats</h3>
+                <div class="consent-box">
+                    <label>
+                        <input type="checkbox" id="exportConsent">
+                        <span>Je souhaite télécharger mes résultats (questionnaire, réponses, score et date) dans un fichier JSON sur mon appareil. <strong>Ces résultats constituent des données de santé — je m'engage à les conserver de façon sécurisée et à ne les partager qu'avec un professionnel de santé de mon choix.</strong> Aucune donnée n'est transmise à un serveur.</span>
+                    </label>
+                </div>
+                <div class="export-buttons">
+                    <button class="btn-primary" onclick="exportData()">
+                        <i class="fas fa-file-export"></i> Exporter en JSON
+                    </button>
+                    <button class="btn-print" onclick="printResults()">
+                        <i class="fas fa-print"></i> Imprimer
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p><strong>SDQ - Strengths and Difficulties Questionnaire</strong></p>
+        <p>Auteur original : Robert Goodman (1997)</p>
+        <p>Adaptation numerique : Dr FENOHASINA | Psychiatre</p>
+        <p style="margin-top: 1rem;">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr" target="_blank">
+                Licence CC BY-NC-SA 4.0
+            </a>
+        </p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../js/app.js"></script>
+    <script>
+        // Les 25 items du SDQ - Version Parents
+        const questions = [
+            { text: "Attentionne(e) envers les autres, tient compte de ce qu'ils ressentent", subscale: "prosocial", reversed: false },
+            { text: "Agite(e), hyperactif(ve), ne tient pas en place", subscale: "hyperactivity", reversed: false },
+            { text: "Se plaint souvent de maux de tete, de ventre ou de nausees", subscale: "emotional", reversed: false },
+            { text: "Partage facilement avec les autres enfants", subscale: "prosocial", reversed: false },
+            { text: "Fait souvent des coleres ou s'emporte facilement", subscale: "conduct", reversed: false },
+            { text: "Plutot solitaire, a tendance a jouer seul(e)", subscale: "peers", reversed: false },
+            { text: "En general obeissant(e), fait ce que les adultes demandent", subscale: "conduct", reversed: true },
+            { text: "A beaucoup de soucis, parait souvent inquiet(ete)", subscale: "emotional", reversed: false },
+            { text: "Aide volontiers quand quelqu'un s'est fait mal, est malade ou triste", subscale: "prosocial", reversed: false },
+            { text: "Ne tient pas en place ou se tortille constamment", subscale: "hyperactivity", reversed: false },
+            { text: "A au moins un(e) bon(ne) ami(e)", subscale: "peers", reversed: true },
+            { text: "Se bagarre souvent avec les autres enfants ou les tyrannise", subscale: "conduct", reversed: false },
+            { text: "Souvent malheureux(se), abattu(e) ou pleure souvent", subscale: "emotional", reversed: false },
+            { text: "Generalement aime(e) des autres enfants", subscale: "peers", reversed: true },
+            { text: "Facilement distrait(e), a du mal a se concentrer", subscale: "hyperactivity", reversed: false },
+            { text: "Anxieux(se) ou s'accroche dans les situations nouvelles, perd facilement ses moyens", subscale: "emotional", reversed: false },
+            { text: "Gentil(le) avec les enfants plus jeunes", subscale: "prosocial", reversed: false },
+            { text: "Ment ou triche souvent", subscale: "conduct", reversed: false },
+            { text: "Harcele(e) ou tyrannise(e) par d'autres enfants", subscale: "peers", reversed: false },
+            { text: "Propose souvent d'aider les autres (parents, enseignants, autres enfants)", subscale: "prosocial", reversed: false },
+            { text: "Reflechit avant d'agir", subscale: "hyperactivity", reversed: true },
+            { text: "Vole a la maison, a l'ecole ou ailleurs", subscale: "conduct", reversed: false },
+            { text: "S'entend mieux avec les adultes qu'avec les autres enfants", subscale: "peers", reversed: false },
+            { text: "A beaucoup de peurs, facilement effraye(e)", subscale: "emotional", reversed: false },
+            { text: "Va jusqu'au bout des taches, a une bonne capacite d'attention", subscale: "hyperactivity", reversed: true }
+        ];
+
+        const options = [
+            { value: 0, label: "Pas vrai" },
+            { value: 1, label: "Un peu vrai" },
+            { value: 2, label: "Tres vrai" }
+        ];
+
+        const subscaleInfo = {
+            emotional: { name: "Symptomes emotionnels", items: [3, 8, 13, 16, 24], color: "#5c6bc0" },
+            conduct: { name: "Problemes de comportement", items: [5, 7, 12, 18, 22], color: "#ef5350" },
+            hyperactivity: { name: "Hyperactivite/inattention", items: [2, 10, 15, 21, 25], color: "#ff9800" },
+            peers: { name: "Problemes avec les pairs", items: [6, 11, 14, 19, 23], color: "#26a69a" },
+            prosocial: { name: "Comportement prosocial", items: [1, 4, 9, 17, 20], color: "#66bb6a", positive: true }
+        };
+
+        // Seuils d'interpretation par sous-echelle
+        const thresholds = {
+            emotional: { normal: [0, 3], borderline: [4, 4], abnormal: [5, 10] },
+            conduct: { normal: [0, 2], borderline: [3, 3], abnormal: [4, 10] },
+            hyperactivity: { normal: [0, 5], borderline: [6, 6], abnormal: [7, 10] },
+            peers: { normal: [0, 2], borderline: [3, 3], abnormal: [4, 10] },
+            prosocial: { normal: [6, 10], borderline: [5, 5], abnormal: [0, 4] }
+        };
+
+        let answers = new Array(25).fill(null);
+
+        function initializeQuestions() {
+            const container = document.getElementById('questions');
+            container.innerHTML = '';
+
+            questions.forEach((question, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-card';
+
+                const subscaleLabel = subscaleInfo[question.subscale];
+                const reversedIndicator = question.reversed ? ' <span style="color: var(--color-warning); font-size: 0.75rem;">(inverse)</span>' : '';
+
+                questionDiv.innerHTML = `
+                    <div style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem;">
+                        <span class="question-number">${index + 1}</span>
+                        <div>
+                            <span class="question-text" style="margin-bottom: 0;">${question.text}</span>
+                            <div style="margin-top: 0.25rem;">
+                                <span style="font-size: 0.75rem; padding: 0.15rem 0.5rem; border-radius: 4px; background: ${subscaleLabel.color}20; color: ${subscaleLabel.color};">
+                                    ${subscaleLabel.name}
+                                </span>
+                                ${reversedIndicator}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="options-grid">
+                        ${options.map(opt => `
+                            <button class="option-btn" onclick="selectAnswer(${index}, ${opt.value})" id="q${index}_opt${opt.value}">
+                                <strong>${opt.value}</strong> - ${opt.label}
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function selectAnswer(questionIndex, value) {
+            answers[questionIndex] = value;
+
+            for (let i = 0; i < 3; i++) {
+                const btn = document.getElementById(`q${questionIndex}_opt${i}`);
+                btn.classList.toggle('selected', i === value);
+            }
+
+            // Marquer la carte comme repondue
+            const cards = document.querySelectorAll('.question-card');
+            cards[questionIndex].classList.add('answered');
+
+            checkCompletion();
+        }
+
+        function checkCompletion() {
+            const allAnswered = answers.every(a => a !== null);
+
+            if (allAnswered) {
+                updateResults();
+                document.getElementById('results').style.display = 'block';
+                document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function getItemScore(index) {
+            const rawValue = answers[index];
+            if (rawValue === null) return 0;
+
+            // Si l'item est inverse, le score est 2-1-0 au lieu de 0-1-2
+            if (questions[index].reversed) {
+                return 2 - rawValue;
+            }
+            return rawValue;
+        }
+
+        function calculateSubscaleScore(subscaleKey) {
+            let score = 0;
+            const items = subscaleInfo[subscaleKey].items;
+
+            items.forEach(itemNum => {
+                score += getItemScore(itemNum - 1); // -1 car les indices commencent a 0
+            });
+
+            return score;
+        }
+
+        function calculateTotalDifficulties() {
+            // Score total = Emotionnel + Comportement + Hyperactivite + Pairs (PAS le prosocial)
+            return calculateSubscaleScore('emotional') +
+                   calculateSubscaleScore('conduct') +
+                   calculateSubscaleScore('hyperactivity') +
+                   calculateSubscaleScore('peers');
+        }
+
+        function getSubscaleInterpretation(subscaleKey, score) {
+            const thresh = thresholds[subscaleKey];
+
+            if (subscaleKey === 'prosocial') {
+                // Pour le prosocial, c'est inverse : score eleve = bien
+                if (score >= thresh.normal[0]) return { level: "Normal", className: "low" };
+                if (score === thresh.borderline[0]) return { level: "Limite", className: "moderate" };
+                return { level: "Anormal", className: "high" };
+            } else {
+                // Pour les autres echelles : score bas = bien
+                if (score <= thresh.normal[1]) return { level: "Normal", className: "low" };
+                if (score >= thresh.borderline[0] && score <= thresh.borderline[1]) return { level: "Limite", className: "moderate" };
+                return { level: "Anormal", className: "high" };
+            }
+        }
+
+        function getTotalInterpretation(score) {
+            if (score <= 13) return {
+                level: "Normal",
+                className: "low",
+                description: "Le score total de difficultes se situe dans la zone normale.",
+                action: "Pas d'indication de difficultes significatives. Surveillance de routine."
+            };
+            if (score <= 16) return {
+                level: "Limite",
+                className: "moderate",
+                description: "Le score total de difficultes se situe dans la zone limite.",
+                action: "Une evaluation plus approfondie peut etre utile. Surveillance recommandee."
+            };
+            return {
+                level: "Anormal",
+                className: "high",
+                description: "Le score total de difficultes se situe dans la zone anormale.",
+                action: "Une evaluation clinique complete est recommandee. Consultation specialisee conseillee."
+            };
+        }
+
+        function updateResults() {
+            const totalScore = calculateTotalDifficulties();
+            const interpretation = getTotalInterpretation(totalScore);
+
+            document.getElementById('totalScore').textContent = totalScore;
+
+            const interpretationBox = document.getElementById('interpretationBox');
+            interpretationBox.className = `interpretation ${interpretation.className}`;
+            interpretationBox.innerHTML = `
+                <h3>Score total : ${interpretation.level}</h3>
+                <p><strong>Interpretation :</strong> ${interpretation.description}</p>
+                <p><strong>Recommandation :</strong> ${interpretation.action}</p>
+            `;
+
+            // Scores par sous-echelle
+            const subscaleContainer = document.getElementById('subscaleScores');
+            let subscaleHTML = '<div style="display: grid; gap: 0.75rem;">';
+
+            for (const [key, info] of Object.entries(subscaleInfo)) {
+                const score = calculateSubscaleScore(key);
+                const interp = getSubscaleInterpretation(key, score);
+                const maxScore = 10;
+                const percentage = (score / maxScore) * 100;
+
+                const isProsocial = key === 'prosocial';
+                const noteText = isProsocial ? ' (non inclus dans le score total)' : '';
+
+                subscaleHTML += `
+                    <div style="padding: 0.75rem; background: var(--color-bg-card); border-radius: var(--radius-md); border-left: 4px solid ${info.color};">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <span style="font-weight: 600; color: ${info.color};">${info.name}${noteText}</span>
+                            <span class="badge badge-${interp.className}" style="font-size: 0.75rem;">${interp.level}</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <div style="flex: 1; background: var(--color-bg-tertiary); border-radius: 4px; height: 8px; overflow: hidden;">
+                                <div style="width: ${percentage}%; height: 100%; background: ${info.color}; transition: width 0.3s ease;"></div>
+                            </div>
+                            <span style="font-weight: 700; min-width: 40px; text-align: right;">${score}/10</span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            subscaleHTML += '</div>';
+            subscaleContainer.innerHTML = subscaleHTML;
+
+            // Details content
+            updateDetailsContent();
+        }
+
+        function updateDetailsContent() {
+            const detailsContent = document.getElementById('detailsContent');
+
+            let html = '<h3 style="margin-bottom: 1rem;">Interpretation detaillee par echelle</h3>';
+
+            // Interpretation par echelle
+            for (const [key, info] of Object.entries(subscaleInfo)) {
+                const score = calculateSubscaleScore(key);
+                const interp = getSubscaleInterpretation(key, score);
+                const thresh = thresholds[key];
+
+                let rangeInfo = '';
+                if (key === 'prosocial') {
+                    rangeInfo = `Normal: ${thresh.normal[0]}-${thresh.normal[1]} | Limite: ${thresh.borderline[0]} | Anormal: ${thresh.abnormal[0]}-${thresh.abnormal[1]}`;
+                } else {
+                    rangeInfo = `Normal: ${thresh.normal[0]}-${thresh.normal[1]} | Limite: ${thresh.borderline[0]}-${thresh.borderline[1]} | Anormal: ${thresh.abnormal[0]}-${thresh.abnormal[1]}`;
+                }
+
+                html += `
+                    <div class="info-box" style="margin-bottom: 0.75rem; border-left: 4px solid ${info.color};">
+                        <h4 style="color: ${info.color}; margin-bottom: 0.5rem;">${info.name}</h4>
+                        <p><strong>Score obtenu :</strong> ${score}/10 - <strong>${interp.level}</strong></p>
+                        <p style="font-size: 0.85rem; color: var(--color-text-muted);">Seuils : ${rangeInfo}</p>
+                        ${key === 'prosocial' ? '<p style="font-size: 0.85rem; color: var(--color-text-muted); margin-top: 0.5rem;"><em>Note : Pour cette echelle positive, un score eleve est favorable.</em></p>' : ''}
+                    </div>
+                `;
+            }
+
+            // Information supplementaire
+            html += `
+                <div class="warning-box" style="margin-top: 1rem;">
+                    <h4><i class="fas fa-info-circle"></i> Note sur l'interpretation</h4>
+                    <p style="margin-bottom: 0.5rem;">Le <strong>score total de difficultes</strong> est la somme des echelles : Symptomes emotionnels + Problemes de comportement + Hyperactivite + Problemes avec les pairs.</p>
+                    <p style="margin-bottom: 0;">L'echelle <strong>Comportement prosocial</strong> n'est <u>pas</u> incluse dans ce score total car elle mesure des forces et non des difficultes.</p>
+                </div>
+            `;
+
+            detailsContent.innerHTML = html;
+        }
+
+        function toggleDetails() {
+            const content = document.getElementById('detailsContent');
+            const icon = document.getElementById('toggleIcon');
+            const isVisible = content.style.display !== 'none';
+
+            content.style.display = isVisible ? 'none' : 'block';
+            icon.innerHTML = isVisible ? '<i class="fas fa-chevron-down"></i>' : '<i class="fas fa-chevron-up"></i>';
+        }
+
+        function resetForm() {
+            answers = new Array(25).fill(null);
+
+            document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+            document.querySelectorAll('.question-card').forEach(card => card.classList.remove('answered'));
+
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('detailsContent').style.display = 'none';
+            document.getElementById('exportConsent').checked = false;
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function importData() {
+            document.getElementById('fileInput').click();
+        }
+
+        function loadFile(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        if (data.answers && Array.isArray(data.answers)) {
+                            answers = data.answers;
+
+                            answers.forEach((value, index) => {
+                                if (value !== null) {
+                                    selectAnswer(index, value);
+                                }
+                            });
+                        }
+                    } catch (error) {
+                        alert("Erreur lors de l'importation du fichier");
+                    }
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        function exportData() {
+            const consent = document.getElementById('exportConsent').checked;
+            if (!consent) {
+                alert("Veuillez cocher la case de consentement avant d''exporter.");
+                return;
+            }
+
+            const totalScore = calculateTotalDifficulties();
+            const interpretation = getTotalInterpretation(totalScore);
+
+            const subscaleResults = {};
+            for (const [key, info] of Object.entries(subscaleInfo)) {
+                const score = calculateSubscaleScore(key);
+                const interp = getSubscaleInterpretation(key, score);
+                subscaleResults[key] = {
+                    name: info.name,
+                    score: score,
+                    interpretation: interp.level
+                };
+            }
+
+            const data = {
+                questionnaire: "SDQ",
+                version: "Parents (4-17 ans)",
+                date: new Date().toISOString(),
+                answers: answers,
+                totalDifficultiesScore: totalScore,
+                totalInterpretation: interpretation.level,
+                subscales: subscaleResults
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `SDQ_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeQuestions();
+        });
+    </script>
+</body>
+</html>

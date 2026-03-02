@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAT-Q - Questionnaire de Camouflage des Traits Autistiques</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <style>
+        :root {
+            --cat-main: #8b5cf6;
+            --cat-dark: #7c3aed;
+            --cat-light: #a78bfa;
+            --cat-rgb: 139, 92, 246;
+            --cat-readable: #7c3aed;
+        }
+        .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
+        .option-btn.selected, .answer-btn.selected { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        .score-circle { border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 30px rgba(var(--cat-rgb), 0.2); }
+        .score-value { color: var(--cat-light); }
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-light); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+        .progress-fill { background: linear-gradient(90deg, var(--cat-main), var(--cat-light)); box-shadow: 0 0 8px rgba(var(--cat-rgb), 0.4); }
+        .likert-options input[type="radio"]:checked + label,
+        .binary-options input[type="radio"]:checked + label,
+        .radio-options input[type="radio"]:checked + label { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+    </style>
+
+</head>
+<body class="light-questionnaire">
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil">
+                <i class="fas fa-home"></i>
+            </a>
+            <button onclick="history.back()" class="btn-back" title="Retour">
+                <i class="fas fa-arrow-left"></i> <span>Retour</span>
+            </button>
+        </div>
+        <h1>CAT-Q</h1>
+        <span class="badge badge-cat-tnd">TND</span>
+    </nav>
+
+    <main class="container">
+        <header class="header-glow" style="text-align: center; margin-bottom: 2rem;">
+            <h1><i class="fas fa-theater-masks"></i> Questionnaire CAT-Q</h1>
+            <p class="subtitle">Camouflaging Autistic Traits Questionnaire (25 questions)</p>
+        </header>
+
+        <section class="glass-card info-box">
+            <h2><i class="fas fa-info-circle"></i> À propos</h2>
+            <p>Le CAT-Q (Hull et al., 2018) mesure les stratégies de <strong>camouflage social</strong> utilisées pour masquer ou compenser les traits autistiques. Il évalue trois dimensions : <strong>Compensation</strong>, <strong>Dissimulation</strong> et <strong>Assimilation</strong>.</p>
+            <p style="margin-top: 0.5rem;"><strong>Seuil suggéré :</strong> Un score ≥ 100 indique un niveau de camouflage élevé, associé à un risque accru d'épuisement et de problèmes de santé mentale.</p>
+        </section>
+
+        <section class="glass-card warning-box">
+            <h3><i class="fas fa-exclamation-triangle"></i> Avertissements</h3>
+            <ul>
+                <li>Ce questionnaire mesure le camouflage, <strong>pas l'autisme</strong></li>
+                <li>Un camouflage élevé est associé à l'anxiété, la dépression et l'épuisement</li>
+                <li>Répondez selon votre expérience personnelle</li>
+            </ul>
+        </section>
+
+        <section class="glass-card">
+            <div class="control-buttons">
+                <button class="btn-primary" onclick="importData()">
+                    <i class="fas fa-file-import"></i> Importer
+                </button>
+                <button class="btn-secondary" onclick="resetForm()">
+                    <i class="fas fa-redo"></i> Réinitialiser
+                </button>
+            </div>
+            <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="loadFile(event)">
+        </section>
+
+        <section class="glass-card">
+            <h2><i class="fas fa-clipboard-list"></i> Questions</h2>
+            <p style="margin-bottom: 1.5rem; opacity: 0.8;">Indiquez dans quelle mesure vous êtes d'accord avec chaque affirmation (1 = Pas du tout d'accord, 7 = Complètement d'accord).</p>
+            <div id="questions"></div>
+        </section>
+
+        <!-- Résultats -->
+        <section id="results" class="glass-card results-section" style="display: none;">
+            <h2 style="text-align: center; margin-bottom: 2rem;"><i class="fas fa-chart-pie"></i> Résultats</h2>
+
+            <div class="score-display">
+                <div class="score-circle">
+                    <span class="score-number" id="totalScore">0</span>
+                    <span class="score-label">sur 175</span>
+                </div>
+            </div>
+
+            <div id="interpretationBox" class="interpretation"></div>
+
+            <div class="subscale-grid" style="margin-top: 2rem;">
+                <div class="subscale-card">
+                    <h4><i class="fas fa-book"></i> Compensation</h4>
+                    <div class="subscale-score"><span id="score-comp">0</span> / 63</div>
+                    <div class="progress-bar"><div class="progress-fill" id="fill-comp"></div></div>
+                    <p class="subscale-interp" id="interp-comp"></p>
+                    <small style="opacity: 0.7;">Stratégies apprises (imiter, scripts)</small>
+                </div>
+                <div class="subscale-card">
+                    <h4><i class="fas fa-mask"></i> Dissimulation</h4>
+                    <div class="subscale-score"><span id="score-mask">0</span> / 56</div>
+                    <div class="progress-bar"><div class="progress-fill" id="fill-mask"></div></div>
+                    <p class="subscale-interp" id="interp-mask"></p>
+                    <small style="opacity: 0.7;">Cacher les traits autistiques</small>
+                </div>
+                <div class="subscale-card">
+                    <h4><i class="fas fa-users"></i> Assimilation</h4>
+                    <div class="subscale-score"><span id="score-assim">0</span> / 56</div>
+                    <div class="progress-bar"><div class="progress-fill" id="fill-assim"></div></div>
+                    <p class="subscale-interp" id="interp-assim"></p>
+                    <small style="opacity: 0.7;">S'intégrer coûte que coûte</small>
+                </div>
+            </div>
+
+            <button class="btn-primary" onclick="toggleDetails()" style="width: 100%; margin-top: 1.5rem;">
+                <i class="fas fa-list-ul"></i> Voir l'interprétation détaillée
+                <span id="toggleIcon"><i class="fas fa-chevron-down"></i></span>
+            </button>
+            <div id="detailsContent" class="details-content" style="display: none;"></div>
+
+            <div class="glass-card" style="margin-top: 2rem; background: rgba(255,255,255,0.05);">
+                <h3><i class="fas fa-download"></i> Exporter</h3>
+                <div class="consent-box">
+                    <label>
+                        <input type="checkbox" id="exportConsent">
+                        <span>Je souhaite télécharger mes résultats (questionnaire, réponses, score et date) dans un fichier JSON sur mon appareil. <strong>Ces résultats constituent des données de santé — je m'engage à les conserver de façon sécurisée et à ne les partager qu'avec un professionnel de santé de mon choix.</strong> Aucune donnée n'est transmise à un serveur.</span>
+                    </label>
+                </div>
+                <div class="export-buttons">
+                    <button class="btn-primary" onclick="exportData()">
+                        <i class="fas fa-file-export"></i> Exporter en JSON
+                    </button>
+                    <button class="btn-print" onclick="printResults()">
+                        <i class="fas fa-print"></i> Imprimer
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p><strong>CAT-Q - Camouflaging Autistic Traits Questionnaire</strong></p>
+        <p style="margin: 0.5rem 0;"><strong>Auteurs :</strong> Hull, L., Mandy, W., Lai, M.C. et al. (2018)</p>
+        <p><strong>Adaptation numérique :</strong> Dr FENOHASINA | Psychiatre</p>
+        <small>Licence CC BY-NC-SA 4.0</small>
+    </footer>
+
+    <script src="../js/app.js"></script>
+    <script>
+        const questions = [
+            "Quand j'interagis avec quelqu'un, je copie délibérément son langage corporel ou ses expressions faciales.",
+            "Je contrôle mon langage corporel ou mes expressions faciales afin d'apparaître détendu(e).",
+            "Je ressens rarement le besoin de jouer un rôle pour me sortir d'une situation sociale.",
+            "J'ai développé un script à suivre dans les situations sociales.",
+            "Je vais répéter des phrases prononcées par d'autres exactement de la même façon que la première fois où je les ai entendues.",
+            "J'adapte mon langage corporel ou mes expressions faciales afin de donner l'impression de m'intéresser à la personne avec qui j'interagis.",
+            "Dans les situations sociales, je me sens comme \"en représentation\", plutôt que si j'étais réellement moi-même.",
+            "Dans mes interactions sociales, j'utilise des comportements que j'ai appris en regardant d'autres personnes interagir.",
+            "Je pense toujours à l'impression que je fais sur autrui.",
+            "J'ai besoin de l'aide d'autres personnes pour socialiser.",
+            "Je m'entraîne afin que mes expressions faciales et mon langage corporel paraissent naturels.",
+            "Je ne ressens pas le besoin d'avoir un contact visuel avec autrui si je n'en ai pas envie.",
+            "Je dois me forcer à interagir avec autrui lorsque je suis dans des situations sociales.",
+            "J'ai essayé d'améliorer ma compréhension des habiletés sociales en observant autrui.",
+            "Je contrôle mon langage corporel ou mes expressions faciales afin de donner l'impression de m'intéresser à la personne avec qui j'interagis.",
+            "Lors de situations sociales, j'essaie de trouver des façons d'éviter d'interagir avec autrui.",
+            "J'ai étudié les règles régissant les interactions sociales afin d'améliorer mes propres habiletés sociales.",
+            "Je suis toujours conscient de l'impression que je fais sur autrui.",
+            "Je me sens libre d'être moi-même quand je suis avec d'autres personnes.",
+            "J'étudie comment les gens utilisent leur corps et leur visage en regardant la télévision ou des films, ou en lisant de la fiction.",
+            "J'adapte mon langage corporel ou mes expressions faciales afin de paraître détendu(e).",
+            "Lorsque je parle avec d'autres personnes, je sens comme si la conversation s'écoulait naturellement.",
+            "J'ai passé du temps à apprendre les habiletés sociales en regardant la télévision et des films, et j'essaie d'utiliser ces habiletés dans mes interactions.",
+            "Dans les interactions sociales, je ne prête pas attention à ce que font mon visage ou mon corps.",
+            "Dans les situations sociales, je me sens comme si je faisais semblant d'être 'normal(e)'."
+        ];
+
+        const reverseScoredQs = [3, 12, 19, 22, 24];
+        const SUBSCALES = {
+            compensation: { qs: [1, 4, 5, 8, 11, 14, 17, 20, 23], max: 63 },
+            masking: { qs: [2, 6, 9, 12, 15, 18, 21, 24], max: 56 },
+            assimilation: { qs: [3, 7, 10, 13, 16, 19, 22, 25], max: 56 }
+        };
+
+        let answers = new Array(25).fill(null);
+
+        function initializeQuestions() {
+            const container = document.getElementById('questions');
+            container.innerHTML = '';
+            questions.forEach((q, index) => {
+                const opts = [1,2,3,4,5,6,7].map(v => `
+                    <button type="button" class="option-btn scale-btn" onclick="selectAnswer(${index}, ${v})" id="q${index}_opt${v}">
+                        ${v}
+                    </button>
+                `).join('');
+
+                container.innerHTML += `
+                    <div class="question-card" id="q-container-${index}">
+                        <span class="question-number">${index + 1}</span>
+                        <div class="question-text">${q}</div>
+                        <div class="scale-labels">
+                            <span>Pas du tout d'accord</span>
+                            <span>Complètement d'accord</span>
+                        </div>
+                        <div class="options-scale">${opts}</div>
+                    </div>
+                `;
+            });
+        }
+
+        function selectAnswer(index, value) {
+            answers[index] = value;
+            for (let v = 1; v <= 7; v++) {
+                const btn = document.getElementById(`q${index}_opt${v}`);
+                if (btn) btn.classList.toggle('selected', v === value);
+            }
+            document.getElementById(`q-container-${index}`).classList.remove('missing');
+
+            if (answers.every(a => a !== null)) {
+                updateResults();
+                document.getElementById('results').style.display = 'block';
+                document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function getInterpretation(score) {
+            if (score >= 100) return { level: "Camouflage très élevé", className: "critical", desc: "Votre score est au-dessus du seuil de 100, suggérant un camouflage social très élevé. Cela est fortement associé à l'épuisement, l'anxiété et la dépression." };
+            if (score >= 87) return { level: "Camouflage élevé", className: "high", desc: "Votre score indique un niveau de camouflage élevé, supérieur à la moyenne. Ce niveau d'effort peut avoir un impact sur votre bien-être." };
+            if (score >= 50) return { level: "Camouflage modéré", className: "moderate", desc: "Votre score indique un recours modéré aux stratégies de camouflage social." };
+            return { level: "Camouflage faible", className: "low", desc: "Votre score suggère un faible recours aux stratégies de camouflage social." };
+        }
+
+        function getSubscoreInterpretation(score, max) {
+            const percentage = (score / max) * 100;
+            if (percentage >= 75) return "Stratégie très utilisée";
+            if (percentage >= 50) return "Stratégie fréquemment utilisée";
+            if (percentage >= 25) return "Stratégie parfois utilisée";
+            return "Stratégie peu utilisée";
+        }
+
+        function updateResults() {
+            const scores = { compensation: 0, masking: 0, assimilation: 0 };
+            let total = 0;
+
+            for (let i = 0; i < questions.length; i++) {
+                let score = answers[i] || 0;
+                if (reverseScoredQs.includes(i + 1)) {
+                    score = 8 - score;
+                }
+                total += score;
+                if (SUBSCALES.compensation.qs.includes(i + 1)) scores.compensation += score;
+                if (SUBSCALES.masking.qs.includes(i + 1)) scores.masking += score;
+                if (SUBSCALES.assimilation.qs.includes(i + 1)) scores.assimilation += score;
+            }
+
+            document.getElementById('totalScore').textContent = total;
+            const interp = getInterpretation(total);
+            const interpretationBox = document.getElementById('interpretationBox');
+            interpretationBox.className = `interpretation ${interp.className}`;
+            interpretationBox.innerHTML = `<h3>${interp.level}</h3><p>${interp.desc}</p>`;
+
+            document.getElementById('score-comp').textContent = scores.compensation;
+            document.getElementById('fill-comp').style.width = `${(scores.compensation / SUBSCALES.compensation.max) * 100}%`;
+            document.getElementById('interp-comp').textContent = getSubscoreInterpretation(scores.compensation, SUBSCALES.compensation.max);
+
+            document.getElementById('score-mask').textContent = scores.masking;
+            document.getElementById('fill-mask').style.width = `${(scores.masking / SUBSCALES.masking.max) * 100}%`;
+            document.getElementById('interp-mask').textContent = getSubscoreInterpretation(scores.masking, SUBSCALES.masking.max);
+
+            document.getElementById('score-assim').textContent = scores.assimilation;
+            document.getElementById('fill-assim').style.width = `${(scores.assimilation / SUBSCALES.assimilation.max) * 100}%`;
+            document.getElementById('interp-assim').textContent = getSubscoreInterpretation(scores.assimilation, SUBSCALES.assimilation.max);
+
+            document.getElementById('detailsContent').innerHTML = `
+                <h3>Comprendre le camouflage social</h3>
+                <div class="info-box">
+                    <h4>Les trois dimensions du camouflage :</h4>
+                    <ul>
+                        <li><strong>Compensation :</strong> Stratégies apprises pour surmonter les difficultés sociales (imitation, scripts de conversation)</li>
+                        <li><strong>Dissimulation :</strong> Masquer activement les traits autistiques (contrôle des expressions, du langage corporel)</li>
+                        <li><strong>Assimilation :</strong> Se forcer à s'intégrer et agir comme les autres</li>
+                    </ul>
+                </div>
+                <div class="warning-box" style="margin-top: 1rem;">
+                    <h4><i class="fas fa-heart"></i> Impact sur la santé mentale</h4>
+                    <p>La recherche (Hull et al., 2021) montre que le camouflage élevé est associé à :</p>
+                    <ul>
+                        <li>Épuisement (burnout autistique)</li>
+                        <li>Anxiété et dépression</li>
+                        <li>Sentiment de perte d'identité</li>
+                        <li>Retard dans le diagnostic de l'autisme</li>
+                    </ul>
+                </div>
+            `;
+        }
+
+        function toggleDetails() {
+            const content = document.getElementById('detailsContent');
+            const icon = document.getElementById('toggleIcon');
+            const isVisible = content.style.display !== 'none';
+            content.style.display = isVisible ? 'none' : 'block';
+            icon.innerHTML = isVisible ? '<i class="fas fa-chevron-down"></i>' : '<i class="fas fa-chevron-up"></i>';
+        }
+
+        function resetForm() {
+            answers = new Array(25).fill(null);
+            document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+            document.querySelectorAll('.question-card').forEach(card => card.classList.remove('missing'));
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('detailsContent').style.display = 'none';
+            document.getElementById('exportConsent').checked = false;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function importData() { document.getElementById('fileInput').click(); }
+
+        function loadFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data.questionnaire === "CAT-Q" && data.answers) {
+                        answers = data.answers;
+                        initializeQuestions();
+                        answers.forEach((val, i) => { if (val !== null) selectAnswer(i, val); });
+                    }
+                } catch { alert("Fichier invalide."); }
+            };
+            reader.readAsText(file);
+        }
+
+        function exportData() {
+            if (!document.getElementById('exportConsent').checked) {
+                alert("Veuillez cocher la case de consentement avant d''exporter.");
+                return;
+            }
+            const scores = { compensation: 0, masking: 0, assimilation: 0 };
+            let total = 0;
+            for (let i = 0; i < questions.length; i++) {
+                let score = answers[i] || 0;
+                if (reverseScoredQs.includes(i + 1)) score = 8 - score;
+                total += score;
+                if (SUBSCALES.compensation.qs.includes(i + 1)) scores.compensation += score;
+                if (SUBSCALES.masking.qs.includes(i + 1)) scores.masking += score;
+                if (SUBSCALES.assimilation.qs.includes(i + 1)) scores.assimilation += score;
+            }
+
+            const data = {
+                questionnaire: "CAT-Q",
+                date: new Date().toISOString(),
+                answers: answers,
+                totalScore: total,
+                subscores: scores,
+                interpretation: getInterpretation(total).level
+            };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `CAT-Q_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        document.addEventListener('DOMContentLoaded', initializeQuestions);
+    </script>
+</body>
+</html>

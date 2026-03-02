@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DIVA-5 - Entretien Diagnostique pour le TDAH chez l'Adulte</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <style>
+        :root {
+            --cat-main: #8b5cf6;
+            --cat-dark: #7c3aed;
+            --cat-light: #a78bfa;
+            --cat-rgb: 139, 92, 246;
+            --cat-readable: #7c3aed;
+        }
+        .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
+        .option-btn.selected, .answer-btn.selected { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        .score-circle { border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 30px rgba(var(--cat-rgb), 0.2); }
+        .score-value { color: var(--cat-light); }
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-light); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+        .progress-fill { background: linear-gradient(90deg, var(--cat-main), var(--cat-light)); box-shadow: 0 0 8px rgba(var(--cat-rgb), 0.4); }
+        .likert-options input[type="radio"]:checked + label,
+        .binary-options input[type="radio"]:checked + label,
+        .radio-options input[type="radio"]:checked + label { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+    </style>
+
+</head>
+<body class="light-questionnaire">
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil">
+                <i class="fas fa-home"></i>
+            </a>
+            <button onclick="history.back()" class="btn-back" title="Retour">
+                <i class="fas fa-arrow-left"></i> <span>Retour</span>
+            </button>
+        </div>
+        <h1>DIVA-5</h1>
+        <span class="badge badge-cat-tnd">TND</span>
+    </nav>
+
+    <main class="container">
+        <header class="header-glow" style="text-align: center; margin-bottom: 2rem;">
+            <h1><i class="fas fa-stethoscope"></i> DIVA-5</h1>
+            <p class="subtitle">Entretien Diagnostique pour le TDAH chez l'Adulte (DSM-5)</p>
+        </header>
+
+        <section class="glass-card danger-box">
+            <h3><i class="fas fa-user-md"></i> Usage Professionnel Uniquement</h3>
+            <p>Cet outil est une adaptation interactive de l'entretien semi-dirigé DIVA-5. Il est destiné à être utilisé par des <strong>professionnels de santé formés</strong> au diagnostic du TDAH. Il ne doit <strong>jamais</strong> être utilisé comme un auto-questionnaire.</p>
+        </section>
+
+        <section class="glass-card info-box">
+            <h2><i class="fas fa-info-circle"></i> Instructions clinicien</h2>
+            <p>L'entretien évalue les 18 critères du DSM-5. Pour chaque critère :</p>
+            <ul style="margin-top: 0.5rem;">
+                <li>Investiguez la présence à l'<strong>âge adulte (6 derniers mois)</strong></li>
+                <li>Si présent, explorez la présence durant l'<strong>enfance (5-12 ans)</strong></li>
+                <li>Demandez des <strong>exemples concrets</strong></li>
+                <li>L'implication d'un tiers (parent, conjoint) est recommandée</li>
+            </ul>
+        </section>
+
+        <section class="glass-card">
+            <h2><i class="fas fa-clipboard-list"></i> Partie 1 : Inattention (A1)</h2>
+            <div id="inattention-criteria"></div>
+        </section>
+
+        <section class="glass-card">
+            <h2><i class="fas fa-bolt"></i> Partie 2 : Hyperactivité-Impulsivité (A2)</h2>
+            <div id="hyperactivity-criteria"></div>
+        </section>
+
+        <section class="glass-card">
+            <h2><i class="fas fa-calendar-check"></i> Partie 3 : Critères B, C, D</h2>
+
+            <div class="question-card">
+                <h4>Critère B : Antériorité des symptômes</h4>
+                <p>Plusieurs symptômes étaient-ils présents avant l'âge de 12 ans ?</p>
+                <div class="options-binary" style="margin-top: 1rem;">
+                    <button class="option-btn" id="criterionB-oui" onclick="selectCriterion('B', 'oui')">Oui</button>
+                    <button class="option-btn" id="criterionB-non" onclick="selectCriterion('B', 'non')">Non</button>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <h4>Critères C & D : Retentissement fonctionnel</h4>
+                <p>Les symptômes interfèrent-ils dans au moins deux contextes (travail, famille, social) ?</p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+                    <div>
+                        <strong>Âge adulte :</strong>
+                        <div class="options-binary">
+                            <button class="option-btn" id="impairmentAdult-oui" onclick="selectImpairment('Adult', 'oui')">Oui</button>
+                            <button class="option-btn" id="impairmentAdult-non" onclick="selectImpairment('Adult', 'non')">Non</button>
+                        </div>
+                    </div>
+                    <div>
+                        <strong>Enfance :</strong>
+                        <div class="options-binary">
+                            <button class="option-btn" id="impairmentChild-oui" onclick="selectImpairment('Child', 'oui')">Oui</button>
+                            <button class="option-btn" id="impairmentChild-non" onclick="selectImpairment('Child', 'non')">Non</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-primary" onclick="calculateSummary()" style="width: 100%; margin-top: 1.5rem;">
+                <i class="fas fa-calculator"></i> Générer le résumé diagnostique
+            </button>
+        </section>
+
+        <!-- Résultats -->
+        <section id="results" class="glass-card results-section" style="display: none;">
+            <h2 style="text-align: center; margin-bottom: 2rem;"><i class="fas fa-chart-pie"></i> Résumé Diagnostique (DSM-5)</h2>
+
+            <div class="subscale-grid">
+                <div class="subscale-card">
+                    <h4><i class="fas fa-brain"></i> A1. Inattention</h4>
+                    <div class="subscale-score">Adulte: <span id="score-inattention-adult">0</span>/9</div>
+                    <div id="result-inattention" class="interpretation low" style="margin-top: 0.5rem; padding: 0.5rem;"></div>
+                </div>
+                <div class="subscale-card">
+                    <h4><i class="fas fa-bolt"></i> A2. Hyperactivité/Impulsivité</h4>
+                    <div class="subscale-score">Adulte: <span id="score-hyperactivity-adult">0</span>/9</div>
+                    <div id="result-hyperactivity" class="interpretation low" style="margin-top: 0.5rem; padding: 0.5rem;"></div>
+                </div>
+                <div class="subscale-card">
+                    <h4><i class="fas fa-calendar"></i> B. Antériorité</h4>
+                    <div id="result-onset" class="interpretation low" style="margin-top: 0.5rem; padding: 0.5rem;"></div>
+                </div>
+                <div class="subscale-card">
+                    <h4><i class="fas fa-exclamation-circle"></i> C & D. Retentissement</h4>
+                    <div id="result-impairment" class="interpretation low" style="margin-top: 0.5rem; padding: 0.5rem;"></div>
+                </div>
+            </div>
+
+            <div id="interpretationBox" class="interpretation" style="margin-top: 2rem;"></div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p><strong>DIVA-5 - Diagnostic Interview for ADHD in Adults</strong></p>
+        <p style="margin: 0.5rem 0;"><strong>Auteurs :</strong> J.J.S. Kooij, MD, PhD & M.H. Francken, MSc</p>
+        <p>© DIVA Foundation, La Haye, Pays-Bas, 2019</p>
+        <small>Usage clinique et recherche uniquement</small>
+    </footer>
+
+    <script src="../js/app.js"></script>
+    <script>
+        const criteria = {
+            inattention: [
+                { id: 'A1a', text: "Ne parvient pas à prêter attention aux détails ou fait des fautes d'étourderie.", examples: ["Fait des fautes d'inattention au travail", "Doit relire plusieurs fois", "Néglige des détails"] },
+                { id: 'A1b', text: "A souvent du mal à soutenir son attention au travail ou dans les jeux.", examples: ["Difficulté à rester concentré en réunion", "Se laisse distraire par ses pensées"] },
+                { id: 'A1c', text: "Semble souvent ne pas écouter quand on lui parle personnellement.", examples: ["L'esprit semble ailleurs", "Passe à côté de consignes"] },
+                { id: 'A1d', text: "Ne se conforme pas aux consignes et ne parvient pas à mener à terme ses obligations.", examples: ["Commence mais ne finit pas", "Se perd dans les détails"] },
+                { id: 'A1e', text: "A souvent du mal à organiser ses travaux et ses activités.", examples: ["Bureau en désordre", "Mauvaise gestion du temps"] },
+                { id: 'A1f', text: "Évite les tâches qui nécessitent un effort mental soutenu.", examples: ["Procrastine sur les tâches administratives", "Évite les formulaires"] },
+                { id: 'A1g', text: "Perd souvent les objets nécessaires à son travail ou à ses activités.", examples: ["Clés, lunettes, téléphone", "Passe du temps à chercher"] },
+                { id: 'A1h', text: "Est souvent facilement distrait par des stimuli externes.", examples: ["Facilement distrait par les bruits", "Difficile de se reconcentrer"] },
+                { id: 'A1i', text: "A des oublis fréquents dans la vie quotidienne.", examples: ["Oublie rendez-vous et promesses", "Doit prendre beaucoup de notes"] }
+            ],
+            hyperactivity: [
+                { id: 'A2a', text: "Remue souvent les mains ou les pieds ou se tortille sur son siège.", examples: ["Agitation des jambes", "Joue avec un stylo"] },
+                { id: 'A2b', text: "Se lève souvent en situation où il est supposé rester assis.", examples: ["Se lève en réunion", "Difficile de rester assis au restaurant"] },
+                { id: 'A2c', text: "Court ou grimpe partout (chez l'adulte: impatience motrice).", examples: ["Sentiment d'être \"sur la brèche\"", "Préfère être en mouvement"] },
+                { id: 'A2d', text: "A souvent du mal à se tenir tranquille dans les activités de loisir.", examples: ["Mal avec la lecture", "Agité pendant les vacances"] },
+                { id: 'A2e', text: "Est souvent \"sur la brèche\" ou agit comme \"monté sur ressorts\".", examples: ["Moteur intérieur", "Fait plusieurs choses en même temps"] },
+                { id: 'A2f', text: "Parle souvent trop.", examples: ["Monopolise la conversation", "N'a pas de filtre"] },
+                { id: 'A2g', text: "Répond à une question qui n'est pas encore entièrement posée.", examples: ["Termine les phrases des autres", "Devine ce que l'autre va dire"] },
+                { id: 'A2h', text: "A souvent du mal à attendre son tour.", examples: ["Impatient dans les files d'attente", "Mal avec le tour de parole"] },
+                { id: 'A2i', text: "Interrompt souvent les autres ou impose sa présence.", examples: ["Interrompt les conversations", "Se mêle de ce qui ne le regarde pas"] }
+            ]
+        };
+
+        let scores = {
+            inattentionAdult: 0,
+            inattentionChild: 0,
+            hyperactivityAdult: 0,
+            hyperactivityChild: 0,
+            criterionB: null,
+            impairmentAdult: null,
+            impairmentChild: null
+        };
+
+        function createCriterionHTML(criterion, type, index) {
+            const exampleList = criterion.examples.map(ex => `<li>${ex}</li>`).join('');
+            return `
+                <div class="question-card criterion-card" id="criterion-${type}-${index}">
+                    <span class="question-number">${type === 'inattention' ? 'A1' : 'A2'}.${String.fromCharCode(97 + index)}</span>
+                    <div class="question-text">${criterion.text}</div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+                        <div>
+                            <strong>Âge Adulte (6 derniers mois)</strong>
+                            <div class="examples" style="font-size: 0.85rem; opacity: 0.8; margin: 0.5rem 0;">
+                                <em>Exemples :</em>
+                                <ul style="margin-left: 1rem;">${exampleList}</ul>
+                            </div>
+                            <div class="options-binary">
+                                <button class="option-btn" id="${type}-${index}-adult-1" onclick="selectSymptom('${type}', ${index}, 'adult', true)">Présent</button>
+                                <button class="option-btn" id="${type}-${index}-adult-0" onclick="selectSymptom('${type}', ${index}, 'adult', false)">Absent</button>
+                            </div>
+                        </div>
+                        <div>
+                            <strong>Enfance (5-12 ans)</strong>
+                            <div style="font-size: 0.85rem; opacity: 0.8; margin: 0.5rem 0;">
+                                <em>« Et quand vous étiez enfant ? »</em>
+                            </div>
+                            <div class="options-binary">
+                                <button class="option-btn" id="${type}-${index}-child-1" onclick="selectSymptom('${type}', ${index}, 'child', true)">Présent</button>
+                                <button class="option-btn" id="${type}-${index}-child-0" onclick="selectSymptom('${type}', ${index}, 'child', false)">Absent</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function initializeForm() {
+            const inattentionContainer = document.getElementById('inattention-criteria');
+            criteria.inattention.forEach((crit, i) => {
+                inattentionContainer.innerHTML += createCriterionHTML(crit, 'inattention', i);
+            });
+
+            const hyperactivityContainer = document.getElementById('hyperactivity-criteria');
+            criteria.hyperactivity.forEach((crit, i) => {
+                hyperactivityContainer.innerHTML += createCriterionHTML(crit, 'hyperactivity', i);
+            });
+        }
+
+        function selectSymptom(type, index, period, present) {
+            const key = `${type}-${index}-${period}`;
+            document.getElementById(`${key}-1`).classList.toggle('selected', present);
+            document.getElementById(`${key}-0`).classList.toggle('selected', !present);
+        }
+
+        function selectCriterion(criterion, value) {
+            scores[`criterion${criterion}`] = value;
+            document.getElementById(`criterion${criterion}-oui`).classList.toggle('selected', value === 'oui');
+            document.getElementById(`criterion${criterion}-non`).classList.toggle('selected', value === 'non');
+        }
+
+        function selectImpairment(period, value) {
+            scores[`impairment${period}`] = value;
+            document.getElementById(`impairment${period}-oui`).classList.toggle('selected', value === 'oui');
+            document.getElementById(`impairment${period}-non`).classList.toggle('selected', value === 'non');
+        }
+
+        function calculateSummary() {
+            // Count adult symptoms
+            let inattentionAdult = 0, hyperactivityAdult = 0;
+
+            criteria.inattention.forEach((_, i) => {
+                if (document.getElementById(`inattention-${i}-adult-1`).classList.contains('selected')) {
+                    inattentionAdult++;
+                }
+            });
+
+            criteria.hyperactivity.forEach((_, i) => {
+                if (document.getElementById(`hyperactivity-${i}-adult-1`).classList.contains('selected')) {
+                    hyperactivityAdult++;
+                }
+            });
+
+            document.getElementById('score-inattention-adult').textContent = inattentionAdult;
+            document.getElementById('score-hyperactivity-adult').textContent = hyperactivityAdult;
+
+            // Inattention result
+            const inattentionResult = document.getElementById('result-inattention');
+            if (inattentionAdult >= 5) {
+                inattentionResult.className = 'interpretation low';
+                inattentionResult.textContent = `Critère rempli (${inattentionAdult} ≥ 5)`;
+            } else {
+                inattentionResult.className = 'interpretation high';
+                inattentionResult.textContent = `Non rempli (${inattentionAdult} < 5)`;
+            }
+
+            // Hyperactivity result
+            const hyperactivityResult = document.getElementById('result-hyperactivity');
+            if (hyperactivityAdult >= 5) {
+                hyperactivityResult.className = 'interpretation low';
+                hyperactivityResult.textContent = `Critère rempli (${hyperactivityAdult} ≥ 5)`;
+            } else {
+                hyperactivityResult.className = 'interpretation high';
+                hyperactivityResult.textContent = `Non rempli (${hyperactivityAdult} < 5)`;
+            }
+
+            // Criterion B
+            const onsetResult = document.getElementById('result-onset');
+            if (scores.criterionB === 'oui') {
+                onsetResult.className = 'interpretation low';
+                onsetResult.textContent = 'Oui - Symptômes présents avant 12 ans';
+            } else if (scores.criterionB === 'non') {
+                onsetResult.className = 'interpretation high';
+                onsetResult.textContent = 'Non - Symptômes apparus après 12 ans';
+            } else {
+                onsetResult.className = 'interpretation moderate';
+                onsetResult.textContent = 'Non évalué';
+            }
+
+            // Impairment
+            const impairmentResult = document.getElementById('result-impairment');
+            if (scores.impairmentAdult === 'oui' && scores.impairmentChild === 'oui') {
+                impairmentResult.className = 'interpretation low';
+                impairmentResult.textContent = 'Oui - Retentissement aux deux périodes';
+            } else {
+                impairmentResult.className = 'interpretation high';
+                impairmentResult.textContent = 'Non ou incomplet';
+            }
+
+            // Overall interpretation
+            const interpretationBox = document.getElementById('interpretationBox');
+            const allCriteriaMet = (inattentionAdult >= 5 || hyperactivityAdult >= 5) &&
+                                   scores.criterionB === 'oui' &&
+                                   scores.impairmentAdult === 'oui';
+
+            if (allCriteriaMet) {
+                let presentation = '';
+                if (inattentionAdult >= 5 && hyperactivityAdult >= 5) {
+                    presentation = 'Combinée';
+                } else if (inattentionAdult >= 5) {
+                    presentation = 'Inattentive prédominante';
+                } else {
+                    presentation = 'Hyperactive/Impulsive prédominante';
+                }
+                interpretationBox.className = 'interpretation low';
+                interpretationBox.innerHTML = `<h3>Critères DSM-5 potentiellement remplis</h3><p>Présentation suggérée : <strong>${presentation}</strong><br>Le diagnostic différentiel (critère E) doit être vérifié cliniquement.</p>`;
+            } else {
+                interpretationBox.className = 'interpretation moderate';
+                interpretationBox.innerHTML = `<h3>Critères DSM-5 non remplis</h3><p>Un ou plusieurs critères diagnostiques ne sont pas satisfaits selon l'entretien actuel.</p>`;
+            }
+
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        document.addEventListener('DOMContentLoaded', initializeForm);
+    </script>
+</body>
+</html>

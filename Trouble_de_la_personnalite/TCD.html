@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide Pratique TCD - Stratégies Interactives</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cat-main: #f59e0b;
+            --cat-dark: #d97706;
+            --cat-light: #fbbf24;
+            --cat-rgb: 245, 158, 11;
+            --cat-readable: #b45309;
+        }
+        .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
+        .option-btn.selected, .answer-btn.selected { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        .score-circle { border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 30px rgba(var(--cat-rgb), 0.2); }
+        .score-value { color: var(--cat-light); }
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-light); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+        .progress-fill { background: linear-gradient(90deg, var(--cat-main), var(--cat-light)); box-shadow: 0 0 8px rgba(var(--cat-rgb), 0.4); }
+        .likert-options input[type="radio"]:checked + label,
+        .binary-options input[type="radio"]:checked + label,
+        .radio-options input[type="radio"]:checked + label { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+
+        /* ========================================
+           TCD Component Styles
+           ======================================== */
+
+        /* Strategy Card — main accordion container */
+        .strategy-card {
+            background: var(--surface-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Accordion */
+        .accordion-header {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            padding: 1.25rem 1.5rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            margin: 0;
+        }
+        .accordion-header:hover {
+            background: var(--surface-input);
+        }
+        .accordion-header-main {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+        .accordion-header-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--color-text-primary);
+        }
+        .accordion-content {
+            display: none;
+            padding: 1.5rem;
+            border-top: 1px solid var(--color-border);
+        }
+        .accordion-content.show {
+            display: block;
+        }
+        .accordion-content.hidden {
+            display: none;
+        }
+        .chevron-icon {
+            transition: transform 0.3s ease;
+            color: var(--color-text-muted);
+            flex-shrink: 0;
+        }
+        .chevron-icon.rotate-180 {
+            transform: rotate(180deg);
+        }
+
+        /* Icon gradient */
+        .icon-gradient {
+            background: linear-gradient(135deg, var(--cat-main), var(--cat-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 1.25rem;
+        }
+
+        /* Priority badges */
+        .priority-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-full, 9999px);
+            font-size: 0.75rem;
+            font-weight: 600;
+            width: fit-content;
+        }
+        .priority-1 {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--accent-red);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        .priority-2 {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--accent-amber);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+        .priority-3 {
+            background: rgba(34, 197, 94, 0.15);
+            color: var(--accent-green);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        /* Crisis Alert */
+        .crisis-alert {
+            background: var(--surface-red);
+            border-left: 4px solid var(--accent-red);
+            border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .crisis-alert h2 {
+            color: var(--accent-red);
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+        .crisis-alert p {
+            color: var(--color-text-secondary);
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+        .crisis-contacts {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(239,68,68,0.2);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .crisis-contacts > p {
+            color: var(--color-text-primary);
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+        }
+        .crisis-phone {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.2s;
+        }
+        .crisis-phone i { font-size: 1.25rem; flex-shrink: 0; }
+        .crisis-phone span { font-weight: 400; font-size: 0.85rem; }
+        .crisis-phone.primary-phone {
+            background: rgba(239,68,68,0.15);
+            color: var(--accent-red);
+            border: 2px solid rgba(239,68,68,0.4);
+        }
+        .crisis-phone.primary-phone:hover {
+            background: rgba(239,68,68,0.25);
+            border-color: var(--accent-red);
+        }
+        .crisis-phone.secondary-phone {
+            background: rgba(59,130,246,0.1);
+            color: #2563eb;
+            border: 1px solid rgba(59,130,246,0.3);
+            font-size: 1rem;
+        }
+        .crisis-phone.secondary-phone:hover {
+            background: rgba(59,130,246,0.2);
+        }
+
+        /* Safety Plan */
+        .safety-plan {
+            background: var(--surface-card);
+            border: 1px solid var(--color-border);
+            border-left: 4px solid var(--accent-green, #22c55e);
+            border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .safety-plan h3 {
+            color: var(--accent-green, #22c55e);
+            font-size: 1.15rem;
+            margin-bottom: 0.5rem;
+        }
+        .safety-plan > p {
+            color: var(--color-text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+        .safety-field {
+            margin-bottom: 1rem;
+        }
+        .safety-field label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--color-text-primary);
+            margin-bottom: 0.375rem;
+        }
+        .safety-field textarea {
+            width: 100%;
+            min-height: 3.5rem;
+            padding: 0.75rem;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            background: var(--surface-input);
+            color: var(--color-text-primary);
+            font-family: inherit;
+            font-size: 0.9rem;
+            resize: vertical;
+            transition: border-color 0.2s;
+        }
+        .safety-field textarea:focus {
+            outline: none;
+            border-color: var(--cat-main);
+            box-shadow: 0 0 0 3px rgba(var(--cat-rgb), 0.15);
+        }
+        .safety-plan .btn-print-plan {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.625rem 1.25rem;
+            background: var(--surface-input);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            color: var(--color-text-primary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .safety-plan .btn-print-plan:hover {
+            border-color: var(--accent-green, #22c55e);
+            color: var(--accent-green, #22c55e);
+        }
+
+        /* Toolkit (Favorites) */
+        .toolkit-section {
+            background: var(--surface-card);
+            border: 1px solid var(--color-border);
+            border-left: 4px solid var(--cat-main);
+            border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .toolkit-section h3 {
+            color: var(--cat-readable);
+            font-size: 1.15rem;
+            margin-bottom: 0.5rem;
+        }
+        .toolkit-section > p {
+            color: var(--color-text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        .toolkit-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .toolkit-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.625rem 1rem;
+            background: var(--surface-input);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .toolkit-item:hover {
+            background: rgba(var(--cat-rgb), 0.08);
+        }
+        .toolkit-item-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--color-text-primary);
+        }
+        .toolkit-item-module {
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+            font-style: italic;
+        }
+        .toolkit-clear {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.375rem 0.75rem;
+            background: rgba(239,68,68,0.1);
+            border: 1px solid rgba(239,68,68,0.3);
+            border-radius: var(--radius-md);
+            color: var(--accent-red);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .toolkit-clear:hover {
+            background: rgba(239,68,68,0.2);
+        }
+        .fav-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            color: var(--color-text-muted);
+            padding: 0.25rem;
+            transition: all 0.2s;
+            flex-shrink: 0;
+            margin-left: 0.5rem;
+        }
+        .fav-btn:hover, .fav-btn.active {
+            color: var(--cat-main);
+        }
+        .fav-btn.active {
+            text-shadow: 0 0 6px rgba(var(--cat-rgb), 0.4);
+        }
+        .technique-item-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        /* Interactive Quiz */
+        .interactive-quiz {
+            background: var(--surface-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .interactive-quiz h3 {
+            color: var(--color-text-primary);
+            margin-bottom: 0.5rem;
+        }
+        .interactive-quiz > p {
+            color: var(--color-text-muted);
+            margin-bottom: 1.5rem;
+        }
+        .quiz-question h4 {
+            color: var(--color-text-primary);
+            margin-bottom: 1rem;
+        }
+        .quiz-option {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.25rem;
+            background: var(--surface-input);
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            margin-bottom: 0.75rem;
+            transition: all 0.2s ease;
+            color: var(--color-text-secondary);
+        }
+        .quiz-option:hover {
+            border-color: var(--cat-main);
+            background: rgba(var(--cat-rgb), 0.08);
+        }
+        .quiz-option.selected {
+            border-color: var(--cat-main);
+            background: rgba(var(--cat-rgb), 0.15);
+            color: var(--color-text-primary);
+        }
+        .quiz-option svg {
+            flex-shrink: 0;
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+
+        /* Technique List */
+        .technique-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .technique-item {
+            padding: 1rem 1.25rem;
+            background: var(--surface-input);
+            border-radius: var(--radius-md);
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--color-text-secondary);
+        }
+        .technique-item:hover {
+            background: var(--surface-overlay);
+        }
+        .technique-item strong {
+            color: var(--color-text-primary);
+        }
+        .technique-item i {
+            color: var(--cat-main);
+            margin-right: 0.5rem;
+        }
+        .technique-detail {
+            display: none;
+            padding: 1rem;
+            margin-top: 0.75rem;
+            background: var(--surface-section-a);
+            border-radius: var(--radius-md);
+            border-left: 3px solid var(--cat-main);
+        }
+        .technique-item.expanded .technique-detail {
+            display: block;
+        }
+        .technique-detail p {
+            color: var(--color-text-secondary);
+            margin-bottom: 0.5rem;
+            line-height: 1.7;
+        }
+        .technique-detail p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* FALC List */
+        .falc-list {
+            padding-left: 1.5rem;
+            margin: 0.75rem 0;
+        }
+        .falc-list li {
+            color: var(--color-text-secondary);
+            margin-bottom: 0.5rem;
+            line-height: 1.7;
+        }
+
+        /* Mindfulness Timer */
+        .mindfulness-timer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 2rem;
+            background: var(--surface-section-a);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--color-border);
+        }
+        .mindfulness-timer h3 {
+            color: var(--color-text-primary);
+            margin-bottom: 0.5rem;
+        }
+        .mindfulness-timer > p {
+            color: var(--color-text-muted);
+            margin-bottom: 1.5rem;
+        }
+        .timer-display {
+            font-size: 3.5rem;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+            color: var(--color-text-primary);
+            margin-bottom: 1.5rem;
+        }
+        .timer-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+        .timer-btn {
+            padding: 0.625rem 1.25rem;
+            background: var(--surface-input);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            color: var(--color-text-secondary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .timer-btn:hover {
+            border-color: var(--cat-main);
+            color: var(--cat-main);
+        }
+        .timer-btn.reset {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: var(--accent-red);
+        }
+        .timer-btn.reset:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+        #timerInstruction {
+            color: var(--color-text-muted);
+            font-style: italic;
+            font-size: 0.875rem;
+        }
+
+        /* Header section */
+        .header-section {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .header-section h1 {
+            color: var(--color-text-primary);
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        .header-section h1 i {
+            color: var(--cat-main);
+        }
+        .header-section p {
+            color: var(--color-text-muted);
+            font-size: 1.125rem;
+        }
+
+        @media print {
+            .navigation-bar { display: none !important; }
+            body { background: white !important; }
+            body::before { display: none !important; }
+            .interactive-quiz { display: none !important; }
+            .accordion-content { display: block !important; }
+            .technique-detail { display: block !important; }
+            .toolkit-section { display: none !important; }
+            .fav-btn { display: none !important; }
+            .safety-plan { break-inside: avoid; border-color: #22c55e !important; }
+            .safety-field textarea { border: 1px solid #ccc !important; min-height: 2.5rem; }
+        }
+    </style>
+
+</head>
+<body class="light-questionnaire">
+
+    <!-- Navigation Bar -->
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+            <button onclick="goBack()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+        </div>
+        <h1>Guide Pratique TCD</h1>
+        <span class="badge badge-cat-perso">Personnalité</span>
+    </nav>
+
+    <div class="container">
+
+        <!-- Header -->
+        <header class="header-section">
+            <h1><i class="fas fa-brain"></i> Guide Pratique TCD</h1>
+            <p>Thérapie Dialectique et Comportementale - Outils concrets</p>
+        </header>
+
+        <!-- Alerte de crise -->
+        <div class="crisis-alert">
+            <h2><i class="fas fa-bolt"></i> En cas de crise (Émotion très forte)</h2>
+            <p><strong>1. NOMMER :</strong> Dites ce que vous ressentez. "Je ressens de la [colère/tristesse/peur]".</p>
+            <p><strong>2. ACCEPTER :</strong> Dites-vous : "C'est OK de ressentir ça."</p>
+            <p><strong>3. AGIR :</strong> Utilisez un outil ci-dessous pour passer la vague.</p>
+            <div class="crisis-contacts">
+                <p><strong><i class="fas fa-phone-alt"></i> Besoin d'aide maintenant ?</strong></p>
+                <a href="tel:3114" class="crisis-phone primary-phone">
+                    <i class="fas fa-phone"></i> 3114
+                    <span>— Numéro national de prévention du suicide (24h/24, gratuit)</span>
+                </a>
+                <a href="tel:15" class="crisis-phone secondary-phone">
+                    <i class="fas fa-ambulance"></i> 15
+                    <span>— SAMU / Urgence médicale</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Outil interactif -->
+        <div id="interactive-tool" class="interactive-quiz">
+            <h3><i class="fas fa-clipboard-check"></i> Quel outil utiliser ?</h3>
+            <p>Choisissez votre état actuel. L'outil correspondant s'ouvrira automatiquement.</p>
+
+            <div id="question1" class="quiz-question">
+                <h4>1. Comment vous sentez-vous en ce moment ?</h4>
+
+                <div class="quiz-option" onclick="selectOption('q1', 'crisis', this)">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" style="color: #ef4444;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Crise intense — Je suis au bord d'exploser / de me faire du mal.
+                </div>
+
+                <div class="quiz-option" onclick="selectOption('q1', 'stressed', this)">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" style="color: #f59e0b;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    Émotion forte / très stressé — Je garde encore le contrôle.
+                </div>
+
+                <div class="quiz-option" onclick="selectOption('q1', 'conflict', this)">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" style="color: #f97316;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a2 2 0 01-2-2V7a2 2 0 012-2h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293H17z" />
+                    </svg>
+                    En conflit avec quelqu'un — J'ai un problème relationnel.
+                </div>
+
+                <div class="quiz-option" onclick="selectOption('q1', 'calm', this)">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" style="color: #22c55e;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Plutôt calme — Je veux m'entraîner / prendre soin de moi.
+                </div>
+            </div>
+        </div>
+
+        <!-- Ma Boîte à Outils (favoris) -->
+        <div id="my-toolkit" class="toolkit-section" style="display:none;">
+            <h3><i class="fas fa-toolbox"></i> Ma Boîte à Outils</h3>
+            <p>Vos stratégies favorites — accès rapide. Cliquez pour y aller.</p>
+            <div id="toolkit-list" class="toolkit-list"></div>
+            <button class="toolkit-clear" onclick="clearFavorites()"><i class="fas fa-trash-alt"></i> Tout retirer</button>
+        </div>
+
+        <!-- Plan de sécurité -->
+        <div class="safety-plan">
+            <h3><i class="fas fa-shield-alt"></i> Mon Plan de Sécurité</h3>
+            <p>Remplissez ce plan avec votre thérapeute ou seul·e. Imprimez-le ou faites une capture d'écran.</p>
+            <div class="safety-field">
+                <label>Mes signes d'alerte (je sais que ça va mal quand…) :</label>
+                <textarea id="safety-signs" placeholder="Ex : Je ne dors plus, je m'isole, je me gratte les bras…"></textarea>
+            </div>
+            <div class="safety-field">
+                <label>Mes 3 stratégies qui marchent :</label>
+                <textarea id="safety-strategies" placeholder="Ex : Eau froide sur le visage, appeler Maman, marcher 10 min…"></textarea>
+            </div>
+            <div class="safety-field">
+                <label>Personnes à appeler :</label>
+                <textarea id="safety-contacts" placeholder="Ex : Maman (06...), Dr X (04...), Ami·e Y (07...)"></textarea>
+            </div>
+            <div class="safety-field">
+                <label>Mon lieu sûr :</label>
+                <textarea id="safety-place" placeholder="Ex : Ma chambre, le parc à côté de chez moi…"></textarea>
+            </div>
+            <button class="btn-print-plan" onclick="window.print()"><i class="fas fa-print"></i> Imprimer mon plan</button>
+        </div>
+
+        <!-- Accordeon : Tolerance a la Detresse -->
+        <div id="distress">
+            <div class="strategy-card">
+                <h3 id="header-distress" onclick="toggleAccordion(this)" class="accordion-header">
+                    <span class="accordion-header-main">
+                        <span class="accordion-header-title">
+                            <span class="icon-gradient"><i class="fas fa-heart-pulse"></i></span>
+                            Tolérance à la Détresse
+                        </span>
+                        <svg class="chevron-icon" style="width: 1.5rem; height: 1.5rem;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                        </svg>
+                    </span>
+                    <span class="priority-badge priority-1">Priorité Haute</span>
+                </h3>
+                <div class="accordion-content">
+                    <p style="margin-bottom: 1rem;"><strong>But :</strong> Traverser la crise (survivre). Ne pas vous faire de mal. Ne pas rendre les choses pires.</p>
+                    <ul class="technique-list">
+                        <li class="technique-item" onclick="toggleDetail(this)">
+                            <strong><i class="fas fa-hand"></i> Compétence STOP</strong>
+                            <div class="technique-detail">
+                                <p><strong>Quand l'utiliser :</strong> Quand vous sentez l'urgence d'agir impulsivement.</p>
+                                <p><strong>Comment faire :</strong></p>
+                                <ul class="falc-list">
+                                    <li><strong>S - S'arrêter :</strong> Ne bougez plus. Figez-vous. Ne réagissez pas.</li>
+                                    <li><strong>T - Temporiser :</strong> Prenez une pause. Respirez profondément.</li>
+                                    <li><strong>O - Observer :</strong> Remarquez ce qui se passe. (Vos pensées, vos émotions, la situation).</li>
+                                    <li><strong>P - Poursuivre :</strong> Agissez en pleine conscience. Pensez à vos objectifs. Choisissez l'action la plus efficace.</li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="technique-item" onclick="toggleDetail(this)">
+                            <strong><i class="fas fa-snowflake"></i> Compétence TER : T - Température</strong>
+                            <div class="technique-detail">
+                                <p><strong>Comment faire :</strong></p>
+                                <ul class="falc-list">
+                                    <li>Mettez votre visage dans de l'eau très froide (pas glacée) pendant 30 secondes.</li>
+                                    <li>Ou : Tenez un pack de glace sur vos joues et vos yeux.</li>
+                                    <li>Important : Pensez à vous pencher en avant et à retenir votre respiration.</li>
+                                </ul>
+                                <p><strong>Pourquoi :</strong> Cela calme votre corps très vite. Votre cœur bat plus lentement.</p>
+                                <p><strong>Quand l'utiliser :</strong> En moment de panique. Quand l'émotion est à 100%.</p>
+                            </div>
+                        </li>
+                        <li class="technique-item" onclick="toggleDetail(this)">
+                            <strong><i class="fas fa-bolt"></i> Compétence TER : E - Exercice Intense</strong>
+                            <div class="technique-detail">
+                                <p><strong>Comment faire :</strong></p>
+                                <ul class="falc-list">
+                                    <li>Bougez très fort pendant un court moment (ex: 10-15 minutes).</li>
+                                    <li>Courir sur place, monter des escaliers, faire des squats, danser.</li>
+                                    <li><strong>But :</strong> Dépenser l'énergie physique accumulée dans le corps.</li>
+                                </ul>
+                                <p><strong>Quand l'utiliser :</strong> Quand vous sentez de la colère ou de l'agitation dans votre corps.</p>
+                            </div>
+                        </li>
+                        <li class="technique-item" onclick="toggleDetail(this)">
+                            <strong><i class="fas fa-wind"></i> Compétence TER : R - Respiration Rythmée</strong>
+                            <div class="technique-detail">
+                                <p><strong>Comment faire :</strong></p>
+                                <ul class="falc-list">
+                                    <li>Inspirez lentement par le ventre (comptez jusqu'à 5).</li>
+                                    <li>Expirez ENCORE PLUS lentement (comptez jusqu'à 7).</li>
+                                    <li>Répétez pendant 1 ou 2 minutes.</li>
+                                    <li>Cela dit à votre corps de se calmer.</li>
+                                </ul>
+                                <p><strong>Relaxation Musculaire (aussi R) :</strong></p>
+                                <ul class="falc-list">
+                                    <li>Contractez un groupe de muscles (ex: serrez les poings) en inspirant.</li>
+                                    <li>Relâchez les muscles en expirant, dites "relax" dans votre tête.</li>
+                                    <li>Faites-le pour plusieurs parties du corps (mains, bras, épaules...).</li>
+                                </ul>
+                                <p><strong>Quand l'utiliser :</strong> Anxiété, tension, début de crise.</p>
+                            </div>
+                        </li>
+                        <li class="technique-item" onclick="toggleDetail(this)">
+                            <strong><i class="fas fa-puzzle-piece"></i> Distraction (Compétence ÉVASION)</strong>
+                            <div class="technique-detail">
+                                <p><strong>But :</strong> Détourner votre attention de la crise pour un moment.</p>
+                                <p><strong>E - Encombrer l'esprit :</strong> Comptez les objets rouges, listez des animaux, récitez une chanson.</p>
+                                <p><strong>V - Verrouiller les pensées :</strong> Mettez le problème "dans une boîte" mentale pour plus tard. Dites "Non !" aux ruminations.</p>
+                                <p><strong>A - Activités :</strong> Faites autre chose. (Sport, ménage, jeu vidéo, marcher, appeler un ami).</p>
+                                <p><strong>S - Sensations :</strong> Utilisez une sensation forte. (Tenir un glaçon, douche froide, manger un piment).</p>
+                                <p><strong>I - Inverser l'émotion :</strong> Si vous êtes triste, regardez une vidéo drôle. Si vous êtes en colère, écoutez une musique calme.</p>
+                                <p><strong>O - Ouverture aux autres :</strong> Aidez quelqu'un, faites un compliment, faites du bénévolat.</p>
+                                <p><strong>N - Nuancer :</strong> Comparez votre situation à un moment où c'était encore plus difficile (et que vous avez surmonté).</p>
+                            </div>
+                        </li>
+                        <li class="technique-item" onclick="toggleDetail(this)">
+                            <strong><i class="fas fa-star"></i> Améliorer le moment (AMÉLIOR)</strong>
+                            <div class="technique-detail">
+                                <p><strong>But :</strong> Introduire des éléments positifs pour rendre le moment plus supportable.</p>
+                                <p><strong>A - Adresser une prière :</strong> Ou se connecter à ses valeurs, à un "Esprit Éclairé".</p>
+                                <p><strong>M - Mettre du sens :</strong> Trouver un sens à la douleur. "Qu'est-ce que je peux apprendre de ça ?"</p>
+                                <p><strong>E - Encouragement de soi :</strong> Parlez-vous gentiment. "Je fais de mon mieux", "Ça va passer", "Je peux y arriver".</p>
+                                <p><strong>L - Loisir / vacances :</strong> Prenez une petite pause. Faites un "mini-congé" mental ou physique (ex: éteindre le téléphone 1h).</p>
+                                <p><strong>I - Imagerie mentale :</strong> Imaginez un lieu sûr et relaxant. Imaginez que vous gérez bien la situation.</p>
+                                <p><strong>O - Orientation sur le présent :</strong> Concentrez-vous sur UNE seule chose dans le moment présent.</p>
+                                <p><strong>R - Relaxation :</strong> Prenez un bain chaud, étirez-vous, buvez une tisane.</p>
+                            </div>
+                        </li>
+                        <li class="technique-item" onclick="toggleDetail(this)">
+                            <strong><i class="fas fa-spa"></i> Apaisement avec les 5 Sens</strong>
+                            <div class="technique-detail">
+                                <p><strong>But :</strong> Se calmer en utilisant ses sens. Être gentil avec soi.</p>
+                                <p><strong>Vue :</strong> Regardez une belle image, la nature, une fleur, une bougie.</p>
+                                <p><strong>Ouïe :</strong> Écoutez une musique douce, les oiseaux, le son de la pluie.</p>
+                                <p><strong>Odorat :</strong> Sentez du café, un parfum, une huile essentielle (lavande), l'herbe coupée.</p>
+                                <p><strong>Goût :</strong> Buvez un thé chaud, mangez un petit chocolat (en pleine conscience), un bonbon à la menthe.</p>
+                                <p><strong>Toucher :</strong> Caressez un animal, mettez une couverture douce, un bain chaud, mettez de la crème.</p>
+                            </div>
+                        </li>
+                        <li class="technique-item" onclick="toggleDetail(this)">
+                            <strong><i class="fas fa-check-circle"></i> Acceptation Radicale</strong>
+                            <div class="technique-detail">
+                                <p><strong>But :</strong> Arrêter de lutter contre la réalité.</p>
+                                <p>L'acceptation, c'est reconnaître que les faits sont vrais. Ce n'est pas aimer la réalité, c'est arrêter de se battre avec.</p>
+                                <p><strong>Comment faire :</strong></p>
+                                <ul class="falc-list">
+                                    <li><strong>Observez</strong> que vous luttez contre la réalité (Ex: "Ça ne devrait pas être comme ça !").</li>
+                                    <li><strong>Rappelez-vous</strong> que la réalité est ce qu'elle est. Les faits sont des faits.</li>
+                                    <li><strong>Pratiquez</strong> l'acceptation avec tout votre être (esprit, corps).</li>
+                                    <li><strong>Attention :</strong> Lutter contre la réalité transforme la douleur en souffrance.</li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="technique-item" onclick="toggleDetail(this)">
+                            <strong><i class="fas fa-smile"></i> Demi-Sourire et Mains Volontaires</strong>
+                            <div class="technique-detail">
+                                <p><strong>But :</strong> Utiliser votre corps pour aider votre esprit à accepter.</p>
+                                <p><strong>Demi-Sourire :</strong></p>
+                                <ul class="falc-list">
+                                    <li>Détendez votre visage (front, yeux, mâchoire).</li>
+                                    <li>Remontez très légèrement les coins de vos lèvres. Juste assez pour le sentir.</li>
+                                    <li>Essayez d'avoir une expression sereine.</li>
+                                </ul>
+                                <p><strong>Mains Volontaires :</strong></p>
+                                <ul class="falc-list">
+                                    <li>Mettez vos mains ouvertes, paumes vers le haut.</li>
+                                    <li>Vous pouvez être assis (mains sur les genoux) ou couché (mains le long du corps).</li>
+                                    <li>C'est une posture d'ouverture et d'acceptation.</li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Accordeon : Regulation Emotionnelle -->
+        <div id="emotions">
+            <div class="strategy-card">
+                <h3 id="header-emotions" onclick="toggleAccordion(this)" class="accordion-header">
+                    <span class="accordion-header-main">
+                        <span class="accordion-header-title">
+                            <span class="icon-gradient"><i class="fas fa-cloud-sun"></i></span>
+                            Régulation des Émotions
+                        </span>
+                        <svg class="chevron-icon" style="width: 1.5rem; height: 1.5rem;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                        </svg>
+                    </span>
+                    <span class="priority-badge priority-2">Priorité Moyenne</span>
+                </h3>
+                <div class="accordion-content">
+                    <p style="margin-bottom: 1rem;"><strong>But :</strong> Mieux comprendre mes émotions, pour qu'elles m'aident au lieu de me diriger. L'objectif est d'agir selon mes valeurs, pas seulement selon mon humeur.</p>
+                    <ul class="technique-list">
+                        <li class="technique-item" onclick="toggleDetail(this)">
+                            <strong><i class="fas fa-search"></i> Identifier (Qu'est-ce que je ressens ?)</strong>
+                            <div class="technique-detail">
+                                <p><strong>1. Nommer :</strong> Donnez un mot à votre émotion : colère, peur, honte, joie, tristesse.</p>
+                                <p><strong>2. Déclencheur :</strong> Qu'est-ce qui s'est passé juste avant ?</p>
+                                <p><strong>3. Pensées :</strong> Qu'est-ce que je me suis dit ? ("Il ne me respecte pas", "Je vais échouer"...)</p>
+                                <p><strong>4. Corps :</strong> Où ça se sent ? (tension, chaleur, gorge serrée, larmes...)</p>
+                                <p><strong>5. Envie d'agir :</strong> Qu'ai-je eu envie de faire ?</p>
+                                <p><strong>Exemples :</strong> Travail — "Je sens mon cœur battre fort (4). J'ai peur de parler en réunion (1-5)." Famille — "Je suis triste car on ne m'a pas invité (1-2)." Soins — "Je ressens de la honte car j'ai oublié mon rendez-vous (1-3)."</p>
+                            </div>
+                        </li>
+                        <li class="technique-item" onclick="toggleDetail(this)">
+                            <strong><i class="fas fa-exchange-alt"></i> Agir à l'opposé</strong>
+                            <div class="technique-detail">
+                                <p><strong>Faites le contraire de ce que l'émotion vous pousse à faire, si elle est trop forte ou inadaptée.</strong></p>
+                                <p><strong>Si TRISTE :</strong> L'envie est de s'isoler → appelez quelqu'un, sortez marcher, écoutez de la musique.</p>
+                                <p><strong>Si EN COLÈRE :</strong> L'envie est de crier → parlez bas, sortez prendre l'air, écrivez vos pensées.</p>
+                                <p><strong>Si PEUR :</strong> L'envie est de fuir → avancez par petites étapes vers ce qui fait peur.</p>
+                                <p><strong>Si HONTE :</strong> L'envie est de se cacher → en parler à une personne de confiance.</p>
+                            </div>
+                        </li>
+                        <li class="technique-item" onclick="toggleDetail(this)">
+                            <strong><i class="fas fa-shield-alt"></i> Prendre soin de soi (ABC SANTÉ)</strong>
+                            <div class="technique-detail">
+                                <p><strong>Plus je prends soin de moi, moins mes émotions me submergent.</strong></p>
+                                <p><strong>A – Accumuler</strong> des émotions positives : faire chaque jour une petite chose agréable (marcher, écouter, rire).</p>
+                                <p><strong>B – Bâtir</strong> des réussites : faire quelque chose où je me sens compétent (cuisiner, ranger, apprendre).</p>
+                                <p><strong>C – Chercher</strong> à anticiper : me préparer aux moments stressants (prévoir, planifier, respirer avant).</p>
+                                <p><strong>S – Santé :</strong> suivre mes soins, prendre mes traitements.</p>
+                                <p><strong>A – Addictions :</strong> éviter alcool, drogues, excès d'écran.</p>
+                                <p><strong>N – Nutrition :</strong> manger à heure régulière, sans sauter de repas.</p>
+                                <p><strong>T – Temps de sommeil :</strong> dormir 7-9 h, se lever à heure fixe.</p>
+                                <p><strong>E – Exercice :</strong> bouger un peu chaque jour, sans compétition.</p>
+                            </div>
+                        </li>
+                        <li class="technique-item" onclick="toggleDetail(this)">
+                            <strong><i class="fas fa-clipboard-check"></i> Vérifier les faits</strong>
+                            <div class="technique-detail">
+                                <p><strong>1. Nommer l'émotion :</strong> Quelle émotion est là ?</p>
+                                <p><strong>2. Décrire les faits :</strong> Que s'est-il passé exactement, sans interpréter.</p>
+                                <p><strong>3. Penser :</strong> Quelles pensées ai-je eues ?</p>
+                                <p><strong>4. Comparer :</strong> Mon émotion correspond-elle aux faits ou à mes pensées ?</p>
+                                <p><strong>5. Ajuster :</strong> Si c'est mes pensées, je les teste autrement.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Accordeon : Efficacite Interpersonnelle -->
+        <div id="interpersonal">
+            <div class="strategy-card">
+                <h3 id="header-interpersonal" onclick="toggleAccordion(this)" class="accordion-header">
+                    <span class="accordion-header-main">
+                        <span class="accordion-header-title">
+                            <span class="icon-gradient"><i class="fas fa-users"></i></span>
+                            Efficacité Interpersonnelle
+                        </span>
+                        <svg class="chevron-icon" style="width: 1.5rem; height: 1.5rem;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                        </svg>
+                    </span>
+                    <span class="priority-badge priority-2">Priorité Moyenne</span>
+                </h3>
+                <div class="accordion-content">
+                    <p style="margin-bottom: 1rem;"><strong>But :</strong> Trois objectifs clairs : 1) Obtenir ce que je veux, 2) Garder une bonne relation, 3) Me respecter. Avant de parler, je choisis l'objectif principal.</p>
+                    <ul class="technique-list">
+                        <li class="technique-item" onclick="toggleDetail(this)">
+                            <strong><i class="fas fa-comments"></i> Technique : Demander ou Refuser</strong>
+                            <div class="technique-detail">
+                                <p><strong>Structure pour être clair et efficace :</strong></p>
+                                <ul class="falc-list">
+                                    <li><strong>Décrire :</strong> Dire les faits, simples et vérifiables. "J'ai remarqué que le rapport n'est pas envoyé."</li>
+                                    <li><strong>Exprimer :</strong> Dire ce que je ressens et ce que je pense avec "je". "Je me sens stressé quand le délai n'est pas respecté."</li>
+                                    <li><strong>Affirmer :</strong> Demande ou refus clair. "Je demande un envoi avant 16h." / "Je ne peux pas rester ce soir."</li>
+                                    <li><strong>Renforcer :</strong> Dire ce que cela apporte. "Cela nous évite des retards et des tensions."</li>
+                                </ul>
+                                <p><strong>Pendant la discussion :</strong></p>
+                                <ul class="falc-list">
+                                    <li><strong>Rester concentré :</strong> Revenir à l'objectif si la discussion dévie. "Mon point, c'est l'envoi avant 16h."</li>
+                                    <li><strong>Paraître assuré :</strong> Parler calmement, voix posée, phrases courtes.</li>
+                                    <li><strong>Négocier :</strong> Proposer ou demander une option. "16h30 te convient-il ?"</li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="technique-item" onclick="toggleDetail(this)">
+                            <strong><i class="fas fa-heart"></i> Technique : AVEC (Garder la relation)</strong>
+                            <div class="technique-detail">
+                                <p><strong>A - Altruiste (Doux) :</strong> Voix douce, pas d'attaque, pas de menace. Partir poliment si besoin.</p>
+                                <p><strong>V - Validant :</strong> Dire ce qui est compréhensible chez l'autre. "Je comprends que tu sois fatigué."</p>
+                                <p><strong>E - Empathique (Intéressé) :</strong> Écouter vraiment, questions courtes et ouvertes. "Qu'est-ce qui te bloque ?"</p>
+                                <p><strong>C - Chaleureux (Détendu) :</strong> Rester calme, petite touche d'humour si c'est adapté.</p>
+                            </div>
+                        </li>
+                        <li class="technique-item" onclick="toggleDetail(this)">
+                            <strong><i class="fas fa-flag"></i> Technique : VRAI (Garder le respect de soi)</strong>
+                            <div class="technique-detail">
+                                <p><strong>V - Valeurs :</strong> Dire sa limite et ses valeurs. "J'ai besoin de mes soirées pour me reposer."</p>
+                                <p><strong>R - Respect (Juste) :</strong> Être équitable avec soi et l'autre. "Je veux être correct avec toi et avec moi."</p>
+                                <p><strong>A - Arrêter les excuses :</strong> S'excuser seulement si nécessaire. "Je m'excuse pour mon retard." (éviter "pardon" dix fois).</p>
+                                <p><strong>I - Intègre (Vrai) :</strong> Dire la vérité, sans exagérer ni minimiser.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Accordeon : Pleine Conscience -->
+        <div id="mindfulness">
+            <div class="strategy-card">
+                <h3 id="header-mindfulness" onclick="toggleAccordion(this)" class="accordion-header">
+                    <span class="accordion-header-main">
+                        <span class="accordion-header-title">
+                            <span class="icon-gradient"><i class="fas fa-leaf"></i></span>
+                            Pleine Conscience
+                        </span>
+                        <svg class="chevron-icon" style="width: 1.5rem; height: 1.5rem;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                        </svg>
+                    </span>
+                    <span class="priority-badge priority-3">Base Quotidienne</span>
+                </h3>
+                <div class="accordion-content">
+                    <p style="margin-bottom: 1rem;"><strong>But :</strong> Être présent ici et maintenant. Voir ce qui se passe, dans mon corps et autour de moi, sans juger. Agir selon ce qui m'aide vraiment.</p>
+                    <ul class="technique-list">
+                        <li class="technique-item" onclick="toggleDetail(this)">
+                            <strong><i class="fas fa-eye"></i> Observer (Compétence QUOI)</strong>
+                            <div class="technique-detail">
+                                <p>Regarder, écouter, sentir. Laisser venir et repartir, sans changer.</p>
+                                <p><strong>Exercice :</strong> 3 choses que je <strong>vois</strong>, 3 choses que j'<strong>entends</strong>, 3 choses que je <strong>ressens</strong> (ex. pieds au sol, air sur la peau).</p>
+                                <p><em>Bulle : "Je remarque la lumière sur la table, le bruit du couloir, ma respiration dans la poitrine."</em></p>
+                            </div>
+                        </li>
+                        <li class="technique-item" onclick="toggleDetail(this)">
+                            <strong><i class="fas fa-pen"></i> Décrire (Compétence QUOI)</strong>
+                            <div class="technique-detail">
+                                <p>Mettre des mots simples sur ce qui est là. Juste les faits.</p>
+                                <p><strong>Jugement :</strong> "C'est une journée horrible." → <strong>Description :</strong> "Il pleut et j'ai raté le bus."</p>
+                                <p><strong>Jugement :</strong> "Je suis nul." → <strong>Description :</strong> "J'ai la pensée que je suis nul" / "J'ai fait une erreur."</p>
+                            </div>
+                        </li>
+                        <li class="technique-item" onclick="toggleDetail(this)">
+                            <strong><i class="fas fa-star"></i> Participer (Compétence QUOI)</strong>
+                            <div class="technique-detail">
+                                <p>Faire une seule activité, à 100%. Être "dedans".</p>
+                                <p>Quand je marche, je marche. Quand je mange, je mange.</p>
+                                <p>Hier et demain attendront. Je suis ici.</p>
+                            </div>
+                        </li>
+                        <li class="technique-item" onclick="toggleDetail(this)">
+                            <strong><i class="fas fa-balance-scale"></i> Non-Jugement (Compétence COMMENT)</strong>
+                            <div class="technique-detail">
+                                <p>Remarquer sans coller une étiquette "bon" / "mauvais".</p>
+                                <p>Voir les faits tels qu'ils sont. Laisser passer l'opinion.</p>
+                            </div>
+                        </li>
+                        <li class="technique-item" onclick="toggleDetail(this)">
+                            <strong><i class="fas fa-bullseye"></i> Une Chose à la Fois (Compétence COMMENT)</strong>
+                            <div class="technique-detail">
+                                <p>Mon attention sur une seule chose. Puis la suivante.</p>
+                                <p>Si l'esprit part, je le ramène doucement, sans me gronder.</p>
+                            </div>
+                        </li>
+                        <li class="technique-item" onclick="toggleDetail(this)">
+                            <strong><i class="fas fa-chart-line"></i> Efficacité (Compétence COMMENT)</strong>
+                            <div class="technique-detail">
+                                <p>Faire ce qui marche pour mon objectif, pas pour "avoir raison".</p>
+                                <p>Question clé : "Qu'est-ce qui m'aide maintenant ?"</p>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <!-- Timer -->
+                    <div class="mindfulness-timer">
+                        <h3><i class="fas fa-stopwatch"></i> Mini-Pratique de Pleine Conscience</h3>
+                        <p>Choisissez un temps. Pendant l'exercice : respirer, sentir, revenir au présent.</p>
+                        <div class="timer-display" id="timerDisplay">5:00</div>
+                        <div class="timer-buttons">
+                            <button class="timer-btn" onclick="startTimer(300)">5 minutes</button>
+                            <button class="timer-btn" onclick="startTimer(180)">3 minutes</button>
+                            <button class="timer-btn" onclick="startTimer(60)">1 minute</button>
+                            <button class="timer-btn reset" onclick="resetTimer()">Reset</button>
+                        </div>
+                        <p id="timerInstruction">Astuce : dites mentalement "j'inspire... j'expire". Si un jugement arrive, notez "jugement", puis revenez à la respiration.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Accordeon : References -->
+        <div id="references">
+            <div class="strategy-card">
+                <h3 id="header-references" onclick="toggleAccordion(this)" class="accordion-header">
+                    <span class="accordion-header-main">
+                        <span class="accordion-header-title">
+                            <i class="fas fa-book"></i>
+                            Références
+                        </span>
+                        <svg class="chevron-icon" style="width: 1.5rem; height: 1.5rem;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                        </svg>
+                    </span>
+                </h3>
+                <div class="accordion-content">
+                    <p>Ce guide est une adaptation pratique et simplifiée inspirée des manuels de Thérapie Comportementale Dialectique.</p>
+                    <p>Linehan, M. M. (1993a). <em>Cognitive-behavioral treatment of borderline personality disorder</em>. The Guilford Press.</p>
+                    <p>Linehan, M. M. (1993b). <em>Skills training manual for treating borderline personality disorder</em>. The Guilford Press.</p>
+                    <p>Linehan, M. M. (2015). <em>DBT skills training manual</em> (2nd ed.). The Guilford Press.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Inspiré de la Thérapie Dialectique et Comportementale de Marsha M. Linehan.</p>
+        <p>Adaptation numérique par Dr FENOHASINA Toto Jean Félicien (Psychiatre - FFI).</p>
+        <p>Dernière mise à jour : 23 octobre 2025.</p>
+    </footer>
+
+    <script>
+        let timerInterval;
+        let timeLeft;
+        let quizAnswers = {};
+        let favorites = [];
+
+        // Module names pour chaque accordion
+        const moduleNames = {
+            'distress': 'Tolérance à la Détresse',
+            'emotions': 'Régulation des Émotions',
+            'interpersonal': 'Efficacité Interpersonnelle',
+            'mindfulness': 'Pleine Conscience'
+        };
+
+        // --- ACCORDÉON ---
+        function toggleAccordion(headerElement) {
+            const content = headerElement.nextElementSibling;
+            const chevron = headerElement.querySelector('.chevron-icon');
+            const isOpening = !content.classList.contains('show');
+
+            if (content.classList.contains('show')) {
+                content.classList.remove('show');
+                content.classList.add('hidden');
+                if (chevron) chevron.classList.remove('rotate-180');
+                headerElement.setAttribute('aria-expanded', 'false');
+            } else {
+                content.classList.remove('hidden');
+                content.classList.add('show');
+                if (chevron) chevron.classList.add('rotate-180');
+                headerElement.setAttribute('aria-expanded', 'true');
+                setTimeout(() => {
+                    headerElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 150);
+            }
+        }
+
+        // --- TECHNIQUES (détails) ---
+        function toggleDetail(element) {
+            const allDetails = element.closest('.technique-list').querySelectorAll('.technique-item');
+            const isExpanding = !element.classList.contains('expanded');
+
+            allDetails.forEach(item => {
+                item.classList.remove('expanded');
+                item.setAttribute('aria-expanded', 'false');
+            });
+
+            if (isExpanding) {
+                element.classList.add('expanded');
+                element.setAttribute('aria-expanded', 'true');
+                setTimeout(() => {
+                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 150);
+            }
+        }
+
+        // --- FAVORIS (localStorage) ---
+        function loadFavorites() {
+            try {
+                const stored = localStorage.getItem('tcd-favorites');
+                favorites = stored ? JSON.parse(stored) : [];
+            } catch (e) {
+                favorites = [];
+            }
+        }
+
+        function saveFavorites() {
+            localStorage.setItem('tcd-favorites', JSON.stringify(favorites));
+        }
+
+        function toggleFavorite(event, techId) {
+            event.stopPropagation();
+            const idx = favorites.indexOf(techId);
+            if (idx === -1) {
+                favorites.push(techId);
+            } else {
+                favorites.splice(idx, 1);
+            }
+            saveFavorites();
+            updateFavButtons();
+            renderToolkit();
+        }
+
+        function updateFavButtons() {
+            document.querySelectorAll('.fav-btn').forEach(btn => {
+                const id = btn.dataset.techId;
+                if (favorites.includes(id)) {
+                    btn.classList.add('active');
+                    btn.innerHTML = '<i class="fas fa-star"></i>';
+                    btn.title = 'Retirer des favoris';
+                } else {
+                    btn.classList.remove('active');
+                    btn.innerHTML = '<i class="far fa-star"></i>';
+                    btn.title = 'Ajouter aux favoris';
+                }
+            });
+        }
+
+        function renderToolkit() {
+            const container = document.getElementById('my-toolkit');
+            const list = document.getElementById('toolkit-list');
+            if (favorites.length === 0) {
+                container.style.display = 'none';
+                return;
+            }
+            container.style.display = 'block';
+            list.innerHTML = '';
+            favorites.forEach(techId => {
+                const techEl = document.querySelector(`[data-tech-id="${techId}"]`);
+                if (!techEl) return;
+                const name = techEl.dataset.techName;
+                const module = techEl.dataset.techModule;
+                const item = document.createElement('div');
+                item.className = 'toolkit-item';
+                item.onclick = () => navigateToTechnique(techId);
+                item.innerHTML = `<div><span class="toolkit-item-name">${name}</span><br><span class="toolkit-item-module">${module}</span></div>`;
+                list.appendChild(item);
+            });
+        }
+
+        function navigateToTechnique(techId) {
+            const techEl = document.querySelector(`[data-tech-id="${techId}"]`);
+            if (!techEl) return;
+            // Ouvrir l'accordion parent
+            const accordionContent = techEl.closest('.accordion-content');
+            if (accordionContent && !accordionContent.classList.contains('show')) {
+                const header = accordionContent.previousElementSibling;
+                if (header) toggleAccordion(header);
+            }
+            // Ouvrir la technique
+            const allInList = techEl.closest('.technique-list').querySelectorAll('.technique-item');
+            allInList.forEach(item => {
+                item.classList.remove('expanded');
+                item.setAttribute('aria-expanded', 'false');
+            });
+            techEl.classList.add('expanded');
+            techEl.setAttribute('aria-expanded', 'true');
+            setTimeout(() => {
+                techEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 200);
+        }
+
+        function clearFavorites() {
+            favorites = [];
+            saveFavorites();
+            updateFavButtons();
+            renderToolkit();
+        }
+
+        // --- PLAN DE SÉCURITÉ (localStorage) ---
+        function loadSafetyPlan() {
+            try {
+                const stored = localStorage.getItem('tcd-safety-plan');
+                if (stored) {
+                    const data = JSON.parse(stored);
+                    ['safety-signs', 'safety-strategies', 'safety-contacts', 'safety-place'].forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el && data[id]) el.value = data[id];
+                    });
+                }
+            } catch (e) { /* ignore */ }
+        }
+
+        function saveSafetyPlan() {
+            const data = {};
+            ['safety-signs', 'safety-strategies', 'safety-contacts', 'safety-place'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) data[id] = el.value;
+            });
+            localStorage.setItem('tcd-safety-plan', JSON.stringify(data));
+        }
+
+        // --- TIMER ---
+        function playEndSound() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.type = 'sine';
+                osc.frequency.value = 528;
+                gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 2);
+                osc.start(ctx.currentTime);
+                osc.stop(ctx.currentTime + 2);
+            } catch (e) { /* AudioContext non supporté */ }
+        }
+
+        function startTimer(seconds) {
+            clearInterval(timerInterval);
+            timeLeft = seconds;
+            updateTimerDisplay();
+
+            const instructions = [
+                "Concentrez-vous sur votre respiration...",
+                "Observez vos pensées sans les juger...",
+                "Sentez votre corps se détendre...",
+                "Restez présent à l'instant..."
+            ];
+
+            let instrIndex = 0;
+            document.getElementById('timerInstruction').textContent = instructions[instrIndex];
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+
+                if (timeLeft % 30 === 0 && timeLeft > 0) {
+                    instrIndex = (instrIndex + 1) % instructions.length;
+                    document.getElementById('timerInstruction').textContent = instructions[instrIndex];
+                }
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    document.getElementById('timerDisplay').textContent = "Terminé !";
+                    document.getElementById('timerInstruction').textContent = "Bravo ! Prenez un moment pour observer comment vous vous sentez.";
+                    playEndSound();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timerDisplay').textContent =
+                `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timeLeft = 300;
+            updateTimerDisplay();
+            document.getElementById('timerInstruction').textContent = "Astuce : dites mentalement 'j'inspire... j'expire'. Si un jugement arrive, notez 'jugement', puis revenez à la respiration.";
+        }
+
+        // --- QUIZ ---
+        function selectOption(questionId, answer, element) {
+            quizAnswers[questionId] = answer;
+
+            const options = element.parentNode.querySelectorAll('.quiz-option');
+            options.forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+
+            const targetMap = {
+                crisis: 'distress',
+                stressed: 'emotions',
+                conflict: 'interpersonal',
+                calm: 'mindfulness'
+            };
+            const targetId = targetMap[answer];
+            if (!targetId) return;
+
+            const allContent = document.querySelectorAll('.accordion-content');
+            allContent.forEach(content => {
+                content.classList.remove('show');
+                content.classList.add('hidden');
+            });
+            const allChevrons = document.querySelectorAll('.chevron-icon');
+            allChevrons.forEach(icon => icon.classList.remove('rotate-180'));
+
+            // Reset aria-expanded on all headers
+            document.querySelectorAll('.accordion-header').forEach(h => h.setAttribute('aria-expanded', 'false'));
+
+            const targetHeader = document.getElementById(`header-${targetId}`);
+            if (targetHeader) {
+                const targetContent = targetHeader.nextElementSibling;
+                const targetChevron = targetHeader.querySelector('.chevron-icon');
+
+                targetContent.classList.remove('hidden');
+                targetContent.classList.add('show');
+                if (targetChevron) targetChevron.classList.add('rotate-180');
+                targetHeader.setAttribute('aria-expanded', 'true');
+
+                setTimeout(() => {
+                    targetHeader.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            }
+        }
+
+        // --- BOUTON RETOUR AVEC FALLBACK ---
+        function goBack() {
+            if (window.history.length > 1) {
+                history.back();
+            } else {
+                location.href = 'Page_d_accueil.html';
+            }
+        }
+
+        // --- INITIALISATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Fermer tous les accordions
+            const allContent = document.querySelectorAll('.accordion-content');
+            allContent.forEach(content => content.classList.add('hidden'));
+
+            // ARIA sur les accordion headers
+            document.querySelectorAll('.accordion-header').forEach(header => {
+                header.setAttribute('role', 'button');
+                header.setAttribute('tabindex', '0');
+                header.setAttribute('aria-expanded', 'false');
+                header.addEventListener('keydown', e => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        toggleAccordion(header);
+                    }
+                });
+            });
+
+            // Identifier le module de chaque technique et ajouter des boutons favoris
+            const moduleIds = ['distress', 'emotions', 'interpersonal', 'mindfulness'];
+            let techIndex = 0;
+
+            moduleIds.forEach(moduleId => {
+                const section = document.getElementById(moduleId);
+                if (!section) return;
+                const items = section.querySelectorAll('.technique-item');
+                items.forEach(item => {
+                    const techId = `tech-${techIndex}`;
+                    const strongEl = item.querySelector(':scope > strong');
+                    const techName = strongEl ? strongEl.textContent.trim() : `Technique ${techIndex + 1}`;
+
+                    item.dataset.techId = techId;
+                    item.dataset.techName = techName;
+                    item.dataset.techModule = moduleNames[moduleId] || moduleId;
+
+                    // ARIA accessibilité
+                    item.setAttribute('tabindex', '0');
+                    item.setAttribute('role', 'button');
+                    item.setAttribute('aria-expanded', 'false');
+                    item.addEventListener('keydown', e => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            toggleDetail(item);
+                        }
+                    });
+
+                    // Bouton favori (étoile)
+                    const favBtn = document.createElement('button');
+                    favBtn.className = 'fav-btn';
+                    favBtn.dataset.techId = techId;
+                    favBtn.innerHTML = '<i class="far fa-star"></i>';
+                    favBtn.title = 'Ajouter aux favoris';
+                    favBtn.setAttribute('aria-label', `Ajouter "${techName}" aux favoris`);
+                    favBtn.onclick = (e) => toggleFavorite(e, techId);
+
+                    // Wrapper le contenu existant du strong dans un header flex
+                    if (strongEl) {
+                        const wrapper = document.createElement('div');
+                        wrapper.className = 'technique-item-header';
+                        item.insertBefore(wrapper, strongEl);
+                        wrapper.appendChild(strongEl);
+                        wrapper.appendChild(favBtn);
+                    }
+
+                    techIndex++;
+                });
+            });
+
+            // Charger favoris
+            loadFavorites();
+            updateFavButtons();
+            renderToolkit();
+
+            // Charger plan de sécurité
+            loadSafetyPlan();
+            ['safety-signs', 'safety-strategies', 'safety-contacts', 'safety-place'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.addEventListener('input', saveSafetyPlan);
+            });
+        });
+    </script>
+
+</body>
+</html>

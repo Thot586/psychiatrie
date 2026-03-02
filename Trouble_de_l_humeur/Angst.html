@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Auto-questionnaire d'Angst — Épisodes Hypomaniaques</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/questionnaire-light.css">
+  <style>
+    :root {
+      --cat-main:     #3b82f6;
+      --cat-dark:     #2563eb;
+      --cat-light:    #93c5fd;
+      --cat-rgb:      59, 130, 246;
+      --cat-readable: #2563eb;
+    }
+
+    /* ── Boutons Oui / Non ─────────────────── */
+    .yn-row {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 0.75rem;
+    }
+    .yn-btn {
+      flex: 1;
+      padding: 0.6rem 1rem;
+      border-radius: var(--radius-lg);
+      border: 2px solid var(--color-border);
+      background: transparent;
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-sm);
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      transition: all var(--transition-normal);
+    }
+    .yn-btn:hover {
+      border-color: var(--color-border-active);
+      color: var(--color-text-primary);
+    }
+    .yn-btn.selected-oui {
+      background: rgba(34, 197, 94, 0.15);
+      border-color: #22c55e;
+      color: #16a34a;
+    }
+    .yn-btn.selected-non {
+      background: rgba(100, 116, 139, 0.15);
+      border-color: #64748b;
+      color: #64748b;
+    }
+    body.light-questionnaire .yn-btn {
+      color: #475569;
+      border-color: #cbd5e1;
+    }
+    body.light-questionnaire .yn-btn:hover {
+      border-color: var(--cat-readable);
+      color: var(--cat-readable);
+    }
+    body.light-questionnaire .yn-btn.selected-oui {
+      background: rgba(34, 197, 94, 0.12);
+      border-color: #16a34a;
+      color: #15803d;
+    }
+    body.light-questionnaire .yn-btn.selected-non {
+      background: rgba(100, 116, 139, 0.10);
+      border-color: #94a3b8;
+      color: #64748b;
+    }
+
+    /* ── Progress bar ──────────────────────── */
+    .angst-progress-wrap {
+      margin: 1.25rem 0;
+    }
+    .angst-progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: var(--font-size-sm);
+      color: var(--color-text-muted);
+      margin-bottom: 0.4rem;
+      font-weight: 500;
+    }
+    .angst-progress-bar {
+      height: 6px;
+      background: var(--color-border);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .angst-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--cat-main), var(--cat-dark));
+      border-radius: 999px;
+      transition: width 0.4s ease;
+      width: 0%;
+    }
+
+    /* ── Question card number badge ─────────── */
+    .q-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      background: var(--cat-main);
+      color: white;
+      border-radius: 50%;
+      font-size: 0.8rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-right: 0.6rem;
+    }
+    .q-header {
+      display: flex;
+      align-items: flex-start;
+    }
+    .q-text {
+      flex: 1;
+      color: var(--color-text-primary);
+      font-size: var(--font-size-sm);
+      font-weight: 500;
+      line-height: 1.5;
+      padding-top: 0.35rem;
+    }
+    body.light-questionnaire .q-text { color: #1e293b; }
+
+    /* ── Symptom list ───────────────────────── */
+    .symptom-item {
+      background: rgba(var(--cat-rgb), 0.07);
+      border-left: 3px solid var(--cat-main);
+      border-radius: var(--radius-md);
+      padding: 0.6rem 0.9rem;
+      margin-bottom: 0.5rem;
+      font-size: var(--font-size-sm);
+      color: var(--color-text-secondary);
+    }
+    body.light-questionnaire .symptom-item { color: #334155; }
+
+    /* ── Import / Reset row ─────────────────── */
+    .action-row {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+<body class="light-questionnaire">
+
+  <!-- Navigation -->
+  <nav class="navigation-bar">
+    <div class="nav-buttons">
+      <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+      <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+    </div>
+    <h1>Auto-questionnaire d'Angst</h1>
+    <span class="badge badge-cat-humeur">Humeur</span>
+  </nav>
+
+  <div class="container">
+
+    <!-- En-tête -->
+    <header class="page-header">
+      <p class="page-subtitle">Évaluation des épisodes hypomaniaques — Pr Jules Angst</p>
+    </header>
+
+    <!-- Info clinique -->
+    <div class="glass-card" style="margin-bottom: 1.5rem;">
+      <h2 class="card-title"><i class="fas fa-info-circle" style="color: var(--cat-readable);"></i> À propos</h2>
+      <p style="color: var(--color-text-secondary); line-height: 1.7; margin-bottom: 1rem;">
+        L'auto-questionnaire d'Angst permet de dépister d'éventuels <strong>épisodes hypomaniaques ou maniaques</strong>.
+        Il évalue les périodes où vous vous êtes senti(e) particulièrement bien, énergique ou exalté(e),
+        distinctes de votre état habituel.
+      </p>
+      <div class="alert alert-info" style="margin: 0 0 1rem 0;">
+        <div class="alert-icon"><i class="fas fa-pencil-alt"></i></div>
+        <div class="alert-content">
+          <p><strong>Instructions :</strong> Répondez en pensant aux <strong>périodes passées</strong> où vous étiez
+          particulièrement « bien dans votre peau », heureux(se), agité(e) ou irritable — et non à votre état actuel.</p>
+        </div>
+      </div>
+      <div class="alert alert-warning" style="margin: 0;">
+        <div class="alert-icon"><i class="fas fa-exclamation-triangle"></i></div>
+        <div class="alert-content">
+          <h3>Avertissement</h3>
+          <p>Outil de dépistage uniquement — pas de diagnostic. Un score élevé nécessite une évaluation psychiatrique.
+          Si vous êtes en crise, contactez immédiatement un professionnel de santé.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Import / Reset -->
+    <div class="glass-card" style="margin-bottom: 1.5rem;">
+      <div class="action-row">
+        <button class="btn-action-primary" onclick="importData()">
+          <i class="fas fa-file-import"></i> Importer un questionnaire
+        </button>
+        <button class="btn-action-secondary" onclick="resetForm()">
+          <i class="fas fa-redo"></i> Réinitialiser
+        </button>
+      </div>
+      <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="loadFile(event)">
+    </div>
+
+    <!-- Questions -->
+    <div class="glass-card" style="margin-bottom: 1.5rem;">
+      <h2 class="card-title">
+        <i class="fas fa-list-check" style="color: var(--cat-readable);"></i>
+        Avez-vous connu des périodes avec les caractéristiques suivantes ?
+      </h2>
+
+      <!-- Progress -->
+      <div class="angst-progress-wrap">
+        <div class="angst-progress-label">
+          <span>Progression</span>
+          <span id="progressText">0 / 20</span>
+        </div>
+        <div class="angst-progress-bar">
+          <div class="angst-progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+
+      <div id="questionsContainer"></div>
+    </div>
+
+    <!-- Résultats -->
+    <div id="results" class="glass-card" style="display: none; margin-bottom: 1.5rem;">
+      <h2 class="card-title" style="text-align: center;">
+        <i class="fas fa-chart-bar" style="color: var(--cat-readable);"></i> Résultats
+      </h2>
+
+      <!-- Score circle -->
+      <div style="display: flex; justify-content: center; margin: 1.5rem 0;">
+        <div class="score-circle" id="scoreCircle">
+          <span class="score-number" id="totalScore">0</span>
+          <span class="score-label">sur 20</span>
+        </div>
+      </div>
+
+      <!-- Interprétation -->
+      <div id="interpretationBox" class="result-band"></div>
+
+      <!-- Symptômes positifs -->
+      <div id="symptomSection" style="display: none; margin-top: 1.25rem;">
+        <h4 style="color: var(--color-text-secondary); margin-bottom: 0.75rem; font-size: var(--font-size-sm); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">
+          <i class="fas fa-list"></i> Symptômes identifiés
+        </h4>
+        <div id="positiveSymptoms"></div>
+      </div>
+
+      <!-- Recommandations -->
+      <div class="result-recommendations" id="recommendationsBox" style="margin-top: 1.25rem;">
+        <h4><i class="fas fa-lightbulb"></i> Recommandations</h4>
+        <ul id="recommendations"></ul>
+      </div>
+
+      <!-- Export -->
+      <div style="margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--color-border);">
+        <h3 class="card-title" style="font-size: 1rem; margin-bottom: 1rem;">
+          <i class="fas fa-download" style="color: var(--cat-readable);"></i> Exporter les résultats
+        </h3>
+        <label class="consent-label" style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; cursor: pointer;">
+          <input type="checkbox" id="exportConsent" style="margin-top: 3px; flex-shrink: 0;">
+          <span style="color: var(--color-text-muted); font-size: var(--font-size-sm); line-height: 1.6;">
+            Je souhaite télécharger mes résultats dans un fichier JSON sur mon appareil. <strong>Ces résultats constituent des données de santé — je m'engage à les conserver de façon sécurisée et à ne les partager qu'avec un professionnel de santé de mon choix.</strong> Aucune donnée n'est transmise à un serveur.
+            L'exportation se fait sous ma seule responsabilité.
+          </span>
+        </label>
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+          <button class="btn-action-primary" onclick="exportData()" style="flex: 1; min-width: 160px; justify-content: center;">
+            <i class="fas fa-file-export"></i> Exporter en JSON
+          </button>
+          <button class="btn-action-secondary" onclick="printResults()" style="flex: 1; min-width: 160px; justify-content: center;">
+            <i class="fas fa-print"></i> Imprimer
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p><strong>Auto-questionnaire d'Angst — Épisodes Hypomaniaques</strong></p>
+    <p style="margin: 0.4rem 0;"><strong>Auteur original :</strong> Pr Jules Angst</p>
+    <p><strong>Adaptation numérique :</strong> Dr FENOHASINA T.J. Felicien (Psychiatre)</p>
+    <p>&copy; 2025 — Centre Ressource de Réhabilitation</p>
+    <p class="license">Licence CC BY-NC-SA 4.0</p>
+  </footer>
+
+  <script>
+    const questions = [
+      "Moins d'heures de sommeil",
+      "Davantage d'énergie et de résistance physique",
+      "Davantage de confiance en soi",
+      "Davantage de plaisir à faire plus de travail",
+      "Davantage d'activités sociales (plus d'appels téléphoniques, plus de visites)",
+      "Plus de déplacements et voyages ; davantage d'imprudences au volant",
+      "Dépenses d'argent excessives",
+      "Comportement déraisonnable dans les affaires",
+      "Surcroît d'activité (y compris au travail)",
+      "Davantage de projets et d'idées créatives",
+      "Moins de timidité, moins d'inhibition",
+      "Plus bavard(e) que d'habitude",
+      "Plus d'impatience ou d'irritabilité que d'habitude",
+      "Attention facilement distraite",
+      "Augmentation des pulsions sexuelles",
+      "Augmentation de la consommation de café et de cigarettes",
+      "Augmentation de la consommation d'alcool",
+      "Exagérément optimiste, voire euphorique",
+      "Augmentation du rire (farces, plaisanteries, jeux de mots, calembours)",
+      "Rapidité de la pensée, idées soudaines, calembours"
+    ];
+
+    let answers = new Array(20).fill(null);
+
+    // ── Initialisation ──────────────────────────────────────────
+    function initializeQuestions() {
+      const container = document.getElementById('questionsContainer');
+      container.innerHTML = '';
+      questions.forEach((q, i) => {
+        const div = document.createElement('div');
+        div.className = 'question-card';
+        div.innerHTML = `
+          <div class="q-header">
+            <span class="q-num">${i + 1}</span>
+            <span class="q-text">${q}</span>
+          </div>
+          <div class="yn-row">
+            <button class="yn-btn" id="q${i}_oui" onclick="selectAnswer(${i}, true)">
+              <i class="fas fa-check"></i> Oui
+            </button>
+            <button class="yn-btn" id="q${i}_non" onclick="selectAnswer(${i}, false)">
+              <i class="fas fa-times"></i> Non
+            </button>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    // ── Sélection d'une réponse ────────────────────────────────
+    function selectAnswer(index, value) {
+      answers[index] = value;
+
+      const ouiBtn = document.getElementById(`q${index}_oui`);
+      const nonBtn = document.getElementById(`q${index}_non`);
+
+      ouiBtn.classList.toggle('selected-oui', value === true);
+      ouiBtn.classList.remove('selected-non');
+      nonBtn.classList.toggle('selected-non', value === false);
+      nonBtn.classList.remove('selected-oui');
+
+      updateProgress();
+      checkCompletion();
+    }
+
+    // ── Progression ────────────────────────────────────────────
+    function updateProgress() {
+      const answered = answers.filter(a => a !== null).length;
+      document.getElementById('progressFill').style.width = (answered / 20 * 100) + '%';
+      document.getElementById('progressText').textContent = `${answered} / 20`;
+    }
+
+    // ── Vérification complétude ────────────────────────────────
+    function checkCompletion() {
+      if (answers.every(a => a !== null)) {
+        updateResults();
+        const resultsEl = document.getElementById('results');
+        resultsEl.style.display = 'block';
+        setTimeout(() => resultsEl.scrollIntoView({ behavior: 'smooth' }), 100);
+      }
+    }
+
+    // ── Calcul du score ────────────────────────────────────────
+    function calculateScore() {
+      return answers.filter(a => a === true).length;
+    }
+
+    // ── Interprétation ─────────────────────────────────────────
+    function getInterpretation(score) {
+      if (score <= 10) {
+        return {
+          level:    'Pas de signes significatifs d\'hypomanie',
+          color:    '#22c55e',
+          bg:       'rgba(34, 197, 94, 0.10)',
+          border:   '#22c55e',
+          textColor: '#15803d',
+          description: 'Votre score ne suggère pas la présence d\'épisodes hypomaniaques significatifs.',
+          recommendations: [
+            'Surveillance de routine de votre humeur',
+            'Maintenir une bonne hygiène de sommeil',
+            'Gérer le stress de manière appropriée',
+            'Consulter si des symptômes apparaissent ou s\'aggravent'
+          ]
+        };
+      } else {
+        return {
+          level:    'Signes possibles d\'épisodes hypomaniaques',
+          color:    '#f59e0b',
+          bg:       'rgba(245, 158, 11, 0.10)',
+          border:   '#f59e0b',
+          textColor: '#92400e',
+          description: 'Votre score suggère la présence possible d\'épisodes hypomaniaques. Une évaluation psychiatrique approfondie est recommandée pour clarifier le diagnostic.',
+          recommendations: [
+            'Consultation psychiatrique recommandée pour évaluation approfondie',
+            'Tenir un journal de l\'humeur quotidien',
+            'Éviter les substances stimulantes (café, alcool)',
+            'Maintenir un rythme de sommeil régulier',
+            'Informer vos proches de surveiller les changements d\'humeur',
+            'Ne pas arrêter ou modifier un traitement sans avis médical'
+          ]
+        };
+      }
+    }
+
+    // ── Mise à jour de l'affichage des résultats ───────────────
+    function updateResults() {
+      const score = calculateScore();
+      const interp = getInterpretation(score);
+
+      // Score circle
+      document.getElementById('totalScore').textContent = score;
+      const circle = document.getElementById('scoreCircle');
+      circle.style.background = `linear-gradient(135deg, ${interp.color}, ${interp.border})`;
+      circle.style.boxShadow  = `0 8px 24px ${interp.color}55`;
+
+      // Interprétation
+      const box = document.getElementById('interpretationBox');
+      box.style.background   = interp.bg;
+      box.style.borderColor  = interp.border;
+      box.style.color        = interp.textColor;
+      box.innerHTML = `
+        <h3 style="margin-bottom: 0.5rem;">${interp.level}</h3>
+        <p>${interp.description}</p>
+        ${score > 10 ? '<p style="margin-top: 0.75rem; font-weight: 700;"><i class="fas fa-exclamation-triangle"></i> Score > 10 : seuil de significativité atteint</p>' : ''}
+      `;
+
+      // Symptômes positifs
+      const positiveSymptoms = questions.filter((_, i) => answers[i] === true);
+      const symptomSection = document.getElementById('symptomSection');
+      if (score > 10 && positiveSymptoms.length > 0) {
+        symptomSection.style.display = 'block';
+        document.getElementById('positiveSymptoms').innerHTML =
+          positiveSymptoms.map(s => `<div class="symptom-item"><i class="fas fa-circle-dot" style="font-size:0.65rem; margin-right:6px; color: var(--cat-main);"></i>${s}</div>`).join('');
+      } else {
+        symptomSection.style.display = 'none';
+      }
+
+      // Recommandations
+      document.getElementById('recommendations').innerHTML =
+        interp.recommendations.map(r => `<li>${r}</li>`).join('');
+    }
+
+    // ── Réinitialiser ──────────────────────────────────────────
+    function resetForm() {
+      answers = new Array(20).fill(null);
+      document.querySelectorAll('.yn-btn').forEach(btn => {
+        btn.classList.remove('selected-oui', 'selected-non');
+      });
+      document.getElementById('progressFill').style.width = '0%';
+      document.getElementById('progressText').textContent = '0 / 20';
+      document.getElementById('results').style.display = 'none';
+      document.getElementById('exportConsent').checked = false;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ── Importer ───────────────────────────────────────────────
+    function importData() {
+      document.getElementById('fileInput').click();
+    }
+
+    function loadFile(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = JSON.parse(e.target.result);
+          if (data.questionnaire !== 'Angst') {
+            alert('Ce fichier ne correspond pas au questionnaire d\'Angst.');
+            return;
+          }
+          if (data.answers && Array.isArray(data.answers) && data.answers.length === 20) {
+            answers = data.answers;
+            answers.forEach((val, i) => {
+              if (val !== null) {
+                const ouiBtn = document.getElementById(`q${i}_oui`);
+                const nonBtn = document.getElementById(`q${i}_non`);
+                ouiBtn.classList.toggle('selected-oui', val === true);
+                nonBtn.classList.toggle('selected-non', val === false);
+              }
+            });
+            updateProgress();
+            checkCompletion();
+          }
+        } catch {
+          alert('Erreur lors de l\'importation du fichier.');
+        }
+      };
+      reader.readAsText(file);
+      event.target.value = '';
+    }
+
+    // ── Exporter ───────────────────────────────────────────────
+    function exportData() {
+      if (!document.getElementById('exportConsent').checked) {
+        alert('Veuillez confirmer votre consentement avant d\'exporter les données.');
+        return;
+      }
+      const score  = calculateScore();
+      const interp = getInterpretation(score);
+      const data = {
+        questionnaire:    'Angst',
+        date:             new Date().toISOString(),
+        answers:          answers,
+        score:            score,
+        interpretation:   interp.level,
+        significant:      score > 10,
+        positiveSymptoms: questions.filter((_, i) => answers[i] === true)
+      };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement('a');
+      a.href     = url;
+      a.download = `Angst_${new Date().toISOString().split('T')[0]}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // ── Imprimer ───────────────────────────────────────────────
+    function printResults() {
+      document.getElementById('results').style.display = 'block';
+      window.print();
+    }
+
+    // ── Initialisation ──────────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', initializeQuestions);
+  </script>
+</body>
+</html>

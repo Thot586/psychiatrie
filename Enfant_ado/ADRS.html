@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADRS - Adolescent Depression Rating Scale</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --cat-main: #14b8a6;
+            --cat-dark: #0d9488;
+            --cat-light: #2dd4bf;
+            --cat-rgb: 20, 184, 166;
+            --cat-readable: #0d9488;
+        }
+        .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
+        .option-btn.selected, .answer-btn.selected { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        .score-circle { border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 30px rgba(var(--cat-rgb), 0.2); }
+        .score-value { color: var(--cat-light); }
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-light); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+        .progress-fill { background: linear-gradient(90deg, var(--cat-main), var(--cat-light)); box-shadow: 0 0 8px rgba(var(--cat-rgb), 0.4); }
+        .likert-options input[type="radio"]:checked + label,
+        .binary-options input[type="radio"]:checked + label,
+        .radio-options input[type="radio"]:checked + label { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+    </style>
+
+</head>
+<body class="light-questionnaire">
+    <!-- Fixed Progress Bar -->
+    <div class="progress-fixed" id="progressFixed">
+        <div class="progress-fixed-inner">
+            <span class="progress-fixed-label"><i class="fas fa-tasks"></i> Progression</span>
+            <div class="progress-fixed-bar">
+                <div class="progress-fixed-fill" id="progressBarFixed" style="width: 0%"></div>
+            </div>
+            <span class="progress-fixed-count" id="progressTextFixed">0/10</span>
+        </div>
+    </div>
+
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+            <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+        </div>
+        <h1>ADRS</h1>
+        <span class="badge badge-cat-enfant">Enfant/Ado</span>
+    </nav>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h2>Adolescent Depression Rating Scale</h2>
+            <p>Comment tu te sens vraiment ?</p>
+            <span class="age-badge"><i class="fas fa-user-graduate"></i> 10-20 ans</span>
+        </div>
+
+        <!-- Info Card -->
+        <div class="glass-card">
+            <div class="info-box">
+                <h3><i class="fas fa-info-circle"></i> A propos de ce test</h3>
+                <p>
+                    10 questions rapides pour evaluer comment tu vas vraiment.
+                    <br><br>
+                    <strong><i class="fas fa-clock"></i> Temps :</strong> 2-3 minutes<br>
+                    <strong><i class="fas fa-user"></i> Pour qui :</strong> Les jeunes qui veulent faire le point
+                </p>
+            </div>
+
+            <div class="warning-box">
+                <h3><i class="fas fa-exclamation-triangle"></i> Important</h3>
+                <ul>
+                    <li>Ce test aide a comprendre, mais ne remplace pas une consultation</li>
+                    <li>Si tu vas mal, parle-en a quelqu'un de confiance</li>
+                    <li>En cas d'urgence : <strong>3114</strong> (24h/7j, gratuit)</li>
+                    <li>Pour parler : <strong>Fil Sante Jeunes 0 800 235 236</strong></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="glass-card">
+            <div class="control-buttons">
+                <button class="btn btn-primary" onclick="importData()">
+                    <i class="fas fa-file-import"></i> Importer
+                </button>
+                <button class="btn btn-secondary" onclick="resetForm()">
+                    <i class="fas fa-redo"></i> Reset
+                </button>
+            </div>
+            <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="loadFile(event)">
+        </div>
+
+        <!-- Questions -->
+        <div class="glass-card">
+            <h3 style="margin-bottom: 1.5rem; text-align: center;">
+                Reponds <span style="color: #14b8a6;">VRAI</span> ou <span style="color: #ef4444;">FAUX</span> pour chaque phrase
+            </h3>
+
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressBar" style="width: 0%"></div>
+                </div>
+                <p class="progress-text" id="progressText">0/10 questions</p>
+            </div>
+
+            <div id="questions"></div>
+        </div>
+
+        <!-- Results -->
+        <div id="results" class="results-section">
+            <h2 style="text-align: center; margin-bottom: 2rem;">
+                <i class="fas fa-chart-bar"></i> Tes resultats
+            </h2>
+
+            <div class="score-display">
+                <div class="score-circle" id="scoreCircle">
+                    <span class="score-number" id="totalScore">0</span>
+                    <span class="score-label">sur 10</span>
+                </div>
+            </div>
+
+            <div id="interpretationBox" class="interpretation"></div>
+
+            <div class="recommendation-card">
+                <h3><i class="fas fa-hand-holding-heart"></i> Que faire maintenant ?</h3>
+                <ul id="recommendations"></ul>
+            </div>
+
+            <div class="glass-card" style="margin-top: 1.5rem;">
+                <h3><i class="fas fa-save"></i> Sauvegarder mes resultats</h3>
+                <div class="consent-box">
+                    <label>
+                        <input type="checkbox" id="exportConsent">
+                        <span>J'accepte de sauvegarder mes résultats sur mon appareil. <strong>Ces informations de santé me concernent — je les garde en sécurité et je ne les partage qu'avec mon médecin ou mes parents.</strong> Aucune donnée n'est envoyée sur internet.</span>
+                    </label>
+                </div>
+                <div class="export-buttons">
+                    <button class="btn btn-primary" onclick="exportData()">
+                        <i class="fas fa-download"></i> Telecharger
+                    </button>
+                    <button class="btn-print" onclick="printResults()">
+                        <i class="fas fa-print"></i> Imprimer
+                    </button>
+                </div>
+            </div>
+
+            <div class="sources-box">
+                <p>
+                    <strong>Sources scientifiques :</strong><br>
+                    - Revah-Levy et al. (2007) - BMC Psychiatry<br>
+                    - Feur et al. (2007) - BEH<br>
+                    - Reseau Sud Aquitain des Professionnels de Soins en Addictologie
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p><strong>ADRS - Adolescent Depression Rating Scale</strong></p>
+        <p><strong>Auteurs originaux :</strong> Anne Revah-Levy, Boris Birmaher, Isabelle Gasquet, Bruno Falissard</p>
+        <p><strong>Adaptation numerique :</strong> Dr FENOHASINA | Psychiatre</p>
+        <p>Reseau Sud Aquitain des Professionnels de Soins en Addictologie</p>
+    </footer>
+
+    <script>
+        const questions = [
+            "Je n'ai pas d'énergie pour l'école, pour le travail",
+            "J'ai du mal à réfléchir",
+            "Je sens que la tristesse, le cafard me débordent en ce moment",
+            "Il n'y a rien qui m'intéresse, plus rien ne m'amuse",
+            "Ce que je fais ne sert à rien",
+            "Au fond, quand c'est comme ça, j'ai envie de mourir",
+            "Je ne supporte pas grand-chose",
+            "Je me sens découragé(e)",
+            "Je dors très mal",
+            "À l'école, au boulot, je n'y arrive pas"
+        ];
+
+        // Question 6 est critique (index 5)
+        const criticalQuestions = [5];
+
+        let answers = new Array(10).fill(null);
+
+        function initializeQuestions() {
+            const container = document.getElementById('questions');
+            container.innerHTML = '';
+
+            questions.forEach((question, index) => {
+                const isCritical = criticalQuestions.includes(index);
+                const questionDiv = document.createElement('div');
+                questionDiv.className = isCritical ? 'question-card critical' : 'question-card';
+                questionDiv.style.animationDelay = `${index * 100}ms`;
+
+                let criticalWarning = '';
+                if (isCritical) {
+                    criticalWarning = `
+                        <div class="critical-warning">
+                            <i class="fas fa-heart-broken"></i> <span>Si tu reponds VRAI ici, parle-en vite a quelqu'un ou appelle le 3114</span>
+                        </div>
+                    `;
+                }
+
+                questionDiv.innerHTML = `
+                    <span class="question-number">${index + 1}</span>
+                    <div class="question-text">${question}</div>
+                    <div class="answer-buttons">
+                        <button class="answer-btn option-btn true" onclick="selectAnswer(${index}, true)" id="q${index}_true">
+                            <i class="fas fa-check"></i> VRAI
+                        </button>
+                        <button class="answer-btn option-btn false" onclick="selectAnswer(${index}, false)" id="q${index}_false">
+                            <i class="fas fa-times"></i> FAUX
+                        </button>
+                    </div>
+                    ${criticalWarning}
+                `;
+
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function selectAnswer(questionIndex, value) {
+            answers[questionIndex] = value;
+
+            // Update UI
+            const trueBtn = document.getElementById(`q${questionIndex}_true`);
+            const falseBtn = document.getElementById(`q${questionIndex}_false`);
+
+            if (value === true) {
+                trueBtn.classList.add('selected', 'true');
+                falseBtn.classList.remove('selected', 'false');
+            } else {
+                falseBtn.classList.add('selected', 'false');
+                trueBtn.classList.remove('selected', 'true');
+            }
+
+            // Update progress
+            updateProgress();
+
+            // Check if fixed progress should be shown
+            const progressBarElement = document.querySelector('.progress-container');
+            const fixedProgressBar = document.getElementById('progressFixed');
+            if (progressBarElement) {
+                const rect = progressBarElement.getBoundingClientRect();
+                const answeredCount = answers.filter(a => a !== null).length;
+                if (rect.bottom < 0 && answeredCount > 0) {
+                    fixedProgressBar.classList.add('show');
+                }
+            }
+
+            // Check completion
+            checkCompletion();
+        }
+
+        function updateProgress() {
+            const answered = answers.filter(a => a !== null).length;
+            const percentage = (answered / 10) * 100;
+
+            // Update regular progress bar
+            document.getElementById('progressBar').style.width = percentage + '%';
+            document.getElementById('progressText').textContent = `${answered}/10 questions`;
+
+            // Update fixed progress bar
+            document.getElementById('progressBarFixed').style.width = percentage + '%';
+            document.getElementById('progressTextFixed').textContent = `${answered}/10`;
+        }
+
+        function checkCompletion() {
+            const allAnswered = answers.every(a => a !== null);
+
+            if (allAnswered) {
+                updateResults();
+                document.getElementById('results').classList.add('show');
+                setTimeout(() => {
+                    document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+                }, 100);
+            }
+        }
+
+        function calculateScore() {
+            return answers.filter(answer => answer === true).length;
+        }
+
+        function getInterpretation(score) {
+            if (score < 4) return {
+                level: "Tout va bien !",
+                className: "low",
+                description: "Tu sembles aller plutôt bien en ce moment. Continue comme ça !",
+                recommendations: [
+                    "Continue à prendre soin de toi (sport, sommeil, amis)",
+                    "Garde tes activités qui te font du bien",
+                    "Reste connecté(e) avec tes potes",
+                    "Si ça change, n'hésite pas à en parler"
+                ]
+            };
+            if (score < 8) return {
+                level: "Attention, ça tangue",
+                className: "moderate",
+                description: "Tu traverses peut-être une période difficile. C'est important d'en parler.",
+                recommendations: [
+                    "Parle à quelqu'un en qui tu as confiance (parent, prof, pote)",
+                    "Tu peux consulter l'infirmier(e) scolaire ou un psy",
+                    "Force-toi un peu à faire des trucs même sans motivation",
+                    "Écris ce que tu ressens dans un journal",
+                    "Appelle le Fil Santé Jeunes : 0 800 235 236 (anonyme et gratuit)"
+                ]
+            };
+            return {
+                level: "Alerte rouge",
+                className: "high",
+                description: "Tu ne vas vraiment pas bien. Il faut absolument que tu demandes de l'aide maintenant.",
+                recommendations: [
+                    "Parle AUJOURD'HUI à un adulte de confiance",
+                    "Appelle le 3114 maintenant si tu as des idées noires",
+                    "Va voir ton médecin ou aux urgences si nécessaire",
+                    "Fil Santé Jeunes : 0 800 235 236 pour parler",
+                    "Tu n'es pas seul(e), des gens veulent t'aider",
+                    "Ne reste surtout pas seul(e) avec ça"
+                ]
+            };
+        }
+
+        function updateResults() {
+            const score = calculateScore();
+            const interpretation = getInterpretation(score);
+
+            document.getElementById('totalScore').textContent = score;
+
+            const scoreCircle = document.getElementById('scoreCircle');
+            scoreCircle.className = `score-circle ${interpretation.className}`;
+
+            const interpretationBox = document.getElementById('interpretationBox');
+            interpretationBox.className = `interpretation ${interpretation.className}`;
+            interpretationBox.innerHTML = `
+                <h3 style="margin-bottom: 15px; font-size: 1.5rem;">${interpretation.level}</h3>
+                <p style="font-size: 1.1rem; line-height: 1.6;">${interpretation.description}</p>
+            `;
+
+            const recommendationsList = document.getElementById('recommendations');
+            recommendationsList.innerHTML = interpretation.recommendations
+                .map(rec => `<li>${rec}</li>`)
+                .join('');
+
+            // Alerte spéciale si question 6 est "VRAI"
+            if (answers[5] === true) {
+                const alertBox = document.createElement('div');
+                alertBox.style.cssText = `
+                    background: linear-gradient(145deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1));
+                    border: 2px solid rgba(239, 68, 68, 0.5);
+                    color: #f87171;
+                    padding: 25px;
+                    border-radius: 12px;
+                    margin: 30px 0;
+                    text-align: center;
+                    font-weight: bold;
+                    font-size: 1.2em;
+                `;
+                alertBox.innerHTML = `
+                    <i class="fas fa-heart-broken"></i> TU AS DES IDEES NOIRES <i class="fas fa-heart-broken"></i><br>
+                    <span style="font-size: 1.5em; display: block; margin: 15px 0;">Appelle le 3114 MAINTENANT</span>
+                    C'est gratuit, 24h/7j, et ça peut sauver ta vie
+                `;
+                interpretationBox.insertAdjacentElement('afterend', alertBox);
+            }
+        }
+
+        function resetForm() {
+            answers = new Array(10).fill(null);
+
+            // Reset UI
+            document.querySelectorAll('.answer-btn').forEach(btn => {
+                btn.classList.remove('selected', 'true', 'false');
+            });
+
+            document.getElementById('progressBar').style.width = '0%';
+            document.getElementById('progressText').textContent = '0/10 questions';
+            document.getElementById('progressBarFixed').style.width = '0%';
+            document.getElementById('progressTextFixed').textContent = '0/10';
+            document.getElementById('progressFixed').classList.remove('show');
+            document.getElementById('results').classList.remove('show');
+            document.getElementById('exportConsent').checked = false;
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function importData() {
+            document.getElementById('fileInput').click();
+        }
+
+        function loadFile(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        if (data.answers && Array.isArray(data.answers)) {
+                            answers = data.answers;
+                            answers.forEach((value, index) => {
+                                if (value !== null) {
+                                    selectAnswer(index, value);
+                                }
+                            });
+                        }
+                    } catch (error) {
+                        alert("Erreur lors de l'importation du fichier");
+                    }
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        function exportData() {
+            const consent = document.getElementById('exportConsent').checked;
+            if (!consent) {
+                alert("Tu dois accepter avant de télécharger tes résultats !");
+                return;
+            }
+
+            const score = calculateScore();
+            const interpretation = getInterpretation(score);
+
+            const data = {
+                questionnaire: "ADRS",
+                date: new Date().toISOString(),
+                answers: answers,
+                score: score,
+                interpretation: interpretation.level,
+                criticalQuestionAlert: answers[5] === true
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ADRS_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeQuestions();
+
+            // Handle fixed progress bar visibility
+            let progressBarElement = document.querySelector('.progress-container');
+            let fixedProgressBar = document.getElementById('progressFixed');
+
+            window.addEventListener('scroll', function() {
+                const answeredCount = answers.filter(a => a !== null).length;
+                // Only show fixed progress if questions have been started and regular bar is out of view
+                if (progressBarElement && answeredCount > 0) {
+                    const rect = progressBarElement.getBoundingClientRect();
+                    if (rect.bottom < 0) {
+                        fixedProgressBar.classList.add('show');
+                    } else {
+                        fixedProgressBar.classList.remove('show');
+                    }
+                }
+            });
+        });
+
+        function printResults() {
+            const resultsSection = document.getElementById('resultsSection');
+            if (resultsSection) {
+                resultsSection.style.display = 'block';
+            }
+            window.print();
+        }
+    </script>
+</body>
+</html>

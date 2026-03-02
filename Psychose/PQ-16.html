@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PQ-16 - Questionnaire Prodromal</title>
+
+    <!-- Font Awesome pour les icônes -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Styles partagés -->
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <style>
+        :root {
+            --cat-main: #7c3aed;
+            --cat-dark: #6d28d9;
+            --cat-light: #a78bfa;
+            --cat-rgb: 124, 58, 237;
+            --cat-readable: #6d28d9;
+        }
+        .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
+        .option-btn.selected, .answer-btn.selected { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        .score-circle { border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 30px rgba(var(--cat-rgb), 0.2); }
+        .score-value { color: var(--cat-light); }
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-light); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+        .progress-fill { background: linear-gradient(90deg, var(--cat-main), var(--cat-light)); box-shadow: 0 0 8px rgba(var(--cat-rgb), 0.4); }
+        .likert-options input[type="radio"]:checked + label,
+        .binary-options input[type="radio"]:checked + label,
+        .radio-options input[type="radio"]:checked + label { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        /* Progress bar */
+        .progress-tracker {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.25rem;
+            background: var(--surface-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            margin-bottom: 1rem;
+        }
+        .progress-tracker-bar {
+            flex: 1;
+            height: 0.5rem;
+            background: var(--surface-input);
+            border-radius: 9999px;
+            overflow: hidden;
+        }
+        .progress-tracker-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--cat-main), var(--cat-light));
+            border-radius: 9999px;
+            transition: width 0.4s ease;
+            width: 0%;
+        }
+        .progress-tracker-text {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-text-muted);
+            white-space: nowrap;
+        }
+        /* Threshold note */
+        .threshold-note {
+            margin-top: 0.75rem;
+            padding: 0.625rem 1rem;
+            background: rgba(var(--cat-rgb), 0.06);
+            border: 1px solid rgba(var(--cat-rgb), 0.15);
+            border-radius: var(--radius-md);
+            font-size: 0.8rem;
+            color: var(--color-text-muted);
+            font-style: italic;
+        }
+    </style>
+
+</head>
+<body class="light-questionnaire">
+    <!-- Navigation -->
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil">
+                <i class="fas fa-home"></i>
+            </a>
+            <button onclick="goBack()" class="btn-back" title="Retour">
+                <i class="fas fa-arrow-left"></i> <span>Retour</span>
+            </button>
+        </div>
+        <h1>PQ-16</h1>
+        <span class="badge badge-cat-psychose">Psychose</span>
+    </nav>
+
+    <div class="container">
+        <!-- En-tête -->
+        <header class="glass-card" style="text-align: center; margin-bottom: 1.5rem;">
+            <h2 class="gradient-text">Prodromal Questionnaire-16</h2>
+            <p>Questionnaire de dépistage des états prodromiques de psychose - 16 items</p>
+        </header>
+
+        <!-- Informations -->
+        <section class="info-box">
+            <h3><i class="fas fa-info-circle"></i> À propos de ce questionnaire</h3>
+            <p>Le PQ-16 est un outil de dépistage validé pour identifier les personnes à risque de développer un trouble psychotique. Il évalue les <strong>expériences perceptuelles inhabituelles</strong>, les <strong>idées de référence</strong> et d'autres symptômes prodromiques.</p>
+            <p style="margin-top: 0.5rem;">Pour chaque item, indiquez si vous avez vécu cette expérience (Vrai/Faux). Si "Vrai", précisez le niveau de détresse associé.</p>
+        </section>
+
+        <!-- Avertissement -->
+        <section class="warning-box">
+            <h3><i class="fas fa-exclamation-triangle"></i> Avertissements importants</h3>
+            <ul style="margin: 0; padding-left: 1.5rem;">
+                <li>Ce questionnaire est un <strong>outil de dépistage</strong>, pas un diagnostic</li>
+                <li>Un résultat positif nécessite une évaluation clinique approfondie par un spécialiste</li>
+                <li>Les expériences évaluées peuvent être présentes dans la population générale sans signification pathologique</li>
+                <li>En cas d'inquiétude, consultez un professionnel de santé mentale</li>
+            </ul>
+        </section>
+
+        <!-- Note clinique -->
+        <section class="clinical-note">
+            <h3><i class="fas fa-stethoscope"></i> Note clinique importante</h3>
+            <p>Le PQ-16 est conçu pour le <strong>dépistage</strong> des états mentaux à risque (Ultra High Risk - UHR). Un dépistage positif ne signifie pas nécessairement qu'une personne développera une psychose.</p>
+            <ul style="margin: 0.5rem 0 0; padding-left: 1.5rem;">
+                <li><strong>Population cible :</strong> validé pour les personnes âgées de <strong>14 à 35 ans</strong> (Ising et al., 2012). Son utilisation en dehors de cette tranche d'âge n'a pas été validée.</li>
+                <li>Sensibilité élevée pour détecter les personnes à risque</li>
+                <li>Un résultat positif doit être suivi d'une évaluation structurée (ex: CAARMS, SIPS)</li>
+                <li>L'intervention précoce peut significativement améliorer le pronostic</li>
+            </ul>
+        </section>
+
+        <!-- Contrôles -->
+        <section class="glass-card">
+            <div class="control-buttons">
+                <button class="btn-secondary" onclick="importData()">
+                    <i class="fas fa-file-import"></i> Importer
+                </button>
+                <button class="btn-secondary" onclick="resetForm()">
+                    <i class="fas fa-redo"></i> Réinitialiser
+                </button>
+            </div>
+            <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="loadFile(event)">
+        </section>
+
+        <!-- Instructions -->
+        <section class="glass-card">
+            <h3 style="margin-bottom: 1rem;">Veuillez indiquer si vous avez vécu les expériences suivantes. Si oui, précisez à quel point cela a été pénible pour vous.</h3>
+
+            <!-- Barre de progression -->
+            <div class="progress-tracker">
+                <span class="progress-tracker-text" id="progressText">0 / 16</span>
+                <div class="progress-tracker-bar">
+                    <div class="progress-tracker-fill" id="progressFill"></div>
+                </div>
+            </div>
+
+            <!-- Questions générées par JS -->
+            <div id="questions"></div>
+        </section>
+
+        <!-- Résultats -->
+        <section id="results" class="results-section" style="display: none;">
+            <h2 style="text-align: center; margin-bottom: 2rem;">
+                <i class="fas fa-chart-bar"></i> Résultats du dépistage
+            </h2>
+
+            <div class="scores-container">
+                <div class="score-box">
+                    <div class="score-circle">
+                        <span class="score-value" id="totalScore">0</span>
+                    </div>
+                    <p class="score-title">Score total (items positifs)</p>
+                    <p class="score-max">sur 16 points</p>
+                </div>
+                <div class="score-box">
+                    <div class="score-circle" style="background: linear-gradient(135deg, #a78bfa, #8b5cf6);">
+                        <span class="score-value" id="distressScore">0</span>
+                    </div>
+                    <p class="score-title">Score de détresse</p>
+                    <p class="score-max">sur 48 points</p>
+                </div>
+            </div>
+
+            <div id="interpretationBox" class="interpretation"></div>
+
+            <button class="btn-primary w-full" onclick="toggleDetails()" style="margin-top: 1.5rem;">
+                <i class="fas fa-list"></i> Voir les détails et recommandations
+                <span id="toggleIcon"><i class="fas fa-chevron-down"></i></span>
+            </button>
+
+            <div id="detailsContent" class="glass-card" style="display: none; margin-top: 1rem;"></div>
+
+            <!-- Export -->
+            <div class="glass-card" style="margin-top: 2rem;">
+                <h3><i class="fas fa-download"></i> Exporter les résultats</h3>
+                <div class="consent-box">
+                    <label>
+                        <input type="checkbox" id="exportConsent">
+                        <span>Je souhaite télécharger mes résultats (questionnaire, réponses, score et date) dans un fichier JSON sur mon appareil. <strong>Ces résultats constituent des données de santé — je m'engage à les conserver de façon sécurisée et à ne les partager qu'avec un professionnel de santé de mon choix.</strong> Aucune donnée n'est transmise à un serveur.</span>
+                    </label>
+                </div>
+                <div class="export-buttons">
+                    <button class="btn-primary" onclick="exportData()">
+                        <i class="fas fa-file-export"></i> Exporter en JSON
+                    </button>
+                    <button class="btn-print" onclick="printResults()">
+                        <i class="fas fa-print"></i> Imprimer
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p><strong>PQ-16 - Prodromal Questionnaire-16</strong></p>
+        <p>Ising, H. K., Veling, W., Loewy, R. L., et al. (2012). The validity of the 16-item version of the Prodromal Questionnaire (PQ-16) to screen for ultra high risk of developing psychosis in the general help-seeking population. <em>Schizophrenia Research</em>, 136(1-3), 128–136. <a href="https://doi.org/10.1016/j.schres.2012.01.006" target="_blank">doi:10.1016/j.schres.2012.01.006</a></p>
+        <p>Loewy, R. L., Bearden, C. E., Johnson, J. K., Raine, A., & Cannon, T. D. (2005). The prodromal questionnaire (PQ): Preliminary validation of a self-report screening measure for prodromal and psychotic syndromes. <em>Schizophrenia Research</em>, 79(1), 117–125. <a href="https://doi.org/10.1016/j.schres.2005.03.007" target="_blank">doi:10.1016/j.schres.2005.03.007</a></p>
+        <p style="margin-top: 0.5rem;">Adaptation numérique : Dr FENOHASINA Toto Jean Félicien (Psychiatre - FFI)</p>
+        <p style="margin-top: 0.5rem;">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr" target="_blank">
+                Licence CC BY-NC-SA 4.0
+            </a>
+        </p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../js/app.js"></script>
+    <script>
+        // --- BOUTON RETOUR AVEC FALLBACK ---
+        function goBack() {
+            if (window.history.length > 1) {
+                history.back();
+            } else {
+                location.href = 'Page_d_accueil.html';
+            }
+        }
+
+        const questions = [
+            "Je me sens mal à l'aise avec des gens que je ne connais pas",
+            "Je pense parfois que des choses ordinaires ont une signification particulière pour moi personnellement",
+            "J'ai l'impression que mes pensées sont comme assourdies ou embrouillées",
+            "Je me sens souvent incompris ou traité injustement",
+            "J'ai l'impression d'avoir des pouvoirs ou des capacités spéciales que les autres n'ont pas",
+            "Les gens me semblent parfois étranges ou différents",
+            "J'ai parfois l'impression que mes pensées ne m'appartiennent pas",
+            "J'ai l'impression que d'autres personnes peuvent lire mes pensées ou savoir ce que je pense",
+            "J'ai parfois l'impression que des voix me parlent ou parlent de moi",
+            "Je vois parfois des choses inhabituelles comme des flashes, des flammes, des figures ou des ombres quand il n'y a rien",
+            "J'ai parfois l'impression que des gens me suivent ou m'espionnent",
+            "J'ai des difficultés à organiser mes pensées",
+            "J'ai parfois l'impression qu'il m'arrive des choses bizarres ou inhabituelles",
+            "Des pensées très inhabituelles me traversent parfois l'esprit",
+            "Parfois j'ai l'impression que mon corps a changé d'une façon que je ne peux pas expliquer",
+            "Je me sens parfois très fatigué ou je n'ai pas d'énergie pendant des jours d'affilée sans raison apparente"
+        ];
+
+        const mainOptions = [
+            { value: 1, label: "Vrai" },
+            { value: 0, label: "Faux" }
+        ];
+
+        const distressOptions = [
+            { value: 0, label: "Pas du tout pénible" },
+            { value: 1, label: "Un peu pénible" },
+            { value: 2, label: "Assez pénible" },
+            { value: 3, label: "Très pénible" }
+        ];
+
+        // Réponses: null = non répondu, 0 = Faux, 1 = Vrai
+        let answers = new Array(16).fill(null);
+        // Scores de détresse (0-3) pour chaque item, null si non applicable
+        let distressScores = new Array(16).fill(null);
+
+        function initializeQuestions() {
+            const container = document.getElementById('questions');
+            container.innerHTML = '';
+
+            questions.forEach((question, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-card';
+                questionDiv.id = `question-${index}`;
+
+                questionDiv.innerHTML = `
+                    <div style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem;">
+                        <span class="question-number">${index + 1}</span>
+                        <span class="question-text" id="qlabel-${index}" style="margin-bottom: 0;">${question}</span>
+                    </div>
+                    <div class="options-grid binary-options" role="group" aria-labelledby="qlabel-${index}">
+                        ${mainOptions.map(opt => `
+                            <button class="option-btn ${opt.value === 1 ? 'yes' : 'no'}"
+                                    onclick="selectAnswer(${index}, ${opt.value})"
+                                    id="q${index}_opt${opt.value}"
+                                    aria-pressed="false"
+                                    aria-label="${opt.label} — ${question}">
+                                ${opt.label}
+                            </button>
+                        `).join('')}
+                    </div>
+                    <div class="distress-section" id="distress-${index}" aria-hidden="true">
+                        <span class="distress-label"><i class="fas fa-heart-broken"></i> À quel point cette expérience a-t-elle été pénible pour vous ?</span>
+                        <div class="distress-options" role="group" aria-label="Niveau de détresse pour l'item ${index + 1}">
+                            ${distressOptions.map(opt => `
+                                <button class="distress-btn"
+                                        onclick="selectDistress(${index}, ${opt.value})"
+                                        id="d${index}_opt${opt.value}"
+                                        aria-pressed="false">
+                                    <strong>${opt.value}</strong> - ${opt.label}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function selectAnswer(questionIndex, value) {
+            answers[questionIndex] = value;
+
+            // Mettre à jour l'affichage des boutons principaux
+            mainOptions.forEach(opt => {
+                const btn = document.getElementById(`q${questionIndex}_opt${opt.value}`);
+                btn.classList.toggle('selected', opt.value === value);
+                btn.setAttribute('aria-pressed', String(opt.value === value));
+            });
+
+            // Marquer la carte comme répondue
+            const card = document.getElementById(`question-${questionIndex}`);
+            card.classList.add('answered');
+
+            // Afficher/masquer la section détresse
+            const distressSection = document.getElementById(`distress-${questionIndex}`);
+            if (value === 1) {
+                distressSection.classList.add('visible');
+                distressSection.setAttribute('aria-hidden', 'false');
+            } else {
+                distressSection.classList.remove('visible');
+                distressSection.setAttribute('aria-hidden', 'true');
+                // Réinitialiser le score de détresse si Faux
+                distressScores[questionIndex] = null;
+                distressOptions.forEach(opt => {
+                    const btn = document.getElementById(`d${questionIndex}_opt${opt.value}`);
+                    btn.classList.remove('selected');
+                    btn.setAttribute('aria-pressed', 'false');
+                });
+            }
+
+            updateProgress();
+            checkCompletion();
+        }
+
+        function selectDistress(questionIndex, value) {
+            distressScores[questionIndex] = value;
+
+            // Mettre à jour l'affichage des boutons de détresse
+            distressOptions.forEach(opt => {
+                const btn = document.getElementById(`d${questionIndex}_opt${opt.value}`);
+                btn.classList.toggle('selected', opt.value === value);
+                btn.setAttribute('aria-pressed', String(opt.value === value));
+            });
+
+            updateProgress();
+            checkCompletion();
+        }
+
+        function updateProgress() {
+            // Compter les questions complètement répondues
+            let answered = 0;
+            for (let i = 0; i < 16; i++) {
+                if (answers[i] === 0) {
+                    answered++;
+                } else if (answers[i] === 1 && distressScores[i] !== null) {
+                    answered++;
+                }
+            }
+            const pct = Math.round((answered / 16) * 100);
+            document.getElementById('progressFill').style.width = pct + '%';
+            document.getElementById('progressText').textContent = answered + ' / 16';
+        }
+
+        function checkCompletion() {
+            // Vérifier que toutes les questions principales sont répondues
+            const allMainAnswered = answers.every(a => a !== null);
+
+            // Vérifier que toutes les questions "Vrai" ont un score de détresse
+            let allDistressAnswered = true;
+            for (let i = 0; i < 16; i++) {
+                if (answers[i] === 1 && distressScores[i] === null) {
+                    allDistressAnswered = false;
+                    break;
+                }
+            }
+
+            if (allMainAnswered && allDistressAnswered) {
+                updateResults();
+                document.getElementById('results').style.display = 'block';
+                document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function calculateScores() {
+            // Score total = nombre de "Vrai"
+            const totalScore = answers.filter(a => a === 1).length;
+
+            // Score de détresse = somme des scores de détresse pour les items "Vrai"
+            let distressTotal = 0;
+            for (let i = 0; i < 16; i++) {
+                if (answers[i] === 1 && distressScores[i] !== null) {
+                    distressTotal += distressScores[i];
+                }
+            }
+
+            return { totalScore, distressTotal };
+        }
+
+        function getInterpretation(totalScore, distressTotal) {
+            // Seuil positif: >=6 items positifs OU score détresse >=9
+            const isPositive = totalScore >= 6 || distressTotal >= 9;
+
+            if (!isPositive) {
+                return {
+                    level: "Dépistage négatif",
+                    className: "low",
+                    description: "Le dépistage ne suggère pas de risque élevé d'état mental à risque de psychose.",
+                    action: "Pas d'évaluation spécialisée nécessaire sur la base de ce questionnaire seul. Cependant, en cas de symptômes préoccupants, une consultation reste recommandée.",
+                    criteria: "Score total < 6 ET score de détresse < 9"
+                };
+            }
+
+            // Déterminer le niveau de positivité
+            if (totalScore >= 10 || distressTotal >= 20) {
+                return {
+                    level: "Dépistage fortement positif",
+                    className: "critical",
+                    description: "Le dépistage suggère un risque significatif d'état mental à risque de psychose.",
+                    action: "Une évaluation clinique approfondie par un spécialiste est fortement recommandée. Envisager une orientation vers un centre spécialisé dans l'intervention précoce.",
+                    criteria: totalScore >= 10 ? `Score total élevé (${totalScore}/16)` : `Score de détresse élevé (${distressTotal}/48)`
+                };
+            }
+
+            return {
+                level: "Dépistage positif",
+                className: "moderate",
+                description: "Le dépistage suggère un possible état mental à risque nécessitant une évaluation complémentaire.",
+                action: "Une évaluation clinique plus approfondie est recommandée pour clarifier la signification de ces expériences.",
+                criteria: totalScore >= 6 ? `Score total >= 6 (${totalScore}/16)` : `Score de détresse >= 9 (${distressTotal}/48)`
+            };
+        }
+
+        function getRecommendations(totalScore, distressTotal) {
+            const isPositive = totalScore >= 6 || distressTotal >= 9;
+
+            const recommendations = [];
+
+            if (isPositive) {
+                recommendations.push({
+                    title: "Évaluation structurée",
+                    description: "Réaliser une évaluation complète avec un instrument validé (CAARMS, SIPS) pour confirmer ou infirmer un état mental à risque."
+                });
+                recommendations.push({
+                    title: "Évaluation du fonctionnement",
+                    description: "Évaluer l'impact sur le fonctionnement social, scolaire/professionnel et familial."
+                });
+                recommendations.push({
+                    title: "Recherche de comorbidités",
+                    description: "Dépister les troubles anxieux, dépressifs, et l'usage de substances (cannabis notamment)."
+                });
+                recommendations.push({
+                    title: "Suivi rapproché",
+                    description: "Mettre en place un suivi régulier pour surveiller l'évolution des symptômes."
+                });
+            }
+
+            if (totalScore >= 10 || distressTotal >= 20) {
+                recommendations.push({
+                    title: "Orientation spécialisée",
+                    description: "Envisager une orientation vers un centre d'intervention précoce pour les psychoses (CLIP, C3RP, etc.)."
+                });
+                recommendations.push({
+                    title: "Intervention précoce",
+                    description: "Les interventions psychosociales et le soutien peuvent réduire significativement le risque de transition vers la psychose."
+                });
+            }
+
+            if (!isPositive) {
+                recommendations.push({
+                    title: "Surveillance",
+                    description: "Bien que le dépistage soit négatif, rester attentif à l'apparition de nouveaux symptômes."
+                });
+                recommendations.push({
+                    title: "Facteurs de risque",
+                    description: "Évaluer les facteurs de risque environnementaux (stress, isolement, usage de substances)."
+                });
+            }
+
+            return recommendations;
+        }
+
+        function getPositiveItems() {
+            const positiveItems = [];
+            for (let i = 0; i < 16; i++) {
+                if (answers[i] === 1) {
+                    positiveItems.push({
+                        number: i + 1,
+                        text: questions[i],
+                        distress: distressScores[i]
+                    });
+                }
+            }
+            return positiveItems;
+        }
+
+        function updateResults() {
+            const { totalScore, distressTotal } = calculateScores();
+            const interpretation = getInterpretation(totalScore, distressTotal);
+            const recommendations = getRecommendations(totalScore, distressTotal);
+            const positiveItems = getPositiveItems();
+
+            document.getElementById('totalScore').textContent = totalScore;
+            document.getElementById('distressScore').textContent = distressTotal;
+
+            const interpretationBox = document.getElementById('interpretationBox');
+            interpretationBox.className = `interpretation ${interpretation.className}`;
+            let interpretationHTML = `
+                <h3>${interpretation.level}</h3>
+                <p><strong>Critère atteint :</strong> ${interpretation.criteria}</p>
+                <p><strong>Interprétation :</strong> ${interpretation.description}</p>
+                <p><strong>Recommandation :</strong> ${interpretation.action}</p>
+            `;
+            if (interpretation.className === 'critical') {
+                interpretationHTML += `
+                    <div class="threshold-note">
+                        <i class="fas fa-info-circle"></i> Les seuils de dépistage « fortement positif » (≥ 10 items ou ≥ 20 détresse) sont une interprétation clinique ajoutée et ne sont pas issus de la validation originale d'Ising et al. (2012), qui définit un seuil binaire (positif / négatif).
+                    </div>
+                `;
+            }
+            interpretationBox.innerHTML = interpretationHTML;
+
+            const detailsContent = document.getElementById('detailsContent');
+            let detailsHTML = '';
+
+            // Items positifs
+            if (positiveItems.length > 0) {
+                detailsHTML += `
+                    <h3 style="margin-bottom: 1rem;"><i class="fas fa-check-circle" style="color: #a78bfa;"></i> Items positifs (${positiveItems.length}/16)</h3>
+                    <div style="margin-bottom: 1.5rem;">
+                        ${positiveItems.map(item => `
+                            <div class="info-box" style="margin-bottom: 0.75rem; padding: 1rem;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
+                                    <div>
+                                        <strong style="color: var(--color-primary-light);">Item ${item.number}</strong>
+                                        <p style="margin: 0.25rem 0 0;">${item.text}</p>
+                                    </div>
+                                    <span class="badge badge-warning" style="white-space: nowrap;">
+                                        Détresse: ${item.distress}/3
+                                    </span>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            // Recommandations
+            if (recommendations.length > 0) {
+                detailsHTML += `
+                    <h3 style="margin-bottom: 1rem;"><i class="fas fa-clipboard-list" style="color: #a78bfa;"></i> Recommandations</h3>
+                    ${recommendations.map(rec => `
+                        <div class="info-box" style="margin-bottom: 0.75rem;">
+                            <h4 style="color: var(--color-primary-light); margin-bottom: 0.5rem;">${rec.title}</h4>
+                            <p style="margin: 0;">${rec.description}</p>
+                        </div>
+                    `).join('')}
+                `;
+            }
+
+            // Rappel important
+            detailsHTML += `
+                <div class="warning-box" style="margin-top: 1.5rem; margin-bottom: 0;">
+                    <h3><i class="fas fa-info-circle"></i> Rappel important</h3>
+                    <p style="margin: 0;">Ce questionnaire est un outil de <strong>dépistage</strong>. Un résultat positif ne constitue pas un diagnostic et nécessite une évaluation clinique complète par un professionnel qualifié. De nombreuses personnes présentant des expériences positives au PQ-16 ne développeront jamais de trouble psychotique.</p>
+                </div>
+            `;
+
+            detailsContent.innerHTML = detailsHTML;
+        }
+
+        function toggleDetails() {
+            const content = document.getElementById('detailsContent');
+            const icon = document.getElementById('toggleIcon');
+            const isVisible = content.style.display !== 'none';
+
+            content.style.display = isVisible ? 'none' : 'block';
+            icon.innerHTML = isVisible ? '<i class="fas fa-chevron-down"></i>' : '<i class="fas fa-chevron-up"></i>';
+        }
+
+        function resetForm() {
+            answers = new Array(16).fill(null);
+            distressScores = new Array(16).fill(null);
+
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                btn.classList.remove('selected');
+                btn.setAttribute('aria-pressed', 'false');
+            });
+            document.querySelectorAll('.distress-btn').forEach(btn => {
+                btn.classList.remove('selected');
+                btn.setAttribute('aria-pressed', 'false');
+            });
+            document.querySelectorAll('.question-card').forEach(card => card.classList.remove('answered'));
+            document.querySelectorAll('.distress-section').forEach(section => {
+                section.classList.remove('visible');
+                section.setAttribute('aria-hidden', 'true');
+            });
+
+            // Réinitialiser la barre de progression
+            document.getElementById('progressFill').style.width = '0%';
+            document.getElementById('progressText').textContent = '0 / 16';
+
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('detailsContent').style.display = 'none';
+            document.getElementById('exportConsent').checked = false;
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function importData() {
+            document.getElementById('fileInput').click();
+        }
+
+        function loadFile(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        if (data.answers && Array.isArray(data.answers)) {
+                            answers = data.answers;
+                            distressScores = data.distressScores || new Array(16).fill(null);
+
+                            answers.forEach((value, index) => {
+                                if (value !== null) {
+                                    selectAnswer(index, value);
+                                    if (value === 1 && distressScores[index] !== null) {
+                                        selectDistress(index, distressScores[index]);
+                                    }
+                                }
+                            });
+                        }
+                    } catch (error) {
+                        alert("Erreur lors de l'importation du fichier");
+                    }
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        function exportData() {
+            const consent = document.getElementById('exportConsent').checked;
+            if (!consent) {
+                alert("Veuillez cocher la case de consentement avant d''exporter.");
+                return;
+            }
+
+            const { totalScore, distressTotal } = calculateScores();
+            const interpretation = getInterpretation(totalScore, distressTotal);
+            const positiveItems = getPositiveItems();
+
+            const data = {
+                questionnaire: "PQ-16",
+                date: new Date().toISOString(),
+                answers: answers,
+                distressScores: distressScores,
+                scores: {
+                    total: totalScore,
+                    distress: distressTotal
+                },
+                interpretation: interpretation.level,
+                positiveItems: positiveItems.map(item => ({
+                    number: item.number,
+                    distress: item.distress
+                }))
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `PQ16_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeQuestions();
+        });
+    </script>
+</body>
+</html>

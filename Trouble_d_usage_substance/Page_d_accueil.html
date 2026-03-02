@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Troubles d'Usage de Substance — Questionnaires &amp; Ressources</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .portal-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+        gap: 1.25rem;
+    }
+    .portal-card {
+        background: linear-gradient(145deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-xl);
+        padding: 1.5rem;
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        transition: all var(--transition-slow);
+    }
+    .portal-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--color-border-active);
+        box-shadow: var(--shadow-glow);
+    }
+    .portal-card h3 { color: var(--color-text-primary); margin-bottom: 0.35rem; font-size: 1.1rem; }
+    .portal-card .card-subtitle {
+        color: var(--color-text-muted);
+        font-size: 0.8rem;
+        font-style: italic;
+        margin-bottom: 0.75rem;
+    }
+    .portal-card .card-description {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 0.85rem;
+        border-radius: var(--radius-md);
+        margin-bottom: 1rem;
+        border: 1px solid var(--color-border);
+        flex-grow: 1;
+    }
+    .portal-card .card-description p { color: var(--color-text-muted); font-size: 0.85rem; }
+    .portal-card .btn-start {
+        display: inline-block;
+        padding: 0.5rem 1.1rem;
+        border-radius: var(--radius-md);
+        font-weight: 600;
+        font-size: 0.875rem;
+        text-align: center;
+        transition: all var(--transition-normal);
+        text-decoration: none;
+        color: white;
+        align-self: flex-start;
+    }
+
+    /* Sections */
+    .section-block { margin-bottom: 2.5rem; }
+    .section-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.45rem 1rem;
+        border-radius: var(--radius-lg);
+        font-weight: 700;
+        font-size: 1rem;
+        margin-bottom: 1rem;
+        color: white;
+    }
+    .section-desc {
+        color: var(--color-text-muted);
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+        padding-left: 0.25rem;
+    }
+
+    /* Resources cards (non questionnaire) */
+    .resource-card {
+        background: linear-gradient(145deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.7));
+        border: 1px dashed rgba(148, 163, 184, 0.3);
+        border-radius: var(--radius-xl);
+        padding: 1.5rem;
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        transition: all var(--transition-slow);
+    }
+    .resource-card:hover {
+        transform: translateY(-4px);
+        border-style: solid;
+        border-color: rgba(148, 163, 184, 0.5);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    .resource-card h3 { color: var(--color-text-primary); margin-bottom: 0.35rem; font-size: 1rem; }
+    .resource-card p { color: var(--color-text-muted); font-size: 0.83rem; }
+    .resource-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        color: white;
+        margin-bottom: 0.9rem;
+    }
+    .badge-new {
+        display: inline-block;
+        padding: 0.1rem 0.5rem;
+        background: #22c55e;
+        color: white;
+        border-radius: 9999px;
+        font-size: 0.68rem;
+        font-weight: 700;
+        margin-left: 0.4rem;
+        vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navigation-bar">
+    <div class="nav-buttons">
+        <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+        <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+    </div>
+    <h1>Troubles d'Usage de Substance</h1>
+    <span class="badge badge-cat-substance">Substance</span>
+  </nav>
+
+  <div class="container">
+
+    <header class="page-header">
+      <p class="subtitle">
+        Questionnaires validés de dépistage et ressources cliniques pour l'évaluation et la prise en charge des conduites addictives.
+      </p>
+    </header>
+
+    <div class="alert alert-warning">
+      <div class="alert-icon"><i class="fas fa-exclamation-triangle"></i></div>
+      <div class="alert-content">
+        <h3>Avertissement Important</h3>
+        <p>Ces outils sont des questionnaires de dépistage et ne constituent pas un diagnostic. Seul un professionnel de santé qualifié peut poser un diagnostic et recommander un traitement.</p>
+      </div>
+    </div>
+
+    <!-- ===== ALCOOL ===== -->
+    <div class="section-block">
+      <div class="section-badge" style="background: linear-gradient(135deg, #3b82f6, #2563eb);">
+        <i class="fas fa-wine-glass-alt"></i> Alcool
+      </div>
+      <p class="section-desc">Évaluation de la consommation d'alcool, dépistage des usages à risque et dépendance.</p>
+      <div class="portal-grid">
+
+        <a href="AUDIT.html" class="portal-card">
+          <h3>AUDIT <span class="badge-new">Référence OMS</span></h3>
+          <p class="card-subtitle">Alcohol Use Disorders Identification Test — 10 questions</p>
+          <div class="card-description">
+            <p>Questionnaire de référence de l'OMS pour identifier les consommations d'alcool à risque, nocives ou avec dépendance. Validé dans de nombreuses cultures. Score 0–40.</p>
+          </div>
+          <span class="btn-start" style="background: #2563eb;">Commencer &rarr;</span>
+        </a>
+
+        <a href="AUDIT-C.html" class="portal-card">
+          <h3>AUDIT-C</h3>
+          <p class="card-subtitle">AUDIT version courte — 3 questions</p>
+          <div class="card-description">
+            <p>Version abrégée de l'AUDIT en 3 items. Dépistage rapide (&lt;1 min). Seuils différenciés selon le sexe. Idéal pour la médecine générale et les consultations brèves.</p>
+          </div>
+          <span class="btn-start" style="background: #3b82f6;">Commencer &rarr;</span>
+        </a>
+
+      </div>
+    </div>
+
+    <!-- ===== CANNABIS ===== -->
+    <div class="section-block">
+      <div class="section-badge" style="background: linear-gradient(135deg, #10b981, #059669);">
+        <i class="fas fa-leaf"></i> Cannabis
+      </div>
+      <p class="section-desc">Dépistage d'un usage problématique du cannabis chez l'adulte.</p>
+      <div class="portal-grid">
+
+        <a href="CAST.html" class="portal-card">
+          <h3>CAST</h3>
+          <p class="card-subtitle">Cannabis Abuse Screening Test — 6 questions</p>
+          <div class="card-description">
+            <p>Outil de dépistage validé en France (Legleye, 2003). 6 items de fréquence. Score binaire ≥ 3 = usage problématique (Se 88%, Sp 88%). Recommandé en épidémiologie et consultation.</p>
+          </div>
+          <span class="btn-start" style="background: #059669;">Commencer &rarr;</span>
+        </a>
+
+      </div>
+    </div>
+
+    <!-- ===== DROGUES & POLYSUBSTANCES ===== -->
+    <div class="section-block">
+      <div class="section-badge" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+        <i class="fas fa-capsules"></i> Drogues &amp; Polysubstances
+      </div>
+      <p class="section-desc">Évaluation tous types de substances (hors alcool et tabac évalués séparément).</p>
+      <div class="portal-grid">
+
+        <a href="DAST-10.html" class="portal-card">
+          <h3>DAST-10</h3>
+          <p class="card-subtitle">Drug Abuse Screening Test — 10 questions</p>
+          <div class="card-description">
+            <p>Dépistage validé des troubles liés aux drogues (hors alcool et tabac) sur les 12 derniers mois. 10 questions Oui/Non. Score 0–10. Seuil ≥ 3 = problème significatif.</p>
+          </div>
+          <span class="btn-start" style="background: #7c3aed;">Commencer &rarr;</span>
+        </a>
+
+        <a href="ASSIST.html" class="portal-card">
+          <h3>ASSIST</h3>
+          <p class="card-subtitle">Alcohol, Smoking &amp; Substance Involvement Screening Test — OMS</p>
+          <div class="card-description">
+            <p>Questionnaire OMS de 8 items évaluant la consommation de 10 catégories de substances : tabac, alcool, cannabis, cocaïne, amphétamines, opioïdes, sédatifs, hallucinogènes, inhalants, autres.</p>
+          </div>
+          <span class="btn-start" style="background: #8b5cf6;">Commencer &rarr;</span>
+        </a>
+
+      </div>
+    </div>
+
+    <!-- ===== TABAC ===== -->
+    <div class="section-block">
+      <div class="section-badge" style="background: linear-gradient(135deg, #64748b, #475569);">
+        <i class="fas fa-smoking"></i> Tabac
+      </div>
+      <p class="section-desc">Évaluation de la dépendance à la nicotine pour guider la stratégie de sevrage.</p>
+      <div class="portal-grid">
+
+        <a href="Fagerstrom.html" class="portal-card">
+          <h3>Test de Fagerström</h3>
+          <p class="card-subtitle">Fagerström Test for Nicotine Dependence (FTND) — 6 questions</p>
+          <div class="card-description">
+            <p>Référence pour évaluer le degré de dépendance physique à la nicotine. 6 questions. Score 0–10. Guide le choix de la dose de substitution nicotinique.</p>
+          </div>
+          <span class="btn-start" style="background: #475569;">Commencer &rarr;</span>
+        </a>
+
+      </div>
+    </div>
+
+    <!-- ===== ADOLESCENTS ===== -->
+    <div class="section-block">
+      <div class="section-badge" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+        <i class="fas fa-user-graduate"></i> Adolescents (12–21 ans)
+      </div>
+      <p class="section-desc">Dépistage spécifiquement validé chez les adolescents et jeunes adultes.</p>
+      <div class="portal-grid">
+
+        <a href="CRAFFT.html" class="portal-card">
+          <h3>CRAFFT</h3>
+          <p class="card-subtitle">Car — Relax — Alone — Forget — Friends — Trouble — 6 questions</p>
+          <div class="card-description">
+            <p>Outil de dépistage validé pour les 12–21 ans (Knight, Boston Children's Hospital). Partie A (3 questions) + Partie B (6 items CRAFFT). Score ≥ 2 = risque élevé (Se 76%, Sp 94%).</p>
+          </div>
+          <span class="btn-start" style="background: #d97706;">Commencer &rarr;</span>
+        </a>
+
+      </div>
+    </div>
+
+    <!-- ===== SÉVÉRITÉ ===== -->
+    <div class="section-block">
+      <div class="section-badge" style="background: linear-gradient(135deg, #6366f1, #4f46e5);">
+        <i class="fas fa-tachometer-alt"></i> Sévérité de la Dépendance
+      </div>
+      <p class="section-desc">Évaluation dimensionnelle de la sévérité de la dépendance, toutes substances confondues.</p>
+      <div class="portal-grid">
+
+        <a href="SDS.html" class="portal-card">
+          <h3>SDS</h3>
+          <p class="card-subtitle">Severity of Dependence Scale — 5 questions</p>
+          <div class="card-description">
+            <p>Évalue la sévérité psychologique de la dépendance à une substance spécifique (Gossop, 1995). 5 questions sur une échelle 0–3. Seuils validés par substance (cannabis, héroïne, cocaïne, alcool).</p>
+          </div>
+          <span class="btn-start" style="background: #4f46e5;">Commencer &rarr;</span>
+        </a>
+
+      </div>
+    </div>
+
+    <!-- ===== RESSOURCES CLINIQUES ===== -->
+    <div class="section-block">
+      <div class="section-badge" style="background: linear-gradient(135deg, #94a3b8, #64748b);">
+        <i class="fas fa-book-medical"></i> Ressources Cliniques
+      </div>
+      <p class="section-desc">Guides pratiques pour les professionnels de santé et les patients.</p>
+      <div class="portal-grid">
+
+        <a href="Reduction_des_risques.html" class="resource-card">
+          <div class="resource-icon" style="background: linear-gradient(135deg, #ec4899, #db2777);">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <h3>Réduction des Risques</h3>
+          <p>Fiches pratiques : unités alcool, stratégies de réduction, risques cannabis, tabac, protocole naloxone pour les surdosages aux opioïdes.</p>
+        </a>
+
+        <a href="Interactions_substances.html" class="resource-card">
+          <div class="resource-icon" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+            <i class="fas fa-exchange-alt"></i>
+          </div>
+          <h3>Interactions Médicaments / Substances</h3>
+          <p>Tableau clinique des interactions : antidépresseurs, antipsychotiques, thymorégulateurs, BZD × alcool, cannabis, opioïdes, stimulants.</p>
+        </a>
+
+        <a href="Protocoles_sevrage.html" class="resource-card">
+          <div class="resource-icon" style="background: linear-gradient(135deg, #0ea5e9, #0284c7);">
+            <i class="fas fa-hospital"></i>
+          </div>
+          <h3>Protocoles de Sevrage</h3>
+          <p>Sevrage alcoolique (CIWA-Ar, BZD, thiamine), sevrage tabagique (substituts, varénicline), TSO opioïdes (buprénorphine, méthadone).</p>
+        </a>
+
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    <p><strong>Troubles d'Usage de Substance — Questionnaires &amp; Ressources</strong></p>
+    <p style="margin: 0.5rem 0;"><strong>Développeur :</strong> Dr FENOHASINA T.J. Felicien (Psychiatre)</p>
+    <p>&copy; 2025 — Centre Ressource de Réhabilitation</p>
+    <small>Licence CC BY-NC-SA 4.0</small>
+  </footer>
+
+</body>
+</html>

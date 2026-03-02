@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BSL-23 - Borderline Symptom List</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <style>
+        :root {
+            --cat-main: #f59e0b;
+            --cat-dark: #d97706;
+            --cat-light: #fbbf24;
+            --cat-rgb: 245, 158, 11;
+            --cat-readable: #b45309;
+        }
+        .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
+        .option-btn.selected, .answer-btn.selected { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        .score-circle { border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 30px rgba(var(--cat-rgb), 0.2); }
+        .score-value { color: var(--cat-light); }
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-light); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+        .progress-fill { background: linear-gradient(90deg, var(--cat-main), var(--cat-light)); box-shadow: 0 0 8px rgba(var(--cat-rgb), 0.4); }
+        .likert-options input[type="radio"]:checked + label,
+        .binary-options input[type="radio"]:checked + label,
+        .radio-options input[type="radio"]:checked + label { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+    </style>
+
+</head>
+<body class="light-questionnaire">
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil">
+                <i class="fas fa-home"></i>
+            </a>
+            <button onclick="history.back()" class="btn-back" title="Retour">
+                <i class="fas fa-arrow-left"></i> <span>Retour</span>
+            </button>
+        </div>
+        <h1>BSL-23</h1>
+        <span class="badge badge-cat-perso">Personnalité</span>
+    </nav>
+
+    <main class="container">
+        <!-- En-tete -->
+        <header class="header-glow" style="text-align: center; margin-bottom: 2rem;">
+            <h1><i class="fas fa-heartbeat"></i> Questionnaire BSL-23</h1>
+            <p class="subtitle">Borderline Symptom List - 23 items</p>
+        </header>
+
+        <!-- Informations -->
+        <section class="glass-card info-box">
+            <h2><i class="fas fa-info-circle"></i> À propos de ce questionnaire</h2>
+            <p style="margin: 15px 0; line-height: 1.6;">
+                La BSL-23 (Borderline Symptom List) est un outil d'auto-évaluation validé scientifiquement pour mesurer
+                la sévérité des symptômes du trouble de la personnalité borderline. Elle évalue vos expériences
+                au cours de la <strong>dernière semaine</strong>.
+            </p>
+            <p style="margin: 10px 0; line-height: 1.6;">
+                <strong>Utilisation clinique :</strong> Cet outil est particulièrement utile pour le suivi de l'évolution
+                des symptômes borderline au cours du temps, notamment pour évaluer l'efficacité des interventions thérapeutiques
+                (TCD, TBM, thérapie des schémas).
+            </p>
+        </section>
+
+        <!-- Avertissements -->
+        <section class="glass-card warning-box">
+            <h3><i class="fas fa-exclamation-triangle"></i> Avertissements importants</h3>
+            <ul>
+                <li>Ce questionnaire ne remplace pas une évaluation clinique complète</li>
+                <li>Le diagnostic de TPB nécessite une évaluation par un professionnel qualifié</li>
+                <li><strong>Item 18 concerne les pensées d'automutilation</strong> - une réponse élevée nécessite une évaluation du risque</li>
+                <li>En cas de pensées suicidaires ou d'automutilation, contactez immédiatement un professionnel de santé</li>
+                <li><strong>Numéro national de prévention du suicide : 3114</strong> (gratuit, 24h/7j)</li>
+            </ul>
+        </section>
+
+        <!-- Controles -->
+        <section class="glass-card">
+            <div class="control-buttons">
+                <button class="btn-primary" onclick="importData()">
+                    <i class="fas fa-file-import"></i> Importer
+                </button>
+                <button class="btn-secondary" onclick="resetForm()">
+                    <i class="fas fa-redo"></i> Réinitialiser
+                </button>
+            </div>
+            <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="loadFile(event)">
+        </section>
+
+        <!-- Questions -->
+        <section class="glass-card">
+            <h2 style="margin-bottom: 1rem;"><i class="fas fa-clipboard-list"></i> Au cours de la dernière semaine...</h2>
+            <p style="margin-bottom: 1.5rem; opacity: 0.8;">Indiquez dans quelle mesure chaque affirmation s'applique à vous.</p>
+            <div id="questions"></div>
+        </section>
+
+        <!-- Resultats -->
+        <section id="results" class="glass-card results-section" style="display: none;">
+            <h2 style="text-align: center; margin-bottom: 2rem;"><i class="fas fa-chart-pie"></i> Résultats de votre évaluation</h2>
+
+            <div class="scores-container">
+                <div class="mean-score">
+                    <div class="mean-value" id="meanScore">0.00</div>
+                    <div class="mean-label">Score moyen (0-4)</div>
+                </div>
+                <div class="mean-score">
+                    <div class="mean-value" id="totalScore">0</div>
+                    <div class="mean-label">Score brut (0-92)</div>
+                </div>
+            </div>
+
+            <div class="score-bar-container">
+                <div class="score-bar">
+                    <div class="score-marker" id="scoreMarker" style="left: 0%;"></div>
+                </div>
+                <div class="score-labels">
+                    <div class="score-label">Absent/Faible<br>0-0.3</div>
+                    <div class="score-label">Léger<br>0.3-0.7</div>
+                    <div class="score-label">Modéré<br>0.7-1.5</div>
+                    <div class="score-label">Élevé<br>1.5-2.5</div>
+                    <div class="score-label">Très élevé<br>>2.5</div>
+                </div>
+            </div>
+
+            <div id="interpretationBox" class="interpretation"></div>
+
+            <div id="criticalAlert" class="danger-box" style="display: none;">
+                <h3><i class="fas fa-exclamation-circle"></i> Alerte - Item critique</h3>
+                <p id="criticalAlertText"></p>
+            </div>
+
+            <button class="btn-primary" onclick="toggleDetails()" style="width: 100%; margin-top: 1rem;">
+                <i class="fas fa-list-ul"></i> Voir les détails et recommandations cliniques
+                <span id="toggleIcon"><i class="fas fa-chevron-down"></i></span>
+            </button>
+
+            <div id="detailsContent" class="details-content"></div>
+
+            <!-- Export -->
+            <div class="glass-card" style="margin-top: 2rem; background: rgba(255,255,255,0.05);">
+                <h3><i class="fas fa-download"></i> Exporter les résultats</h3>
+                <div class="consent-box">
+                    <label>
+                        <input type="checkbox" id="exportConsent">
+                        <span>Je souhaite télécharger mes résultats (questionnaire, réponses, score et date) dans un fichier JSON sur mon appareil. <strong>Ces résultats constituent des données de santé — je m'engage à les conserver de façon sécurisée et à ne les partager qu'avec un professionnel de santé de mon choix.</strong> Aucune donnée n'est transmise à un serveur.</span>
+                    </label>
+                </div>
+                <div class="export-buttons">
+                    <button class="btn-primary" onclick="exportData()">
+                        <i class="fas fa-file-export"></i> Exporter en JSON
+                    </button>
+                    <button class="btn-print" onclick="printResults()">
+                        <i class="fas fa-print"></i> Imprimer
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p><strong>BSL-23 - Borderline Symptom List (23 items)</strong></p>
+        <p style="margin: 0.5rem 0;">
+            <strong>Auteurs originaux :</strong> Bohus M., Limberger M.F., Frank U., Chapman A.L., Kuhler T., Stieglitz R.D. (2007)
+        </p>
+        <p><strong>Référence :</strong> Bohus et al. (2009). Psychometric properties of the BSL-23.</p>
+        <p style="margin-top: 0.5rem;"><strong>Adaptation numérique :</strong> Dr FENOHASINA | Psychiatre</p>
+        <small>Usage clinique et recherche avec attribution appropriée</small>
+    </footer>
+
+    <script src="../js/app.js"></script>
+    <script>
+        // BSL-23 Items (French version)
+        const questions = [
+            "J'avais du mal à me concentrer",
+            "Je me sentais sans défense",
+            "J'étais dégoûté(e) de moi-même",
+            "Je me sentais déchiré(e) intérieurement",
+            "J'avais des pensées négatives sur mon corps",
+            "J'étais désespéré(e)",
+            "Je ne pouvais pas supporter d'être seul(e)",
+            "J'ai ressenti de la haine envers moi-même",
+            "Je me sentais coupable",
+            "J'ai voulu me punir",
+            "J'étais honteux(se)",
+            "Je voulais arrêter tout contact avec les autres",
+            "J'avais peur d'être abandonné(e)",
+            "Je me sentais submergé(e) par mes émotions",
+            "Je ne savais pas qui j'étais",
+            "J'ai eu des moments de vide intérieur",
+            "Je me suis senti(e) mort(e) intérieurement",
+            "J'ai pensé à me faire du mal", // Item 18 - Critical item
+            "J'ai douté de mes sentiments",
+            "Je ne savais plus ce que je voulais",
+            "Mon humeur changeait rapidement",
+            "Je me sentais irritable",
+            "J'ai eu des comportements impulsifs"
+        ];
+
+        // Likert scale options (0-4)
+        const likertOptions = [
+            { value: 0, label: "Pas du tout" },
+            { value: 1, label: "Un peu" },
+            { value: 2, label: "Plutôt" },
+            { value: 3, label: "Beaucoup" },
+            { value: 4, label: "Très fortement" }
+        ];
+
+        // Critical item index (0-based)
+        const CRITICAL_ITEM = 17; // Item 18
+
+        let answers = new Array(23).fill(null);
+
+        function initializeQuestions() {
+            const container = document.getElementById('questions');
+            container.innerHTML = '';
+
+            questions.forEach((question, index) => {
+                const questionDiv = document.createElement('div');
+                const isCritical = index === CRITICAL_ITEM;
+                questionDiv.className = `question-card${isCritical ? ' critical' : ''}`;
+                questionDiv.id = `question-${index}`;
+
+                let criticalWarningHTML = '';
+                if (isCritical) {
+                    criticalWarningHTML = `
+                        <div class="critical-warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span>Cet item concerne les pensées d'automutilation. Une réponse élevée nécessite une évaluation clinique du risque.</span>
+                        </div>
+                    `;
+                }
+
+                questionDiv.innerHTML = `
+                    <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                        <span class="question-number">${index + 1}</span>
+                        <div style="flex: 1;">
+                            <div class="question-text">${question}</div>
+                            <div class="likert-container">
+                                ${likertOptions.map(opt => `
+                                    <div class="likert-option" onclick="selectAnswer(${index}, ${opt.value})" id="q${index}_opt${opt.value}">
+                                        <span class="likert-value">${opt.value}</span>
+                                        <span class="likert-label">${opt.label}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            ${criticalWarningHTML}
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function selectAnswer(questionIndex, value) {
+            answers[questionIndex] = value;
+
+            // Update visual selection
+            for (let i = 0; i < 5; i++) {
+                const opt = document.getElementById(`q${questionIndex}_opt${i}`);
+                opt.classList.toggle('selected', i === value);
+            }
+
+            // Mark question as answered
+            const questionCard = document.getElementById(`question-${questionIndex}`);
+            questionCard.classList.add('answered');
+
+            checkCompletion();
+        }
+
+        function checkCompletion() {
+            const allAnswered = answers.every(a => a !== null);
+
+            if (allAnswered) {
+                updateResults();
+                document.getElementById('results').style.display = 'block';
+                document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function calculateScores() {
+            const total = answers.reduce((sum, val) => sum + (val || 0), 0);
+            const mean = total / 23;
+            return { total, mean };
+        }
+
+        function getInterpretation(mean) {
+            if (mean <= 0.3) return {
+                level: "Absent ou faible",
+                className: "low",
+                description: "Les symptômes borderline sont absents ou très faibles.",
+                action: "Aucune intervention spécifique nécessaire. Surveillance de routine si contexte clinique particulier.",
+                color: "#22c55e"
+            };
+            if (mean <= 0.7) return {
+                level: "Léger",
+                className: "moderate",
+                description: "Présence de symptômes borderline légers.",
+                action: "Surveillance active recommandée. Psychoéducation et techniques de régulation émotionnelle peuvent être bénéfiques.",
+                color: "#84cc16"
+            };
+            if (mean <= 1.5) return {
+                level: "Modéré",
+                className: "high",
+                description: "Symptômes borderline modérés nécessitant attention clinique.",
+                action: "Évaluation clinique approfondie recommandée. Considération d'une psychothérapie structurée (TCD, TBM, thérapie des schémas).",
+                color: "#eab308"
+            };
+            if (mean <= 2.5) return {
+                level: "Élevé",
+                className: "high",
+                description: "Symptômes borderline élevés avec impact significatif sur le fonctionnement.",
+                action: "Prise en charge thérapeutique active recommandée. Évaluation du risque suicidaire/automutilation. Psychothérapie spécialisée + suivi psychiatrique.",
+                color: "#f59e0b"
+            };
+            return {
+                level: "Très élevé",
+                className: "critical",
+                description: "Symptômes borderline sévères nécessitant une prise en charge intensive.",
+                action: "Intervention urgente recommandée. Évaluation psychiatrique complète. Considération d'une hospitalisation si risque élevé. Traitement intensif (TCD intensive, hospitalisation de jour).",
+                color: "#ef4444"
+            };
+        }
+
+        function updateResults() {
+            const { total, mean } = calculateScores();
+            const interpretation = getInterpretation(mean);
+
+            // Update scores
+            document.getElementById('totalScore').textContent = total;
+            document.getElementById('meanScore').textContent = mean.toFixed(2);
+
+            // Update score marker position (mean 0-4 mapped to 0-100%)
+            const markerPosition = (mean / 4) * 100;
+            document.getElementById('scoreMarker').style.left = `${markerPosition}%`;
+
+            // Update interpretation
+            const interpretationBox = document.getElementById('interpretationBox');
+            interpretationBox.className = `interpretation ${interpretation.className}`;
+            interpretationBox.innerHTML = `
+                <h3>Sévérité : ${interpretation.level}</h3>
+                <p><strong>Interprétation :</strong> ${interpretation.description}</p>
+                <p><strong>Recommandation :</strong> ${interpretation.action}</p>
+            `;
+
+            // Check critical item (item 18 - index 17)
+            const criticalValue = answers[CRITICAL_ITEM];
+            const criticalAlert = document.getElementById('criticalAlert');
+            if (criticalValue >= 2) {
+                criticalAlert.style.display = 'block';
+                let alertText = '';
+                if (criticalValue === 2) {
+                    alertText = `L'item 18 (pensées d'automutilation) a été coté à ${criticalValue} (Plutôt). Une évaluation clinique du risque d'automutilation est recommandée.`;
+                } else if (criticalValue === 3) {
+                    alertText = `L'item 18 (pensées d'automutilation) a été coté à ${criticalValue} (Beaucoup). Une évaluation approfondie du risque d'automutilation est fortement recommandée.`;
+                } else if (criticalValue === 4) {
+                    alertText = `L'item 18 (pensées d'automutilation) a été coté à ${criticalValue} (Très fortement). Évaluation URGENTE du risque d'automutilation et de suicide nécessaire. Envisager une intervention de crise.`;
+                }
+                document.getElementById('criticalAlertText').textContent = alertText;
+            } else {
+                criticalAlert.style.display = 'none';
+            }
+
+            // Update details content
+            updateDetailsContent(mean, total);
+        }
+
+        function updateDetailsContent(mean, total) {
+            const detailsContent = document.getElementById('detailsContent');
+
+            // Item scores summary
+            let itemScoresHTML = '<h4 style="margin-bottom: 1rem; color: var(--color-category-light);">Scores par item</h4>';
+            itemScoresHTML += '<div style="display: grid; gap: 0.5rem;">';
+            questions.forEach((q, i) => {
+                const score = answers[i];
+                const isCritical = i === CRITICAL_ITEM;
+                const barWidth = (score / 4) * 100;
+                itemScoresHTML += `
+                    <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem; background: var(--color-bg-card); border-radius: var(--radius-sm); ${isCritical ? 'border: 1px solid rgba(239, 68, 68, 0.5);' : ''}">
+                        <span style="min-width: 2rem; font-weight: 600; color: ${isCritical ? '#f87171' : 'var(--color-category-light)'};">${i + 1}</span>
+                        <div style="flex: 1; height: 8px; background: var(--color-bg-dark-secondary); border-radius: var(--radius-full); overflow: hidden;">
+                            <div style="height: 100%; width: ${barWidth}%; background: ${isCritical && score >= 2 ? '#ef4444' : 'var(--color-category)'}; border-radius: var(--radius-full);"></div>
+                        </div>
+                        <span style="min-width: 1.5rem; text-align: right; font-weight: 600;">${score}</span>
+                    </div>
+                `;
+            });
+            itemScoresHTML += '</div>';
+
+            // Clinical thresholds
+            const thresholdsHTML = `
+                <div class="info-box" style="margin-top: 1.5rem;">
+                    <h4><i class="fas fa-bookmark"></i> Seuils cliniques (score moyen)</h4>
+                    <ul style="margin-top: 0.5rem;">
+                        <li><strong>0 - 0.3 :</strong> Symptômes absents ou faibles</li>
+                        <li><strong>0.3 - 0.7 :</strong> Symptômes légers</li>
+                        <li><strong>0.7 - 1.5 :</strong> Symptômes modérés - évaluation clinique recommandée</li>
+                        <li><strong>1.5 - 2.5 :</strong> Symptômes élevés - prise en charge active recommandée</li>
+                        <li><strong>> 2.5 :</strong> Symptômes sévères - intervention urgente</li>
+                    </ul>
+                    <p style="margin-top: 1rem;"><strong>Note :</strong> Une diminution de 0.5 point du score moyen est considérée comme cliniquement significative lors du suivi.</p>
+                </div>
+            `;
+
+            // Clinical recommendations based on severity
+            let recommendationsHTML = '<h4 style="margin-top: 1.5rem; margin-bottom: 1rem; color: var(--color-category-light);">Recommandations cliniques</h4>';
+
+            if (mean <= 0.7) {
+                recommendationsHTML += `
+                    <div class="differential-item">
+                        <h4>Suivi de routine</h4>
+                        <p>Pas d'intervention spécifique requise. Réévaluation périodique si contexte clinique justifié.</p>
+                    </div>
+                `;
+            } else if (mean <= 1.5) {
+                recommendationsHTML += `
+                    <div class="differential-item">
+                        <h4>Évaluation diagnostique</h4>
+                        <p>Confirmer le diagnostic de TPB par entretien clinique structuré (SCID-II, IPDE). Explorer les comorbidités (dépression, anxiété, TSPT, TUS).</p>
+                    </div>
+                    <div class="differential-item">
+                        <h4>Interventions recommandées</h4>
+                        <p>Psychoéducation sur le TPB. Introduction aux techniques de régulation émotionnelle (TCD skills). Considération d'une psychothérapie structurée.</p>
+                    </div>
+                `;
+            } else if (mean <= 2.5) {
+                recommendationsHTML += `
+                    <div class="differential-item">
+                        <h4>Prise en charge active</h4>
+                        <p>Psychothérapie spécialisée recommandée : TCD (Thérapie Comportementale Dialectique), TBM (Thérapie Basée sur la Mentalisation), ou Thérapie des Schémas.</p>
+                    </div>
+                    <div class="differential-item">
+                        <h4>Évaluation du risque</h4>
+                        <p>Évaluation systématique du risque suicidaire et d'automutilation. Plan de sécurité si nécessaire. Coordination avec le médecin traitant.</p>
+                    </div>
+                    <div class="differential-item">
+                        <h4>Suivi rapproché</h4>
+                        <p>Réévaluation régulière avec BSL-23 (toutes les 2-4 semaines). Ajustement du traitement selon évolution.</p>
+                    </div>
+                `;
+            } else {
+                recommendationsHTML += `
+                    <div class="differential-item" style="border-color: rgba(239, 68, 68, 0.5);">
+                        <h4 style="color: #f87171;">Intervention urgente</h4>
+                        <p>Évaluation psychiatrique complète recommandée. Considération d'une hospitalisation (temps complet ou de jour) si risque élevé ou détérioration fonctionnelle majeure.</p>
+                    </div>
+                    <div class="differential-item">
+                        <h4>Traitement intensif</h4>
+                        <p>TCD intensive ou programme de jour spécialisé TPB. Traitement pharmacologique adjuvant si symptômes cibles (impulsivité, instabilité affective, symptômes psychotiques transitoires).</p>
+                    </div>
+                    <div class="differential-item">
+                        <h4>Gestion de crise</h4>
+                        <p>Mise en place d'un plan de crise. Identification des ressources d'urgence. Formation de l'entourage à la gestion des crises.</p>
+                    </div>
+                `;
+            }
+
+            // Differential diagnoses
+            const differentialsHTML = `
+                <h4 style="margin-top: 1.5rem; margin-bottom: 1rem; color: var(--color-category-light);">Diagnostics différentiels à considérer</h4>
+                <div class="differential-item">
+                    <h4>TSPT complexe</h4>
+                    <p>Chevauchement symptomatique important. Rechercher antécédents traumatiques. Évaluer avec PCL-5 et exploration de l'histoire développementale.</p>
+                </div>
+                <div class="differential-item">
+                    <h4>Trouble bipolaire</h4>
+                    <p>Différencier les variations de l'humeur. Épisodes maniaques/hypomaniaques de durée > quelques heures. Évaluer avec MDQ, HCL-32.</p>
+                </div>
+                <div class="differential-item">
+                    <h4>TDAH avec dysrégulation émotionnelle</h4>
+                    <p>Impulsivité et instabilité émotionnelle peuvent simuler un TPB. Rechercher symptômes depuis l'enfance. Évaluer avec ASRS, DIVA-5.</p>
+                </div>
+                <div class="differential-item">
+                    <h4>Autres troubles de la personnalité</h4>
+                    <p>Cluster B (narcissique, histrionique, antisocial) et Cluster C peuvent coexister ou être confondus.</p>
+                </div>
+            `;
+
+            detailsContent.innerHTML = itemScoresHTML + thresholdsHTML + recommendationsHTML + differentialsHTML;
+        }
+
+        function toggleDetails() {
+            const content = document.getElementById('detailsContent');
+            const icon = document.getElementById('toggleIcon');
+            const isVisible = content.classList.contains('show');
+
+            content.classList.toggle('show');
+            icon.innerHTML = isVisible ? '<i class="fas fa-chevron-down"></i>' : '<i class="fas fa-chevron-up"></i>';
+        }
+
+        function resetForm() {
+            answers = new Array(23).fill(null);
+
+            document.querySelectorAll('.likert-option').forEach(opt => opt.classList.remove('selected'));
+            document.querySelectorAll('.question-card').forEach(card => card.classList.remove('answered'));
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('detailsContent').classList.remove('show');
+            document.getElementById('exportConsent').checked = false;
+            document.getElementById('scoreMarker').style.left = '0%';
+        }
+
+        function importData() {
+            document.getElementById('fileInput').click();
+        }
+
+        function loadFile(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        if (data.answers && Array.isArray(data.answers)) {
+                            answers = data.answers;
+
+                            answers.forEach((value, index) => {
+                                if (value !== null) {
+                                    selectAnswer(index, value);
+                                }
+                            });
+                        }
+                    } catch (error) {
+                        alert("Erreur lors de l'importation du fichier");
+                    }
+                };
+                reader.readAsText(file);
+            }
+            event.target.value = '';
+        }
+
+        function exportData() {
+            if (!document.getElementById('exportConsent').checked) {
+                alert("Veuillez cocher la case de consentement avant d''exporter.");
+                return;
+            }
+
+            const { total, mean } = calculateScores();
+            const interpretation = getInterpretation(mean);
+
+            const data = {
+                questionnaire: "BSL-23",
+                version: "Bohus et al., 2009",
+                date: new Date().toISOString(),
+                answers: answers,
+                scores: {
+                    raw: total,
+                    mean: parseFloat(mean.toFixed(2))
+                },
+                interpretation: interpretation.level,
+                criticalItem: {
+                    item: 18,
+                    value: answers[CRITICAL_ITEM],
+                    description: "Pensées d'automutilation"
+                }
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `BSL23_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeQuestions();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,851 @@
+/* ========================================
+   questionnaire-light.css
+   Light theme overrides for questionnaire pages.
+   Loaded AFTER styles.css.
+   All rules scoped under body.light-questionnaire.
+   Portals, Page_d_accueil, and index.html do NOT use this file.
+   ======================================== */
+
+/* ========================================
+   CSS Variable Overrides
+   ======================================== */
+body.light-questionnaire {
+    /* Backgrounds */
+    --color-bg-dark: #f8fafc;
+    --color-bg-dark-secondary: #f1f5f9;
+    --color-bg-card: rgba(255, 255, 255, 0.95);
+    --color-bg-card-hover: rgba(241, 245, 249, 0.98);
+
+    /* Text */
+    --color-text-primary: #1e293b;
+    --color-text-secondary: #334155;
+    --color-text-muted: #64748b;
+    --color-text-dimmed: #6b7280;
+
+    /* Borders */
+    --color-border: rgba(0, 0, 0, 0.08);
+    --color-border-hover: rgba(0, 0, 0, 0.15);
+    --color-border-active: rgba(14, 165, 233, 0.4);
+
+    /* Shadows */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.1);
+
+    /* Neomorphism — Light mode
+       --neo-raised / --neo-pressed are computed from these variables
+       so overriding them here automatically updates all neo components */
+    --neo-bg: #ffffff;
+    --neo-bg-light: #f8fafc;
+    --neo-shadow-dark: rgba(0, 0, 0, 0.10);
+    --neo-shadow-light: rgba(255, 255, 255, 0.90);
+
+    /* Surface backgrounds — light mode */
+    --surface-card: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(248, 250, 252, 0.95));
+    --surface-card-solid: rgba(255, 255, 255, 0.95);
+    --surface-input: rgba(241, 245, 249, 0.9);
+    --surface-overlay: rgba(241, 245, 249, 0.9);
+    --surface-table: rgba(255, 255, 255, 0.95);
+    --surface-table-header: #f1f5f9;
+    --surface-inset: rgba(241, 245, 249, 0.8);
+    --surface-section-a: rgba(248, 250, 252, 0.5);
+    --surface-section-b: rgba(241, 245, 249, 0.5);
+
+    /* Semantic accent colors — darker for readability on light */
+    --accent-amber: #b45309;
+    --accent-red: #dc2626;
+    --accent-green: #16a34a;
+    --accent-yellow: #a16207;
+    --accent-orange: #c2410c;
+    --accent-teal: #0d9488;
+
+    /* Colored box backgrounds — lower opacity on light */
+    --surface-amber: linear-gradient(145deg, rgba(245, 158, 11, 0.08), rgba(245, 158, 11, 0.03));
+    --surface-red: linear-gradient(145deg, rgba(239, 68, 68, 0.08), rgba(239, 68, 68, 0.03));
+    --surface-green: linear-gradient(145deg, rgba(34, 197, 94, 0.08), rgba(34, 197, 94, 0.03));
+    --surface-yellow: linear-gradient(145deg, rgba(234, 179, 8, 0.08), rgba(234, 179, 8, 0.03));
+    --surface-orange: linear-gradient(145deg, rgba(249, 115, 22, 0.08), rgba(249, 115, 22, 0.03));
+}
+
+/* ========================================
+   Body & Grid Overlay
+   ======================================== */
+body.light-questionnaire {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f8fafc 100%);
+    color: var(--color-text-secondary);
+}
+
+body.light-questionnaire::before {
+    background-image:
+        linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+}
+
+/* ========================================
+   Typography
+   ======================================== */
+body.light-questionnaire h1,
+body.light-questionnaire h2,
+body.light-questionnaire h3,
+body.light-questionnaire h4,
+body.light-questionnaire h5,
+body.light-questionnaire h6 {
+    color: var(--color-text-primary);
+}
+
+body.light-questionnaire p,
+body.light-questionnaire li {
+    color: var(--color-text-muted);
+}
+
+body.light-questionnaire a {
+    color: #2563eb;
+}
+
+body.light-questionnaire strong,
+body.light-questionnaire b {
+    color: var(--color-text-primary);
+}
+
+/* ========================================
+   Navigation Bar — stays dark (glassmorphism)
+   ======================================== */
+body.light-questionnaire .navigation-bar {
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+body.light-questionnaire .navigation-bar h1 {
+    color: #f8fafc;
+}
+
+body.light-questionnaire .navigation-bar .back-button,
+body.light-questionnaire .navigation-bar button {
+    color: #f8fafc;
+}
+
+/* ========================================
+   Glass Card — light version
+   ======================================== */
+body.light-questionnaire .glass-card {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.98));
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-md);
+}
+
+body.light-questionnaire .glass-card:hover {
+    box-shadow: var(--shadow-lg);
+    border-color: var(--color-border-hover);
+}
+
+/* ========================================
+   Gradient Text — dark text on light bg
+   ======================================== */
+body.light-questionnaire .gradient-text {
+    background: linear-gradient(135deg, #0f172a 0%, #334155 50%, #0f172a 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ========================================
+   Header / Intro block
+   ======================================== */
+body.light-questionnaire .header-glow {
+    background: rgba(255, 255, 255, 0.5);
+    border-bottom: 1px solid var(--color-border);
+}
+
+body.light-questionnaire .header-glow::before {
+    background: radial-gradient(ellipse, rgba(14, 165, 233, 0.06) 0%, transparent 70%);
+}
+
+/* ========================================
+   Question Cards — light neomorphism
+   ======================================== */
+body.light-questionnaire .question-card {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow:
+        5px 5px 12px rgba(0, 0, 0, 0.07),
+        -5px -5px 12px rgba(255, 255, 255, 0.85);
+}
+
+body.light-questionnaire .question-card:hover {
+    box-shadow:
+        7px 7px 16px rgba(0, 0, 0, 0.09),
+        -7px -7px 16px rgba(255, 255, 255, 0.9);
+}
+
+body.light-questionnaire .question-card.answered {
+    box-shadow:
+        inset 3px 3px 7px rgba(0, 0, 0, 0.07),
+        inset -3px -3px 7px rgba(255, 255, 255, 0.85);
+    border-color: rgba(0, 0, 0, 0.08);
+}
+
+body.light-questionnaire .question-text {
+    color: var(--color-text-primary);
+}
+
+body.light-questionnaire .question-number {
+    /* gradient fill preserved from inline category styles */
+    color: #ffffff;
+}
+
+/* Checkmark on answered card */
+body.light-questionnaire .question-card.answered::after {
+    color: #ffffff;
+}
+
+/* ========================================
+   Option Buttons — light neomorphism
+   ======================================== */
+body.light-questionnaire .option-btn,
+body.light-questionnaire .answer-btn {
+    background: #ffffff;
+    color: var(--color-text-secondary);
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    box-shadow:
+        3px 3px 8px rgba(0, 0, 0, 0.07),
+        -3px -3px 8px rgba(255, 255, 255, 0.85);
+}
+
+body.light-questionnaire .option-btn:hover,
+body.light-questionnaire .answer-btn:hover {
+    box-shadow:
+        5px 5px 12px rgba(0, 0, 0, 0.09),
+        -5px -5px 12px rgba(255, 255, 255, 0.9);
+    color: var(--color-text-primary);
+    border-color: rgba(0, 0, 0, 0.12);
+}
+
+body.light-questionnaire .option-btn:active,
+body.light-questionnaire .answer-btn:active {
+    box-shadow:
+        inset 3px 3px 7px rgba(0, 0, 0, 0.07),
+        inset -3px -3px 7px rgba(255, 255, 255, 0.85);
+}
+
+/* Selected state — border-color comes from inline category styles
+   but color must use --cat-readable for WCAG AA on white */
+body.light-questionnaire .option-btn.selected,
+body.light-questionnaire .answer-btn.selected {
+    background: #ffffff;
+    color: var(--cat-readable, var(--cat-main, #2563eb));
+    box-shadow:
+        inset 3px 3px 7px rgba(0, 0, 0, 0.07),
+        inset -3px -3px 7px rgba(255, 255, 255, 0.85);
+}
+
+/* ========================================
+   Radio / Checkbox Labels
+   ======================================== */
+body.light-questionnaire .binary-options label,
+body.light-questionnaire .radio-options label,
+body.light-questionnaire .likert-options label,
+body.light-questionnaire .options-grid label {
+    background: #ffffff;
+    color: var(--color-text-secondary);
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    box-shadow:
+        3px 3px 8px rgba(0, 0, 0, 0.07),
+        -3px -3px 8px rgba(255, 255, 255, 0.85);
+}
+
+body.light-questionnaire .binary-options label:hover,
+body.light-questionnaire .radio-options label:hover,
+body.light-questionnaire .likert-options label:hover,
+body.light-questionnaire .options-grid label:hover {
+    box-shadow:
+        5px 5px 12px rgba(0, 0, 0, 0.09),
+        -5px -5px 12px rgba(255, 255, 255, 0.9);
+    color: var(--color-text-primary);
+}
+
+body.light-questionnaire .binary-options input[type="radio"]:checked + label,
+body.light-questionnaire .radio-options input[type="radio"]:checked + label,
+body.light-questionnaire .likert-options input[type="radio"]:checked + label,
+body.light-questionnaire .options-grid input[type="radio"]:checked + label {
+    background: #ffffff;
+    color: var(--cat-readable, var(--cat-main, #2563eb));
+    box-shadow:
+        inset 3px 3px 7px rgba(0, 0, 0, 0.07),
+        inset -3px -3px 7px rgba(255, 255, 255, 0.85);
+}
+
+/* ========================================
+   Action Buttons
+   ======================================== */
+body.light-questionnaire .btn-primary,
+body.light-questionnaire .btn-action,
+body.light-questionnaire .btn-submit,
+body.light-questionnaire .btn-calculate {
+    background: #ffffff;
+    color: var(--cat-readable, var(--cat-main, #2563eb));
+    box-shadow:
+        4px 4px 10px rgba(0, 0, 0, 0.07),
+        -4px -4px 10px rgba(255, 255, 255, 0.85);
+}
+
+body.light-questionnaire .btn-primary:hover,
+body.light-questionnaire .btn-action:hover,
+body.light-questionnaire .btn-submit:hover,
+body.light-questionnaire .btn-calculate:hover {
+    background: linear-gradient(135deg, var(--cat-main, #3b82f6), var(--cat-dark, #2563eb));
+    color: #ffffff;
+    border-color: transparent;
+    box-shadow:
+        5px 5px 14px rgba(0, 0, 0, 0.12),
+        -3px -3px 8px rgba(255, 255, 255, 0.6),
+        0 0 20px rgba(var(--cat-rgb, 59, 130, 246), 0.3);
+    transform: translateY(-2px);
+}
+
+body.light-questionnaire .btn-secondary {
+    background: #f1f5f9;
+    border: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    box-shadow: var(--shadow-sm);
+}
+
+body.light-questionnaire .btn-secondary:hover {
+    background: #e2e8f0;
+    color: var(--color-text-primary);
+}
+
+body.light-questionnaire .btn-print {
+    background: rgba(0, 0, 0, 0.04);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+}
+
+body.light-questionnaire .btn-print:hover {
+    background: rgba(0, 0, 0, 0.08);
+    border-color: var(--color-border-hover);
+    color: var(--color-text-primary);
+}
+
+/* ========================================
+   Details / Summary (native HTML5 toggle)
+   ======================================== */
+body.light-questionnaire details summary {
+    cursor: pointer;
+    padding: 0.85rem 1.25rem;
+    border-radius: var(--neo-radius, 12px);
+    background: #ffffff;
+    color: var(--cat-readable, var(--cat-main, #2563eb));
+    font-weight: 600;
+    box-shadow:
+        4px 4px 10px rgba(0, 0, 0, 0.07),
+        -4px -4px 10px rgba(255, 255, 255, 0.85);
+    transition: all 0.25s ease;
+    list-style: none;
+}
+
+body.light-questionnaire details summary::-webkit-details-marker { display: none; }
+
+body.light-questionnaire details summary:hover {
+    background: linear-gradient(135deg, var(--cat-main, #3b82f6), var(--cat-dark, #2563eb));
+    color: #ffffff;
+    box-shadow:
+        5px 5px 14px rgba(0, 0, 0, 0.12),
+        0 0 20px rgba(var(--cat-rgb, 59, 130, 246), 0.3);
+    transform: translateY(-2px);
+}
+
+body.light-questionnaire details[open] summary {
+    background: linear-gradient(135deg, var(--cat-main, #3b82f6), var(--cat-dark, #2563eb));
+    color: #ffffff;
+    border-radius: var(--neo-radius, 12px) var(--neo-radius, 12px) 0 0;
+}
+
+/* ========================================
+   Score Circle
+   ======================================== */
+body.light-questionnaire .score-circle {
+    background: #ffffff;
+    box-shadow:
+        inset 4px 4px 10px rgba(0, 0, 0, 0.08),
+        inset -4px -4px 10px rgba(255, 255, 255, 0.9);
+    /* border-color from inline category styles */
+}
+
+body.light-questionnaire .score-value,
+body.light-questionnaire .score-number {
+    color: var(--cat-readable, var(--cat-main, #2563eb));
+}
+
+body.light-questionnaire .score-label {
+    color: var(--color-text-muted);
+}
+
+/* ========================================
+   Results Section
+   ======================================== */
+body.light-questionnaire .results-section,
+body.light-questionnaire #results {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.98));
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-lg);
+}
+
+body.light-questionnaire .results-title {
+    color: var(--color-text-primary);
+}
+
+/* Interpretation boxes */
+body.light-questionnaire .interpretation {
+    background: rgba(248, 250, 252, 0.95);
+    border-color: rgba(0, 0, 0, 0.08);
+}
+
+body.light-questionnaire .interpretation h3,
+body.light-questionnaire .interpretation-title {
+    color: var(--color-text-primary);
+}
+
+body.light-questionnaire .interpretation p,
+body.light-questionnaire .interpretation li {
+    color: var(--color-text-muted);
+}
+
+body.light-questionnaire .interpretation.low {
+    background: rgba(240, 253, 244, 0.95);
+    border-color: rgba(34, 197, 94, 0.2);
+}
+
+body.light-questionnaire .interpretation.low h3 {
+    color: #15803d;
+}
+
+body.light-questionnaire .interpretation.moderate {
+    background: rgba(255, 251, 235, 0.95);
+    border-color: rgba(245, 158, 11, 0.2);
+}
+
+body.light-questionnaire .interpretation.moderate h3 {
+    color: #b45309;
+}
+
+body.light-questionnaire .interpretation.high,
+body.light-questionnaire .interpretation.severe {
+    background: rgba(254, 242, 242, 0.95);
+    border-color: rgba(239, 68, 68, 0.2);
+}
+
+body.light-questionnaire .interpretation.high h3,
+body.light-questionnaire .interpretation.severe h3 {
+    color: #b91c1c;
+}
+
+/* ========================================
+   Info / Warning / Danger Boxes
+   ======================================== */
+body.light-questionnaire .info-box {
+    background: rgba(239, 246, 255, 0.95);
+    border-color: rgba(59, 130, 246, 0.2);
+}
+
+body.light-questionnaire .info-box h3,
+body.light-questionnaire .info-box strong {
+    color: #1d4ed8;
+}
+
+body.light-questionnaire .info-box p,
+body.light-questionnaire .info-box li {
+    color: #374151;
+}
+
+body.light-questionnaire .warning-box {
+    background: rgba(255, 251, 235, 0.95);
+    border-color: rgba(245, 158, 11, 0.25);
+}
+
+body.light-questionnaire .warning-box h3,
+body.light-questionnaire .warning-box strong {
+    color: #92400e;
+}
+
+body.light-questionnaire .danger-box {
+    background: rgba(254, 242, 242, 0.95);
+    border-color: rgba(239, 68, 68, 0.25);
+}
+
+body.light-questionnaire .danger-box h3,
+body.light-questionnaire .danger-box strong {
+    color: #991b1b;
+}
+
+/* ========================================
+   Progress Bar
+   ======================================== */
+body.light-questionnaire .progress-bar {
+    background: #e2e8f0;
+    box-shadow:
+        inset 2px 2px 4px rgba(0, 0, 0, 0.06),
+        inset -2px -2px 4px rgba(255, 255, 255, 0.8);
+}
+
+body.light-questionnaire .progress-text {
+    color: var(--color-text-muted);
+}
+
+/* progress-fill gradient preserved from inline category styles */
+
+/* ========================================
+   Reference block / instructions
+   ======================================== */
+body.light-questionnaire .reference-block,
+body.light-questionnaire .instructions {
+    background: rgba(248, 250, 252, 0.95);
+    border-color: var(--color-border);
+}
+
+body.light-questionnaire .reference-block p,
+body.light-questionnaire .instructions p {
+    color: var(--color-text-muted);
+}
+
+/* ========================================
+   BPQ scale / likert labels
+   ======================================== */
+body.light-questionnaire .scale-btn,
+body.light-questionnaire .likert-btn {
+    background: #ffffff;
+    color: var(--color-text-secondary);
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    box-shadow:
+        3px 3px 8px rgba(0, 0, 0, 0.07),
+        -3px -3px 8px rgba(255, 255, 255, 0.85);
+}
+
+body.light-questionnaire .scale-btn.selected,
+body.light-questionnaire .likert-btn.selected {
+    background: #ffffff;
+    color: var(--cat-readable, var(--cat-main, #2563eb));
+    box-shadow:
+        inset 3px 3px 7px rgba(0, 0, 0, 0.07),
+        inset -3px -3px 7px rgba(255, 255, 255, 0.85);
+}
+
+/* ========================================
+   Validated checkbox / selection item
+   ======================================== */
+body.light-questionnaire .substance-checkbox,
+body.light-questionnaire .selection-item {
+    background: #ffffff;
+    border-color: rgba(0, 0, 0, 0.08);
+    box-shadow:
+        3px 3px 8px rgba(0, 0, 0, 0.07),
+        -3px -3px 8px rgba(255, 255, 255, 0.85);
+}
+
+body.light-questionnaire .substance-checkbox.checked,
+body.light-questionnaire .selection-item.selected {
+    background: #ffffff;
+    box-shadow:
+        inset 3px 3px 7px rgba(0, 0, 0, 0.07),
+        inset -3px -3px 7px rgba(255, 255, 255, 0.85);
+}
+
+/* ========================================
+   Footer
+   ======================================== */
+body.light-questionnaire footer,
+body.light-questionnaire .footer {
+    background: transparent;
+    border-top: 1px solid var(--color-border);
+}
+
+body.light-questionnaire footer p,
+body.light-questionnaire .footer p {
+    color: var(--color-text-dimmed);
+}
+
+/* ========================================
+   Modal
+   ======================================== */
+body.light-questionnaire .modal-overlay {
+    background: rgba(0, 0, 0, 0.35);
+}
+
+body.light-questionnaire .modal-content {
+    background: linear-gradient(145deg, #ffffff, #f8fafc);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+}
+
+/* ========================================
+   Scrollbar
+   ======================================== */
+body.light-questionnaire::-webkit-scrollbar-track {
+    background: rgba(241, 245, 249, 0.8);
+}
+
+body.light-questionnaire::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.5);
+}
+
+body.light-questionnaire::-webkit-scrollbar-thumb:hover {
+    background: rgba(100, 116, 139, 0.6);
+}
+
+/* ========================================
+   Selection highlight
+   ======================================== */
+body.light-questionnaire ::selection {
+    background-color: rgba(14, 165, 233, 0.2);
+    color: var(--color-text-primary);
+}
+
+/* ========================================
+   Category color readable overrides
+   These ensure text colors using var(--cat-light)
+   get replaced by var(--cat-readable) in light mode
+   for WCAG AA compliance on white backgrounds.
+   ======================================== */
+body.light-questionnaire .option-btn.selected,
+body.light-questionnaire .answer-btn.selected {
+    color: var(--cat-readable, var(--cat-main, #2563eb));
+}
+
+body.light-questionnaire .score-value,
+body.light-questionnaire .score-number,
+body.light-questionnaire .score-circle .score-value {
+    color: var(--cat-readable, var(--cat-main, #2563eb));
+}
+
+body.light-questionnaire .btn-primary,
+body.light-questionnaire .btn-action,
+body.light-questionnaire .btn-submit,
+body.light-questionnaire .btn-calculate {
+    color: var(--cat-readable, var(--cat-main, #2563eb));
+}
+
+body.light-questionnaire .binary-options input[type="radio"]:checked + label,
+body.light-questionnaire .radio-options input[type="radio"]:checked + label,
+body.light-questionnaire .likert-options input[type="radio"]:checked + label,
+body.light-questionnaire .options-grid input[type="radio"]:checked + label {
+    color: var(--cat-readable, var(--cat-main, #2563eb));
+}
+
+/* ========================================
+   Form Inputs (text, date, number, select, textarea)
+   ======================================== */
+body.light-questionnaire input[type="text"],
+body.light-questionnaire input[type="number"],
+body.light-questionnaire input[type="date"],
+body.light-questionnaire input[type="email"],
+body.light-questionnaire select,
+body.light-questionnaire textarea {
+    background: #ffffff;
+    color: var(--color-text-primary);
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: var(--neo-radius, 12px);
+    padding: 0.65rem 1rem;
+    box-shadow:
+        inset 2px 2px 5px rgba(0, 0, 0, 0.06),
+        inset -2px -2px 5px rgba(255, 255, 255, 0.8);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+body.light-questionnaire input[type="text"]:focus,
+body.light-questionnaire input[type="number"]:focus,
+body.light-questionnaire input[type="date"]:focus,
+body.light-questionnaire input[type="email"]:focus,
+body.light-questionnaire select:focus,
+body.light-questionnaire textarea:focus {
+    outline: none;
+    border-color: var(--cat-main, #3b82f6);
+    box-shadow:
+        inset 2px 2px 5px rgba(0, 0, 0, 0.06),
+        0 0 0 3px rgba(var(--cat-rgb, 59, 130, 246), 0.15);
+}
+
+body.light-questionnaire select option {
+    background: #ffffff;
+    color: var(--color-text-primary);
+}
+
+/* ========================================
+   .interpretation.critical / .high-risk
+   ======================================== */
+body.light-questionnaire .interpretation.critical,
+body.light-questionnaire .interpretation.high-risk {
+    background: rgba(254, 242, 242, 0.97);
+    border: 2px solid rgba(239, 68, 68, 0.35);
+}
+
+body.light-questionnaire .interpretation.critical h3,
+body.light-questionnaire .interpretation.high-risk h3 {
+    color: #991b1b;
+}
+
+/* ========================================
+   ZAN-BPD : bigscore + bar + threshold + validation
+   ======================================== */
+body.light-questionnaire .bigscore {
+    background: #ffffff;
+    border: 2px solid var(--cat-main, #f59e0b);
+    border-radius: var(--neo-radius, 12px);
+    padding: 0.75rem 1.25rem;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.25rem;
+    box-shadow:
+        inset 3px 3px 8px rgba(0, 0, 0, 0.06),
+        inset -3px -3px 8px rgba(255, 255, 255, 0.9);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--cat-readable, var(--cat-main, #b45309));
+}
+
+body.light-questionnaire .bigscore small {
+    font-size: 1rem;
+    color: var(--color-text-muted);
+    font-weight: 400;
+}
+
+body.light-questionnaire .barwrap {
+    margin: 1rem 0;
+}
+
+body.light-questionnaire .bar {
+    width: 100%;
+    height: 12px;
+    background: #e2e8f0;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow:
+        inset 2px 2px 4px rgba(0, 0, 0, 0.07),
+        inset -2px -2px 4px rgba(255, 255, 255, 0.9);
+}
+
+body.light-questionnaire .fill {
+    height: 100%;
+    border-radius: 6px;
+    background: linear-gradient(90deg, var(--cat-main, #f59e0b), var(--cat-light, #fbbf24));
+    box-shadow: 0 0 8px rgba(var(--cat-rgb, 245, 158, 11), 0.4);
+    transition: width 0.5s ease;
+}
+
+body.light-questionnaire .threshold-markers {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+}
+
+body.light-questionnaire .threshold-marker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 0.7rem;
+    color: var(--color-text-muted);
+    gap: 0.1rem;
+}
+
+body.light-questionnaire .threshold-marker > div:first-child {
+    font-weight: 700;
+    color: var(--color-text-secondary);
+}
+
+body.light-questionnaire .validation {
+    color: #b91c1c;
+    background: rgba(254, 242, 242, 0.9);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 8px;
+    padding: 0.65rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-top: 0.75rem;
+}
+
+/* ========================================
+   AQ-50 : subscale grid
+   ======================================== */
+body.light-questionnaire .subs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+body.light-questionnaire .sub-card {
+    background: #ffffff;
+    border-radius: var(--neo-radius, 12px);
+    padding: 1rem 1.25rem;
+    text-align: center;
+    box-shadow:
+        4px 4px 10px rgba(0, 0, 0, 0.07),
+        -4px -4px 10px rgba(255, 255, 255, 0.85);
+}
+
+body.light-questionnaire .sub-card h4 {
+    color: var(--cat-readable, var(--cat-main, #7c3aed));
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+}
+
+body.light-questionnaire .sub-card .sub-score {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--cat-readable, var(--cat-main, #7c3aed));
+}
+
+/* ========================================
+   Cas Cliniques — textes inaccessibles en light
+   ======================================== */
+
+/* Feedback quiz */
+body.light-questionnaire .feedback-box.success { color: #15803d; }
+body.light-questionnaire .feedback-box.error   { color: #b91c1c; }
+
+/* Result box headings */
+body.light-questionnaire .result-box h3         { color: #15803d; }
+body.light-questionnaire .result-box.warning h3 { color: #b45309; }
+body.light-questionnaire .result-box.danger h3  { color: #b91c1c; }
+
+/* Active case-tab text (couleurs hardcodées non exprimables via variables) */
+body.light-questionnaire .case-tab.active-teal   { color: #0d9488; }
+body.light-questionnaire .case-tab.active-amber  { color: #b45309; }
+body.light-questionnaire .case-tab.active-orange { color: #c2410c; }
+body.light-questionnaire .case-tab.active-purple { color: #7c3aed; }
+body.light-questionnaire .case-tab.active-blue   { color: #1d4ed8; }
+body.light-questionnaire .case-tab.active-red    { color: #b91c1c; }
+
+/* Case-tab subtitle — visible en light mode (couleur muted trop pâle sinon) */
+body.light-questionnaire .case-tab p { color: var(--color-text-secondary); }
+
+/* Step-btn — sticky-header toujours sombre, conserver textes clairs en light mode */
+body.light-questionnaire .sticky-header .step-btn       { color: rgba(255, 255, 255, 0.65); }
+body.light-questionnaire .sticky-header .step-btn:hover { color: rgba(255, 255, 255, 0.95); }
+
+/* Feature card icons — trop clairs sur fond blanc */
+body.light-questionnaire .feature-card.teal   h4 i { color: #0d9488; }
+body.light-questionnaire .feature-card.amber  h4 i { color: #d97706; }
+body.light-questionnaire .feature-card.orange h4 i { color: #c2410c; }
+body.light-questionnaire .feature-card.purple h4 i { color: #7c3aed; }
+body.light-questionnaire .feature-card.blue   h4 i { color: #1d4ed8; }
+body.light-questionnaire .feature-card.red    h4 i { color: #b91c1c; }
+
+/* ========================================
+   Focus visible — outline plus contrasté
+   sur fond clair (WCAG 2.4.11 ≥ 3:1)
+   ======================================== */
+body.light-questionnaire button:focus-visible,
+body.light-questionnaire a:focus-visible,
+body.light-questionnaire input:focus-visible,
+body.light-questionnaire select:focus-visible,
+body.light-questionnaire textarea:focus-visible {
+    outline: 2px solid #0369a1;
+    outline-offset: 2px;
+}
+
+/* ========================================
+   Print — already light, no changes needed
+   (styles.css print block forces white bg)
+   ======================================== */

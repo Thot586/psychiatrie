@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STORI - Stages Of Recovery Instrument</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --cat-main: #0ea5e9;
+            --cat-dark: #0284c7;
+            --cat-light: #38bdf8;
+            --cat-rgb: 14, 165, 233;
+            --cat-readable: #0284c7;
+        }
+        .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
+        .option-btn.selected, .answer-btn.selected { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        .score-circle { border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 30px rgba(var(--cat-rgb), 0.2); }
+        .score-value { color: var(--cat-light); }
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-light); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+        .progress-fill { background: linear-gradient(90deg, var(--cat-main), var(--cat-light)); box-shadow: 0 0 8px rgba(var(--cat-rgb), 0.4); }
+        .likert-options input[type="radio"]:checked + label,
+        .binary-options input[type="radio"]:checked + label,
+        .radio-options input[type="radio"]:checked + label { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+    </style>
+
+</head>
+<body class="light-questionnaire">
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+            <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+        </div>
+        <h1>STORI - Evaluation du retablissement</h1>
+        <span class="badge badge-cat-rehab">Rehab</span>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>STORI</h1>
+            <p>Stages Of Recovery Instrument</p>
+        </div>
+
+        <!-- Introduction -->
+        <div class="glass-card" id="introSection">
+            <h2>A propos de ce questionnaire</h2>
+            <p style="margin: 15px 0; line-height: 1.6;">
+                Le STORI est un instrument valide scientifiquement qui evalue votre progression dans le processus de retablissement.
+                Il explore vos sentiments actuels concernant votre vie et vous-meme depuis la maladie.
+            </p>
+
+            <div class="warning-box">
+                <h3><i class="fas fa-exclamation-triangle"></i> Avertissement important</h3>
+                <p>
+                    Si certaines questions vous derangent ou vous mettent mal a l'aise, n'hesitez pas a faire une pause et a en parler a un ami ou a contacter votre equipe soignante.
+                    Ce questionnaire n'est pas un diagnostic mais un outil d'evaluation du processus de retablissement.
+                </p>
+            </div>
+
+            <div class="info-box">
+                <h3><i class="fas fa-info-circle"></i> Instructions importantes</h3>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Lisez d'abord les 5 questions de chaque groupe avant d'y repondre</li>
+                    <li>Repondez en fonction de comment vous vous sentez <strong>actuellement</strong></li>
+                    <li>Ne laissez pas votre humeur du moment influencer vos reponses</li>
+                    <li>Pensez a votre etat global ces derniers jours</li>
+                </ul>
+            </div>
+
+            <div style="margin-top: 30px;">
+                <h3 style="margin-bottom: 15px; color: var(--color-text-primary);">Ce que mesure le STORI</h3>
+                <div class="process-grid" style="margin-top: 20px;">
+                    <div class="process-card">
+                        <div class="process-icon"><i class="fas fa-star"></i></div>
+                        <div class="process-title">Espoir</div>
+                    </div>
+                    <div class="process-card">
+                        <div class="process-icon"><i class="fas fa-search"></i></div>
+                        <div class="process-title">Identite</div>
+                    </div>
+                    <div class="process-card">
+                        <div class="process-icon"><i class="fas fa-gem"></i></div>
+                        <div class="process-title">Sens</div>
+                    </div>
+                    <div class="process-card">
+                        <div class="process-icon"><i class="fas fa-bullseye"></i></div>
+                        <div class="process-title">Responsabilite</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="control-buttons" style="margin-top: 30px; justify-content: center;">
+                <button class="btn btn-primary" onclick="startQuestionnaire()">
+                    <i class="fas fa-play"></i> Commencer l'evaluation
+                </button>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="glass-card" id="progressSection" style="display: none;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                <span id="progressText">Progression</span>
+                <span id="progressPercent">0%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+            <div class="progress-text" id="progressGroupText">Groupe 0 / 10</div>
+            <div class="control-buttons" style="margin-top: 15px;">
+                <button class="btn btn-secondary" onclick="importData()">
+                    <i class="fas fa-file-import"></i> Importer
+                </button>
+                <button class="btn btn-secondary" onclick="fillRandom()">
+                    <i class="fas fa-random"></i> Test aleatoire
+                </button>
+                <button class="btn btn-secondary" onclick="resetQuestionnaire()">
+                    <i class="fas fa-redo"></i> Reinitialiser
+                </button>
+            </div>
+        </div>
+
+        <!-- Questions Section -->
+        <div class="glass-card" id="questionsSection" style="display: none;">
+            <h2 style="margin-bottom: 25px; color: var(--color-text-primary);">Repondez aux questions suivantes</h2>
+
+            <div class="info-box" id="reminderBox">
+                <p>
+                    <strong>Rappel :</strong> Lisez d'abord toutes les questions du groupe, puis repondez a chacune en pensant a votre situation actuelle.
+                </p>
+            </div>
+
+            <div id="questionsContainer"></div>
+
+            <div style="display: flex; justify-content: space-between; margin-top: 30px; gap: 15px;">
+                <button class="btn btn-secondary" id="prevBtn" onclick="previousGroup()" disabled>
+                    <i class="fas fa-arrow-left"></i> Groupe precedent
+                </button>
+                <button class="btn btn-primary" id="nextBtn" onclick="nextGroup()">
+                    Groupe suivant <i class="fas fa-arrow-right"></i>
+                </button>
+                <button class="btn btn-primary" id="calculateBtn" onclick="calculateResults()" style="display: none; width: 100%;">
+                    <i class="fas fa-chart-bar"></i> Voir mes resultats
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results-section" id="resultsSection">
+            <div class="glass-card">
+                <h2 style="text-align: center; margin-bottom: 30px; color: var(--color-text-primary);">Vos Resultats</h2>
+
+                <div class="current-stage" id="currentStageBox">
+                    <h2 id="currentStageTitle">Votre etape actuelle</h2>
+                    <p id="currentStageDescription"></p>
+                </div>
+
+                <h3 style="margin-bottom: 20px; color: var(--color-text-primary);">Scores detailles par etape</h3>
+                <div id="stagesContainer"></div>
+            </div>
+
+            <div class="glass-card">
+                <h3 style="margin-bottom: 20px; color: var(--color-text-primary);"><i class="fas fa-chart-line"></i> Analyse par processus</h3>
+                <div class="chart-container">
+                    <canvas id="processChart"></canvas>
+                </div>
+
+                <div class="process-grid" id="processScores">
+                    <!-- Process scores will be inserted here -->
+                </div>
+            </div>
+
+            <div class="glass-card">
+                <h3 style="margin-bottom: 20px; color: var(--color-text-primary);"><i class="fas fa-lightbulb"></i> Comprendre vos resultats</h3>
+
+                <div style="margin-bottom: 25px;">
+                    <h4 style="color: var(--color-text-primary); margin-bottom: 15px;">Les 5 etapes du retablissement :</h4>
+
+                    <div class="stage-card" style="border-left-color: #6c757d;" onclick="showStageDescription(0)">
+                        <h5 style="color: var(--color-text-primary); margin-bottom: 10px;">1. Moratoire</h5>
+                        <p style="color: var(--color-text-muted);">Une periode caracterisee par le repli, le desespoir et la confusion concernant l'identite.</p>
+                    </div>
+
+                    <div class="stage-card" style="border-left-color: #fbbf24;" onclick="showStageDescription(1)">
+                        <h5 style="color: var(--color-text-primary); margin-bottom: 10px;">2. Conscience</h5>
+                        <p style="color: var(--color-text-muted);">La prise de conscience que le retablissement est possible, souvent inspiree par d'autres.</p>
+                    </div>
+
+                    <div class="stage-card" style="border-left-color: #fb923c;" onclick="showStageDescription(2)">
+                        <h5 style="color: var(--color-text-primary); margin-bottom: 10px;">3. Preparation</h5>
+                        <p style="color: var(--color-text-muted);">L'apprentissage actif sur la maladie et les strategies de retablissement.</p>
+                    </div>
+
+                    <div class="stage-card" style="border-left-color: #0ea5e9;" onclick="showStageDescription(3)">
+                        <h5 style="color: var(--color-text-primary); margin-bottom: 10px;">4. Reconstruction</h5>
+                        <p style="color: var(--color-text-muted);">Le travail actif pour construire une identite positive et atteindre des objectifs significatifs.</p>
+                    </div>
+
+                    <div class="stage-card" style="border-left-color: #10b981;" onclick="showStageDescription(4)">
+                        <h5 style="color: var(--color-text-primary); margin-bottom: 10px;">5. Croissance</h5>
+                        <p style="color: var(--color-text-muted);">L'acceptation de la maladie comme partie de l'experience de vie, avec un sentiment de bien-etre et de resilience.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card">
+                 <div class="control-buttons" style="justify-content: center; margin-bottom: 0;">
+                    <button class="btn btn-secondary" onclick="exportData()">
+                        <i class="fas fa-download"></i> Exporter mes resultats
+                    </button>
+                    <button class="btn-print" onclick="window.print()">
+                        <i class="fas fa-print"></i> Imprimer
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p><strong>STORI - Stages Of Recovery Instrument</strong></p>
+            <p>
+                <strong>Auteurs :</strong> Retta Andresen, Peter Caputi & Lindsay Oades (2006)<br>
+                <strong>Traduction francaise :</strong> P. Galay & J. Favrod
+            </p>
+            <p>
+                <strong>Adaptation numerique :</strong> Dr FENOHASINA T.J. Felicien | Psychiatre - FFI
+            </p>
+            <p>&copy; 2025 - Outil d'evaluation psychometrique</p>
+        </footer>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header" id="modalTitle">Information</div>
+            <div class="modal-body" id="modalBody"></div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="closeModal()">Compris</button>
+            </div>
+        </div>
+    </div>
+
+    <input type="file" id="fileInput" accept=".json" style="display: none;">
+
+    <script>
+        // Questions data
+        const questions = [
+            // Groupe 1
+            [
+                "Je ne pense pas que les gens qui ont une maladie psychique puissent aller mieux.",
+                "J'ai seulement recemment decouvert que les gens avec une maladie psychique peuvent aller mieux.",
+                "Je commence a apprendre comment je peux faire des choses pour moi-meme pour aller mieux.",
+                "Je travaille dur pour aller bien, et cela en vaudra la peine sur le long terme.",
+                "J'ai maintenant un sentiment de paix interieure au sujet de la vie avec la maladie."
+            ],
+            // Groupe 2
+            [
+                "Je sens que ma vie a ete ruinee par cette maladie.",
+                "J'ai commence seulement a realiser que ma vie n'a pas a etre affreuse pour toujours.",
+                "J'ai recemment commence a apprendre des gens qui vivent bien malgre une serieuse maladie.",
+                "Je commence a etre raisonnablement confiant a propos de remettre ma vie sur les rails.",
+                "Ma vie est vraiment bonne maintenant et le futur s'annonce lumineux."
+            ],
+            // Groupe 3
+            [
+                "Je me sens actuellement comme si je n'etais qu'une personne malade.",
+                "Parce que les autres ont confiance en moi, je commence tout juste a penser que peut-etre, je peux aller mieux.",
+                "Je commence seulement a realiser que la maladie ne change pas qui je suis en tant que personne.",
+                "Je commence actuellement a accepter la maladie comme une partie du tout qui fait ma personne.",
+                "Je suis heureux d'etre la personne que je suis."
+            ],
+            // Groupe 4
+            [
+                "J'ai l'impression de ne plus savoir qui je suis.",
+                "J'ai recemment commence a reconnaitre qu'une partie de moi n'est pas affectee par la maladie.",
+                "Je commence juste a realiser que je peux toujours etre une personne de valeur.",
+                "J'apprends de nouvelles choses sur moi-meme alors que je travaille a mon retablissement.",
+                "Je pense que le fait d'avoir travaille pour depasser la maladie a fait de moi une personne meilleure."
+            ],
+            // Groupe 5
+            [
+                "Je ne serai jamais la personne que je pensais que je serais.",
+                "J'ai tout juste commence a accepter la maladie comme une partie de ma vie avec laquelle je vais devoir apprendre a vivre.",
+                "Je commence a reconnaitre ou sont mes forces et mes faiblesses.",
+                "Je commence a sentir que j'apporte une contribution de valeur a la vie.",
+                "J'accomplis des choses qui valent la peine et qui sont satisfaisantes dans ma vie."
+            ],
+            // Groupe 6
+            [
+                "Je suis en colere que cela me soit arrive a moi.",
+                "J'ai commence tout juste a me demander si des choses positives pourraient ressortir de ce qui m'arrive.",
+                "Je commence a reflechir a quelles sont mes qualites particulieres.",
+                "En devant faire face a la maladie, j'apprends beaucoup au sujet de la vie.",
+                "En surmontant la maladie, j'ai acquis de nouvelles valeurs dans la vie."
+            ],
+            // Groupe 7
+            [
+                "Ma vie semble totalement inutile actuellement.",
+                "J'ai commence tout juste a penser que je peux peut-etre faire quelque chose de ma vie.",
+                "J'essaie de penser a des moyens d'apporter une contribution dans la vie.",
+                "Je travaille ces jours sur des choses de la vie qui sont personnellement importantes pour moi.",
+                "J'ai des projets importants qui me donnent une raison d'etre."
+            ],
+            // Groupe 8
+            [
+                "Je ne peux rien faire a propos de ma situation.",
+                "Je commence a penser que je pourrai faire quelque chose pour m'aider.",
+                "Je commence a me sentir plus confiant au sujet d'apprendre a vivre avec la maladie.",
+                "Il y a parfois des revers, mais je ne laisse pas tomber.",
+                "Je me rejouis de relever de nouveaux defis dans la vie."
+            ],
+            // Groupe 9
+            [
+                "Les autres savent mieux que moi ce qui est bon pour moi.",
+                "J'aimerais commencer a apprendre a m'occuper de moi correctement.",
+                "Je commence a en apprendre davantage sur la maladie psychique et sur comment je peux m'aider moi-meme.",
+                "Je me sens maintenant raisonnablement confiant en ce qui concerne la gestion de la maladie.",
+                "Maintenant, je peux bien gerer la maladie."
+            ],
+            // Groupe 10
+            [
+                "Il ne me semble pas que j'ai actuellement un quelconque controle sur ma vie.",
+                "J'aimerais commencer a apprendre a gerer la maladie.",
+                "Je commence seulement a travailler pour remettre ma vie sur les rails.",
+                "Je commence a me sentir responsable de ma propre vie.",
+                "Je suis aux commandes de ma propre vie."
+            ]
+        ];
+
+        const stageNames = ["Moratoire", "Conscience", "Preparation", "Reconstruction", "Croissance"];
+        const stageColors = ["#6c757d", "#fbbf24", "#fb923c", "#0ea5e9", "#10b981"];
+
+        // Process mapping: which groups belong to which process
+        const processMapping = {
+            "Espoir": [1, 2],
+            "Identite": [3, 4, 5, 6],
+            "Sens": [7],
+            "Responsabilite": [8, 9, 10]
+        };
+
+        const choiceLabels = [
+            { score: 0, text: "0. Pas du tout vrai" },
+            { score: 1, text: "1. Pas vraiment" },
+            { score: 2, text: "2. Un petit peu" },
+            { score: 3, text: "3. Assez vrai" },
+            { score: 4, text: "4. Vrai" },
+            { score: 5, text: "5. Completement vrai" }
+        ];
+
+        let currentGroup = 0;
+        const totalGroups = 10;
+        let answers = Array(10).fill(null).map(() => Array(5).fill(null));
+        let chartInstance = null;
+
+        function startQuestionnaire() {
+            document.getElementById('introSection').style.display = 'none';
+            document.getElementById('progressSection').style.display = 'block';
+            document.getElementById('questionsSection').style.display = 'block';
+            renderGroup();
+            updateProgress();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function renderGroup() {
+            const container = document.getElementById('questionsContainer');
+            const groupQuestions = questions[currentGroup];
+
+            let html = `
+                <div class="question-group">
+                    <div class="group-title">
+                        <span class="group-number">${currentGroup + 1}</span>
+                        <span>Groupe ${currentGroup + 1}</span>
+                    </div>
+            `;
+
+            groupQuestions.forEach((question, index) => {
+                const value = answers[currentGroup][index];
+                const questionNum = currentGroup * 5 + index + 1;
+
+                html += `
+                    <div class="question-item" id="question-item-${currentGroup}-${index}">
+                        <div class="question-text">
+                            <span class="question-number-badge">${questionNum}</span>
+                            ${question}
+                        </div>
+                        <div class="question-choices">
+                `;
+
+                choiceLabels.forEach(choice => {
+                    const selected = value === choice.score ? 'active' : '';
+                    html += `
+                        <button class="choice-btn ${selected}"
+                                data-score="${choice.score}"
+                                onclick="selectAnswer(${currentGroup}, ${index}, ${choice.score})">
+                            ${choice.text}
+                        </button>
+                    `;
+                });
+
+                html += `
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += '</div>';
+            container.innerHTML = html;
+
+            // Update navigation buttons
+            document.getElementById('prevBtn').disabled = currentGroup === 0;
+            document.getElementById('nextBtn').style.display = currentGroup === totalGroups - 1 ? 'none' : 'inline-flex';
+            document.getElementById('calculateBtn').style.display = currentGroup === totalGroups - 1 ? 'block' : 'none';
+        }
+
+
+        function selectAnswer(group, question, value) {
+            answers[group][question] = value;
+            const questionItem = document.getElementById(`question-item-${group}-${question}`);
+            if(questionItem) {
+                const choiceButtons = questionItem.querySelectorAll('.choice-btn');
+                choiceButtons.forEach(btn => btn.classList.remove('active'));
+                const selectedBtn = questionItem.querySelector(`.choice-btn[data-score="${value}"]`);
+                if(selectedBtn) {
+                    selectedBtn.classList.add('active');
+                }
+            }
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const totalAnswers = answers.flat().filter(a => a !== null).length;
+            const percentage = Math.round((totalAnswers / 50) * 100);
+            const completedGroups = answers.filter(group => group.every(a => a !== null)).length;
+
+            document.getElementById('progressPercent').textContent = `${percentage}%`;
+            document.getElementById('progressFill').style.width = `${percentage}%`;
+            document.getElementById('progressGroupText').textContent = `Groupe ${completedGroups} / ${totalGroups}`;
+        }
+
+        function nextGroup() {
+            // Check if current group is complete
+            if (!answers[currentGroup].every(a => a !== null)) {
+                showModal('Groupe incomplet', 'Veuillez repondre a toutes les questions du groupe avant de continuer.');
+                return;
+            }
+
+            if (currentGroup < totalGroups - 1) {
+                currentGroup++;
+                renderGroup();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function previousGroup() {
+            if (currentGroup > 0) {
+                currentGroup--;
+                renderGroup();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function fillRandom() {
+            answers = Array(10).fill(null).map(() =>
+                Array(5).fill(null).map(() => Math.floor(Math.random() * 6))
+            );
+            startQuestionnaire();
+            updateProgress();
+            calculateResults();
+        }
+
+        function resetQuestionnaire() {
+             if (confirm('Etes-vous sur de vouloir reinitialiser toutes vos reponses ?')) {
+                answers = Array(10).fill(null).map(() => Array(5).fill(null));
+                currentGroup = 0;
+
+                const progressSection = document.getElementById('progressSection');
+                progressSection.style.position = 'sticky';
+                progressSection.style.top = '20px';
+                document.getElementById('reminderBox').style.display = 'block';
+
+                document.getElementById('resultsSection').classList.remove('show');
+                document.getElementById('introSection').style.display = 'block';
+                document.getElementById('questionsSection').style.display = 'none';
+                document.getElementById('progressSection').style.display = 'none';
+
+                updateProgress();
+             }
+        }
+
+        function calculateResults() {
+            // Check if all questions are answered
+            const totalAnswers = answers.flat().filter(a => a !== null).length;
+            if (totalAnswers < 50) {
+                showModal('Questionnaire incomplet', `Veuillez repondre a toutes les questions. Il vous reste ${50 - totalAnswers} questions a completer.`);
+                return;
+            }
+
+            // Calculate scores for each stage
+            const stageScores = [0, 0, 0, 0, 0];
+
+            answers.forEach((group) => {
+                group.forEach((score, stageIndex) => {
+                    stageScores[stageIndex] += score;
+                });
+            });
+
+            // Find the highest scoring stage
+            const maxScore = Math.max(...stageScores);
+            let currentStage = stageScores.lastIndexOf(maxScore); // If tie, take the most advanced stage
+
+            // Calculate process scores
+            const processScores = {};
+            Object.entries(processMapping).forEach(([process, groups]) => {
+                let totalScore = 0;
+                let count = 0;
+                groups.forEach(groupNum => {
+                    const groupIndex = groupNum - 1;
+                    answers[groupIndex].forEach(score => {
+                        totalScore += score;
+                        count++;
+                    });
+                });
+                processScores[process] = totalScore / count;
+            });
+
+            displayResults(stageScores, currentStage, processScores);
+        }
+
+        function displayResults(stageScores, currentStage, processScores) {
+            document.getElementById('questionsSection').style.display = 'none';
+            const progressSection = document.getElementById('progressSection');
+            progressSection.style.position = 'relative';
+            progressSection.style.top = 'auto';
+            document.getElementById('reminderBox').style.display = 'none';
+
+            // Display current stage
+            document.getElementById('currentStageTitle').textContent = `Etape actuelle : ${stageNames[currentStage]}`;
+            document.getElementById('currentStageDescription').textContent = getStageDescription(currentStage);
+
+            // Display stage scores
+            const stagesContainer = document.getElementById('stagesContainer');
+            let stagesHtml = '';
+
+            stageScores.forEach((score, index) => {
+                const maxPossible = 50; // 10 groups * 5 max score per question
+                const percentage = (score / maxPossible) * 100;
+                const isCurrentStage = index === currentStage;
+
+                stagesHtml += `
+                    <div class="stage-card" style="border-left-color: ${stageColors[index]}; ${isCurrentStage ? 'background: linear-gradient(145deg, rgba(14, 165, 233, 0.2), rgba(14, 165, 233, 0.1));' : ''}" onclick="showStageDescription(${index})">
+                        <div class="stage-header">
+                            <span class="stage-title">
+                                ${stageNames[index]}
+                                ${isCurrentStage ? '<i class="fas fa-check-circle" style="color: #0ea5e9;"></i>' : ''}
+                            </span>
+                            <span class="stage-score" style="background: ${stageColors[index]};">
+                                ${score}
+                            </span>
+                        </div>
+                        <div class="stage-bar">
+                            <div class="stage-fill" style="width: ${percentage}%; background: ${stageColors[index]};"></div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            stagesContainer.innerHTML = stagesHtml;
+
+            // Display process scores
+            renderProcessChart(processScores);
+
+            const processScoresHtml = Object.entries(processScores).map(([process, score]) => {
+                const iconClass = {
+                    "Espoir": "fa-star",
+                    "Identite": "fa-search",
+                    "Sens": "fa-gem",
+                    "Responsabilite": "fa-bullseye"
+                }[process];
+
+                return `
+                    <div class="process-card">
+                        <div class="process-icon"><i class="fas ${iconClass}"></i></div>
+                        <div class="process-title">${process}</div>
+                        <div class="process-score">${score.toFixed(1)}/5</div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('processScores').innerHTML = processScoresHtml;
+
+            // Show results
+            document.getElementById('resultsSection').classList.add('show');
+            document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function getStageDescription(stageIndex) {
+            const descriptions = [
+                "Periode de repli, de confusion et de perte d'espoir face a la maladie.",
+                "Emergence de l'espoir et prise de conscience que le retablissement est possible.",
+                "Apprentissage actif et preparation au changement.",
+                "Reconstruction active d'une vie significative et d'une identite positive.",
+                "Acceptation, resilience et croissance personnelle a travers l'experience."
+            ];
+            return descriptions[stageIndex];
+        }
+
+        function showStageDescription(stageIndex) {
+            const title = stageNames[stageIndex];
+            const description = getStageDescription(stageIndex);
+            showModal(title, description);
+        }
+
+        function renderProcessChart(processScores) {
+            const ctx = document.getElementById('processChart').getContext('2d');
+
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            chartInstance = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: Object.keys(processScores),
+                    datasets: [{
+                        label: 'Score moyen',
+                        data: Object.values(processScores),
+                        backgroundColor: 'rgba(14, 165, 233, 0.2)',
+                        borderColor: 'rgba(14, 165, 233, 0.8)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(14, 165, 233, 1)',
+                        pointBorderColor: '#fff',
+                        pointRadius: 6,
+                        pointHoverRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            min: 0,
+                            max: 5,
+                            ticks: {
+                                stepSize: 1,
+                                color: '#94a3b8'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            pointLabels: {
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                },
+                                color: '#e2e8f0'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return 'Score: ' + context.parsed.r.toFixed(2);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function importData() {
+            document.getElementById('fileInput').click();
+        }
+
+        function exportData() {
+            const data = {
+                date: new Date().toISOString(),
+                answers: answers,
+                version: 'STORI-1.0'
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `STORI_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function showModal(title, message) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalBody').textContent = message;
+            document.getElementById('modal').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('show');
+        }
+
+        // File input handler
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    try {
+                        const data = JSON.parse(event.target.result);
+                        if (data.answers && Array.isArray(data.answers) && data.answers.length === 10) {
+                            answers = data.answers;
+                            startQuestionnaire();
+                            updateProgress();
+                            calculateResults();
+                            showModal('Import reussi', 'Vos donnees ont ete importees et les resultats calcules.');
+                        } else {
+                            showModal('Erreur', 'Le fichier ne contient pas de donnees valides.');
+                        }
+                    } catch (error) {
+                        showModal('Erreur', 'Impossible de lire le fichier. Assurez-vous qu\'il s\'agit d\'un fichier JSON valide.');
+                    }
+                };
+                reader.readAsText(file);
+            }
+            e.target.value = '';
+        });
+    </script>
+</body>
+</html>

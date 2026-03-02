@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WURS-25 - Échelle d'Évaluation de Wender Utah</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <style>
+        :root {
+            --cat-main: #8b5cf6;
+            --cat-dark: #7c3aed;
+            --cat-light: #a78bfa;
+            --cat-rgb: 139, 92, 246;
+            --cat-readable: #7c3aed;
+        }
+        .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
+        .option-btn.selected, .answer-btn.selected { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        .score-circle { border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 30px rgba(var(--cat-rgb), 0.2); }
+        .score-value { color: var(--cat-light); }
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-light); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+        .progress-fill { background: linear-gradient(90deg, var(--cat-main), var(--cat-light)); box-shadow: 0 0 8px rgba(var(--cat-rgb), 0.4); }
+        .likert-options input[type="radio"]:checked + label,
+        .binary-options input[type="radio"]:checked + label,
+        .radio-options input[type="radio"]:checked + label { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+    </style>
+
+</head>
+<body class="light-questionnaire">
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil">
+                <i class="fas fa-home"></i>
+            </a>
+            <button onclick="history.back()" class="btn-back" title="Retour">
+                <i class="fas fa-arrow-left"></i> <span>Retour</span>
+            </button>
+        </div>
+        <h1>WURS-25</h1>
+        <span class="badge badge-cat-tnd">TND</span>
+    </nav>
+
+    <main class="container">
+        <header class="header-glow" style="text-align: center; margin-bottom: 2rem;">
+            <h1><i class="fas fa-child"></i> Échelle WURS-25</h1>
+            <p class="subtitle">Wender Utah Rating Scale - Évaluation rétrospective du TDAH dans l'enfance</p>
+        </header>
+
+        <section class="glass-card info-box">
+            <h2><i class="fas fa-info-circle"></i> À propos</h2>
+            <p>Le WURS-25 (Ward, Wender & Reimherr, 1993) est un questionnaire d'<strong>évaluation rétrospective</strong> des symptômes du TDAH durant l'enfance. Il aide à documenter l'antériorité des symptômes pour le diagnostic du TDAH adulte.</p>
+            <p style="margin-top: 0.5rem;"><strong>Seuil clinique :</strong> Un score ≥ 46 suggère une forte probabilité de TDAH dans l'enfance.</p>
+        </section>
+
+        <section class="glass-card warning-box">
+            <h3><i class="fas fa-exclamation-triangle"></i> Avertissements</h3>
+            <ul>
+                <li>Évaluez votre comportement durant votre <strong>enfance (6-10 ans)</strong></li>
+                <li>Ce questionnaire est un outil de dépistage, <strong>pas un diagnostic</strong></li>
+                <li>Le TDAH nécessite une évaluation clinique complète</li>
+            </ul>
+        </section>
+
+        <section class="glass-card">
+            <div class="control-buttons">
+                <button class="btn-primary" onclick="importData()">
+                    <i class="fas fa-file-import"></i> Importer
+                </button>
+                <button class="btn-secondary" onclick="resetForm()">
+                    <i class="fas fa-redo"></i> Réinitialiser
+                </button>
+            </div>
+            <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="loadFile(event)">
+        </section>
+
+        <section class="glass-card">
+            <h2><i class="fas fa-clipboard-list"></i> Questions</h2>
+            <p style="margin-bottom: 1.5rem; opacity: 0.8;">Quand j'étais enfant, j'avais...</p>
+            <div id="questions"></div>
+        </section>
+
+        <!-- Résultats -->
+        <section id="results" class="glass-card results-section" style="display: none;">
+            <h2 style="text-align: center; margin-bottom: 2rem;"><i class="fas fa-chart-pie"></i> Résultats</h2>
+
+            <div class="score-display">
+                <div class="score-circle">
+                    <span class="score-number" id="totalScore">0</span>
+                    <span class="score-label">sur 100</span>
+                </div>
+            </div>
+
+            <div id="interpretationBox" class="interpretation"></div>
+
+            <button class="btn-primary" onclick="toggleDetails()" style="width: 100%; margin-top: 1.5rem;">
+                <i class="fas fa-list-ul"></i> Voir l'interprétation détaillée
+                <span id="toggleIcon"><i class="fas fa-chevron-down"></i></span>
+            </button>
+            <div id="detailsContent" class="details-content" style="display: none;"></div>
+
+            <div class="glass-card" style="margin-top: 2rem; background: rgba(255,255,255,0.05);">
+                <h3><i class="fas fa-download"></i> Exporter</h3>
+                <div class="consent-box">
+                    <label>
+                        <input type="checkbox" id="exportConsent">
+                        <span>Je souhaite télécharger mes résultats (questionnaire, réponses, score et date) dans un fichier JSON sur mon appareil. <strong>Ces résultats constituent des données de santé — je m'engage à les conserver de façon sécurisée et à ne les partager qu'avec un professionnel de santé de mon choix.</strong> Aucune donnée n'est transmise à un serveur.</span>
+                    </label>
+                </div>
+                <div class="export-buttons">
+                    <button class="btn-primary" onclick="exportData()">
+                        <i class="fas fa-file-export"></i> Exporter en JSON
+                    </button>
+                    <button class="btn-print" onclick="printResults()">
+                        <i class="fas fa-print"></i> Imprimer
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p><strong>WURS-25 - Wender Utah Rating Scale</strong></p>
+        <p style="margin: 0.5rem 0;"><strong>Auteurs :</strong> Ward, M.F., Wender, P.H. & Reimherr, F.W. (1993)</p>
+        <p><strong>Adaptation numérique :</strong> Dr FENOHASINA | Psychiatre</p>
+        <small>Licence CC BY-NC-SA 4.0</small>
+    </footer>
+
+    <script src="../js/app.js"></script>
+    <script>
+        const questions = [
+            "Des problèmes de concentration. J'étais facilement distrait(e)",
+            "Anxieux. Je me faisais du souci",
+            "Nerveux. Je ne tenais pas en place",
+            "Inattentif(ve), rêveur(se)",
+            "Facilement en colère, « soupe au lait »",
+            "Des éclats d'humeur, des accès de colère",
+            "Des difficultés à me tenir aux choses, à mener mes projets jusqu'à la fin",
+            "Têtu(e), obstiné(e)",
+            "Triste ou cafardeux(se), déprimé(e), malheureux(se)",
+            "Désobéissant(e) envers mes parents, rebelle, effronté(e)",
+            "Mauvaise opinion de moi-même",
+            "Irritable",
+            "D'humeur changeante avec des hauts et des bas",
+            "En colère",
+            "Impulsif(ve). J'agissais sans réfléchir.",
+            "Tendance à être immature",
+            "Culpabilisé(e), plein(e) de regrets",
+            "Je pouvais perdre le contrôle de moi-même",
+            "Tendance à être ou à agir de façon irrationnelle",
+            "Impopulaire auprès des autres enfants",
+            "Du mal à voir les choses du point de vue de quelqu'un d'autre",
+            "Des ennuis avec les autorités, des ennuis à l'école",
+            "Dans l'ensemble un élève peu doué, apprenant lentement",
+            "Des difficultés en mathématiques ou avec les chiffres",
+            "En dessous de mon potentiel"
+        ];
+
+        const responses = [
+            { label: "Pas du tout", value: 0 },
+            { label: "Légèrement", value: 1 },
+            { label: "Modérément", value: 2 },
+            { label: "Assez", value: 3 },
+            { label: "Beaucoup", value: 4 }
+        ];
+
+        let answers = new Array(25).fill(null);
+
+        function initializeQuestions() {
+            const container = document.getElementById('questions');
+            container.innerHTML = '';
+            questions.forEach((q, index) => {
+                const opts = responses.map(r => `
+                    <button type="button" class="option-btn" onclick="selectAnswer(${index}, ${r.value})" id="q${index}_opt${r.value}">
+                        <span>${r.label}</span>
+                    </button>
+                `).join('');
+
+                container.innerHTML += `
+                    <div class="question-card" id="q-container-${index}">
+                        <span class="question-number">${index + 1}</span>
+                        <div class="question-text">${q}</div>
+                        <div class="options-grid">${opts}</div>
+                    </div>
+                `;
+            });
+        }
+
+        function selectAnswer(index, value) {
+            answers[index] = value;
+            responses.forEach(r => {
+                const btn = document.getElementById(`q${index}_opt${r.value}`);
+                if (btn) btn.classList.toggle('selected', r.value === value);
+            });
+            document.getElementById(`q-container-${index}`).classList.remove('missing');
+
+            if (answers.every(a => a !== null)) {
+                updateResults();
+                document.getElementById('results').style.display = 'block';
+                document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function getInterpretation(score) {
+            if (score >= 46) return { level: "TDAH enfance probable", className: "high", desc: "Votre score suggère une forte probabilité de TDAH dans l'enfance. Les difficultés que vous décrivez sont compatibles avec un profil TDAH." };
+            return { level: "TDAH enfance peu probable", className: "low", desc: "Un TDAH dans l'enfance est moins probable selon ce score. Si vous avez des difficultés actuelles, d'autres facteurs pourraient être impliqués." };
+        }
+
+        function updateResults() {
+            const total = answers.reduce((sum, val) => sum + (val || 0), 0);
+            document.getElementById('totalScore').textContent = total;
+
+            const interp = getInterpretation(total);
+            const interpretationBox = document.getElementById('interpretationBox');
+            interpretationBox.className = `interpretation ${interp.className}`;
+            interpretationBox.innerHTML = `<h3>${interp.level}</h3><p>${interp.desc}</p>`;
+
+            document.getElementById('detailsContent').innerHTML = `
+                <h3>À propos du seuil de 46</h3>
+                <div class="info-box">
+                    <p>Le seuil de 46 est un indicateur clinique (Ward et al., 1993) pour identifier les adultes ayant une forte probabilité de TDAH dans l'enfance.</p>
+                    <ul style="margin-top: 0.5rem;">
+                        <li><strong>Score ≥ 46 :</strong> Souvenirs d'enfance compatibles avec un profil TDAH</li>
+                        <li><strong>Score < 46 :</strong> TDAH enfance moins probable, sans l'exclure formellement</li>
+                    </ul>
+                </div>
+                <div class="warning-box" style="margin-top: 1rem;">
+                    <p><strong>Important :</strong> Ce questionnaire évalue rétrospectivement l'enfance. Pour un diagnostic complet de TDAH adulte, une évaluation des symptômes actuels (ex: ASRS) et du retentissement fonctionnel est également nécessaire.</p>
+                </div>
+            `;
+        }
+
+        function toggleDetails() {
+            const content = document.getElementById('detailsContent');
+            const icon = document.getElementById('toggleIcon');
+            const isVisible = content.style.display !== 'none';
+            content.style.display = isVisible ? 'none' : 'block';
+            icon.innerHTML = isVisible ? '<i class="fas fa-chevron-down"></i>' : '<i class="fas fa-chevron-up"></i>';
+        }
+
+        function resetForm() {
+            answers = new Array(25).fill(null);
+            document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+            document.querySelectorAll('.question-card').forEach(card => card.classList.remove('missing'));
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('detailsContent').style.display = 'none';
+            document.getElementById('exportConsent').checked = false;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function importData() { document.getElementById('fileInput').click(); }
+
+        function loadFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data.questionnaire === "WURS-25" && data.answers) {
+                        answers = data.answers;
+                        initializeQuestions();
+                        answers.forEach((val, i) => { if (val !== null) selectAnswer(i, val); });
+                    }
+                } catch { alert("Fichier invalide."); }
+            };
+            reader.readAsText(file);
+        }
+
+        function exportData() {
+            if (!document.getElementById('exportConsent').checked) {
+                alert("Veuillez cocher la case de consentement avant d''exporter.");
+                return;
+            }
+            const total = answers.reduce((sum, val) => sum + (val || 0), 0);
+            const data = {
+                questionnaire: "WURS-25",
+                date: new Date().toISOString(),
+                answers: answers,
+                totalScore: total,
+                interpretation: getInterpretation(total).level
+            };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `WURS-25_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        document.addEventListener('DOMContentLoaded', initializeQuestions);
+    </script>
+</body>
+</html>

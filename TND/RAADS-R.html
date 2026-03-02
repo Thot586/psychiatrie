@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAADS-R - Échelle Diagnostique de l'Autisme (Révisée)</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <style>
+        :root {
+            --cat-main: #8b5cf6;
+            --cat-dark: #7c3aed;
+            --cat-light: #a78bfa;
+            --cat-rgb: 139, 92, 246;
+            --cat-readable: #7c3aed;
+        }
+        .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
+        .option-btn.selected, .answer-btn.selected { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        .score-circle { border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 30px rgba(var(--cat-rgb), 0.2); }
+        .score-value { color: var(--cat-light); }
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-light); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+        .progress-fill { background: linear-gradient(90deg, var(--cat-main), var(--cat-light)); box-shadow: 0 0 8px rgba(var(--cat-rgb), 0.4); }
+        .likert-options input[type="radio"]:checked + label,
+        .binary-options input[type="radio"]:checked + label,
+        .radio-options input[type="radio"]:checked + label { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+    </style>
+
+</head>
+<body class="light-questionnaire">
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil">
+                <i class="fas fa-home"></i>
+            </a>
+            <button onclick="history.back()" class="btn-back" title="Retour">
+                <i class="fas fa-arrow-left"></i> <span>Retour</span>
+            </button>
+        </div>
+        <h1>RAADS-R</h1>
+        <span class="badge badge-cat-tnd">TND</span>
+    </nav>
+
+    <main class="container">
+        <header class="header-glow" style="text-align: center; margin-bottom: 2rem;">
+            <h1><i class="fas fa-brain"></i> Échelle RAADS-R</h1>
+            <p class="subtitle">Ritvo Autism Asperger Diagnostic Scale - Revised (80 questions)</p>
+        </header>
+
+        <section class="glass-card info-box">
+            <h2><i class="fas fa-info-circle"></i> À propos</h2>
+            <p>Le RAADS-R est un questionnaire de dépistage de l'autisme chez l'adulte développé par Ritvo et al. (2011). Il évalue les traits autistiques dans 4 domaines : <strong>Relations sociales</strong>, <strong>Intérêts spécifiques</strong>, <strong>Particularités sensorimotrices</strong> et <strong>Langage</strong>.</p>
+            <p style="margin-top: 0.5rem;"><strong>Seuil suggéré :</strong> Un score ≥ 65 suggère la présence de traits autistiques significatifs.</p>
+        </section>
+
+        <section class="glass-card warning-box">
+            <h3><i class="fas fa-exclamation-triangle"></i> Avertissements</h3>
+            <ul>
+                <li>Ce questionnaire est un outil de dépistage, <strong>pas un diagnostic</strong></li>
+                <li>Répondez en fonction de vos expériences de vie entière</li>
+                <li>Seul un clinicien qualifié peut poser un diagnostic de TSA</li>
+            </ul>
+        </section>
+
+        <section class="glass-card">
+            <div class="control-buttons">
+                <button class="btn-primary" onclick="importData()">
+                    <i class="fas fa-file-import"></i> Importer
+                </button>
+                <button class="btn-secondary" onclick="resetForm()">
+                    <i class="fas fa-redo"></i> Réinitialiser
+                </button>
+            </div>
+            <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="loadFile(event)">
+        </section>
+
+        <section class="glass-card">
+            <h2><i class="fas fa-clipboard-list"></i> Questions (1-80)</h2>
+            <p style="margin-bottom: 1.5rem; opacity: 0.8;">Pour chaque affirmation, choisissez la réponse qui vous décrit le mieux.</p>
+            <div id="questions"></div>
+        </section>
+
+        <!-- Résultats -->
+        <section id="results" class="glass-card results-section" style="display: none;">
+            <h2 style="text-align: center; margin-bottom: 2rem;"><i class="fas fa-chart-pie"></i> Résultats</h2>
+
+            <div class="score-display">
+                <div class="score-circle">
+                    <span class="score-number" id="totalScore">0</span>
+                    <span class="score-label">sur 240</span>
+                </div>
+            </div>
+
+            <div id="interpretationBox" class="interpretation"></div>
+
+            <div class="subscale-grid" style="margin-top: 2rem;">
+                <div class="subscale-card">
+                    <h4><i class="fas fa-users"></i> Relations sociales</h4>
+                    <div class="subscale-score"><span id="score-social">0</span> / 117</div>
+                    <div class="progress-bar"><div class="progress-fill" id="fill-social"></div></div>
+                    <p class="subscale-interp" id="interp-social"></p>
+                </div>
+                <div class="subscale-card">
+                    <h4><i class="fas fa-star"></i> Intérêts spécifiques</h4>
+                    <div class="subscale-score"><span id="score-interests">0</span> / 42</div>
+                    <div class="progress-bar"><div class="progress-fill" id="fill-interests"></div></div>
+                    <p class="subscale-interp" id="interp-interests"></p>
+                </div>
+                <div class="subscale-card">
+                    <h4><i class="fas fa-hand-paper"></i> Sensorimoteur</h4>
+                    <div class="subscale-score"><span id="score-sensory">0</span> / 60</div>
+                    <div class="progress-bar"><div class="progress-fill" id="fill-sensory"></div></div>
+                    <p class="subscale-interp" id="interp-sensory"></p>
+                </div>
+                <div class="subscale-card">
+                    <h4><i class="fas fa-comment"></i> Langage</h4>
+                    <div class="subscale-score"><span id="score-language">0</span> / 21</div>
+                    <div class="progress-bar"><div class="progress-fill" id="fill-language"></div></div>
+                    <p class="subscale-interp" id="interp-language"></p>
+                </div>
+            </div>
+
+            <button class="btn-primary" onclick="toggleDetails()" style="width: 100%; margin-top: 1.5rem;">
+                <i class="fas fa-list-ul"></i> Voir l'interprétation détaillée
+                <span id="toggleIcon"><i class="fas fa-chevron-down"></i></span>
+            </button>
+            <div id="detailsContent" class="details-content" style="display: none;"></div>
+
+            <div class="glass-card" style="margin-top: 2rem; background: rgba(255,255,255,0.05);">
+                <h3><i class="fas fa-download"></i> Exporter</h3>
+                <div class="consent-box">
+                    <label>
+                        <input type="checkbox" id="exportConsent">
+                        <span>Je souhaite télécharger mes résultats (questionnaire, réponses, score et date) dans un fichier JSON sur mon appareil. <strong>Ces résultats constituent des données de santé — je m'engage à les conserver de façon sécurisée et à ne les partager qu'avec un professionnel de santé de mon choix.</strong> Aucune donnée n'est transmise à un serveur.</span>
+                    </label>
+                </div>
+                <div class="export-buttons">
+                    <button class="btn-primary" onclick="exportData()">
+                        <i class="fas fa-file-export"></i> Exporter en JSON
+                    </button>
+                    <button class="btn-print" onclick="printResults()">
+                        <i class="fas fa-print"></i> Imprimer
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p><strong>RAADS-R - Ritvo Autism Asperger Diagnostic Scale - Revised</strong></p>
+        <p style="margin: 0.5rem 0;"><strong>Auteurs :</strong> Ritvo, R.A., Ritvo, E.R., Guthrie, D. et al. (2011)</p>
+        <p><strong>Adaptation numérique :</strong> Dr FENOHASINA | Psychiatre</p>
+        <small>Licence CC BY-NC-SA 4.0</small>
+    </footer>
+
+    <script src="../js/app.js"></script>
+    <script>
+        const questions = [
+            { text: "Je suis une personne compatissante.", subscale: 'social', reversed: true },
+            { text: "J'utilise souvent des mots et des phrases entendus dans des films ou à la télévision dans les conversations.", subscale: 'language', reversed: false },
+            { text: "Je suis souvent surpris lorsque les autres me disent que j'ai été impoli.", subscale: 'social', reversed: false },
+            { text: "Parfois je parle trop fort ou trop doucement, et je ne m'en aperçois pas.", subscale: 'sensory', reversed: false },
+            { text: "J'ai souvent des difficultés à savoir comment me comporter en société.", subscale: 'social', reversed: false },
+            { text: "Je peux « me mettre dans la peau de quelqu'un d'autre ».", subscale: 'social', reversed: true },
+            { text: "J'ai du mal à comprendre le sens de certaines phrases comme « je tiens à toi comme à la prunelle de mes yeux ».", subscale: 'language', reversed: false },
+            { text: "J'aime seulement parler aux gens qui partagent mes centres d'intérêt.", subscale: 'social', reversed: false },
+            { text: "Je fais plus attention aux détails qu'à l'idée générale.", subscale: 'interests', reversed: false },
+            { text: "Je suis sensible à l'effet produit par un aliment dans ma bouche. Ceci est plus important que son goût.", subscale: 'sensory', reversed: false },
+            { text: "Mes meilleurs amis ou ma famille me manquent quand nous sommes séparés depuis longtemps.", subscale: 'social', reversed: true },
+            { text: "Quelquefois je vexe les autres en disant ce que je pense, sans le faire exprès.", subscale: 'social', reversed: false },
+            { text: "J'aime seulement penser et parler des choses qui m'intéressent.", subscale: 'social', reversed: false },
+            { text: "Je préfère aller manger dans un restaurant tout seul plutôt qu'avec quelqu'un que je connais.", subscale: 'social', reversed: false },
+            { text: "Je n'arrive pas à imaginer comment ce serait d'être quelqu'un d'autre.", subscale: 'social', reversed: false },
+            { text: "On m'a déjà dit que j'étais maladroit ou que je manquais de coordination.", subscale: 'sensory', reversed: false },
+            { text: "Les autres me trouvent étrange ou différent.", subscale: 'social', reversed: false },
+            { text: "Je comprends lorsque des amis ont besoin d'être réconfortés.", subscale: 'social', reversed: true },
+            { text: "Je suis très sensible au contact de mes vêtements lorsque je les touche. Leur texture est plus importante pour moi que leur look.", subscale: 'sensory', reversed: false },
+            { text: "J'aime copier la manière dont certaines personnes parlent et agissent. Cela m'aide à me sentir plus « normal ».", subscale: 'social', reversed: false },
+            { text: "Cela peut être très intimidant pour moi de parler à plus d'une personne en même temps.", subscale: 'social', reversed: false },
+            { text: "Je dois adopter un comportement \"normal\" pour plaire aux autres et pour qu'ils m'apprécient.", subscale: 'social', reversed: false },
+            { text: "Rencontrer de nouvelles personnes est habituellement facile pour moi.", subscale: 'social', reversed: true },
+            { text: "Je suis déstabilisé lorsque quelqu'un m'interrompt alors que je parle de quelque chose qui m'intéresse beaucoup.", subscale: 'interests', reversed: false },
+            { text: "Il m'est difficile de percevoir les sentiments des autres lors d'une conversation.", subscale: 'social', reversed: false },
+            { text: "J'aime avoir une conversation avec plusieurs personnes, par exemple lors d'un dîner, à l'école, ou au travail.", subscale: 'social', reversed: true },
+            { text: "Je prends les choses trop au premier degré, ainsi je passe à côté de ce que les gens essaient de dire.", subscale: 'language', reversed: false },
+            { text: "C'est très difficile pour moi de comprendre lorsque quelqu'un est gêné ou jaloux.", subscale: 'social', reversed: false },
+            { text: "Certaines textures ordinaires qui ne posent aucun problème aux autres sont pour moi insupportables lorsqu'elles sont au contact de ma peau.", subscale: 'sensory', reversed: false },
+            { text: "Je suis très contrarié lorsqu'on m'empêche de faire les choses à ma façon.", subscale: 'interests', reversed: false },
+            { text: "Je n'ai jamais désiré ou eu besoin de ce que les autres personnes appellent une « relation intime ».", subscale: 'social', reversed: false },
+            { text: "C'est difficile pour moi de commencer et d'arrêter une conversation. J'ai besoin d'aller jusqu'au bout de mon propos.", subscale: 'language', reversed: false },
+            { text: "Je parle avec un rythme de voix normal.", subscale: 'sensory', reversed: true },
+            { text: "Je peux sans transition être très sensible ou pas du tout sensible au même son, à la même couleur ou à la même texture.", subscale: 'sensory', reversed: false },
+            { text: "La phrase « je t'ai dans la peau » me met mal à l'aise.", subscale: 'language', reversed: false },
+            { text: "Quelquefois la sonorité d'un mot ou un bruit aigu peut me faire mal aux oreilles.", subscale: 'sensory', reversed: false },
+            { text: "On me considère comme une personne très compréhensive.", subscale: 'social', reversed: true },
+            { text: "Je ne peux pas m'identifier à un personnage dans un film, et je ne peux pas ressentir ce qu'il ressent.", subscale: 'social', reversed: false },
+            { text: "Je ne peux pas dire si quelqu'un est en train de me draguer.", subscale: 'social', reversed: false },
+            { text: "Je peux me représenter avec précision les détails qui m'intéressent.", subscale: 'sensory', reversed: false },
+            { text: "Je fais des listes de choses qui m'intéressent, même si elles n'ont pas d'utilité pratique.", subscale: 'interests', reversed: false },
+            { text: "Quand je me sens dépassé par des stimulations sensorielles, je dois m'isoler pour y échapper.", subscale: 'sensory', reversed: false },
+            { text: "J'aime parler de choses et d'autres avec mes amis.", subscale: 'social', reversed: true },
+            { text: "Je ne peux pas dire si quelqu'un est intéressé ou ennuyé par ce que je dis.", subscale: 'social', reversed: false },
+            { text: "Lorsque quelqu'un est en train de parler, il peut m'être très difficile de lire sur son visage, de comprendre les mouvements de ses mains ou de son corps.", subscale: 'social', reversed: false },
+            { text: "Je peux ressentir à différents moments la même chose très différemment.", subscale: 'sensory', reversed: false },
+            { text: "Je me sens très à l'aise lors d'un rendez-vous amoureux ou lorsque je me trouve en société.", subscale: 'social', reversed: true },
+            { text: "J'essaie d'être aussi aidant que possible lorsque les autres me parlent de leurs problèmes personnels.", subscale: 'social', reversed: true },
+            { text: "On m'a dit que j'avais une voix particulière.", subscale: 'sensory', reversed: false },
+            { text: "Quelquefois une idée ou un sujet reste bloqué dans mon esprit et je dois en parler, même si cela n'intéresse personne.", subscale: 'interests', reversed: false },
+            { text: "Je fais certaines choses avec mes mains de façon répétée.", subscale: 'sensory', reversed: false },
+            { text: "Je n'ai jamais été intéressé par ce que la plupart des gens que je connais considèrent comme intéressant.", subscale: 'interests', reversed: false },
+            { text: "On me considère comme une personne compatissante.", subscale: 'social', reversed: true },
+            { text: "Pour m'entendre avec les autres, je suis un ensemble de règles spécifiques qui m'aide à paraître normale.", subscale: 'social', reversed: false },
+            { text: "C'est très difficile pour moi de travailler et d'évoluer dans un groupe.", subscale: 'social', reversed: false },
+            { text: "Lorsque je parle à quelqu'un, il m'est difficile de changer de sujet. Si l'autre personne le fait, je peux être bouleversé et confus.", subscale: 'language', reversed: false },
+            { text: "Quelquefois je dois couvrir mes oreilles pour arrêter des bruits douloureux.", subscale: 'sensory', reversed: false },
+            { text: "Je peux discuter et avoir des conversations superficielles.", subscale: 'social', reversed: true },
+            { text: "Quelquefois des choses qui devraient être douloureuses ne me font pas mal.", subscale: 'sensory', reversed: false },
+            { text: "Quand je parle à quelqu'un, j'ai des difficultés à savoir si c'est à mon tour de parler ou d'écouter.", subscale: 'language', reversed: false },
+            { text: "Je suis considéré comme un solitaire par ceux qui me connaissent le mieux.", subscale: 'social', reversed: false },
+            { text: "Je parle habituellement avec un ton de voix normal.", subscale: 'sensory', reversed: true },
+            { text: "J'aime que les choses se déroulent toujours de la même manière jour après jour, et même les petits changements dans mes routines me perturbent.", subscale: 'interests', reversed: false },
+            { text: "Comment se faire des amis et s'intégrer socialement est un mystère pour moi.", subscale: 'social', reversed: false },
+            { text: "Cela me calme de tourner en rond ou de me balancer sur une chaise lorsque je me sens stressé.", subscale: 'sensory', reversed: false },
+            { text: "La phrase « il a le cœur sur la main » n'a pas de sens pour moi.", subscale: 'language', reversed: false },
+            { text: "Si je suis dans un endroit où il y a beaucoup d'odeurs, de matières à toucher, de bruits ou de lumières intenses, je me sens anxieux ou effrayé.", subscale: 'sensory', reversed: false },
+            { text: "Je sais faire la différence lorsque quelqu'un dit une chose mais veut en dire une autre.", subscale: 'language', reversed: true },
+            { text: "J'aime être seul autant que possible.", subscale: 'social', reversed: false },
+            { text: "Je garde mes pensées empilées dans ma mémoire comme dans un classeur, et je prends celles dont j'ai besoin en sélectionnant dans la pile.", subscale: 'sensory', reversed: false },
+            { text: "Le même son peut paraître quelquefois très fort ou très doux alors que je sais qu'il n'a pas changé.", subscale: 'sensory', reversed: false },
+            { text: "J'aime passer du temps à manger et parler avec ma famille et mes amis.", subscale: 'social', reversed: true },
+            { text: "Je ne supporte pas les choses que je n'aime pas.", subscale: 'sensory', reversed: false },
+            { text: "Je n'aime pas être tenu ou étreint.", subscale: 'sensory', reversed: false },
+            { text: "Lorsque je vais quelque part, je dois suivre un parcours familier sinon je peux devenir très confus et perturbé.", subscale: 'interests', reversed: false },
+            { text: "C'est difficile de comprendre ce que les autres personnes attendent de moi.", subscale: 'social', reversed: false },
+            { text: "J'aime avoir des amis proches.", subscale: 'social', reversed: true },
+            { text: "On me dit que je donne trop de détails.", subscale: 'interests', reversed: false },
+            { text: "On me dit souvent que je pose des questions embarrassantes.", subscale: 'social', reversed: false },
+            { text: "J'ai tendance à souligner les erreurs des autres.", subscale: 'social', reversed: false }
+        ];
+
+        const responses = [
+            { label: "Vrai maintenant et quand j'étais jeune", value: 3 },
+            { label: "Vrai seulement maintenant", value: 2 },
+            { label: "Vrai seulement quand j'étais jeune", value: 1 },
+            { label: "Jamais vrai", value: 0 }
+        ];
+
+        const SUBSCALES_MAX = { social: 117, interests: 42, sensory: 60, language: 21 };
+        let answers = {};
+
+        function initializeQuestions() {
+            const container = document.getElementById('questions');
+            container.innerHTML = '';
+            questions.forEach((q, index) => {
+                const opts = responses.map(r => `
+                    <button type="button" class="option-btn" onclick="selectAnswer(${index}, ${r.value})" id="q${index}_opt${r.value}">
+                        <span>${r.label}</span>
+                    </button>
+                `).join('');
+
+                container.innerHTML += `
+                    <div class="question-card" id="q-container-${index}">
+                        <span class="question-number">${index + 1}</span>
+                        <div class="question-text">${q.text}</div>
+                        <div class="options-grid">${opts}</div>
+                    </div>
+                `;
+            });
+        }
+
+        function selectAnswer(index, value) {
+            answers[`q${index}`] = value;
+            responses.forEach(r => {
+                const btn = document.getElementById(`q${index}_opt${r.value}`);
+                if (btn) btn.classList.toggle('selected', r.value === value);
+            });
+            document.getElementById(`q-container-${index}`).classList.remove('missing');
+
+            if (Object.keys(answers).length === questions.length) {
+                updateResults();
+                document.getElementById('results').style.display = 'block';
+                document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function getInterpretation(score) {
+            if (score >= 65) return { level: "Traits autistiques significatifs", className: "high", desc: "Votre score suggère la présence de traits autistiques significatifs. Une évaluation par un professionnel qualifié est recommandée." };
+            if (score >= 45) return { level: "Traits autistiques modérés", className: "moderate", desc: "Votre score indique la présence de certains traits autistiques. Si vous ressentez des difficultés, une évaluation peut être utile." };
+            return { level: "Traits autistiques faibles", className: "low", desc: "Votre score ne suggère pas de traits autistiques significatifs selon cette échelle." };
+        }
+
+        function getSubscoreInterpretation(score, max) {
+            const percentage = (score / max) * 100;
+            if (percentage >= 66) return "Traits très prononcés";
+            if (percentage >= 33) return "Traits significatifs";
+            return "Traits peu prononcés";
+        }
+
+        function updateResults() {
+            const scores = { social: 0, sensory: 0, language: 0, interests: 0 };
+            let total = 0;
+
+            questions.forEach((q, i) => {
+                const rawValue = answers[`q${i}`] || 0;
+                const score = q.reversed ? (3 - rawValue) : rawValue;
+                total += score;
+                scores[q.subscale] += score;
+            });
+
+            document.getElementById('totalScore').textContent = total;
+            const interp = getInterpretation(total);
+            const interpretationBox = document.getElementById('interpretationBox');
+            interpretationBox.className = `interpretation ${interp.className}`;
+            interpretationBox.innerHTML = `<h3>${interp.level}</h3><p>${interp.desc}</p>`;
+
+            // Sous-scores
+            ['social', 'interests', 'sensory', 'language'].forEach(sub => {
+                document.getElementById(`score-${sub}`).textContent = scores[sub];
+                document.getElementById(`fill-${sub}`).style.width = `${(scores[sub] / SUBSCALES_MAX[sub]) * 100}%`;
+                document.getElementById(`interp-${sub}`).textContent = getSubscoreInterpretation(scores[sub], SUBSCALES_MAX[sub]);
+            });
+
+            document.getElementById('detailsContent').innerHTML = `
+                <h3>Interprétation des seuils RAADS-R</h3>
+                <div class="info-box">
+                    <ul>
+                        <li><strong>≥ 65 :</strong> Seuil suggéré pour des traits autistiques significatifs (Ritvo et al., 2011)</li>
+                        <li><strong>45-64 :</strong> Zone intermédiaire avec présence de certains traits</li>
+                        <li><strong>< 45 :</strong> Traits autistiques peu prononcés</li>
+                    </ul>
+                    <p class="threshold-note" style="margin-top: 0.75rem; font-size: 0.85rem; opacity: 0.85;">
+                        <i class="fas fa-info-circle"></i> <strong>Note de transparence :</strong> Seul le seuil ≥ 65 est issu de la validation originale de Ritvo et al. (2011). Le seuil intermédiaire de 45 est un repère clinique ajouté pour nuancer l'interprétation et ne provient pas de l'étude de validation.
+                    </p>
+                </div>
+                <p style="margin-top: 1rem;"><strong>Important :</strong> Ce questionnaire est un outil de dépistage. Un diagnostic de TSA ne peut être posé que par un clinicien qualifié après une évaluation complète incluant l'histoire développementale et l'évaluation du retentissement fonctionnel.</p>
+            `;
+        }
+
+        function toggleDetails() {
+            const content = document.getElementById('detailsContent');
+            const icon = document.getElementById('toggleIcon');
+            const isVisible = content.style.display !== 'none';
+            content.style.display = isVisible ? 'none' : 'block';
+            icon.innerHTML = isVisible ? '<i class="fas fa-chevron-down"></i>' : '<i class="fas fa-chevron-up"></i>';
+        }
+
+        function resetForm() {
+            answers = {};
+            document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+            document.querySelectorAll('.question-card').forEach(card => card.classList.remove('missing'));
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('detailsContent').style.display = 'none';
+            document.getElementById('exportConsent').checked = false;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function importData() { document.getElementById('fileInput').click(); }
+
+        function loadFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data.questionnaire === "RAADS-R" && data.answers) {
+                        answers = data.answers;
+                        initializeQuestions();
+                        Object.entries(answers).forEach(([key, val]) => {
+                            const index = parseInt(key.replace('q', ''));
+                            selectAnswer(index, val);
+                        });
+                    }
+                } catch { alert("Fichier invalide."); }
+            };
+            reader.readAsText(file);
+        }
+
+        function exportData() {
+            if (!document.getElementById('exportConsent').checked) {
+                alert("Veuillez cocher la case de consentement avant d''exporter.");
+                return;
+            }
+            const scores = { social: 0, sensory: 0, language: 0, interests: 0 };
+            let total = 0;
+            questions.forEach((q, i) => {
+                const rawValue = answers[`q${i}`] || 0;
+                const score = q.reversed ? (3 - rawValue) : rawValue;
+                total += score;
+                scores[q.subscale] += score;
+            });
+
+            const data = {
+                questionnaire: "RAADS-R",
+                date: new Date().toISOString(),
+                answers: answers,
+                totalScore: total,
+                subscores: scores,
+                interpretation: getInterpretation(total).level
+            };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `RAADS-R_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        document.addEventListener('DOMContentLoaded', initializeQuestions);
+    </script>
+</body>
+</html>

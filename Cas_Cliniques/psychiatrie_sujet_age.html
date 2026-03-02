@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Psychiatrie du Sujet Âgé - Cas Cliniques</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --cat-main: #14b8a6;
+            --cat-dark: #0d9488;
+            --cat-light: #2dd4bf;
+            --cat-rgb: 20, 184, 166;
+            --cat-readable: #0d9488;
+        }
+
+        /* Conteneur sticky pour progression et navigation */
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(15, 23, 42, 0.98);
+            backdrop-filter: blur(10px);
+            margin: 0 -1.5rem;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid rgba(20, 184, 166, 0.3);
+        }
+
+        /* Step Navigation */
+        .step-nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .step-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            background: var(--surface-table);
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            color: var(--color-text-muted);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .step-btn:hover {
+            border-color: var(--cat-main);
+            color: var(--color-text-primary);
+        }
+        .step-btn.active {
+            background: rgba(var(--cat-rgb), 0.15);
+            border-color: var(--cat-main);
+            color: var(--cat-light);
+        }
+        .step-btn .step-number {
+            width: 24px;
+            height: 24px;
+            background: var(--cat-main);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-size-xs);
+            font-weight: 700;
+            color: white;
+        }
+        .step-btn.active .step-number { background: var(--cat-light); color: var(--color-bg-primary); }
+
+        .step-content { display: none; animation: fadeIn 0.5s ease-in-out; }
+        .step-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .case-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .case-tab {
+            flex: 1;
+            min-width: 200px;
+            padding: 1rem 1.5rem;
+            background: var(--color-bg-card);
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            color: var(--color-text-muted);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        .case-tab:hover { border-color: var(--cat-main); background: rgba(var(--cat-rgb), 0.04); }
+        .case-tab.active-teal {
+            background: rgba(var(--cat-rgb), 0.1);
+            border-color: var(--cat-main);
+            color: var(--cat-readable);
+        }
+        .case-tab.active-amber {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: #f59e0b;
+            color: var(--accent-amber);
+        }
+        .case-tab h4 { margin: 0 0 0.25rem 0; font-size: 1.1rem; }
+        .case-tab p { margin: 0; font-size: var(--font-size-sm); }
+
+        .scénario-box {
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .scénario-box.teal { border-left: 4px solid var(--cat-main); }
+        .scénario-box.amber { border-left: 4px solid #f59e0b; }
+        .scénario-box p {
+            color: var(--color-text-secondary);
+            line-height: 1.8;
+            margin: 0;
+        }
+
+        .accordion-button {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 1rem 1.25rem;
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            color: var(--color-text-primary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 0.5rem;
+        }
+        .accordion-button:hover {
+            background: var(--neo-bg-light);
+            border-color: var(--color-border-hover);
+        }
+        .accordion-button.open .accordion-arrow { transform: rotate(180deg); }
+        .accordion-arrow { transition: transform 0.3s ease; color: var(--color-text-muted); }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+            background: var(--color-bg-dark);
+            border: 1px solid var(--color-border);
+            border-top: none;
+            border-radius: 0 0 var(--radius-md) var(--radius-md);
+            margin-bottom: 0.5rem;
+        }
+        .accordion-content-inner { padding: 1rem 1.25rem; }
+        .accordion-content p, .accordion-content li { color: var(--color-text-muted); line-height: 1.7; }
+
+        .quiz-item { margin-bottom: 2rem; }
+        .quiz-item h4 { color: var(--color-text-primary); margin-bottom: 1rem; }
+        .quiz-option {
+            padding: 1rem;
+            background: var(--color-bg-card);
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-md);
+            margin-bottom: 0.75rem;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .quiz-option:hover { background: rgba(var(--cat-rgb), 0.1); border-color: var(--cat-main); }
+        .quiz-option.selected { background: rgba(var(--cat-rgb), 0.2); border-color: var(--cat-main); }
+        .quiz-option.correct { background: rgba(34, 197, 94, 0.2); border-color: var(--color-success); }
+        .quiz-option.incorrect { background: rgba(239, 68, 68, 0.2); border-color: var(--color-danger); }
+        .feedback-box { transition: opacity 0.3s; padding: 1rem; border-radius: var(--radius-md); margin-top: 1rem; font-size: var(--font-size-sm); opacity: 0; }
+        .feedback-box.visible { opacity: 1; }
+        .feedback-box.success { background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); color: var(--accent-green); }
+        .feedback-box.error { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: var(--accent-red); }
+
+        .decision-container { position: relative; min-height: 200px; }
+        .decision-node { transition: opacity 0.5s ease, transform 0.5s ease; }
+        .decision-node.hidden { opacity: 0; transform: scale(0.95); pointer-events: none; position: absolute; top: 0; left: 0; right: 0; }
+        .decision-option {
+            width: 100%;
+            text-align: left;
+            padding: 1rem;
+            background: var(--color-bg-card);
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-md);
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 0.75rem;
+        }
+        .decision-option:hover {
+            background: rgba(var(--cat-rgb), 0.1);
+            border-color: var(--cat-main);
+        }
+        .result-box {
+            padding: 1.5rem;
+            background: rgba(34, 197, 94, 0.1);
+            border: 2px solid rgba(34, 197, 94, 0.3);
+            border-radius: var(--radius-lg);
+        }
+        .result-box h3 { color: var(--accent-green); margin-bottom: 0.5rem; }
+        .result-box p { color: var(--color-text-muted); }
+        .result-box.warning { background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3); }
+        .result-box.warning h3 { color: var(--accent-amber); }
+        .result-box.danger { background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3); }
+        .result-box.danger h3 { color: var(--accent-red); }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            margin-bottom: 0.75rem;
+            transition: all 0.3s ease;
+        }
+        .checklist-item:hover { background: var(--neo-bg-light); }
+        .checklist-item input[type="checkbox"] {
+            width: 1.25rem;
+            height: 1.25rem;
+            margin-right: 1rem;
+            accent-color: var(--cat-main);
+            cursor: pointer;
+        }
+        .checklist-item label { color: var(--color-text-secondary); font-size: var(--font-size-sm); cursor: pointer; flex: 1; }
+        .checklist-item.checked label { text-decoration: line-through; opacity: 0.6; }
+
+        .comparison-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+        .comparison-table th, .comparison-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--color-border);
+        }
+        .comparison-table th {
+            background: rgba(var(--cat-rgb), 0.1);
+            color: var(--cat-readable);
+            font-weight: 600;
+            font-size: var(--font-size-xs);
+            text-transform: uppercase;
+        }
+        .comparison-table td { color: var(--color-text-muted); font-size: var(--font-size-sm); }
+        .comparison-table tr:hover td { background: var(--neo-bg-light); }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        .feature-card {
+            padding: 1rem;
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+        }
+        .feature-card h4 { color: var(--color-text-primary); margin-bottom: 0.5rem; font-size: 1rem; }
+        .feature-card p { color: var(--color-text-muted); font-size: var(--font-size-sm); margin: 0; }
+        .feature-card.teal { border-left: 4px solid var(--cat-main); }
+        .feature-card.amber { border-left: 4px solid #f59e0b; }
+
+        .action-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .action-list li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--color-border);
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            color: var(--color-text-muted);
+            line-height: 1.6;
+        }
+        .action-list li:last-child { border-bottom: none; }
+        .action-list li::before {
+            content: "\f058";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: var(--accent-green);
+            flex-shrink: 0;
+        }
+
+        .key-points {
+            background: linear-gradient(145deg, rgba(var(--cat-rgb), 0.1), rgba(var(--cat-rgb), 0.05));
+            border: 1px solid rgba(var(--cat-rgb), 0.3);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .key-points h3 { color: var(--cat-readable); margin-bottom: 1rem; }
+        .key-points ul { margin: 0; padding-left: 1.25rem; }
+        .key-points li { color: var(--color-text-secondary); margin-bottom: 0.5rem; line-height: 1.6; }
+
+        .nav-buttons-bottom {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--color-border);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .case-content { display: none; }
+        .case-content.active { display: block; }
+
+        .progress-bar {
+            height: 6px;
+            background: var(--surface-table);
+            border-radius: 3px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--cat-main), var(--cat-light));
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        @media (max-width: 768px) {
+            .step-nav { flex-direction: column; align-items: stretch; }
+            .step-btn { justify-content: center; }
+            .case-tabs { flex-direction: column; }
+            .comparison-table { font-size: var(--font-size-xs); }
+            .comparison-table th, .comparison-table td { padding: 0.5rem; }
+        }
+
+        @media print {
+            .navigation-bar, footer, .step-nav, .nav-buttons-bottom { display: none !important; }
+            body { background: white !important; }
+            .step-content { display: block !important; }
+        }
+    </style>
+</head>
+<body class="light-questionnaire">
+
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+            <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+        </div>
+        <h1>Psychiatrie du Sujet Âgé</h1>
+        <span class="badge badge-cat-clinique">Cas Cliniques</span>
+    </nav>
+
+    <div class="container">
+        <header class="page-header">
+            <p class="subtitle">Parcours pédagogique en gérontopsychiatrie</p>
+        </header>
+
+        <div class="sticky-header">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 20%;"></div>
+            </div>
+
+            <nav class="step-nav">
+                <button class="step-btn active" data-step="1">
+                    <span class="step-number">1</span>
+                    <span>Contexte</span>
+                </button>
+                <button class="step-btn" data-step="2">
+                    <span class="step-number">2</span>
+                    <span>Évaluation</span>
+                </button>
+                <button class="step-btn" data-step="3">
+                    <span class="step-number">3</span>
+                    <span>Diagnostic</span>
+                </button>
+                <button class="step-btn" data-step="4">
+                    <span class="step-number">4</span>
+                    <span>Prise en charge</span>
+                </button>
+                <button class="step-btn" data-step="5">
+                    <span class="step-number">5</span>
+                    <span>Synthèse</span>
+                </button>
+            </nav>
+        </div>
+
+        <main>
+            <!-- ÉTAPE 1: CONTEXTE -->
+            <section id="step-1" class="step-content active">
+                <div class="glass-card">
+                    <h2><i class="fas fa-user-md" style="color: #14b8a6; margin-right: 0.5rem;"></i>Étape 1 : Contexte</h2>
+                    <p style="color: var(--color-text-muted); margin-bottom: 1.5rem;">Découvrez deux cas cliniques illustrant les enjeux psychiatriques spécifiques du sujet âgé.</p>
+
+                    <div class="case-tabs">
+                        <div class="case-tab active-teal" data-case="depression">
+                            <h4><i class="fas fa-brain" style="margin-right: 0.5rem;"></i>Rasoa</h4>
+                            <p>Dépression tardive</p>
+                        </div>
+                        <div class="case-tab" data-case="delirium">
+                            <h4><i class="fas fa-triangle-exclamation" style="margin-right: 0.5rem;"></i>Rakoto</h4>
+                            <p>Confusion/Délirium</p>
+                        </div>
+                    </div>
+
+                    <!-- Depression Case -->
+                    <div id="case-depression" class="case-content active">
+                        <div class="scenario-box teal">
+                            <h3 style="color: #2dd4bf; margin-bottom: 1rem;"><i class="fas fa-file-alt" style="margin-right: 0.5rem;"></i>Cas 1 : La fatigue de Rasoa</h3>
+                            <p><strong>Rasoa, 72 ans</strong>, vit en EHPAD depuis 6 mois après le décès de son mari. Elle consulte fréquemment l'infirmière pour des plaintes multiples : maux de tête, douleurs abdominales, fatigué. Les bilans somatiques sont normaux. Le personnel note qu'elle ne participe plus aux activités, reste dans sa chambre, mange peu. Elle dit qu'elle « attend la fin » et qu'elle est « un fardeau pour tout le monde ». Elle a perdu 4 kg en 2 mois. Elle a des antécédents de dépression traitée il y a 20 ans.</p>
+                        </div>
+                        <div class="feature-grid">
+                            <div class="feature-card teal">
+                                <h4><i class="fas fa-birthday-cake" style="color: #2dd4bf; margin-right: 0.5rem;"></i>Âge</h4>
+                                <p>72 ans</p>
+                            </div>
+                            <div class="feature-card teal">
+                                <h4><i class="fas fa-home" style="color: #2dd4bf; margin-right: 0.5rem;"></i>Lieu de vie</h4>
+                                <p>EHPAD depuis 6 mois</p>
+                            </div>
+                            <div class="feature-card teal">
+                                <h4><i class="fas fa-heart-broken" style="color: #2dd4bf; margin-right: 0.5rem;"></i>Événement récent</h4>
+                                <p>Décès du conjoint</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Delirium Case -->
+                    <div id="case-delirium" class="case-content">
+                        <div class="scenario-box amber">
+                            <h3 style="color: #fbbf24; margin-bottom: 1rem;"><i class="fas fa-file-alt" style="margin-right: 0.5rem;"></i>Cas 2 : La confusion de Rakoto</h3>
+                            <p><strong>Rakoto, 78 ans</strong>, est hospitalisé en chirurgie pour une fracture du col du fémur opérée il y a 3 jours. Depuis hier soir, il est agité, ne reconnaît plus l'équipe soignante, essaie d'arracher sa perfusion. Il dit voir « des gens dans la chambre » et pense être chez lui. La nuit, il est très agité ; le jour, il alterne entre somnolence et agitation. Il était autonome avant l'hospitalisation. Antécédents : HTA, diabète type 2, prothèse auditive.</p>
+                        </div>
+                        <div class="feature-grid">
+                            <div class="feature-card amber">
+                                <h4><i class="fas fa-birthday-cake" style="color: #fbbf24; margin-right: 0.5rem;"></i>Âge</h4>
+                                <p>78 ans</p>
+                            </div>
+                            <div class="feature-card amber">
+                                <h4><i class="fas fa-procedures" style="color: #fbbf24; margin-right: 0.5rem;"></i>Contexte</h4>
+                                <p>Post-opératoire J3 (fracture col fémoral)</p>
+                            </div>
+                            <div class="feature-card amber">
+                                <h4><i class="fas fa-clock" style="color: #fbbf24; margin-right: 0.5rem;"></i>Installation</h4>
+                                <p>Brutale (depuis hier soir)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="nav-buttons-bottom">
+                        <div></div>
+                        <button class="btn-primary" onclick="goToStep(2)">
+                            Étape suivante : Évaluation <i class="fas fa-arrow-right" style="margin-left: 0.5rem;"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ÉTAPE 2: ÉVALUATION -->
+            <section id="step-2" class="step-content">
+                <div class="glass-card">
+                    <h2><i class="fas fa-stethoscope" style="color: #14b8a6; margin-right: 0.5rem;"></i>Étape 2 : Évaluation clinique</h2>
+                    <p style="color: var(--color-text-muted); margin-bottom: 1.5rem;">Apprenez à évaluer les troubles psychiatriques du sujet âgé.</p>
+
+                    <div class="case-tabs">
+                        <div class="case-tab active-teal" data-case="depression">
+                            <h4>Rasoa</h4>
+                            <p>Évaluation dépression</p>
+                        </div>
+                        <div class="case-tab" data-case="delirium">
+                            <h4>Rakoto</h4>
+                            <p>Évaluation confusion</p>
+                        </div>
+                    </div>
+
+                    <!-- Depression Évaluation -->
+                    <div id="eval-depression" class="case-content active">
+                        <h3 style="color: #2dd4bf; margin-bottom: 1rem;"><i class="fas fa-search" style="margin-right: 0.5rem;"></i>Évaluation de Rasoa</h3>
+
+                        <div class="accordion-container">
+                            <button type="button" class="accordion-button" data-target="acc-dep-1">
+                                <span><i class="fas fa-mask" style="color: #14b8a6; margin-right: 0.5rem;"></i>1. Dépression masquée</span>
+                                <i class="fas fa-chevron-down accordion-arrow"></i>
+                            </button>
+                            <div id="acc-dep-1" class="accordion-content">
+                                <div class="accordion-content-inner">
+                                    <p><strong>Particularité du sujet âgé :</strong> La dépression se présente souvent de manière atypique :</p>
+                                    <ul>
+                                        <li>Plaintes somatiques au premier plan (douleurs, fatigue)</li>
+                                        <li>Irritabilité plutôt que tristesse</li>
+                                        <li>Troubles cognitifs (« pseudo-démence dépressive »)</li>
+                                        <li>Anxiété prédominante</li>
+                                    </ul>
+                                    <p><strong>Chez Rasoa :</strong> Plaintes somatiques multiples avec bilans normaux = tableau classique de dépression masquée.</p>
+                                </div>
+                            </div>
+
+                            <button type="button" class="accordion-button" data-target="acc-dep-2">
+                                <span><i class="fas fa-skull" style="color: #ef4444; margin-right: 0.5rem;"></i>2. Risque suicidaire</span>
+                                <i class="fas fa-chevron-down accordion-arrow"></i>
+                            </button>
+                            <div id="acc-dep-2" class="accordion-content">
+                                <div class="accordion-content-inner">
+                                    <p style="color: #f87171;"><strong>⚠️ ATTENTION :</strong> Le suicide du sujet âgé est souvent sous-estimé.</p>
+                                    <ul>
+                                        <li>Taux de suicide élevé chez les > 75 ans</li>
+                                        <li>Méthodes plus létales, moins de signaux d'alerte</li>
+                                        <li>« J'attends la fin » = idéation suicidaire passive</li>
+                                        <li>Facteurs de risque : isolement, deuil, maladie chronique</li>
+                                    </ul>
+                                    <p><strong>Chez Rasoa :</strong> Propos de désespoir + deuil récent + isolement = évaluation suicidaire indispensable.</p>
+                                </div>
+                            </div>
+
+                            <button type="button" class="accordion-button" data-target="acc-dep-3">
+                                <span><i class="fas fa-brain" style="color: #14b8a6; margin-right: 0.5rem;"></i>3. Diagnostic différentiel avec démence</span>
+                                <i class="fas fa-chevron-down accordion-arrow"></i>
+                            </button>
+                            <div id="acc-dep-3" class="accordion-content">
+                                <div class="accordion-content-inner">
+                                    <p><strong>Question clé :</strong> Dépression ou démence débutante ?</p>
+                                    <ul>
+                                        <li>Installation rapide → plutôt dépression</li>
+                                        <li>Plaintes mnésiques exagérées → plutôt dépression</li>
+                                        <li>Évaluation cognitive (MMS, MOCA) indispensable</li>
+                                        <li>Les deux peuvent coexister (dépression + démence)</li>
+                                    </ul>
+                                    <p><strong>Chez Rasoa :</strong> Début après le deuil, plaintes actives = plus en faveur d'une dépression, mais un bilan cognitif reste nécessaire.</p>
+                                </div>
+                            </div>
+
+                            <button type="button" class="accordion-button" data-target="acc-dep-4">
+                                <span><i class="fas fa-pills" style="color: #14b8a6; margin-right: 0.5rem;"></i>4. Iatrogénie</span>
+                                <i class="fas fa-chevron-down accordion-arrow"></i>
+                            </button>
+                            <div id="acc-dep-4" class="accordion-content">
+                                <div class="accordion-content-inner">
+                                    <p><strong>Médicaments pouvant induire une dépression :</strong></p>
+                                    <ul>
+                                        <li>Bêta-bloquants</li>
+                                        <li>Corticoïdes</li>
+                                        <li>Certains antihypertenseurs (clonidine, méthyldopa)</li>
+                                        <li>Benzodiazépines au long cours</li>
+                                    </ul>
+                                    <p>→ Revoir systématiquement l'ordonnance du patient âgé déprimé.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--color-border);">
+                            <h3 style="margin-bottom: 1rem;"><i class="fas fa-question-circle" style="color: #14b8a6; margin-right: 0.5rem;"></i>Quiz</h3>
+                            <div class="quiz-item">
+                                <h4>Quelle est la particularité de la dépression du sujet âgé ?</h4>
+                                <div class="quiz-options" data-quiz="dep-q1" data-answer="C">
+                                    <div class="quiz-option" data-option="A">A) Elle est toujours moins sévère que chez l'adulte jeune</div>
+                                    <div class="quiz-option" data-option="B">B) Elle se présente toujours avec une tristesse intense</div>
+                                    <div class="quiz-option" data-option="C">C) Elle est souvent masquée par des plaintes somatiques</div>
+                                    <div class="quiz-option" data-option="D">D) Elle ne nécessite généralement pas de traitement</div>
+                                </div>
+                                <div class="feedback-box" id="feedback-dep-q1"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Delirium Évaluation -->
+                    <div id="eval-delirium" class="case-content">
+                        <h3 style="color: #fbbf24; margin-bottom: 1rem;"><i class="fas fa-search" style="margin-right: 0.5rem;"></i>Évaluation de Rakoto</h3>
+
+                        <div class="accordion-container">
+                            <button type="button" class="accordion-button" data-target="acc-del-1">
+                                <span><i class="fas fa-bolt" style="color: #f59e0b; margin-right: 0.5rem;"></i>1. Reconnaître le délirium (confusion aiguë)</span>
+                                <i class="fas fa-chevron-down accordion-arrow"></i>
+                            </button>
+                            <div id="acc-del-1" class="accordion-content">
+                                <div class="accordion-content-inner">
+                                    <p><strong>Critères diagnostiques (CAM) :</strong></p>
+                                    <ul>
+                                        <li><strong>Début aigu et fluctuation</strong> des symptômes</li>
+                                        <li><strong>Inattention</strong> (difficulté à maintenir l'attention)</li>
+                                        <li><strong>Pensée désorganisée</strong> ou altération de la conscience</li>
+                                    </ul>
+                                    <p><strong>Chez Rakoto :</strong> Début brutal (hier soir), fluctuation jour/nuit, désorientation, hallucinations = délirium typique.</p>
+                                </div>
+                            </div>
+
+                            <button type="button" class="accordion-button" data-target="acc-del-2">
+                                <span><i class="fas fa-search-plus" style="color: #f59e0b; margin-right: 0.5rem;"></i>2. Rechercher les causes</span>
+                                <i class="fas fa-chevron-down accordion-arrow"></i>
+                            </button>
+                            <div id="acc-del-2" class="accordion-content">
+                                <div class="accordion-content-inner">
+                                    <p><strong>Causes fréquentes (mnémotechnique : I WATCH DEATH) :</strong></p>
+                                    <ul>
+                                        <li><strong>I</strong>nfection (urinaire, pulmonaire)</li>
+                                        <li><strong>W</strong>ithdrawal (sevrage alcool, benzodiazépines)</li>
+                                        <li><strong>A</strong>cute metabolic (déshydratation, hyponatrémie, hypoglycémie)</li>
+                                        <li><strong>T</strong>rauma (fracture, hématome sous-dural)</li>
+                                        <li><strong>C</strong>NS pathology (AVC, méningite)</li>
+                                        <li><strong>H</strong>ypoxia</li>
+                                        <li><strong>D</strong>eficiencies (thiamine, B12)</li>
+                                        <li><strong>E</strong>ndocrinopathies (thyroïde)</li>
+                                        <li><strong>A</strong>cute vascular (infarctus, embolie)</li>
+                                        <li><strong>T</strong>oxins/drugs (médicaments anticholinergiques ++)</li>
+                                        <li><strong>H</strong>eavy metals</li>
+                                    </ul>
+                                    <p><strong>Chez Rakoto :</strong> Contexte post-opératoire → rechercher douleur mal contrôlée, infection, rétention urinaire, médicaments (morphine ?), globe vésical.</p>
+                                </div>
+                            </div>
+
+                            <button type="button" class="accordion-button" data-target="acc-del-3">
+                                <span><i class="fas fa-pills" style="color: #ef4444; margin-right: 0.5rem;"></i>3. Médicaments à risque</span>
+                                <i class="fas fa-chevron-down accordion-arrow"></i>
+                            </button>
+                            <div id="acc-del-3" class="accordion-content">
+                                <div class="accordion-content-inner">
+                                    <p><strong>Médicaments souvent impliqués :</strong></p>
+                                    <ul>
+                                        <li>Opioïdes (morphine, tramadol)</li>
+                                        <li>Anticholinergiques (atropine, antihistaminiques)</li>
+                                        <li>Benzodiazépines</li>
+                                        <li>Corticoïdes</li>
+                                        <li>Antibiotiques (fluoroquinolones)</li>
+                                    </ul>
+                                    <p style="color: #f87171;"><strong>⚠️</strong> Revoir systématiquement les prescriptions récentes chez un patient confus.</p>
+                                </div>
+                            </div>
+
+                            <button type="button" class="accordion-button" data-target="acc-del-4">
+                                <span><i class="fas fa-balance-scale" style="color: #f59e0b; margin-right: 0.5rem;"></i>4. Délirium vs Démence</span>
+                                <i class="fas fa-chevron-down accordion-arrow"></i>
+                            </button>
+                            <div id="acc-del-4" class="accordion-content">
+                                <div class="accordion-content-inner">
+                                    <p><strong>Distinctions clés :</strong></p>
+                                    <ul>
+                                        <li>Délirium : début aigu, fluctuant, inattention, souvent réversible</li>
+                                        <li>Démence : début progressif, stable, mémoire ++, chronique</li>
+                                        <li>Attention : la démence est un facteur de risque de délirium</li>
+                                    </ul>
+                                    <p><strong>Chez Rakoto :</strong> Autonome avant l'hospitalisation + début brutal = délirium sur terrain sain (probablement).</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--color-border);">
+                            <h3 style="margin-bottom: 1rem;"><i class="fas fa-question-circle" style="color: #14b8a6; margin-right: 0.5rem;"></i>Quiz</h3>
+                            <div class="quiz-item">
+                                <h4>Quel est le critère ESSENTIEL pour diagnostiquer un délirium ?</h4>
+                                <div class="quiz-options" data-quiz="del-q1" data-answer="B">
+                                    <div class="quiz-option" data-option="A">A) La présence d'hallucinations</div>
+                                    <div class="quiz-option" data-option="B">B) Le début aigu et la fluctuation des symptômes</div>
+                                    <div class="quiz-option" data-option="C">C) L'agitation nocturne</div>
+                                    <div class="quiz-option" data-option="D">D) L'âge > 75 ans</div>
+                                </div>
+                                <div class="feedback-box" id="feedback-del-q1"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Comparison Table -->
+                    <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--color-border);">
+                        <h3 style="margin-bottom: 1rem;"><i class="fas fa-columns" style="color: #14b8a6; margin-right: 0.5rem;"></i>Comparaison : Dépression vs Délirium vs Démence</h3>
+                        <div style="overflow-x: auto; border-radius: var(--radius-lg); border: 1px solid var(--color-border);">
+                            <table class="comparison-table">
+                                <thead>
+                                    <tr>
+                                        <th>Caractéristique</th>
+                                        <th>Dépression</th>
+                                        <th>Délirium</th>
+                                        <th>Démence</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="font-weight: 600;">Début</td>
+                                        <td>Semaines</td>
+                                        <td>Heures/jours</td>
+                                        <td>Mois/années</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 600;">Évolution</td>
+                                        <td>Stable ou progressive</td>
+                                        <td>Fluctuante</td>
+                                        <td>Progressive</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 600;">Conscience</td>
+                                        <td>Claire</td>
+                                        <td>Altérée</td>
+                                        <td>Claire (sauf stade avancé)</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 600;">Attention</td>
+                                        <td>Diminuée (par manque d'intérêt)</td>
+                                        <td>Très altérée</td>
+                                        <td>Relativement préservée (début)</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 600;">Hallucinations</td>
+                                        <td>Rares</td>
+                                        <td>Fréquentes (visuelles)</td>
+                                        <td>Tardives</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 600;">Réversibilité</td>
+                                        <td>Oui (traitement)</td>
+                                        <td>Oui (si cause traitée)</td>
+                                        <td>Non (mais stabilisation possible)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="nav-buttons-bottom">
+                        <button class="btn-secondary" onclick="goToStep(1)">
+                            <i class="fas fa-arrow-left" style="margin-right: 0.5rem;"></i> Étape précédente
+                        </button>
+                        <button class="btn-primary" onclick="goToStep(3)">
+                            Étape suivante : Diagnostic <i class="fas fa-arrow-right" style="margin-left: 0.5rem;"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ÉTAPE 3: DIAGNOSTIC -->
+            <section id="step-3" class="step-content">
+                <div class="glass-card">
+                    <h2><i class="fas fa-diagnoses" style="color: #14b8a6; margin-right: 0.5rem;"></i>Étape 3 : Raisonnement diagnostique</h2>
+                    <p style="color: var(--color-text-muted); margin-bottom: 1.5rem;">Utilisez l'arbre décisionnel pour guider votre réflexion.</p>
+
+                    <h3 style="margin-bottom: 1rem;"><i class="fas fa-sitemap" style="color: #14b8a6; margin-right: 0.5rem;"></i>Arbre décisionnel</h3>
+
+                    <div class="decision-container" id="decision-tree">
+                        <div id="node-start" class="decision-node">
+                            <p style="font-weight: 600; font-size: var(--font-size-lg); color: var(--color-text-primary); margin-bottom: 1rem;"><i class="fas fa-question-circle" style="color: #14b8a6; margin-right: 0.5rem;"></i>Patient âgé avec troubles du comportement ou de l'humeur. Quel est le mode d'installation ?</p>
+                            <div>
+                                <button onclick="showDecisionNode('node-aigu')" class="decision-option"><i class="fas fa-bolt" style="margin-right: 0.5rem; color: #f59e0b;"></i>Aigu (heures/jours) avec fluctuation</button>
+                                <button onclick="showDecisionNode('node-progressif')" class="decision-option"><i class="fas fa-chart-line" style="margin-right: 0.5rem; color: #14b8a6;"></i>Progressif (semaines/mois)</button>
+                            </div>
+                        </div>
+
+                        <div id="node-aigu" class="decision-node hidden">
+                            <p style="font-weight: 600; font-size: var(--font-size-lg); color: var(--color-text-primary); margin-bottom: 1rem;"><i class="fas fa-question-circle" style="color: #f59e0b; margin-right: 0.5rem;"></i>Y a-t-il une inattention marquée et une altération de la conscience ?</p>
+                            <div>
+                                <button onclick="showDecisionResult('result-delirium')" class="decision-option"><i class="fas fa-check" style="margin-right: 0.5rem; color: #4ade80;"></i>Oui → Délirium probable</button>
+                                <button onclick="showDecisionResult('result-autre-aigu')" class="decision-option"><i class="fas fa-times" style="margin-right: 0.5rem; color: #ef4444;"></i>Non → Autre cause aiguë à rechercher</button>
+                            </div>
+                        </div>
+
+                        <div id="node-progressif" class="decision-node hidden">
+                            <p style="font-weight: 600; font-size: var(--font-size-lg); color: var(--color-text-primary); margin-bottom: 1rem;"><i class="fas fa-question-circle" style="color: #14b8a6; margin-right: 0.5rem;"></i>Quel est le tableau clinique prédominant ?</p>
+                            <div>
+                                <button onclick="showDecisionResult('result-depression')" class="decision-option"><i class="fas fa-cloud-rain" style="margin-right: 0.5rem; color: #60a5fa;"></i>Tristesse, plaintes somatiques, perte d'intérêt</button>
+                                <button onclick="showDecisionResult('result-demence')" class="decision-option"><i class="fas fa-brain" style="margin-right: 0.5rem; color: #a855f7;"></i>Troubles de la mémoire, désorientation progressive</button>
+                            </div>
+                        </div>
+
+                        <div id="result-delirium" class="decision-node hidden result-box danger">
+                            <h3><i class="fas fa-exclamation-circle" style="margin-right: 0.5rem;"></i>Délirium (confusion aiguë)</h3>
+                            <p><strong>Chez Rakoto :</strong> Début brutal, fluctuation, hallucinations visuelles, contexte post-opératoire.</p>
+                            <ul style="margin-top: 1rem; padding-left: 1.5rem;">
+                                <li><strong>Urgence médicale :</strong> Rechercher et traiter la cause</li>
+                                <li>Bilan infectieux, métabolique, médicamenteux</li>
+                                <li>Scanner cérébral si traumatisme ou signes neurologiques</li>
+                                <li>Traitement symptomatique avec prudence</li>
+                            </ul>
+                        </div>
+
+                        <div id="result-autre-aigu" class="decision-node hidden result-box warning">
+                            <h3><i class="fas fa-search" style="margin-right: 0.5rem;"></i>Autre cause aiguë</h3>
+                            <p>Si pas de critères de délirium mais début aigu :</p>
+                            <ul style="margin-top: 1rem; padding-left: 1.5rem;">
+                                <li>AVC (rechercher déficit neurologique)</li>
+                                <li>Trouble métabolique isolé</li>
+                                <li>Épisode psychiatrique aigu sur terrain connu</li>
+                                <li>Intoxication médicamenteuse</li>
+                            </ul>
+                        </div>
+
+                        <div id="result-depression" class="decision-node hidden result-box">
+                            <h3><i class="fas fa-cloud-rain" style="margin-right: 0.5rem;"></i>Dépression du sujet âgé</h3>
+                            <p><strong>Chez Rasoa :</strong> Deuil récent, plaintes somatiques, retrait social, propos de désespoir.</p>
+                            <ul style="margin-top: 1rem; padding-left: 1.5rem;">
+                                <li>Évaluation du risque suicidaire (RUD)</li>
+                                <li>Bilan cognitif (éliminer pseudo-démence dépressive)</li>
+                                <li>Recherche de cause organique (hypothyroïdie, carence B12)</li>
+                                <li>Revue des médicaments</li>
+                            </ul>
+                        </div>
+
+                        <div id="result-demence" class="decision-node hidden result-box warning">
+                            <h3><i class="fas fa-brain" style="margin-right: 0.5rem;"></i>Démence débutante probable</h3>
+                            <p>Évolution progressive sur plusieurs mois avec troubles mnésiques au premier plan.</p>
+                            <ul style="margin-top: 1rem; padding-left: 1.5rem;">
+                                <li>Bilan cognitif approfondi (neuropsychologue)</li>
+                                <li>IRM cérébrale</li>
+                                <li>Bilan biologique complet</li>
+                                <li>Évaluation gériatrique globale</li>
+                                <li>Attention : peut coexister avec une dépression</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <button onclick="resetDecisionTree()" class="btn-secondary" style="margin-top: 1rem;"><i class="fas fa-redo" style="margin-right: 0.5rem;"></i>Recommencer</button>
+
+                    <div class="nav-buttons-bottom">
+                        <button class="btn-secondary" onclick="goToStep(2)">
+                            <i class="fas fa-arrow-left" style="margin-right: 0.5rem;"></i> Étape précédente
+                        </button>
+                        <button class="btn-primary" onclick="goToStep(4)">
+                            Étape suivante : Prise en charge <i class="fas fa-arrow-right" style="margin-left: 0.5rem;"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ÉTAPE 4: PRISE EN CHARGE -->
+            <section id="step-4" class="step-content">
+                <div class="glass-card">
+                    <h2><i class="fas fa-hand-holding-medical" style="color: #14b8a6; margin-right: 0.5rem;"></i>Étape 4 : Prise en charge</h2>
+                    <p style="color: var(--color-text-muted); margin-bottom: 1.5rem;">Apprenez les spécificités de la prise en charge psychiatrique du sujet âgé.</p>
+
+                    <div class="case-tabs">
+                        <div class="case-tab active-teal" data-case="depression">
+                            <h4>Rasoa</h4>
+                            <p>Traitement dépression</p>
+                        </div>
+                        <div class="case-tab" data-case="delirium">
+                            <h4>Rakoto</h4>
+                            <p>Gestion délirium</p>
+                        </div>
+                    </div>
+
+                    <!-- Depression Management -->
+                    <div id="pec-depression" class="case-content active">
+                        <h3 style="color: #2dd4bf; margin-bottom: 1rem;"><i class="fas fa-procedures" style="margin-right: 0.5rem;"></i>Prise en charge de Rasoa</h3>
+
+                        <h4 style="margin-bottom: 1rem; color: var(--color-text-primary);"><i class="fas fa-pills" style="color: #14b8a6; margin-right: 0.5rem;"></i>Traitement médicamenteux</h4>
+                        <ul class="action-list">
+                            <li><strong>ISRS en 1ère intention :</strong> Sertraline, escitalopram. Débuter à demi-dose, augmenter progressivement.</li>
+                            <li><strong>Éviter les tricycliques :</strong> Effets anticholinergiques, risque cardiaque.</li>
+                            <li><strong>Délai d'action :</strong> 4-6 semaines, parfois plus long chez le sujet âgé.</li>
+                            <li><strong>Durée de traitement :</strong> Minimum 12 mois après rémission (risque de rechute élevé).</li>
+                            <li><strong>Anxiolytiques :</strong> Si nécessaire, préférer oxazépam (demi-vie courte), durée limitée.</li>
+                        </ul>
+
+                        <h4 style="margin: 1.5rem 0 1rem; color: var(--color-text-primary);"><i class="fas fa-comments" style="color: #14b8a6; margin-right: 0.5rem;"></i>Prise en charge non médicamenteuse</h4>
+                        <ul class="action-list">
+                            <li><strong>Psychothérapie :</strong> TCC adaptée, psychothérapie de soutien, réminiscence.</li>
+                            <li><strong>Activités sociales :</strong> Encourager la participation aux activités de l'EHPAD.</li>
+                            <li><strong>Activité physique :</strong> Adaptée aux capacités (marche, gym douce).</li>
+                            <li><strong>Accompagnement du deuil :</strong> Si besoin, psychologue ou groupe de parole.</li>
+                            <li><strong>Lien avec la famille :</strong> Impliquer les proches dans la prise en charge.</li>
+                        </ul>
+
+                        <div class="alert alert-warning" style="margin-top: 1.5rem;">
+                            <div class="alert-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                            <div class="alert-content">
+                                <h4>Points de vigilance</h4>
+                                <ul style="margin: 0; padding-left: 1.25rem;">
+                                    <li>Surveiller le risque suicidaire (levée d'inhibition en début de traitement)</li>
+                                    <li>Attention aux interactions médicamenteuses (polymédication)</li>
+                                    <li>Surveiller la natrémie sous ISRS (SIADH)</li>
+                                    <li>Réévaluer régulièrement l'efficacité et la tolérance</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Delirium Management -->
+                    <div id="pec-delirium" class="case-content">
+                        <h3 style="color: #fbbf24; margin-bottom: 1rem;"><i class="fas fa-procedures" style="margin-right: 0.5rem;"></i>Prise en charge de Rakoto</h3>
+
+                        <h4 style="margin-bottom: 1rem; color: var(--color-text-primary);"><i class="fas fa-search-plus" style="color: #f59e0b; margin-right: 0.5rem;"></i>1. Traiter la cause</h4>
+                        <ul class="action-list">
+                            <li><strong>Bilan étiologique :</strong> NFS, iono, créat, CRP, BU, glycémie, TSH.</li>
+                            <li><strong>Chez Rakoto :</strong> Rechercher infection (pulmonaire, urinaire), globe vésical, fécalome, douleur mal contrôlée.</li>
+                            <li><strong>Revoir les médicaments :</strong> Opioïdes ? Anticholinergiques ? Benzodiazépines ?</li>
+                            <li><strong>Corriger les troubles métaboliques :</strong> Hydratation, correction électrolytique.</li>
+                        </ul>
+
+                        <h4 style="margin: 1.5rem 0 1rem; color: var(--color-text-primary);"><i class="fas fa-bed" style="color: #f59e0b; margin-right: 0.5rem;"></i>2. Mesures non médicamenteuses</h4>
+                        <ul class="action-list">
+                            <li><strong>Réorientation :</strong> Calendrier, horloge visible, photos familiales, objets familiers.</li>
+                            <li><strong>Environnement calme :</strong> Lumière douce, réduire le bruit, éviter les changements de chambre.</li>
+                            <li><strong>Correction des déficits sensoriels :</strong> Lunettes, prothèses auditives (Rakoto a une prothèse !).</li>
+                            <li><strong>Mobilisation précoce :</strong> Lever dès que possible, éviter la contention.</li>
+                            <li><strong>Cycle veille-sommeil :</strong> Lumière le jour, obscurité la nuit.</li>
+                            <li><strong>Présence rassurante :</strong> Famille si possible, personnel stable.</li>
+                        </ul>
+
+                        <h4 style="margin: 1.5rem 0 1rem; color: var(--color-text-primary);"><i class="fas fa-pills" style="color: #f59e0b; margin-right: 0.5rem;"></i>3. Traitement symptomatique (si nécessaire)</h4>
+                        <ul class="action-list">
+                            <li><strong>En dernier recours :</strong> Si agitation mettant en danger le patient ou les soins.</li>
+                            <li><strong>Halopéridol :</strong> 0.5-1 mg PO ou IM, dose minimale efficace.</li>
+                            <li><strong>Éviter les benzodiazépines :</strong> Sauf si sevrage alcoolique ou CI aux neuroleptiques.</li>
+                            <li><strong>Durée la plus courte possible :</strong> Réévaluation quotidienne.</li>
+                        </ul>
+
+                        <div class="alert alert-danger" style="margin-top: 1.5rem;">
+                            <div class="alert-icon"><i class="fas fa-exclamation-circle"></i></div>
+                            <div class="alert-content">
+                                <h4>Contention physique</h4>
+                                <p>À éviter autant que possible ! Augmente la mortalité, l'agitation et prolonge le délirium. Si absolument nécessaire : prescription médicale, durée limitée, réévaluation horaire.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--color-border);">
+                        <h3 style="margin-bottom: 1rem;"><i class="fas fa-question-circle" style="color: #14b8a6; margin-right: 0.5rem;"></i>Quiz</h3>
+                        <div class="quiz-item">
+                            <h4>Dans la prise en charge du délirium, quelle est la PRIORITÉ ?</h4>
+                            <div class="quiz-options" data-quiz="pec-q1" data-answer="A">
+                                <div class="quiz-option" data-option="A">A) Rechercher et traiter la cause sous-jacente</div>
+                                <div class="quiz-option" data-option="B">B) Prescrire un neuroleptique pour calmer le patient</div>
+                                <div class="quiz-option" data-option="C">C) Mettre en place une contention</div>
+                                <div class="quiz-option" data-option="D">D) Transférer en psychiatrie</div>
+                            </div>
+                            <div class="feedback-box" id="feedback-pec-q1"></div>
+                        </div>
+                    </div>
+
+                    <div class="nav-buttons-bottom">
+                        <button class="btn-secondary" onclick="goToStep(3)">
+                            <i class="fas fa-arrow-left" style="margin-right: 0.5rem;"></i> Étape précédente
+                        </button>
+                        <button class="btn-primary" onclick="goToStep(5)">
+                            Étape suivante : Synthèse <i class="fas fa-arrow-right" style="margin-left: 0.5rem;"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ÉTAPE 5: SYNTHÈSE -->
+            <section id="step-5" class="step-content">
+                <div class="glass-card">
+                    <h2><i class="fas fa-flag-checkered" style="color: #14b8a6; margin-right: 0.5rem;"></i>Étape 5 : Synthèse</h2>
+                    <p style="color: var(--color-text-muted); margin-bottom: 1.5rem;">Récapitulatif des points essentiels en gérontopsychiatrie.</p>
+
+                    <div class="key-points">
+                        <h3><i class="fas fa-star" style="margin-right: 0.5rem;"></i>Points clés à retenir</h3>
+                        <ul>
+                            <li><strong>Dépression masquée :</strong> Chez le sujet âgé, les plaintes somatiques peuvent être au premier plan.</li>
+                            <li><strong>Risque suicidaire élevé :</strong> Les > 75 ans ont un taux de suicide élevé, méthodes plus létales.</li>
+                            <li><strong>Délirium = urgence médicale :</strong> Toujours rechercher une cause organique (infection, médicaments, métabolique).</li>
+                            <li><strong>Différencier les 3D :</strong> Dépression, Délirium, Démence - mode d'installation et attention sont clés.</li>
+                            <li><strong>« Start low, go slow » :</strong> Commencer les traitements à faible dose chez le sujet âgé.</li>
+                            <li><strong>Iatrogénie :</strong> Toujours revoir les médicaments devant un trouble psychiatrique du sujet âgé.</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-top: 2rem;">
+                        <h3 style="margin-bottom: 1rem;"><i class="fas fa-tasks" style="color: #4ade80; margin-right: 0.5rem;"></i>Checklist d'auto-évaluation</h3>
+                        <div class="checklist-item">
+                            <input id="check-1" type="checkbox">
+                            <label for="check-1">Je sais reconnaître une dépression masquée chez le sujet âgé</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input id="check-2" type="checkbox">
+                            <label for="check-2">Je connais les facteurs de risque suicidaire spécifiques au sujet âgé</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input id="check-3" type="checkbox">
+                            <label for="check-3">Je sais diagnostiquer un délirium avec les critères CAM</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input id="check-4" type="checkbox">
+                            <label for="check-4">Je connais les principales causes de délirium (I WATCH DEATH)</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input id="check-5" type="checkbox">
+                            <label for="check-5">Je sais différencier dépression, délirium et démence</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input id="check-6" type="checkbox">
+                            <label for="check-6">Je connais les règles de prescription d'antidépresseurs chez le sujet âgé</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input id="check-7" type="checkbox">
+                            <label for="check-7">Je connais les mesures non médicamenteuses du délirium</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input id="check-8" type="checkbox">
+                            <label for="check-8">Je sais que la contention doit être un dernier recours</label>
+                        </div>
+
+                        <div id="checklist-result" style="margin-top: 1rem; padding: 1rem; background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); display: none;">
+                            <p style="color: #4ade80; margin: 0;"><i class="fas fa-check-circle" style="margin-right: 0.5rem;"></i><span id="checklist-count">0</span>/8 compétences validées</p>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-success" style="margin-top: 2rem;">
+                        <div class="alert-icon"><i class="fas fa-medal"></i></div>
+                        <div class="alert-content">
+                            <h4>Parcours terminé !</h4>
+                            <p>Vous avez complété ce module sur la psychiatrie du sujet âgé. N'hésitez pas à revoir les différentes étapes.</p>
+                        </div>
+                    </div>
+
+                    <div class="nav-buttons-bottom">
+                        <button class="btn-secondary" onclick="goToStep(4)">
+                            <i class="fas fa-arrow-left" style="margin-right: 0.5rem;"></i> Étape précédente
+                        </button>
+                        <button class="btn-primary" onclick="goToStep(1)">
+                            <i class="fas fa-redo" style="margin-right: 0.5rem;"></i> Recommencer le parcours
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <p>Dr. FENOHASINA T.J. Felicien (Psychiatre)</p>
+        <p>&copy; 2025 - Centre Ressource de Réhabilitation</p>
+        <p class="license">Licence CC BY-NC-SA 4.0</p>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const quizAnswers = {
+        'dep-q1': {
+            answer: 'C',
+            correct: "<strong>Correct !</strong> La dépression du sujet âgé est souvent « masquée » par des plaintes somatiques (douleurs, fatigué, troubles digestifs). La tristesse peut être absente ou remplacée par de l'irritabilité.",
+            incorrect: "<strong>À revoir.</strong> La bonne réponse est C. La dépression du sujet âgé se présente souvent de manière atypique, avec des plaintes somatiques au premier plan."
+        },
+        'del-q1': {
+            answer: 'B',
+            correct: "<strong>Exact !</strong> Le critère essentiel du délirium est le début aigu (heures/jours) avec fluctuation des symptômes. C'est ce qui le distingue de la démence (progressive) et de la dépression (stable).",
+            incorrect: "<strong>À revoir.</strong> La bonne réponse est B. Le délirium se caractérise par un début brutal et une fluctuation des symptômes, critères essentiels du diagnostic."
+        },
+        'pec-q1': {
+            answer: 'A',
+            correct: "<strong>Parfait !</strong> La priorité dans le délirium est de rechercher et traiter la cause sous-jacente (infection, médicament, métabolique). Le traitement symptomatique (neuroleptique) ne vient qu'en dernier recours.",
+            incorrect: "<strong>À revoir.</strong> La bonne réponse est A. Le délirium est un symptôme, pas une maladie. La priorité est de trouver et traiter la cause."
+        }
+    };
+
+    const stepBtns = document.querySelectorAll('.step-btn');
+    const stepContents = document.querySelectorAll('.step-content');
+    const progressFill = document.getElementById('progressFill');
+
+    window.goToStep = function(stepNum) {
+        stepBtns.forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.step == stepNum);
+        });
+        stepContents.forEach(content => {
+            content.classList.toggle('active', content.id === `step-${stepNum}`);
+        });
+        progressFill.style.width = (stepNum * 20) + '%';
+        updateCaseDisplay();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    stepBtns.forEach(btn => {
+        btn.addEventListener('click', () => goToStep(btn.dataset.step));
+    });
+
+    let currentCase = 'dépression';
+
+    function updateCaseTabs(caseName) {
+        document.querySelectorAll('.case-tab').forEach(t => {
+            t.classList.remove('active-teal', 'active-amber');
+            if (t.dataset.case === caseName) {
+                t.classList.add(caseName === 'dépression' ? 'active-teal' : 'active-amber');
+            }
+        });
+    }
+
+    function updateCaseDisplay() {
+        const contentPrefixes = ['case-', 'eval-', 'pec-'];
+        contentPrefixes.forEach(prefix => {
+            document.querySelectorAll(`[id^="${prefix}"]`).forEach(c => c.classList.remove('active'));
+            const target = document.querySelector(`#${prefix}${currentCase}`);
+            if (target) target.classList.add('active');
+        });
+    }
+
+    document.querySelectorAll('.case-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            currentCase = this.dataset.case;
+            updateCaseTabs(currentCase);
+            updateCaseDisplay();
+        });
+    });
+
+    document.querySelectorAll('.accordion-button').forEach(button => {
+        button.addEventListener('click', () => {
+            const targetId = button.dataset.target;
+            const content = document.getElementById(targetId);
+            const isOpen = button.classList.toggle('open');
+            content.style.maxHeight = isOpen ? content.scrollHeight + "px" : null;
+        });
+    });
+
+    document.querySelectorAll('.quiz-options').forEach(quizContainer => {
+        const quizId = quizContainer.dataset.quiz;
+        const correctAnswer = quizContainer.dataset.answer;
+
+        quizContainer.querySelectorAll('.quiz-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const selectedOption = this.dataset.option;
+                const feedbackDiv = document.getElementById(`feedback-${quizId}`);
+                const quizData = quizAnswers[quizId];
+
+                quizContainer.querySelectorAll('.quiz-option').forEach(opt => {
+                    opt.classList.remove('selected', 'correct', 'incorrect');
+                });
+
+                this.classList.add('selected');
+
+                if (selectedOption === correctAnswer) {
+                    feedbackDiv.innerHTML = quizData.correct;
+                    feedbackDiv.className = 'feedback-box success visible';
+                    this.classList.add('correct');
+                } else {
+                    feedbackDiv.innerHTML = quizData.incorrect;
+                    feedbackDiv.className = 'feedback-box error visible';
+                    this.classList.add('incorrect');
+                    quizContainer.querySelector(`[data-option="${correctAnswer}"]`).classList.add('correct');
+                }
+            });
+        });
+    });
+
+    window.showDecisionNode = function(nodeId) {
+        document.querySelectorAll('.decision-node').forEach(node => {
+            node.classList.add('hidden');
+        });
+        document.getElementById(nodeId).classList.remove('hidden');
+    };
+
+    window.showDecisionResult = function(resultId) {
+        document.querySelectorAll('.decision-node').forEach(node => {
+            node.classList.add('hidden');
+        });
+        document.getElementById(resultId).classList.remove('hidden');
+    };
+
+    window.resetDecisionTree = function() {
+        document.querySelectorAll('.decision-node').forEach(node => {
+            node.classList.add('hidden');
+        });
+        document.getElementById('node-start').classList.remove('hidden');
+    };
+
+    const checkboxes = document.querySelectorAll('.checklist-item input[type="checkbox"]');
+    const checklistResult = document.getElementById('checklist-result');
+    const checklistCount = document.getElementById('checklist-count');
+
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            this.closest('.checklist-item').classList.toggle('checked', this.checked);
+            const checkedCount = document.querySelectorAll('.checklist-item input:checked').length;
+            checklistCount.textContent = checkedCount;
+            checklistResult.style.display = 'block';
+        });
+    });
+});
+</script>
+
+</body>
+</html>

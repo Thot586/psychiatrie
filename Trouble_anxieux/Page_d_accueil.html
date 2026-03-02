@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Troubles Anxieux - Questionnaires</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .portal-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+    .portal-card {
+        background: linear-gradient(145deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-xl);
+        padding: 1.5rem;
+        text-decoration: none;
+        display: block;
+        transition: all var(--transition-slow);
+    }
+    .portal-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--color-border-active);
+        box-shadow: var(--shadow-glow);
+    }
+    .portal-card h3 { color: var(--color-text-primary); margin-bottom: 0.5rem; }
+    .portal-card p { color: var(--color-text-muted); font-size: var(--font-size-sm); }
+    .section-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius-lg);
+        font-weight: 600;
+        font-size: var(--font-size-lg);
+        margin-bottom: 1.5rem;
+        color: white;
+    }
+    .section-badge-depistage { background: #10b981; }
+    .section-badge-specifique { background: #14b8a6; }
+    .section-badge-suivi { background: #06b6d4; }
+    .card-subtitle { color: var(--color-text-muted); font-style: italic; font-size: var(--font-size-sm); margin-bottom: 0.75rem; }
+    .card-description {
+        background: rgba(15, 23, 42, 0.5);
+        padding: 1rem;
+        border-radius: var(--radius-md);
+        margin-bottom: 1rem;
+        flex-grow: 1;
+        border: 1px solid var(--color-border);
+    }
+    .card-description p { margin: 0; }
+    .btn-test {
+        display: inline-block;
+        padding: 0.5rem 1.25rem;
+        border-radius: var(--radius-md);
+        font-weight: 600;
+        text-align: center;
+        transition: all var(--transition-normal);
+        text-decoration: none;
+    }
+    .btn-test-emerald { background: #10b981; color: white; }
+    .btn-test-emerald:hover { background: #059669; }
+    .btn-test-teal { background: #14b8a6; color: white; }
+    .btn-test-teal:hover { background: #0d9488; }
+    .btn-test-cyan { background: #06b6d4; color: white; }
+    .btn-test-cyan:hover { background: #0891b2; }
+  </style>
+</head>
+<body>
+
+  <nav class="navigation-bar">
+    <div class="nav-buttons">
+        <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+        <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+    </div>
+    <h1>Troubles Anxieux</h1>
+    <span class="badge badge-cat-anxiete">Anxiete</span>
+  </nav>
+
+  <main class="container" style="max-width: 1200px;">
+
+    <header class="text-center" style="margin-bottom: 3rem;">
+      <p style="color: var(--color-text-secondary); font-size: var(--font-size-lg); max-width: 800px; margin: 0 auto;">
+        Outils d'evaluation et de suivi pour l'anxiete generalisee, l'anxiete sociale, le trouble panique et le TOC.
+      </p>
+    </header>
+
+    <div class="glass-card" style="border-left: 4px solid #eab308; margin-bottom: 3rem;">
+      <div style="display: flex; align-items: flex-start; gap: 1rem;">
+        <i class="fas fa-exclamation-triangle" style="color: #eab308; font-size: 1.5rem;"></i>
+        <div>
+          <h2 style="color: var(--color-text-primary); margin-bottom: 0.5rem;">Avertissement Important</h2>
+          <p style="color: var(--color-text-secondary); font-size: var(--font-size-sm);">Ces outils sont des questionnaires de depistage et ne constituent en aucun cas un diagnostic. Seul un professionnel de sante qualifie peut poser un diagnostic. Veuillez consulter un medecin ou un psychologue pour toute question medicale.</p>
+        </div>
+      </div>
+    </div>
+
+    <section style="margin-bottom: 3rem;">
+      <span class="section-badge section-badge-depistage"><i class="fas fa-search"></i> Aide au Depistage</span>
+      <div class="portal-grid">
+
+        <a href="GAD-7.html" class="portal-card">
+          <h3>GAD-7</h3>
+          <p class="card-subtitle">Generalized Anxiety Disorder-7</p>
+          <div class="card-description">
+            <p>Questionnaire de reference pour le depistage du trouble anxieux generalise. Evalue la severite de l'anxiete sur les 2 dernieres semaines.</p>
+          </div>
+          <span class="btn-test btn-test-emerald">Commencer le test &rarr;</span>
+        </a>
+
+      </div>
+    </section>
+
+    <section style="margin-bottom: 3rem;">
+      <span class="section-badge section-badge-specifique"><i class="fas fa-bullseye"></i> Troubles Specifiques</span>
+      <div class="portal-grid">
+
+        <a href="LSAS.html" class="portal-card">
+          <h3>LSAS</h3>
+          <p class="card-subtitle">Liebowitz Social Anxiety Scale</p>
+          <div class="card-description">
+            <p>Echelle de reference pour l'anxiete sociale. Evalue la peur et l'evitement dans 24 situations sociales et de performance.</p>
+          </div>
+          <span class="btn-test btn-test-teal">Commencer le test &rarr;</span>
+        </a>
+
+        <a href="SPIN.html" class="portal-card">
+          <h3>SPIN</h3>
+          <p class="card-subtitle">Social Phobia Inventory</p>
+          <div class="card-description">
+            <p>Auto-questionnaire de 17 items pour le depistage de la phobie sociale. Plus court que la LSAS, evalue la peur, l'evitement et les symptomes physiologiques.</p>
+          </div>
+          <span class="btn-test btn-test-teal">Commencer le test &rarr;</span>
+        </a>
+
+        <a href="PDSS.html" class="portal-card">
+          <h3>PDSS</h3>
+          <p class="card-subtitle">Panic Disorder Severity Scale</p>
+          <div class="card-description">
+            <p>Echelle en 7 items evaluant la frequence, la detresse et l'evitement lies aux attaques de panique.</p>
+          </div>
+          <span class="btn-test btn-test-teal">Commencer le test &rarr;</span>
+        </a>
+
+        <a href="Y-BOCS.html" class="portal-card">
+          <h3>Y-BOCS</h3>
+          <p class="card-subtitle">Yale-Brown Obsessive Compulsive Scale</p>
+          <div class="card-description">
+            <p>Echelle de reference pour evaluer la severite des symptomes obsessionnels et compulsifs dans le TOC.</p>
+          </div>
+          <span class="btn-test btn-test-teal">Commencer le test &rarr;</span>
+        </a>
+
+      </div>
+    </section>
+
+    <section style="margin-bottom: 3rem;">
+      <span class="section-badge section-badge-suivi"><i class="fas fa-chart-line"></i> Pour le Suivi</span>
+      <div class="portal-grid">
+
+        <a href="BAI.html" class="portal-card">
+          <h3>BAI</h3>
+          <p class="card-subtitle">Beck Anxiety Inventory</p>
+          <div class="card-description">
+            <p>Auto-questionnaire de 21 items mesurant l'intensite des symptomes anxieux. Ideal pour le suivi de l'evolution sous traitement.</p>
+          </div>
+          <span class="btn-test btn-test-cyan">Commencer le test &rarr;</span>
+        </a>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p>Dr. FENOHASINA T.J. Felicien (Psychiatre)</p>
+    <p>&copy; 2025 - Centre Ressource de Rehabilitation</p>
+    <p style="font-size: var(--font-size-xs); color: var(--color-text-muted); margin-top: 0.5rem;">Licence CC BY-NC-SA 4.0</p>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ZAN-BPD - Echelle de Zanarini</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <style>
+        :root {
+            --cat-main: #f59e0b;
+            --cat-dark: #d97706;
+            --cat-light: #fbbf24;
+            --cat-rgb: 245, 158, 11;
+            --cat-readable: #b45309;
+        }
+        .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
+        .option-btn.selected, .answer-btn.selected { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        .score-circle { border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 30px rgba(var(--cat-rgb), 0.2); }
+        .score-value { color: var(--cat-light); }
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-light); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+        .progress-fill { background: linear-gradient(90deg, var(--cat-main), var(--cat-light)); box-shadow: 0 0 8px rgba(var(--cat-rgb), 0.4); }
+        .likert-options input[type="radio"]:checked + label,
+        .binary-options input[type="radio"]:checked + label,
+        .radio-options input[type="radio"]:checked + label { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+    </style>
+
+</head>
+<body class="light-questionnaire">
+  <nav class="navigation-bar">
+    <div class="nav-buttons">
+      <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+      <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+    </div>
+    <h1>ZAN-BPD</h1>
+    <span class="badge badge-cat-perso">Personnalite</span>
+  </nav>
+
+  <div class="container">
+    <div class="header-section">
+      <h2>Echelle de Zanarini pour le Trouble de la Personnalite Borderline</h2>
+      <p class="subtitle">Mesure de la severite des symptomes</p>
+      <div class="toolbar">
+        <label class="btn" for="file-import"><i class="fas fa-file-import"></i> Importer un resultat</label>
+        <input type="file" id="file-import" accept=".json" style="display:none"/>
+      </div>
+    </div>
+
+    <div class="instructions">
+      <p><strong>Periode de reference :</strong> la semaine ecoulee (7 derniers jours)</p>
+      <p>Pour chaque critere ci-dessous, evaluez l'intensite et la frequence des symptomes durant cette periode. <strong>Toutes les questions doivent etre completees</strong> pour calculer les scores. Cet outil est un questionnaire de suivi de la severite, non un instrument diagnostique.</p>
+
+      <div style="margin-top: 1rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+        <label for="eval-date" style="font-weight: 600; color: var(--color-text-primary);">Date de l'evaluation :</label>
+        <input type="date" id="eval-date"/>
+      </div>
+    </div>
+
+    <form id="zan-form">
+      <div id="qwrap"></div>
+
+      <div class="actions">
+        <button type="submit" class="btn-primary"><i class="fas fa-calculator"></i> Calculer les resultats</button>
+      </div>
+      <p id="valmsg" class="validation">Veuillez repondre a toutes les questions.</p>
+
+      <div id="results" class="results-section" style="display: none;">
+        <div class="grid">
+          <div class="panel">
+            <h3>Score de severite</h3>
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem; flex-wrap: wrap;">
+              <div class="bigscore">
+                <span id="totalscore">0</span>
+                <small>/ 36</small>
+              </div>
+              <div id="severity-badge"></div>
+            </div>
+            <p id="eval-date-display" style="color: var(--color-text-muted); font-size: 0.9rem; margin-bottom: 1rem;"></p>
+
+            <div class="barwrap">
+              <div class="bar">
+                <div class="fill" id="fill"></div>
+              </div>
+              <div class="threshold-markers">
+                <div class="threshold-marker">
+                  <div>0</div>
+                  <div>Minimal</div>
+                </div>
+                <div class="threshold-marker">
+                  <div>9</div>
+                  <div>Leger</div>
+                </div>
+                <div class="threshold-marker">
+                  <div>18</div>
+                  <div>Modere</div>
+                </div>
+                <div class="threshold-marker">
+                  <div>27</div>
+                  <div>Marque</div>
+                </div>
+                <div class="threshold-marker">
+                  <div>36</div>
+                  <div>Severe</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="summary-box">
+              <p id="interp" style="font-size: 1.05rem; font-weight: 600; color: var(--color-text-primary);"></p>
+            </div>
+
+            <details class="accordion">
+              <summary>Interpretation detaillee</summary>
+              <div class="content">
+                <div id="interp-long"></div>
+              </div>
+            </details>
+
+            <details class="accordion">
+              <summary>Probabilite selon criteres DSM-5</summary>
+              <div class="content">
+                <div id="probability-result"></div>
+                <p class="note">
+                  <strong>Note importante :</strong> Cette estimation de probabilite est fournie a titre informatif uniquement.
+                  La ZAN-BPD est principalement concue pour le <strong>suivi de la severite</strong> des symptomes dans le temps,
+                  pas pour poser un diagnostic. Seul un professionnel qualifie peut etablir un diagnostic de TPB apres une
+                  evaluation clinique complete et longitudinale.
+                </p>
+              </div>
+            </details>
+
+            <details class="accordion">
+              <summary>Pour les patients - comprendre votre resultat</summary>
+              <div class="content">
+                <p><strong>Qu'est-ce que la ZAN-BPD ?</strong></p>
+                <p>La ZAN-BPD est une echelle qui mesure la severite des symptomes associes au trouble de la personnalite borderline durant la semaine ecoulee. Elle evalue 9 criteres correspondant aux criteres diagnostiques du DSM-5.</p>
+
+                <p><strong>Objectif principal : le suivi de la severite</strong></p>
+                <p>Cette echelle est concue pour <strong>suivre l'evolution</strong> de vos symptomes dans le temps, pas pour poser un diagnostic. Elle vous permet, ainsi qu'a votre therapeute, de :</p>
+                <ul>
+                  <li>Mesurer l'intensite actuelle de vos difficultes</li>
+                  <li>Observer les changements d'une semaine a l'autre</li>
+                  <li>Evaluer l'efficacite des traitements ou strategies mises en place</li>
+                  <li>Identifier les periodes plus difficiles necessitant un ajustement du suivi</li>
+                </ul>
+
+                <p class="note"><strong>Important :</strong> Un score eleve ne signifie pas necessairement que vous avez un TPB. Il indique que vous vivez actuellement des difficultes importantes qui meritent attention et soutien. Seul un professionnel de sante qualifie peut poser un diagnostic apres une evaluation complete.</p>
+
+                <p><strong>Comment utiliser vos resultats ?</strong></p>
+                <ul>
+                  <li><strong>Suivi regulier :</strong> Vous pouvez remplir cette echelle chaque semaine pour suivre votre evolution</li>
+                  <li><strong>Exportez vos resultats :</strong> Conservez-les pour les partager avec votre therapeute ou pour observer vos progres sur plusieurs semaines</li>
+                  <li><strong>Dialogue therapeutique :</strong> Utilisez ces scores pour discuter avec votre professionnel de sante de ce qui a ete difficile ou de ce qui s'ameliore</li>
+                  <li><strong>Si le score est eleve (>=19) de facon persistante :</strong> Discutez-en avec un professionnel pour adapter votre prise en charge</li>
+                </ul>
+
+                <p><strong>A propos de la "Probabilite DSM-5"</strong></p>
+                <p>Cette estimation (visible dans l'accordeon dedie) est fournie a titre informatif mais n'est <strong>pas l'objectif principal</strong> de cette echelle. Elle compte simplement le nombre de criteres significativement presents. Le diagnostic reel necessite bien plus qu'un score : une evaluation longitudinale, le contexte developpemental, l'exclusion d'autres troubles, etc.</p>
+              </div>
+            </details>
+
+            <details class="accordion">
+              <summary>Pour les cliniciens - utilisation de l'echelle</summary>
+              <div class="content">
+                <p><strong>Objectif principal : mesure de la severite et suivi longitudinal</strong></p>
+                <p>La ZAN-BPD est une echelle dimensionnelle concue pour :</p>
+                <ul>
+                  <li><strong>Evaluer la severite actuelle</strong> des symptomes borderline (semaine ecoulee)</li>
+                  <li><strong>Suivre l'evolution symptomatique</strong> dans le temps (administrations repetees)</li>
+                  <li><strong>Mesurer la reponse au traitement</strong> (psychotherapie, pharmacotherapie)</li>
+                  <li><strong>Objectiver les fluctuations</strong> et identifier les periodes de decompensation</li>
+                </ul>
+
+                <p class="note"><strong>Limite majeure :</strong> La ZAN-BPD n'est <strong>pas</strong> un outil diagnostique autonome. Elle evalue une periode de 7 jours, alors que le diagnostic de TPB necessite une persistance des symptomes depuis l'adolescence/debut de l'age adulte, une evaluation longitudinale, et l'exclusion d'autres troubles.</p>
+
+                <p><strong>Interpretation de la severite (usage principal)</strong></p>
+                <ul>
+                  <li><strong>0-9 (minimal) :</strong> Symptomes absents ou sous-cliniques. Periode de stabilite ou remission partielle.</li>
+                  <li><strong>10-18 (leger a modere) :</strong> Symptomes presents mais gerables. Surveillance, interventions ciblees, ajustement des strategies d'adaptation.</li>
+                  <li><strong>19-27 (modere a marque) :</strong> Symptomes significatifs impactant le fonctionnement. Intensification du suivi, psychotherapie structuree (TCD, TBM, schema therapie), evaluation pharmacologique.</li>
+                  <li><strong>28-36 (severe) :</strong> Decompensation significative. Evaluation du risque suicidaire, intensification urgente du traitement, consideration d'une hospitalisation si securite compromise.</li>
+                </ul>
+
+                <p><strong>Usage en suivi therapeutique</strong></p>
+                <p>Administration recommandee :</p>
+                <ul>
+                  <li><strong>Hebdomadaire</strong> en phase aigue ou decompensation</li>
+                  <li><strong>Bimensuelle a mensuelle</strong> en phase de stabilisation</li>
+                  <li><strong>Mensuelle</strong> en phase d'entretien</li>
+                </ul>
+                <p>Interpretez les fluctuations dans leur contexte : evenements de vie, adhesion therapeutique, changements therapeutiques recents, comorbidites actives.</p>
+
+                <p><strong>A propos de la "Probabilite DSM-5" (usage secondaire)</strong></p>
+                <p>L'estimation de probabilite (basee sur le decompte des criteres >=2) est fournie pour contexte mais presente des limites importantes :</p>
+                <ul>
+                  <li><strong>Fenetre temporelle inadequate :</strong> 7 jours vs critere de persistance du DSM-5</li>
+                  <li><strong>Pas de ponderation :</strong> tous les criteres comptent egal (alors que cliniquement, certains ont plus de poids)</li>
+                  <li><strong>Pas de contextualisation :</strong> ne considere pas l'histoire developpementale, les comorbidites, le fonctionnement global</li>
+                  <li><strong>Risque de sur-diagnostic :</strong> une decompensation aigue (trauma recent, deuil, stress majeur) peut donner un score eleve sans TPB sous-jacent</li>
+                </ul>
+
+                <p class="note"><strong>Recommandation clinique :</strong> Utilisez prioritairement le <strong>score de severite</strong> pour le suivi. Pour le diagnostic initial, privilegiez les entretiens structures valides (SCID-II, IPDE, DIB-R) et l'evaluation clinique longitudinale. La ZAN-BPD excelle dans le suivi d'efficacite therapeutique, pas dans le depistage diagnostique.</p>
+
+                <p><strong>Considerations differentielles</strong></p>
+                <p>Un score eleve peut refleter :</p>
+                <ul>
+                  <li>TPB (si contexte clinique coherent)</li>
+                  <li>TSPT complexe (chevauchement symptomatique important)</li>
+                  <li>Trouble bipolaire en phase mixte/depressive</li>
+                  <li>TDAH avec dysregulation emotionnelle severe</li>
+                  <li>Reaction aigue a un stress majeur</li>
+                </ul>
+              </div>
+            </details>
+          </div>
+
+          <details class="accordion">
+            <summary>Scores par critere DSM-5</summary>
+            <div class="content">
+              <p style="margin-bottom: 1rem; font-size: 0.9rem;">Detail de vos scores pour chaque critere (0 = absent, 4 = severe/quotidien)</p>
+              <div class="criteria-grid" id="criteria-scores"></div>
+            </div>
+          </details>
+
+          <div class="panel">
+            <h3>Exporter votre resultat</h3>
+            <p style="font-size: 0.9rem; color: var(--color-text-muted);">Aucun stockage local n'est effectue. Pour exporter, cochez la case de consentement puis cliquez sur "Exporter".</p>
+            <label class="consent">
+              <input type="checkbox" id="consent"/>
+              <span>Je souhaite télécharger mes résultats (questionnaire, réponses, score et date) dans un fichier JSON sur mon appareil. <strong>Ces résultats constituent des données de santé — je les conserverai de façon sécurisée.</strong> Aucune donnée n'est transmise à un serveur.</span>
+            </label>
+            <div class="export-buttons">
+              <button type="button" id="btn-export" class="btn-primary" disabled><i class="fas fa-download"></i> Exporter</button>
+              <button type="button" class="btn-print" onclick="printResults()"><i class="fas fa-print"></i> Imprimer</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <footer class="footer">
+    <p><strong>&copy; Mary C. Zanarini, PhD - McLean Hospital, Harvard Medical School</strong></p>
+    <p>La ZAN-BPD est un outil valide pour mesurer la severite des symptomes borderline. Usage clinique et recherche avec attribution appropriee. Aucune donnee n'est stockee localement.</p>
+    <p>Adapte en version interactive par Dr FENOHASINA Toto Jean Felicien (Psychiatre - FFI).</p>
+  </footer>
+
+  <script>
+    // Definition des criteres (9 criteres DSM-5)
+    const criteria = [
+      {
+        num: 1,
+        name: "Efforts effrenes pour eviter l'abandon",
+        question: "Avez-vous fait des efforts importants pour eviter d'etre abandonne(e) (reel ou imagine) ?",
+        examples: "Ex : appels repetes, menaces, comportements desesperes pour retenir quelqu'un"
+      },
+      {
+        num: 2,
+        name: "Relations instables et intenses",
+        question: "Avez-vous vecu des relations qui alternent entre idealisation et devalorisation extremes ?",
+        examples: "Ex : passer de 'tu es parfait(e)' a 'je te deteste' rapidement"
+      },
+      {
+        num: 3,
+        name: "Perturbations de l'identite",
+        question: "Avez-vous eu l'impression de ne pas savoir qui vous etes vraiment ?",
+        examples: "Ex : sentiment de ne pas avoir d'identite stable, confusion sur ses valeurs/objectifs"
+      },
+      {
+        num: 4,
+        name: "Impulsivite",
+        question: "Avez-vous agi de maniere impulsive dans au moins 2 domaines potentiellement dommageables ?",
+        examples: "Ex : depenses excessives, sexualite a risque, abus de substances, conduite dangereuse, crises de boulimie"
+      },
+      {
+        num: 5,
+        name: "Comportements suicidaires ou automutilations",
+        question: "Avez-vous eu des gestes suicidaires, des menaces ou des comportements d'automutilation ?",
+        examples: "Ex : scarifications, tentatives de suicide, menaces suicidaires"
+      },
+      {
+        num: 6,
+        name: "Instabilite affective",
+        question: "Votre humeur a-t-elle change de maniere rapide et intense ?",
+        examples: "Ex : passer de la tristesse a la colere a l'euphorie en quelques heures"
+      },
+      {
+        num: 7,
+        name: "Sentiments chroniques de vide",
+        question: "Vous etes-vous senti(e) vide interieurement de maniere persistante ?",
+        examples: "Ex : sensation de vide emotionnel, impression d'etre creux/creuse"
+      },
+      {
+        num: 8,
+        name: "Coleres intenses et inappropriees",
+        question: "Avez-vous ressenti des coleres intenses difficiles a controler ?",
+        examples: "Ex : explosions de rage, difficulte a controler sa colere, conflits frequents"
+      },
+      {
+        num: 9,
+        name: "Ideation paranoiaque ou dissociation",
+        question: "Avez-vous eu des moments ou vous pensiez qu'on vous voulait du mal ou vous vous sentiez deconnecte(e) ?",
+        examples: "Ex : sentiment que les autres complotent contre vous, sensation de se regarder de l'exterieur"
+      }
+    ];
+
+    const scaleOptions = [
+      { value: 0, label: "Absent", desc: "Aucun symptome" },
+      { value: 1, label: "Leger", desc: "Rare/minime" },
+      { value: 2, label: "Modere", desc: "Occasionnel" },
+      { value: 3, label: "Marque", desc: "Frequent" },
+      { value: 4, label: "Severe", desc: "Quotidien/extreme" }
+    ];
+
+    // Initialiser la date du jour
+    const evalDateInput = document.getElementById('eval-date');
+    const today = new Date().toISOString().split('T')[0];
+    evalDateInput.value = today;
+
+    // Generation du formulaire
+    const qwrap = document.getElementById('qwrap');
+    criteria.forEach((crit, i) => {
+      const div = document.createElement('div');
+      div.className = 'question-card';
+      div.id = `question-${crit.num}`;
+
+      const scaleHTML = scaleOptions.map(opt => `
+        <div>
+          <input type="radio" id="q${crit.num}_${opt.value}" name="q${crit.num}" value="${opt.value}"/>
+          <label for="q${crit.num}_${opt.value}">
+            <div class="scale-value">${opt.value}</div>
+            <div class="scale-label">${opt.label}</div>
+          </label>
+        </div>
+      `).join('');
+
+      div.innerHTML = `
+        <div class="question-text">
+          <span class="question-number">${crit.num}</span>${crit.name}
+        </div>
+        <div class="question-details">${crit.question}</div>
+        <div class="question-examples">${crit.examples}</div>
+        <div class="scale-container">${scaleHTML}</div>
+      `;
+      qwrap.appendChild(div);
+
+      // Ajouter l'event pour marquer comme repondu
+      div.querySelectorAll('input[type="radio"]').forEach(radio => {
+        radio.addEventListener('change', () => {
+          div.classList.add('answered');
+        });
+      });
+    });
+
+    // Fonctions d'interpretation
+    function getProbabilityInfo(scores) {
+      // Compter le nombre de criteres "significativement presents" (>=2)
+      let significantCriteria = 0;
+      for (let i = 1; i <= criteria.length; i++) {
+        if (scores[`q${i}`] >= 2) {
+          significantCriteria++;
+        }
+      }
+
+      // Calculer la probabilite basee sur les criteres DSM-5
+      // DSM-5 necessite 5 criteres sur 9 pour le diagnostic
+      let probability, probabilityClass, probabilityColor, probabilityDesc;
+
+      if (significantCriteria < 3) {
+        probability = "Faible";
+        probabilityClass = "severity-minimal";
+        probabilityColor = "#4ade80";
+        probabilityDesc = "Moins de 3 criteres significatifs. Peu probable selon les criteres DSM-5.";
+      } else if (significantCriteria < 5) {
+        probability = "Moderee";
+        probabilityClass = "severity-mild";
+        probabilityColor = "#fbbf24";
+        probabilityDesc = `${significantCriteria} criteres significatifs. En dessous du seuil DSM-5 (5 criteres requis), mais presence de difficultes notables.`;
+      } else if (significantCriteria < 7) {
+        probability = "Elevee";
+        probabilityClass = "severity-moderate";
+        probabilityColor = "#fb923c";
+        probabilityDesc = `${significantCriteria} criteres significatifs. Au-dessus du seuil DSM-5 (5 criteres), suggerant une forte probabilite de TPB.`;
+      } else {
+        probability = "Tres elevee";
+        probabilityClass = "severity-severe";
+        probabilityColor = "#f87171";
+        probabilityDesc = `${significantCriteria} criteres significatifs sur 9. Nettement au-dessus du seuil DSM-5, suggerant une tres forte probabilite de TPB.`;
+      }
+
+      return {
+        probability,
+        probabilityClass,
+        probabilityColor,
+        probabilityDesc,
+        significantCriteria
+      };
+    }
+
+    function getSeverityInfo(total) {
+      if (total <= 9) {
+        return {
+          label: "Symptomes minimes",
+          class: "severity-minimal",
+          shortDesc: "Symptomes absents ou minimes",
+          longDesc: "Votre score indique une absence ou une presence minime de symptomes borderline durant la semaine ecoulee. Cela suggere un fonctionnement relativement stable sur cette periode. Si toutefois vous ressentez des difficultes dans votre vie quotidienne, n'hesitez pas a en discuter avec un professionnel de sante."
+        };
+      } else if (total <= 18) {
+        return {
+          label: "Severite legere a moderee",
+          class: "severity-mild",
+          shortDesc: "Symptomes legers a moderes",
+          longDesc: "Votre score indique la presence de symptomes borderline d'intensite legere a moderee durant la semaine ecoulee. Ces symptomes peuvent impacter votre quotidien de maniere variable. Une consultation avec un professionnel de sante mentale peut etre benefique pour evaluer vos besoins et discuter d'eventuelles strategies d'adaptation ou interventions therapeutiques (psychotherapie, gestion de crise)."
+        };
+      } else if (total <= 27) {
+        return {
+          label: "Severite moderee a marquee",
+          class: "severity-moderate",
+          shortDesc: "Symptomes moderes a marques",
+          longDesc: "Votre score indique la presence de symptomes borderline d'intensite moderee a marquee durant la semaine ecoulee. Ces symptomes ont probablement un impact significatif sur votre fonctionnement quotidien (relations, travail, bien-etre). Une prise en charge therapeutique structuree est fortement recommandee. Les approches validees incluent la therapie comportementale dialectique (TCD), la therapie basee sur la mentalisation (TBM), ou la therapie des schemas."
+        };
+      } else {
+        return {
+          label: "Severite severe",
+          class: "severity-severe",
+          shortDesc: "Symptomes severes",
+          longDesc: "Votre score indique la presence de symptomes borderline severes durant la semaine ecoulee. Ces symptomes ont tres probablement un impact majeur sur votre vie quotidienne et peuvent compromettre votre securite ou celle d'autrui. Une consultation urgente avec un professionnel de sante mentale est vivement recommandee. Une intensification du traitement peut etre necessaire, incluant un suivi rapproche, une evaluation du risque suicidaire, et dans certains cas, une hospitalisation si la situation le justifie."
+        };
+      }
+    }
+
+    // Gestion du formulaire
+    const form = document.getElementById('zan-form');
+    const valmsg = document.getElementById('valmsg');
+    const results = document.getElementById('results');
+    const totalscoreEl = document.getElementById('totalscore');
+    const fill = document.getElementById('fill');
+    const severityBadge = document.getElementById('severity-badge');
+    const evalDateDisplay = document.getElementById('eval-date-display');
+    const probabilityResult = document.getElementById('probability-result');
+    const interp = document.getElementById('interp');
+    const interpLong = document.getElementById('interp-long');
+    const criteriaScores = document.getElementById('criteria-scores');
+
+    function computeAndRender(answers) {
+      // Verifier completude
+      for (let i = 1; i <= criteria.length; i++) {
+        if (answers[`q${i}`] === undefined) {
+          valmsg.style.display = 'block';
+          results.style.display = 'none';
+          return false;
+        }
+      }
+      valmsg.style.display = 'none';
+
+      // Calculer le score total
+      let total = 0;
+      const scores = {};
+      for (let i = 1; i <= criteria.length; i++) {
+        const score = parseInt(answers[`q${i}`]);
+        scores[`q${i}`] = score;
+        total += score;
+      }
+
+      // Afficher le score total
+      totalscoreEl.textContent = String(total);
+      fill.style.width = `${(total / 36) * 100}%`;
+
+      // Afficher la date
+      const evalDate = evalDateInput.value;
+      const dateObj = new Date(evalDate + 'T00:00:00');
+      const dateFormatted = dateObj.toLocaleDateString('fr-FR', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+      evalDateDisplay.textContent = `Evaluation du ${dateFormatted}`;
+
+      // Badge de severite
+      const severity = getSeverityInfo(total);
+      severityBadge.innerHTML = `<span class="severity-badge ${severity.class}">${severity.label}</span>`;
+
+      // Interpretation resumee (severite)
+      interp.textContent = severity.shortDesc;
+      interpLong.innerHTML = `<p>${severity.longDesc}</p>`;
+
+      // Probabilite selon criteres DSM-5 (dans accordeon)
+      const probInfo = getProbabilityInfo(scores);
+      probabilityResult.innerHTML = `
+        <div class="probability-indicator">
+          <div class="probability-circle" style="background: linear-gradient(135deg, ${probInfo.probabilityColor}, ${probInfo.probabilityColor}dd);">
+            ${probInfo.probability}
+          </div>
+          <div class="probability-text">
+            <div class="label">Probabilite de TPB selon criteres DSM-5</div>
+            <div class="desc">${probInfo.probabilityDesc}</div>
+            <div class="criteria-count">${probInfo.significantCriteria} critere(s) significatif(s) sur 9</div>
+          </div>
+        </div>
+      `;
+
+      // Scores par critere
+      criteriaScores.innerHTML = '';
+      criteria.forEach(crit => {
+        const score = scores[`q${crit.num}`];
+        const card = document.createElement('div');
+        card.className = 'criterion-card';
+        card.innerHTML = `
+          <div class="criterion-header">
+            <div class="criterion-name">${crit.num}. ${crit.name}</div>
+            <div class="criterion-score">${score} / 4</div>
+          </div>
+          <div class="criterion-desc">${scaleOptions[score].label} - ${scaleOptions[score].desc}</div>
+        `;
+        criteriaScores.appendChild(card);
+      });
+
+      // Afficher les resultats
+      results.style.display = 'block';
+      results.scrollIntoView({ behavior: 'smooth' });
+
+      // Activer le bouton d'export
+      document.getElementById('btn-export').disabled = !document.getElementById('consent').checked;
+      return true;
+    }
+
+    // Gestion de la soumission
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fd = new FormData(form);
+      const answers = {};
+      for (const [k, v] of fd.entries()) {
+        answers[k] = v;
+      }
+      computeAndRender(answers);
+    });
+
+    // Import
+    const fileImport = document.getElementById('file-import');
+    fileImport.addEventListener('change', (ev) => {
+      const f = ev.target.files?.[0];
+      if (!f) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const data = JSON.parse(e.target.result);
+
+          // Restaurer la date si presente
+          if (data.evaluationDate) {
+            evalDateInput.value = data.evaluationDate;
+          }
+
+          // Restaurer les reponses
+          const responses = data.responses || data;
+          for (let i = 1; i <= criteria.length; i++) {
+            const v = responses[`q${i}`];
+            if (v !== undefined) {
+              const r = document.querySelector(`input[name="q${i}"][value="${v}"]`);
+              if (r) {
+                r.checked = true;
+                document.getElementById(`question-${i}`).classList.add('answered');
+              }
+            }
+          }
+          computeAndRender(responses);
+        } catch {
+          alert("Fichier invalide.");
+        } finally {
+          ev.target.value = '';
+        }
+      };
+      reader.readAsText(f);
+    });
+
+    // Export
+    const consent = document.getElementById('consent');
+    const btnExport = document.getElementById('btn-export');
+
+    consent.addEventListener('change', () => {
+      if (document.getElementById('results').style.display === 'block') {
+        btnExport.disabled = !consent.checked;
+      }
+    });
+
+    btnExport.addEventListener('click', () => {
+      if (!consent.checked) return;
+      const fd = new FormData(form);
+      const answers = {};
+      let any = false;
+      for (const [k, v] of fd.entries()) {
+        answers[k] = v;
+        any = true;
+      }
+      if (!any) {
+        alert("Veuillez d'abord calculer un resultat.");
+        return;
+      }
+
+      // Ajouter des metadonnees
+      const exportData = {
+        questionnaire: "ZAN-BPD",
+        evaluationDate: evalDateInput.value,
+        exportDate: new Date().toISOString(),
+        responses: answers
+      };
+
+      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `zan-bpd_${evalDateInput.value}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    function printResults() {
+      // Deplier les details avant impression
+      const accordions = document.querySelectorAll('details.accordion');
+      accordions.forEach(detail => {
+        detail.setAttribute('open', 'true');
+      });
+      // Afficher les resultats
+      const resultsSection = document.getElementById('results');
+      if (resultsSection) {
+        resultsSection.style.display = 'block';
+      }
+      window.print();
+    }
+  </script>
+</body>
+</html>

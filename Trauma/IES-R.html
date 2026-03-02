@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>IES-R - Impact of Event Scale-Revised</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <style>
+        :root {
+            --cat-main: #6366f1;
+            --cat-dark: #4f46e5;
+            --cat-light: #818cf8;
+            --cat-rgb: 99, 102, 241;
+            --cat-readable: #4f46e5;
+        }
+        .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
+        .option-btn.selected, .answer-btn.selected { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        .score-circle { border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 30px rgba(var(--cat-rgb), 0.2); }
+        .score-value { color: var(--cat-light); }
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-light); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+        .progress-fill { background: linear-gradient(90deg, var(--cat-main), var(--cat-light)); box-shadow: 0 0 8px rgba(var(--cat-rgb), 0.4); }
+        .likert-options input[type="radio"]:checked + label,
+        .binary-options input[type="radio"]:checked + label,
+        .radio-options input[type="radio"]:checked + label { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+    </style>
+
+</head>
+<body class="light-questionnaire">
+  <nav class="navigation-bar">
+    <div class="nav-buttons">
+      <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+      <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+    </div>
+    <h1>IES-R</h1>
+    <span class="badge badge-cat-trauma">Trauma</span>
+  </nav>
+
+  <div class="container">
+    <div class="glass-card" style="margin-bottom: 1.5rem;">
+      <h2 style="margin-bottom: 0.5rem;">Impact of Event Scale-Revised</h2>
+      <p style="color: var(--color-text-muted);">(Weiss & Marmar, 1997)</p>
+
+      <div class="toolbar">
+        <label class="btn" for="file-import"><i class="fas fa-upload"></i> Importer un resultat</label>
+        <input type="file" id="file-import" accept=".json" style="display:none"/>
+        <button type="button" class="btn btn-reset" onclick="resetForm()"><i class="fas fa-undo"></i> Reinitialiser</button>
+      </div>
+    </div>
+
+    <!-- Section A propos -->
+    <div class="about-section">
+      <h3><i class="fas fa-info-circle"></i> A propos de l'IES-R</h3>
+      <p>L'IES-R (Impact of Event Scale-Revised) est un questionnaire de <strong>22 items</strong> mesurant la detresse liee a un evenement traumatique. Il evalue trois dimensions :</p>
+      <ul>
+        <li><strong>Intrusion</strong> (8 items) : pensees intrusives, cauchemars, reviviscences</li>
+        <li><strong>Evitement</strong> (8 items) : evitement des pensees, sentiments et situations</li>
+        <li><strong>Hyperactivation</strong> (6 items) : hypervigilance, irritabilite, troubles du sommeil</li>
+      </ul>
+      <p style="margin-top: 0.75rem;"><strong>Interpretation :</strong> Un score moyen superieur a 1.5 suggere une preoccupation clinique significative.</p>
+    </div>
+
+    <!-- Avertissement -->
+    <div class="warning-box" style="margin-bottom: 1.5rem;">
+      <h3><i class="fas fa-exclamation-triangle"></i> Avertissement</h3>
+      <p>Ce questionnaire est un outil de depistage et ne constitue pas un diagnostic. Si vous etes en detresse, veuillez contacter un professionnel de sante ou appeler le <strong>3114</strong> (numero national de prevention du suicide).</p>
+    </div>
+
+    <div class="instructions-box">
+      <p><strong>Consigne :</strong> Voici une liste de difficultes que les gens eprouvent parfois apres un evenement stressant. Veuillez indiquer a quel point chaque difficulte vous a perturbe(e) <strong>au cours des 7 derniers jours</strong>.</p>
+
+      <div class="event-description">
+        <label for="event-description">Decrivez brievement l'evenement traumatique (facultatif) :</label>
+        <textarea id="event-description" placeholder="Ex: accident de voiture, agression, deces d'un proche..."></textarea>
+      </div>
+
+      <div style="margin-top: 1rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+        <label for="eval-date" style="font-weight: 600; color: var(--color-text-primary);">Date de l'evaluation :</label>
+        <input type="date" id="eval-date" class="date-input"/>
+      </div>
+    </div>
+
+    <form id="iesr-form">
+      <div id="qwrap"></div>
+
+      <div class="actions">
+        <button type="submit" class="btn-primary" style="padding: 1rem 2rem; font-size: 1.05rem;"><i class="fas fa-calculator"></i> Calculer les resultats</button>
+      </div>
+      <p id="valmsg" class="validation">Veuillez repondre a toutes les questions.</p>
+
+      <div id="results">
+        <div class="panel">
+          <h3>Resultats de l'evaluation</h3>
+          <p id="eval-date-display" style="color: var(--color-text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;"></p>
+          <p id="event-display" style="color: var(--color-text-secondary); font-size: 0.9rem; margin-bottom: 1rem; font-style: italic;"></p>
+
+          <div class="score-display">
+            <div class="score-number">
+              <div class="score-value" id="totalscore">0</div>
+              <div class="score-label">Score total / 88</div>
+            </div>
+            <div class="mean-score">
+              <div class="mean-value" id="meanscore">0.00</div>
+              <div class="mean-label">Score moyen</div>
+            </div>
+            <div id="probability-badge" style="flex: 1;"></div>
+          </div>
+
+          <div class="score-slider">
+            <div class="slider-track">
+              <div class="slider-zones">
+                <div class="zone zone-low">Normal</div>
+                <div class="zone zone-moderate">Modere</div>
+                <div class="zone zone-high">Clinique</div>
+              </div>
+              <div class="score-marker" id="score-marker">
+                <div class="marker-value" id="marker-value">0</div>
+                <div class="marker-pin"></div>
+              </div>
+            </div>
+            <div class="slider-labels">
+              <div class="slider-label" style="left: 0%;">
+                <div class="slider-label-value">0</div>
+                <div class="slider-label-text">Min</div>
+              </div>
+              <div class="slider-label" style="left: 37.5%;">
+                <div class="slider-label-value">33</div>
+                <div class="slider-label-text">Moy. 1.5</div>
+              </div>
+              <div class="slider-label" style="left: 68.75%;">
+                <div class="slider-label-value">55</div>
+                <div class="slider-label-text">Moy. 2.5</div>
+              </div>
+              <div class="slider-label" style="left: 100%;">
+                <div class="slider-label-value">88</div>
+                <div class="slider-label-text">Max</div>
+              </div>
+            </div>
+          </div>
+
+          <details class="accordion">
+            <summary>Interpretation clinique detaillee</summary>
+            <div class="content">
+              <div id="interp-long"></div>
+              <div class="reference-box">
+                  <p style="font-weight:600; margin-bottom:0.5rem; color: var(--color-text-primary);">References utilisees pour l'interpretation :</p>
+                  <div class="reference-item">Weiss, D. S., & Marmar, C. R. (1997). The Impact of Event Scale-Revised. In J. P. Wilson & T. M. Keane (Eds.), <em>Assessing psychological trauma and PTSD</em> (pp. 399-411). Guilford Press.</div>
+                  <div class="reference-item">Creamer, M., Bell, R., & Failla, S. (2003). Psychometric properties of the Impact of Event Scale-Revised. <em>Behaviour Research and Therapy</em>, 41(12), 1489-1496.</div>
+                  <div class="reference-item">Brunet, A., St-Hilaire, A., Jehel, L., & King, S. (2003). Validation of a French version of the Impact of Event Scale-Revised. <em>Canadian Journal of Psychiatry</em>, 48(1), 56-61.</div>
+              </div>
+            </div>
+          </details>
+
+          <details class="accordion">
+            <summary>Pour les patients - comprendre votre resultat</summary>
+            <div class="content">
+              <p><strong>Qu'est-ce que l'IES-R ?</strong></p>
+              <p>L'IES-R est un questionnaire de 22 questions qui mesure l'impact psychologique d'un evenement stressant ou traumatique. Il explore trois types de reactions : les pensees intrusives, l'evitement et l'hyperactivation (nervosite, troubles du sommeil).</p>
+
+              <p style="margin-top: 1rem;"><strong>Que signifie votre score ?</strong></p>
+              <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                <li><strong>Score moyen inferieur a 1.5 :</strong> Vos reactions sont dans la norme. L'evenement ne semble pas avoir un impact majeur sur votre quotidien actuellement.</li>
+                <li><strong>Score moyen entre 1.5 et 2.5 :</strong> Vous presentez des symptomes significatifs. Une consultation peut etre benefique.</li>
+                <li><strong>Score moyen superieur a 2.5 :</strong> Vos reactions sont importantes. Une evaluation par un professionnel est recommandee.</li>
+              </ul>
+
+              <p class="note" style="margin-top: 1rem;"><strong>Important :</strong> Ce questionnaire est un outil d'aide et ne remplace pas un diagnostic medical. Seul un clinicien peut evaluer pleinement votre situation apres un entretien approfondi.</p>
+            </div>
+          </details>
+
+          <details class="accordion">
+            <summary>Pour les cliniciens - cotation et interpretation</summary>
+            <div class="content">
+              <p><strong>Methodologie de cotation</strong></p>
+              <p>L'IES-R (Weiss & Marmar, 1997) comprend 22 items cotes de 0 (Pas du tout) a 4 (Extremement), evaluant trois dimensions :</p>
+
+              <p style="margin-top: 1rem;"><strong>Sous-echelles</strong></p>
+              <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                  <li><strong>Intrusion</strong> (items 1, 2, 3, 6, 9, 14, 16, 20) : Score max = 32</li>
+                  <li><strong>Evitement</strong> (items 5, 7, 8, 11, 12, 13, 17, 22) : Score max = 32</li>
+                  <li><strong>Hyperactivation</strong> (items 4, 10, 15, 18, 19, 21) : Score max = 24</li>
+              </ul>
+
+              <p style="margin-top: 1rem;"><strong>Interpretation des scores</strong></p>
+              <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                  <li>Score total : 0-88</li>
+                  <li><strong>Score moyen > 1.5</strong> : Seuil suggerant une preoccupation clinique (Creamer et al., 2003)</li>
+                  <li>Les scores des sous-echelles peuvent etre calcules en moyennes ou en sommes selon les besoins cliniques</li>
+              </ul>
+
+              <p style="margin-top: 1rem;"><strong>Utilisation clinique</strong></p>
+              <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                <li>Depistage des symptomes de stress post-traumatique</li>
+                <li>Suivi longitudinal de l'evolution des symptomes</li>
+                <li>Evaluation de l'efficacite des interventions therapeutiques</li>
+                <li>Complement a l'entretien clinique (ne remplace pas le diagnostic)</li>
+              </ul>
+
+              <p style="margin-top: 1rem;"><strong>Limites</strong></p>
+              <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                <li>Auto-questionnaire sujet aux biais de declaration</li>
+                <li>Ne permet pas de poser un diagnostic de TSPT</li>
+                <li>Sensibilite aux variations culturelles</li>
+              </ul>
+            </div>
+          </details>
+        </div>
+
+        <details class="accordion">
+          <summary>Scores par sous-echelle</summary>
+          <div class="content">
+            <p class="small" style="margin-bottom: 1rem;">Scores detailles pour les trois dimensions de l'IES-R.</p>
+            <div class="subscales-grid" id="subscales-scores"></div>
+          </div>
+        </details>
+
+        <div class="panel">
+          <h3>Exporter votre resultat</h3>
+          <p class="small">Aucun stockage local n'est effectue. Pour exporter, cochez la case de consentement puis cliquez sur Exporter.</p>
+          <label class="consent">
+            <input type="checkbox" id="consent"/>
+            <span>Je souhaite télécharger mes résultats (questionnaire, réponses, score et date) dans un fichier JSON sur mon appareil. <strong>Ces résultats constituent des données de santé — je les conserverai de façon sécurisée.</strong> Aucune donnée n'est transmise à un serveur.</span>
+          </label>
+          <div class="export-buttons">
+            <button type="button" id="btn-export" class="btn-primary" disabled><i class="fas fa-download"></i> Exporter (JSON)</button>
+            <button type="button" class="btn-print" onclick="printResults()"><i class="fas fa-print"></i> Imprimer</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <footer class="footer">
+    <p><strong>&copy; Weiss, D. S., & Marmar, C. R. (1997).</strong></p>
+    <p>L'IES-R est un instrument largement utilise dans la recherche et la pratique clinique. Version francaise validee par Brunet et al. (2003). Aucune donnee n'est stockee sur serveur.</p>
+    <p>Adaptation en version numerique par le Dr FENOHASINA Toto Jean Felicien (Psychiatre).</p>
+  </footer>
+
+  <script>
+    // 22 items de l'IES-R (Version francaise)
+    const questions = [
+      "Tout rappel de l'evenement ravivait mes sentiments",
+      "J'avais des difficultes a rester endormi(e)",
+      "D'autres choses me faisaient penser a l'evenement",
+      "Je me sentais irritable et en colere",
+      "J'essayais de ne pas me laisser bouleverser quand j'y pensais ou quand on me le rappelait",
+      "J'y pensais alors que je ne le voulais pas",
+      "J'avais l'impression que cela n'etait pas arrive ou n'etait pas reel",
+      "Je me suis tenu(e) a l'ecart de ce qui me le rappelait",
+      "Des images de l'evenement surgissaient dans mon esprit",
+      "J'etais nerveux(se) et je sursautais facilement",
+      "J'essayais de ne pas y penser",
+      "J'etais conscient(e) d'avoir encore beaucoup d'emotions a propos de l'evenement, mais je n'y ai pas fait face",
+      "Mes sentiments a propos de l'evenement etaient comme engourdis",
+      "Je me suis comporte(e) ou j'ai ressenti les choses comme si j'etais revenu(e) a ce moment-la",
+      "J'avais des difficultes a m'endormir",
+      "J'ai eu des vagues d'emotions intenses a propos de l'evenement",
+      "J'ai essaye de l'effacer de ma memoire",
+      "J'avais des difficultes a me concentrer",
+      "Ce qui me rappelait l'evenement provoquait des reactions physiques (transpiration, difficultes a respirer, nausees, palpitations)",
+      "J'ai reve de l'evenement",
+      "Je me sentais vigilant(e) et sur mes gardes",
+      "J'ai essaye de ne pas en parler"
+    ];
+
+    // Sous-echelles IES-R (items en indexation 1-based)
+    const subscales = {
+      intrusion: {
+        name: "Intrusion",
+        items: [1, 2, 3, 6, 9, 14, 16, 20],
+        description: "Pensees intrusives, cauchemars, reviviscences"
+      },
+      avoidance: {
+        name: "Evitement",
+        items: [5, 7, 8, 11, 12, 13, 17, 22],
+        description: "Evitement des pensees, sentiments et situations"
+      },
+      hyperarousal: {
+        name: "Hyperactivation",
+        items: [4, 10, 15, 18, 19, 21],
+        description: "Hypervigilance, irritabilite, troubles du sommeil"
+      }
+    };
+
+    // Initialiser la date du jour
+    const evalDateInput = document.getElementById('eval-date');
+    const today = new Date().toISOString().split('T')[0];
+    evalDateInput.value = today;
+
+    // Generation du formulaire
+    const qwrap = document.getElementById('qwrap');
+    questions.forEach((text, i) => {
+      const idx = i + 1;
+      const div = document.createElement('div');
+      div.className = 'question-card';
+      div.id = `question-${idx}`;
+
+      div.innerHTML = `
+        <div class="question-text">
+          <span class="question-number">${idx}</span>${text}
+        </div>
+        <div class="options-grid likert-options">
+          <div>
+            <input type="radio" id="q${idx}_0" name="q${idx}" value="0"/>
+            <label for="q${idx}_0" class="option-btn"><strong>0</strong>Pas du tout</label>
+          </div>
+          <div>
+            <input type="radio" id="q${idx}_1" name="q${idx}" value="1"/>
+            <label for="q${idx}_1" class="option-btn"><strong>1</strong>Un peu</label>
+          </div>
+          <div>
+            <input type="radio" id="q${idx}_2" name="q${idx}" value="2"/>
+            <label for="q${idx}_2" class="option-btn"><strong>2</strong>Moderement</label>
+          </div>
+          <div>
+            <input type="radio" id="q${idx}_3" name="q${idx}" value="3"/>
+            <label for="q${idx}_3" class="option-btn"><strong>3</strong>Beaucoup</label>
+          </div>
+          <div>
+            <input type="radio" id="q${idx}_4" name="q${idx}" value="4"/>
+            <label for="q${idx}_4" class="option-btn"><strong>4</strong>Extremement</label>
+          </div>
+        </div>
+      `;
+      qwrap.appendChild(div);
+
+      // Ajouter classe answered quand repondu
+      const radios = div.querySelectorAll('input[type="radio"]');
+      radios.forEach(radio => {
+        radio.addEventListener('change', () => {
+          div.classList.add('answered');
+        });
+      });
+    });
+
+    // Fonctions d'interpretation
+    function getInterpretation(total, mean) {
+      let severity, severityClass, severityColor, severityDesc, detailedDesc;
+
+      if (mean < 1.5) {
+        severity = "Normal / Infra-clinique";
+        severityClass = "success";
+        severityColor = "#22c55e";
+        severityDesc = "Score moyen inferieur au seuil clinique (1.5).";
+        detailedDesc = `Votre score moyen (${mean.toFixed(2)}) est inferieur au seuil de 1.5, ce qui suggere que l'evenement traumatique n'a actuellement pas d'impact majeur sur votre fonctionnement quotidien. Cependant, si vous ressentez une detresse meme legere, n'hesitez pas a en parler a un professionnel.`;
+      } else if (mean < 2.5) {
+        severity = "Significatif";
+        severityClass = "warning";
+        severityColor = "#fbbf24";
+        severityDesc = "Score moyen entre 1.5 et 2.5 - symptomes significatifs.";
+        detailedDesc = `Votre score moyen (${mean.toFixed(2)}) se situe entre 1.5 et 2.5, indiquant des symptomes de stress post-traumatique <strong>significatifs</strong>. Ces reactions sont frequentes apres un evenement traumatique, mais il est recommande de consulter un professionnel pour evaluer si une prise en charge pourrait vous etre benefique.`;
+      } else {
+        severity = "Eleve / Clinique";
+        severityClass = "danger";
+        severityColor = "#ef4444";
+        severityDesc = "Score moyen superieur a 2.5 - niveau clinique.";
+        detailedDesc = `Votre score moyen (${mean.toFixed(2)}) est superieur a 2.5, ce qui indique un <strong>niveau de detresse important</strong> necessitant une attention particuliere. Il est fortement recommande de consulter un professionnel de sante mentale (psychiatre, psychologue) pour une evaluation complete et discuter des options de traitement disponibles.`;
+      }
+
+      return {
+        severity,
+        severityClass,
+        severityColor,
+        severityDesc,
+        detailedDesc
+      };
+    }
+
+    // Gestion du formulaire
+    const form = document.getElementById('iesr-form');
+    const valmsg = document.getElementById('valmsg');
+    const results = document.getElementById('results');
+    const totalscoreEl = document.getElementById('totalscore');
+    const meanscoreEl = document.getElementById('meanscore');
+    const scoreMarker = document.getElementById('score-marker');
+    const markerValue = document.getElementById('marker-value');
+    const evalDateDisplay = document.getElementById('eval-date-display');
+    const eventDisplay = document.getElementById('event-display');
+    const probabilityBadge = document.getElementById('probability-badge');
+    const interpLong = document.getElementById('interp-long');
+    const subscalesScores = document.getElementById('subscales-scores');
+
+    function computeAndRender(answers) {
+      // Verifier completude
+      for (let i = 1; i <= questions.length; i++) {
+        if (answers[`q${i}`] === undefined) {
+          valmsg.style.display = 'block';
+          results.style.display = 'none';
+          return false;
+        }
+      }
+      valmsg.style.display = 'none';
+
+      // Calcul des scores
+      let total = 0;
+      const subscaleScores = {
+        intrusion: 0,
+        avoidance: 0,
+        hyperarousal: 0
+      };
+
+      // Conversion reponses en entiers et calcul
+      for (let i = 1; i <= questions.length; i++) {
+        const val = parseInt(answers[`q${i}`], 10);
+        total += val;
+
+        // Trouver a quelle sous-echelle appartient la question
+        for (const [key, data] of Object.entries(subscales)) {
+          if (data.items.includes(i)) {
+            subscaleScores[key] += val;
+          }
+        }
+      }
+
+      // Calcul du score moyen
+      const mean = total / 22;
+
+      // Afficher le score total
+      totalscoreEl.textContent = String(total);
+      meanscoreEl.textContent = mean.toFixed(2);
+
+      // Animer le curseur
+      const percentage = (total / 88) * 100;
+      setTimeout(() => {
+        scoreMarker.style.left = `${percentage}%`;
+        markerValue.textContent = total;
+      }, 100);
+
+      // Afficher la date
+      const evalDate = evalDateInput.value;
+      const dateObj = new Date(evalDate + 'T00:00:00');
+      const dateFormatted = dateObj.toLocaleDateString('fr-FR', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+      evalDateDisplay.textContent = `Evaluation du ${dateFormatted}`;
+
+      // Afficher l'evenement si renseigne
+      const eventDesc = document.getElementById('event-description').value.trim();
+      if (eventDesc) {
+        eventDisplay.textContent = `Evenement : "${eventDesc}"`;
+        eventDisplay.style.display = 'block';
+      } else {
+        eventDisplay.style.display = 'none';
+      }
+
+      // Interpretation
+      const interpInfo = getInterpretation(total, mean);
+      probabilityBadge.innerHTML = `
+        <div style="text-align: center;">
+          <div style="font-size: 1.5rem; font-weight: 800; color: ${interpInfo.severityColor}; margin-bottom: 0.5rem;">
+            ${interpInfo.severity}
+          </div>
+          <div style="font-size: 0.9rem; color: var(--color-text-muted);">
+            ${interpInfo.severityDesc}
+          </div>
+        </div>
+      `;
+
+      // Interpretation detaillee texte
+      interpLong.innerHTML = `<p>${interpInfo.detailedDesc}</p>`;
+
+      // Scores par sous-echelle
+      subscalesScores.innerHTML = '';
+      for (const [key, data] of Object.entries(subscales)) {
+        const score = subscaleScores[key];
+        const max = data.items.length * 4;
+        const subscaleMean = score / data.items.length;
+        const percentageFill = (score / max) * 100;
+
+        const card = document.createElement('div');
+        card.className = 'subscale-card';
+        card.innerHTML = `
+          <div class="subscale-header">
+            <div class="subscale-name">${data.name}</div>
+            <div class="subscale-score">${score} / ${max}</div>
+          </div>
+          <div class="subscale-mean">Moyenne : ${subscaleMean.toFixed(2)}</div>
+          <div class="subscale-bar">
+            <div class="subscale-bar-fill" style="width: ${percentageFill}%"></div>
+          </div>
+          <p style="font-size: 0.8rem; color: var(--color-text-muted); margin-top: 0.5rem;">${data.description}</p>
+        `;
+        subscalesScores.appendChild(card);
+      }
+
+      // Afficher les resultats
+      results.style.display = 'block';
+      results.scrollIntoView({ behavior: 'smooth' });
+
+      // Activer le bouton d'export
+      document.getElementById('btn-export').disabled = !document.getElementById('consent').checked;
+      return true;
+    }
+
+    // Gestion de la soumission
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fd = new FormData(form);
+      const answers = {};
+      for (const [k, v] of fd.entries()) {
+        answers[k] = v;
+      }
+      computeAndRender(answers);
+    });
+
+    // Import
+    const fileImport = document.getElementById('file-import');
+    fileImport.addEventListener('change', (ev) => {
+      const f = ev.target.files?.[0];
+      if (!f) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const data = JSON.parse(e.target.result);
+
+          if (data.evaluationDate) {
+            evalDateInput.value = data.evaluationDate;
+          }
+          if (data.eventDescription) {
+            document.getElementById('event-description').value = data.eventDescription;
+          }
+
+          const responses = data.responses || data;
+          for (let i = 1; i <= questions.length; i++) {
+            const v = responses[`q${i}`];
+            if (v !== undefined) {
+              const r = document.querySelector(`input[name="q${i}"][value="${v}"]`);
+              if (r) {
+                r.checked = true;
+                document.getElementById(`question-${i}`).classList.add('answered');
+              }
+            }
+          }
+          computeAndRender(responses);
+        } catch {
+          alert("Fichier invalide.");
+        } finally {
+          ev.target.value = '';
+        }
+      };
+      reader.readAsText(f);
+    });
+
+    // Export
+    const consent = document.getElementById('consent');
+    const btnExport = document.getElementById('btn-export');
+
+    consent.addEventListener('change', () => {
+      if (document.getElementById('results').style.display === 'block') {
+        btnExport.disabled = !consent.checked;
+      }
+    });
+
+    btnExport.addEventListener('click', () => {
+      if (!consent.checked) return;
+      const fd = new FormData(form);
+      const answers = {};
+      let any = false;
+      for (const [k, v] of fd.entries()) {
+        answers[k] = v;
+        any = true;
+      }
+      if (!any) {
+        alert("Veuillez d'abord calculer un resultat.");
+        return;
+      }
+
+      const exportData = {
+        questionnaire: "IES-R",
+        version: "Weiss & Marmar, 1997",
+        evaluationDate: evalDateInput.value,
+        eventDescription: document.getElementById('event-description').value.trim(),
+        exportDate: new Date().toISOString(),
+        responses: answers
+      };
+
+      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `iesr_${evalDateInput.value}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    function resetForm() {
+      if (confirm('Etes-vous sur de vouloir reinitialiser le formulaire ? Toutes les reponses seront effacees.')) {
+        form.reset();
+        evalDateInput.value = today;
+        document.getElementById('event-description').value = '';
+        results.style.display = 'none';
+        valmsg.style.display = 'none';
+        // Retirer la classe answered de toutes les questions
+        document.querySelectorAll('.question-card').forEach(card => {
+          card.classList.remove('answered');
+        });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    function printResults() {
+      // Deplier les details avant impression
+      const accordions = document.querySelectorAll('details.accordion');
+      accordions.forEach(detail => {
+        detail.setAttribute('open', 'true');
+      });
+      // Afficher les resultats
+      const resultsSection = document.getElementById('results');
+      if (resultsSection) {
+        resultsSection.style.display = 'block';
+      }
+      window.print();
+    }
+  </script>
+</body>
+</html>

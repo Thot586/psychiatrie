@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASRS - Évaluation du TDAH Adulte</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <style>
+        :root {
+            --cat-main: #8b5cf6;
+            --cat-dark: #7c3aed;
+            --cat-light: #a78bfa;
+            --cat-rgb: 139, 92, 246;
+            --cat-readable: #7c3aed;
+        }
+        .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
+        .option-btn.selected, .answer-btn.selected { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        .score-circle { border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 30px rgba(var(--cat-rgb), 0.2); }
+        .score-value { color: var(--cat-light); }
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-light); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+        .progress-fill { background: linear-gradient(90deg, var(--cat-main), var(--cat-light)); box-shadow: 0 0 8px rgba(var(--cat-rgb), 0.4); }
+        .likert-options input[type="radio"]:checked + label,
+        .binary-options input[type="radio"]:checked + label,
+        .radio-options input[type="radio"]:checked + label { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+    </style>
+
+</head>
+<body class="light-questionnaire">
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil">
+                <i class="fas fa-home"></i>
+            </a>
+            <button onclick="history.back()" class="btn-back" title="Retour">
+                <i class="fas fa-arrow-left"></i> <span>Retour</span>
+            </button>
+        </div>
+        <h1>ASRS-v1.1</h1>
+        <span class="badge badge-cat-tnd">TND</span>
+    </nav>
+
+    <main class="container">
+        <header class="header-glow" style="text-align: center; margin-bottom: 2rem;">
+            <h1><i class="fas fa-bolt"></i> Échelle ASRS-v1.1</h1>
+            <p class="subtitle">Auto-Évaluation du TDAH chez l'Adulte</p>
+        </header>
+
+        <section class="glass-card info-box">
+            <h2><i class="fas fa-info-circle"></i> Instructions</h2>
+            <p>Répondez aux questions en vous basant sur la manière dont vous vous êtes senti(e) et comporté(e) au cours des <strong>6 derniers mois</strong>.</p>
+        </section>
+
+        <section class="glass-card">
+            <div class="control-buttons">
+                <label class="btn-primary" for="file-import" style="cursor: pointer;">
+                    <i class="fas fa-file-import"></i> Importer
+                </label>
+                <input type="file" id="file-import" accept=".json" style="display:none"/>
+                <button type="button" class="btn-secondary" onclick="resetForm()">
+                    <i class="fas fa-redo"></i> Réinitialiser
+                </button>
+            </div>
+        </section>
+
+        <form id="asrs-form">
+            <!-- Progression -->
+            <section class="glass-card">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span>Progression</span>
+                    <span id="progress-text">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-bar" style="width: 0%;"></div>
+                </div>
+            </section>
+
+            <div id="qwrap"></div>
+
+            <section class="glass-card" style="text-align: center;">
+                <button type="submit" class="btn-primary" style="padding: 1rem 2rem;">
+                    <i class="fas fa-chart-pie"></i> Voir mes résultats
+                </button>
+                <p id="valmsg" style="display: none; color: var(--color-danger); margin-top: 1rem;">
+                    Veuillez répondre à toutes les questions.
+                </p>
+            </section>
+        </form>
+
+        <!-- Résultats -->
+        <section id="results" class="glass-card results-section" style="display: none;">
+            <h2 style="text-align: center; margin-bottom: 2rem;"><i class="fas fa-clipboard-check"></i> Vos Résultats</h2>
+
+            <div id="main-result-card" class="interpretation"></div>
+
+            <!-- Export -->
+            <div class="glass-card" style="margin-top: 2rem; background: rgba(255,255,255,0.05);">
+                <h3><i class="fas fa-download"></i> Exporter</h3>
+                <div class="consent-box">
+                    <label>
+                        <input type="checkbox" id="consent-export"/>
+                        <span>Je souhaite télécharger mes résultats (questionnaire, réponses, score et date) dans un fichier JSON sur mon appareil. <strong>Ces résultats constituent des données de santé — je les conserverai de façon sécurisée.</strong> Aucune donnée n'est transmise à un serveur.</span>
+                    </label>
+                </div>
+                <div class="export-buttons">
+                    <button type="button" id="btn-export" class="btn-primary" disabled>
+                        <i class="fas fa-file-export"></i> Exporter
+                    </button>
+                    <button type="button" class="btn-print" onclick="printResults()">
+                        <i class="fas fa-print"></i> Imprimer
+                    </button>
+                </div>
+            </div>
+
+            <!-- Interprétation détaillée -->
+            <details class="glass-card" style="margin-top: 1.5rem; background: rgba(255,255,255,0.05);">
+                <summary style="cursor: pointer; font-weight: 600;"><i class="fas fa-book"></i> Interprétation détaillée</summary>
+                <div style="padding-top: 1rem;">
+                    <h4>Partie A : Score de dépistage (<span id="part-a-score-text"></span>)</h4>
+                    <p>La Partie A sert de questionnaire de dépistage. Un score de <strong>4 ou plus</strong> est considéré comme un "dépistage positif". Cela indique qu'une évaluation plus approfondie est justifiée (Kessler et al., 2005).</p>
+
+                    <h4 style="margin-top: 1rem;">Partie B : Autres symptômes (<span id="part-b-score-text"></span>)</h4>
+                    <p>La Partie B explore d'autres symptômes qui fournissent des informations cliniques sur l'étendue et l'impact des symptômes.</p>
+                </div>
+            </details>
+
+            <details class="glass-card" style="margin-top: 1rem; background: rgba(255,255,255,0.05);">
+                <summary style="cursor: pointer; font-weight: 600;"><i class="fas fa-route"></i> Étapes suivantes</summary>
+                <div style="padding-top: 1rem;">
+                    <p>Indépendamment du score, si vous ressentez des difficultés dans votre vie, consultez un professionnel de santé.</p>
+                    <ul>
+                        <li><strong>Dépistage positif :</strong> Partagez ces résultats avec un professionnel.</li>
+                        <li><strong>Dépistage négatif :</strong> Si vous avez des difficultés, ne les ignorez pas.</li>
+                    </ul>
+                    <h4 style="margin-top: 1rem;">Le diagnostic du TDAH inclut :</h4>
+                    <ul>
+                        <li>Entrevue clinique structurée</li>
+                        <li>Évaluation de l'impact fonctionnel</li>
+                        <li>Informations collatérales (parents, bulletins...)</li>
+                        <li>Diagnostic différentiel</li>
+                    </ul>
+                </div>
+            </details>
+
+            <details class="glass-card" style="margin-top: 1rem; background: rgba(255,255,255,0.05);">
+                <summary style="cursor: pointer; font-weight: 600;"><i class="fas fa-exclamation-triangle"></i> Limites de l'outil</summary>
+                <div style="padding-top: 1rem;">
+                    <ul>
+                        <li><strong>Dépistage, pas diagnostic :</strong> Identifie un risque potentiel.</li>
+                        <li><strong>Subjectivité :</strong> Basé sur votre propre perception.</li>
+                        <li><strong>Pas de contexte :</strong> N'évalue pas l'apparition dans l'enfance.</li>
+                        <li><strong>Pas de diagnostic différentiel :</strong> D'autres conditions peuvent présenter des symptômes similaires.</li>
+                    </ul>
+                </div>
+            </details>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p><strong>ASRS-v1.1 - Adult ADHD Self-Report Scale</strong></p>
+        <p style="margin: 0.5rem 0;"><strong>Références :</strong> Kessler et al. (2005), Adler et al. (2006), CADDRA (2020)</p>
+        <p><strong>Adaptation numérique :</strong> Dr FENOHASINA | Psychiatre</p>
+        <small>Licence CC BY-NC-SA 4.0</small>
+    </footer>
+
+    <script src="../js/app.js"></script>
+    <script>
+        const questions = [
+            // Partie A (1-6)
+            { text: "Combien de fois avez-vous du mal à finaliser les derniers détails d'un projet, une fois les parties difficiles faites ?", part: 'A', scoreIdx: [2, 3, 4] },
+            { text: "Combien de fois avez-vous des difficultés à organiser une tâche qui demande de l'organisation ?", part: 'A', scoreIdx: [2, 3, 4] },
+            { text: "Combien de fois avez-vous du mal à vous souvenir de vos rendez-vous ou obligations ?", part: 'A', scoreIdx: [2, 3, 4] },
+            { text: "Combien de fois évitez-vous ou retardez-vous une tâche qui demande beaucoup de réflexion ?", part: 'A', scoreIdx: [3, 4] },
+            { text: "Combien de fois remuez-vous vos mains ou pieds lorsque vous devez rester assis(e) ?", part: 'A', scoreIdx: [3, 4] },
+            { text: "Combien de fois vous sentez-vous trop actif/active, comme 'poussé(e) par un moteur' ?", part: 'A', scoreIdx: [3, 4] },
+            // Partie B (7-18)
+            { text: "Combien de fois faites-vous des fautes d'inattention sur un projet ennuyeux ou difficile ?", part: 'B' },
+            { text: "Combien de fois avez-vous du mal à maintenir votre attention sur un travail ennuyeux ?", part: 'B' },
+            { text: "Combien de fois avez-vous du mal à vous concentrer sur ce qu'on vous dit directement ?", part: 'B' },
+            { text: "Combien de fois égarez-vous des choses chez vous ou au travail ?", part: 'B' },
+            { text: "Combien de fois êtes-vous distrait(e) par des activités ou bruits autour de vous ?", part: 'B' },
+            { text: "Combien de fois quittez-vous votre siège dans des situations où vous devriez rester assis(e) ?", part: 'B' },
+            { text: "Combien de fois vous sentez-vous agité(e) ou incapable de tenir en place ?", part: 'B' },
+            { text: "Combien de fois avez-vous du mal à vous détendre pendant votre temps libre ?", part: 'B' },
+            { text: "Combien de fois vous surprenez-vous à parler plus que les autres en société ?", part: 'B' },
+            { text: "Combien de fois finissez-vous les phrases des autres avant qu'ils ne puissent le faire ?", part: 'B' },
+            { text: "Combien de fois avez-vous du mal à attendre votre tour ?", part: 'B' },
+            { text: "Combien de fois interrompez-vous les gens lorsqu'ils sont occupés ?", part: 'B' }
+        ];
+
+        const responses = [
+            { label: "Jamais", value: 0 },
+            { label: "Rarement", value: 1 },
+            { label: "Parfois", value: 2 },
+            { label: "Souvent", value: 3 },
+            { label: "Très souvent", value: 4 }
+        ];
+
+        const qwrap = document.getElementById('qwrap');
+        let partAHeaderAdded = false, partBHeaderAdded = false;
+
+        questions.forEach((q, i) => {
+            const idx = i + 1;
+
+            if (q.part === 'A' && !partAHeaderAdded) {
+                const section = document.createElement('section');
+                section.className = 'glass-card';
+                section.innerHTML = '<h2 style="margin-bottom: 1rem;"><i class="fas fa-clipboard-list"></i> Partie A : Dépistage</h2><div id="partA"></div>';
+                qwrap.appendChild(section);
+                partAHeaderAdded = true;
+            }
+            if (q.part === 'B' && !partBHeaderAdded) {
+                const section = document.createElement('section');
+                section.className = 'glass-card';
+                section.innerHTML = '<h2 style="margin-bottom: 1rem;"><i class="fas fa-list-ul"></i> Partie B : Autres symptômes</h2><div id="partB"></div>';
+                qwrap.appendChild(section);
+                partBHeaderAdded = true;
+            }
+
+            const container = document.getElementById(q.part === 'A' ? 'partA' : 'partB');
+            const div = document.createElement('div');
+            div.className = 'question-card';
+            div.id = `q-container-${idx}`;
+
+            div.innerHTML = `
+                <span class="question-number">${idx}</span>
+                <div class="question-text">${q.text}</div>
+                <div class="options-grid">
+                    ${responses.map(r => `
+                        <div>
+                            <input type="radio" id="q${idx}_${r.value}" name="q${idx}" value="${r.value}" style="display:none"/>
+                            <label for="q${idx}_${r.value}" class="option-btn ${q.part === 'A' && q.scoreIdx.includes(r.value) ? 'scored' : ''}">${r.label}</label>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            container.appendChild(div);
+        });
+
+        document.querySelectorAll('.options-grid label').forEach(label => {
+            label.addEventListener('click', function() {
+                const name = this.previousElementSibling.name;
+                document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
+                    r.nextElementSibling.classList.remove('selected');
+                });
+                this.classList.add('selected');
+                updateProgress();
+            });
+        });
+
+        function updateProgress() {
+            const answered = document.querySelectorAll('input[type="radio"]:checked').length;
+            const percentage = Math.round((answered / questions.length) * 100);
+            document.getElementById('progress-bar').style.width = `${percentage}%`;
+            document.getElementById('progress-text').textContent = `${percentage}%`;
+        }
+
+        function calculateAndShowResults(answers) {
+            let scoreA = 0;
+            for (let i = 0; i < 6; i++) {
+                const qIdx = i + 1;
+                const answerVal = answers[`q${qIdx}`];
+                if (questions[i].scoreIdx.includes(answerVal)) scoreA++;
+            }
+
+            let scoreB = 0;
+            for (let i = 6; i < 18; i++) {
+                const qIdx = i + 1;
+                if (answers[`q${qIdx}`] >= 3) scoreB++;
+            }
+
+            const mainResultCard = document.getElementById('main-result-card');
+            const positiveScreen = scoreA >= 4;
+
+            if (positiveScreen) {
+                mainResultCard.className = 'interpretation high';
+                mainResultCard.innerHTML = `
+                    <h3><i class="fas fa-check-circle"></i> Dépistage positif pour les symptômes du TDAH</h3>
+                    <p>Score : <strong>${scoreA}/6</strong>. Une évaluation par un professionnel est recommandée.</p>
+                `;
+            } else {
+                mainResultCard.className = 'interpretation low';
+                mainResultCard.innerHTML = `
+                    <h3><i class="fas fa-info-circle"></i> Dépistage négatif</h3>
+                    <p>Score : <strong>${scoreA}/6</strong>. Si vous avez des difficultés, consultez tout de même un professionnel.</p>
+                `;
+            }
+
+            document.getElementById('part-a-score-text').textContent = `${scoreA}/6`;
+            document.getElementById('part-b-score-text').textContent = `${scoreB}/12`;
+
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        const form = document.getElementById('asrs-form');
+
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            const fd = new FormData(form);
+            const answers = {};
+            let allAnswered = true;
+
+            document.querySelectorAll('.question-card').forEach(qDiv => qDiv.classList.remove('unanswered'));
+
+            for (let i = 1; i <= questions.length; i++) {
+                if (fd.has(`q${i}`)) {
+                    answers[`q${i}`] = parseInt(fd.get(`q${i}`), 10);
+                } else {
+                    allAnswered = false;
+                    document.getElementById(`q-container-${i}`).classList.add('unanswered');
+                }
+            }
+
+            if (!allAnswered) {
+                document.getElementById('valmsg').style.display = 'block';
+                document.getElementById('results').style.display = 'none';
+                document.querySelector('.unanswered')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+
+            document.getElementById('valmsg').style.display = 'none';
+            calculateAndShowResults(answers);
+        });
+
+        document.getElementById('consent-export').addEventListener('change', function() {
+            document.getElementById('btn-export').disabled = !this.checked;
+        });
+
+        document.getElementById('btn-export').addEventListener('click', () => {
+            if (!document.getElementById('consent-export').checked) return;
+            const fd = new FormData(form);
+            const answers = {};
+            for (const [k, v] of fd.entries()) answers[k] = parseInt(v, 10);
+            const blob = new Blob([JSON.stringify(answers, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'ASRS_' + new Date().toISOString().split('T')[0] + '.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        document.getElementById('file-import').addEventListener('change', ev => {
+            const f = ev.target.files?.[0];
+            if (!f) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    for (let i = 1; i <= questions.length; i++) {
+                        const v = data[`q${i}`];
+                        if (v !== undefined) {
+                            const r = document.querySelector(`input[name="q${i}"][value="${v}"]`);
+                            if (r) {
+                                r.checked = true;
+                                r.nextElementSibling.classList.add('selected');
+                            }
+                        }
+                    }
+                    updateProgress();
+                    calculateAndShowResults(data);
+                } catch { alert("Fichier invalide."); }
+                finally { ev.target.value = ''; }
+            };
+            reader.readAsText(f);
+        });
+
+        function resetForm() {
+            form.reset();
+            document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+            document.querySelectorAll('.question-card').forEach(qDiv => qDiv.classList.remove('unanswered'));
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('valmsg').style.display = 'none';
+            updateProgress();
+        }
+    </script>
+</body>
+</html>

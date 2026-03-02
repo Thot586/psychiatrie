@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LSAS - Échelle d'Anxiété Sociale de Liebowitz</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <style>
+        :root {
+            --cat-main: #10b981;
+            --cat-dark: #059669;
+            --cat-light: #34d399;
+            --cat-rgb: 16, 185, 129;
+            --cat-readable: #059669;
+        }
+        .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
+        .option-btn.selected, .answer-btn.selected { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        .score-circle { border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 30px rgba(var(--cat-rgb), 0.2); }
+        .score-value { color: var(--cat-light); }
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-light); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+        .progress-fill { background: linear-gradient(90deg, var(--cat-main), var(--cat-light)); box-shadow: 0 0 8px rgba(var(--cat-rgb), 0.4); }
+        .likert-options input[type="radio"]:checked + label,
+        .binary-options input[type="radio"]:checked + label,
+        .radio-options input[type="radio"]:checked + label { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+    </style>
+
+</head>
+<body class="light-questionnaire">
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil">
+                <i class="fas fa-home"></i>
+            </a>
+            <button onclick="history.back()" class="btn-back" title="Retour">
+                <i class="fas fa-arrow-left"></i> <span>Retour</span>
+            </button>
+        </div>
+        <h1>LSAS</h1>
+        <span class="badge badge-cat-anxiete">Anxiété</span>
+    </nav>
+
+    <main class="container">
+        <!-- En-tête -->
+        <header class="glass-card" style="text-align: center; margin-bottom: 2rem;">
+            <h2 class="gradient-text">Liebowitz Social Anxiety Scale</h2>
+            <p class="subtitle">Échelle d'Anxiété Sociale de Liebowitz - 24 situations</p>
+        </header>
+
+        <!-- Informations -->
+        <section class="info-box">
+            <h3><i class="fas fa-info-circle"></i> À propos de ce questionnaire</h3>
+            <p style="margin: 15px 0; line-height: 1.6;">
+                Le LSAS est un outil de référence pour évaluer la sévérité de l'anxiété sociale (phobie sociale).
+                Pour chaque situation, vous devez évaluer <strong>deux dimensions</strong> :
+            </p>
+            <ul style="margin-left: 1.5rem; line-height: 1.8;">
+                <li><strong style="color: #f87171;">La peur ou l'anxiété</strong> : l'intensité de la peur ressentie dans cette situation</li>
+                <li><strong style="color: #fbbf24;">L'évitement</strong> : à quelle fréquence vous évitez cette situation</li>
+            </ul>
+        </section>
+
+        <!-- Avertissements -->
+        <section class="warning-box">
+            <h3><i class="fas fa-exclamation-triangle"></i> Avertissements importants</h3>
+            <ul>
+                <li>Ce questionnaire ne remplace pas une consultation médicale</li>
+                <li>Les résultats sont indicatifs et nécessitent une interprétation clinique</li>
+                <li>Un score élevé suggère la nécessité d'une évaluation par un professionnel de santé mentale</li>
+                <li><strong>SOS Amitié : 09 72 39 40 50</strong> (écoute 24h/24)</li>
+            </ul>
+        </section>
+
+        <!-- Contrôles -->
+        <section class="glass-card">
+            <div class="control-buttons">
+                <button class="btn-secondary" onclick="importData()">
+                    <i class="fas fa-file-import"></i> Importer
+                </button>
+                <button class="btn-secondary" onclick="resetForm()">
+                    <i class="fas fa-redo"></i> Réinitialiser
+                </button>
+            </div>
+            <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="loadFile(event)">
+        </section>
+
+        <!-- Progression -->
+        <section class="glass-card">
+            <div class="progress-info">
+                <i class="fas fa-tasks"></i> Questions complétées : <span id="progressCount">0</span> / 24
+            </div>
+
+            <h3 style="margin-bottom: 1.5rem;">
+                <i class="fas fa-clipboard-list"></i> Évaluez chaque situation selon votre expérience habituelle
+            </h3>
+
+            <!-- Questions générées par JS -->
+            <div id="questions"></div>
+        </section>
+
+        <!-- Résultats -->
+        <section id="results" class="glass-card results-section" style="display: none;">
+            <h2 style="text-align: center; margin-bottom: 2rem;">
+                <i class="fas fa-chart-pie"></i> Résultats de votre évaluation
+            </h2>
+
+            <div class="score-display">
+                <div class="score-circle">
+                    <span class="score-number" id="totalScore">0</span>
+                    <span class="score-label">sur 144</span>
+                </div>
+            </div>
+
+            <!-- Sous-scores -->
+            <div class="subscores-grid">
+                <div class="subscore-card fear">
+                    <h4><i class="fas fa-heart-broken"></i> Score Peur</h4>
+                    <span class="subscore-value" id="fearScore">0</span>
+                    <span class="subscore-max">/ 72</span>
+                </div>
+                <div class="subscore-card avoidance">
+                    <h4><i class="fas fa-running"></i> Score Évitement</h4>
+                    <span class="subscore-value" id="avoidanceScore">0</span>
+                    <span class="subscore-max">/ 72</span>
+                </div>
+            </div>
+
+            <div id="interpretationBox" class="interpretation"></div>
+
+            <button class="btn-primary" onclick="toggleDetails()" style="width: 100%; margin-top: 1.5rem;">
+                <i class="fas fa-list-ul"></i> Voir les détails et recommandations
+                <span id="toggleIcon"><i class="fas fa-chevron-down"></i></span>
+            </button>
+
+            <div id="detailsContent" class="details-content" style="display: none;"></div>
+
+            <!-- Export -->
+            <div class="glass-card" style="margin-top: 2rem; background: rgba(255,255,255,0.05);">
+                <h3><i class="fas fa-download"></i> Exporter les résultats</h3>
+                <div class="consent-box">
+                    <label>
+                        <input type="checkbox" id="exportConsent">
+                        <span>Je souhaite télécharger mes résultats (questionnaire, réponses, score et date) dans un fichier JSON sur mon appareil. <strong>Ces résultats constituent des données de santé — je m'engage à les conserver de façon sécurisée et à ne les partager qu'avec un professionnel de santé de mon choix.</strong> Aucune donnée n'est transmise à un serveur.</span>
+                    </label>
+                </div>
+                <div class="export-buttons">
+                    <button class="btn-primary" onclick="exportData()">
+                        <i class="fas fa-file-export"></i> Exporter en JSON
+                    </button>
+                    <button class="btn-print" onclick="printResults()">
+                        <i class="fas fa-print"></i> Imprimer
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p><strong>LSAS - Liebowitz Social Anxiety Scale</strong></p>
+        <p style="margin: 0.5rem 0;">
+            <strong>Auteur original :</strong> Michael R. Liebowitz (1987)
+        </p>
+        <p><strong>Adaptation numérique :</strong> Dr FENOHASINA | Psychiatre</p>
+        <small>Licence CC BY-NC-SA 4.0</small>
+    </footer>
+
+    <script src="../js/app.js"></script>
+    <script>
+        // Les 24 situations sociales/performance
+        const situations = [
+            "Téléphoner en public",
+            "Participer à un petit groupe",
+            "Manger dans un lieu public",
+            "Boire en compagnie dans un lieu public",
+            "Parler à quelqu'un d'autorité",
+            "Jouer, donner une representation ou parler devant un public",
+            "Aller à une soirée",
+            "Travailler en étant observé",
+            "Écrire en étant observé",
+            "Contacter par téléphone quelqu'un que l'on ne connaît pas très bien",
+            "Parler à quelqu'un que l'on ne connaît pas très bien",
+            "Rencontrer des inconnus",
+            "Uriner dans des toilettes publiques",
+            "Entrer dans une pièce où des gens sont déjà assis",
+            "Être le centre de l'attention",
+            "Prendre la parole à une réunion",
+            "Passer un examen",
+            "Exprimer son désaccord ou sa désapprobation à quelqu'un que l'on ne connaît pas très bien",
+            "Regarder dans les yeux quelqu'un que l'on ne connaît pas très bien",
+            "Faire un exposé préparé devant un groupe",
+            "Essayer de séduire quelqu'un",
+            "Rapporter des marchandises dans un magasin",
+            "Organiser une soirée",
+            "Résister à un vendeur insistant"
+        ];
+
+        // Options pour l'échelle PEUR (0-3)
+        const fearOptions = [
+            { value: 0, label: "Aucune" },
+            { value: 1, label: "Légère" },
+            { value: 2, label: "Modérée" },
+            { value: 3, label: "Sévère" }
+        ];
+
+        // Options pour l'échelle ÉVITEMENT (0-3)
+        const avoidanceOptions = [
+            { value: 0, label: "Jamais" },
+            { value: 1, label: "Occasionnel" },
+            { value: 2, label: "Souvent" },
+            { value: 3, label: "Habituel" }
+        ];
+
+        // Réponses : tableau d'objets {fear: null, avoidance: null}
+        let answers = situations.map(() => ({ fear: null, avoidance: null }));
+
+        function initializeQuestions() {
+            const container = document.getElementById('questions');
+            container.innerHTML = '';
+
+            situations.forEach((situation, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-card';
+                questionDiv.id = `question-${index}`;
+
+                questionDiv.innerHTML = `
+                    <div style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem;">
+                        <span class="question-number">${index + 1}</span>
+                        <span class="question-text" style="margin-bottom: 0;">${situation}</span>
+                    </div>
+
+                    <div class="dual-scale-container">
+                        <!-- Échelle PEUR -->
+                        <div class="scale-section fear">
+                            <h4><i class="fas fa-heart-broken"></i> Peur / Anxiété</h4>
+                            <div class="scale-options">
+                                ${fearOptions.map(opt => `
+                                    <button class="option-btn" onclick="selectFear(${index}, ${opt.value})" id="fear${index}_opt${opt.value}">
+                                        <span class="option-label">${opt.label}</span>
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <!-- Échelle ÉVITEMENT -->
+                        <div class="scale-section avoidance">
+                            <h4><i class="fas fa-running"></i> Évitement</h4>
+                            <div class="scale-options">
+                                ${avoidanceOptions.map(opt => `
+                                    <button class="option-btn" onclick="selectAvoidance(${index}, ${opt.value})" id="avoid${index}_opt${opt.value}">
+                                        <span class="option-label">${opt.label}</span>
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function selectFear(questionIndex, value) {
+            answers[questionIndex].fear = value;
+
+            // Mettre à jour les boutons
+            for (let i = 0; i < 4; i++) {
+                const btn = document.getElementById(`fear${questionIndex}_opt${i}`);
+                btn.classList.toggle('selected', i === value);
+            }
+
+            updateQuestionState(questionIndex);
+            checkCompletion();
+        }
+
+        function selectAvoidance(questionIndex, value) {
+            answers[questionIndex].avoidance = value;
+
+            // Mettre à jour les boutons
+            for (let i = 0; i < 4; i++) {
+                const btn = document.getElementById(`avoid${questionIndex}_opt${i}`);
+                btn.classList.toggle('selected', i === value);
+            }
+
+            updateQuestionState(questionIndex);
+            checkCompletion();
+        }
+
+        function updateQuestionState(questionIndex) {
+            const card = document.getElementById(`question-${questionIndex}`);
+            const answer = answers[questionIndex];
+
+            card.classList.remove('partial', 'complete', 'answered');
+
+            if (answer.fear !== null && answer.avoidance !== null) {
+                card.classList.add('complete', 'answered');
+            } else if (answer.fear !== null || answer.avoidance !== null) {
+                card.classList.add('partial');
+            }
+        }
+
+        function checkCompletion() {
+            const completedCount = answers.filter(a => a.fear !== null && a.avoidance !== null).length;
+            document.getElementById('progressCount').textContent = completedCount;
+
+            if (completedCount === 24) {
+                updateResults();
+                document.getElementById('results').style.display = 'block';
+                document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function calculateScores() {
+            const fearScore = answers.reduce((sum, a) => sum + (a.fear || 0), 0);
+            const avoidanceScore = answers.reduce((sum, a) => sum + (a.avoidance || 0), 0);
+            const totalScore = fearScore + avoidanceScore;
+            return { totalScore, fearScore, avoidanceScore };
+        }
+
+        function getInterpretation(score) {
+            if (score <= 54) return {
+                level: "Légère",
+                className: "low",
+                description: "Les symptômes d'anxiété sociale sont légers ou absents.",
+                action: "Surveillance de routine. Des techniques de relaxation et d'affirmation de soi peuvent être utiles."
+            };
+            if (score <= 65) return {
+                level: "Modérée",
+                className: "moderate",
+                description: "Présence de symptômes d'anxiété sociale modérés.",
+                action: "Une évaluation clinique est recommandée. La thérapie cognitivo-comportementale (TCC) peut être bénéfique."
+            };
+            if (score <= 80) return {
+                level: "Marquée",
+                className: "high",
+                description: "Anxiété sociale marquée avec impact significatif sur le fonctionnement quotidien.",
+                action: "Consultation spécialisée recommandée. Traitement par TCC et/ou pharmacothérapie à considérer."
+            };
+            if (score <= 95) return {
+                level: "Sévère",
+                className: "high",
+                description: "Anxiété sociale sévère avec retentissement important sur la vie sociale et professionnelle.",
+                action: "Prise en charge active nécessaire. Combinaison TCC + traitement médicamenteux souvent indiquée."
+            };
+            return {
+                level: "Très sévère",
+                className: "critical",
+                description: "Anxiété sociale très sévère, possiblement invalidante.",
+                action: "Évaluation psychiatrique urgente recommandée. Traitement intensif nécessaire."
+            };
+        }
+
+        function getRecommendations(score) {
+            const recommendations = [];
+
+            if (score <= 54) {
+                recommendations.push({
+                    title: "Stratégies de maintien",
+                    items: [
+                        "Continuer les activités sociales régulières",
+                        "Pratiquer des techniques de relaxation préventives",
+                        "Maintenir un mode de vie équilibré"
+                    ]
+                });
+            } else {
+                recommendations.push({
+                    title: "Évaluations complémentaires",
+                    items: [
+                        "Bilan psychiatrique pour évaluation du trouble anxieux social",
+                        "Recherche de comorbidités (dépression, autres troubles anxieux)",
+                        "Évaluation de l'impact fonctionnel (travail, relations, qualité de vie)"
+                    ]
+                });
+
+                recommendations.push({
+                    title: "Options thérapeutiques",
+                    items: [
+                        "Thérapie cognitivo-comportementale (TCC) - traitement de référence",
+                        "Thérapie d'exposition graduée",
+                        "Entraînement aux habiletés sociales",
+                        score > 65 ? "Pharmacothérapie : ISRS (paroxétine, sertraline) ou IRSNA (venlafaxine)" : "Pharmacothérapie si échec de la TCC seule"
+                    ]
+                });
+            }
+
+            recommendations.push({
+                title: "Ressources utiles",
+                items: [
+                    "Associations de patients : AFTOC, Médiagora",
+                    "Groupes de parole et d'entraide",
+                    "Applications de méditation et relaxation",
+                    "Lignes d'écoute : SOS Amitié 09 72 39 40 50"
+                ]
+            });
+
+            return recommendations;
+        }
+
+        function updateResults() {
+            const { totalScore, fearScore, avoidanceScore } = calculateScores();
+            const interpretation = getInterpretation(totalScore);
+            const recommendations = getRecommendations(totalScore);
+
+            document.getElementById('totalScore').textContent = totalScore;
+            document.getElementById('fearScore').textContent = fearScore;
+            document.getElementById('avoidanceScore').textContent = avoidanceScore;
+
+            const interpretationBox = document.getElementById('interpretationBox');
+            interpretationBox.className = `interpretation ${interpretation.className}`;
+            interpretationBox.innerHTML = `
+                <h3>Anxiété sociale ${interpretation.level}</h3>
+                <p><strong>Interprétation :</strong> ${interpretation.description}</p>
+                <p><strong>Recommandation :</strong> ${interpretation.action}</p>
+            `;
+
+            const detailsContent = document.getElementById('detailsContent');
+            detailsContent.innerHTML = `
+                <div class="glass-card" style="margin-top: 1rem;">
+                    <h3 style="margin-bottom: 1rem;"><i class="fas fa-chart-bar"></i> Analyse détaillée</h3>
+
+                    <div class="info-box" style="margin-bottom: 1rem;">
+                        <h4>Seuils cliniques importants</h4>
+                        <ul style="margin: 0.5rem 0 0 1.5rem;">
+                            <li><strong>0-54</strong> : Anxiété sociale légère</li>
+                            <li><strong>55-65</strong> : Anxiété sociale modérée</li>
+                            <li><strong>66-80</strong> : Anxiété sociale marquée</li>
+                            <li><strong>81-95</strong> : Anxiété sociale sévère</li>
+                            <li><strong>96+</strong> : Anxiété sociale très sévère</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box" style="margin-bottom: 1rem;">
+                        <h4>Votre profil</h4>
+                        <p style="margin: 0.5rem 0;">
+                            <strong>Score Peur :</strong> ${fearScore}/72 (${Math.round(fearScore/72*100)}%)<br>
+                            <strong>Score Évitement :</strong> ${avoidanceScore}/72 (${Math.round(avoidanceScore/72*100)}%)<br>
+                            ${fearScore > avoidanceScore
+                                ? "Votre profil montre une prédominance de la peur/anxiété sur l'évitement."
+                                : avoidanceScore > fearScore
+                                    ? "Votre profil montre une prédominance de l'évitement sur la peur ressentie."
+                                    : "Vos scores de peur et d'évitement sont équilibrés."}
+                        </p>
+                    </div>
+
+                    ${recommendations.map(rec => `
+                        <div class="info-box" style="margin-bottom: 1rem;">
+                            <h4><i class="fas fa-lightbulb"></i> ${rec.title}</h4>
+                            <ul style="margin: 0.5rem 0 0 1.5rem;">
+                                ${rec.items.map(item => `<li>${item}</li>`).join('')}
+                            </ul>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function toggleDetails() {
+            const content = document.getElementById('detailsContent');
+            const icon = document.getElementById('toggleIcon');
+            const isVisible = content.style.display !== 'none';
+
+            content.style.display = isVisible ? 'none' : 'block';
+            icon.innerHTML = isVisible ? '<i class="fas fa-chevron-down"></i>' : '<i class="fas fa-chevron-up"></i>';
+        }
+
+        function resetForm() {
+            answers = situations.map(() => ({ fear: null, avoidance: null }));
+
+            document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+            document.querySelectorAll('.question-card').forEach(card => {
+                card.classList.remove('partial', 'complete', 'answered');
+            });
+
+            document.getElementById('progressCount').textContent = '0';
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('detailsContent').style.display = 'none';
+            document.getElementById('exportConsent').checked = false;
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function importData() {
+            document.getElementById('fileInput').click();
+        }
+
+        function loadFile(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        if (data.questionnaire === "LSAS" && data.answers && Array.isArray(data.answers)) {
+                            resetForm();
+                            answers = data.answers;
+
+                            answers.forEach((answer, index) => {
+                                if (answer.fear !== null) {
+                                    selectFear(index, answer.fear);
+                                }
+                                if (answer.avoidance !== null) {
+                                    selectAvoidance(index, answer.avoidance);
+                                }
+                            });
+                        } else {
+                            alert("Le fichier n'est pas un export LSAS valide.");
+                        }
+                    } catch (error) {
+                        alert("Erreur lors de l'importation du fichier");
+                    }
+                };
+                reader.readAsText(file);
+            }
+            // Reset file input
+            event.target.value = '';
+        }
+
+        function exportData() {
+            if (!document.getElementById('exportConsent').checked) {
+                alert("Veuillez cocher la case de consentement avant d''exporter.");
+                return;
+            }
+
+            const allComplete = answers.every(a => a.fear !== null && a.avoidance !== null);
+            if (!allComplete) {
+                alert("Veuillez répondre à toutes les questions avant d'exporter.");
+                return;
+            }
+
+            const { totalScore, fearScore, avoidanceScore } = calculateScores();
+            const interpretation = getInterpretation(totalScore);
+
+            const data = {
+                questionnaire: "LSAS",
+                date: new Date().toISOString(),
+                answers: answers,
+                scores: {
+                    total: totalScore,
+                    fear: fearScore,
+                    avoidance: avoidanceScore
+                },
+                interpretation: interpretation.level
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `LSAS_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeQuestions();
+        });
+    </script>
+</body>
+</html>

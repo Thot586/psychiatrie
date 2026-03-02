@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide PSSM Madagascar</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+    <style>
+        .guide-section { margin-bottom: 2rem; }
+        .guide-card {
+            background: var(--surface-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .guide-card h3 { color: var(--color-text-primary); margin-bottom: 0.75rem; }
+        .guide-card p, .guide-card li { color: var(--color-text-muted); }
+        .badge-guides { background: rgba(100, 116, 139, 0.15); color: #94a3b8; border: 1px solid rgba(100, 116, 139, 0.3); }
+
+        html { scroll-behavior: smooth; }
+
+        /* Section navigation */
+        .section-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: var(--surface-overlay);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--color-border);
+        }
+        .section-nav a {
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-full);
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
+            background: var(--surface-input);
+            border: 1px solid var(--color-border);
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        .section-nav a:hover, .section-nav a.active {
+            background: var(--color-bg-card-hover);
+            color: var(--color-text-primary);
+            border-color: var(--color-border-hover);
+        }
+
+        /* Principes grid */
+        .principes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* Checklist */
+        .checklist-wrapper {
+            background: var(--surface-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+        }
+        .checklist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        .checklist-label {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        .checklist-label:hover {
+            background: rgba(51, 65, 85, 0.5);
+        }
+        .checklist-label input[type="checkbox"] {
+            width: 1.25rem;
+            height: 1.25rem;
+            accent-color: var(--color-primary);
+        }
+        .checklist-label span {
+            color: var(--color-text-secondary);
+            font-size: 0.9rem;
+        }
+        .checklist-label.danger {
+            color: var(--accent-red);
+        }
+        .checklist-label.danger span {
+            color: var(--accent-red);
+            font-weight: 600;
+        }
+        .checklist-result {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            text-align: center;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .checklist-result.vigilance {
+            background: linear-gradient(145deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.05));
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: var(--accent-amber);
+        }
+        .checklist-result.urgence {
+            background: linear-gradient(145deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.05));
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: var(--accent-red);
+        }
+
+        /* Action plan */
+        .action-step {
+            background: var(--surface-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        .action-step:hover {
+            border-color: var(--color-border-hover);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        .action-header {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+        }
+        .action-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: var(--radius-full);
+            background: rgba(34, 197, 94, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-size: 1.25rem;
+        }
+        .action-title {
+            flex: 1;
+            color: var(--color-text-primary);
+        }
+        .action-arrow {
+            color: var(--color-primary-light);
+            font-size: 1.25rem;
+            transition: transform 0.3s ease;
+        }
+        .action-content {
+            display: none;
+            padding: 0 1.5rem 1.5rem 4.5rem;
+            color: var(--color-text-muted);
+        }
+        .action-content ul {
+            list-style: disc;
+            margin-left: 1rem;
+        }
+        .action-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Tabs for crisis */
+        .tabs-wrapper {
+            margin-bottom: 1rem;
+        }
+        .tabs-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--color-border);
+            padding-bottom: 1rem;
+        }
+        .tab-button {
+            padding: 0.75rem 1.25rem;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            background: var(--surface-input);
+            color: var(--color-text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.875rem;
+        }
+        .tab-button:hover {
+            background: var(--color-bg-card-hover);
+            border-color: var(--color-border-hover);
+        }
+        .tab-button.active {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.1));
+            border-color: rgba(34, 197, 94, 0.5);
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+        .tab-content {
+            background: var(--surface-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+        }
+        .tab-content h3 {
+            color: var(--accent-green);
+            margin-bottom: 1rem;
+        }
+        .tab-content ul {
+            list-style: disc;
+            margin-left: 1.5rem;
+        }
+        .tab-content li {
+            color: var(--color-text-muted);
+            margin-bottom: 0.75rem;
+        }
+
+        /* Context section */
+        .context-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        @media (min-width: 768px) {
+            .context-grid { grid-template-columns: 1fr 1fr; }
+        }
+        .context-list li {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        .context-list .icon {
+            margin-right: 0.75rem;
+            font-size: 1rem;
+        }
+        .context-list .icon.positive { color: var(--accent-green); }
+        .context-list .icon.negative { color: var(--accent-red); }
+
+        /* Chart */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            height: 300px;
+        }
+
+        /* Reference item */
+        .reference-item {
+            text-indent: -2em;
+            padding-left: 2em;
+            color: var(--color-text-muted);
+            font-size: 0.875rem;
+            margin-bottom: 0.75rem;
+        }
+
+        /* Fiche orientation */
+        .fiche-orientation {
+            background: var(--surface-overlay);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            font-size: 0.9rem;
+        }
+        .fiche-orientation p {
+            margin-bottom: 0.5rem;
+            color: var(--color-text-muted);
+        }
+
+        /* Mobile nav */
+        .mobile-nav {
+            display: none;
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--surface-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            color: var(--color-text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        @media (max-width: 767px) {
+            .mobile-nav { display: block; }
+            .section-nav { display: none; }
+        }
+
+        .scroll-mt { scroll-margin-top: 6rem; }
+
+        @media print {
+            .navigation-bar { display: none !important; }
+            body { background: white !important; }
+            body::before { display: none !important; }
+        }
+    </style>
+</head>
+<body class="light-questionnaire">
+
+    <!-- Navigation Bar -->
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+            <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+        </div>
+        <h1>PSSM Madagascar</h1>
+        <span class="badge badge-guides">Guides</span>
+    </nav>
+
+    <div class="container" style="max-width: 1100px;">
+
+        <!-- Mobile navigation -->
+        <select id="mobile-nav" class="mobile-nav">
+            <option value="#home">Menu</option>
+            <option value="#principes">Principes</option>
+            <option value="#reconnaitre">Reconnaître</option>
+            <option value="#agir">Agir</option>
+            <option value="#crises">Gérer les Crises</option>
+            <option value="#contexte">Contexte Malgache</option>
+            <option value="#ressources">Ressources</option>
+            <option value="#references">Références</option>
+        </select>
+
+        <!-- Section navigation -->
+        <div class="section-nav">
+            <a href="#principes">Principes</a>
+            <a href="#reconnaitre">Reconnaître</a>
+            <a href="#agir">Agir</a>
+            <a href="#crises">Gérer les Crises</a>
+            <a href="#contexte">Contexte Malgache</a>
+            <a href="#ressources">Ressources</a>
+            <a href="#references">Références</a>
+        </div>
+
+        <!-- Header -->
+        <header id="home" class="text-center" style="margin-bottom: 3rem;">
+            <h1 class="gradient-text" style="font-size: 2.25rem; margin-bottom: 1rem;">Guide de Premiers Secours en Santé Mentale</h1>
+            <p style="font-size: 1.125rem; color: var(--color-text-muted); max-width: 700px; margin: 0 auto;">Un guide pratique adapté au contexte de Madagascar pour soutenir une personne en détresse psychique.</p>
+        </header>
+
+        <main>
+            <!-- Section Principes -->
+            <section id="principes" class="guide-section scroll-mt">
+                <h2 style="text-align: center; margin-bottom: 2rem;">Principes Généraux</h2>
+                <div class="principes-grid">
+                    <div class="guide-card">
+                        <h3 style="color: #4ade80;">Définition des PSSM</h3>
+                        <p>Une aide immédiate et temporaire apportée à une personne qui éprouve une détresse psychique, en attendant qu'un relais professionnel soit possible. Il ne s'agit pas d'un diagnostic ni d'une thérapie (Kitchener & Jorm, 2002).</p>
+                    </div>
+                    <div class="guide-card">
+                        <h3 style="color: #4ade80;">Objectifs Clés</h3>
+                        <ul style="list-style: disc; margin-left: 1.5rem;">
+                            <li>Préserver la vie</li>
+                            <li>Prévenir l'aggravation</li>
+                            <li>Maintenir le lien social</li>
+                            <li>Promouvoir le rétablissement</li>
+                            <li>Orienter vers une aide adaptée (MHFA International, 2020)</li>
+                        </ul>
+                    </div>
+                    <div class="guide-card">
+                        <h3 style="color: #4ade80;">Cadre Éthique</h3>
+                        <p>Le secouriste agit avec bienveillance, non-jugement, respect de la confidentialité, des croyances culturelles et religieuses de la personne. La dignité de la personne est la priorité absolue (OMS, 2016).</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section Reconnaitre -->
+            <section id="reconnaitre" class="guide-section scroll-mt">
+                <h2 style="text-align: center; margin-bottom: 1rem;">Reconnaître les Signes de Détresse</h2>
+                <p style="text-align: center; color: var(--color-text-muted); margin-bottom: 2rem; max-width: 700px; margin-left: auto; margin-right: auto;">Apprendre à identifier les changements de comportement, de pensée ou d'émotions qui peuvent indiquer une souffrance psychique (Santé publique France, 2021). Utilisez cette check-list pour vous guider.</p>
+
+                <div class="checklist-wrapper">
+                    <h3 style="margin-bottom: 1rem;">Check-list d'Observation</h3>
+                    <div id="checklist" class="checklist-grid">
+                        <label class="checklist-label">
+                            <input type="checkbox" value="1" class="checklist-item">
+                            <span>Retrait social inhabituel</span>
+                        </label>
+                        <label class="checklist-label">
+                            <input type="checkbox" value="1" class="checklist-item">
+                            <span>Changements d'humeur extrêmes</span>
+                        </label>
+                        <label class="checklist-label">
+                            <input type="checkbox" value="1" class="checklist-item">
+                            <span>Discours confus ou incohérent</span>
+                        </label>
+                        <label class="checklist-label">
+                            <input type="checkbox" value="1" class="checklist-item">
+                            <span>Négligence de l'hygiène</span>
+                        </label>
+                        <label class="checklist-label">
+                            <input type="checkbox" value="2" class="checklist-item">
+                            <span>Agitation ou agressivité</span>
+                        </label>
+                        <label class="checklist-label">
+                            <input type="checkbox" value="2" class="checklist-item">
+                            <span>Consommation accrue de substances</span>
+                        </label>
+                        <label class="checklist-label danger">
+                            <input type="checkbox" value="3" class="checklist-item">
+                            <span>Propos suicidaires directs</span>
+                        </label>
+                        <label class="checklist-label danger">
+                            <input type="checkbox" value="3" class="checklist-item">
+                            <span>Danger imminent pour soi/autrui</span>
+                        </label>
+                    </div>
+                    <div id="checklist-result" class="checklist-result" style="background: rgba(30, 41, 59, 0.6); border: 1px solid var(--color-border); color: var(--color-text-muted);">
+                        Sélectionnez les signes observés pour une recommandation.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section Agir -->
+            <section id="agir" class="guide-section scroll-mt">
+                <h2 style="text-align: center; margin-bottom: 0.5rem;">Agir : Le Plan d'Action AERER</h2>
+                <p style="text-align: center; color: var(--color-text-muted); margin-bottom: 2rem; max-width: 700px; margin-left: auto; margin-right: auto;">Suivez ces 5 étapes, adaptées du modèle international "ALGEE" (Kitchener et al., 2018), pour structurer votre intervention de manière sûre et efficace.</p>
+                <div id="action-plan" style="display: flex; flex-direction: column; gap: 1rem; max-width: 900px; margin: 0 auto;">
+                    <!-- Steps will be generated by JS -->
+                </div>
+            </section>
+
+            <!-- Section Gerer les Crises -->
+            <section id="crises" class="guide-section scroll-mt">
+                <h2 style="text-align: center; margin-bottom: 2rem;">Gérer les Crises Spécifiques</h2>
+                <div class="tabs-wrapper">
+                    <div class="tabs-nav">
+                        <button class="tab-button active" data-tab="suicide">Crise Suicidaire</button>
+                        <button class="tab-button" data-tab="anxiete">Crise d'Anxiété / Panique</button>
+                        <button class="tab-button" data-tab="psychose">Crise Psychotique</button>
+                        <button class="tab-button" data-tab="trauma">Réaction à un Traumatisme</button>
+                    </div>
+                    <div id="crisis-content" class="tab-content">
+                        <!-- Content will be injected by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section Contexte Malgache -->
+            <section id="contexte" class="guide-section scroll-mt">
+                <h2 style="text-align: center; margin-bottom: 2rem;">Adaptation au Contexte Malgache</h2>
+                <div class="context-grid">
+                    <div>
+                        <h3 style="margin-bottom: 1rem;">Défis et Ressources</h3>
+                        <ul class="context-list" style="list-style: none; padding: 0;">
+                            <li>
+                                <span class="icon negative"><i class="fas fa-times"></i></span>
+                                <div><strong style="color: var(--color-text-primary);">Ressources limitées :</strong> <span style="color: var(--color-text-muted);">Accès difficile aux soins spécialisés, manque de professionnels, et coûts élevés (OMS, 2017).</span></div>
+                            </li>
+                            <li>
+                                <span class="icon negative"><i class="fas fa-times"></i></span>
+                                <div><strong style="color: var(--color-text-primary);">Obstacles culturels :</strong> <span style="color: var(--color-text-muted);">La souffrance psychique est souvent interprétée différemment, ce qui peut retarder la recherche d'aide médicale (Jenkins et al., 2015).</span></div>
+                            </li>
+                            <li>
+                                <span class="icon positive"><i class="fas fa-check"></i></span>
+                                <div><strong style="color: var(--color-text-primary);">Réseau communautaire fort :</strong> <span style="color: var(--color-text-muted);">La famille, les leaders religieux et les "raiamandreny" (aînés respectés) sont des piliers. Il est essentiel de les impliquer avec respect.</span></div>
+                            </li>
+                            <li>
+                                <span class="icon positive"><i class="fas fa-check"></i></span>
+                                <div><strong style="color: var(--color-text-primary);">Structures de proximité :</strong> <span style="color: var(--color-text-muted);">L'approche prônée par le programme mhGAP de l'OMS vise à intégrer la santé mentale dans les soins de santé primaires, comme les Centres de Santé de Base (CSB) (OMS, 2016).</span></div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 style="margin-bottom: 1rem; text-align: center;">Le Fossé de la Santé Mentale</h3>
+                        <div class="chart-container">
+                            <canvas id="mentalHealthGapChart"></canvas>
+                        </div>
+                        <p style="text-align: center; font-size: 0.8rem; color: var(--color-text-dimmed); margin-top: 0.5rem;">Illustration du décalage entre le besoin de soins et l'accès effectif dans les pays à faible revenu (d'après OMS, 2017).</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section Ressources -->
+            <section id="ressources" class="guide-section scroll-mt">
+                <h2 style="text-align: center; margin-bottom: 2rem;">Ressources pour le Secouriste</h2>
+                <div class="principes-grid">
+                    <div class="guide-card">
+                        <h3 style="color: #f87171;">Ce qu'il ne faut PAS faire</h3>
+                        <ul style="list-style: disc; margin-left: 1.5rem;">
+                            <li>Juger ou critiquer la personne.</li>
+                            <li>Promettre que "tout ira bien".</li>
+                            <li>Minimiser ce qu'elle ressent.</li>
+                            <li>Forcer la personne à parler ou à accepter de l'aide.</li>
+                            <li>Prendre la responsabilité de sa guérison (OMS, 2021).</li>
+                        </ul>
+                    </div>
+                    <div class="guide-card">
+                        <h3 style="color: #4ade80;">Prendre Soin de Soi</h3>
+                        <p>Aider peut être éprouvant. Connaissez vos limites. Parlez de votre expérience à une personne de confiance ou un superviseur. Ne restez pas seul avec le poids de ce que vous avez entendu. Le débriefing et l'auto-soin sont essentiels pour prévenir l'épuisement (IFRC, 2018).</p>
+                    </div>
+                    <div class="guide-card" style="grid-column: 1 / -1;">
+                        <h3 style="color: var(--color-primary-light);">Modèle de Fiche d'Orientation</h3>
+                        <div class="fiche-orientation">
+                            <p><strong>Date :</strong> __________</p>
+                            <p><strong>Personne orientée (anonymisé si besoin) :</strong> Initiales/Age/Genre : __________</p>
+                            <p><strong>Signes observés (bref) :</strong> __________</p>
+                            <p><strong>Actions menées (sécurisation, écoute) :</strong> __________</p>
+                            <p><strong>Orienté vers (Nom et contact du professionnel/service) :</strong> __________</p>
+                            <p><strong>Avec le consentement de la personne :</strong> Oui / Non</p>
+                            <p><strong>Secouriste (Nom/Contact pour suivi si accord) :</strong> __________</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section References -->
+            <section id="references" class="guide-section scroll-mt">
+                <h2 style="text-align: center; margin-bottom: 2rem;">Références</h2>
+                <div class="glass-card">
+                    <ul style="list-style: none; padding: 0;">
+                        <li class="reference-item">Fédération Internationale des Sociétés de la Croix-Rouge et du Croissant-Rouge (IFRC). (2018). <em>Guide de soutien psychosocial en situations d'urgence</em>. IFRC.</li>
+                        <li class="reference-item">Jenkins, R., Njenga, F., & Othieno, C. (2015). The need for a public health approach to mental health in sub-saharan Africa. In <em>Mental Health in the Global Village</em> (pp. 119-136).</li>
+                        <li class="reference-item">Kitchener, B. A., & Jorm, A. F. (2002). Mental health first aid training for the public: a potential first step in a community-based approach to mental health. <em>Medical Journal of Australia, 177</em>(Suppl), S61-S64.</li>
+                        <li class="reference-item">Kitchener, B. A., Jorm, A. F., & Kelly, C. M. (2018). <em>Mental Health First Aid Manual</em> (4th ed.). Mental Health First Aid International.</li>
+                        <li class="reference-item">Mental Health First Aid International. (2020). <em>Our Story & Impact</em>.</li>
+                        <li class="reference-item">Organisation mondiale de la Santé (OMS). (2016). <em>Programme d'action Combler les lacunes en santé mentale (mhGAP) - Guide d'intervention, version 2.0</em>. OMS.</li>
+                        <li class="reference-item">Organisation mondiale de la Santé (OMS). (2017). <em>Mental Health Atlas 2017</em>. OMS.</li>
+                        <li class="reference-item">Organisation mondiale de la Santé (OMS). (2021). <em>Vivre, c'est... Prévention du suicide : ressource pour les intervenants de première ligne</em>. OMS.</li>
+                        <li class="reference-item">Santé publique France. (2021). <em>La santé mentale : un enjeu majeur de santé publique</em>.</li>
+                    </ul>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Inspiré des recommandations de bonne pratique de Mental Health First Aid International et de l'Organisation mondiale de la Santé.</p>
+            <p>Adapté en version numérique par Dr FENOHASINA Toto Jean Félicien (Psychiatre).</p>
+            <p>Association Psy-kozy Madagascar & Société Malgache de Psychiatrie.</p>
+            <p style="font-size: 0.75rem; margin-top: 1rem;">Ce guide est un outil d'information et ne remplace pas une formation certifiée ni un avis médical professionnel. En cas d'urgence vitale, contactez immédiatement les services de secours locaux.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile navigation
+            const mobileNav = document.getElementById('mobile-nav');
+            mobileNav.addEventListener('change', (e) => {
+                if(e.target.value) {
+                    const targetElement = document.querySelector(e.target.value);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            });
+
+            // Checklist logic
+            const checklistItems = document.querySelectorAll('.checklist-item');
+            const resultBox = document.getElementById('checklist-result');
+            checklistItems.forEach(item => {
+                item.addEventListener('change', () => {
+                    let score = 0;
+                    let checkedCount = 0;
+                    checklistItems.forEach(i => {
+                        if (i.checked) {
+                            score += parseInt(i.value);
+                            checkedCount++;
+                        }
+                    });
+
+                    resultBox.className = 'checklist-result';
+                    resultBox.style.background = '';
+                    resultBox.style.border = '';
+                    resultBox.style.color = '';
+
+                    if (checkedCount === 0) {
+                        resultBox.textContent = 'Sélectionnez les signes observés pour une recommandation.';
+                        resultBox.style.background = 'rgba(30, 41, 59, 0.6)';
+                        resultBox.style.border = '1px solid var(--color-border)';
+                        resultBox.style.color = 'var(--color-text-muted)';
+                    } else if (score >= 3) {
+                        resultBox.textContent = 'URGENCE : Risque élevé. Ne laissez pas la personne seule. Contactez immédiatement les urgences ou un professionnel de santé.';
+                        resultBox.classList.add('urgence');
+                    } else if (score > 0) {
+                        resultBox.textContent = 'VIGILANCE : Des signes de détresse sont présents. Appliquez le plan d\'action AERER et orientez vers une aide professionnelle.';
+                        resultBox.classList.add('vigilance');
+                    }
+                });
+            });
+
+            // Action Plan data and rendering
+            const actionPlanData = [
+                {
+                    step: '1',
+                    title: 'Approcher & Assurer la sécurité',
+                    icon: '&#128172;',
+                    content: `
+                        <div>
+                            <p><strong>Objectif :</strong> Créer un contact dans un cadre sûr pour vous et pour la personne.</p>
+                            <p style="margin-top: 0.75rem;"><strong>À faire :</strong></p>
+                            <ul>
+                                <li>Choisir un lieu calme et confidentiel.</li>
+                                <li>Évaluer s'il y a un danger immédiat (agressivité, risque suicidaire). Si oui, la sécurité prime : appelez de l'aide.</li>
+                                <li>Se présenter simplement et expliquer votre inquiétude avec bienveillance.</li>
+                            </ul>
+                            <p style="margin-top: 0.75rem;"><strong>À éviter :</strong></p>
+                            <ul>
+                                <li>Aborder la personne en public ou devant des tiers.</li>
+                                <li>Utiliser un ton accusateur.</li>
+                                <li>Minimiser d'emblée.</li>
+                            </ul>
+                        </div>
+                    `
+                },
+                {
+                    step: '2',
+                    title: 'Écouter sans jugement',
+                    icon: '&#128066;',
+                    content: `
+                        <div>
+                            <p><strong>Objectif :</strong> Permettre à la personne d'exprimer ce qu'elle ressent sans crainte d'être jugée.</p>
+                            <p style="margin-top: 0.75rem;"><strong>À faire :</strong></p>
+                            <ul>
+                                <li>Pratiquer l'écoute active : hochements de tête, contact visuel approprié.</li>
+                                <li>Laisser des silences. Ils permettent à la personne de réfléchir.</li>
+                                <li>Valider ses emotions.</li>
+                                <li>Reformuler pour montrer que vous suivez.</li>
+                            </ul>
+                            <p style="margin-top: 0.75rem;"><strong>À éviter :</strong></p>
+                            <ul>
+                                <li>Interrompre pour donner votre avis.</li>
+                                <li>Proposer des solutions immédiates.</li>
+                                <li>Juger ses actions ou ses sentiments.</li>
+                            </ul>
+                        </div>
+                    `
+                },
+                {
+                    step: '3',
+                    title: 'Rassurer & Donner de l\'information',
+                    icon: '&#129309;',
+                    content: `
+                        <div>
+                            <p><strong>Objectif :</strong> Apporter du réconfort et de l'espoir de manière réaliste, et fournir des informations utiles.</p>
+                            <p style="margin-top: 0.75rem;"><strong>À faire :</strong></p>
+                            <ul>
+                                <li>Offrir un réconfort non verbal (si approprié et accepté).</li>
+                                <li>Dédramatiser la recherche d'aide.</li>
+                                <li>Fournir de l'information factuelle et simple sur la santé mentale.</li>
+                            </ul>
+                            <p style="margin-top: 0.75rem;"><strong>À éviter :</strong></p>
+                            <ul>
+                                <li>Faire de fausses promesses.</li>
+                                <li>Dire "Je sais ce que tu ressens".</li>
+                            </ul>
+                        </div>
+                    `
+                },
+                {
+                    step: '4',
+                    title: 'Encourager à chercher une aide appropriée',
+                    icon: '&#128170;',
+                    content: `
+                        <div>
+                            <p><strong>Objectif :</strong> Aider la personne à identifier les types d'aide qui pourraient lui être bénéfiques.</p>
+                            <p style="margin-top: 0.75rem;"><strong>À faire :</strong></p>
+                            <ul>
+                                <li>Explorer les options ensemble.</li>
+                                <li>Suggérer l'aide professionnelle comme une option valable.</li>
+                                <li>Respecter son autonomie. La décision finale lui appartient.</li>
+                            </ul>
+                            <p style="margin-top: 0.75rem;"><strong>À éviter :</strong></p>
+                            <ul>
+                                <li>Imposer une solution.</li>
+                                <li>Critiquer ses réticences ou ses peurs.</li>
+                            </ul>
+                        </div>
+                    `
+                },
+                {
+                    step: '5',
+                    title: 'Référer & Encourager les autres soutiens',
+                    icon: '&#128222;',
+                    content: `
+                        <div>
+                            <p><strong>Objectif :</strong> Faciliter concrètement l'accès à l'aide et mobiliser le réseau de soutien de la personne.</p>
+                            <p style="margin-top: 0.75rem;"><strong>À faire :</strong></p>
+                            <ul>
+                                <li>Connaître les ressources locales (le CSB le plus proche, une ONG, un leader religieux de confiance).</li>
+                                <li>Offrir une aide pratique si la personne accepte.</li>
+                                <li>Encourager la personne à s'appuyer sur des personnes de confiance dans son entourage.</li>
+                            </ul>
+                            <p style="margin-top: 0.75rem;"><strong>À éviter :</strong></p>
+                            <ul>
+                                <li>Laisser la personne se débrouiller seule si elle est en détresse aiguë.</li>
+                                <li>Prendre rendez-vous a sa place sans son consentement explicite.</li>
+                            </ul>
+                        </div>
+                    `
+                },
+            ];
+
+            const actionPlanContainer = document.getElementById('action-plan');
+            actionPlanData.forEach(item => {
+                const stepEl = document.createElement('div');
+                stepEl.className = 'action-step';
+                stepEl.innerHTML = `
+                    <div class="action-header">
+                        <span class="action-icon">${item.icon}</span>
+                        <span class="action-title">${item.step}. ${item.title}</span>
+                        <span class="action-arrow"><i class="fas fa-chevron-down"></i></span>
+                    </div>
+                    <div class="action-content">
+                        ${item.content}
+                    </div>
+                `;
+                actionPlanContainer.appendChild(stepEl);
+            });
+
+            document.querySelectorAll('.action-step').forEach(step => {
+                step.addEventListener('click', () => {
+                    const content = step.querySelector('.action-content');
+                    const arrow = step.querySelector('.action-arrow i');
+                    const wasHidden = content.style.display !== 'block';
+
+                    document.querySelectorAll('.action-content').forEach(c => c.style.display = 'none');
+                    document.querySelectorAll('.action-arrow i').forEach(a => a.style.transform = 'rotate(0deg)');
+
+                    if(wasHidden){
+                        content.style.display = 'block';
+                        arrow.style.transform = 'rotate(180deg)';
+                    }
+                });
+            });
+
+            // Crisis Management Tabs
+            const crisisData = {
+                suicide: {
+                    title: "En cas de crise suicidaire",
+                    content: `
+                        <ul>
+                            <li><strong>Ne jamais laisser la personne seule.</strong> La sécurité est la priorité absolue.</li>
+                            <li><strong>Poser la question directement et avec calme :</strong> "Pensez-vous au suicide ?". Parler du suicide ne donne pas l'idée, au contraire, cela soulage et ouvre la discussion (OMS, 2021).</li>
+                            <li><strong>Écouter avec calme et sans jugement.</strong> Montrez que vous prenez sa souffrance au sérieux.</li>
+                            <li><strong>Éloigner les moyens potentiels</strong> (médicaments, objets tranchants, etc.), si possible et en toute sécurité.</li>
+                            <li><strong>Obtenir une aide professionnelle immédiate :</strong> Contacter un médecin, les urgences ou une structure de santé.</li>
+                        </ul>
+                    `
+                },
+                anxiete: {
+                    title: "En cas de crise d'anxiété ou d'attaque de panique",
+                    content: `
+                        <ul>
+                            <li><strong>Rester calme et parler d'une voix douce.</strong> Votre calme peut être rassurant.</li>
+                            <li><strong>Guider sa respiration :</strong> Proposer de respirer lentement avec vous (inspirer par le nez sur 4 temps, expirer par la bouche sur 6 temps).</li>
+                            <li><strong>Ancrer la personne dans le présent :</strong> Lui demander de nommer 5 choses qu'elle voit, 4 choses qu'elle peut toucher, 3 choses qu'elle entend (MHFA International, 2020).</li>
+                            <li><strong>Ne pas minimiser son état.</strong> Éviter les phrases comme "calmez-vous" ou "ce n'est rien". Valider son ressenti.</li>
+                            <li>Rester avec la personne jusqu'à ce que la crise passe (généralement 10-20 minutes).</li>
+                        </ul>
+                    `
+                },
+                psychose: {
+                    title: "Face à une personne en crise psychotique",
+                    content: `
+                        <ul>
+                            <li><strong>Prioriser la sécurité.</strong> Ne pas s'approcher si la personne est agitée ou menaçante. Maintenir une distance de sécurité.</li>
+                            <li><strong>Ne pas argumenter ni contredire ses délires ou hallucinations.</strong> Cela ne ferait qu'augmenter son angoisse.</li>
+                            <li><strong>Utiliser des phrases courtes et simples.</strong> Parler calmement et clairement.</li>
+                            <li><strong>Se concentrer sur la réalité et les émotions.</strong> Dire "Je vois que vous avez très peur" plutôt que "Il n'y a personne qui vous poursuit" (Kitchener et al., 2018).</li>
+                            <li><strong>Orienter vers une aide médicale d'urgence si la personne représente un danger pour elle-même ou autrui.</strong></li>
+                        </ul>
+                    `
+                },
+                trauma: {
+                    title: "Après un événement traumatisant",
+                    content: `
+                        <ul>
+                            <li><strong>Assurer la sécurité physique et émotionnelle.</strong> Mettre la personne à l'abri, lui offrir une boisson chaude si approprié.</li>
+                            <li><strong>Écouter si la personne veut parler, mais ne pas la forcer.</strong> Le silence est aussi une forme de soutien. Laissez-la guider la conversation (IFRC, 2018).</li>
+                            <li><strong>Donner des informations pratiques et fiables.</strong> L'incertitude augmente le stress.</li>
+                            <li><strong>Éviter les détails graphiques</strong> de l'événement si ce n'est pas nécessaire.</li>
+                            <li><strong>Connecter la personne a ses soutiens naturels</strong> (famille, amis) et a des services d'aide.</li>
+                        </ul>
+                    `
+                }
+            };
+
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const crisisContent = document.getElementById('crisis-content');
+
+            function switchTab(tab) {
+                tabButtons.forEach(button => {
+                    button.classList.remove('active');
+                });
+                document.querySelector(`.tab-button[data-tab="${tab}"]`).classList.add('active');
+
+                const data = crisisData[tab];
+                crisisContent.innerHTML = `
+                    <h3>${data.title}</h3>
+                    ${data.content}
+                `;
+            }
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    switchTab(button.dataset.tab);
+                });
+            });
+
+            switchTab('suicide');
+
+            // Mental Health Gap Chart
+            const ctx = document.getElementById('mentalHealthGapChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Besoins estimes', 'Acces aux soins'],
+                    datasets: [{
+                        label: 'Population (%)',
+                        data: [15, 1.5],
+                        backgroundColor: [
+                            'rgba(249, 115, 22, 0.4)',
+                            'rgba(34, 197, 94, 0.4)'
+                        ],
+                        borderColor: [
+                            'rgba(249, 115, 22, 1)',
+                            'rgba(34, 197, 94, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += context.parsed.y + '%';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 20,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%'
+                                },
+                                color: 'var(--color-text-muted)'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: 'var(--color-text-muted)'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

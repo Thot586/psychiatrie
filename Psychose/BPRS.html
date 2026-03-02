@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BPRS - Brief Psychiatric Rating Scale</title>
+
+    <!-- Font Awesome pour les icônes -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Styles partagés -->
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <style>
+        :root {
+            --cat-main: #7c3aed;
+            --cat-dark: #6d28d9;
+            --cat-light: #a78bfa;
+            --cat-rgb: 124, 58, 237;
+            --cat-readable: #6d28d9;
+        }
+        .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
+        .option-btn.selected, .answer-btn.selected { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        .score-circle { border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 30px rgba(var(--cat-rgb), 0.2); }
+        .score-value { color: var(--cat-light); }
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-light); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+        .progress-fill { background: linear-gradient(90deg, var(--cat-main), var(--cat-light)); box-shadow: 0 0 8px rgba(var(--cat-rgb), 0.4); }
+        .likert-options input[type="radio"]:checked + label,
+        .binary-options input[type="radio"]:checked + label,
+        .radio-options input[type="radio"]:checked + label { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+    </style>
+
+</head>
+<body class="light-questionnaire">
+    <!-- Navigation -->
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil">
+                <i class="fas fa-home"></i>
+            </a>
+            <button onclick="history.back()" class="btn-back" title="Retour">
+                <i class="fas fa-arrow-left"></i> <span>Retour</span>
+            </button>
+        </div>
+        <h1>BPRS</h1>
+        <span class="badge badge-cat-psychose">Psychose</span>
+    </nav>
+
+    <div class="container">
+        <!-- En-tête -->
+        <header class="glass-card" style="text-align: center; margin-bottom: 1.5rem;">
+            <h2 class="gradient-text">Brief Psychiatric Rating Scale</h2>
+            <p>Échelle d'évaluation de la sévérité des symptômes psychiatriques - 18 items</p>
+        </header>
+
+        <!-- Information hétéro-évaluation -->
+        <section class="hetero-box">
+            <h3><i class="fas fa-user-md"></i> Hétéro-évaluation clinique</h3>
+            <p>La BPRS est une échelle d'<strong>hétéro-évaluation</strong> complétée par le clinicien. Elle permet d'évaluer la sévérité des symptômes psychiatriques sur la base de l'entretien clinique et de l'observation du comportement du patient.</p>
+            <ul style="margin: 0.75rem 0 0 1.5rem; padding: 0;">
+                <li>Période d'évaluation : les <strong>2-3 derniers jours</strong> ou depuis la dernière évaluation</li>
+                <li>Basée sur l'entretien et l'observation comportementale</li>
+                <li>Chaque item est coté de 1 (absent) à 7 (extrêmement sévère)</li>
+            </ul>
+        </section>
+
+        <!-- Avertissement -->
+        <section class="warning-box">
+            <h3><i class="fas fa-exclamation-triangle"></i> Avertissements importants</h3>
+            <ul style="margin: 0; padding-left: 1.5rem;">
+                <li>Cette échelle nécessite une formation à son utilisation</li>
+                <li>L'évaluation doit être réalisée par un professionnel de santé qualifié</li>
+                <li>Les résultats doivent être interprétés dans le contexte clinique global</li>
+                <li>L'item 4 (risque suicidaire) nécessite une évaluation approfondie si score élevé</li>
+            </ul>
+        </section>
+
+        <!-- Contrôles -->
+        <section class="glass-card">
+            <div class="control-buttons">
+                <button class="btn-secondary" onclick="importData()">
+                    <i class="fas fa-file-import"></i> Importer
+                </button>
+                <button class="btn-secondary" onclick="resetForm()">
+                    <i class="fas fa-redo"></i> Réinitialiser
+                </button>
+            </div>
+            <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="loadFile(event)">
+        </section>
+
+        <!-- Instructions -->
+        <section class="glass-card">
+            <h3 style="margin-bottom: 1rem;">Évaluez chaque symptôme selon son intensité observée ou rapportée :</h3>
+
+            <!-- Questions générées par JS -->
+            <div id="questions"></div>
+        </section>
+
+        <!-- Alerte risque suicidaire (cachée par défaut) -->
+        <section id="suicideAlert" class="suicide-alert" style="display: none;">
+            <h3><i class="fas fa-exclamation-circle"></i> Alerte - Risque suicidaire identifié</h3>
+            <p><strong>Le patient présente un score élevé à l'item "Risque suicidaire".</strong></p>
+            <p>Une évaluation approfondie du risque suicidaire est indispensable. Envisagez une consultation psychiatrique urgente si nécessaire.</p>
+            <p style="margin-top: 0.75rem;"><strong>Numéro national de prévention du suicide : 3114</strong> (gratuit, 24h/7j)</p>
+        </section>
+
+        <!-- Résultats -->
+        <section id="results" class="results-section" style="display: none;">
+            <h2 style="text-align: center; margin-bottom: 2rem;">
+                <i class="fas fa-chart-bar"></i> Résultats de l'évaluation
+            </h2>
+
+            <div class="score-display">
+                <div class="score-circle psychose">
+                    <span class="score-value" id="totalScore">0</span>
+                </div>
+                <p class="score-label">sur 126 points (score total)</p>
+            </div>
+
+            <div id="interpretationBox" class="interpretation"></div>
+
+            <!-- Scores par dimension -->
+            <div class="glass-card" style="margin-top: 1.5rem;">
+                <h3 style="margin-bottom: 1rem;"><i class="fas fa-layer-group"></i> Scores par dimension</h3>
+                <div id="dimensionScores"></div>
+            </div>
+
+            <button class="btn-primary w-full" onclick="toggleDetails()" style="margin-top: 1.5rem;">
+                <i class="fas fa-list"></i> Voir le détail des items
+                <span id="toggleIcon"><i class="fas fa-chevron-down"></i></span>
+            </button>
+
+            <div id="detailsContent" class="glass-card" style="display: none; margin-top: 1rem;"></div>
+
+            <!-- Export -->
+            <div class="glass-card" style="margin-top: 2rem;">
+                <h3><i class="fas fa-download"></i> Exporter les résultats</h3>
+                <div class="consent-box">
+                    <label>
+                        <input type="checkbox" id="exportConsent">
+                        <span>J'atteste avoir informé la personne concernée de cet export et obtenu son accord. <strong>Ces résultats constituent des données de santé — je m'engage à les conserver de façon sécurisée et à ne les partager qu'avec des professionnels de santé autorisés.</strong> Aucune donnée n'est transmise à un serveur.</span>
+                    </label>
+                </div>
+                <div class="export-buttons">
+                    <button class="btn-primary" onclick="exportData()">
+                        <i class="fas fa-file-export"></i> Exporter en JSON
+                    </button>
+                    <button class="btn-print" onclick="printResults()">
+                        <i class="fas fa-print"></i> Imprimer
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p><strong>BPRS - Brief Psychiatric Rating Scale (18 items)</strong></p>
+        <p>Auteurs originaux : John E. Overall & Donald R. Gorham (1962)</p>
+        <p>Adaptation numérique : Dr FENOHASINA | Psychiatre</p>
+        <p style="margin-top: 1rem;">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr" target="_blank">
+                Licence CC BY-NC-SA 4.0
+            </a>
+        </p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../js/app.js"></script>
+    <script>
+        // Définition des 18 items BPRS
+        const questions = [
+            {
+                id: 1,
+                text: "Préoccupations somatiques",
+                description: "Degré de préoccupation pour sa santé physique actuelle. Coter le degré auquel la santé physique est perçue comme un problème par le patient, qu'il y ait ou non une base médicale réelle aux plaintes.",
+                dimension: "affect"
+            },
+            {
+                id: 2,
+                text: "Anxiété",
+                description: "Inquiétude, peur ou préoccupation excessive concernant le présent ou l'avenir. Coter uniquement sur la base du rapport verbal de l'expérience subjective du patient durant la période d'évaluation.",
+                dimension: "affect"
+            },
+            {
+                id: 3,
+                text: "Dépression",
+                description: "Sentiments de tristesse, désespoir, impuissance, pessimisme. Coter uniquement sur la base du rapport verbal de l'humeur subjective du patient.",
+                dimension: "affect"
+            },
+            {
+                id: 4,
+                text: "Risque suicidaire",
+                description: "Désir, intention ou actions visant à se faire du mal ou à mettre fin à ses jours. Coter sur la base des idéations et comportements suicidaires rapportés ou observés.",
+                dimension: "affect",
+                critical: true
+            },
+            {
+                id: 5,
+                text: "Sentiments de culpabilité",
+                description: "Remords ou auto-accusation excessive, que ce soit pour des actions passées réelles ou imaginaires. Coter sur la base de l'expérience subjective de culpabilité.",
+                dimension: "affect"
+            },
+            {
+                id: 6,
+                text: "Hostilité",
+                description: "Animosité, mépris, agressivité, dédain envers les autres en dehors de la situation d'entretien. Coter uniquement sur la base du rapport verbal du patient concernant ses sentiments et actions envers les autres.",
+                dimension: "activation"
+            },
+            {
+                id: 7,
+                text: "Humeur exaltée",
+                description: "Sentiment exagéré de bien-être, euphorie, confiance en soi, gaieté excessive. Coter sur la base de la qualité de l'humeur élevée rapportée ou observée.",
+                dimension: "activation"
+            },
+            {
+                id: 8,
+                text: "Mégalomanie",
+                description: "Conviction exagérée de ses propres capacités, pouvoirs ou importance. Coter sur la base du contenu des pensées exprimées par le patient.",
+                dimension: "pensee_positive"
+            },
+            {
+                id: 9,
+                text: "Méfiance",
+                description: "Conviction que d'autres ont ou ont eu des intentions malveillantes ou discriminatoires envers le patient. Coter uniquement les suspicions actuelles, qu'elles semblent justifiées ou non.",
+                dimension: "pensee_positive"
+            },
+            {
+                id: 10,
+                text: "Hallucinations",
+                description: "Perceptions sans stimulus externe correspondant. Coter uniquement les expériences hallucinatoires survenant durant la période d'évaluation.",
+                dimension: "pensee_positive"
+            },
+            {
+                id: 11,
+                text: "Pensées inhabituelles",
+                description: "Contenu de pensée inhabituel, étrange, bizarre. Coter sur la base de la présence d'idées délirantes, d'idées de référence, ou d'autres croyances inhabituelles.",
+                dimension: "pensee_positive"
+            },
+            {
+                id: 12,
+                text: "Comportement bizarre",
+                description: "Comportements ou postures étranges, inhabituels, inappropriés. Coter uniquement les comportements observés ou rapportés de manière fiable.",
+                dimension: "pensee_positive"
+            },
+            {
+                id: 13,
+                text: "Négligence de soi",
+                description: "Hygiène, tenue vestimentaire, soins personnels négligés. Coter le niveau de négligence par rapport aux normes sociales habituelles.",
+                dimension: "negative"
+            },
+            {
+                id: 14,
+                text: "Désorientation",
+                description: "Confusion concernant les personnes, le lieu ou le temps. Évaluer sur la base de l'entretien.",
+                dimension: "negative"
+            },
+            {
+                id: 15,
+                text: "Désorganisation conceptuelle",
+                description: "Processus de pensée confus, incohérent, désorganisé. Coter sur la base des verbalisations observées durant l'entretien.",
+                dimension: "negative"
+            },
+            {
+                id: 16,
+                text: "Émoussement affectif",
+                description: "Réduction de la réactivité émotionnelle, du tonus affectif. Coter sur la base de l'observation de la gamme et de l'intensité de l'expression émotionnelle.",
+                dimension: "negative"
+            },
+            {
+                id: 17,
+                text: "Retrait émotionnel",
+                description: "Manque d'engagement spontané, retrait, isolement, déficience dans la relation avec l'examinateur. Coter sur la base de l'observation durant l'entretien.",
+                dimension: "negative"
+            },
+            {
+                id: 18,
+                text: "Ralentissement moteur",
+                description: "Réduction de l'énergie, ralentissement des mouvements, diminution de l'activité motrice. Coter sur la base de l'observation comportementale.",
+                dimension: "negative"
+            }
+        ];
+
+        // Options de cotation (1-7)
+        const options = [
+            { value: 1, label: "Non évalué / Absent" },
+            { value: 2, label: "Très léger" },
+            { value: 3, label: "Léger" },
+            { value: 4, label: "Modéré" },
+            { value: 5, label: "Mod. sévère" },
+            { value: 6, label: "Sévère" },
+            { value: 7, label: "Ext. sévère" }
+        ];
+
+        // Dimensions
+        const dimensions = {
+            affect: { name: "Affect/Anxiété-Dépression", items: [1, 2, 3, 4, 5], maxScore: 35 },
+            activation: { name: "Activation", items: [6, 7], maxScore: 14 },
+            pensee_positive: { name: "Symptômes positifs", items: [8, 9, 10, 11, 12], maxScore: 35 },
+            negative: { name: "Symptômes négatifs", items: [13, 14, 15, 16, 17, 18], maxScore: 42 }
+        };
+
+        let answers = new Array(18).fill(null);
+
+        function initializeQuestions() {
+            const container = document.getElementById('questions');
+            container.innerHTML = '';
+
+            questions.forEach((question, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-card';
+
+                let criticalWarning = '';
+                if (question.critical) {
+                    criticalWarning = `
+                        <div class="danger-box" style="margin-top: 1rem; margin-bottom: 0;">
+                            <h3><i class="fas fa-shield-alt"></i> Item sensible - Risque suicidaire</h3>
+                            <p>Un score >= 4 nécessite une évaluation approfondie du risque suicidaire.</p>
+                        </div>
+                    `;
+                }
+
+                questionDiv.innerHTML = `
+                    <div style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 0.75rem;">
+                        <span class="question-number">${question.id}</span>
+                        <div>
+                            <span class="question-text" style="margin-bottom: 0; display: block;">${question.text}</span>
+                            <p style="font-size: var(--font-size-sm); color: var(--color-text-dimmed); margin: 0.5rem 0 0 0;">${question.description}</p>
+                        </div>
+                    </div>
+                    <div class="scale-options">
+                        ${options.map(opt => `
+                            <button class="option-btn" onclick="selectAnswer(${index}, ${opt.value})" id="q${index}_opt${opt.value}">
+                                <strong>${opt.value}</strong>
+                                ${opt.label}
+                            </button>
+                        `).join('')}
+                    </div>
+                    ${criticalWarning}
+                `;
+
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function selectAnswer(questionIndex, value) {
+            answers[questionIndex] = value;
+
+            // Mise a jour visuelle des boutons
+            for (let i = 1; i <= 7; i++) {
+                const btn = document.getElementById(`q${questionIndex}_opt${i}`);
+                btn.classList.toggle('selected', i === value);
+            }
+
+            // Marquer la carte comme repondue
+            const cards = document.querySelectorAll('.question-card');
+            cards[questionIndex].classList.add('answered');
+
+            // Verifier l'alerte risque suicidaire (item 4, index 3)
+            if (questionIndex === 3 && value >= 4) {
+                document.getElementById('suicideAlert').style.display = 'block';
+                document.getElementById('suicideAlert').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else if (questionIndex === 3 && value < 4) {
+                document.getElementById('suicideAlert').style.display = 'none';
+            }
+
+            checkCompletion();
+        }
+
+        function checkCompletion() {
+            const allAnswered = answers.every(a => a !== null);
+
+            if (allAnswered) {
+                updateResults();
+                document.getElementById('results').style.display = 'block';
+                document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function calculateScore() {
+            return answers.reduce((sum, val) => sum + (val || 0), 0);
+        }
+
+        function calculateDimensionScores() {
+            const scores = {};
+            for (const [key, dim] of Object.entries(dimensions)) {
+                const itemScores = dim.items.map(itemNum => answers[itemNum - 1] || 0);
+                scores[key] = {
+                    score: itemScores.reduce((a, b) => a + b, 0),
+                    maxScore: dim.maxScore,
+                    name: dim.name,
+                    items: dim.items
+                };
+            }
+            return scores;
+        }
+
+        function getInterpretation(score) {
+            if (score <= 30) return {
+                level: "Symptômes minimes à légers",
+                className: "low",
+                description: "Les symptômes psychiatriques sont minimes ou absents.",
+                action: "Surveillance clinique de routine recommandée."
+            };
+            if (score <= 40) return {
+                level: "Symptômes légers à modérés",
+                className: "low",
+                description: "Présence de symptômes psychiatriques légers nécessitant un suivi.",
+                action: "Suivi ambulatoire régulier recommandé. Évaluer la nécessité d'un ajustement thérapeutique."
+            };
+            if (score <= 52) return {
+                level: "Symptômes modérés",
+                className: "moderate",
+                description: "Symptômes psychiatriques modérés avec impact fonctionnel probable.",
+                action: "Renforcement du suivi recommandé. Envisager une optimisation du traitement."
+            };
+            return {
+                level: "Symptômes sévères",
+                className: "critical",
+                description: "Symptômes psychiatriques sévères nécessitant une prise en charge intensive.",
+                action: "Évaluation psychiatrique approfondie recommandée. Envisager une hospitalisation si nécessaire."
+            };
+        }
+
+        function updateResults() {
+            const score = calculateScore();
+            const interpretation = getInterpretation(score);
+            const dimScores = calculateDimensionScores();
+
+            document.getElementById('totalScore').textContent = score;
+
+            // Interpretation
+            const interpretationBox = document.getElementById('interpretationBox');
+            interpretationBox.className = `interpretation ${interpretation.className}`;
+            interpretationBox.innerHTML = `
+                <h3>${interpretation.level}</h3>
+                <p><strong>Interprétation :</strong> ${interpretation.description}</p>
+                <p><strong>Recommandation :</strong> ${interpretation.action}</p>
+            `;
+
+            // Scores par dimension
+            const dimContainer = document.getElementById('dimensionScores');
+            dimContainer.innerHTML = '';
+
+            for (const [key, dim] of Object.entries(dimScores)) {
+                const percentage = (dim.score / dim.maxScore) * 100;
+                let fillClass = 'low';
+                if (percentage > 60) fillClass = 'high';
+                else if (percentage > 35) fillClass = 'moderate';
+
+                dimContainer.innerHTML += `
+                    <div class="dimension-card">
+                        <h4>${dim.name}</h4>
+                        <div class="dimension-score">
+                            <span class="score-value">${dim.score}</span>
+                            <div class="dimension-bar">
+                                <div class="dimension-fill ${fillClass}" style="width: ${percentage}%;"></div>
+                            </div>
+                            <span style="color: var(--color-text-dimmed); font-size: var(--font-size-sm);">/ ${dim.maxScore}</span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Details des items
+            const detailsContent = document.getElementById('detailsContent');
+            detailsContent.innerHTML = `
+                <h3 style="margin-bottom: 1rem;">Détail des réponses par item :</h3>
+                ${questions.map((q, i) => `
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--color-bg-card); border-radius: var(--radius-md); margin-bottom: 0.5rem;">
+                        <span style="flex: 1;">${q.id}. ${q.text}</span>
+                        <span style="font-weight: 600; color: ${answers[i] >= 5 ? 'var(--color-danger)' : answers[i] >= 3 ? 'var(--color-warning)' : 'var(--color-success)'};">
+                            ${answers[i] || '-'}/7
+                        </span>
+                    </div>
+                `).join('')}
+            `;
+        }
+
+        function toggleDetails() {
+            const content = document.getElementById('detailsContent');
+            const icon = document.getElementById('toggleIcon');
+            const isVisible = content.style.display !== 'none';
+
+            content.style.display = isVisible ? 'none' : 'block';
+            icon.innerHTML = isVisible ? '<i class="fas fa-chevron-down"></i>' : '<i class="fas fa-chevron-up"></i>';
+        }
+
+        function resetForm() {
+            answers = new Array(18).fill(null);
+
+            document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+            document.querySelectorAll('.question-card').forEach(card => card.classList.remove('answered'));
+
+            document.getElementById('suicideAlert').style.display = 'none';
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('detailsContent').style.display = 'none';
+            document.getElementById('exportConsent').checked = false;
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function importData() {
+            document.getElementById('fileInput').click();
+        }
+
+        function loadFile(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        if (data.answers && Array.isArray(data.answers)) {
+                            answers = data.answers;
+
+                            answers.forEach((value, index) => {
+                                if (value !== null) {
+                                    selectAnswer(index, value);
+                                }
+                            });
+                        }
+                    } catch (error) {
+                        alert("Erreur lors de l'importation du fichier");
+                    }
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        function exportData() {
+            const consent = document.getElementById('exportConsent').checked;
+            if (!consent) {
+                alert("Veuillez cocher la case de consentement avant d''exporter.");
+                return;
+            }
+
+            const score = calculateScore();
+            const interpretation = getInterpretation(score);
+            const dimScores = calculateDimensionScores();
+
+            const data = {
+                questionnaire: "BPRS-18",
+                version: "18 items",
+                date: new Date().toISOString(),
+                evaluationType: "Hétéro-évaluation clinique",
+                answers: answers,
+                answerDetails: questions.map((q, i) => ({
+                    item: q.id,
+                    text: q.text,
+                    score: answers[i],
+                    dimension: q.dimension
+                })),
+                totalScore: score,
+                maxScore: 126,
+                interpretation: interpretation.level,
+                dimensionScores: dimScores,
+                suicideRiskScore: answers[3],
+                suicideRiskAlert: answers[3] >= 4
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `BPRS-18_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeQuestions();
+        });
+    </script>
+</body>
+</html>

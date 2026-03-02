@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Naviguer l'Adolescence : Guide pour Parents Courageux</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+
+        /* Styles pour les guides */
+        .guide-section { margin-bottom: 2rem; }
+        .guide-card {
+            background: var(--surface-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .guide-card h3 { color: var(--color-text-primary); margin-bottom: 0.75rem; }
+        .guide-card p, .guide-card li { color: var(--color-text-muted); }
+
+        /* Couleurs Teal pour Enfant/Ado */
+        .badge-enfant { background: rgba(20, 184, 166, 0.15); color: #2dd4bf; border: 1px solid rgba(20, 184, 166, 0.3); }
+
+        /* Navigation SPA */
+        .spa-nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--surface-table-header);
+            backdrop-filter: blur(10px);
+            padding: 1rem;
+            border-radius: var(--radius-xl);
+            margin-bottom: 2rem;
+            position: sticky;
+            top: 80px;
+            z-index: 50;
+            border: 1px solid var(--color-border);
+        }
+        .nav-btn {
+            padding: 0.5rem 1.25rem;
+            border-radius: var(--radius-full);
+            font-weight: 500;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            background: transparent;
+            color: var(--color-text-muted);
+        }
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--color-text-secondary);
+        }
+        .nav-btn.active {
+            background: linear-gradient(135deg, rgba(20, 184, 166, 0.9), rgba(13, 148, 136, 0.9));
+            color: white;
+            box-shadow: 0 4px 15px rgba(20, 184, 166, 0.3);
+        }
+
+        /* Header section */
+        .header-section {
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-bottom: 1rem;
+        }
+        .header-section h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #f8fafc 0%, #94a3b8 50%, #f8fafc 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .header-section p {
+            color: var(--color-text-muted);
+        }
+
+        /* Sections de contenu */
+        .content-section {
+            display: none;
+            animation: fadeIn 0.6s ease-in-out;
+        }
+        .content-section.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Main content area */
+        .main-content {
+            background: var(--surface-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            min-height: 60vh;
+        }
+
+        /* Section headings */
+        .section-title {
+            font-size: 1.75rem;
+            color: var(--color-text-primary);
+            margin-bottom: 1rem;
+        }
+        .section-title.teal {
+            color: #2dd4bf;
+        }
+
+        /* Special boxes */
+        .dedication-box {
+            background: linear-gradient(145deg, rgba(234, 179, 8, 0.15), rgba(234, 179, 8, 0.05));
+            border-left: 4px solid #facc15;
+            border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+        .dedication-box h3 {
+            color: var(--accent-amber);
+            margin-bottom: 0.5rem;
+        }
+        .dedication-box p {
+            color: var(--color-text-muted);
+            margin: 0;
+        }
+
+        .intro-box {
+            background: linear-gradient(145deg, rgba(14, 165, 233, 0.15), rgba(14, 165, 233, 0.05));
+            border-left: 4px solid #0ea5e9;
+            border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+        .intro-box h3 {
+            color: #38bdf8;
+            margin-bottom: 0.5rem;
+        }
+        .intro-box p {
+            color: var(--color-text-muted);
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        /* Interactive cards */
+        .interactive-card {
+            background: var(--surface-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        .interactive-card:hover {
+            border-color: var(--color-border-active);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+        }
+        .interactive-card.amber {
+            border-color: rgba(245, 158, 11, 0.3);
+        }
+        .interactive-card.amber h3 {
+            color: var(--accent-amber);
+        }
+        .interactive-card.sky {
+            border-color: rgba(14, 165, 233, 0.3);
+        }
+        .interactive-card.sky h3 {
+            color: #38bdf8;
+        }
+        .interactive-card.green {
+            border-color: rgba(34, 197, 94, 0.3);
+        }
+        .interactive-card.green h3 {
+            color: var(--accent-green);
+        }
+
+        /* Blockquotes */
+        .guide-blockquote {
+            background: var(--surface-inset);
+            border-left: 4px solid #14b8a6;
+            padding: 0.75rem 1rem;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            margin-top: 0.75rem;
+        }
+        .guide-blockquote.amber {
+            border-left-color: #f59e0b;
+        }
+        .guide-blockquote.sky {
+            border-left-color: #0ea5e9;
+        }
+        .guide-blockquote.green {
+            border-left-color: #22c55e;
+        }
+        .guide-blockquote.slate {
+            border-left-color: #64748b;
+        }
+
+        /* Two column grid */
+        .two-col-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        @media (min-width: 768px) {
+            .two-col-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* Iceberg selector */
+        .iceberg-selector {
+            width: 100%;
+            max-width: 300px;
+            padding: 0.75rem 1rem;
+            background: rgba(30, 41, 59, 0.9);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            color: var(--color-text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 1.5rem;
+        }
+        .iceberg-selector:focus {
+            outline: none;
+            border-color: rgba(20, 184, 166, 0.5);
+        }
+
+        /* Iceberg explanation */
+        #iceberg-explanation h4 {
+            color: var(--color-text-primary);
+            margin-bottom: 0.5rem;
+        }
+        #iceberg-explanation blockquote {
+            background: var(--surface-table);
+            border-left: 4px solid #14b8a6;
+            padding: 0.75rem 1rem;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            margin: 0.75rem 0;
+        }
+
+        /* Murs et Jardin diagram */
+        .murs-jardin-container {
+            background: var(--surface-table);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+        }
+        .murs-frame {
+            border: 8px solid #334155;
+            border-radius: var(--radius-lg);
+            padding: 1rem;
+            background: linear-gradient(145deg, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.05));
+        }
+        .murs-header {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        .murs-header h3 {
+            color: var(--color-text-primary);
+            font-size: 1.25rem;
+            margin-bottom: 0.25rem;
+        }
+        .murs-header p {
+            color: var(--color-text-dimmed);
+            font-size: 0.875rem;
+            margin: 0;
+        }
+        .murs-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        @media (min-width: 768px) {
+            .murs-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        .mur-item {
+            background: #334155;
+            color: white;
+            padding: 0.75rem;
+            border-radius: var(--radius-md);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-align: center;
+        }
+        .jardin-area {
+            background: rgba(34, 197, 94, 0.15);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+            margin: 1rem 0;
+        }
+        .jardin-header {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        .jardin-header h3 {
+            color: var(--accent-green);
+            font-size: 1.25rem;
+            margin-bottom: 0.25rem;
+        }
+        .jardin-header p {
+            color: #86efac;
+            font-size: 0.875rem;
+            margin: 0;
+        }
+        .jardin-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+        }
+        @media (min-width: 768px) {
+            .jardin-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        .jardin-item {
+            background: rgba(255, 255, 255, 0.1);
+            color: #bbf7d0;
+            padding: 0.75rem;
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .jardin-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Outil tabs */
+        .outil-tabs {
+            display: flex;
+            gap: 1.5rem;
+            border-bottom: 1px solid var(--color-border);
+            margin-bottom: 1.5rem;
+        }
+        .outil-tab {
+            padding: 1rem 0.25rem;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: var(--color-text-muted);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .outil-tab:hover {
+            color: var(--color-text-secondary);
+        }
+        .outil-tab.active {
+            border-bottom-color: #14b8a6;
+            color: var(--color-text-primary);
+        }
+        .outil-content {
+            display: none;
+        }
+        .outil-content.active {
+            display: block;
+        }
+
+        /* Lists */
+        .styled-list {
+            list-style: disc;
+            list-style-position: inside;
+            color: var(--color-text-muted);
+        }
+        .styled-list li {
+            margin-bottom: 0.5rem;
+        }
+        .styled-list strong {
+            color: var(--color-text-secondary);
+        }
+    </style>
+</head>
+<body class="light-questionnaire">
+
+    <!-- Navigation Bar -->
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+            <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+        </div>
+        <h1>Guide pour Parents Courageux</h1>
+        <span class="badge badge-success">Enfant/Ado</span>
+    </nav>
+
+    <div class="container" style="max-width: 1000px;">
+        <header class="header-section">
+            <h1>Naviguer l'Adolescence</h1>
+            <p>Un guide pratique et bienveillant pour parents courageux</p>
+        </header>
+
+        <nav class="spa-nav">
+            <button data-target="intro" class="nav-btn active">Introduction</button>
+            <button data-target="comprendre" class="nav-btn">Comprendre</button>
+            <button data-target="parent" class="nav-btn">Moi, Parent</button>
+            <button data-target="cadre" class="nav-btn">Le Cadre</button>
+            <button data-target="outils" class="nav-btn">Boîte à Outils</button>
+            <button data-target="alliance" class="nav-btn">Alliance</button>
+        </nav>
+
+        <main id="main-content" class="main-content">
+
+            <section id="intro" class="content-section active">
+                <div class="dedication-box">
+                    <h3>Pour Sigolène R.</h3>
+                    <p>À l'occasion de ton anniversaire. Pour la femme intelligente, courageuse et battante que tu es, qui gère tant de choses avec une force admirable.</p>
+                </div>
+
+                <div class="intro-box">
+                    <h3>Avant de commencer...</h3>
+                    <p>Naviguer l'adolescence est un parcours profondément personnel et complexe. Ce guide n'est pas une solution miracle ni une parole d'expert. C'est une humble boîte à outils, une collection de pistes de réflexion inspirées de la psychologie, conçue pour vous aider à trouver vos propres réponses et à préserver ce qui compte le plus : le lien avec votre enfant.</p>
+                </div>
+
+                <h2 class="section-title teal">L'Objectif de ce Guide : Retrouver le Cap</h2>
+                <div class="guide-card">
+                    <p style="margin-bottom: 1rem;">Cette période de "crise" n'est pas un échec, mais une transition normale. Le cerveau de votre adolescent est en plein remodelage : son moteur émotionnel est à fond, tandis que ses freins (le contrôle, la raison) sont encore en développement. C'est comme avoir une voiture de course avec des freins de vélo.</p>
+                    <p>Ce guide propose de voir les conflits non comme des échecs, mais comme des opportunités pour faire évoluer votre relation vers un modèle plus adulte. Il vise à vous offrir des outils concrets pour mieux comprendre, communiquer différemment et, surtout, préserver le lien qui vous unit.</p>
+                </div>
+            </section>
+
+            <section id="comprendre" class="content-section">
+                <h2 class="section-title teal">Décoder le Message de l'Adolescent</h2>
+                <p style="color: var(--color-text-muted); margin-bottom: 2rem; line-height: 1.6;">Le comportement visible de votre adolescent n'est que la pointe d'un iceberg. Pour vraiment comprendre, il faut regarder ce qui se cache sous la surface : ses émotions et, plus profondément, ses besoins fondamentaux non satisfaits. Cette section vous aide à devenir un détective bienveillant.</p>
+
+                <div class="guide-card">
+                    <h3>L'Iceberg des Comportements : Que se cache-t-il dessous ?</h3>
+                    <p style="margin-bottom: 1rem;">Choisissez un comportement pour voir ce qu'il peut cacher.</p>
+                    <select id="iceberg-selector" class="iceberg-selector">
+                        <option value="insolence">Insolence / Agressivité</option>
+                        <option value="repli">Repli sur soi / Isolement</option>
+                        <option value="transgression">Transgression des règles</option>
+                        <option value="apathie">Apathie / "Paresse" scolaire</option>
+                    </select>
+
+                    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                        <div style="max-width: 400px; height: 280px; margin: 0 auto; width: 100%;">
+                            <canvas id="icebergChart"></canvas>
+                        </div>
+                        <div id="iceberg-explanation"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="parent" class="content-section">
+                <h2 class="section-title teal">Le Capitaine d'Abord : Gérer ses Propres Émotions</h2>
+                <p style="color: var(--color-text-muted); margin-bottom: 2rem; line-height: 1.6;">Avant de pouvoir calmer la tempête de votre ado, vous devez tenir la barre de votre propre navire. Votre colère cache souvent de la peur, de la tristesse ou un sentiment d'impuissance. Apprendre à faire une pause est votre super-pouvoir.</p>
+
+                <div class="two-col-grid">
+                    <div class="interactive-card amber">
+                        <h3>La Pause Stratégique</h3>
+                        <p style="margin-bottom: 1rem;">Quand la tension monte, ne réagissez pas à chaud. Annoncez calmement votre besoin de faire une pause. Cela casse l'escalade et montre l'exemple.</p>
+                        <p style="font-weight: 600; color: var(--color-text-secondary);">Phrase-type à utiliser :</p>
+                        <div class="guide-blockquote amber">
+                            "Là, je sens que je m'énerve. J'ai besoin de 5 minutes pour me calmer. On en reparle après."
+                        </div>
+                    </div>
+                    <div class="interactive-card sky">
+                        <h3>Le Mantra du Parent-Phare</h3>
+                        <p style="margin-bottom: 1rem;">Le comportement de votre ado n'est pas une attaque personnelle. C'est sa tentative, souvent maladroite, de construire sa propre identité.</p>
+                        <p style="font-weight: 600; color: var(--color-text-secondary);">Phrase-type à se dire :</p>
+                        <div class="guide-blockquote sky">
+                            "Ce n'est pas contre moi. C'est pour lui. Mon rôle est d'être un phare stable dans sa tempête."
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="cadre" class="content-section">
+                <h2 class="section-title teal">Le Cadre : Allier Fermeté et Souplesse</h2>
+                <p style="color: var(--color-text-muted); margin-bottom: 2rem; line-height: 1.6;">Un cadre bienveillant est la clé : il est composé de murs solides (les non-négociables) et d'un grand jardin (la liberté). Les murs offrent la sécurité, le jardin nourrit l'autonomie. L'un ne va pas sans l'autre.</p>
+
+                <div class="murs-jardin-container">
+                    <div class="murs-frame">
+                        <div class="murs-header">
+                            <h3>LES MURS (Fermeté)</h3>
+                            <p>Principes non-négociables qui assurent la sécurité.</p>
+                        </div>
+                        <div class="murs-grid">
+                            <div class="mur-item">Sécurité physique & morale</div>
+                            <div class="mur-item">Santé & Hygiène</div>
+                            <div class="mur-item">Respect fondamental</div>
+                            <div class="mur-item">Obligations légales</div>
+                        </div>
+
+                        <div class="jardin-area">
+                            <div class="jardin-header">
+                                <h3>LE JARDIN (Souplesse)</h3>
+                                <p>Espace de liberté et de négociation pour grandir.</p>
+                            </div>
+                            <div class="jardin-grid">
+                                <div class="jardin-item">Style vestimentaire</div>
+                                <div class="jardin-item">Choix musicaux</div>
+                                <div class="jardin-item">Déco de la chambre</div>
+                                <div class="jardin-item">Organisation loisirs</div>
+                            </div>
+                        </div>
+
+                        <div style="text-align: center; margin-top: 1rem;">
+                            <p style="font-weight: 600; color: var(--color-text-secondary);">Tenir bon sur un mur est sécurisant. Céder dans le jardin est reconnaissant.</p>
+                            <div class="guide-blockquote slate" style="text-align: left; margin-top: 1rem;">
+                                <strong>Pour tenir bon sur un mur :</strong> "Je comprends ta frustration, mais sur ce point (ex: ta sécurité), ma décision est non. Ma responsabilité de parent est de te protéger, même si ça te déplaît."
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="outils" class="content-section">
+                <h2 class="section-title teal">Boîte à Outils : Gérer les Conflits Majeurs</h2>
+                <p style="color: var(--color-text-muted); margin-bottom: 2rem; line-height: 1.6;">Appliquons les principes vus précédemment à des situations concrètes. Voici des stratégies pour transformer les champs de bataille habituels en terrains de collaboration.</p>
+
+                <nav class="outil-tabs">
+                    <button class="outil-tab active" data-target="outil-ecrans">Gestion des Écrans</button>
+                    <button class="outil-tab" data-target="outil-sorties">Sorties & Permissions</button>
+                </nav>
+
+                <div id="outil-ecrans" class="outil-content active">
+                    <div class="guide-card">
+                        <h3>De l'Imposition à la Co-construction</h3>
+                        <p style="margin-bottom: 1rem;">Imposer des règles unilatérales mène à la guérilla. La meilleure approche est de co-construire une "charte" ensemble. L'objectif est de passer du contrôle à la collaboration.</p>
+
+                        <div style="background: linear-gradient(145deg, rgba(20, 184, 166, 0.15), rgba(20, 184, 166, 0.05)); border: 1px solid rgba(20, 184, 166, 0.3); border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 1.5rem;">
+                            <p style="font-weight: 600; color: #2dd4bf; margin-bottom: 0.5rem;">Phrase-type pour ouvrir le dialogue :</p>
+                            <p style="color: var(--color-text-muted);">"Les écrans font partie de ta vie, je le comprends. J'ai besoin qu'on trouve ensemble un équilibre pour que ça ne nuise ni à ton sommeil, ni à tes études. Quelles sont tes propositions ?"</p>
+                        </div>
+
+                        <h4 style="color: var(--color-text-secondary); margin-bottom: 0.75rem;">Règles claires à proposer lors de la discussion :</h4>
+                        <ul class="styled-list">
+                            <li><strong>Zones sans écrans :</strong> Pas d'écrans à table.</li>
+                            <li><strong>Chargement nocturne :</strong> Les téléphones chargent hors de la chambre la nuit (règle "mur" pour protéger le sommeil).</li>
+                            <li><strong>"Budget temps" :</strong> Négocier un temps hebdomadaire pour les loisirs numériques qu'il gère en autonomie.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="outil-sorties" class="outil-content">
+                    <div class="guide-card">
+                        <h3>Le Contrat de Confiance Progressive</h3>
+                        <p style="margin-bottom: 1rem;">La confiance ne se décrète pas, elle se construit. Mettez en place un système de paliers clairs : si un petit engagement est respecté, l'autonomie est élargie.</p>
+
+                        <div style="background: linear-gradient(145deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.05)); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 1.5rem;">
+                            <p style="font-weight: 600; color: #fbbf24; margin-bottom: 0.5rem;">Phrase-type pour un premier palier :</p>
+                            <p style="color: var(--color-text-muted);">"Pour cette soirée, l'heure de retour est fixée à 23h. Si tout se passe comme convenu (tu rentres à l'heure, tu réponds à mon SMS), alors pour la prochaine fois, nous pourrons discuter d'un horaire plus tardif."</p>
+                        </div>
+
+                        <h4 style="color: var(--color-text-secondary); margin-bottom: 0.75rem;">En cas d'infraction au contrat :</h4>
+                        <p style="color: var(--color-text-muted); margin-bottom: 0.75rem;">La conséquence doit être logique, non une punition. C'est l'application d'une clause du contrat.</p>
+                        <div class="guide-blockquote slate">
+                            "Nous avions un accord qui n'a pas été respecté. Comme discuté, nous revenons donc au palier de confiance précédent. C'est à toi de me montrer que je peux à nouveau te faire confiance."
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="alliance" class="content-section">
+                <h2 class="section-title teal">Faire Équipe : L'Alliance Parentale</h2>
+                <p style="color: var(--color-text-muted); margin-bottom: 2rem; line-height: 1.6;">Le manque de cohérence entre parents est une source majeure d'instabilité pour l'adolescent. Il est crucial de présenter un front commun, même si vous n'êtes pas toujours d'accord. Les désaccords se règlent "en coulisses".</p>
+
+                <div class="two-col-grid">
+                    <div class="interactive-card green">
+                        <h3>La Règle des Coulisses</h3>
+                        <p style="margin-bottom: 1rem;">Si vous êtes en désaccord "à chaud", un parent doit temporiser. Ne vous contredisez jamais devant l'ado.</p>
+                        <p style="font-weight: 600; color: var(--color-text-secondary);">Phrase-type pour temporiser :</p>
+                        <div class="guide-blockquote green">
+                            "J'entends la réponse de ton père/ta mère. Laisse-nous un moment pour en discuter. On te donnera notre décision commune."
+                        </div>
+                    </div>
+                    <div class="interactive-card sky">
+                        <h3>Dialoguer avec son Partenaire</h3>
+                        <p style="margin-bottom: 1rem;">Pour discuter du désaccord en privé, utilisez la Communication Non Violente (CNV) pour éviter les reproches.</p>
+                        <p style="font-weight: 600; color: var(--color-text-secondary);">Phrase-type pour initier le dialogue :</p>
+                        <div class="guide-blockquote sky">
+                            "J'ai besoin qu'on soit une équipe. Quand tu as dit 'oui', je me suis senti(e) sapé(e). Pouvons-nous nous accorder avant de répondre à l'avenir ?"
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-logos">
+            <a href="https://www.ch-le-vinatier.fr" target="_blank" rel="noopener noreferrer">
+                <img src="../images/logos/vinatier.png" alt="Logo Centre Hospitalier Le Vinatier">
+            </a>
+            <a href="https://www.facebook.com/Psykozy?locale=fr_FR" target="_blank" rel="noopener noreferrer">
+                <img src="../images/logos/psykozy.png" alt="Logo Psy-kozy">
+            </a>
+            <a href="https://centre-ressource-rehabilitation.org" target="_blank" rel="noopener noreferrer">
+                <img src="../images/logos/crr.jpg" alt="Logo Centre Ressource Rehabilitation">
+            </a>
+        </div>
+        <p>Dr FENOHASINA T.J. Felicien (Psychiatre - FFI)</p>
+        <p style="font-size: 0.8rem; margin-top: 0.5rem;">Cet outil est inspiré des principes de la psychologie du développement, de la thérapie systémique et de la Communication Non Violente.</p>
+        <p style="font-size: 0.8rem;">L'objectif final n'est pas de "gagner" les batailles, mais de maintenir un lien de confiance et d'amour.</p>
+        <p style="margin-top: 1rem;">
+            <img src="../images/icons/cc-by-nc-sa.png" alt="CC BY-NC-SA" style="height: 20px; vertical-align: middle;">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr" target="_blank" rel="noopener noreferrer">Licence CC BY-NC-SA 4.0</a>
+        </p>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const navItems = document.querySelectorAll('.nav-btn');
+    const contentSections = document.querySelectorAll('.content-section');
+    const mainContent = document.getElementById('main-content');
+
+    navItems.forEach(item => {
+        item.addEventListener('click', () => {
+            const targetId = item.dataset.target;
+            navItems.forEach(nav => nav.classList.remove('active'));
+            item.classList.add('active');
+            contentSections.forEach(section => {
+                section.classList.toggle('active', section.id === targetId);
+            });
+            mainContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+
+    // Outil tabs
+    const outilTabs = document.querySelectorAll('.outil-tab');
+    const outilContents = document.querySelectorAll('.outil-content');
+
+    outilTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const targetClass = tab.dataset.target;
+            outilTabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            outilContents.forEach(content => {
+                content.classList.remove('active');
+                if (content.id === targetClass) {
+                    content.classList.add('active');
+                }
+            });
+        });
+    });
+
+    // Iceberg Chart
+    const icebergData = {
+        insolence: {
+            labels: ["Besoin d'Autonomie", "Sentiment d'injustice", "Insolence"],
+            explanation: `
+                <h4>Derrière l'insolence :</h4>
+                <div style="line-height: 1.6;">
+                    <p style="color: var(--color-text-muted);"><strong style="color: var(--color-text-secondary);">Émotions/Pensées :</strong> Colère, frustration, sentiment d'être contrôlé. "On me traite comme un gamin."</p>
+                    <p style="color: var(--color-text-muted); margin-top: 0.5rem;"><strong style="color: var(--color-text-secondary);">Besoins Fondamentaux :</strong> Un grand <strong style="color: #2dd4bf;">besoin d'autonomie</strong>, de respect et de reconnaissance.</p>
+                    <p style="font-weight: 600; color: var(--color-text-secondary); margin-top: 1rem;">Phrase-type d'écoute active :</p>
+                    <blockquote>"Je vois que tu es très en colère. J'ai l'impression que tu te sens contrôlé(e) et pas respecté(e). C'est ça ?"</blockquote>
+                </div>`
+        },
+        repli: {
+            labels: ["Besoin de Sécurité", "Peur / Tristesse", "Repli sur soi"],
+            explanation: `
+                <h4>Derrière le repli :</h4>
+                <div style="line-height: 1.6;">
+                    <p style="color: var(--color-text-muted);"><strong style="color: var(--color-text-secondary);">Émotions/Pensées :</strong> Tristesse, honte, anxiété, peur de l'échec. "Je suis nul(le)."</p>
+                    <p style="color: var(--color-text-muted); margin-top: 0.5rem;"><strong style="color: var(--color-text-secondary);">Besoins Fondamentaux :</strong> Un <strong style="color: #2dd4bf;">besoin de compétence</strong> (se sentir capable), de sécurité et d'acceptation.</p>
+                    <p style="font-weight: 600; color: var(--color-text-secondary); margin-top: 1rem;">Phrase-type d'écoute active :</p>
+                    <blockquote>"J'ai l'impression que tu es vraiment triste en ce moment. Est-ce que tu as peur de ne pas être à la hauteur ?"</blockquote>
+                </div>`
+        },
+        transgression: {
+            labels: ["Besoin d'Appartenance", "Besoin d'impressionner", "Transgression"],
+            explanation: `
+                <h4>Derrière la transgression :</h4>
+                <div style="line-height: 1.6;">
+                    <p style="color: var(--color-text-muted);"><strong style="color: var(--color-text-secondary);">Émotions/Pensées :</strong> Excitation, défi, peur d'être exclu du groupe. "Je veux faire comme les autres."</p>
+                    <p style="color: var(--color-text-muted); margin-top: 0.5rem;"><strong style="color: var(--color-text-secondary);">Besoins Fondamentaux :</strong> Un immense <strong style="color: #2dd4bf;">besoin d'affiliation</strong> (appartenance au groupe), d'autonomie et d'exploration.</p>
+                    <p style="font-weight: 600; color: var(--color-text-secondary); margin-top: 1rem;">Phrase-type d'écoute active :</p>
+                    <blockquote>"J'imagine que c'était très important pour toi d'être avec tes amis, et que tu avais peur d'être mis(e) à l'écart."</blockquote>
+                </div>`
+        },
+        apathie: {
+            labels: ["Besoin de Compétence", "Découragement", "Apathie scolaire"],
+            explanation: `
+                <h4>Derrière l'apathie scolaire :</h4>
+                <div style="line-height: 1.6;">
+                    <p style="color: var(--color-text-muted);"><strong style="color: var(--color-text-secondary);">Émotions/Pensées :</strong> Découragement, anxiété, ennui. "C'est trop dur, je n'y arriverai jamais."</p>
+                    <p style="color: var(--color-text-muted); margin-top: 0.5rem;"><strong style="color: var(--color-text-secondary);">Besoins Fondamentaux :</strong> Un <strong style="color: #2dd4bf;">besoin de compétence</strong> (se sentir efficace), mais aussi de sens et de stimulation.</p>
+                    <p style="font-weight: 600; color: var(--color-text-secondary); margin-top: 1rem;">Phrase-type d'écoute active :</p>
+                    <blockquote>"On dirait que le travail scolaire te semble une montagne. Tu as l'impression que ça ne sert à rien ?"</blockquote>
+                </div>`
+        }
+    };
+
+    const icebergSelector = document.getElementById('iceberg-selector');
+    const icebergExplanation = document.getElementById('iceberg-explanation');
+    const ctx = document.getElementById('icebergChart')?.getContext('2d');
+    let icebergChart;
+
+    function createOrUpdateIcebergChart(behavior) {
+        if (!ctx) return;
+        const data = icebergData[behavior];
+        icebergExplanation.innerHTML = data.explanation;
+
+        if (icebergChart) {
+            icebergChart.destroy();
+        }
+
+        icebergChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [''],
+                datasets: [
+                    { label: data.labels[2], data: [15], backgroundColor: '#64748b' },
+                    { label: data.labels[1], data: [35], backgroundColor: '#3b82f6' },
+                    { label: data.labels[0], data: [50], backgroundColor: '#0ea5e9' }
+                ]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: true, position: 'bottom', labels: { boxWidth: 15, padding: 20, font: { size: 12 }, color: '#94a3b8' } },
+                    tooltip: {
+                        backgroundColor: '#1e293b',
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.parsed.x + '%';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: { stacked: true, display: false, max: 100 },
+                    y: { stacked: true, display: false }
+                }
+            }
+        });
+    }
+
+    if (icebergSelector) {
+        icebergSelector.addEventListener('change', (e) => {
+            createOrUpdateIcebergChart(e.target.value);
+        });
+
+        // Initialize chart when comprendre section becomes active
+        const observer = new MutationObserver((mutationsList) => {
+            for(let mutation of mutationsList) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                    if(mutation.target.id === 'comprendre' && mutation.target.classList.contains('active')) {
+                        if(!icebergChart) {
+                            createOrUpdateIcebergChart(icebergSelector.value);
+                        }
+                    }
+                }
+            }
+        });
+
+        observer.observe(document.querySelector('#comprendre'), { attributes: true });
+    }
+
+});
+</script>
+
+</body>
+</html>

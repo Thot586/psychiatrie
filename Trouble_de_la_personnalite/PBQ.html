@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PBQ - Questionnaire des Croyances de la Personnalite</title>
+
+    <!-- Font Awesome pour les icônes -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Styles partagés -->
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+    <style>
+        :root {
+            --cat-main: #eab308;
+            --cat-dark: #ca8a04;
+            --cat-light: #facc15;
+            --cat-rgb: 234, 179, 8;
+            --cat-readable: #ca8a04;
+        }
+        .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
+        .option-btn.selected, .answer-btn.selected { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        .score-circle { border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 30px rgba(var(--cat-rgb), 0.2); }
+        .score-value { color: var(--cat-light); }
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-light); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+        .progress-fill { background: linear-gradient(90deg, var(--cat-main), var(--cat-light)); box-shadow: 0 0 8px rgba(var(--cat-rgb), 0.4); }
+        .likert-options input[type="radio"]:checked + label,
+        .binary-options input[type="radio"]:checked + label,
+        .radio-options input[type="radio"]:checked + label { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+
+        /* Domain progress bars */
+        .domain-result { margin-bottom: 1.25rem; }
+        .domain-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; }
+        .domain-name { font-weight: 600; color: var(--color-text-primary); font-size: 0.95rem; }
+        .domain-score-label { font-size: 0.85rem; color: var(--color-text-muted); }
+        .domain-bar { width: 100%; height: 14px; background: #e2e8f0; border-radius: 7px; overflow: hidden; box-shadow: inset 2px 2px 4px rgba(0,0,0,0.06), inset -2px -2px 4px rgba(255,255,255,0.8); }
+        .domain-fill { height: 100%; border-radius: 7px; transition: width 0.6s ease; }
+        .domain-fill.level-low { background: linear-gradient(90deg, #22c55e, #4ade80); }
+        .domain-fill.level-moderate { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+        .domain-fill.level-high { background: linear-gradient(90deg, #ef4444, #f97316); }
+        .domain-fill.level-critical { background: linear-gradient(90deg, #dc2626, #ef4444); }
+        .domain-level { font-size: 0.8rem; font-weight: 500; margin-top: 0.2rem; }
+        .domain-level.level-low { color: #16a34a; }
+        .domain-level.level-moderate { color: #d97706; }
+        .domain-level.level-high { color: #ea580c; }
+        .domain-level.level-critical { color: #dc2626; }
+
+        /* Top domains highlight */
+        .top-domains { margin-top: 1.5rem; padding: 1rem; background: rgba(254, 242, 242, 0.6); border: 1px solid rgba(239, 68, 68, 0.15); border-radius: var(--radius-md, 12px); }
+        .top-domains h4 { color: #b91c1c; margin-bottom: 0.5rem; }
+        .top-domains li { color: var(--color-text-secondary); margin-bottom: 0.25rem; }
+    </style>
+
+</head>
+<body class="light-questionnaire">
+    <!-- Navigation -->
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil">
+                <i class="fas fa-home"></i>
+            </a>
+            <button onclick="history.back()" class="btn-back" title="Retour">
+                <i class="fas fa-arrow-left"></i> <span>Retour</span>
+            </button>
+        </div>
+        <h1>PBQ</h1>
+        <span class="badge badge-cat-perso">Personnalite</span>
+    </nav>
+
+    <div class="container">
+        <!-- En-tête -->
+        <header class="glass-card" style="text-align: center; margin-bottom: 1.5rem;">
+            <h2 class="gradient-text">PBQ - Questionnaire des Croyances de la Personnalite</h2>
+            <p>Personality Belief Questionnaire (Beck & Beck, 2001)</p>
+        </header>
+
+        <!-- Informations -->
+        <section class="info-box">
+            <h3><i class="fas fa-info-circle"></i> A propos de ce questionnaire</h3>
+            <p>Le PBQ est un auto-questionnaire developpe par Aaron T. Beck et Judith S. Beck pour identifier les croyances centrales associees a chaque type de trouble de la personnalite. Il comprend <strong>126 items</strong> evalues sur une echelle de 0 a 4. Ce questionnaire permet d'orienter le travail therapeutique en therapie cognitive.</p>
+        </section>
+
+        <!-- Avertissement -->
+        <section class="warning-box">
+            <h3><i class="fas fa-exclamation-triangle"></i> Avertissements importants</h3>
+            <ul style="margin: 0; padding-left: 1.5rem;">
+                <li>Ce questionnaire ne remplace pas une consultation medicale</li>
+                <li>Il s'agit d'un outil d'evaluation et non d'un outil diagnostique</li>
+                <li>Les resultats sont indicatifs et necessitent une interpretation clinique</li>
+                <li>Un resultat eleve doit etre suivi d'une evaluation approfondie par un professionnel</li>
+            </ul>
+        </section>
+
+        <!-- Contrôles -->
+        <section class="glass-card">
+            <div class="control-buttons">
+                <button class="btn-secondary" onclick="importData()">
+                    <i class="fas fa-file-import"></i> Importer
+                </button>
+                <button class="btn-secondary" onclick="resetForm()">
+                    <i class="fas fa-redo"></i> Reinitialiser
+                </button>
+            </div>
+            <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="loadFile(event)">
+        </section>
+
+        <!-- Instructions -->
+        <section class="glass-card">
+            <h3 style="margin-bottom: 1rem;">Evaluez dans quelle mesure vous croyez a chacune des affirmations suivantes, en utilisant l'echelle de 0 (je n'y crois pas du tout) a 4 (j'y crois totalement).</h3>
+
+            <!-- Questions générées par JS -->
+            <div id="questions"></div>
+        </section>
+
+        <!-- Résultats -->
+        <section id="results" class="results-section" style="display: none;">
+            <h2 style="text-align: center; margin-bottom: 2rem;">
+                <i class="fas fa-chart-bar"></i> Resultats de votre evaluation
+            </h2>
+
+            <div class="score-display">
+                <div class="score-circle">
+                    <span class="score-value" id="totalScore">0</span>
+                </div>
+                <p class="score-label">sur 504 points</p>
+            </div>
+
+            <div id="interpretationBox" class="interpretation"></div>
+
+            <!-- Scores par domaine -->
+            <div class="glass-card" style="margin-top: 1.5rem;">
+                <h3 style="margin-bottom: 1rem;"><i class="fas fa-layer-group"></i> Scores par domaine de personnalite</h3>
+                <div id="domainScores"></div>
+                <div id="topDomains"></div>
+            </div>
+
+            <button class="btn-primary w-full" onclick="toggleDetails()" style="margin-top: 1.5rem;">
+                <i class="fas fa-list"></i> Voir les details des reponses
+                <span id="toggleIcon"><i class="fas fa-chevron-down"></i></span>
+            </button>
+
+            <div id="detailsContent" class="glass-card" style="display: none; margin-top: 1rem;"></div>
+
+            <!-- Export -->
+            <div class="glass-card" style="margin-top: 2rem;">
+                <h3><i class="fas fa-download"></i> Exporter les resultats</h3>
+                <div class="consent-box">
+                    <label>
+                        <input type="checkbox" id="exportConsent">
+                        <span>Je souhaite telecharger mes resultats (questionnaire, reponses, score et date) dans un fichier JSON sur mon appareil. <strong>Ces resultats constituent des donnees de sante — je m'engage a les conserver de facon securisee et a ne les partager qu'avec un professionnel de sante de mon choix.</strong> Aucune donnee n'est transmise a un serveur.</span>
+                    </label>
+                </div>
+                <div class="export-buttons">
+                    <button class="btn-primary" onclick="exportData()">
+                        <i class="fas fa-file-export"></i> Exporter en JSON
+                    </button>
+                    <button class="btn-print" onclick="printResults()">
+                        <i class="fas fa-print"></i> Imprimer
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p><strong>PBQ - Personality Belief Questionnaire</strong></p>
+        <p>Auteurs : Beck AT, Beck JS (2001)</p>
+        <p>Adaptation numérique : Dr FENOHASINA | Psychiatre</p>
+        <p style="margin-top: 1rem;">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr" target="_blank">
+                Licence CC BY-NC-SA 4.0
+            </a>
+        </p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../js/app.js"></script>
+    <script>
+        // ========================================
+        // PBQ - 126 items, 9 sous-echelles (14 items chacune)
+        // ========================================
+
+        const domains = [
+            {
+                key: 'evitante',
+                name: 'Personnalite Evitante',
+                icon: 'fa-user-shield',
+                items: [
+                    "Je suis socialement inadapte(e) et socialement indesirable dans un cadre professionnel ou social.",
+                    "Les autres personnes sont potentiellement critiques, indifferentes, devaluantes ou rejetantes.",
+                    "Je ne supporte pas les sentiments desagreables.",
+                    "Si les gens s'approchaient de moi, ils decouvriront mon \"vrai moi\" et me rejetteront.",
+                    "Etre devoile(e) comme inferieur(e) ou inadequat(e) serait intolerable.",
+                    "Je dois eviter les situations desagreables a tout prix.",
+                    "Si je ressens ou pense quelque chose de desagreable, je dois essayer de l'oublier ou de m'en distraire.",
+                    "Je dois eviter les situations dans lesquelles j'attire l'attention, ou etre aussi discret(e) que possible.",
+                    "Les sentiments desagreables vont s'aggraver et devenir incontr\u00f4lables.",
+                    "Si les autres me critiquent, c'est qu'ils ont raison.",
+                    "Il vaut mieux ne rien faire que d'essayer quelque chose qui pourrait echouer.",
+                    "Si je ne pense pas au probleme, je n'aurai pas a le resoudre.",
+                    "Tout signe d'inconfort indique que quelque chose va mal.",
+                    "Si je m'ecoutais, je saurais instinctivement ce qui est bien et ce qui est mal pour moi."
+                ]
+            },
+            {
+                key: 'dependante',
+                name: 'Personnalite Dependante',
+                icon: 'fa-hands-helping',
+                items: [
+                    "Je suis needy et faible.",
+                    "J'ai besoin de quelqu'un de disponible en permanence pour m'aider a faire face aux situations et resoudre les problemes.",
+                    "Mon protecteur/gardien peut me nourrir, me soutenir et me consoler.",
+                    "Je ne peux pas vivre sans soutien d'une autre personne.",
+                    "Si je ne suis pas aime(e), je serai toujours malheureux(se).",
+                    "Je dois maintenir l'acces le plus proche possible avec mon gardien protecteur.",
+                    "Je dois etre soumis(e) afin de maintenir leur bonne volonte.",
+                    "Je dois maintenir la relation a tout prix.",
+                    "Je ne suis pas capable de faire face a la vie par moi-meme.",
+                    "Si j'etais plus autonome, je me retrouverais isole(e) et seul(e).",
+                    "Si l'on me demande de faire quelque chose, je dois le faire.",
+                    "Les relations intimes sont essentielles a ma survie emotionnelle.",
+                    "Si les autres ne m'aident pas, je ne peux pas me debrouiller.",
+                    "Je suis essentiellement seul(e), sauf quand je m'attache a une personne forte."
+                ]
+            },
+            {
+                key: 'obsessionnelle',
+                name: 'Personnalite Obsessionnelle-Compulsive',
+                icon: 'fa-list-check',
+                items: [
+                    "Je dois me conformer a des regles et standards personnels superieurs aux conventions.",
+                    "Les details sont extremement importants.",
+                    "Il faut que les choses soient faites de la \"bonne\" facon.",
+                    "Les gens devraient faire mieux et s'efforcer davantage.",
+                    "Je dois perfectionnement tout.",
+                    "J'ai besoin d'un ordre et de systemes pour pouvoir realiser la tache.",
+                    "Si je n'ai pas de systemes, tout va s'effondrer.",
+                    "Toute faille ou defaut dans la performance peut conduire a une catastrophe.",
+                    "Il est necessaire de maintenir les standards les plus eleves a tout moment ou les choses vont tomber en pieces.",
+                    "Si les gens ne font pas les choses correctement, je dois les corriger.",
+                    "Les choses devraient etre faites d'une certaine facon.",
+                    "Les sentiments et l'intuition doivent etre subordonnes a la raison et a la logique.",
+                    "Il est important de tout prevoir.",
+                    "Les erreurs sont intolerables."
+                ]
+            },
+            {
+                key: 'narcissique',
+                name: 'Personnalite Narcissique',
+                icon: 'fa-crown',
+                items: [
+                    "Puisque je suis special(e), je merite des regles speciales.",
+                    "Je suis au-dessus des regles.",
+                    "Si les autres ne respectent pas mon statut, ils devraient etre punis.",
+                    "Je n'ai pas besoin de me plier aux regles et conventions des autres.",
+                    "Les gens n'ont pas le droit de me frustrer ou de m'empecher d'obtenir ce que je merite.",
+                    "Si les gens ne soutiennent pas mon point de vue, ils le regretteront.",
+                    "Ce que les autres pensent et ressentent est sans importance pour moi.",
+                    "J'ai toujours raison.",
+                    "Les autres devraient satisfaire mes besoins.",
+                    "Les gens me doivent du respect parce que je suis superieur(e) a eux.",
+                    "Les gens n'ont pas le droit de me critiquer ou de me refuser ce que je merite.",
+                    "Les gens devraient me complimenter pour ce que j'ai accompli.",
+                    "Je ne devrais pas etre freine(e) par les besoins des autres.",
+                    "Puisque je suis si doue(e), les gens devraient faire tout leur possible pour promouvoir ma carriere."
+                ]
+            },
+            {
+                key: 'antisociale',
+                name: 'Personnalite Antisociale',
+                icon: 'fa-skull-crossbones',
+                items: [
+                    "Il faut prendre soin de soi-meme.",
+                    "La force ou la ruse est la meilleure facon de resoudre les problemes.",
+                    "Nous vivons dans une jungle et le plus fort survit.",
+                    "Les autres peuvent s'attaquer a vous si vous n'y faites pas attention.",
+                    "Ce n'est pas important de tenir ses promesses ou de payer ses dettes.",
+                    "On doit se battre pour obtenir ce que l'on veut.",
+                    "Si je n'agresse pas les autres, ils m'agresseront les premiers.",
+                    "Il faut profiter des situations avant d'etre mis a profit.",
+                    "Les lois et les regles sont faites pour les autres.",
+                    "Si les gens ne sont pas capables de se defendre, c'est leur probleme.",
+                    "Ce qui compte pour moi, c'est d'obtenir ce que je veux.",
+                    "Je suis plus intelligent que la plupart des gens.",
+                    "Les gens sont la pour etre manipules.",
+                    "Je dois faire tout ce qui est necessaire pour proteger mes interets."
+                ]
+            },
+            {
+                key: 'histrionique',
+                name: 'Personnalite Histrionique',
+                icon: 'fa-theater-masks',
+                items: [
+                    "Je suis fondamentalement seul(e) sauf si je m'attache a une personne plus forte.",
+                    "Pour etre heureux(se), j'ai besoin que les autres fassent attention a moi.",
+                    "Si je ne divertis pas ou n'impressionne pas les gens, je ne suis rien.",
+                    "Si je n'attire pas l'attention des autres, je suis sans valeur.",
+                    "Les gens ne s'occuperont pas de moi si je ne fais pas quelque chose pour attirer leur attention.",
+                    "Etre le centre de l'attention est essentiel.",
+                    "L'apparence est tres importante.",
+                    "Les gens me jugeront sur mon apparence exterieure.",
+                    "Je dois exprimer mes sentiments immediatement.",
+                    "Les sentiments doivent etre exprimes de maniere spectaculaire.",
+                    "Les impressions sont plus importantes que les faits.",
+                    "Pour obtenir ce que je veux, je dois charmer et impressionner les autres.",
+                    "Si les gens ne repondent pas a mes sentiments, c'est qu'ils sont insensibles.",
+                    "J'ai besoin d'etre le centre de l'attention pour etre heureux(se)."
+                ]
+            },
+            {
+                key: 'schizoide',
+                name: 'Personnalite Schizoide',
+                icon: 'fa-user-lock',
+                items: [
+                    "Je n'ai pas besoin des autres.",
+                    "Les relations sont g\u00eanantes et pas la peine.",
+                    "Ma vie privee est beaucoup plus importante que la proximite avec les autres.",
+                    "Je suis mon propre meilleur ami.",
+                    "Il est preferable d'etre seul(e).",
+                    "Je suis indifferent(e) a la louange comme a la critique.",
+                    "Se trouver proche des gens est inconfortable.",
+                    "Il est important de m'isoler des autres.",
+                    "Les relations avec les autres sont chaotiques et indesirables.",
+                    "Je ne suis pas affecte(e) par ce que les autres pensent ou disent de moi.",
+                    "Je suis une personne solitaire par nature.",
+                    "L'isolement est preferable a l'intimite.",
+                    "Les activites solitaires sont plus satisfaisantes que les activites sociales.",
+                    "Les emotions sont inutiles et ne font que compliquer les choses."
+                ]
+            },
+            {
+                key: 'paranoiaque',
+                name: 'Personnalite Paranoiaque',
+                icon: 'fa-eye',
+                items: [
+                    "Les gens vont m'utiliser si je leur en donne la possibilite.",
+                    "Les gens ont des intentions cachees.",
+                    "Les autres essaieront de m'utiliser ou de me manipuler si j'en donne l'occasion.",
+                    "Je dois etre sur mes gardes a tout moment.",
+                    "Si les gens agissent d'une maniere amicale, c'est qu'ils essaient de m'utiliser ou de m'exploiter.",
+                    "Si les gens decouvrent des choses sur moi, ils les utiliseront contre moi.",
+                    "Les gens sont souvent deliberement mechants et trompeurs.",
+                    "Il faut toujours etre vigilant et en alerte.",
+                    "Si les gens semblent amicaux, ils ont generalement un motif cache.",
+                    "Je ne peux pas faire confiance aux autres.",
+                    "Il faut etre prudent avec les gens.",
+                    "Ma securite et celle de mes proches est la chose la plus importante.",
+                    "Si les gens connaissent mes faiblesses, ils les utiliseront contre moi.",
+                    "Les confidences seront utilisees contre moi."
+                ]
+            },
+            {
+                key: 'borderline',
+                name: 'Personnalite Borderline',
+                icon: 'fa-bolt',
+                items: [
+                    "Je ne peux pas me debrouiller seul(e), j'ai besoin de quelqu'un sur qui compter.",
+                    "Je suis fondamentalement mauvais(e) et je merite d'etre puni(e).",
+                    "Si les gens m'approchent, ils decouvriront qui je suis reellement et me rejetteront.",
+                    "Rien de ce que je fais ne marche.",
+                    "Si les autres me quittent, je ne pourrai pas le supporter.",
+                    "Si j'obeis aux regles comme les autres le font, cela supprimera ma liberte d'action.",
+                    "Si je ne m'impose pas, on m'ignorera.",
+                    "Je suis incapable de me discipliner.",
+                    "Mes sentiments et mes opinions ne sont pas fondes.",
+                    "Je suis fondamentalement deficient(e) en ce qui concerne les qualites desirables.",
+                    "Les situations qui me causent de la detresse justifient des mesures extremes.",
+                    "Ma detresse est tellement intense que je ne peux pas la supporter.",
+                    "Je suis impuissant(e) et vulnerable et je ne peux pas me controler.",
+                    "Je ne sais pas qui je suis."
+                ]
+            }
+        ];
+
+        // Echelle de Likert (0-4)
+        const likertOptions = [
+            { value: 0, label: "0 - Pas du tout" },
+            { value: 1, label: "1 - Un peu" },
+            { value: 2, label: "2 - Moderement" },
+            { value: 3, label: "3 - Beaucoup" },
+            { value: 4, label: "4 - Totalement" }
+        ];
+
+        // Construction de la liste plate de questions
+        const questions = [];
+        domains.forEach(domain => {
+            domain.items.forEach(text => {
+                questions.push({ text: text, domain: domain.key });
+            });
+        });
+
+        const TOTAL_ITEMS = 126;
+        let answers = new Array(TOTAL_ITEMS).fill(null);
+
+        function initializeQuestions() {
+            const container = document.getElementById('questions');
+            container.innerHTML = '';
+
+            let globalIndex = 0;
+
+            domains.forEach((domain, domainIdx) => {
+                // En-tete de section
+                const sectionHeader = document.createElement('div');
+                sectionHeader.className = 'section-header';
+                sectionHeader.style.cssText = 'background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; padding: 0.75rem 1rem; border-radius: var(--radius-md); margin: 1.5rem 0 1rem 0; font-weight: 600; font-size: var(--font-size-md);';
+                if (domainIdx === 0) {
+                    sectionHeader.style.marginTop = '0';
+                }
+                sectionHeader.innerHTML = `<i class="fas ${domain.icon}"></i> ${domain.name} (items ${domainIdx * 14 + 1}-${domainIdx * 14 + 14})`;
+                container.appendChild(sectionHeader);
+
+                // Items du domaine
+                domain.items.forEach((itemText, itemIdx) => {
+                    const index = globalIndex;
+                    const questionDiv = document.createElement('div');
+                    questionDiv.className = 'question-card';
+
+                    questionDiv.innerHTML = `
+                        <div style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem;">
+                            <span class="question-number">${index + 1}</span>
+                            <span class="question-text" style="margin-bottom: 0;">${itemText}</span>
+                        </div>
+                        <div class="options-grid">
+                            ${likertOptions.map(opt => `
+                                <button class="option-btn" onclick="selectAnswer(${index}, ${opt.value})" id="q${index}_opt${opt.value}">
+                                    ${opt.label}
+                                </button>
+                            `).join('')}
+                        </div>
+                    `;
+
+                    container.appendChild(questionDiv);
+                    globalIndex++;
+                });
+            });
+        }
+
+        function selectAnswer(questionIndex, value) {
+            answers[questionIndex] = value;
+
+            likertOptions.forEach(opt => {
+                const btn = document.getElementById(`q${questionIndex}_opt${opt.value}`);
+                btn.classList.toggle('selected', opt.value === value);
+            });
+
+            // Marquer la carte comme repondue
+            const cards = document.querySelectorAll('.question-card');
+            cards[questionIndex].classList.add('answered');
+
+            checkCompletion();
+        }
+
+        function checkCompletion() {
+            const allAnswered = answers.every(a => a !== null);
+
+            if (allAnswered) {
+                updateResults();
+                document.getElementById('results').style.display = 'block';
+                document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function calculateTotalScore() {
+            return answers.reduce((sum, val) => sum + (val || 0), 0);
+        }
+
+        function calculateDomainScores() {
+            const scores = {};
+            domains.forEach((domain, idx) => {
+                const start = idx * 14;
+                const domainAnswers = answers.slice(start, start + 14);
+                const score = domainAnswers.reduce((sum, val) => sum + (val || 0), 0);
+                scores[domain.key] = {
+                    name: domain.name,
+                    icon: domain.icon,
+                    score: score,
+                    maxScore: 56,
+                    items: domainAnswers
+                };
+            });
+            return scores;
+        }
+
+        function getDomainLevel(score) {
+            if (score <= 14) return { level: 'Faible', className: 'level-low', description: 'Pas de croyances significatives' };
+            if (score <= 27) return { level: 'Modere', className: 'level-moderate', description: 'Quelques croyances dysfonctionnelles' };
+            if (score <= 42) return { level: 'Eleve', className: 'level-high', description: 'Croyances dysfonctionnelles significatives' };
+            return { level: 'Tres eleve', className: 'level-critical', description: 'Croyances dysfonctionnelles envahissantes' };
+        }
+
+        function getGlobalInterpretation(score) {
+            if (score <= 126) return {
+                level: "Niveau faible",
+                className: "low",
+                description: "Les croyances dysfonctionnelles sont peu presentes. Le profil ne suggere pas de schema de personnalite pathologique predominant.",
+                action: "Aucune intervention specifique n'est necessaire concernant les croyances de personnalite."
+            };
+            if (score <= 252) return {
+                level: "Niveau modere",
+                className: "moderate",
+                description: "Certaines croyances dysfonctionnelles sont presentes. Il peut etre utile d'explorer les domaines les plus eleves en therapie cognitive.",
+                action: "Une exploration therapeutique des croyances predominantes est recommandee, notamment dans les domaines les plus eleves."
+            };
+            if (score <= 378) return {
+                level: "Niveau eleve",
+                className: "high",
+                description: "Des croyances dysfonctionnelles significatives sont identifiees dans plusieurs domaines. Un travail therapeutique cible est recommande.",
+                action: "Un travail approfondi en therapie cognitive sur les schemas de personnalite est fortement recommande. Envisager une evaluation clinique complete."
+            };
+            return {
+                level: "Niveau tres eleve",
+                className: "critical",
+                description: "Des croyances dysfonctionnelles envahissantes sont presentes dans de nombreux domaines. Une prise en charge specialisee est necessaire.",
+                action: "Une evaluation psychiatrique approfondie et une prise en charge en therapie cognitive structuree sont necessaires."
+            };
+        }
+
+        function updateResults() {
+            const totalScore = calculateTotalScore();
+            const domainScores = calculateDomainScores();
+            const interpretation = getGlobalInterpretation(totalScore);
+
+            // Score total
+            document.getElementById('totalScore').textContent = totalScore;
+
+            // Interpretation globale
+            const interpretationBox = document.getElementById('interpretationBox');
+            interpretationBox.className = `interpretation ${interpretation.className}`;
+            interpretationBox.innerHTML = `
+                <h3>${interpretation.level}</h3>
+                <p><strong>Interpretation :</strong> ${interpretation.description}</p>
+                <p><strong>Recommandation :</strong> ${interpretation.action}</p>
+            `;
+
+            // Scores par domaine avec barres de progression (tries par score decroissant)
+            const domainContainer = document.getElementById('domainScores');
+            domainContainer.innerHTML = '';
+
+            const sortedDomains = Object.entries(domainScores).sort((a, b) => b[1].score - a[1].score);
+
+            sortedDomains.forEach(([key, domain]) => {
+                const level = getDomainLevel(domain.score);
+                const percentage = (domain.score / domain.maxScore) * 100;
+
+                domainContainer.innerHTML += `
+                    <div class="domain-result">
+                        <div class="domain-header">
+                            <span class="domain-name"><i class="fas ${domain.icon}"></i> ${domain.name}</span>
+                            <span class="domain-score-label">${domain.score} / ${domain.maxScore}</span>
+                        </div>
+                        <div class="domain-bar">
+                            <div class="domain-fill ${level.className}" style="width: ${percentage}%;"></div>
+                        </div>
+                        <div class="domain-level ${level.className}">${level.level} — ${level.description}</div>
+                    </div>
+                `;
+            });
+
+            // Mettre en evidence les 2-3 domaines les plus eleves
+            const topDomainsContainer = document.getElementById('topDomains');
+            const topN = sortedDomains.filter(([, d]) => d.score > 14).slice(0, 3);
+
+            if (topN.length > 0) {
+                topDomainsContainer.innerHTML = `
+                    <div class="top-domains">
+                        <h4><i class="fas fa-exclamation-circle"></i> Domaines predominants</h4>
+                        <p style="margin-bottom: 0.5rem; color: var(--color-text-muted);">Les domaines suivants presentent les scores les plus eleves et meritent une attention particuliere en therapie :</p>
+                        <ul style="margin: 0; padding-left: 1.5rem;">
+                            ${topN.map(([key, domain]) => {
+                                const level = getDomainLevel(domain.score);
+                                return `<li><strong>${domain.name}</strong> : ${domain.score}/56 (${level.level})</li>`;
+                            }).join('')}
+                        </ul>
+                    </div>
+                `;
+            } else {
+                topDomainsContainer.innerHTML = `
+                    <div class="info-box" style="margin-top: 1rem;">
+                        <p style="margin: 0;"><i class="fas fa-check-circle"></i> Aucun domaine ne depasse le seuil de significativite clinique.</p>
+                    </div>
+                `;
+            }
+
+            // Contenu detaille
+            const detailsContent = document.getElementById('detailsContent');
+            let detailsHTML = '<h3 style="margin-bottom: 1rem;">Detail des reponses par domaine :</h3>';
+
+            domains.forEach((domain, domainIdx) => {
+                const start = domainIdx * 14;
+                const domainScore = domainScores[domain.key];
+                const level = getDomainLevel(domainScore.score);
+
+                detailsHTML += `<h4 style="margin: 1rem 0 0.5rem 0; color: var(--cat-readable);"><i class="fas ${domain.icon}"></i> ${domain.name} (${domainScore.score}/56 — ${level.level})</h4>`;
+
+                domain.items.forEach((itemText, itemIdx) => {
+                    const globalIdx = start + itemIdx;
+                    const val = answers[globalIdx];
+                    const colorStyle = val >= 3 ? 'var(--color-danger, #ef4444)' : val >= 2 ? 'var(--color-warning, #f59e0b)' : 'var(--color-success, #22c55e)';
+
+                    detailsHTML += `
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--color-bg-card); border-radius: var(--radius-md); margin-bottom: 0.5rem;">
+                            <span style="flex: 1;">Q${globalIdx + 1}. ${itemText}</span>
+                            <span style="font-weight: 600; color: ${colorStyle}; min-width: 2.5rem; text-align: right;">
+                                ${val !== null ? val : '-'}/4
+                            </span>
+                        </div>
+                    `;
+                });
+            });
+
+            detailsContent.innerHTML = detailsHTML;
+        }
+
+        function toggleDetails() {
+            const content = document.getElementById('detailsContent');
+            const icon = document.getElementById('toggleIcon');
+            const isVisible = content.style.display !== 'none';
+
+            content.style.display = isVisible ? 'none' : 'block';
+            icon.innerHTML = isVisible ? '<i class="fas fa-chevron-down"></i>' : '<i class="fas fa-chevron-up"></i>';
+        }
+
+        function resetForm() {
+            answers = new Array(TOTAL_ITEMS).fill(null);
+
+            document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+            document.querySelectorAll('.question-card').forEach(card => card.classList.remove('answered'));
+
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('detailsContent').style.display = 'none';
+            document.getElementById('exportConsent').checked = false;
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function importData() {
+            document.getElementById('fileInput').click();
+        }
+
+        function loadFile(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        if (data.answers && Array.isArray(data.answers)) {
+                            answers = data.answers;
+
+                            answers.forEach((value, index) => {
+                                if (value !== null) {
+                                    selectAnswer(index, value);
+                                }
+                            });
+                        }
+                    } catch (error) {
+                        alert("Erreur lors de l'importation du fichier");
+                    }
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        function exportData() {
+            const consent = document.getElementById('exportConsent').checked;
+            if (!consent) {
+                alert("Veuillez cocher la case de consentement avant d'exporter.");
+                return;
+            }
+
+            const totalScore = calculateTotalScore();
+            const interpretation = getGlobalInterpretation(totalScore);
+            const domainScores = calculateDomainScores();
+
+            const domainExport = {};
+            for (const [key, domain] of Object.entries(domainScores)) {
+                domainExport[key] = {
+                    name: domain.name,
+                    score: domain.score,
+                    maxScore: domain.maxScore,
+                    level: getDomainLevel(domain.score).level
+                };
+            }
+
+            const data = {
+                questionnaire: "PBQ",
+                version: "126 items - 9 sous-echelles",
+                date: new Date().toISOString(),
+                answers: answers,
+                answerDetails: questions.map((q, i) => ({
+                    item: i + 1,
+                    text: q.text,
+                    score: answers[i],
+                    domain: q.domain
+                })),
+                totalScore: totalScore,
+                maxScore: 504,
+                domainScores: domainExport,
+                interpretation: interpretation.level
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `PBQ_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeQuestions();
+        });
+    </script>
+</body>
+</html>

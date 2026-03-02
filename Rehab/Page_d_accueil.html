@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Réhabilitation - Questionnaires</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .portal-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+    .portal-card {
+        background: linear-gradient(145deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-xl);
+        padding: 1.5rem;
+        text-decoration: none;
+        display: block;
+        transition: all var(--transition-slow);
+    }
+    .portal-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--color-border-active);
+        box-shadow: var(--shadow-glow);
+    }
+    .portal-card h3 { color: var(--color-text-primary); margin-bottom: 0.5rem; }
+    .portal-card p { color: var(--color-text-muted); font-size: var(--font-size-sm); }
+    .section-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius-lg);
+        font-weight: 600;
+        font-size: var(--font-size-lg);
+        margin-bottom: 1.5rem;
+        color: white;
+    }
+    .portal-card .card-description {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 1rem;
+        border-radius: var(--radius-md);
+        margin: 1rem 0;
+        border: 1px solid var(--color-border);
+    }
+    .portal-card .card-subtitle {
+        color: var(--color-text-secondary);
+        font-style: italic;
+        font-size: var(--font-size-sm);
+        margin-bottom: 0.75rem;
+    }
+    .portal-card .btn-action {
+        display: inline-block;
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--radius-lg);
+        font-weight: 600;
+        text-decoration: none;
+        text-align: center;
+        transition: all var(--transition-normal);
+        margin-top: auto;
+    }
+    .btn-sky { background: #0ea5e9; color: white; }
+    .btn-sky:hover { background: #0284c7; }
+    .btn-blue { background: #3b82f6; color: white; }
+    .btn-blue:hover { background: #2563eb; }
+    .btn-indigo { background: #6366f1; color: white; }
+    .btn-indigo:hover { background: #4f46e5; }
+    .btn-violet { background: #8b5cf6; color: white; }
+    .btn-violet:hover { background: #7c3aed; }
+    .btn-emerald { background: #10b981; color: white; }
+    .btn-emerald:hover { background: #059669; }
+    .btn-pink { background: #ec4899; color: white; }
+    .btn-pink:hover { background: #db2777; }
+    .btn-cyan { background: #06b6d4; color: white; }
+    .btn-cyan:hover { background: #0891b2; }
+    .btn-amber { background: #f59e0b; color: white; }
+    .btn-amber:hover { background: #d97706; }
+    .btn-slate { background: #64748b; color: white; }
+    .btn-slate:hover { background: #475569; }
+  </style>
+</head>
+<body>
+
+  <nav class="navigation-bar">
+    <div class="nav-buttons">
+      <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+      <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+    </div>
+    <h1>Réhabilitation</h1>
+    <span class="badge badge-cat-rehab">Réhab</span>
+  </nav>
+
+  <div class="container">
+
+    <header class="page-header">
+      <p class="page-subtitle">
+        Outils complets pour la rehabilitation psychosociale : cognition, qualite de vie, insight, fonctionnement social, empowerment et psychoeducation.
+      </p>
+    </header>
+
+    <div class="alert alert-info">
+      <div class="alert-icon">
+        <i class="fas fa-info-circle"></i>
+      </div>
+      <div class="alert-content">
+        <h3>Information</h3>
+        <p>Ces outils s'inscrivent dans une démarche de réhabilitation psychosociale. Ils sont conçus pour être utilisés en collaboration avec une équipe soignante.</p>
+      </div>
+    </div>
+
+    <section class="section">
+      <span class="section-badge" style="background: #0ea5e9;">
+        <i class="fas fa-clipboard-list"></i> Plan de Suivi Individualisé
+      </span>
+      <div class="portal-grid">
+
+        <div class="portal-card">
+          <h3>PSI</h3>
+          <p class="card-subtitle">Plan de Suivi Individualisé</p>
+          <div class="card-description">
+            <p>Outil structuré pour établir et suivre les objectifs de rétablissement personnalisés du patient.</p>
+          </div>
+          <a href="PSI.html" class="btn-action btn-sky">
+            Commencer &rarr;
+          </a>
+        </div>
+
+        <div class="portal-card">
+          <h3>Mon PSI</h3>
+          <p class="card-subtitle">Version patient</p>
+          <div class="card-description">
+            <p>Version du PSI destinée au patient pour faciliter son implication dans son parcours de soins.</p>
+          </div>
+          <a href="Mon_PSI.html" class="btn-action btn-sky">
+            Commencer &rarr;
+          </a>
+        </div>
+
+        <div class="portal-card">
+          <h3>PSI (QS)</h3>
+          <p class="card-subtitle">Questionnaire de Suivi</p>
+          <div class="card-description">
+            <p>Questionnaire de suivi pour évaluer l'avancement du plan de suivi individualisé.</p>
+          </div>
+          <a href="PSI(QS).html" class="btn-action btn-sky">
+            Commencer &rarr;
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="section">
+      <span class="section-badge" style="background: #3b82f6;">
+        <i class="fas fa-chart-line"></i> Rétablissement
+      </span>
+      <div class="portal-grid">
+
+        <div class="portal-card">
+          <h3>SERS</h3>
+          <p class="card-subtitle">Self-Esteem Rating Scale</p>
+          <div class="card-description">
+            <p>Échelle d'évaluation de l'estime de soi, composante essentielle du processus de rétablissement.</p>
+          </div>
+          <a href="SERS.html" class="btn-action btn-blue">
+            Commencer le test &rarr;
+          </a>
+        </div>
+
+        <div class="portal-card">
+          <h3>STORI</h3>
+          <p class="card-subtitle">Stages of Recovery Instrument</p>
+          <div class="card-description">
+            <p>Instrument permettant d'identifier l'étape du processus de rétablissement où se situe la personne.</p>
+          </div>
+          <a href="STORI.html" class="btn-action btn-blue">
+            Commencer le test &rarr;
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="section">
+      <span class="section-badge" style="background: #6366f1;">
+        <i class="fas fa-tasks"></i> Fonctionnement
+      </span>
+      <div class="portal-grid">
+
+        <div class="portal-card">
+          <h3>WHODAS 2.0</h3>
+          <p class="card-subtitle">WHO Disability Assessment Schedule</p>
+          <div class="card-description">
+            <p>Questionnaire OMS evaluant le fonctionnement et le handicap dans 6 domaines : cognition, mobilite, soins personnels, relations, activites quotidiennes, participation.</p>
+          </div>
+          <a href="WHODAS.html" class="btn-action btn-indigo">
+            Commencer le test &rarr;
+          </a>
+        </div>
+
+        <div class="portal-card">
+          <h3>PSP</h3>
+          <p class="card-subtitle">Personal and Social Performance Scale</p>
+          <div class="card-description">
+            <p>Echelle de fonctionnement personnel et social. 4 domaines : activites utiles, relations, soins personnels, comportements perturbateurs. Score global 1-100. <strong>Hetero-questionnaire (clinicien).</strong></p>
+          </div>
+          <a href="PSP.html" class="btn-action btn-indigo">
+            Commencer l'evaluation &rarr;
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="section">
+      <span class="section-badge" style="background: #8b5cf6;">
+        <i class="fas fa-brain"></i> Cognition
+      </span>
+      <div class="portal-grid">
+
+        <div class="portal-card">
+          <h3>MoCA</h3>
+          <p class="card-subtitle">Montreal Cognitive Assessment</p>
+          <div class="card-description">
+            <p>Outil de depistage cognitif rapide (30 points) evaluant 8 domaines : visuospatial, denomination, attention, langage, abstraction, memoire, orientation.</p>
+          </div>
+          <a href="MoCA.html" class="btn-action btn-violet">
+            Commencer le test &rarr;
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="section">
+      <span class="section-badge" style="background: #10b981;">
+        <i class="fas fa-heart"></i> Qualite de Vie
+      </span>
+      <div class="portal-grid">
+
+        <div class="portal-card">
+          <h3>S-QoL 18</h3>
+          <p class="card-subtitle">Schizophrenia Quality of Life</p>
+          <div class="card-description">
+            <p>Questionnaire de qualite de vie specifique aux troubles psychotiques. 18 items evaluant 8 dimensions : bien-etre, estime de soi, relations, resilience, autonomie.</p>
+          </div>
+          <a href="S-QoL.html" class="btn-action btn-emerald">
+            Commencer le test &rarr;
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="section">
+      <span class="section-badge" style="background: #ec4899;">
+        <i class="fas fa-eye"></i> Insight
+      </span>
+      <div class="portal-grid">
+
+        <div class="portal-card">
+          <h3>BIS</h3>
+          <p class="card-subtitle">Birchwood Insight Scale</p>
+          <div class="card-description">
+            <p>Echelle de conscience du trouble en 8 items. Evalue 3 dimensions : conscience de la maladie, reattribution des symptomes, necessite du traitement.</p>
+          </div>
+          <a href="BIS.html" class="btn-action btn-pink">
+            Commencer le test &rarr;
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="section">
+      <span class="section-badge" style="background: #06b6d4;">
+        <i class="fas fa-users"></i> Fonctionnement Social
+      </span>
+      <div class="portal-grid">
+
+        <div class="portal-card">
+          <h3>SFS</h3>
+          <p class="card-subtitle">Social Functioning Scale</p>
+          <div class="card-description">
+            <p>Echelle complete du fonctionnement social (79 items, 7 domaines) : retrait social, communication, autonomie, loisirs, activites prosociales, emploi.</p>
+          </div>
+          <a href="SFS.html" class="btn-action btn-cyan">
+            Commencer le test &rarr;
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="section">
+      <span class="section-badge" style="background: #f59e0b;">
+        <i class="fas fa-fist-raised"></i> Empowerment
+      </span>
+      <div class="portal-grid">
+
+        <div class="portal-card">
+          <h3>RAS</h3>
+          <p class="card-subtitle">Recovery Assessment Scale</p>
+          <div class="card-description">
+            <p>Echelle d'evaluation du retablissement personnel (24 items). Mesure la confiance, l'espoir, l'orientation vers les objectifs et l'autonomie.</p>
+          </div>
+          <a href="RAS.html" class="btn-action btn-amber">
+            Commencer le test &rarr;
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="section">
+      <span class="section-badge" style="background: #64748b;">
+        <i class="fas fa-book-reader"></i> Psychoeducation
+      </span>
+      <div class="portal-grid">
+
+        <div class="portal-card">
+          <h3>Guide du Retablissement</h3>
+          <p class="card-subtitle">Ressource educative</p>
+          <div class="card-description">
+            <p>Qu'est-ce que le retablissement ? Decouvrez les etapes CHIME (Connection, Espoir, Identite, Sens, Empowerment) et des ressources pratiques.</p>
+          </div>
+          <a href="Guide_Retablissement.html" class="btn-action btn-slate">
+            Consulter le guide &rarr;
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+
+  <footer class="footer">
+    <p>Dr. FENOHASINA T.J. Felicien (Psychiatre)</p>
+    <p>&copy; 2025 - Centre Ressource de Réhabilitation</p>
+    <p class="license">Licence CC BY-NC-SA 4.0</p>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CDI-2 - Children's Depression Inventory 2</title>
+
+    <!-- Font Awesome pour les icones -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Styles partages -->
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/questionnaire-light.css">
+
+    <!-- Styles specifiques CDI-2 -->
+    <style>
+        :root {
+            --cat-main: #14b8a6;
+            --cat-dark: #0d9488;
+            --cat-light: #2dd4bf;
+            --cat-rgb: 20, 184, 166;
+            --cat-readable: #0d9488;
+        }
+        .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
+        .option-btn.selected, .answer-btn.selected { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        .score-circle { border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 30px rgba(var(--cat-rgb), 0.2); }
+        .score-value { color: var(--cat-light); }
+        .btn-primary { border-color: var(--cat-main); color: var(--cat-light); }
+        .btn-primary:hover { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); color: #fff; }
+        .progress-fill { background: linear-gradient(90deg, var(--cat-main), var(--cat-light)); box-shadow: 0 0 8px rgba(var(--cat-rgb), 0.4); }
+        .likert-options input[type="radio"]:checked + label,
+        .binary-options input[type="radio"]:checked + label,
+        .radio-options input[type="radio"]:checked + label { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+    </style>
+
+</head>
+<body class="light-questionnaire">
+    <!-- Navigation -->
+    <nav class="navigation-bar">
+        <div class="nav-buttons">
+            <a href="../index.html" class="btn-home" title="Accueil">
+                <i class="fas fa-home"></i>
+            </a>
+            <button onclick="history.back()" class="btn-back" title="Retour">
+                <i class="fas fa-arrow-left"></i> <span>Retour</span>
+            </button>
+        </div>
+        <h1>CDI-2</h1>
+        <span class="badge badge-cat-enfant">Enfant/Ado</span>
+    </nav>
+
+    <div class="container">
+        <!-- En-tete -->
+        <header class="glass-card" style="text-align: center; margin-bottom: 1.5rem;">
+            <h2 class="gradient-text">Children's Depression Inventory 2</h2>
+            <p>Inventaire de depression de l'enfant - Version Auto-questionnaire (7-17 ans)</p>
+        </header>
+
+        <!-- Informations -->
+        <section class="info-box">
+            <h3><i class="fas fa-info-circle"></i> A propos de ce questionnaire</h3>
+            <p>Le CDI-2 (Children's Depression Inventory 2) est un auto-questionnaire de reference pour evaluer les symptomes depressifs chez l'enfant et l'adolescent de <strong>7 a 17 ans</strong>.</p>
+            <p style="margin-top: 0.5rem;">Il comprend <strong>28 items</strong> evaluant les symptomes depressifs au cours des <strong>deux dernieres semaines</strong>. Chaque item presente 3 affirmations parmi lesquelles choisir celle qui decrit le mieux les sentiments recents.</p>
+            <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--color-text-dimmed);">
+                <i class="fas fa-users"></i> Note : Il existe egalement des versions parent et enseignant du CDI-2 pour une evaluation multimodale.
+            </p>
+        </section>
+
+        <!-- Avertissement -->
+        <section class="warning-box">
+            <h3><i class="fas fa-exclamation-triangle"></i> Avertissements importants</h3>
+            <ul style="margin: 0; padding-left: 1.5rem;">
+                <li>Ce questionnaire est un outil de depistage et ne remplace pas une evaluation clinique complete</li>
+                <li>Les resultats doivent etre interpretes par un professionnel de sante mentale</li>
+                <li><strong>L'item 9 evalue les idees suicidaires</strong> - une reponse positive necessite une evaluation urgente</li>
+                <li>En cas de crise : <strong>3114</strong> (numero national de prevention du suicide, 24h/7j)</li>
+                <li>Fil Sante Jeunes : <strong>0 800 235 236</strong> (anonyme et gratuit)</li>
+            </ul>
+        </section>
+
+        <!-- Alerte item critique (cachee par defaut) -->
+        <section id="criticalItemAlert" class="critical-alert">
+            <h4><i class="fas fa-exclamation-circle"></i> Alerte - Pensees suicidaires detectees</h4>
+            <p>Une reponse indiquant des pensees de se faire du mal a ete selectionnee. Il est important d'en parler immediatement a un adulte de confiance ou de contacter :</p>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem; color: var(--color-text-muted); font-size: 0.875rem;">
+                <li><strong>3114</strong> - Numero national de prevention du suicide (24h/7j)</li>
+                <li><strong>0 800 235 236</strong> - Fil Sante Jeunes (anonyme et gratuit)</li>
+                <li>Les urgences de l'hopital le plus proche</li>
+            </ul>
+        </section>
+
+        <!-- Controles -->
+        <section class="glass-card">
+            <div class="control-buttons">
+                <button class="btn-secondary" onclick="importData()">
+                    <i class="fas fa-file-import"></i> Importer
+                </button>
+                <button class="btn-secondary" onclick="resetForm()">
+                    <i class="fas fa-redo"></i> Reinitialiser
+                </button>
+            </div>
+            <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="loadFile(event)">
+        </section>
+
+        <!-- Instructions -->
+        <section class="glass-card">
+            <h3 style="margin-bottom: 1rem;">Pour chaque groupe de phrases, choisis la phrase qui decrit le mieux comment tu t'es senti(e) au cours des <strong>deux dernieres semaines</strong>.</h3>
+
+            <!-- Barre de progression -->
+            <div class="progress-container" style="margin-bottom: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span style="color: var(--color-text-muted); font-size: 0.875rem;">Progression</span>
+                    <span id="progressText" style="color: var(--color-text-primary); font-weight: 600;">0/28</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressBar" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <!-- Questions generees par JS -->
+            <div id="questions"></div>
+        </section>
+
+        <!-- Resultats -->
+        <section id="results" class="results-section" style="display: none;">
+            <h2 style="text-align: center; margin-bottom: 2rem;">
+                <i class="fas fa-chart-bar"></i> Resultats de l'evaluation
+            </h2>
+
+            <!-- Score total -->
+            <div class="score-display">
+                <div class="score-circle">
+                    <span class="score-value" id="totalScore">0</span>
+                </div>
+                <p class="score-label">Score total (sur 56)</p>
+            </div>
+
+            <div id="interpretationBox" class="interpretation"></div>
+
+            <!-- Alerte critique dans les resultats -->
+            <div id="criticalResultAlert" class="critical-alert" style="margin-bottom: 1.5rem;">
+                <h4><i class="fas fa-exclamation-circle"></i> Attention - Pensees suicidaires</h4>
+                <p>Le questionnaire a revele des pensees de se faire du mal. Une consultation urgente avec un professionnel de sante mentale est necessaire.</p>
+                <p style="margin-top: 0.5rem;"><strong>Contactez immediatement le 3114 ou rendez-vous aux urgences.</strong></p>
+            </div>
+
+            <!-- Scores par dimension -->
+            <div class="glass-card" style="margin-top: 1.5rem;">
+                <h3 style="margin-bottom: 1rem;"><i class="fas fa-list-ul"></i> Interpretation du score</h3>
+                <div id="scoreInterpretation"></div>
+            </div>
+
+            <button class="btn-primary w-full" onclick="toggleDetails()" style="margin-top: 1.5rem;">
+                <i class="fas fa-list"></i> Voir les details par item
+                <span id="toggleIcon"><i class="fas fa-chevron-down"></i></span>
+            </button>
+
+            <div id="detailsContent" class="glass-card" style="display: none; margin-top: 1rem;"></div>
+
+            <!-- Recommandations -->
+            <div class="glass-card" style="margin-top: 1.5rem;">
+                <h3 style="margin-bottom: 1rem;"><i class="fas fa-hand-holding-heart"></i> Recommandations</h3>
+                <div id="recommendations"></div>
+            </div>
+
+            <!-- Export -->
+            <div class="glass-card" style="margin-top: 2rem;">
+                <h3><i class="fas fa-download"></i> Exporter les resultats</h3>
+                <div class="consent-box">
+                    <label>
+                        <input type="checkbox" id="exportConsent">
+                        <span>Je souhaite télécharger mes résultats (questionnaire, réponses, score et date) dans un fichier JSON sur mon appareil. <strong>Ces résultats constituent des données de santé — je m'engage à les conserver de façon sécurisée et à ne les partager qu'avec un professionnel de santé de mon choix.</strong> Aucune donnée n'est transmise à un serveur.</span>
+                    </label>
+                </div>
+                <div class="export-buttons">
+                    <button class="btn-primary" onclick="exportData()">
+                        <i class="fas fa-file-export"></i> Exporter en JSON
+                    </button>
+                    <button class="btn-print" onclick="printResults()">
+                        <i class="fas fa-print"></i> Imprimer
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p><strong>CDI-2 - Children's Depression Inventory 2</strong></p>
+        <p>Auteur original : Maria Kovacs, Ph.D. (1977, revision 2011)</p>
+        <p>Adaptation numerique : Dr FENOHASINA | Psychiatre</p>
+        <p style="margin-top: 1rem;">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr" target="_blank">
+                Licence CC BY-NC-SA 4.0
+            </a>
+        </p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../js/app.js"></script>
+    <script>
+        // Les 28 items du CDI-2 - Version Auto-questionnaire
+        const questions = [
+            {
+                id: 1,
+                theme: "Tristesse",
+                options: [
+                    { value: 0, text: "Je suis triste de temps en temps" },
+                    { value: 1, text: "Je suis triste souvent" },
+                    { value: 2, text: "Je suis triste tout le temps" }
+                ]
+            },
+            {
+                id: 2,
+                theme: "Pessimisme",
+                options: [
+                    { value: 0, text: "Les choses vont bien se passer pour moi" },
+                    { value: 1, text: "Je ne suis pas sur(e) que les choses iront bien" },
+                    { value: 2, text: "Rien ne va marcher pour moi" }
+                ]
+            },
+            {
+                id: 3,
+                theme: "Sentiment d'echec",
+                options: [
+                    { value: 0, text: "Je reussis la plupart des choses" },
+                    { value: 1, text: "J'echoue dans beaucoup de choses" },
+                    { value: 2, text: "J'echoue dans tout" }
+                ]
+            },
+            {
+                id: 4,
+                theme: "Anhedonie",
+                options: [
+                    { value: 0, text: "Beaucoup de choses me font plaisir" },
+                    { value: 1, text: "Certaines choses me font plaisir" },
+                    { value: 2, text: "Rien ne me fait plaisir" }
+                ]
+            },
+            {
+                id: 5,
+                theme: "Sentiment d'etre mechant(e)",
+                options: [
+                    { value: 0, text: "Je suis gentil(le) la plupart du temps" },
+                    { value: 1, text: "Je suis mechant(e) assez souvent" },
+                    { value: 2, text: "Je suis mechant(e) tout le temps" }
+                ]
+            },
+            {
+                id: 6,
+                theme: "Pensees negatives",
+                options: [
+                    { value: 0, text: "Je ne pense pas que des choses mauvaises vont m'arriver" },
+                    { value: 1, text: "Je m'inquiete que des choses mauvaises puissent m'arriver" },
+                    { value: 2, text: "Je suis sur(e) que des choses terribles vont m'arriver" }
+                ]
+            },
+            {
+                id: 7,
+                theme: "Se detester",
+                options: [
+                    { value: 0, text: "Je m'aime bien" },
+                    { value: 1, text: "Je ne m'aime pas" },
+                    { value: 2, text: "Je me deteste" }
+                ]
+            },
+            {
+                id: 8,
+                theme: "Se blamer",
+                options: [
+                    { value: 0, text: "Les choses mauvaises ne sont generalement pas de ma faute" },
+                    { value: 1, text: "Beaucoup de choses mauvaises sont de ma faute" },
+                    { value: 2, text: "Toutes les choses mauvaises sont de ma faute" }
+                ]
+            },
+            {
+                id: 9,
+                theme: "Idees suicidaires",
+                critical: true,
+                options: [
+                    { value: 0, text: "Je ne pense pas a me faire du mal" },
+                    { value: 1, text: "Je pense a me faire du mal mais je ne le ferais pas" },
+                    { value: 2, text: "Je veux me faire du mal" }
+                ]
+            },
+            {
+                id: 10,
+                theme: "Envie de pleurer",
+                options: [
+                    { value: 0, text: "Je n'ai pas envie de pleurer" },
+                    { value: 1, text: "J'ai souvent envie de pleurer" },
+                    { value: 2, text: "J'ai tout le temps envie de pleurer" }
+                ]
+            },
+            {
+                id: 11,
+                theme: "Irritabilite",
+                options: [
+                    { value: 0, text: "Je suis calme la plupart du temps" },
+                    { value: 1, text: "Je suis souvent agace(e) par les choses" },
+                    { value: 2, text: "Je suis agace(e) tout le temps" }
+                ]
+            },
+            {
+                id: 12,
+                theme: "Interet pour les autres",
+                options: [
+                    { value: 0, text: "J'aime etre avec les autres" },
+                    { value: 1, text: "Je n'aime pas etre avec les autres aussi souvent qu'avant" },
+                    { value: 2, text: "Je ne veux plus du tout etre avec les autres" }
+                ]
+            },
+            {
+                id: 13,
+                theme: "Indecision",
+                options: [
+                    { value: 0, text: "J'arrive facilement a prendre des decisions" },
+                    { value: 1, text: "J'ai du mal a prendre des decisions" },
+                    { value: 2, text: "Je n'arrive pas du tout a prendre des decisions" }
+                ]
+            },
+            {
+                id: 14,
+                theme: "Image de soi",
+                options: [
+                    { value: 0, text: "Je suis content(e) de mon apparence" },
+                    { value: 1, text: "Il y a des choses dans mon apparence que je n'aime pas" },
+                    { value: 2, text: "Je suis moche" }
+                ]
+            },
+            {
+                id: 15,
+                theme: "Travail scolaire",
+                options: [
+                    { value: 0, text: "Faire mes devoirs n'est pas un gros probleme" },
+                    { value: 1, text: "J'ai souvent du mal a me forcer a faire mes devoirs" },
+                    { value: 2, text: "Je n'arrive pas a faire mes devoirs" }
+                ]
+            },
+            {
+                id: 16,
+                theme: "Sommeil",
+                options: [
+                    { value: 0, text: "Je dors bien" },
+                    { value: 1, text: "J'ai quelques problemes de sommeil" },
+                    { value: 2, text: "J'ai de gros problemes de sommeil" }
+                ]
+            },
+            {
+                id: 17,
+                theme: "Fatigue",
+                options: [
+                    { value: 0, text: "Je suis fatigue(e) de temps en temps" },
+                    { value: 1, text: "Je suis souvent fatigue(e)" },
+                    { value: 2, text: "Je suis tout le temps fatigue(e)" }
+                ]
+            },
+            {
+                id: 18,
+                theme: "Appetit",
+                options: [
+                    { value: 0, text: "J'ai un appetit normal" },
+                    { value: 1, text: "Mon appetit n'est pas aussi bon qu'avant" },
+                    { value: 2, text: "Je n'ai plus d'appetit du tout" }
+                ]
+            },
+            {
+                id: 19,
+                theme: "Inquietudes somatiques",
+                options: [
+                    { value: 0, text: "Je n'ai pas mal au ventre, pas de maux de tete, ni de nausees" },
+                    { value: 1, text: "J'ai parfois mal au ventre, des maux de tete ou des nausees" },
+                    { value: 2, text: "J'ai souvent mal au ventre, des maux de tete ou des nausees" }
+                ]
+            },
+            {
+                id: 20,
+                theme: "Solitude",
+                options: [
+                    { value: 0, text: "Je ne me sens pas seul(e)" },
+                    { value: 1, text: "Je me sens souvent seul(e)" },
+                    { value: 2, text: "Je me sens tout le temps seul(e)" }
+                ]
+            },
+            {
+                id: 21,
+                theme: "Plaisir a l'ecole",
+                options: [
+                    { value: 0, text: "Je m'amuse a l'ecole" },
+                    { value: 1, text: "Je ne m'amuse pas souvent a l'ecole" },
+                    { value: 2, text: "Je ne m'amuse jamais a l'ecole" }
+                ]
+            },
+            {
+                id: 22,
+                theme: "Amis",
+                options: [
+                    { value: 0, text: "J'ai beaucoup d'amis" },
+                    { value: 1, text: "J'ai quelques amis mais j'aimerais en avoir plus" },
+                    { value: 2, text: "Je n'ai pas d'amis" }
+                ]
+            },
+            {
+                id: 23,
+                theme: "Performance scolaire",
+                options: [
+                    { value: 0, text: "Je travaille bien a l'ecole" },
+                    { value: 1, text: "Je ne travaille pas aussi bien a l'ecole qu'avant" },
+                    { value: 2, text: "Je travaille tres mal a l'ecole" }
+                ]
+            },
+            {
+                id: 24,
+                theme: "Comparaison aux autres",
+                options: [
+                    { value: 0, text: "Je suis aussi bien que les autres enfants" },
+                    { value: 1, text: "Je ne suis pas aussi bien que les autres enfants" },
+                    { value: 2, text: "Je suis beaucoup moins bien que les autres enfants" }
+                ]
+            },
+            {
+                id: 25,
+                theme: "Se sentir aime",
+                options: [
+                    { value: 0, text: "Je suis sur(e) que quelqu'un m'aime" },
+                    { value: 1, text: "Je ne suis pas sur(e) que quelqu'un m'aime" },
+                    { value: 2, text: "Personne ne m'aime vraiment" }
+                ]
+            },
+            {
+                id: 26,
+                theme: "Obeissance",
+                options: [
+                    { value: 0, text: "Je fais generalement ce qu'on me dit" },
+                    { value: 1, text: "Je ne fais pas ce qu'on me dit la plupart du temps" },
+                    { value: 2, text: "Je ne fais jamais ce qu'on me dit" }
+                ]
+            },
+            {
+                id: 27,
+                theme: "Conflits",
+                options: [
+                    { value: 0, text: "Je m'entends bien avec les autres" },
+                    { value: 1, text: "Je me dispute souvent avec les autres" },
+                    { value: 2, text: "Je me dispute tout le temps avec les autres" }
+                ]
+            },
+            {
+                id: 28,
+                theme: "Anxiete de performance",
+                options: [
+                    { value: 0, text: "Je n'ai pas peur d'echouer" },
+                    { value: 1, text: "Je m'inquiete parfois d'echouer" },
+                    { value: 2, text: "J'ai tres peur d'echouer" }
+                ]
+            }
+        ];
+
+        // Seuils d'interpretation (scores bruts)
+        const interpretationThresholds = {
+            average: { min: 0, max: 12 },
+            highAverage: { min: 13, max: 18 },
+            elevated: { min: 19, max: 25 },
+            veryElevated: { min: 26, max: 56 }
+        };
+
+        let answers = new Array(28).fill(null);
+
+        function initializeQuestions() {
+            const container = document.getElementById('questions');
+            container.innerHTML = '';
+
+            questions.forEach((question, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = question.critical ? 'question-card critical' : 'question-card';
+
+                const criticalBadge = question.critical ?
+                    '<span class="critical-badge"><i class="fas fa-exclamation-triangle"></i> Item critique</span>' : '';
+
+                questionDiv.innerHTML = `
+                    <div style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem;">
+                        <span class="question-number">${index + 1}</span>
+                        <div style="flex: 1;">
+                            <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+                                <span class="question-text" style="margin-bottom: 0; font-weight: 600;">${question.theme}</span>
+                                ${criticalBadge}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="triple-options">
+                        ${question.options.map(opt => `
+                            <button class="option-btn" onclick="selectAnswer(${index}, ${opt.value})" id="q${index}_opt${opt.value}">
+                                <span class="option-text">${opt.text}</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                    ${question.critical ? `
+                        <div class="critical-alert" id="criticalAlert${index}">
+                            <h4><i class="fas fa-phone"></i> Besoin d'aide ?</h4>
+                            <p>Si tu as des pensees de te faire du mal, parle a un adulte de confiance ou appelle le <strong>3114</strong> (24h/7j, gratuit).</p>
+                        </div>
+                    ` : ''}
+                `;
+
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function selectAnswer(questionIndex, value) {
+            answers[questionIndex] = value;
+
+            // Update UI - remove selected from all options of this question
+            for (let i = 0; i < 3; i++) {
+                const btn = document.getElementById(`q${questionIndex}_opt${i}`);
+                btn.classList.toggle('selected', i === value);
+            }
+
+            // Mark card as answered
+            const cards = document.querySelectorAll('.question-card');
+            cards[questionIndex].classList.add('answered');
+
+            // Check for critical item (item 9, index 8)
+            if (questionIndex === 8 && value > 0) {
+                document.getElementById('criticalItemAlert').classList.add('show');
+                document.getElementById('criticalAlert8').classList.add('show');
+            } else if (questionIndex === 8 && value === 0) {
+                document.getElementById('criticalAlert8').classList.remove('show');
+                // Only hide main alert if truly 0
+                if (answers[8] === 0) {
+                    document.getElementById('criticalItemAlert').classList.remove('show');
+                }
+            }
+
+            // Update progress
+            updateProgress();
+
+            // Check completion
+            checkCompletion();
+        }
+
+        function updateProgress() {
+            const answered = answers.filter(a => a !== null).length;
+            const percentage = (answered / 28) * 100;
+            document.getElementById('progressBar').style.width = percentage + '%';
+            document.getElementById('progressText').textContent = `${answered}/28`;
+        }
+
+        function checkCompletion() {
+            const allAnswered = answers.every(a => a !== null);
+
+            if (allAnswered) {
+                updateResults();
+                document.getElementById('results').style.display = 'block';
+                document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function calculateScore() {
+            return answers.reduce((sum, val) => sum + (val || 0), 0);
+        }
+
+        function getInterpretation(score) {
+            if (score <= interpretationThresholds.average.max) {
+                return {
+                    level: "Moyen (pas de symptomes significatifs)",
+                    className: "low",
+                    badgeClass: "badge-low",
+                    description: "Le score se situe dans la zone moyenne, suggerant une absence de symptomes depressifs significatifs.",
+                    recommendations: [
+                        "Continuer a maintenir un mode de vie equilibre",
+                        "Encourager les activites sociales et physiques",
+                        "Maintenir une communication ouverte avec l'enfant/adolescent",
+                        "Refaire l'evaluation si des changements de comportement sont observes"
+                    ]
+                };
+            }
+            if (score <= interpretationThresholds.highAverage.max) {
+                return {
+                    level: "Moyen superieur",
+                    className: "moderate",
+                    badgeClass: "badge-moderate",
+                    description: "Le score se situe legerement au-dessus de la moyenne. Une surveillance est recommandee.",
+                    recommendations: [
+                        "Surveillance reguliere de l'humeur et du comportement",
+                        "Encourager l'expression des emotions",
+                        "Maintenir des activites agreables et un rythme de vie regulier",
+                        "Consultation avec un professionnel si les symptomes persistent ou s'aggravent",
+                        "Reevaluation dans 2-4 semaines"
+                    ]
+                };
+            }
+            if (score <= interpretationThresholds.elevated.max) {
+                return {
+                    level: "Eleve",
+                    className: "high",
+                    badgeClass: "badge-high",
+                    description: "Le score est eleve, indiquant des symptomes depressifs significatifs necessitant une attention particuliere.",
+                    recommendations: [
+                        "Consultation recommandee avec un professionnel de sante mentale",
+                        "Evaluation clinique complete conseillee",
+                        "Mise en place d'un suivi regulier",
+                        "Soutien psychologique a envisager",
+                        "Surveillance etroite de l'evolution des symptomes"
+                    ]
+                };
+            }
+            return {
+                level: "Tres eleve",
+                className: "very-elevated",
+                badgeClass: "badge-critical",
+                description: "Le score est tres eleve, suggerant des symptomes depressifs severes necessitant une prise en charge rapide.",
+                recommendations: [
+                    "Consultation urgente avec un pedopsychiatre ou psychologue",
+                    "Evaluation approfondie des idees suicidaires",
+                    "Mise en place d'un suivi intensif",
+                    "Consideration d'une prise en charge specialisee",
+                    "Soutien de l'entourage familial et scolaire",
+                    "En cas de crise : contacter le 3114 ou se rendre aux urgences"
+                ]
+            };
+        }
+
+        function updateResults() {
+            const score = calculateScore();
+            const interpretation = getInterpretation(score);
+
+            document.getElementById('totalScore').textContent = score;
+
+            // Interpretation box
+            const interpretationBox = document.getElementById('interpretationBox');
+            interpretationBox.className = `interpretation ${interpretation.className}`;
+            interpretationBox.innerHTML = `
+                <h3>Niveau : ${interpretation.level}</h3>
+                <p><strong>Score brut :</strong> ${score}/56</p>
+                <p style="margin-top: 0.5rem;">${interpretation.description}</p>
+            `;
+
+            // Critical item alert in results
+            if (answers[8] > 0) {
+                document.getElementById('criticalResultAlert').classList.add('show');
+            } else {
+                document.getElementById('criticalResultAlert').classList.remove('show');
+            }
+
+            // Score interpretation section
+            const scoreInterpretation = document.getElementById('scoreInterpretation');
+            scoreInterpretation.innerHTML = `
+                <div style="display: grid; gap: 0.75rem;">
+                    <div style="padding: 0.75rem; background: var(--color-bg-card); border-radius: var(--radius-md);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <span style="font-weight: 600;">Zone du score</span>
+                            <span class="badge ${interpretation.badgeClass}">${interpretation.level}</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <div style="flex: 1; background: var(--color-bg-tertiary); border-radius: 4px; height: 8px; overflow: hidden;">
+                                <div style="width: ${(score / 56) * 100}%; height: 100%; background: linear-gradient(90deg, #06b6d4, #22d3ee); transition: width 0.3s ease;"></div>
+                            </div>
+                            <span style="font-weight: 700; min-width: 50px; text-align: right;">${score}/56</span>
+                        </div>
+                    </div>
+
+                    <div style="padding: 1rem; background: var(--color-bg-card); border-radius: var(--radius-md); margin-top: 0.5rem;">
+                        <h4 style="color: var(--color-text-primary); margin-bottom: 0.75rem; font-size: 0.9rem;">Echelle d'interpretation :</h4>
+                        <div style="display: grid; gap: 0.5rem; font-size: 0.85rem;">
+                            <div style="display: flex; justify-content: space-between; padding: 0.5rem; background: ${score <= 12 ? 'rgba(6, 182, 212, 0.1)' : 'transparent'}; border-radius: 4px; ${score <= 12 ? 'border: 1px solid rgba(6, 182, 212, 0.3);' : ''}">
+                                <span style="color: var(--color-text-muted);">0-12 : Moyen</span>
+                                <span style="color: #4ade80;">Pas de symptomes significatifs</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 0.5rem; background: ${score >= 13 && score <= 18 ? 'rgba(6, 182, 212, 0.1)' : 'transparent'}; border-radius: 4px; ${score >= 13 && score <= 18 ? 'border: 1px solid rgba(6, 182, 212, 0.3);' : ''}">
+                                <span style="color: var(--color-text-muted);">13-18 : Moyen superieur</span>
+                                <span style="color: #fbbf24;">Surveillance recommandee</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 0.5rem; background: ${score >= 19 && score <= 25 ? 'rgba(6, 182, 212, 0.1)' : 'transparent'}; border-radius: 4px; ${score >= 19 && score <= 25 ? 'border: 1px solid rgba(6, 182, 212, 0.3);' : ''}">
+                                <span style="color: var(--color-text-muted);">19-25 : Eleve</span>
+                                <span style="color: #fb923c;">Consultation recommandee</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 0.5rem; background: ${score >= 26 ? 'rgba(6, 182, 212, 0.1)' : 'transparent'}; border-radius: 4px; ${score >= 26 ? 'border: 1px solid rgba(6, 182, 212, 0.3);' : ''}">
+                                <span style="color: var(--color-text-muted);">26+ : Tres eleve</span>
+                                <span style="color: #f87171;">Consultation urgente</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Recommendations
+            const recommendationsDiv = document.getElementById('recommendations');
+            recommendationsDiv.innerHTML = `
+                <ul style="margin: 0; padding-left: 1.5rem; color: var(--color-text-muted);">
+                    ${interpretation.recommendations.map(rec => `<li style="margin-bottom: 0.5rem;">${rec}</li>`).join('')}
+                </ul>
+            `;
+
+            // Update details content
+            updateDetailsContent();
+        }
+
+        function updateDetailsContent() {
+            const detailsContent = document.getElementById('detailsContent');
+
+            let html = '<h3 style="margin-bottom: 1rem;">Detail des reponses par item</h3>';
+            html += '<div style="display: grid; gap: 0.5rem;">';
+
+            questions.forEach((question, index) => {
+                const answer = answers[index];
+                const answerText = answer !== null ? question.options[answer].text : 'Non repondu';
+                const scoreColor = answer === 0 ? '#4ade80' : (answer === 1 ? '#fbbf24' : '#f87171');
+                const isCritical = question.critical;
+
+                html += `
+                    <div style="padding: 0.75rem; background: var(--color-bg-card); border-radius: var(--radius-md); ${isCritical && answer > 0 ? 'border: 1px solid rgba(239, 68, 68, 0.3);' : ''}">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
+                            <div style="flex: 1;">
+                                <span style="font-weight: 600; color: var(--color-text-primary);">${index + 1}. ${question.theme}</span>
+                                ${isCritical ? '<span class="critical-badge" style="margin-left: 0.5rem;"><i class="fas fa-exclamation-triangle"></i></span>' : ''}
+                                <p style="font-size: 0.85rem; color: var(--color-text-muted); margin: 0.25rem 0 0 0;">${answerText}</p>
+                            </div>
+                            <span style="background: ${scoreColor}20; color: ${scoreColor}; padding: 0.25rem 0.75rem; border-radius: 9999px; font-weight: 600; font-size: 0.875rem;">${answer !== null ? answer : '-'}</span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += '</div>';
+
+            // Note about versions
+            html += `
+                <div class="info-box" style="margin-top: 1.5rem;">
+                    <h4 style="color: var(--color-primary-light); margin-bottom: 0.5rem;"><i class="fas fa-info-circle"></i> Note sur les versions</h4>
+                    <p style="margin: 0; font-size: 0.875rem;">Le CDI-2 existe en plusieurs versions :</p>
+                    <ul style="margin: 0.5rem 0 0 0; padding-left: 1.5rem; font-size: 0.875rem; color: var(--color-text-muted);">
+                        <li><strong>Auto-questionnaire (cette version)</strong> : rempli par l'enfant/adolescent</li>
+                        <li><strong>Version parent</strong> : rempli par les parents</li>
+                        <li><strong>Version enseignant</strong> : rempli par l'enseignant</li>
+                    </ul>
+                    <p style="margin: 0.5rem 0 0 0; font-size: 0.875rem;">Une evaluation multimodale combinant plusieurs versions est recommandee pour une evaluation complete.</p>
+                </div>
+            `;
+
+            detailsContent.innerHTML = html;
+        }
+
+        function toggleDetails() {
+            const content = document.getElementById('detailsContent');
+            const icon = document.getElementById('toggleIcon');
+            const isVisible = content.style.display !== 'none';
+
+            content.style.display = isVisible ? 'none' : 'block';
+            icon.innerHTML = isVisible ? '<i class="fas fa-chevron-down"></i>' : '<i class="fas fa-chevron-up"></i>';
+        }
+
+        function resetForm() {
+            answers = new Array(28).fill(null);
+
+            document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+            document.querySelectorAll('.question-card').forEach(card => card.classList.remove('answered'));
+
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('detailsContent').style.display = 'none';
+            document.getElementById('exportConsent').checked = false;
+            document.getElementById('criticalItemAlert').classList.remove('show');
+            document.getElementById('criticalResultAlert').classList.remove('show');
+
+            const criticalAlert = document.getElementById('criticalAlert8');
+            if (criticalAlert) {
+                criticalAlert.classList.remove('show');
+            }
+
+            document.getElementById('progressBar').style.width = '0%';
+            document.getElementById('progressText').textContent = '0/28';
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function importData() {
+            document.getElementById('fileInput').click();
+        }
+
+        function loadFile(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        if (data.answers && Array.isArray(data.answers)) {
+                            answers = data.answers;
+
+                            answers.forEach((value, index) => {
+                                if (value !== null) {
+                                    selectAnswer(index, value);
+                                }
+                            });
+                        }
+                    } catch (error) {
+                        alert("Erreur lors de l'importation du fichier");
+                    }
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        function exportData() {
+            const consent = document.getElementById('exportConsent').checked;
+            if (!consent) {
+                alert("Veuillez cocher la case de consentement avant d''exporter.");
+                return;
+            }
+
+            const score = calculateScore();
+            const interpretation = getInterpretation(score);
+
+            const itemDetails = questions.map((q, i) => ({
+                item: i + 1,
+                theme: q.theme,
+                response: answers[i],
+                responseText: answers[i] !== null ? q.options[answers[i]].text : null,
+                critical: q.critical || false
+            }));
+
+            const data = {
+                questionnaire: "CDI-2",
+                version: "Auto-questionnaire (7-17 ans)",
+                date: new Date().toISOString(),
+                answers: answers,
+                totalScore: score,
+                maxScore: 56,
+                interpretation: interpretation.level,
+                interpretationClass: interpretation.className,
+                criticalItemAlert: answers[8] > 0,
+                itemDetails: itemDetails
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `CDI-2_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeQuestions();
+        });
+    </script>
+</body>
+</html>
