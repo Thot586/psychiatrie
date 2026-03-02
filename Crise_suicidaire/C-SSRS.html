@@ -113,7 +113,7 @@
         <!-- Section 1: Idéation -->
         <section class="glass-card question-section active" id="ideationSection">
             <h2><i class="fas fa-brain"></i> Section 1 : Idéation suicidaire</h2>
-            <p style="margin-bottom: 1.5rem; opacity: 0.8;">Répondez selon la période sélectionnée.</p>
+            <p style="margin-bottom: 1.5rem; color: var(--color-text-muted);">Répondez selon la période sélectionnée.</p>
             <div id="ideationQuestions"></div>
             <button class="btn-primary next-btn" onclick="proceedToIntensity()" style="display: none;" id="intensityBtn">
                 <i class="fas fa-arrow-right"></i> Continuer vers l'intensité
@@ -123,7 +123,7 @@
         <!-- Section 2: Intensité -->
         <section class="glass-card question-section" id="intensitySection">
             <h2><i class="fas fa-chart-bar"></i> Section 2 : Intensité de l'idéation</h2>
-            <p style="margin-bottom: 1.5rem; opacity: 0.8;">Évaluez l'intensité de vos idées suicidaires.</p>
+            <p style="margin-bottom: 1.5rem; color: var(--color-text-muted);">Évaluez l'intensité de vos idées suicidaires.</p>
 
             <div class="question-card">
                 <span class="question-number">1</span>
@@ -193,7 +193,7 @@
         <!-- Section 3: Comportements -->
         <section class="glass-card question-section" id="behaviorSection">
             <h2><i class="fas fa-exclamation-circle"></i> Section 3 : Comportements suicidaires</h2>
-            <p style="margin-bottom: 1.5rem; opacity: 0.8;">Cette section évalue les comportements et actes préparatoires.</p>
+            <p style="margin-bottom: 1.5rem; color: var(--color-text-muted);">Cette section évalue les comportements et actes préparatoires.</p>
             <div id="behaviorQuestions"></div>
             <button class="btn-primary next-btn" onclick="calculateResults()">
                 <i class="fas fa-chart-pie"></i> Voir les résultats
@@ -314,7 +314,7 @@
                     <span class="question-number ${question.critical ? 'high-risk' : ''}">${index + 1}</span>
                     <div class="question-text">
                         ${question.text}
-                        ${question.examples ? `<div style="margin-top: 0.5rem; font-size: 0.9em; opacity: 0.7; font-style: italic;">${question.examples}</div>` : ''}
+                        ${question.examples ? `<div style="margin-top: 0.5rem; font-size: 0.9em; color: var(--color-text-muted); font-style: italic;">${question.examples}</div>` : ''}
                     </div>
                     <div class="options-binary">
                         <button class="option-btn" onclick="answerBehavior('${question.id}', false)">Non</button>

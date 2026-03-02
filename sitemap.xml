@@ -1,29 +1,682 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset
-      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
-            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-<!-- URL de la page d'accueil -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- Accueil -->
+<!-- ═══════════════════════════════════════════════════════ -->
 <url>
   <loc>https://thot586.github.io/psychiatrie/index.html</loc>
-  <lastmod>2025-06-22</lastmod>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>weekly</changefreq>
   <priority>1.00</priority>
 </url>
 
-<!-- URL de la page "Psychiatrie Intégrative" -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- TND - Troubles Neurodéveloppementaux (9 pages) -->
+<!-- ═══════════════════════════════════════════════════════ -->
 <url>
-  <loc>https://thot586.github.io/psychiatrie/Transculturelle/Psychiatrie_integrative.html</loc>
-  <lastmod>2025-06-22</lastmod>
+  <loc>https://thot586.github.io/psychiatrie/TND/Page_d_accueil.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
   <priority>0.80</priority>
 </url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/TND/AQ-50.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/TND/ASRS.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/TND/CAT-Q.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/TND/DIVA-5.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/TND/EQ.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/TND/RAADS-R.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/TND/SRS-2.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/TND/WURS-25.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
 
-<!-- URL de la page "Effets Contextuels" -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- Trouble de l'humeur (10 pages) -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trouble_de_l_humeur/Page_d_accueil.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trouble_de_l_humeur/Angst.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trouble_de_l_humeur/BDI-II.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trouble_de_l_humeur/HADS.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trouble_de_l_humeur/HCL-32.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trouble_de_l_humeur/MADRS.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trouble_de_l_humeur/MDQ.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trouble_de_l_humeur/PHQ-2.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trouble_de_l_humeur/PHQ-9.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trouble_de_l_humeur/YMRS.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- Troubles anxieux (7 pages) -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trouble_anxieux/Page_d_accueil.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trouble_anxieux/BAI.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trouble_anxieux/GAD-7.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trouble_anxieux/LSAS.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trouble_anxieux/PDSS.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trouble_anxieux/SPIN.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trouble_anxieux/Y-BOCS.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- Troubles de la personnalité (10 pages) -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trouble_de_la_personnalite/Page_d_accueil.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trouble_de_la_personnalite/BPQ.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trouble_de_la_personnalite/BSL-23.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trouble_de_la_personnalite/PBQ.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trouble_de_la_personnalite/PID-5-BF.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trouble_de_la_personnalite/SAPAS.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trouble_de_la_personnalite/TCD.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trouble_de_la_personnalite/Trouble_personnalite.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trouble_de_la_personnalite/ZAN-BPD.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trouble_de_la_personnalite/ysq-l3-questionnaire.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- Troubles d'usage de substance (12 pages) -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trouble_d_usage_substance/Page_d_accueil.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trouble_d_usage_substance/ASSIST.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trouble_d_usage_substance/AUDIT-C.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trouble_d_usage_substance/AUDIT.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trouble_d_usage_substance/CAST.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trouble_d_usage_substance/CRAFFT.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trouble_d_usage_substance/DAST-10.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trouble_d_usage_substance/Fagerstrom.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trouble_d_usage_substance/Interactions_substances.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trouble_d_usage_substance/Protocoles_sevrage.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trouble_d_usage_substance/Reduction_des_risques.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trouble_d_usage_substance/SDS.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- Trauma (4 pages) -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trauma/Page_d_accueil.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trauma/CTQ.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trauma/IES-R.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Trauma/PCL-5.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- Crise suicidaire (4 pages) -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Crise_suicidaire/Page_d_accueil.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Crise_suicidaire/C-SSRS.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Crise_suicidaire/Hospitalisation_Psy_crise_suicidaire.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.50</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Crise_suicidaire/RUD.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- Enfant et adolescent (9 pages) -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Enfant_ado/Page_d_accueil.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Enfant_ado/ADRS.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Enfant_ado/CDI-2.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Enfant_ado/Guidance_parentale.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.50</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Enfant_ado/Guide_parental_adolescence.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.50</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Enfant_ado/Guide_parental_ecran.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.50</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Enfant_ado/Guide_pour_parents_courageux.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.50</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Enfant_ado/SCARED.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Enfant_ado/SDQ.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- Réhabilitation (14 pages) -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Rehab/Page_d_accueil.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Rehab/BIS.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Rehab/Guide_Retablissement.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.50</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Rehab/MoCA.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Rehab/Mon_PSI.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Rehab/PSI%28QS%29.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Rehab/PSI.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Rehab/PSP.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Rehab/RAS.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Rehab/S-QoL.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Rehab/SERS.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Rehab/SFS.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Rehab/STORI.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Rehab/WHODAS.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- Guides et ressources (8 pages) -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Guides/Page_d_accueil.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Guides/BPSCE.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.50</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Guides/PSSM.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.50</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Guides/Strategies_coping.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.50</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Guides/Syndrome_d_epuisement_professionnel.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.50</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Guides/hygiene_sommeil.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.50</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Guides/profil_pro.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.50</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Guides/schemas_young.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.50</priority>
+</url>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- Cas cliniques (5 pages) -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Cas_Cliniques/Page_d_accueil.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Cas_Cliniques/milieu_carceral.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.50</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Cas_Cliniques/pedopsychiatrie.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.50</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Cas_Cliniques/psychiatrie_sujet_age.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.50</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Cas_Cliniques/urgences_psychiatriques.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.50</priority>
+</url>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- Psychose (5 pages) -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Psychose/Page_d_accueil.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Psychose/BPRS.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Psychose/CGI.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Psychose/PANSS.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Psychose/PQ-16.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
+</url>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- Transculturelle (2 pages) -->
+<!-- ═══════════════════════════════════════════════════════ -->
 <url>
   <loc>https://thot586.github.io/psychiatrie/Transculturelle/Effets_contextuels.html</loc>
-  <lastmod>2025-06-22</lastmod>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.50</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Transculturelle/Psychiatrie_integrative.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.50</priority>
+</url>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- Ressources de formation (3 pages) -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Ressources_Formation/Page_d_accueil.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
   <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Ressources_Formation/Guide_Question_Recherche.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.50</priority>
+</url>
+<url>
+  <loc>https://thot586.github.io/psychiatrie/Ressources_Formation/Testeur_Question.html</loc>
+  <lastmod>2026-03-02</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.50</priority>
 </url>
 
 </urlset>

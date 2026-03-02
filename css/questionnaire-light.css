@@ -820,9 +820,9 @@ body.light-questionnaire .case-tab.active-red    { color: #b91c1c; }
 /* Case-tab subtitle — visible en light mode (couleur muted trop pâle sinon) */
 body.light-questionnaire .case-tab p { color: var(--color-text-secondary); }
 
-/* Step-btn — sticky-header toujours sombre, conserver textes clairs en light mode */
-body.light-questionnaire .sticky-header .step-btn       { color: rgba(255, 255, 255, 0.65); }
-body.light-questionnaire .sticky-header .step-btn:hover { color: rgba(255, 255, 255, 0.95); }
+/* Step-btn — boutons avec fond blanc sur header sombre, texte sombre nécessaire */
+body.light-questionnaire .sticky-header .step-btn       { color: #64748b; }
+body.light-questionnaire .sticky-header .step-btn:hover { color: #1e293b; }
 
 /* Feature card icons — trop clairs sur fond blanc */
 body.light-questionnaire .feature-card.teal   h4 i { color: #0d9488; }

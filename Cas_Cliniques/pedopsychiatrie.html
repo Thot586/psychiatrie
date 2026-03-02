@@ -51,10 +51,17 @@
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--color-border);
             border-radius: var(--radius-lg);
-            color: var(--color-text-secondary);
             cursor: pointer;
             transition: all var(--transition-normal);
             font-weight: 500;
+        }
+
+        /* Spécificité 0,3,0 pour surcharger questionnaire-light.css */
+        body.light-questionnaire .sticky-header .step-btn {
+            color: #94a3b8;
+        }
+        body.light-questionnaire .sticky-header .step-btn:hover {
+            color: #cbd5e1;
         }
 
         .step-btn:hover {
@@ -64,7 +71,7 @@
 
         .step-btn.active {
             background: var(--cat-main);
-            color: white;
+            color: #0f172a;
             border-color: var(--cat-main);
         }
 
