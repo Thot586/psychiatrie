@@ -20,7 +20,7 @@ body.light-questionnaire {
     --color-text-primary: #1e293b;
     --color-text-secondary: #334155;
     --color-text-muted: #64748b;
-    --color-text-dimmed: #6b7280;
+    --color-text-dimmed: #5b6370;
 
     /* Borders */
     --color-border: rgba(0, 0, 0, 0.08);
@@ -32,13 +32,14 @@ body.light-questionnaire {
     --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
     --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.1);
 
-    /* Neomorphism — Light mode
-       --neo-raised / --neo-pressed are computed from these variables
-       so overriding them here automatically updates all neo components */
+    /* Neomorphism — Light mode */
     --neo-bg: #ffffff;
     --neo-bg-light: #f8fafc;
     --neo-shadow-dark: rgba(0, 0, 0, 0.10);
     --neo-shadow-light: rgba(255, 255, 255, 0.90);
+    --neo-raised: 5px 5px 10px var(--neo-shadow-dark), -5px -5px 10px var(--neo-shadow-light);
+    --neo-raised-lg: 8px 8px 16px var(--neo-shadow-dark), -8px -8px 16px var(--neo-shadow-light);
+    --neo-pressed: inset 4px 4px 8px var(--neo-shadow-dark), inset -4px -4px 8px var(--neo-shadow-light);
 
     /* Surface backgrounds — light mode */
     --surface-card: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(248, 250, 252, 0.95));
@@ -130,9 +131,11 @@ body.light-questionnaire .navigation-bar button {
    Glass Card — light version
    ======================================== */
 body.light-questionnaire .glass-card {
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.98));
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(248, 250, 252, 0.95));
     border: 1px solid var(--color-border);
     box-shadow: var(--shadow-md);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
 }
 
 body.light-questionnaire .glass-card:hover {

@@ -1047,7 +1047,13 @@ document.addEventListener('DOMContentLoaded', function() {
             btn.classList.toggle('active', btn.dataset.step == stepNum);
         });
         stepContents.forEach(content => {
-            content.classList.toggle('active', content.id === `step-${stepNum}`);
+            const isActive = content.id === `step-${stepNum}`;
+            content.classList.toggle('active', isActive);
+            if (isActive) {
+                content.classList.remove('fade-in');
+                void content.offsetWidth;
+                content.classList.add('fade-in');
+            }
         });
         progressFill.style.width = (stepNum * 20) + '%';
         updateCaseDisplay();

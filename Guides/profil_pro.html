@@ -55,6 +55,7 @@
             border-radius: var(--radius-xl);
             padding: 1.5rem;
             margin-bottom: 2rem;
+            box-shadow: var(--neo-raised-lg);
         }
 
         .intro-header {
@@ -106,6 +107,97 @@
             font-size: 0.9rem;
         }
 
+        .science-note {
+            background: linear-gradient(145deg, rgba(100, 116, 139, 0.12), rgba(100, 116, 139, 0.04));
+            border: 1px solid rgba(100, 116, 139, 0.3);
+            border-left: 4px solid #64748b;
+            border-radius: var(--radius-lg);
+            padding: 1rem 1.25rem;
+            margin-top: 1rem;
+        }
+        .science-note h3 {
+            color: #475569;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .science-note p {
+            color: var(--color-text-muted);
+            margin: 0;
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+        .science-note p + p {
+            margin-top: 0.5rem;
+        }
+
+        .references-section {
+            margin-top: 1.5rem;
+            border-top: 1px solid var(--color-border);
+            padding-top: 1rem;
+        }
+        .references-toggle {
+            background: none;
+            border: none;
+            color: #475569;
+            font-family: 'Lexend', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0;
+        }
+        .references-toggle:hover { color: #14b8a6; }
+        .references-toggle .icon {
+            transition: transform 0.3s ease;
+            font-size: 0.75rem;
+        }
+        .references-toggle.open .icon { transform: rotate(90deg); }
+        .references-list {
+            display: none;
+            padding: 1rem 0;
+        }
+        .references-list.visible { display: block; }
+        .references-list h4 {
+            color: #475569;
+            font-size: 0.85rem;
+            margin: 1rem 0 0.5rem 0;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .references-list h4:first-child { margin-top: 0; }
+        .references-list p {
+            color: var(--color-text-muted);
+            font-size: 0.8rem;
+            line-height: 1.6;
+            margin: 0.35rem 0;
+            padding-left: 2rem;
+            text-indent: -2rem;
+        }
+
+        /* Quiz */
+        .quiz-progress { margin-bottom: 1.5rem; }
+        .quiz-progress .progress-bar { height: 6px; background: var(--color-border); border-radius: 3px; margin-top: 0.5rem; }
+        .quiz-progress .progress-fill { height: 100%; background: linear-gradient(90deg, #14b8a6, #0d9488); border-radius: 3px; transition: width 0.3s ease; width: 0%; }
+        .quiz-question { background: var(--surface-card); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 1rem; box-shadow: var(--neo-raised); }
+        .quiz-question p { color: var(--color-text-primary); font-weight: 500; margin-bottom: 0.75rem; }
+        .quiz-poles { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--color-text-muted); margin-bottom: 0.35rem; }
+        .quiz-scale { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.35rem; }
+        .quiz-scale button { padding: 0.6rem 0.25rem; border-radius: var(--radius-lg); border: 1px solid var(--color-border); background: var(--color-bg-card, #fff); color: var(--color-text-muted); cursor: pointer; font-size: 0.85rem; min-height: 44px; transition: all 0.2s ease; box-shadow: var(--neo-raised); }
+        .quiz-scale button:hover { border-color: #14b8a6; color: #14b8a6; }
+        .quiz-scale button.selected { background: linear-gradient(135deg, #14b8a6, #0d9488); color: white; border-color: #14b8a6; box-shadow: var(--neo-pressed), 0 4px 12px rgba(20,184,166,0.3); }
+        .btn-quiz-submit { display: block; width: 100%; padding: 1rem; margin-top: 1.5rem; background: linear-gradient(135deg, #14b8a6, #0d9488); color: white; border: none; border-radius: var(--radius-lg); font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; box-shadow: var(--neo-raised); font-family: 'Lexend', sans-serif; }
+        .btn-quiz-submit:hover { transform: translateY(-2px); box-shadow: var(--neo-raised-lg); }
+        .btn-quiz-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .profile-result { background: var(--surface-card); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1rem; box-shadow: var(--neo-raised); text-align: center; }
+        .profile-result .result-icon { font-size: 3rem; margin-bottom: 0.5rem; }
+        .profile-result .result-title { font-size: 1.5rem; color: #14b8a6; font-family: 'Lexend', sans-serif; margin: 0; }
+        .profile-result .result-summary { color: var(--color-text-muted); font-style: italic; margin: 0.5rem 0; }
+        .profile-result .result-match { font-size: 0.85rem; color: var(--color-text-dimmed); }
+        .profile-result.complementary { border-top: 4px solid #fb923c; }
+        .profile-result.complementary .result-title { color: #fb923c; }
+
         /* Main layout grid */
         .main-grid {
             display: grid;
@@ -156,6 +248,7 @@
             border-radius: var(--radius-lg);
             overflow: hidden;
             transition: all 0.3s ease;
+            box-shadow: var(--neo-raised);
         }
 
         .accordion-header {
@@ -169,7 +262,8 @@
         }
 
         .accordion-header:hover {
-            background: rgba(20, 184, 166, 0.1);
+            background: rgba(20, 184, 166, 0.08);
+            box-shadow: var(--neo-raised-lg);
         }
 
         .accordion-header.active {
@@ -208,6 +302,8 @@
             padding: 1.5rem 2rem;
             min-height: 500px;
             scroll-margin-top: 20px;
+            box-shadow: var(--neo-raised-lg);
+            backdrop-filter: blur(4px);
         }
 
         /* Placeholder */
@@ -262,6 +358,10 @@
             margin: 0 auto 2rem;
             height: 80vw;
             max-height: 350px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--neo-pressed);
+            padding: 1rem;
         }
 
         @media (min-width: 768px) {
@@ -293,6 +393,13 @@
             padding: 1.5rem;
             display: flex;
             flex-direction: column;
+            box-shadow: var(--neo-raised-lg);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 8px 8px 20px var(--neo-shadow-dark), -8px -8px 20px var(--neo-shadow-light);
         }
 
         .profile-header {
@@ -338,6 +445,7 @@
             color: var(--color-text-muted);
             cursor: pointer;
             transition: all 0.2s ease;
+            box-shadow: var(--neo-raised);
         }
 
         .profile-tab:hover {
@@ -350,7 +458,7 @@
             color: white;
             border-color: #14b8a6;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(20, 184, 166, 0.3);
+            box-shadow: var(--neo-pressed), 0 4px 12px rgba(20, 184, 166, 0.3);
         }
 
         .profile-tab.tab-inactive {
@@ -499,9 +607,7 @@
             <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
         </div>
         <h1>Explorateur des Profils Professionnels</h1>
-        <button onclick="window.print()" class="btn-secondary" style="padding: 0.5rem 1rem;">
-            <i class="fas fa-print"></i> Imprimer
-        </button>
+        <span class="badge badge-guides">Guides</span>
     </nav>
 
     <div class="main-container">
@@ -522,7 +628,58 @@
                     <h3><i class="fas fa-exclamation-triangle"></i> Avertissement : Des archétypes, pas des boîtes</h3>
                     <p>Ces profils sont des <strong>archétypes</strong>, pas des étiquettes. Un individu est infiniment plus complexe. Utilisez cet outil non pas comme un diagnostic, mais comme un <strong>point de départ pour le dialogue</strong> et une meilleure compréhension mutuelle.</p>
                 </div>
+
+                <div class="science-note">
+                    <h3><i class="fas fa-microscope"></i> Note méthodologique — Circularité et limites des typologies</h3>
+                    <p>Toute typologie fondée sur des traits comporte un risque de <strong>raisonnement circulaire</strong> : un comportement sert à définir un profil, puis ce profil est invoqué pour « expliquer » le même comportement (Cervone, 2005). Par exemple, dire qu'une personne est un « Plongeur Analytique » <em>parce qu'elle</em> analyse les données en détail, puis expliquer qu'elle analyse les données en détail <em>parce qu'elle est</em> un Plongeur Analytique, ne constitue pas une explication causale — c'est une description reformulée. Les profils présentés ici sont des <strong>outils descriptifs</strong>, non des explications causales du comportement.</p>
+                </div>
+
+                <div class="science-note">
+                    <h3><i class="fas fa-balance-scale"></i> Effet Barnum (Forer, 1949)</h3>
+                    <p>Les descriptions de personnalité formulées de manière suffisamment large peuvent paraître étonnamment « justes » pour presque tout le monde — c'est l'<strong>effet Barnum</strong>. Si vous vous reconnaissez dans plusieurs profils simultanément, c'est normal et attendu : cela reflète à la fois la complexité réelle de votre fonctionnement <em>et</em> la tendance naturelle à projeter du sens dans des descriptions génériques.</p>
+                    <p>Testez votre impression : montrez la description d'un profil à un collègue sans lui dire lequel c'est — s'il s'y reconnaît aussi, l'effet Barnum est probablement à l'œuvre.</p>
+                </div>
+
+                <div class="science-note">
+                    <h3><i class="fas fa-brain"></i> Neurodiversité et profils cognitifs (Psychiatrie)</h3>
+                    <p>Les archétypes présentés ici recoupent partiellement des profils cognitifs décrits en psychiatrie. Le style analytique du « Plongeur » partage des traits avec le profil de <strong>systemizing élevé</strong> (Baron-Cohen, 2009), fréquent dans les troubles du spectre autistique. L'énergie du « Pionnier » évoque la <strong>recherche de nouveauté</strong> (<em>novelty seeking</em>) associée au TDAH (Barkley, 1997). Ces parallèles ne sont pas des diagnostics — ils illustrent que la <strong>neurodiversité est un continuum</strong> dont les profils professionnels ne sont qu'une facette.</p>
+                </div>
+
+                <div class="science-note">
+                    <h3><i class="fas fa-users"></i> Construction sociale des profils (Sociologie, Psychologie sociale)</h3>
+                    <p>Les styles cognitifs ne sont pas purement innés : ils sont façonnés par l'<strong>habitus professionnel</strong> (Bourdieu, 1979) — l'ensemble des dispositions acquises au fil de la socialisation, de la formation et de l'expérience. L'identité au travail se construit dans l'interaction avec les pairs et la hiérarchie (Sainsaulieu, 1977). Attribuer un profil à un collègue comporte un risque de <strong>biais de confirmation</strong> et de catégorisation intergroupes (Tajfel & Turner, 1979) : une fois étiquetée, une personne peut être réduite à son archétype. Par ailleurs, la valorisation de certains profils varie selon les cultures : le « Pilote Orienté Tâche » est prisé dans les cultures individualistes mais peut être perçu comme autoritaire dans les cultures collectivistes (Hofstede, 2001).</p>
+                </div>
+
+                <div class="science-note">
+                    <h3><i class="fas fa-ruler-combined"></i> Limites psychométriques</h3>
+                    <p>Le questionnaire ci-dessous est un <strong>outil exploratoire non validé psychométriquement</strong>. Il n'a pas fait l'objet d'études de fidélité (test-retest, cohérence interne α de Cronbach) ni de validité de construit (analyses factorielles confirmatoires). Conformément aux <em>Standards for Educational and Psychological Testing</em> (APA, AERA, NCME, 2014), tout instrument doit être interprété à la lumière de ses propriétés psychométriques. Les résultats sont <strong>indicatifs et non diagnostiques</strong>.</p>
+                </div>
             </div>
+        </section>
+
+        <section id="quiz" class="intro-card">
+            <h2><i class="fas fa-compass"></i> Découvrez votre profil</h2>
+            <p style="color: var(--color-text-muted);">Positionnez-vous sur 16 situations professionnelles entre deux pôles. Il n'y a pas de bonne ou mauvaise réponse.</p>
+            <div class="quiz-progress">
+                <span id="quiz-progress-text" style="font-size: 0.85rem; color: var(--color-text-dimmed);">0 / 16 réponses</span>
+                <div class="progress-bar"><div class="progress-fill" id="quiz-progress-fill"></div></div>
+            </div>
+            <div id="quiz-questions"></div>
+            <button class="btn-quiz-submit" id="quiz-submit" onclick="submitQuiz()" disabled>
+                <i class="fas fa-chart-line"></i> Découvrir mon profil
+            </button>
+        </section>
+
+        <section id="quiz-results" class="intro-card" style="display: none;">
+            <h2><i class="fas fa-star"></i> Votre profil cognitif</h2>
+            <div class="chart-container" style="max-width: 450px; height: 350px; margin: 0 auto 2rem;">
+                <canvas id="userChart"></canvas>
+            </div>
+            <div id="dominant-profile" class="profile-result"></div>
+            <div id="complementary-profile" class="profile-result complementary"></div>
+            <button class="btn-quiz-submit" onclick="document.querySelector('.main-grid').scrollIntoView({behavior:'smooth'})">
+                <i class="fas fa-book-open"></i> Explorer tous les profils en détail
+            </button>
         </section>
 
         <main class="main-grid">
@@ -564,6 +721,52 @@
                 </div>
             </div>
         </div>
+
+        <div class="references-section">
+            <button class="references-toggle" onclick="toggleReferences()">
+                <span class="icon"><i class="fas fa-caret-right"></i></span>
+                <i class="fas fa-book"></i> Références scientifiques
+            </button>
+            <div id="references-list" class="references-list">
+                <h4>Fondements théoriques</h4>
+                <p>Barrick, M. R., & Mount, M. K. (1991). The Big Five personality dimensions and job performance: A meta-analysis. <em>Personnel Psychology</em>, <em>44</em>(1), 1–26. https://doi.org/10.1111/j.1744-6570.1991.tb00688.x</p>
+                <p>Blake, R. R., & Mouton, J. S. (1964). <em>The managerial grid: Key orientations for achieving production through people</em>. Gulf Publishing.</p>
+                <p>Costa, P. T., Jr., & McCrae, R. R. (1992). <em>Revised NEO Personality Inventory (NEO-PI-R) and NEO Five-Factor Inventory (NEO-FFI) professional manual</em>. Psychological Assessment Resources.</p>
+                <p>Guilford, J. P. (1967). <em>The nature of human intelligence</em>. McGraw-Hill.</p>
+                <p>Kahneman, D. (2011). <em>Thinking, fast and slow</em>. Farrar, Straus and Giroux.</p>
+                <p>Kirton, M. J. (2003). <em>Adaption-innovation: In the context of diversity and change</em>. Routledge.</p>
+
+                <h4>Méta-analyses et validations</h4>
+                <p>Cropley, A. (2006). In praise of convergent thinking. <em>Creativity Research Journal</em>, <em>18</em>(3), 391–404. https://doi.org/10.1207/s15326934crj1803_13</p>
+                <p>Judge, T. A., Piccolo, R. F., & Ilies, R. (2004). The forgotten ones? The validity of consideration and initiating structure in leadership research. <em>Journal of Applied Psychology</em>, <em>89</em>(1), 36–51. https://doi.org/10.1037/0021-9010.89.1.36</p>
+                <p>Salgado, J. F. (1997). The five factor model of personality and job performance in the European Community. <em>Journal of Applied Psychology</em>, <em>82</em>(1), 30–43. https://doi.org/10.1037/0021-9010.82.1.30</p>
+
+                <h4>Limites méthodologiques (circularité, effet Barnum)</h4>
+                <p>Block, J. (2010). The five-factor framing of personality and beyond: Some ruminations. <em>Psychological Inquiry</em>, <em>21</em>(1), 2–25. https://doi.org/10.1080/10478401003596626</p>
+                <p>Cervone, D. (2005). Personality architecture: Within-person structures and processes. <em>Annual Review of Psychology</em>, <em>56</em>, 423–452. https://doi.org/10.1146/annurev.psych.56.091103.070229</p>
+                <p>Fleeson, W., & Jayawickreme, E. (2015). Whole Trait Theory. <em>Journal of Research in Personality</em>, <em>56</em>, 82–92. https://doi.org/10.1016/j.jrp.2014.10.009</p>
+                <p>Forer, B. R. (1949). The fallacy of personal validation: A classroom demonstration of gullibility. <em>The Journal of Abnormal and Social Psychology</em>, <em>44</em>(1), 118–123. https://doi.org/10.1037/h0059240</p>
+                <p>Meehl, P. E. (1956). Wanted—A good cookbook. <em>American Psychologist</em>, <em>11</em>(6), 263–272. https://doi.org/10.1037/h0044164</p>
+
+                <h4>Psychiatrie et neurodiversité</h4>
+                <p>Barkley, R. A. (1997). Behavioral inhibition, sustained attention, and executive functions. <em>Psychological Bulletin</em>, <em>121</em>(1), 65–94. https://doi.org/10.1037/0033-2909.121.1.65</p>
+                <p>Baron-Cohen, S. (2009). Autism: The empathizing-systemizing (E-S) theory. <em>Annals of the New York Academy of Sciences</em>, <em>1156</em>, 68–80. https://doi.org/10.1111/j.1749-6632.2009.04467.x</p>
+
+                <h4>Psychologie organisationnelle</h4>
+                <p>Ashton, M. C., & Lee, K. (2007). Empirical, theoretical, and practical advantages of the HEXACO model. <em>Personality and Social Psychology Review</em>, <em>11</em>(2), 150–166. https://doi.org/10.1177/1088868306294907</p>
+                <p>Holland, J. L. (1997). <em>Making vocational choices</em> (3rd ed.). Psychological Assessment Resources.</p>
+                <p>Wilmot, M. P., & Ones, D. S. (2019). A century of research on conscientiousness at work. <em>PNAS</em>, <em>116</em>(46), 23004–23010. https://doi.org/10.1073/pnas.1908430116</p>
+
+                <h4>Sociologie, anthropologie et psychologie sociale</h4>
+                <p>Bourdieu, P. (1979). <em>La distinction : Critique sociale du jugement</em>. Minuit.</p>
+                <p>Hofstede, G. (2001). <em>Culture's consequences</em> (2nd ed.). Sage.</p>
+                <p>Sainsaulieu, R. (1977). <em>L'identité au travail</em>. Presses de Sciences Po.</p>
+                <p>Tajfel, H., & Turner, J. C. (1979). An integrative theory of intergroup conflict. In W. G. Austin & S. Worchel (Eds.), <em>The social psychology of intergroup relations</em> (pp. 33–47). Brooks/Cole.</p>
+
+                <h4>Psychométrie</h4>
+                <p>American Educational Research Association, American Psychological Association, & National Council on Measurement in Education. (2014). <em>Standards for educational and psychological testing</em>.</p>
+            </div>
+        </div>
     </footer>
 
     </div>
@@ -580,7 +783,7 @@
                 plongeur: {
                     title: "Le Plongeur Analytique", summary: "Apporte rigueur et précision pour réduire les risques.", icon: '🔬', chartData: [9, 2, 8, 3, 7, 4, 3, 8],
                     details: {
-                        fonctionnement: "Aborde les problèmes avec logique, données factuelles et une pensée convergente. Décompose, analyse et évalue de manière critique pour identifier la solution la plus juste.",
+                        fonctionnement: "Aborde les problèmes avec logique, données factuelles et une pensée convergente (Guilford, 1967). Décompose, analyse et évalue de manière critique pour identifier la solution la plus juste. Ce style partage des traits avec le profil de systemizing élevé décrit par Baron-Cohen (2009).",
                         forces: "Attention méticuleuse aux détails, capacité à identifier des tendances dans les données, démarche structurée qui apporte clarté et discipline, rôle de 'garde-fou'.",
                         limites: "Risque de 'paralyse par l'analyse', peut être perçu comme rigide ou excessivement critique, peut négliger les dimensions humaines et émotionnelles.",
                         leviers: "Développer la flexibilité cognitive et la métacognition ('Quelle est l'information minimale viable?'). Pour l'équipe : fournir des données claires, fixer des délais et valoriser sa rigueur."
@@ -589,7 +792,7 @@
                 explorateur: {
                     title: "L'Explorateur Divergent", summary: "Génère des options et stimule l'innovation.", icon: '💡', chartData: [2, 9, 3, 8, 4, 6, 8, 2],
                     details: {
-                        fonctionnement: "Générateur d'idées dont la pensée divergente produit une grande quantité d'options variées. À l'aise avec l'ambiguïté, la nouveauté et les approches non conventionnelles.",
+                        fonctionnement: "Générateur d'idées dont la pensée divergente (Guilford, 1967) produit une grande quantité d'options variées — fluence, flexibilité, originalité. À l'aise avec l'ambiguïté, la nouveauté et les approches non conventionnelles.",
                         forces: "Moteur de l'innovation et de la créativité, capacité à aborder les problèmes sous des angles nouveaux, prévention de la pensée de groupe ('groupthink').",
                         limites: "Difficulté à se concentrer sur l'exécution d'une seule tâche, idées parfois perçues comme irréalistes, risque d'ennui dans des environnements très structurés.",
                         leviers: "Apprendre à faire le pont entre divergence et convergence (ex: mind mapping). Pour l'équipe : créer un environnement psychologiquement sûr, utiliser des techniques de brainstorming."
@@ -598,7 +801,7 @@
                 architecte: {
                     title: "L'Architecte Méthodique", summary: "Transforme les stratégies en plans d'action concrets.", icon: '🏗️', chartData: [8, 3, 9, 2, 9, 5, 2, 9],
                     details: {
-                        fonctionnement: "Incarnation de la haute Conscienciosité. Son mode opératoire est défini par l'organisation, la fiabilité, la planification et un souci constant du détail. Prise de décision délibérée (Système 2).",
+                        fonctionnement: "Fonctionne selon un registre que la recherche en psychologie de la personnalité associe à une haute Conscienciosité (Costa & McCrae, 1992) — le facteur le plus robuste pour prédire la performance professionnelle (Barrick & Mount, 1991). Son mode opératoire est défini par l'organisation, la fiabilité, la planification et un souci constant du détail.",
                         forces: "Fiabilité, haute qualité d'exécution, excelle dans l'organisation de projets complexes, persévérance et autodiscipline. Prédicteur le plus robuste de la performance au travail.",
                         limites: "Peut être rigide et résistant au changement, difficulté face à l'ambiguïté, risque de micro-management, stressé par les situations chaotiques.",
                         leviers: "Accroître sa flexibilité (ex: planifier l'imprévu), s'entraîner à la délégation. Pour l'équipe : communiquer les changements en amont, l'impliquer dans la création des plans."
@@ -607,7 +810,7 @@
                 navigateur: {
                     title: "Le Navigateur Intuitif", summary: "Prend des décisions rapides dans l'incertitude.", icon: '🧭', chartData: [3, 7, 2, 9, 5, 8, 7, 3],
                     details: {
-                        fonctionnement: "Prend des décisions rapides basées sur des 'pressentiments' (reconnaissance de schémas non-consciente). Pensée de Système 1 : rapide, automatique, holistique. Capte les signaux faibles.",
+                        fonctionnement: "Prend des décisions rapides basées sur des 'pressentiments' (reconnaissance de schémas non-consciente). Ce mode est souvent associé à ce que Kahneman (2011) appelle le Système 1, bien que cette dichotomie soit une simplification heuristique — en réalité, intuition et analyse s'entremêlent constamment. Capte les signaux faibles.",
                         forces: "Vitesse de décision, excellente gestion de l'ambiguïté, forte intelligence interpersonnelle, capable de synthétiser des informations complexes de manière holistique.",
                         limites: "Difficulté à justifier ses décisions de manière factuelle, vulnérable aux biais cognitifs, peut être perçu comme impulsif ou irrationnel.",
                         leviers: "Pratiquer la métacognition (ex: tenir un 'journal de décisions'). Pour l'équipe : faire confiance à son jugement, l'encourager à expliciter les signaux faibles qu'il perçoit."
@@ -625,7 +828,7 @@
                 catalyseur: {
                     title: "Le Catalyseur Social", summary: "Construit la confiance et facilite la communication.", icon: '❤️‍🔥', chartData: [4, 6, 3, 5, 2, 9, 6, 5],
                     details: {
-                        fonctionnement: "Associé à une haute Agréabilité. Attention tournée vers l'harmonie du groupe, la cohésion et le bien-être. Privilégie la collaboration, la coopération et le consensus.",
+                        fonctionnement: "Associé à ce que le modèle des Big Five appelle une haute Agréabilité, bien que ce facteur soit le moins prédictif de la performance professionnelle — il est davantage lié à la satisfaction relationnelle et à la cohésion d'équipe (Salgado, 1997). Attention tournée vers l'harmonie du groupe et le bien-être. Privilégie la collaboration, la coopération et le consensus.",
                         forces: "Exceptionnel pour créer une forte cohésion d'équipe et un environnement psychologiquement sûr, excellent médiateur, favorise une communication ouverte et durable.",
                         limites: "Réticent à prendre des décisions impopulaires ou à donner un feedback critique, peut manquer d'assertivité, risque d'être exploité ou de ne pas défendre ses propres intérêts.",
                         leviers: "Apprendre à distinguer 'être gentil' de 'être efficace'. S'entraîner au feedback constructif et à dire 'non'. Pour l'équipe : reconnaître son rôle de 'glue' sociale, le coacher pour développer son assertivité."
@@ -634,7 +837,7 @@
                 pionnier: {
                     title: "Le Pionnier Adaptatif", summary: "Agit comme un agent du changement et explore de nouvelles opportunités.", icon: '🚀', chartData: [3, 8, 4, 7, 5, 6, 9, 2],
                     details: {
-                        fonctionnement: "Associé à une haute Ouverture à l'expérience. Curieux, imaginatif, attiré par la nouveauté. Perçoit le changement comme une opportunité stimulante.",
+                        fonctionnement: "Associé à une haute Ouverture à l'Expérience (Costa & McCrae, 1992) et à la recherche de nouveauté (Barkley, 1997). Curieux, imaginatif, attiré par la nouveauté. Perçoit le changement comme une opportunité stimulante. La valorisation de ce profil varie selon les contextes culturels (Hofstede, 2001).",
                         forces: "Capacité d'adaptation exceptionnelle, moteur pour l'innovation, apprend et se développe continuellement tout au long de sa carrière.",
                         limites: "Aversion pour la routine, peut manquer de discipline pour les tâches répétitives, peut être perçu comme manquant de pragmatisme, son appétit pour le changement peut être déstabilisant.",
                         leviers: "Apprendre à valoriser aussi les phases d'exécution. S'associer à des profils plus structurés. Pour l'équipe : le positionner comme agent du changement, lui donner des objectifs clairs."
@@ -643,7 +846,7 @@
                 stabilisateur: {
                     title: "Le Stabilisateur Prudent", summary: "Assure la qualité, la fiabilité et la continuité.", icon: '⚓', chartData: [7, 2, 7, 3, 6, 4, 2, 9],
                     details: {
-                        fonctionnement: "Faible Ouverture à l'expérience. Préférence pour les routines, les traditions et les méthodes éprouvées. Pragmatique, concret, se sent en sécurité dans des environnements prévisibles.",
+                        fonctionnement: "Fonctionne dans un registre que la littérature associe à une Ouverture à l'Expérience modérée — ce qui, loin d'être un déficit, est associé à la fiabilité, la constance et l'ancrage pragmatique (Kirton, 2003). Préférence pour les routines, les traditions et les méthodes éprouvées. Se sent en sécurité dans des environnements prévisibles.",
                         forces: "Fiabilité et constance dans l'exécution, garantit la continuité et la qualité, excellent pour optimiser les systèmes, apporte un point de vue pragmatique qui sert de contrepoids.",
                         limites: "Potentielle résistance au changement, peut paraître rigide ou fermé, risque de désengagement si les changements sont trop rapides ou mal expliqués.",
                         leviers: "Travailler sa perception du changement, se concentrer sur les bénéfices concrets. Pour l'équipe : communiquer le 'pourquoi' du changement, l'impliquer dans l'amélioration des processus."
@@ -652,11 +855,156 @@
             }
         };
 
+        // ===== Quiz d'auto-positionnement =====
+        const quizQuestions = [
+            { axis: 0, poleA: "Analyser en détail", poleB: "Explorer largement", text: "Face à un nouveau projet, je préfère..." },
+            { axis: 0, poleA: "Une seule bonne solution", poleB: "Plusieurs options ouvertes", text: "Je suis plus à l'aise quand je cherche..." },
+            { axis: 0, poleA: "Approfondir un sujet", poleB: "Connecter des domaines différents", text: "Mon énergie intellectuelle va naturellement vers..." },
+            { axis: 0, poleA: "Des données vérifiées", poleB: "Des idées nouvelles même incertaines", text: "Je fais davantage confiance à..." },
+            { axis: 1, poleA: "Planifier avant d'agir", poleB: "Ajuster en cours de route", text: "Ma façon de travailler naturelle est de..." },
+            { axis: 1, poleA: "Un plan détaillé", poleB: "Mon intuition du moment", text: "Pour prendre une décision, je m'appuie sur..." },
+            { axis: 1, poleA: "Anticiper les risques", poleB: "Saisir les opportunités", text: "Ma priorité face à l'incertitude est de..." },
+            { axis: 1, poleA: "Respecter le processus", poleB: "Improviser selon le contexte", text: "En réunion, je suis plutôt celui/celle qui veut..." },
+            { axis: 2, poleA: "Les résultats d'abord", poleB: "Les relations d'abord", text: "Dans un projet d'équipe, je privilégie..." },
+            { axis: 2, poleA: "Être direct et efficace", poleB: "Être diplomate et inclusif", text: "Ma communication tend à..." },
+            { axis: 2, poleA: "La clarté des objectifs", poleB: "La cohésion du groupe", text: "Ce qui m'importe le plus dans une équipe, c'est..." },
+            { axis: 2, poleA: "Trancher rapidement", poleB: "Chercher le consensus", text: "Face à un désaccord en équipe, je préfère..." },
+            { axis: 3, poleA: "Changer et innover", poleB: "Optimiser l'existant", text: "Mon réflexe face à un processus établi est de..." },
+            { axis: 3, poleA: "Stimulant", poleB: "Déstabilisant", text: "Je trouve le changement plutôt..." },
+            { axis: 3, poleA: "Les possibilités futures", poleB: "Les acquis concrets", text: "Ce qui me motive le plus, ce sont..." },
+            { axis: 3, poleA: "L'exploration de l'inconnu", poleB: "La maîtrise de mon domaine", text: "Je tire le plus de satisfaction de..." }
+        ];
+        const quizAnswers = new Array(16).fill(null);
+        let userChartInstance = null;
+
+        function renderQuiz() {
+            const container = document.getElementById('quiz-questions');
+            container.innerHTML = quizQuestions.map((q, i) => `
+                <div class="quiz-question">
+                    <p>${i + 1}. ${q.text}</p>
+                    <div class="quiz-poles"><span>← ${q.poleA}</span><span>${q.poleB} →</span></div>
+                    <div class="quiz-scale">
+                        ${[1,2,3,4,5,6,7].map(v => `<button type="button" onclick="selectQuizAnswer(${i}, ${v})" id="q${i}_v${v}">${v}</button>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function selectQuizAnswer(questionIndex, value) {
+            quizAnswers[questionIndex] = value;
+            for (let v = 1; v <= 7; v++) {
+                const btn = document.getElementById(`q${questionIndex}_v${v}`);
+                btn.classList.toggle('selected', v === value);
+            }
+            const answered = quizAnswers.filter(a => a !== null).length;
+            document.getElementById('quiz-progress-text').textContent = `${answered} / 16 réponses`;
+            document.getElementById('quiz-progress-fill').style.width = `${(answered / 16) * 100}%`;
+            document.getElementById('quiz-submit').disabled = answered < 16;
+        }
+
+        function submitQuiz() {
+            const axisScores = [0, 1, 2, 3].map(axis => {
+                const questions = quizAnswers.filter((_, i) => quizQuestions[i].axis === axis);
+                return questions.reduce((sum, v) => sum + v, 0) / questions.length;
+            });
+
+            // Axe scores → 8 radar dimensions
+            // [Rigueur, Créativité, Planification, Agilité, Focus Tâche, Focus Relation, Adaptabilité, Stabilité]
+            const s = axisScores.map(v => v / 7 * 10); // normalize to 0-10
+            const userData = [
+                10 - s[0],  // Rigueur (inverse axe1: low=analytique=rigoureux)
+                s[0],       // Créativité (high axe1=explorateur=créatif)
+                10 - s[1],  // Planification (inverse axe2: low=architecte=planificateur)
+                s[1],       // Agilité (high axe2=navigateur=agile)
+                10 - s[2],  // Focus Tâche (inverse axe3: low=pilote=tâche)
+                s[2],       // Focus Relation (high axe3=catalyseur=relation)
+                s[3],       // Adaptabilité (high axe4: poleA=changer → inverse: low=adaptable... wait)
+                10 - s[3]   // Stabilité
+            ];
+            // Fix axe4: poleA="Changer et innover" scores LOW (1) for stabilisateur, HIGH (7) for stabilisateur on poleB
+            // So low score = innovateur/adaptable, high score = stable
+            // Adaptabilité = 10 - s[3], Stabilité = s[3]
+            userData[6] = 10 - s[3]; // Adaptabilité (low score on axe4 = changement-oriented)
+            userData[7] = s[3];      // Stabilité (high score on axe4 = stability-oriented)
+
+            // Find dominant profile by correlation
+            const profiles = Object.entries(profilsData.profiles);
+            let bestMatch = null, bestCorr = -Infinity;
+            let worstMatch = null, worstCorr = Infinity;
+            profiles.forEach(([id, profile]) => {
+                let corr = 0;
+                for (let i = 0; i < 8; i++) corr += userData[i] * profile.chartData[i];
+                if (corr > bestCorr) { bestCorr = corr; bestMatch = id; }
+                if (corr < worstCorr) { worstCorr = corr; worstMatch = id; }
+            });
+
+            // Find complementary (opposite pole on dominant axis)
+            const dominant = profilsData.profiles[bestMatch];
+            const dominantAxis = profilsData.axes.find(a => a.profiles.includes(bestMatch));
+            const complementaryId = dominantAxis.profiles.find(p => p !== bestMatch);
+            const complementary = profilsData.profiles[complementaryId];
+
+            // Show results
+            document.getElementById('quiz').style.display = 'none';
+            const resultsEl = document.getElementById('quiz-results');
+            resultsEl.style.display = 'block';
+            resultsEl.classList.add('fade-in');
+
+            document.getElementById('dominant-profile').innerHTML = `
+                <div class="result-icon">${dominant.icon}</div>
+                <h3 class="result-title">${dominant.title}</h3>
+                <p class="result-summary">"${dominant.summary}"</p>
+                <p class="result-match">Profil dominant — ${dominantAxis.title}</p>
+                <p style="font-size: 0.8rem; color: var(--color-text-dimmed); margin-top: 0.75rem; font-style: italic;">Rappel : ce résultat est exploratoire. Il reflète vos réponses à un instant donné, pas un trait stable. Les profils sont des archétypes simplificateurs — votre fonctionnement réel est plus nuancé et dépend du contexte (Fleeson & Jayawickreme, 2015).</p>
+            `;
+
+            document.getElementById('complementary-profile').innerHTML = `
+                <div class="result-icon">${complementary.icon}</div>
+                <h3 class="result-title">Binôme complémentaire : ${complementary.title}</h3>
+                <p class="result-summary">"${complementary.summary}"</p>
+                <p class="result-match">Collaborer avec ce profil enrichit votre approche</p>
+            `;
+
+            // User radar chart
+            const ctx = document.getElementById('userChart').getContext('2d');
+            if (userChartInstance) userChartInstance.destroy();
+            userChartInstance = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: chartLabels,
+                    datasets: [
+                        { label: 'Votre profil', data: userData.map(v => Math.round(v * 10) / 10),
+                          backgroundColor: 'rgba(20, 184, 166, 0.25)', borderColor: 'rgba(20, 184, 166, 1)',
+                          pointBackgroundColor: 'rgba(20, 184, 166, 1)', pointBorderColor: '#fff', borderWidth: 2 },
+                        { label: dominant.title, data: dominant.chartData,
+                          backgroundColor: 'rgba(251, 146, 60, 0.15)', borderColor: 'rgba(251, 146, 60, 0.8)',
+                          pointBackgroundColor: 'rgba(251, 146, 60, 0.8)', borderWidth: 1, borderDash: [5, 5] }
+                    ]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: { r: {
+                        angleLines: { color: 'rgba(0, 0, 0, 0.1)' },
+                        grid: { color: 'rgba(0, 0, 0, 0.1)' },
+                        pointLabels: { font: { size: 11, weight: 600, family: 'Inter' }, color: '#334155' },
+                        ticks: { backdropColor: 'rgba(255, 255, 255, 0.85)', color: '#64748b', stepSize: 2 },
+                        suggestedMin: 0, suggestedMax: 10
+                    }},
+                    plugins: {
+                        legend: { position: 'top', labels: { font: { family: 'Inter' }, color: '#334155' } }
+                    }
+                }
+            });
+
+            resultsEl.scrollIntoView({ behavior: 'smooth' });
+        }
+
         let chartInstance = null;
         const chartLabels = ['Rigueur', 'Créativité', 'Planification', 'Agilité', 'Focus Tâche', 'Focus Relation', 'Adaptabilité', 'Stabilité'];
 
         document.addEventListener('DOMContentLoaded', () => {
             renderAccordion();
+            renderQuiz();
         });
 
         function renderAccordion() {
@@ -706,6 +1054,9 @@
             const detailsContainer = document.getElementById('axis-details-container');
             detailsContainer.classList.add('visible');
             detailsContainer.style.display = 'block';
+            detailsContainer.classList.remove('fade-in');
+            void detailsContainer.offsetWidth;
+            detailsContainer.classList.add('fade-in');
 
             const axis = profilsData.axes.find(a => a.id === axisId);
             const [profile1Id, profile2Id] = axis.profiles;
@@ -812,15 +1163,15 @@
                     responsive: true, maintainAspectRatio: false,
                     scales: {
                         r: {
-                            angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
-                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                            pointLabels: { font: { size: 12, family: 'Inter' }, color: '#94a3b8' },
-                            ticks: { backdropColor: 'rgba(15, 23, 42, 0.75)', color: '#64748b', stepSize: 2 },
+                            angleLines: { color: 'rgba(0, 0, 0, 0.1)' },
+                            grid: { color: 'rgba(0, 0, 0, 0.1)' },
+                            pointLabels: { font: { size: 12, weight: 600, family: 'Inter' }, color: '#334155' },
+                            ticks: { backdropColor: 'rgba(255, 255, 255, 0.85)', color: '#64748b', stepSize: 2 },
                             suggestedMin: 0, suggestedMax: 10
                         }
                     },
                     plugins: {
-                        legend: { position: 'top', labels: { font: { family: 'Inter' }, color: '#e2e8f0' } },
+                        legend: { position: 'top', labels: { font: { family: 'Inter' }, color: '#334155' } },
                         tooltip: { bodyFont: { family: 'Inter' }, titleFont: { family: 'Lexend' } }
                     }
                 }
@@ -837,6 +1188,13 @@
                 content.style.display = 'none';
                 icon.textContent = '+';
             }
+        }
+
+        function toggleReferences() {
+            const list = document.getElementById('references-list');
+            const btn = document.querySelector('.references-toggle');
+            list.classList.toggle('visible');
+            btn.classList.toggle('open');
         }
     </script>
 </body>
