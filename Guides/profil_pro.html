@@ -177,19 +177,67 @@
         }
 
         /* Quiz */
-        .quiz-progress { margin-bottom: 1.5rem; }
-        .quiz-progress .progress-bar { height: 6px; background: var(--color-border); border-radius: 3px; margin-top: 0.5rem; }
+        .quiz-progress {
+            position: sticky; top: 70px; z-index: 50;
+            background: rgba(248, 250, 252, 0.92);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            padding: 0.75rem 1.25rem; margin: -1.25rem -1.5rem 1.5rem;
+            border-bottom: 1px solid var(--color-border);
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        .quiz-progress .progress-bar { height: 6px; background: #e2e8f0; border-radius: 3px; margin-top: 0.5rem; box-shadow: inset 2px 2px 4px rgba(0,0,0,0.06), inset -2px -2px 4px rgba(255,255,255,0.8); }
         .quiz-progress .progress-fill { height: 100%; background: linear-gradient(90deg, #14b8a6, #0d9488); border-radius: 3px; transition: width 0.3s ease; width: 0%; }
-        .quiz-question { background: var(--surface-card); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 1rem; box-shadow: var(--neo-raised); }
-        .quiz-question p { color: var(--color-text-primary); font-weight: 500; margin-bottom: 0.75rem; }
-        .quiz-poles { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--color-text-muted); margin-bottom: 0.35rem; }
-        .quiz-scale { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.35rem; }
-        .quiz-scale button { padding: 0.6rem 0.25rem; border-radius: var(--radius-lg); border: 1px solid var(--color-border); background: var(--color-bg-card, #fff); color: var(--color-text-muted); cursor: pointer; font-size: 0.85rem; min-height: 44px; transition: all 0.2s ease; box-shadow: var(--neo-raised); }
-        .quiz-scale button:hover { border-color: #14b8a6; color: #14b8a6; }
-        .quiz-scale button.selected { background: linear-gradient(135deg, #14b8a6, #0d9488); color: white; border-color: #14b8a6; box-shadow: var(--neo-pressed), 0 4px 12px rgba(20,184,166,0.3); }
-        .btn-quiz-submit { display: block; width: 100%; padding: 1rem; margin-top: 1.5rem; background: linear-gradient(135deg, #14b8a6, #0d9488); color: white; border: none; border-radius: var(--radius-lg); font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; box-shadow: var(--neo-raised); font-family: 'Lexend', sans-serif; }
-        .btn-quiz-submit:hover { transform: translateY(-2px); box-shadow: var(--neo-raised-lg); }
-        .btn-quiz-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .quiz-axis-header {
+            display: flex; align-items: center; gap: 0.75rem;
+            padding: 0.75rem 0; margin: 1.75rem 0 0.75rem;
+            border-bottom: 2px solid; font-family: 'Lexend', sans-serif;
+            font-size: 1rem; font-weight: 600;
+        }
+        .quiz-axis-header:first-child { margin-top: 0; }
+        .quiz-axis-header i { font-size: 1.1rem; }
+        .quiz-question {
+            background: #f8fafc; border: none; border-radius: 16px;
+            padding: 1.5rem; margin-bottom: 1.25rem;
+            box-shadow: 8px 8px 16px rgba(0,0,0,0.07), -8px -8px 16px rgba(255,255,255,0.85);
+        }
+        .quiz-question p { color: var(--color-text-primary); font-weight: 500; margin-bottom: 0.75rem; font-size: 0.95rem; }
+        .quiz-poles {
+            display: flex; justify-content: space-between;
+            font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem;
+        }
+        .quiz-poles span:first-child { color: #0d9488; }
+        .quiz-poles span:last-child { color: #ea580c; }
+        .quiz-scale { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.4rem; }
+        .quiz-scale button {
+            padding: 0.65rem 0.3rem; border-radius: 12px; border: none;
+            background: #f1f5f9; color: #475569; cursor: pointer;
+            font-size: 0.9rem; font-weight: 500; min-height: 48px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.08), -4px -4px 8px rgba(255,255,255,0.9);
+        }
+        .quiz-scale button:hover {
+            transform: translateY(-1px); color: #0d9488;
+            box-shadow: 6px 6px 12px rgba(0,0,0,0.1), -6px -6px 12px rgba(255,255,255,0.95);
+        }
+        .quiz-scale button.selected {
+            background: linear-gradient(145deg, #0d9488, #065f56); color: #ffffff;
+            font-weight: 700; transform: scale(1.05);
+            box-shadow: inset 3px 3px 6px rgba(0,0,0,0.2), inset -2px -2px 4px rgba(255,255,255,0.1), 0 0 20px rgba(20,184,166,0.3);
+        }
+        .btn-quiz-submit {
+            display: block; width: 100%; padding: 1.1rem; margin-top: 2rem;
+            background: linear-gradient(145deg, #0d9488, #065f56); color: white;
+            border: none; border-radius: 14px; font-size: 1.05rem; font-weight: 700;
+            cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 6px 6px 14px rgba(0,0,0,0.12), -4px -4px 10px rgba(255,255,255,0.8);
+            font-family: 'Lexend', sans-serif; letter-spacing: 0.02em;
+        }
+        .btn-quiz-submit:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 8px 8px 20px rgba(0,0,0,0.15), -6px -6px 14px rgba(255,255,255,0.9), 0 0 30px rgba(20,184,166,0.2);
+        }
+        .btn-quiz-submit:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
         .profile-result { background: var(--surface-card); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1rem; box-shadow: var(--neo-raised); text-align: center; }
         .profile-result .result-icon { font-size: 3rem; margin-bottom: 0.5rem; }
         .profile-result .result-title { font-size: 1.5rem; color: #14b8a6; font-family: 'Lexend', sans-serif; margin: 0; }
@@ -197,6 +245,14 @@
         .profile-result .result-match { font-size: 0.85rem; color: var(--color-text-dimmed); }
         .profile-result.complementary { border-top: 4px solid #fb923c; }
         .profile-result.complementary .result-title { color: #fb923c; }
+        .result-tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; margin: 1.5rem 0 1rem; }
+        .result-tab-content {
+            background: #f8fafc; border-radius: 16px; padding: 1.5rem;
+            box-shadow: inset 4px 4px 8px rgba(0,0,0,0.06), inset -4px -4px 8px rgba(255,255,255,0.8);
+            color: var(--color-text-muted); font-size: 0.9rem; line-height: 1.7; min-height: 80px;
+        }
+        .result-tab-content strong { color: var(--color-text-primary); }
+        .result-tab-content .source { font-size: 0.8rem; color: var(--color-text-dimmed); font-style: italic; display: block; margin-top: 0.5rem; }
 
         /* Main layout grid */
         .main-grid {
@@ -787,6 +843,12 @@
                         forces: "Attention méticuleuse aux détails, capacité à identifier des tendances dans les données, démarche structurée qui apporte clarté et discipline, rôle de 'garde-fou'.",
                         limites: "Risque de 'paralyse par l'analyse', peut être perçu comme rigide ou excessivement critique, peut négliger les dimensions humaines et émotionnelles.",
                         leviers: "Développer la flexibilité cognitive et la métacognition ('Quelle est l'information minimale viable?'). Pour l'équipe : fournir des données claires, fixer des délais et valoriser sa rigueur."
+                    },
+                    enriched: {
+                        fonctionnement: "<strong>Pensée convergente</strong> (Guilford, 1967) : ce mode cognitif privilégie la vitesse, la précision et la logique pour converger vers la solution optimale. La connaissance factuelle y joue un rôle central — elle est à la fois source d'idées, chemin vers les solutions et critère d'efficacité (Cropley, 2006). Ce profil partage des caractéristiques avec le <strong>systemizing élevé</strong> décrit en psychiatrie (Baron-Cohen, 2009).<span class='source'>Guilford (1967) ; Cropley (2006) ; Baron-Cohen (2009)</span>",
+                        forces: "La rigueur analytique est un <strong>garde-fou</strong> essentiel contre les décisions impulsives et les biais cognitifs. La pensée convergente excelle dans les environnements où une seule réponse correcte existe — budgets, conformité réglementaire, diagnostics techniques. L'attention aux détails prévient les erreurs coûteuses.<span class='source'>Cropley (2006)</span>",
+                        limites: "La <strong>paralysie par l'analyse</strong> survient quand la recherche de la solution parfaite bloque l'action. La pensée convergente seule ne produit pas d'innovation — elle nécessite d'être précédée de phases divergentes (Cropley, 2006). Ce profil peut négliger les dimensions émotionnelles et relationnelles, créant un décalage avec les collaborateurs orientés relation.<span class='source'>Cropley (2006)</span>",
+                        leviers: "Intégrer des <strong>cycles divergent→convergent itératifs</strong> : brainstormer d'abord (divergence), puis évaluer (convergence). Pratiquer la métacognition : « Quelle est l'information minimale viable ? » Pour l'équipe : fournir des données claires, fixer des délais pour limiter la paralysie, et valoriser explicitement la rigueur apportée.<span class='source'>Cropley (2006) ; Guilford (1967)</span>"
                     }
                 },
                 explorateur: {
@@ -796,6 +858,12 @@
                         forces: "Moteur de l'innovation et de la créativité, capacité à aborder les problèmes sous des angles nouveaux, prévention de la pensée de groupe ('groupthink').",
                         limites: "Difficulté à se concentrer sur l'exécution d'une seule tâche, idées parfois perçues comme irréalistes, risque d'ennui dans des environnements très structurés.",
                         leviers: "Apprendre à faire le pont entre divergence et convergence (ex: mind mapping). Pour l'équipe : créer un environnement psychologiquement sûr, utiliser des techniques de brainstorming."
+                    },
+                    enriched: {
+                        fonctionnement: "<strong>Pensée divergente</strong> (Guilford, 1967) : ce mode cognitif produit de multiples réponses — fluence (quantité), flexibilité (variété), originalité (rareté) et élaboration (détail). C'est le moteur de la <strong>créativité</strong>, mais elle nécessite un environnement psychologiquement sûr pour s'exprimer pleinement.<span class='source'>Guilford (1967)</span>",
+                        forces: "Prévention de la <strong>pensée de groupe</strong> (<em>groupthink</em>) en proposant des alternatives que personne n'a envisagées. Capacité à aborder les problèmes sous des angles non conventionnels — essentiel pour l'innovation organisationnelle.<span class='source'>Guilford (1967) ; Cropley (2006)</span>",
+                        limites: "La divergence sans convergence produit de la <strong>quasi-créativité</strong> — des idées nouvelles mais inapplicables (Cropley, 2006). Difficulté à se concentrer sur l'exécution. Risque d'ennui dans les environnements très structurés.<span class='source'>Cropley (2006)</span>",
+                        leviers: "Utiliser le <strong>mind mapping</strong> pour structurer la divergence. S'associer à un profil convergent (Plongeur) pour évaluer et sélectionner les meilleures idées. Pour l'équipe : cadrer les séances de brainstorming avec des objectifs clairs.<span class='source'>Cropley (2006)</span>"
                     }
                 },
                 architecte: {
@@ -805,6 +873,12 @@
                         forces: "Fiabilité, haute qualité d'exécution, excelle dans l'organisation de projets complexes, persévérance et autodiscipline. Prédicteur le plus robuste de la performance au travail.",
                         limites: "Peut être rigide et résistant au changement, difficulté face à l'ambiguïté, risque de micro-management, stressé par les situations chaotiques.",
                         leviers: "Accroître sa flexibilité (ex: planifier l'imprévu), s'entraîner à la délégation. Pour l'équipe : communiquer les changements en amont, l'impliquer dans la création des plans."
+                    },
+                    enriched: {
+                        fonctionnement: "Incarnation de la <strong>haute Conscienciosité</strong> (Costa & McCrae, 1992) — le facteur le plus robuste pour prédire la performance professionnelle. Méta-analyse de Wilmot & Ones (2019) sur 1,1 million de participants : la conscienciosité a un effet positif dans 98% des variables étudiées.<span class='source'>Costa & McCrae (1992) ; Wilmot & Ones (2019)</span>",
+                        forces: "<strong>Fiabilité et qualité d'exécution</strong> exceptionnelles. Excelle dans l'organisation de projets complexes. La conscienciosité est le prédicteur le plus constant de la performance dans toutes les catégories d'emploi (Barrick & Mount, 1991).<span class='source'>Barrick & Mount (1991) ; Wilmot & Ones (2019)</span>",
+                        limites: "La relation conscienciosité→performance est <strong>curvilinéaire</strong> : un excès peut réduire la performance par rigidité et micro-management (Carter et al., 2014). La validité prédictive est surestimée d'environ 30% en raison du biais de publication (Credé et al., 2012).<span class='source'>Carter et al. (2014)</span>",
+                        leviers: "<strong>Planifier l'imprévu</strong> : réserver des créneaux non structurés. S'entraîner à la délégation avec des objectifs clairs mais sans micro-management. Pour l'équipe : communiquer les changements en amont, l'impliquer dans la création des plans.<span class='source'>Wilmot & Ones (2019)</span>"
                     }
                 },
                 navigateur: {
@@ -814,6 +888,12 @@
                         forces: "Vitesse de décision, excellente gestion de l'ambiguïté, forte intelligence interpersonnelle, capable de synthétiser des informations complexes de manière holistique.",
                         limites: "Difficulté à justifier ses décisions de manière factuelle, vulnérable aux biais cognitifs, peut être perçu comme impulsif ou irrationnel.",
                         leviers: "Pratiquer la métacognition (ex: tenir un 'journal de décisions'). Pour l'équipe : faire confiance à son jugement, l'encourager à expliciter les signaux faibles qu'il perçoit."
+                    },
+                    enriched: {
+                        fonctionnement: "Mode cognitif associé au <strong>Système 1</strong> de Kahneman (2011) — rapide, automatique, holistique. Cependant, cette dichotomie est une <strong>simplification heuristique</strong> : en réalité, intuition et analyse s'entremêlent constamment. L'intuition experte est une reconnaissance de schémas non-consciente construite par l'expérience.<span class='source'>Kahneman (2011)</span>",
+                        forces: "<strong>Vitesse de décision</strong> dans l'incertitude. Excellente gestion de l'ambiguïté. Forte intelligence interpersonnelle — capte les signaux faibles que l'analyse formelle ne détecte pas. Synthétise des informations complexes de manière holistique.<span class='source'>Kahneman (2011)</span>",
+                        limites: "Vulnérable aux <strong>biais cognitifs</strong> (ancrage, disponibilité, confirmation) précisément parce que le Système 1 fonctionne par heuristiques. Difficulté à justifier ses décisions factuellement. Peut être perçu comme impulsif ou irrationnel par les profils analytiques.<span class='source'>Kahneman (2011)</span>",
+                        leviers: "Tenir un <strong>journal de décisions</strong> pour développer la métacognition. Expliciter les signaux faibles perçus pour les rendre communicables. Pour l'équipe : faire confiance à son jugement tout en demandant une justification a posteriori.<span class='source'>Kahneman (2011)</span>"
                     }
                 },
                 pilote: {
@@ -823,6 +903,12 @@
                         forces: "Efficacité redoutable pour faire avancer les projets, apporte de la clarté dans les objectifs, maintient l'équipe concentrée sur les priorités.",
                         limites: "Peut négliger le bien-être et les besoins relationnels de l'équipe, ce qui peut éroder la motivation à long terme. Peut être perçu comme froid ou excessivement directif.",
                         leviers: "Développer son intelligence relationnelle (ex: planifier du temps pour des interactions informelles), pratiquer l'écoute active. Pour l'équipe : reconnaître son efficacité."
+                    },
+                    enriched: {
+                        fonctionnement: "Leadership <strong>orienté tâche</strong> (Blake & Mouton, 1964) : focalisation sur les objectifs, les délais et l'efficacité. Définit clairement les rôles et suit les résultats. Ce style produit une <strong>efficacité de groupe</strong> et un positivisme élevés parmi les membres.<span class='source'>Blake & Mouton (1964)</span>",
+                        forces: "Efficacité redoutable pour faire avancer les projets. Apporte de la <strong>clarté dans les objectifs</strong>. Les équipes task-oriented montrent +4% de productivité réelle (méta-analyse). Maintient le focus sur les priorités.<span class='source'>Blake & Mouton (1964)</span>",
+                        limites: "Peut négliger le <strong>bien-être relationnel</strong> de l'équipe, érodant la motivation à long terme. Une étude de 2017 montre que le leadership « efficace » focalisé sur la tâche est associé au <strong>burnout</strong>. Peut être perçu comme froid ou directif.<span class='source'>Blake & Mouton (1964)</span>",
+                        leviers: "Planifier du temps pour des <strong>interactions informelles</strong>. Pratiquer l'écoute active. Intégrer les deux orientations (tâche + relation) pour un leadership optimal. Pour l'équipe : reconnaître son efficacité tout en signalant les besoins relationnels.<span class='source'>Blake & Mouton (1964)</span>"
                     }
                 },
                 catalyseur: {
@@ -832,6 +918,12 @@
                         forces: "Exceptionnel pour créer une forte cohésion d'équipe et un environnement psychologiquement sûr, excellent médiateur, favorise une communication ouverte et durable.",
                         limites: "Réticent à prendre des décisions impopulaires ou à donner un feedback critique, peut manquer d'assertivité, risque d'être exploité ou de ne pas défendre ses propres intérêts.",
                         leviers: "Apprendre à distinguer 'être gentil' de 'être efficace'. S'entraîner au feedback constructif et à dire 'non'. Pour l'équipe : reconnaître son rôle de 'glue' sociale, le coacher pour développer son assertivité."
+                    },
+                    enriched: {
+                        fonctionnement: "Leadership <strong>orienté relation</strong> — associé à une haute Agréabilité (Costa & McCrae, 1992). Attention tournée vers l'harmonie, la cohésion et le bien-être. L'Agréabilité est le facteur Big Five le <strong>moins prédictif de la performance individuelle</strong>, mais le plus lié à la satisfaction relationnelle et à la cohésion d'équipe (Salgado, 1997).<span class='source'>Costa & McCrae (1992) ; Salgado (1997)</span>",
+                        forces: "Le leadership relationnel génère une <strong>+8% de productivité réelle</strong> (vs +4% pour le task-oriented) grâce à une plus grande cohésion d'équipe et un meilleur apprentissage collectif (méta-analyse). Crée un environnement psychologiquement sûr propice à l'innovation.<span class='source'>Salgado (1997)</span>",
+                        limites: "Si poussé trop loin, la <strong>chimie d'équipe</strong> peut détourner des objectifs concrets. Réticence à prendre des décisions impopulaires ou à donner un feedback critique. Risque d'être exploité par des profils plus assertifs.<span class='source'>Salgado (1997)</span>",
+                        leviers: "Apprendre à distinguer <strong>« être gentil » de « être efficace »</strong>. S'entraîner au feedback constructif (méthode SBI : Situation-Behavior-Impact). Intégrer les deux orientations (tâche + relation). Pour l'équipe : valoriser son rôle de « glue sociale ».<span class='source'>Salgado (1997) ; Blake & Mouton (1964)</span>"
                     }
                 },
                 pionnier: {
@@ -841,6 +933,12 @@
                         forces: "Capacité d'adaptation exceptionnelle, moteur pour l'innovation, apprend et se développe continuellement tout au long de sa carrière.",
                         limites: "Aversion pour la routine, peut manquer de discipline pour les tâches répétitives, peut être perçu comme manquant de pragmatisme, son appétit pour le changement peut être déstabilisant.",
                         leviers: "Apprendre à valoriser aussi les phases d'exécution. S'associer à des profils plus structurés. Pour l'équipe : le positionner comme agent du changement, lui donner des objectifs clairs."
+                    },
+                    enriched: {
+                        fonctionnement: "Haute <strong>Ouverture à l'Expérience</strong> (Costa & McCrae, 1992) — curieux, imaginatif, attiré par la nouveauté. Ce profil évoque la <strong>recherche de nouveauté</strong> (<em>novelty seeking</em>) décrite dans la littérature sur le TDAH (Barkley, 1997). La valorisation de ce style varie fortement selon les cultures (Hofstede, 2001) — prisé dans les cultures individualistes, il peut être perçu comme déstabilisant dans les cultures collectivistes.<span class='source'>Costa & McCrae (1992) ; Barkley (1997) ; Hofstede (2001)</span>",
+                        forces: "Capacité d'<strong>adaptation exceptionnelle</strong> au changement. Moteur de l'innovation. Apprend et se développe continuellement. L'Ouverture est associée au succès dans les métiers créatifs et les environnements incertains.<span class='source'>Costa & McCrae (1992)</span>",
+                        limites: "L'Ouverture à l'Expérience est le facteur Big Five le <strong>moins stable</strong> — il fluctue davantage selon le contexte que les autres traits (De Raad & Peabody, 2005). Aversion pour la routine, difficulté avec les tâches répétitives, peut être perçu comme manquant de pragmatisme.<span class='source'>De Raad & Peabody (2005)</span>",
+                        leviers: "S'associer à des <strong>profils structurés</strong> (Architecte, Stabilisateur) pour l'exécution. Valoriser les phases d'exécution comme des opportunités d'apprentissage. Pour l'équipe : le positionner comme agent du changement avec des objectifs clairs et mesurables.<span class='source'>Kirton (2003)</span>"
                     }
                 },
                 stabilisateur: {
@@ -850,6 +948,12 @@
                         forces: "Fiabilité et constance dans l'exécution, garantit la continuité et la qualité, excellent pour optimiser les systèmes, apporte un point de vue pragmatique qui sert de contrepoids.",
                         limites: "Potentielle résistance au changement, peut paraître rigide ou fermé, risque de désengagement si les changements sont trop rapides ou mal expliqués.",
                         leviers: "Travailler sa perception du changement, se concentrer sur les bénéfices concrets. Pour l'équipe : communiquer le 'pourquoi' du changement, l'impliquer dans l'amélioration des processus."
+                    },
+                    enriched: {
+                        fonctionnement: "Ouverture à l'Expérience <strong>modérée</strong> — ce qui, loin d'être un déficit, est associé à la fiabilité, la constance et l'ancrage pragmatique (Kirton, 2003). Préférence pour les routines, les traditions et les méthodes éprouvées. Se sent en sécurité dans des environnements prévisibles. L'habitus professionnel (Bourdieu, 1979) façonne cette préférence pour la stabilité.<span class='source'>Kirton (2003) ; Bourdieu (1979)</span>",
+                        forces: "<strong>Fiabilité et constance</strong> dans l'exécution. Garantit la continuité et la qualité des processus. Excellent pour optimiser les systèmes existants. Apporte un point de vue <strong>pragmatique</strong> qui sert de contrepoids essentiel aux profils innovateurs.<span class='source'>Kirton (2003)</span>",
+                        limites: "Potentielle <strong>résistance au changement</strong> — peut paraître rigide ou fermé. Risque de désengagement si les changements sont trop rapides ou mal communiqués. Cette résistance peut être renforcée par l'identité au travail construite autour de la maîtrise (Sainsaulieu, 1977).<span class='source'>Sainsaulieu (1977)</span>",
+                        leviers: "Travailler la perception du changement en se concentrant sur les <strong>bénéfices concrets</strong> et mesurables. Pour l'équipe : communiquer le « pourquoi » du changement, l'impliquer dans l'<strong>amélioration continue</strong> des processus existants plutôt que dans la rupture.<span class='source'>Kirton (2003) ; Sainsaulieu (1977)</span>"
                     }
                 },
             }
@@ -877,17 +981,34 @@
         const quizAnswers = new Array(16).fill(null);
         let userChartInstance = null;
 
+        const axisHeaders = [
+            { icon: 'fa-microscope', title: "Traitement de l'Information", color: '#0d9488' },
+            { icon: 'fa-cogs', title: "Processus d'Action", color: '#2563eb' },
+            { icon: 'fa-users', title: "Rapport aux Autres", color: '#7c3aed' },
+            { icon: 'fa-seedling', title: "Rapport à la Nouveauté", color: '#ea580c' }
+        ];
+
         function renderQuiz() {
             const container = document.getElementById('quiz-questions');
-            container.innerHTML = quizQuestions.map((q, i) => `
-                <div class="quiz-question">
+            let html = '';
+            let currentAxis = -1;
+            quizQuestions.forEach((q, i) => {
+                if (q.axis !== currentAxis) {
+                    currentAxis = q.axis;
+                    const ah = axisHeaders[currentAxis];
+                    html += `<div class="quiz-axis-header" style="color: ${ah.color}; border-color: ${ah.color};">
+                        <i class="fas ${ah.icon}"></i> Axe ${currentAxis + 1} — ${ah.title}
+                    </div>`;
+                }
+                html += `<div class="quiz-question">
                     <p>${i + 1}. ${q.text}</p>
                     <div class="quiz-poles"><span>← ${q.poleA}</span><span>${q.poleB} →</span></div>
                     <div class="quiz-scale">
                         ${[1,2,3,4,5,6,7].map(v => `<button type="button" onclick="selectQuizAnswer(${i}, ${v})" id="q${i}_v${v}">${v}</button>`).join('')}
                     </div>
-                </div>
-            `).join('');
+                </div>`;
+            });
+            container.innerHTML = html;
         }
 
         function selectQuizAnswer(questionIndex, value) {
@@ -956,6 +1077,13 @@
                 <p class="result-summary">"${dominant.summary}"</p>
                 <p class="result-match">Profil dominant — ${dominantAxis.title}</p>
                 <p style="font-size: 0.8rem; color: var(--color-text-dimmed); margin-top: 0.75rem; font-style: italic;">Rappel : ce résultat est exploratoire. Il reflète vos réponses à un instant donné, pas un trait stable. Les profils sont des archétypes simplificateurs — votre fonctionnement réel est plus nuancé et dépend du contexte (Fleeson & Jayawickreme, 2015).</p>
+                <div class="result-tabs">
+                    <button class="profile-tab tab-active" onclick="showResultTab('fonctionnement', this)">Fonctionnement</button>
+                    <button class="profile-tab" onclick="showResultTab('forces', this)">Forces</button>
+                    <button class="profile-tab" onclick="showResultTab('limites', this)">Limites</button>
+                    <button class="profile-tab" onclick="showResultTab('leviers', this)">Leviers</button>
+                </div>
+                <div id="result-tab-content" class="result-tab-content">${dominant.enriched.fonctionnement}</div>
             `;
 
             document.getElementById('complementary-profile').innerHTML = `
@@ -997,6 +1125,20 @@
             });
 
             resultsEl.scrollIntoView({ behavior: 'smooth' });
+            window._dominantId = bestMatch;
+        }
+
+        function showResultTab(tab, btn) {
+            const tabs = document.querySelectorAll('.result-tabs .profile-tab');
+            tabs.forEach(t => { t.classList.remove('tab-active'); t.classList.add('tab-inactive'); });
+            btn.classList.add('tab-active');
+            btn.classList.remove('tab-inactive');
+            const content = profilsData.profiles[window._dominantId].enriched[tab];
+            const el = document.getElementById('result-tab-content');
+            el.innerHTML = content;
+            el.classList.remove('fade-in');
+            void el.offsetWidth;
+            el.classList.add('fade-in');
         }
 
         let chartInstance = null;
