@@ -3,15 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Outil d'auto-positionnement sur 4 axes cognitifs pour comprendre et valoriser la diversité professionnelle. Questionnaire interactif avec 8 profils.">
+    <meta property="og:title" content="Explorateur des Profils Professionnels">
+    <meta property="og:description" content="Découvrez votre profil cognitif professionnel parmi 8 archétypes.">
+    <meta property="og:type" content="website">
     <title>Explorateur des Profils Professionnels</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧠</text></svg>">
+    <!-- Critical CSS -->
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/questionnaire-light.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Font Awesome — async (non-bloquant) -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
+    <!-- Chart.js — defer (non-bloquant, execute apres parsing) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+    <!-- Google Fonts — async (non-bloquant) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lexend:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Lexend:wght@700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Lexend:wght@700&display=swap"></noscript>
     <style>
         /* Override font family */
         body {
@@ -185,8 +195,7 @@
         /* Quiz */
         .quiz-progress {
             position: sticky; top: 70px; z-index: 50;
-            background: rgba(248, 250, 252, 0.92);
-            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            background: #f8fafc;
             padding: 0.75rem 1.25rem; margin: -1.25rem -1.5rem 1.5rem;
             border-bottom: 1px solid var(--color-border);
             border-radius: var(--radius-lg) var(--radius-lg) 0 0;
@@ -218,8 +227,8 @@
             display: flex; justify-content: space-between;
             font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem;
         }
-        .quiz-poles span:first-child { color: #0d9488; }
-        .quiz-poles span:last-child { color: #ea580c; }
+        .quiz-poles span:first-child { color: #0f766e; }
+        .quiz-poles span:last-child { color: #c2410c; }
         .quiz-scale { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.4rem; }
         .quiz-radio-label { cursor: pointer; display: block; }
         .quiz-radio-btn {
@@ -832,7 +841,7 @@
             <!-- Logo -->
             <div class="footer-logo">
                 <a href="https://www.facebook.com/p/Atelier-de-R%25C3%25A9flexion-100057626852106/?checkpoint_src=any" target="_blank" rel="noopener noreferrer">
-                    <img src="../images/misc/profession.jpg" alt="Logo Atelier de Réflexion">
+                    <img src="../images/misc/profession.jpg" alt="Logo Atelier de Réflexion" loading="lazy" width="96" height="96">
                 </a>
             </div>
 
@@ -841,7 +850,7 @@
                 <p>RASOLONAIVO MIhaja (Philosophe, Admin Page FB Atelier de réflexion) ;</p>
                 <p>Dr FENOHASINA T.J. Félicien (Psychiatre)</p>
                 <div class="footer-license">
-                    <img src="../images/icons/cc-by-nc-sa.png" alt="Icône Creative Commons BY-NC-SA">
+                    <img src="../images/icons/cc-by-nc-sa.png" alt="Icône Creative Commons BY-NC-SA" loading="lazy" width="80" height="15">
                     <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr" target="_blank" rel="noopener noreferrer">Licence CC BY-NC-SA 4.0</a> -
                     <span style="color: var(--color-text-dimmed);">Dernière mise à jour : 10 juillet 2025.</span>
                 </div>
