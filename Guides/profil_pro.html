@@ -1187,15 +1187,26 @@
                 s[3]        // Stabilité     ← haut axe3 = stabilité (poleB)
             ];
 
-            // Find dominant profile by correlation
+            // Find dominant profile by Pearson correlation (shape match, not magnitude)
+            function pearsonCorr(a, b) {
+                const n = a.length;
+                const meanA = a.reduce((s, v) => s + v, 0) / n;
+                const meanB = b.reduce((s, v) => s + v, 0) / n;
+                let num = 0, denA = 0, denB = 0;
+                for (let i = 0; i < n; i++) {
+                    const da = a[i] - meanA, db = b[i] - meanB;
+                    num += da * db;
+                    denA += da * da;
+                    denB += db * db;
+                }
+                const den = Math.sqrt(denA) * Math.sqrt(denB);
+                return den === 0 ? 0 : num / den;
+            }
             const profiles = Object.entries(profilsData.profiles);
             let bestMatch = null, bestCorr = -Infinity;
-            let worstMatch = null, worstCorr = Infinity;
             profiles.forEach(([id, profile]) => {
-                let corr = 0;
-                for (let i = 0; i < 8; i++) corr += userData[i] * profile.chartData[i];
+                const corr = pearsonCorr(userData, profile.chartData);
                 if (corr > bestCorr) { bestCorr = corr; bestMatch = id; }
-                if (corr < worstCorr) { worstCorr = corr; worstMatch = id; }
             });
 
             // Find complementary (opposite pole on dominant axis)
