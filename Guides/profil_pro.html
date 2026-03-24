@@ -875,7 +875,7 @@
                 <div class="footer-license">
                     <img src="../images/icons/cc-by-nc-sa.png" alt="Icône Creative Commons BY-NC-SA" loading="lazy" width="80" height="15">
                     <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr" target="_blank" rel="noopener noreferrer">Licence CC BY-NC-SA 4.0</a> -
-                    <span style="color: var(--color-text-dimmed);">Dernière mise à jour : 10 juillet 2025.</span>
+                    <span style="color: var(--color-text-dimmed);">Dernière mise à jour : 24 mars 2026.</span>
                 </div>
             </div>
         </div>
@@ -1187,27 +1187,20 @@
                 s[3]        // Stabilité     ← haut axe3 = stabilité (poleB)
             ];
 
-            // Find dominant profile by Pearson correlation (shape match, not magnitude)
-            function pearsonCorr(a, b) {
-                const n = a.length;
-                const meanA = a.reduce((s, v) => s + v, 0) / n;
-                const meanB = b.reduce((s, v) => s + v, 0) / n;
-                let num = 0, denA = 0, denB = 0;
-                for (let i = 0; i < n; i++) {
-                    const da = a[i] - meanA, db = b[i] - meanB;
-                    num += da * db;
-                    denA += da * da;
-                    denB += db * db;
-                }
-                const den = Math.sqrt(denA) * Math.sqrt(denB);
-                return den === 0 ? 0 : num / den;
-            }
-            const profiles = Object.entries(profilsData.profiles);
-            let bestMatch = null, bestCorr = -Infinity;
-            profiles.forEach(([id, profile]) => {
-                const corr = pearsonCorr(userData, profile.chartData);
-                if (corr > bestCorr) { bestCorr = corr; bestMatch = id; }
+            // Find dominant profile: axis with max deviation from neutral determines the profile
+            // This avoids the bias where "flatter" chartData profiles match random answers more often
+            const neutral = 4; // neutral point on 1-7 Likert scale
+            let bestAxisIdx = 0, bestDev = 0;
+            axisScores.forEach((score, i) => {
+                const dev = Math.abs(score - neutral);
+                if (dev > bestDev) { bestDev = dev; bestAxisIdx = i; }
             });
+            const axisProfilePairs = profilsData.axes.map(a => a.profiles); // [['plongeur','explorateur'], ...]
+            const bestMatch = axisScores[bestAxisIdx] <= neutral
+                ? axisProfilePairs[bestAxisIdx][0]   // low score → first profile (poleA)
+                : axisProfilePairs[bestAxisIdx][1];  // high score → second profile (poleB)
+            // Confidence = how far the dominant axis deviates (0-3 range → 0-100%)
+            const bestCorr = Math.min(bestDev / 3, 1);
 
             // Find complementary (opposite pole on dominant axis)
             const dominant = profilsData.profiles[bestMatch];
