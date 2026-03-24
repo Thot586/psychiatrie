@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Guidance Parentale - Outils et Ressources — outil clinique interactif pour la psychiatrie et la sante mentale.">
     <title>Guidance Parentale - Outils et Ressources</title>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/questionnaire-light.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="../images/icons/family.png">
     <style>
@@ -102,10 +104,10 @@
     <!-- Navigation Bar -->
     <nav class="navigation-bar">
         <div class="nav-buttons">
-            <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+            <a href="../index.html" class="btn-home" aria-label="Accueil" title="Accueil"><i class="fas fa-home" aria-hidden="true"></i></a>
             <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
         </div>
-        <h1>Guidance Parentale</h1>
+        <span class="nav-title">Guidance Parentale</span>
         <span class="badge badge-success">Enfant/Ado</span>
     </nav>
 

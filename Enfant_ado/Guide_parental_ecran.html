@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Guide Parental sur les Écrans (0-18 ans) — outil clinique interactif pour la psychiatrie et la sante mentale.">
     <title>Guide Parental sur les Écrans (0-18 ans)</title>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/questionnaire-light.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -293,10 +295,10 @@
     <!-- Navigation Bar -->
     <nav class="navigation-bar">
         <div class="nav-buttons">
-            <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+            <a href="../index.html" class="btn-home" aria-label="Accueil" title="Accueil"><i class="fas fa-home" aria-hidden="true"></i></a>
             <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
         </div>
-        <h1>Guide Parental sur les Écrans</h1>
+        <span class="nav-title">Guide Parental sur les Écrans</span>
         <span class="badge badge-success">Enfant/Ado</span>
     </nav>
 
@@ -308,7 +310,7 @@
 
         <nav class="spa-nav">
             <a href="Guidance_parentale.html" title="Retour à l'accueil" class="nav-home">
-                <i class="fas fa-home"></i>
+                <i class="fas fa-home" aria-hidden="true"></i>
             </a>
             <button data-target="mythes" class="nav-btn active">Idées Reçues</button>
             <button data-target="inefficaces" class="nav-btn">Stratégies Inefficaces</button>

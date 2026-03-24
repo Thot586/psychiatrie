@@ -19,8 +19,8 @@ body.light-questionnaire {
     /* Text */
     --color-text-primary: #1e293b;
     --color-text-secondary: #334155;
-    --color-text-muted: #64748b;
-    --color-text-dimmed: #5b6370;
+    --color-text-muted: #5c6b7f;
+    --color-text-dimmed: #536179;
 
     /* Borders */
     --color-border: rgba(0, 0, 0, 0.08);
@@ -118,7 +118,8 @@ body.light-questionnaire .navigation-bar {
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-body.light-questionnaire .navigation-bar h1 {
+body.light-questionnaire .navigation-bar h1,
+body.light-questionnaire .navigation-bar .nav-title {
     color: #f8fafc;
 }
 

@@ -44,8 +44,8 @@
 
     --color-text-primary: #f8fafc;
     --color-text-secondary: #e2e8f0;
-    --color-text-muted: #94a3b8;
-    --color-text-dimmed: #64748b;
+    --color-text-muted: #b0bec9;
+    --color-text-dimmed: #8896a7;
 
     --color-border: rgba(255, 255, 255, 0.08);
     --color-border-hover: rgba(255, 255, 255, 0.2);
@@ -418,25 +418,25 @@ a:hover {
 
 .badge-primary {
     background: rgba(14, 165, 233, 0.15);
-    color: var(--color-primary-light);
+    color: #7dd3fc;
     border: 1px solid rgba(14, 165, 233, 0.3);
 }
 
 .badge-success {
     background: rgba(34, 197, 94, 0.15);
-    color: #86efac;
+    color: #a7f3d0;
     border: 1px solid rgba(34, 197, 94, 0.3);
 }
 
 .badge-warning {
     background: rgba(245, 158, 11, 0.15);
-    color: #fde68a;
+    color: #fef3c7;
     border: 1px solid rgba(245, 158, 11, 0.3);
 }
 
 .badge-danger {
     background: rgba(239, 68, 68, 0.15);
-    color: #fca5a5;
+    color: #fecaca;
     border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
@@ -444,17 +444,17 @@ a:hover {
    Category Badges — Navigation bar
    White text on solid colored backgrounds (WCAG AA ≥ 4.5:1 for all)
    ======================================== */
-.badge-cat-tnd      { background: #8b5cf6; color: #ffffff; border: none; }
-.badge-cat-humeur   { background: #3b82f6; color: #ffffff; border: none; }
-.badge-cat-anxiete  { background: #10b981; color: #ffffff; border: none; }
+.badge-cat-tnd      { background: #7c3aed; color: #ffffff; border: none; }
+.badge-cat-humeur   { background: #2563eb; color: #ffffff; border: none; }
+.badge-cat-anxiete  { background: #047857; color: #ffffff; border: none; }
 .badge-cat-perso    { background: #b45309; color: #ffffff; border: none; }
-.badge-cat-substance{ background: #ec4899; color: #ffffff; border: none; }
-.badge-cat-trauma   { background: #6366f1; color: #ffffff; border: none; }
+.badge-cat-substance{ background: #db2777; color: #ffffff; border: none; }
+.badge-cat-trauma   { background: #4f46e5; color: #ffffff; border: none; }
 .badge-cat-crise    { background: #3e6b99; color: #ffffff; border: none; }
-.badge-cat-enfant   { background: #14b8a6; color: #ffffff; border: none; }
-.badge-cat-rehab    { background: #0ea5e9; color: #ffffff; border: none; }
-.badge-cat-psychose { background: #7c3aed; color: #ffffff; border: none; }
-.badge-cat-guides   { background: #475569; color: #ffffff; border: none; }
+.badge-cat-enfant   { background: #0d7c72; color: #ffffff; border: none; }
+.badge-cat-rehab    { background: #0284c7; color: #ffffff; border: none; }
+.badge-cat-psychose { background: #6d28d9; color: #ffffff; border: none; }
+.badge-cat-guides   { background: #64748b; color: #ffffff; border: none; }
 .badge-cat-clinique { background: #92400e; color: #ffffff; border: none; }
 .badge-cat-recherche{ background: #0284c7; color: #ffffff; border: none; }
 
@@ -595,10 +595,13 @@ input:focus-visible {
     backdrop-filter: blur(8px);
 }
 
-.navigation-bar h1 {
+.navigation-bar h1,
+.navigation-bar .nav-title {
     font-size: var(--font-size-xl);
     margin: 0;
     flex: 1;
+    color: #f8fafc;
+    font-weight: 700;
 }
 
 .back-button {
@@ -643,7 +646,7 @@ input:focus-visible {
 }
 
 .info-box h3 {
-    color: var(--color-primary-light);
+    color: #7dd3fc;
     font-size: var(--font-size-lg);
     margin-bottom: 0.5rem;
 }
@@ -662,7 +665,7 @@ input:focus-visible {
 }
 
 .warning-box h3 {
-    color: #fde68a;
+    color: #fef3c7;
     font-size: var(--font-size-lg);
     margin-bottom: 0.5rem;
 }
@@ -681,7 +684,7 @@ input:focus-visible {
 }
 
 .danger-box h3 {
-    color: #fca5a5;
+    color: #fecaca;
     font-size: var(--font-size-lg);
     margin-bottom: 0.5rem;
 }
@@ -771,7 +774,7 @@ input:focus-visible {
     background: var(--neo-bg);
     border: 2px solid transparent;
     border-radius: var(--neo-radius);
-    color: var(--color-text-muted);
+    color: #cbd5e1;
     font-size: var(--font-size-sm);
     font-weight: 500;
     cursor: pointer;
@@ -923,7 +926,7 @@ input:focus-visible {
 }
 
 .interpretation.moderate h3 {
-    color: #fde68a;
+    color: #fef3c7;
 }
 
 .interpretation.high {
@@ -932,7 +935,7 @@ input:focus-visible {
 }
 
 .interpretation.high h3 {
-    color: #fca5a5;
+    color: #fecaca;
 }
 
 .interpretation.critical {
@@ -1063,7 +1066,8 @@ input:focus-visible {
         padding: 1rem;
     }
 
-    .navigation-bar h1 {
+    .navigation-bar h1,
+    .navigation-bar .nav-title {
         font-size: var(--font-size-lg);
         width: 100%;
         order: 2;

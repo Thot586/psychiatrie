@@ -7,6 +7,7 @@
     <meta property="og:title" content="Explorateur des Profils Professionnels">
     <meta property="og:description" content="Découvrez votre profil cognitif professionnel parmi 8 archétypes.">
     <meta property="og:type" content="website">
+    <meta property="og:image" content="../images/misc/profession.jpg">
     <title>Explorateur des Profils Professionnels</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧠</text></svg>">
     <!-- Critical CSS -->
@@ -221,7 +222,8 @@
         .quiz-question.answered {
             border-color: rgba(13, 148, 136, 0.25);
         }
-        .quiz-legend { color: var(--color-text-primary); font-weight: 500; margin-bottom: 0.75rem; font-size: 0.95rem; padding: 0; }
+        .quiz-legend { color: var(--color-text-primary); font-weight: 500; margin-bottom: 0.25rem; font-size: 0.95rem; padding: 0; }
+        .quiz-hint { font-size: 0.8rem; color: var(--color-text-dimmed); font-style: italic; margin: 0 0 0.5rem; padding-left: 0.5rem; border-left: 2px solid var(--color-border); line-height: 1.5; }
         .quiz-question p { color: var(--color-text-primary); font-weight: 500; margin-bottom: 0.75rem; font-size: 0.95rem; }
         .quiz-poles {
             display: flex; justify-content: space-between;
@@ -248,6 +250,11 @@
             font-weight: 700; transform: scale(1.05);
             box-shadow: inset 3px 3px 6px rgba(0,0,0,0.2), inset -2px -2px 4px rgba(255,255,255,0.1), 0 0 20px rgba(20,184,166,0.3);
         }
+        .quiz-scale-labels {
+            display: flex; justify-content: space-between;
+            font-size: 0.7rem; color: var(--color-text-dimmed); margin-top: 0.3rem; padding: 0 0.1rem;
+        }
+        .quiz-scale-labels span:nth-child(2) { text-align: center; }
         /* Focus visible on radio label */
         .quiz-radio-input:focus-visible + .quiz-radio-btn {
             outline: 2px solid #0369a1;
@@ -517,6 +524,16 @@
             font-size: 0.9rem;
         }
 
+        .profile-exemple {
+            color: var(--color-text-dimmed);
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            background: rgba(13, 124, 114, 0.06);
+            border-left: 3px solid #0d9488;
+            border-radius: 0 8px 8px 0;
+        }
+
         /* Tabs */
         .tabs-container {
             display: flex;
@@ -735,7 +752,7 @@
             <a href="../index.html" class="btn-home" aria-label="Accueil" title="Accueil"><i class="fas fa-home" aria-hidden="true"></i></a>
             <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
         </div>
-        <h1>Explorateur des Profils Professionnels</h1>
+        <span class="nav-title">Explorateur des Profils Professionnels</span>
         <span class="badge badge-guides">Guides</span>
     </nav>
 
@@ -809,11 +826,22 @@
             <div id="complementary-profile" class="profile-result complementary"></div>
             <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.5rem;">
                 <button class="btn-quiz-submit" style="flex: 1; min-width: 200px;" onclick="document.querySelector('.main-grid').scrollIntoView({behavior:'smooth'})">
-                    <i class="fas fa-book-open"></i> Explorer tous les profils en détail
+                    <i class="fas fa-book-open"></i> Explorer tous les profils
+                </button>
+                <button class="btn-quiz-submit" style="flex: 1; min-width: 200px; background: linear-gradient(145deg, #2563eb, #1d4ed8);" onclick="exportResults()">
+                    <i class="fas fa-download"></i> Exporter en image
                 </button>
                 <button class="btn-quiz-submit" style="flex: 1; min-width: 200px; background: linear-gradient(145deg, #64748b, #475569);" onclick="resetQuiz()">
                     <i class="fas fa-redo"></i> Refaire le quiz
                 </button>
+            </div>
+
+            <div class="science-note" style="margin-top: 1.5rem;">
+                <h3><i class="fas fa-compass"></i> Et maintenant ?</h3>
+                <p><strong>1.</strong> Partagez ce résultat avec un collègue et comparez vos profils — la diversité cognitive est une ressource, pas un obstacle (Woolley et al., 2010).</p>
+                <p><strong>2.</strong> Identifiez dans votre équipe qui incarne le profil complémentaire. La performance collective dépend moins du talent individuel que de la complémentarité des approches.</p>
+                <p><strong>3.</strong> Lors de votre prochaine réunion, observez quand vous opérez dans votre mode dominant — et quand la situation appellerait le mode opposé.</p>
+                <p><strong>4.</strong> Rappelez-vous : ce profil est un <strong>point de départ pour le dialogue</strong>, pas une étiquette. Les comportements changent selon le contexte (Fleeson & Jayawickreme, 2015).</p>
             </div>
         </section>
 
@@ -858,7 +886,7 @@
         </div>
 
         <div class="references-section">
-            <button class="references-toggle" onclick="toggleReferences()">
+            <button class="references-toggle" onclick="toggleReferences()" aria-expanded="false" aria-controls="references-list">
                 <span class="icon"><i class="fas fa-caret-right"></i></span>
                 <i class="fas fa-book"></i> Références scientifiques
             </button>
@@ -900,6 +928,18 @@
 
                 <h4>Psychométrie</h4>
                 <p>American Educational Research Association, American Psychological Association, & National Council on Measurement in Education. (2014). <em>Standards for educational and psychological testing</em>.</p>
+
+                <h4>Intelligence collective, décision et leadership</h4>
+                <p>Edmondson, A. C. (2019). <em>The Fearless Organization: Creating Psychological Safety in the Workplace</em>. Wiley.</p>
+                <p>Grant, A. (2021). <em>Think Again: The Power of Knowing What You Don't Know</em>. Viking.</p>
+                <p>Klein, G. (1998). <em>Sources of Power: How People Make Decisions</em>. MIT Press.</p>
+                <p>Lencioni, P. (2002). <em>The Five Dysfunctions of a Team</em>. Jossey-Bass.</p>
+                <p>Pink, D. (2009). <em>Drive: The Surprising Truth About What Motivates Us</em>. Riverhead.</p>
+                <p>Sibony, O. (2020). <em>Vous allez commettre une terrible erreur ! 9 pièges cognitifs qui menacent vos décisions stratégiques</em>. Flammarion.</p>
+                <p>Sibony, O., Kahneman, D., & Sunstein, C. R. (2021). <em>Noise: A Flaw in Human Judgment</em>. Little, Brown.</p>
+                <p>Steiner, I. D. (1972). <em>Group Process and Productivity</em>. Academic Press.</p>
+                <p>Wiseman, L. (2010). <em>Multipliers: How the Best Leaders Make Everyone Smarter</em>. HarperBusiness.</p>
+                <p>Woolley, A. W., Chabris, C. F., Pentland, A., Hashmi, N., & Malone, T. W. (2010). Evidence for a Collective Intelligence Factor in the Performance of Human Groups. <em>Science</em>, <em>330</em>(6004), 686–688. https://doi.org/10.1126/science.1193147</p>
             </div>
         </div>
     </footer>
@@ -917,122 +957,130 @@
             profiles: {
                 plongeur: {
                     title: "Le Plongeur Analytique", summary: "Apporte rigueur et précision pour réduire les risques.", icon: '🔬', chartData: [9, 2, 8, 3, 7, 4, 3, 8],
+                    exemple: "En réunion, c'est celui qui demande « Quelles sont les données ? » avant de se prononcer.",
                     details: {
                         fonctionnement: "Aborde les problèmes avec logique, données factuelles et une pensée convergente (Guilford, 1967). Décompose, analyse et évalue de manière critique pour identifier la solution la plus juste. Ce style partage des traits avec le profil de systemizing élevé décrit par Baron-Cohen (2009).",
-                        forces: "Attention méticuleuse aux détails, capacité à identifier des tendances dans les données, démarche structurée qui apporte clarté et discipline, rôle de 'garde-fou'.",
-                        limites: "Risque de 'paralyse par l'analyse', peut être perçu comme rigide ou excessivement critique, peut négliger les dimensions humaines et émotionnelles.",
-                        leviers: "Développer la flexibilité cognitive et la métacognition ('Quelle est l'information minimale viable?'). Pour l'équipe : fournir des données claires, fixer des délais et valoriser sa rigueur."
+                        forces: "Attention méticuleuse aux détails, capacité à identifier des tendances dans les données, démarche structurée qui apporte clarté et discipline, rôle de 'garde-fou'. Réduit le « bruit » décisionnel (Sibony, Kahneman & Sunstein, 2021).",
+                        limites: "Risque de 'paralyse par l'analyse', peut être perçu comme rigide ou excessivement critique, peut négliger les dimensions humaines et émotionnelles. Peut inhiber la sécurité psychologique si sa rigueur critique est perçue comme du jugement (Edmondson, 2019).",
+                        leviers: "Développer la flexibilité cognitive — « repenser » ses hypothèses (Grant, 2021). Cultiver un état d'esprit de croissance (Dweck). Pour l'équipe : fournir des données claires, fixer des délais et valoriser sa rigueur."
                     },
                     enriched: {
                         fonctionnement: "<strong>Pensée convergente</strong> (Guilford, 1967) : ce mode cognitif privilégie la vitesse, la précision et la logique pour converger vers la solution optimale. La connaissance factuelle y joue un rôle central — elle est à la fois source d'idées, chemin vers les solutions et critère d'efficacité (Cropley, 2006). Ce profil partage des caractéristiques avec le <strong>systemizing élevé</strong> décrit en psychiatrie (Baron-Cohen, 2009).<span class='source'>Guilford (1967) ; Cropley (2006) ; Baron-Cohen (2009)</span>",
-                        forces: "La rigueur analytique est un <strong>garde-fou</strong> essentiel contre les décisions impulsives et les biais cognitifs. La pensée convergente excelle dans les environnements où une seule réponse correcte existe — budgets, conformité réglementaire, diagnostics techniques. L'attention aux détails prévient les erreurs coûteuses.<span class='source'>Cropley (2006)</span>",
-                        limites: "La <strong>paralysie par l'analyse</strong> survient quand la recherche de la solution parfaite bloque l'action. La pensée convergente seule ne produit pas d'innovation — elle nécessite d'être précédée de phases divergentes (Cropley, 2006). Ce profil peut négliger les dimensions émotionnelles et relationnelles, créant un décalage avec les collaborateurs orientés relation.<span class='source'>Cropley (2006)</span>",
-                        leviers: "Intégrer des <strong>cycles divergent→convergent itératifs</strong> : brainstormer d'abord (divergence), puis évaluer (convergence). Pratiquer la métacognition : « Quelle est l'information minimale viable ? » Pour l'équipe : fournir des données claires, fixer des délais pour limiter la paralysie, et valoriser explicitement la rigueur apportée.<span class='source'>Cropley (2006) ; Guilford (1967)</span>"
+                        forces: "La rigueur analytique est un <strong>garde-fou</strong> essentiel contre les décisions impulsives et les biais cognitifs. Elle réduit le <strong>bruit décisionnel</strong> — cette variabilité indésirable dans les jugements que Sibony, Kahneman et Sunstein (2021) identifient comme un fléau organisationnel silencieux. La pensée convergente excelle dans les environnements où une seule réponse correcte existe. En termes de <strong>pertes de processus</strong> (Steiner, 1972), ce profil minimise les pertes de coordination en clarifiant les critères de décision.<span class='source'>Cropley (2006) ; Sibony et al. (2021) ; Steiner (1972)</span>",
+                        limites: "La <strong>paralysie par l'analyse</strong> survient quand la recherche de la solution parfaite bloque l'action. Risque de <strong>« pensée figée »</strong> (Grant, 2021) : l'incapacité à repenser ses hypothèses face à de nouvelles données. Ce profil peut inhiber la <strong>sécurité psychologique</strong> (Edmondson, 2019) si sa rigueur critique est perçue comme du jugement, décourageant la prise de parole des autres. La pensée convergente seule ne produit pas d'innovation (Cropley, 2006).<span class='source'>Grant (2021) ; Edmondson (2019) ; Cropley (2006)</span>",
+                        leviers: "Intégrer des <strong>cycles divergent→convergent itératifs</strong> : brainstormer d'abord, puis évaluer. Cultiver un <strong>état d'esprit de croissance</strong> (Dweck) : « je peux aussi être créatif ». Pratiquer le rôle de <strong>multiplicateur</strong> (Wiseman, 2010) : poser des questions au lieu de trancher, pour amplifier l'intelligence collective. Pratiquer la métacognition : « Quelle est l'information minimale viable ? »<span class='source'>Cropley (2006) ; Dweck ; Wiseman (2010)</span>"
                     }
                 },
                 explorateur: {
                     title: "L'Explorateur Divergent", summary: "Génère des options et stimule l'innovation.", icon: '💡', chartData: [2, 9, 3, 8, 4, 6, 8, 2],
+                    exemple: "C'est celui qui lance « Et si on faisait complètement autrement ? » quand l'équipe tourne en rond.",
                     details: {
                         fonctionnement: "Générateur d'idées dont la pensée divergente (Guilford, 1967) produit une grande quantité d'options variées — fluence, flexibilité, originalité. À l'aise avec l'ambiguïté, la nouveauté et les approches non conventionnelles.",
-                        forces: "Moteur de l'innovation et de la créativité, capacité à aborder les problèmes sous des angles nouveaux, prévention de la pensée de groupe ('groupthink').",
-                        limites: "Difficulté à se concentrer sur l'exécution d'une seule tâche, idées parfois perçues comme irréalistes, risque d'ennui dans des environnements très structurés.",
-                        leviers: "Apprendre à faire le pont entre divergence et convergence (ex: mind mapping). Pour l'équipe : créer un environnement psychologiquement sûr, utiliser des techniques de brainstorming."
+                        forces: "Moteur de l'innovation et de la créativité. Incarne la flexibilité cognitive — la capacité à « repenser » (Grant, 2021). Sa diversité d'idées augmente l'intelligence collective du groupe (Woolley et al., 2010).",
+                        limites: "Difficulté à se concentrer sur l'exécution. Risque d'éviter la phase d'engagement (Lencioni, 2002) — trop d'options, jamais de décision. Peut créer des pertes de coordination (Steiner, 1972) si les idées ne sont pas canalisées.",
+                        leviers: "Utiliser l'architecture de décision (Sibony, 2020) pour canaliser la divergence : brainstorming structuré avec critères de sélection. Ancrer sa motivation dans la maîtrise (Pink, 2009) — approfondir une idée jusqu'au bout."
                     },
                     enriched: {
-                        fonctionnement: "<strong>Pensée divergente</strong> (Guilford, 1967) : ce mode cognitif produit de multiples réponses — fluence (quantité), flexibilité (variété), originalité (rareté) et élaboration (détail). C'est le moteur de la <strong>créativité</strong>, mais elle nécessite un environnement psychologiquement sûr pour s'exprimer pleinement.<span class='source'>Guilford (1967)</span>",
-                        forces: "Prévention de la <strong>pensée de groupe</strong> (<em>groupthink</em>) en proposant des alternatives que personne n'a envisagées. Capacité à aborder les problèmes sous des angles non conventionnels — essentiel pour l'innovation organisationnelle.<span class='source'>Guilford (1967) ; Cropley (2006)</span>",
-                        limites: "La divergence sans convergence produit de la <strong>quasi-créativité</strong> — des idées nouvelles mais inapplicables (Cropley, 2006). Difficulté à se concentrer sur l'exécution. Risque d'ennui dans les environnements très structurés.<span class='source'>Cropley (2006)</span>",
-                        leviers: "Utiliser le <strong>mind mapping</strong> pour structurer la divergence. S'associer à un profil convergent (Plongeur) pour évaluer et sélectionner les meilleures idées. Pour l'équipe : cadrer les séances de brainstorming avec des objectifs clairs.<span class='source'>Cropley (2006)</span>"
+                        fonctionnement: "<strong>Pensée divergente</strong> (Guilford, 1967) : ce mode cognitif produit de multiples réponses — fluence (quantité), flexibilité (variété), originalité (rareté) et élaboration (détail). C'est le moteur de la <strong>créativité</strong>, mais elle nécessite un environnement psychologiquement sûr pour s'exprimer pleinement (Edmondson, 2019).<span class='source'>Guilford (1967) ; Edmondson (2019)</span>",
+                        forces: "Prévention de la <strong>pensée de groupe</strong> (<em>groupthink</em>) en proposant des alternatives que personne n'a envisagées. Incarne la <strong>flexibilité cognitive</strong> décrite par Grant (2021) : la capacité à repenser, désapprendre et inviter le désaccord productif. La recherche sur l'<strong>intelligence collective</strong> (Woolley et al., 2010) montre que la diversité de perspectives — plus que le QI moyen — prédit la performance de groupe.<span class='source'>Grant (2021) ; Woolley et al. (2010) ; Cropley (2006)</span>",
+                        limites: "La divergence sans convergence produit de la <strong>quasi-créativité</strong> — des idées nouvelles mais inapplicables (Cropley, 2006). Selon le modèle des <strong>5 dysfonctions</strong> de Lencioni (2002), ce profil risque de bloquer la phase d'engagement : trop d'options empêchent la décision. En termes de <strong>pertes de processus</strong> (Steiner, 1972), la multiplication des idées sans structure crée des pertes de coordination.<span class='source'>Cropley (2006) ; Lencioni (2002) ; Steiner (1972)</span>",
+                        leviers: "Utiliser l'<strong>architecture de décision</strong> (Sibony, 2020) pour canaliser la divergence : brainstorming structuré avec critères de sélection explicites. Ancrer sa motivation dans la <strong>maîtrise</strong> (Pink, 2009) — approfondir une idée jusqu'au prototype plutôt que passer à la suivante. S'associer à un profil convergent (Plongeur) pour évaluer et sélectionner.<span class='source'>Sibony (2020) ; Pink (2009) ; Cropley (2006)</span>"
                     }
                 },
                 architecte: {
                     title: "L'Architecte Méthodique", summary: "Transforme les stratégies en plans d'action concrets.", icon: '🏗️', chartData: [8, 3, 9, 2, 9, 5, 2, 9],
+                    exemple: "C'est celui qui dit « Attendez, il nous faut un rétroplanning avant de commencer. »",
                     details: {
                         fonctionnement: "Fonctionne selon un registre que la recherche en psychologie de la personnalité associe à une haute Conscienciosité (Costa & McCrae, 1992) — le facteur le plus robuste pour prédire la performance professionnelle (Barrick & Mount, 1991). Son mode opératoire est défini par l'organisation, la fiabilité, la planification et un souci constant du détail.",
-                        forces: "Fiabilité, haute qualité d'exécution, excelle dans l'organisation de projets complexes, persévérance et autodiscipline. Prédicteur le plus robuste de la performance au travail.",
-                        limites: "Peut être rigide et résistant au changement, difficulté face à l'ambiguïté, risque de micro-management, stressé par les situations chaotiques.",
-                        leviers: "Accroître sa flexibilité (ex: planifier l'imprévu), s'entraîner à la délégation. Pour l'équipe : communiquer les changements en amont, l'impliquer dans la création des plans."
+                        forces: "Fiabilité, haute qualité d'exécution, excelle dans l'organisation de projets complexes, persévérance et autodiscipline. Prédicteur le plus robuste de la performance au travail. Maître de l'hygiène décisionnelle — réduit le bruit par les processus (Sibony et al., 2021). Minimise les pertes de coordination (Steiner, 1972).",
+                        limites: "Peut être rigide et résistant au changement, difficulté face à l'ambiguïté, risque de micro-management, stressé par les situations chaotiques. Risque de « pensée congelée » face au changement (Grant, 2021). Un excès de contrôle tue l'autonomie des collaborateurs (Pink, 2009).",
+                        leviers: "Accroître sa flexibilité (ex: planifier l'imprévu), s'entraîner à la délégation. Pour l'équipe : communiquer les changements en amont, l'impliquer dans la création des plans. Planifier l'imprévu comme opportunité d'apprentissage (Dweck). Pratiquer la discipline « Investisseur » du multiplicateur : déléguer avec confiance (Wiseman, 2010)."
                     },
                     enriched: {
                         fonctionnement: "Incarnation de la <strong>haute Conscienciosité</strong> (Costa & McCrae, 1992) — le facteur le plus robuste pour prédire la performance professionnelle. Méta-analyse de Wilmot & Ones (2019) sur 1,1 million de participants : la conscienciosité a un effet positif dans 98% des variables étudiées.<span class='source'>Costa & McCrae (1992) ; Wilmot & Ones (2019)</span>",
-                        forces: "<strong>Fiabilité et qualité d'exécution</strong> exceptionnelles. Excelle dans l'organisation de projets complexes. La conscienciosité est le prédicteur le plus constant de la performance dans toutes les catégories d'emploi (Barrick & Mount, 1991).<span class='source'>Barrick & Mount (1991) ; Wilmot & Ones (2019)</span>",
-                        limites: "La relation conscienciosité→performance est <strong>curvilinéaire</strong> : un excès peut réduire la performance par rigidité et micro-management (Carter et al., 2014). La validité prédictive est surestimée d'environ 30% en raison du biais de publication (Credé et al., 2012).<span class='source'>Carter et al. (2014)</span>",
-                        leviers: "<strong>Planifier l'imprévu</strong> : réserver des créneaux non structurés. S'entraîner à la délégation avec des objectifs clairs mais sans micro-management. Pour l'équipe : communiquer les changements en amont, l'impliquer dans la création des plans.<span class='source'>Wilmot & Ones (2019)</span>"
+                        forces: "<strong>Fiabilité et qualité d'exécution</strong> exceptionnelles. Excelle dans l'organisation de projets complexes. La conscienciosité est le prédicteur le plus constant de la performance dans toutes les catégories d'emploi (Barrick & Mount, 1991). Maître de l'<strong>hygiène décisionnelle</strong> — réduit le bruit par les processus <span class='source'>(Sibony et al., 2021)</span>. Minimise les <strong>pertes de coordination</strong> <span class='source'>(Steiner, 1972)</span>.<span class='source'>Barrick & Mount (1991) ; Wilmot & Ones (2019) ; Sibony et al. (2021) ; Steiner (1972)</span>",
+                        limites: "La relation conscienciosité→performance est <strong>curvilinéaire</strong> : un excès peut réduire la performance par rigidité et micro-management (Carter et al., 2014). La validité prédictive est surestimée d'environ 30% en raison du biais de publication (Credé et al., 2012). Risque de <strong>« pensée congelée »</strong> face au changement <span class='source'>(Grant, 2021)</span>. Un excès de contrôle tue l'<strong>autonomie</strong> des collaborateurs <span class='source'>(Pink, 2009)</span>.<span class='source'>Carter et al. (2014) ; Grant (2021) ; Pink (2009)</span>",
+                        leviers: "<strong>Planifier l'imprévu</strong> : réserver des créneaux non structurés. S'entraîner à la délégation avec des objectifs clairs mais sans micro-management. Pour l'équipe : communiquer les changements en amont, l'impliquer dans la création des plans. Planifier l'imprévu comme <strong>opportunité d'apprentissage</strong> <span class='source'>(Dweck)</span>. Pratiquer la discipline <strong>« Investisseur »</strong> du multiplicateur : déléguer avec confiance <span class='source'>(Wiseman, 2010)</span>.<span class='source'>Wilmot & Ones (2019) ; Dweck ; Wiseman (2010)</span>"
                     }
                 },
                 navigateur: {
                     title: "Le Navigateur Intuitif", summary: "Prend des décisions rapides dans l'incertitude.", icon: '🧭', chartData: [3, 7, 2, 9, 5, 8, 7, 3],
+                    exemple: "C'est celui qui sent que « quelque chose cloche » dans le projet avant que les indicateurs ne le montrent.",
                     details: {
                         fonctionnement: "Prend des décisions rapides basées sur des 'pressentiments' (reconnaissance de schémas non-consciente). Ce mode est souvent associé à ce que Kahneman (2011) appelle le Système 1, bien que cette dichotomie soit une simplification heuristique — en réalité, intuition et analyse s'entremêlent constamment. Capte les signaux faibles.",
-                        forces: "Vitesse de décision, excellente gestion de l'ambiguïté, forte intelligence interpersonnelle, capable de synthétiser des informations complexes de manière holistique.",
-                        limites: "Difficulté à justifier ses décisions de manière factuelle, vulnérable aux biais cognitifs, peut être perçu comme impulsif ou irrationnel.",
-                        leviers: "Pratiquer la métacognition (ex: tenir un 'journal de décisions'). Pour l'équipe : faire confiance à son jugement, l'encourager à expliciter les signaux faibles qu'il perçoit."
+                        forces: "Vitesse de décision, excellente gestion de l'ambiguïté, forte intelligence interpersonnelle, capable de synthétiser des informations complexes de manière holistique. Incarne la décision intuitive experte — RPD (Klein, 1998). Forte sensibilité sociale = composante clé de l'intelligence collective (Woolley et al., 2010).",
+                        limites: "Difficulté à justifier ses décisions de manière factuelle, vulnérable aux biais cognitifs, peut être perçu comme impulsif ou irrationnel. Vulnérable au bruit décisionnel — l'humeur et le contexte influencent le jugement (Sibony et al., 2021).",
+                        leviers: "Pratiquer la métacognition (ex: tenir un 'journal de décisions'). Pour l'équipe : faire confiance à son jugement, l'encourager à expliciter les signaux faibles qu'il perçoit. Tenir un journal de décisions pour calibrer l'intuition et détecter le bruit (Sibony et al., 2021). Pratiquer le « repensement » (Grant, 2021)."
                     },
                     enriched: {
                         fonctionnement: "Mode cognitif associé au <strong>Système 1</strong> de Kahneman (2011) — rapide, automatique, holistique. Cependant, cette dichotomie est une <strong>simplification heuristique</strong> : en réalité, intuition et analyse s'entremêlent constamment. L'intuition experte est une reconnaissance de schémas non-consciente construite par l'expérience.<span class='source'>Kahneman (2011)</span>",
-                        forces: "<strong>Vitesse de décision</strong> dans l'incertitude. Excellente gestion de l'ambiguïté. Forte intelligence interpersonnelle — capte les signaux faibles que l'analyse formelle ne détecte pas. Synthétise des informations complexes de manière holistique.<span class='source'>Kahneman (2011)</span>",
-                        limites: "Vulnérable aux <strong>biais cognitifs</strong> (ancrage, disponibilité, confirmation) précisément parce que le Système 1 fonctionne par heuristiques. Difficulté à justifier ses décisions factuellement. Peut être perçu comme impulsif ou irrationnel par les profils analytiques.<span class='source'>Kahneman (2011)</span>",
-                        leviers: "Tenir un <strong>journal de décisions</strong> pour développer la métacognition. Expliciter les signaux faibles perçus pour les rendre communicables. Pour l'équipe : faire confiance à son jugement tout en demandant une justification a posteriori.<span class='source'>Kahneman (2011)</span>"
+                        forces: "<strong>Vitesse de décision</strong> dans l'incertitude. Excellente gestion de l'ambiguïté. Forte intelligence interpersonnelle — capte les signaux faibles que l'analyse formelle ne détecte pas. Synthétise des informations complexes de manière holistique. Incarne la <strong>décision intuitive experte</strong> — RPD <span class='source'>(Klein, 1998)</span>. Forte <strong>sensibilité sociale</strong> = composante clé de l'intelligence collective <span class='source'>(Woolley et al., 2010)</span>.<span class='source'>Kahneman (2011) ; Klein (1998) ; Woolley et al. (2010)</span>",
+                        limites: "Vulnérable aux <strong>biais cognitifs</strong> (ancrage, disponibilité, confirmation) précisément parce que le Système 1 fonctionne par heuristiques. Difficulté à justifier ses décisions factuellement. Peut être perçu comme impulsif ou irrationnel par les profils analytiques. Vulnérable au <strong>bruit décisionnel</strong> — l'humeur et le contexte influencent le jugement <span class='source'>(Sibony et al., 2021)</span>.<span class='source'>Kahneman (2011) ; Sibony et al. (2021)</span>",
+                        leviers: "Tenir un <strong>journal de décisions</strong> pour développer la métacognition. Expliciter les signaux faibles perçus pour les rendre communicables. Pour l'équipe : faire confiance à son jugement tout en demandant une justification a posteriori. Tenir un journal de décisions pour <strong>calibrer l'intuition</strong> et détecter le bruit <span class='source'>(Sibony et al., 2021)</span>. Pratiquer le <strong>« repensement »</strong> <span class='source'>(Grant, 2021)</span>.<span class='source'>Kahneman (2011) ; Sibony et al. (2021) ; Grant (2021)</span>"
                     }
                 },
                 pilote: {
                     title: "Le Pilote Orienté Tâche", summary: "Maintient le focus sur les objectifs et les résultats.", icon: '🎯', chartData: [7, 4, 8, 6, 9, 2, 4, 7],
+                    exemple: "C'est celui qui recentre : « OK, mais concrètement, qui fait quoi pour vendredi ? »",
                     details: {
                         fonctionnement: "Principalement focalisé sur l'accomplissement des objectifs, le respect des délais et l'efficacité. Définit clairement les rôles, planifie et suit les résultats.",
-                        forces: "Efficacité redoutable pour faire avancer les projets, apporte de la clarté dans les objectifs, maintient l'équipe concentrée sur les priorités.",
-                        limites: "Peut négliger le bien-être et les besoins relationnels de l'équipe, ce qui peut éroder la motivation à long terme. Peut être perçu comme froid ou excessivement directif.",
-                        leviers: "Développer son intelligence relationnelle (ex: planifier du temps pour des interactions informelles), pratiquer l'écoute active. Pour l'équipe : reconnaître son efficacité."
+                        forces: "Efficacité redoutable pour faire avancer les projets, apporte de la clarté dans les objectifs, maintient l'équipe concentrée sur les priorités. Pilote la responsabilité et l'attention aux résultats — niveaux 4-5 de la pyramide de Lencioni (2002).",
+                        limites: "Peut négliger le bien-être et les besoins relationnels de l'équipe, ce qui peut éroder la motivation à long terme. Peut être perçu comme froid ou excessivement directif. Un style trop directif érode la sécurité psychologique (Edmondson, 2019). Monopoliser la parole réduit l'intelligence collective (Woolley et al., 2010). Risque d'être un « diminueur » involontaire (Wiseman, 2010).",
+                        leviers: "Développer son intelligence relationnelle (ex: planifier du temps pour des interactions informelles), pratiquer l'écoute active. Pour l'équipe : reconnaître son efficacité. Pratiquer la discipline « Libérateur » (Wiseman, 2010) : inviter, écouter. Donner de l'autonomie (Pink, 2009). Cadrer le travail, inviter l'engagement, répondre productivement (Edmondson, 2019)."
                     },
                     enriched: {
                         fonctionnement: "Leadership <strong>orienté tâche</strong> (Blake & Mouton, 1964) : focalisation sur les objectifs, les délais et l'efficacité. Définit clairement les rôles et suit les résultats. Ce style produit une <strong>efficacité de groupe</strong> et un positivisme élevés parmi les membres.<span class='source'>Blake & Mouton (1964)</span>",
-                        forces: "Efficacité redoutable pour faire avancer les projets. Apporte de la <strong>clarté dans les objectifs</strong>. Les équipes task-oriented montrent +4% de productivité réelle (méta-analyse). Maintient le focus sur les priorités.<span class='source'>Blake & Mouton (1964)</span>",
-                        limites: "Peut négliger le <strong>bien-être relationnel</strong> de l'équipe, érodant la motivation à long terme. Une étude de 2017 montre que le leadership « efficace » focalisé sur la tâche est associé au <strong>burnout</strong>. Peut être perçu comme froid ou directif.<span class='source'>Blake & Mouton (1964)</span>",
-                        leviers: "Planifier du temps pour des <strong>interactions informelles</strong>. Pratiquer l'écoute active. Intégrer les deux orientations (tâche + relation) pour un leadership optimal. Pour l'équipe : reconnaître son efficacité tout en signalant les besoins relationnels.<span class='source'>Blake & Mouton (1964)</span>"
+                        forces: "Efficacité redoutable pour faire avancer les projets. Apporte de la <strong>clarté dans les objectifs</strong>. Les équipes task-oriented montrent +4% de productivité réelle (méta-analyse). Maintient le focus sur les priorités. Pilote la <strong>responsabilité</strong> et l'<strong>attention aux résultats</strong> — niveaux 4-5 de la pyramide de Lencioni <span class='source'>(2002)</span>.<span class='source'>Blake & Mouton (1964) ; Lencioni (2002)</span>",
+                        limites: "Peut négliger le <strong>bien-être relationnel</strong> de l'équipe, érodant la motivation à long terme. Une étude de 2017 montre que le leadership « efficace » focalisé sur la tâche est associé au <strong>burnout</strong>. Peut être perçu comme froid ou directif. Un style trop directif érode la <strong>sécurité psychologique</strong> <span class='source'>(Edmondson, 2019)</span>. Monopoliser la parole réduit l'<strong>intelligence collective</strong> <span class='source'>(Woolley et al., 2010)</span>. Risque d'être un <strong>« diminueur »</strong> involontaire <span class='source'>(Wiseman, 2010)</span>.<span class='source'>Blake & Mouton (1964) ; Edmondson (2019) ; Woolley et al. (2010) ; Wiseman (2010)</span>",
+                        leviers: "Planifier du temps pour des <strong>interactions informelles</strong>. Pratiquer l'écoute active. Intégrer les deux orientations (tâche + relation) pour un leadership optimal. Pour l'équipe : reconnaître son efficacité tout en signalant les besoins relationnels. Pratiquer la discipline <strong>« Libérateur »</strong> <span class='source'>(Wiseman, 2010)</span> : inviter, écouter. Donner de l'<strong>autonomie</strong> <span class='source'>(Pink, 2009)</span>. Cadrer le travail, inviter l'engagement, répondre productivement <span class='source'>(Edmondson, 2019)</span>.<span class='source'>Blake & Mouton (1964) ; Wiseman (2010) ; Pink (2009) ; Edmondson (2019)</span>"
                     }
                 },
                 catalyseur: {
                     title: "Le Catalyseur Social", summary: "Construit la confiance et facilite la communication.", icon: '❤️‍🔥', chartData: [4, 6, 3, 5, 2, 9, 6, 5],
+                    exemple: "C'est celui qui remarque que Marie n'a pas parlé depuis 20 minutes et lui donne la parole.",
                     details: {
                         fonctionnement: "Associé à ce que le modèle des Big Five appelle une haute Agréabilité, bien que ce facteur soit le moins prédictif de la performance professionnelle — il est davantage lié à la satisfaction relationnelle et à la cohésion d'équipe (Salgado, 1997). Attention tournée vers l'harmonie du groupe et le bien-être. Privilégie la collaboration, la coopération et le consensus.",
-                        forces: "Exceptionnel pour créer une forte cohésion d'équipe et un environnement psychologiquement sûr, excellent médiateur, favorise une communication ouverte et durable.",
-                        limites: "Réticent à prendre des décisions impopulaires ou à donner un feedback critique, peut manquer d'assertivité, risque d'être exploité ou de ne pas défendre ses propres intérêts.",
-                        leviers: "Apprendre à distinguer 'être gentil' de 'être efficace'. S'entraîner au feedback constructif et à dire 'non'. Pour l'équipe : reconnaître son rôle de 'glue' sociale, le coacher pour développer son assertivité."
+                        forces: "Exceptionnel pour créer une forte cohésion d'équipe et un environnement psychologiquement sûr, excellent médiateur, favorise une communication ouverte et durable. Incarne les 3 facteurs de l'intelligence collective : sensibilité sociale, égalité de parole, diversité (Woolley et al., 2010). Créateur naturel de sécurité psychologique (Edmondson, 2019). « Multiplicateur » par excellence (Wiseman, 2010).",
+                        limites: "Réticent à prendre des décisions impopulaires ou à donner un feedback critique, peut manquer d'assertivité, risque d'être exploité ou de ne pas défendre ses propres intérêts. Risque d'éviter le conflit productif — niveau 2 de la pyramide de Lencioni (2002). Trop de consensus = pensée de groupe, pas assez de repensement (Grant, 2021).",
+                        leviers: "Apprendre à distinguer 'être gentil' de 'être efficace'. S'entraîner au feedback constructif et à dire 'non'. Pour l'équipe : reconnaître son rôle de 'glue' sociale, le coacher pour développer son assertivité. Distinguer conflit productif (idées) vs destructif (personnes) (Lencioni, 2002). Faciliter des débats structurés plutôt que chercher l'unanimité (Sibony, 2020)."
                     },
                     enriched: {
                         fonctionnement: "Leadership <strong>orienté relation</strong> — associé à une haute Agréabilité (Costa & McCrae, 1992). Attention tournée vers l'harmonie, la cohésion et le bien-être. L'Agréabilité est le facteur Big Five le <strong>moins prédictif de la performance individuelle</strong>, mais le plus lié à la satisfaction relationnelle et à la cohésion d'équipe (Salgado, 1997).<span class='source'>Costa & McCrae (1992) ; Salgado (1997)</span>",
-                        forces: "Le leadership relationnel génère une <strong>+8% de productivité réelle</strong> (vs +4% pour le task-oriented) grâce à une plus grande cohésion d'équipe et un meilleur apprentissage collectif (méta-analyse). Crée un environnement psychologiquement sûr propice à l'innovation.<span class='source'>Salgado (1997)</span>",
-                        limites: "Si poussé trop loin, la <strong>chimie d'équipe</strong> peut détourner des objectifs concrets. Réticence à prendre des décisions impopulaires ou à donner un feedback critique. Risque d'être exploité par des profils plus assertifs.<span class='source'>Salgado (1997)</span>",
-                        leviers: "Apprendre à distinguer <strong>« être gentil » de « être efficace »</strong>. S'entraîner au feedback constructif (méthode SBI : Situation-Behavior-Impact). Intégrer les deux orientations (tâche + relation). Pour l'équipe : valoriser son rôle de « glue sociale ».<span class='source'>Salgado (1997) ; Blake & Mouton (1964)</span>"
+                        forces: "Le leadership relationnel génère une <strong>+8% de productivité réelle</strong> (vs +4% pour le task-oriented) grâce à une plus grande cohésion d'équipe et un meilleur apprentissage collectif (méta-analyse). Crée un environnement psychologiquement sûr propice à l'innovation. Incarne les <strong>3 facteurs de l'intelligence collective</strong> : sensibilité sociale, égalité de parole, diversité <span class='source'>(Woolley et al., 2010)</span>. Créateur naturel de <strong>sécurité psychologique</strong> <span class='source'>(Edmondson, 2019)</span>. <strong>« Multiplicateur »</strong> par excellence <span class='source'>(Wiseman, 2010)</span>.<span class='source'>Salgado (1997) ; Woolley et al. (2010) ; Edmondson (2019) ; Wiseman (2010)</span>",
+                        limites: "Si poussé trop loin, la <strong>chimie d'équipe</strong> peut détourner des objectifs concrets. Réticence à prendre des décisions impopulaires ou à donner un feedback critique. Risque d'être exploité par des profils plus assertifs. Risque d'éviter le <strong>conflit productif</strong> — niveau 2 de la pyramide de Lencioni <span class='source'>(2002)</span>. Trop de consensus = <strong>pensée de groupe</strong>, pas assez de repensement <span class='source'>(Grant, 2021)</span>.<span class='source'>Salgado (1997) ; Lencioni (2002) ; Grant (2021)</span>",
+                        leviers: "Apprendre à distinguer <strong>« être gentil » de « être efficace »</strong>. S'entraîner au feedback constructif (méthode SBI : Situation-Behavior-Impact). Intégrer les deux orientations (tâche + relation). Pour l'équipe : valoriser son rôle de « glue sociale ». Distinguer <strong>conflit productif</strong> (idées) vs destructif (personnes) <span class='source'>(Lencioni, 2002)</span>. Faciliter des <strong>débats structurés</strong> plutôt que chercher l'unanimité <span class='source'>(Sibony, 2020)</span>.<span class='source'>Salgado (1997) ; Blake & Mouton (1964) ; Lencioni (2002) ; Sibony (2020)</span>"
                     }
                 },
                 pionnier: {
                     title: "Le Pionnier Adaptatif", summary: "Agit comme un agent du changement et explore de nouvelles opportunités.", icon: '🚀', chartData: [3, 8, 4, 7, 5, 6, 9, 2],
+                    exemple: "C'est celui qui propose de tester un nouvel outil alors que l'ancien n'est pas encore maîtrisé.",
                     details: {
                         fonctionnement: "Associé à une haute Ouverture à l'Expérience (Costa & McCrae, 1992) et à la recherche de nouveauté (Barkley, 1997). Curieux, imaginatif, attiré par la nouveauté. Perçoit le changement comme une opportunité stimulante. La valorisation de ce profil varie selon les contextes culturels (Hofstede, 2001).",
-                        forces: "Capacité d'adaptation exceptionnelle, moteur pour l'innovation, apprend et se développe continuellement tout au long de sa carrière.",
-                        limites: "Aversion pour la routine, peut manquer de discipline pour les tâches répétitives, peut être perçu comme manquant de pragmatisme, son appétit pour le changement peut être déstabilisant.",
-                        leviers: "Apprendre à valoriser aussi les phases d'exécution. S'associer à des profils plus structurés. Pour l'équipe : le positionner comme agent du changement, lui donner des objectifs clairs."
+                        forces: "Capacité d'adaptation exceptionnelle, moteur pour l'innovation, apprend et se développe continuellement tout au long de sa carrière. Incarne la flexibilité cognitive et la capacité de repensement (Grant, 2021). Motivé par l'autonomie et le sens (Pink, 2009). État d'esprit de croissance naturel (Dweck).",
+                        limites: "Aversion pour la routine, peut manquer de discipline pour les tâches répétitives, peut être perçu comme manquant de pragmatisme, son appétit pour le changement peut être déstabilisant. Difficulté avec l'engagement durable — trop d'options, pas de suivi (Lencioni, 2002). Peut créer des pertes de motivation chez ceux qui préfèrent la stabilité (Steiner, 1972).",
+                        leviers: "Apprendre à valoriser aussi les phases d'exécution. S'associer à des profils plus structurés. Pour l'équipe : le positionner comme agent du changement, lui donner des objectifs clairs. Ancrer l'innovation dans la maîtrise — approfondir avant de passer à autre chose (Pink, 2009). Discipline « Investisseur » : développer les autres, pas juste lancer des idées (Wiseman, 2010)."
                     },
                     enriched: {
                         fonctionnement: "Haute <strong>Ouverture à l'Expérience</strong> (Costa & McCrae, 1992) — curieux, imaginatif, attiré par la nouveauté. Ce profil évoque la <strong>recherche de nouveauté</strong> (<em>novelty seeking</em>) décrite dans la littérature sur le TDAH (Barkley, 1997). La valorisation de ce style varie fortement selon les cultures (Hofstede, 2001) — prisé dans les cultures individualistes, il peut être perçu comme déstabilisant dans les cultures collectivistes.<span class='source'>Costa & McCrae (1992) ; Barkley (1997) ; Hofstede (2001)</span>",
-                        forces: "Capacité d'<strong>adaptation exceptionnelle</strong> au changement. Moteur de l'innovation. Apprend et se développe continuellement. L'Ouverture est associée au succès dans les métiers créatifs et les environnements incertains.<span class='source'>Costa & McCrae (1992)</span>",
-                        limites: "L'Ouverture à l'Expérience est le facteur Big Five le <strong>moins stable</strong> — il fluctue davantage selon le contexte que les autres traits (De Raad & Peabody, 2005). Aversion pour la routine, difficulté avec les tâches répétitives, peut être perçu comme manquant de pragmatisme.<span class='source'>De Raad & Peabody (2005)</span>",
-                        leviers: "S'associer à des <strong>profils structurés</strong> (Architecte, Stabilisateur) pour l'exécution. Valoriser les phases d'exécution comme des opportunités d'apprentissage. Pour l'équipe : le positionner comme agent du changement avec des objectifs clairs et mesurables.<span class='source'>Kirton (2003)</span>"
+                        forces: "Capacité d'<strong>adaptation exceptionnelle</strong> au changement. Moteur de l'innovation. Apprend et se développe continuellement. L'Ouverture est associée au succès dans les métiers créatifs et les environnements incertains. Incarne la <strong>flexibilité cognitive</strong> et la capacité de repensement <span class='source'>(Grant, 2021)</span>. Motivé par l'<strong>autonomie</strong> et le <strong>sens</strong> <span class='source'>(Pink, 2009)</span>. <strong>État d'esprit de croissance</strong> naturel <span class='source'>(Dweck)</span>.<span class='source'>Costa & McCrae (1992) ; Grant (2021) ; Pink (2009) ; Dweck</span>",
+                        limites: "L'Ouverture à l'Expérience est le facteur Big Five le <strong>moins stable</strong> — il fluctue davantage selon le contexte que les autres traits (De Raad & Peabody, 2005). Aversion pour la routine, difficulté avec les tâches répétitives, peut être perçu comme manquant de pragmatisme. Difficulté avec l'<strong>engagement durable</strong> — trop d'options, pas de suivi <span class='source'>(Lencioni, 2002)</span>. Peut créer des <strong>pertes de motivation</strong> chez ceux qui préfèrent la stabilité <span class='source'>(Steiner, 1972)</span>.<span class='source'>De Raad & Peabody (2005) ; Lencioni (2002) ; Steiner (1972)</span>",
+                        leviers: "S'associer à des <strong>profils structurés</strong> (Architecte, Stabilisateur) pour l'exécution. Valoriser les phases d'exécution comme des opportunités d'apprentissage. Pour l'équipe : le positionner comme agent du changement avec des objectifs clairs et mesurables. Ancrer l'innovation dans la <strong>maîtrise</strong> — approfondir avant de passer à autre chose <span class='source'>(Pink, 2009)</span>. Discipline <strong>« Investisseur »</strong> : développer les autres, pas juste lancer des idées <span class='source'>(Wiseman, 2010)</span>.<span class='source'>Kirton (2003) ; Pink (2009) ; Wiseman (2010)</span>"
                     }
                 },
                 stabilisateur: {
                     title: "Le Stabilisateur Prudent", summary: "Assure la qualité, la fiabilité et la continuité.", icon: '⚓', chartData: [7, 2, 7, 3, 6, 4, 2, 9],
+                    exemple: "C'est celui qui rappelle : « La dernière fois qu'on a changé de méthode, on a perdu 3 semaines. »",
                     details: {
                         fonctionnement: "Fonctionne dans un registre que la littérature associe à une Ouverture à l'Expérience modérée — ce qui, loin d'être un déficit, est associé à la fiabilité, la constance et l'ancrage pragmatique (Kirton, 2003). Préférence pour les routines, les traditions et les méthodes éprouvées. Se sent en sécurité dans des environnements prévisibles.",
-                        forces: "Fiabilité et constance dans l'exécution, garantit la continuité et la qualité, excellent pour optimiser les systèmes, apporte un point de vue pragmatique qui sert de contrepoids.",
-                        limites: "Potentielle résistance au changement, peut paraître rigide ou fermé, risque de désengagement si les changements sont trop rapides ou mal expliqués.",
-                        leviers: "Travailler sa perception du changement, se concentrer sur les bénéfices concrets. Pour l'équipe : communiquer le 'pourquoi' du changement, l'impliquer dans l'amélioration des processus."
+                        forces: "Fiabilité et constance dans l'exécution, garantit la continuité et la qualité, excellent pour optimiser les systèmes, apporte un point de vue pragmatique qui sert de contrepoids. Réduit les pertes de motivation en maintenant la continuité (Steiner, 1972). Contribue à la confiance — niveau 1 de la pyramide de Lencioni (2002) — par sa prévisibilité.",
+                        limites: "Potentielle résistance au changement, peut paraître rigide ou fermé, risque de désengagement si les changements sont trop rapides ou mal expliqués. Risque de « pensée congelée » et de résistance au changement nécessaire (Grant, 2021). Peut basculer vers un état d'esprit fixe (Dweck).",
+                        leviers: "Travailler sa perception du changement, se concentrer sur les bénéfices concrets. Pour l'équipe : communiquer le 'pourquoi' du changement, l'impliquer dans l'amélioration des processus. Pratiquer le « repensement » en se concentrant sur les bénéfices mesurables du changement (Grant, 2021). Participer aux audits de bruit pour voir où les processus actuels échouent (Sibony et al., 2021)."
                     },
                     enriched: {
                         fonctionnement: "Ouverture à l'Expérience <strong>modérée</strong> — ce qui, loin d'être un déficit, est associé à la fiabilité, la constance et l'ancrage pragmatique (Kirton, 2003). Préférence pour les routines, les traditions et les méthodes éprouvées. Se sent en sécurité dans des environnements prévisibles. L'habitus professionnel (Bourdieu, 1979) façonne cette préférence pour la stabilité.<span class='source'>Kirton (2003) ; Bourdieu (1979)</span>",
-                        forces: "<strong>Fiabilité et constance</strong> dans l'exécution. Garantit la continuité et la qualité des processus. Excellent pour optimiser les systèmes existants. Apporte un point de vue <strong>pragmatique</strong> qui sert de contrepoids essentiel aux profils innovateurs.<span class='source'>Kirton (2003)</span>",
-                        limites: "Potentielle <strong>résistance au changement</strong> — peut paraître rigide ou fermé. Risque de désengagement si les changements sont trop rapides ou mal communiqués. Cette résistance peut être renforcée par l'identité au travail construite autour de la maîtrise (Sainsaulieu, 1977).<span class='source'>Sainsaulieu (1977)</span>",
-                        leviers: "Travailler la perception du changement en se concentrant sur les <strong>bénéfices concrets</strong> et mesurables. Pour l'équipe : communiquer le « pourquoi » du changement, l'impliquer dans l'<strong>amélioration continue</strong> des processus existants plutôt que dans la rupture.<span class='source'>Kirton (2003) ; Sainsaulieu (1977)</span>"
+                        forces: "<strong>Fiabilité et constance</strong> dans l'exécution. Garantit la continuité et la qualité des processus. Excellent pour optimiser les systèmes existants. Apporte un point de vue <strong>pragmatique</strong> qui sert de contrepoids essentiel aux profils innovateurs. Réduit les <strong>pertes de motivation</strong> en maintenant la continuité <span class='source'>(Steiner, 1972)</span>. Contribue à la <strong>confiance</strong> — niveau 1 de la pyramide de Lencioni <span class='source'>(2002)</span> — par sa prévisibilité.<span class='source'>Kirton (2003) ; Steiner (1972) ; Lencioni (2002)</span>",
+                        limites: "Potentielle <strong>résistance au changement</strong> — peut paraître rigide ou fermé. Risque de désengagement si les changements sont trop rapides ou mal communiqués. Cette résistance peut être renforcée par l'identité au travail construite autour de la maîtrise (Sainsaulieu, 1977). Risque de <strong>« pensée congelée »</strong> et de résistance au changement nécessaire <span class='source'>(Grant, 2021)</span>. Peut basculer vers un <strong>état d'esprit fixe</strong> <span class='source'>(Dweck)</span>.<span class='source'>Sainsaulieu (1977) ; Grant (2021) ; Dweck</span>",
+                        leviers: "Travailler la perception du changement en se concentrant sur les <strong>bénéfices concrets</strong> et mesurables. Pour l'équipe : communiquer le « pourquoi » du changement, l'impliquer dans l'<strong>amélioration continue</strong> des processus existants plutôt que dans la rupture. Pratiquer le <strong>« repensement »</strong> en se concentrant sur les bénéfices mesurables du changement <span class='source'>(Grant, 2021)</span>. Participer aux <strong>audits de bruit</strong> pour voir où les processus actuels échouent <span class='source'>(Sibony et al., 2021)</span>.<span class='source'>Kirton (2003) ; Sainsaulieu (1977) ; Grant (2021) ; Sibony et al. (2021)</span>"
                     }
                 },
             }
@@ -1040,22 +1088,26 @@
 
         // ===== Quiz d'auto-positionnement =====
         const quizQuestions = [
-            { axis: 0, poleA: "Analyser en détail", poleB: "Explorer largement", text: "Face à un nouveau projet, je préfère..." },
-            { axis: 0, poleA: "Une seule bonne solution", poleB: "Plusieurs options ouvertes", text: "Je suis plus à l'aise quand je cherche..." },
-            { axis: 0, poleA: "Approfondir un sujet", poleB: "Connecter des domaines différents", text: "Mon énergie intellectuelle va naturellement vers..." },
-            { axis: 0, poleA: "Des données vérifiées", poleB: "Des idées nouvelles même incertaines", text: "Je fais davantage confiance à..." },
-            { axis: 1, poleA: "Planifier avant d'agir", poleB: "Ajuster en cours de route", text: "Ma façon de travailler naturelle est de..." },
-            { axis: 1, poleA: "Un plan détaillé", poleB: "Mon intuition du moment", text: "Pour prendre une décision, je m'appuie sur..." },
-            { axis: 1, poleA: "Anticiper les risques", poleB: "Saisir les opportunités", text: "Ma priorité face à l'incertitude est de..." },
-            { axis: 1, poleA: "Respecter le processus", poleB: "Improviser selon le contexte", text: "En réunion, je suis plutôt celui/celle qui veut..." },
-            { axis: 2, poleA: "Les résultats d'abord", poleB: "Les relations d'abord", text: "Dans un projet d'équipe, je privilégie..." },
-            { axis: 2, poleA: "Être direct et efficace", poleB: "Être diplomate et inclusif", text: "Ma communication tend à..." },
-            { axis: 2, poleA: "La clarté des objectifs", poleB: "La cohésion du groupe", text: "Ce qui m'importe le plus dans une équipe, c'est..." },
-            { axis: 2, poleA: "Trancher rapidement", poleB: "Chercher le consensus", text: "Face à un désaccord en équipe, je préfère..." },
-            { axis: 3, poleA: "Changer et innover", poleB: "Optimiser l'existant", text: "Mon réflexe face à un processus établi est de..." },
-            { axis: 3, poleA: "Stimulant", poleB: "Déstabilisant", text: "Je trouve le changement plutôt..." },
-            { axis: 3, poleA: "Les possibilités futures", poleB: "Les acquis concrets", text: "Ce qui me motive le plus, ce sont..." },
-            { axis: 3, poleA: "L'exploration de l'inconnu", poleB: "La maîtrise de mon domaine", text: "Je tire le plus de satisfaction de..." }
+            // Axe 0 — Traitement de l'Information (poleA=analytique, poleB=exploratoire)
+            { axis: 0, poleA: "Analyser en détail", poleB: "Explorer largement", text: "Face à un nouveau projet, je préfère...", hint: "Ex : On vous confie un nouveau dossier — vous étudiez chaque détail ou vous explorez d'abord les grandes lignes ?" },
+            { axis: 0, poleA: "Plusieurs options ouvertes", poleB: "Une seule bonne solution", text: "Je suis plus à l'aise quand je cherche...", reversed: true, hint: "Ex : En réunion de brainstorming, préférez-vous multiplier les pistes ou converger vers LA solution ?" },
+            { axis: 0, poleA: "Approfondir un sujet", poleB: "Connecter des domaines différents", text: "Mon énergie intellectuelle va naturellement vers...", hint: "Ex : Quand vous lisez un article, vous creusez le sujet ou vous faites des liens avec d'autres domaines ?" },
+            { axis: 0, poleA: "Des idées nouvelles même incertaines", poleB: "Des données vérifiées", text: "Je fais davantage confiance à...", reversed: true, hint: "Ex : Pour prendre une décision, vous attendez les chiffres ou vous suivez une intuition prometteuse ?" },
+            // Axe 1 — Processus d'Action (poleA=planificateur, poleB=agile)
+            { axis: 1, poleA: "Planifier avant d'agir", poleB: "Ajuster en cours de route", text: "Ma façon de travailler naturelle est de...", hint: "Ex : Avant de commencer une tâche, vous faites un plan ou vous démarrez et ajustez en chemin ?" },
+            { axis: 1, poleA: "Mon intuition et mon expérience", poleB: "Un plan détaillé", text: "Pour prendre une décision, je m'appuie sur...", reversed: true, hint: "Ex : Face à un choix important, vous consultez votre expérience vécue ou vous construisez un tableau comparatif ?" },
+            { axis: 1, poleA: "Anticiper les risques", poleB: "Saisir les opportunités", text: "Ma priorité face à l'incertitude est de...", hint: "Ex : Un projet démarre avec beaucoup d'inconnues — vous listez les risques ou vous foncez pour voir ?" },
+            { axis: 1, poleA: "Improviser selon le contexte", poleB: "Respecter le processus", text: "En réunion, je suis plutôt celui/celle qui veut...", reversed: true, hint: "Ex : La réunion dérive — vous proposez de suivre l'ordre du jour ou vous laissez la discussion évoluer ?" },
+            // Axe 2 — Rapport aux Autres (poleA=tâche, poleB=relation)
+            { axis: 2, poleA: "Les résultats d'abord", poleB: "Les relations d'abord", text: "Dans un projet d'équipe, je privilégie...", hint: "Ex : Un collègue a besoin d'aide mais la deadline approche — vous terminez votre tâche ou vous l'aidez d'abord ?" },
+            { axis: 2, poleA: "Être diplomate et inclusif", poleB: "Être direct et efficace", text: "Ma communication tend à...", reversed: true, hint: "Ex : Vous devez donner un retour négatif — vous allez droit au but ou vous enrobez le message ?" },
+            { axis: 2, poleA: "La clarté des objectifs", poleB: "La cohésion du groupe", text: "Ce qui m'importe le plus dans une équipe, c'est...", hint: "Ex : Vous évaluez une équipe — vous regardez d'abord les résultats ou l'ambiance de travail ?" },
+            { axis: 2, poleA: "Chercher le consensus", poleB: "Trancher rapidement", text: "Face à un désaccord en équipe, je préfère...", reversed: true, hint: "Ex : Deux collègues ne sont pas d'accord — vous tranchez rapidement ou vous cherchez un compromis ?" },
+            // Axe 3 — Rapport à la Nouveauté (poleA=changement, poleB=stabilité)
+            { axis: 3, poleA: "Changer et innover", poleB: "Optimiser l'existant", text: "Mon réflexe face à un processus établi est de...", hint: "Ex : Un outil que vous utilisez depuis 2 ans fonctionne bien — vous cherchez quand même mieux ou vous l'optimisez ?" },
+            { axis: 3, poleA: "Prendre du recul d'abord", poleB: "M'adapter rapidement", text: "Face au changement, ma première réaction est de...", reversed: true, hint: "Ex : On annonce une réorganisation — vous vous adaptez vite ou vous prenez du temps pour digérer ?" },
+            { axis: 3, poleA: "Les possibilités futures", poleB: "Les acquis concrets", text: "Ce qui me motive le plus, ce sont...", hint: "Ex : Qu'est-ce qui vous fait lever le matin — les projets à venir ou la satisfaction du travail bien fait ?" },
+            { axis: 3, poleA: "La maîtrise de mon domaine", poleB: "L'exploration de l'inconnu", text: "Je tire le plus de satisfaction de...", reversed: true, hint: "Ex : Fin de journée — vous êtes plus fier d'avoir maîtrisé votre sujet ou d'avoir exploré un nouveau domaine ?" }
         ];
         const quizAnswers = new Array(16).fill(null);
         let userChartInstance = null;
@@ -1081,6 +1133,7 @@
                 }
                 html += `<fieldset class="quiz-question" id="quiz-q${i}">
                     <legend class="quiz-legend">${i + 1}. ${q.text}</legend>
+                    ${q.hint ? `<p class="quiz-hint">${q.hint}</p>` : ''}
                     <div class="quiz-poles" aria-hidden="true"><span>← ${q.poleA}</span><span>${q.poleB} →</span></div>
                     <div class="quiz-scale" role="radiogroup" aria-label="${q.text}">
                         ${[1,2,3,4,5,6,7].map(v => `<label class="quiz-radio-label" for="q${i}_v${v}">
@@ -1088,6 +1141,7 @@
                             <span class="quiz-radio-btn">${v}</span>
                         </label>`).join('')}
                     </div>
+                    <div class="quiz-scale-labels" aria-hidden="true"><span>${q.poleA}</span><span>Neutre</span><span>${q.poleB}</span></div>
                 </fieldset>`;
             });
             container.innerHTML = html;
@@ -1102,7 +1156,9 @@
         }
 
         function selectQuizAnswer(questionIndex, value) {
-            quizAnswers[questionIndex] = value;
+            // Store corrected value: reverse if item polarity is flipped
+            const q = quizQuestions[questionIndex];
+            quizAnswers[questionIndex] = q.reversed ? (8 - value) : value;
             // Update visual state on custom radio buttons
             const fieldset = document.getElementById(`quiz-q${questionIndex}`);
             fieldset.querySelectorAll('.quiz-radio-btn').forEach(btn => btn.classList.remove('selected'));
@@ -1122,24 +1178,20 @@
                 return questions.reduce((sum, v) => sum + v, 0) / questions.length;
             });
 
-            // Axe scores → 8 radar dimensions
-            // [Rigueur, Créativité, Planification, Agilité, Focus Tâche, Focus Relation, Adaptabilité, Stabilité]
-            const s = axisScores.map(v => v / 7 * 10); // normalize to 0-10
+            // Scores moyens (1-7) → normalisés 0-10 → 8 dimensions radar
+            // Score bas sur un axe = poleA dominant, score haut = poleB dominant
+            // NB: les items reversed sont déjà corrigés dans selectQuizAnswer()
+            const s = axisScores.map(v => v / 7 * 10);
             const userData = [
-                10 - s[0],  // Rigueur (inverse axe1: low=analytique=rigoureux)
-                s[0],       // Créativité (high axe1=explorateur=créatif)
-                10 - s[1],  // Planification (inverse axe2: low=architecte=planificateur)
-                s[1],       // Agilité (high axe2=navigateur=agile)
-                10 - s[2],  // Focus Tâche (inverse axe3: low=pilote=tâche)
-                s[2],       // Focus Relation (high axe3=catalyseur=relation)
-                s[3],       // Adaptabilité (high axe4: poleA=changer → inverse: low=adaptable... wait)
-                10 - s[3]   // Stabilité
+                10 - s[0],  // Rigueur       ← bas axe0 = analytique
+                s[0],       // Créativité    ← haut axe0 = exploratoire
+                10 - s[1],  // Planification ← bas axe1 = planificateur
+                s[1],       // Agilité       ← haut axe1 = agile
+                10 - s[2],  // Focus Tâche   ← bas axe2 = orienté tâche
+                s[2],       // Focus Relation← haut axe2 = orienté relation
+                10 - s[3],  // Adaptabilité  ← bas axe3 = changement (poleA)
+                s[3]        // Stabilité     ← haut axe3 = stabilité (poleB)
             ];
-            // Fix axe4: poleA="Changer et innover" scores LOW (1) for stabilisateur, HIGH (7) for stabilisateur on poleB
-            // So low score = innovateur/adaptable, high score = stable
-            // Adaptabilité = 10 - s[3], Stabilité = s[3]
-            userData[6] = 10 - s[3]; // Adaptabilité (low score on axe4 = changement-oriented)
-            userData[7] = s[3];      // Stabilité (high score on axe4 = stability-oriented)
 
             // Find dominant profile by correlation
             const profiles = Object.entries(profilsData.profiles);
@@ -1255,6 +1307,132 @@
             document.getElementById('quiz').scrollIntoView({ behavior: 'smooth' });
         }
 
+        function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+            const words = text.split(' ');
+            let line = '';
+            for (const word of words) {
+                const test = line + word + ' ';
+                if (ctx.measureText(test).width > maxWidth && line) {
+                    ctx.fillText(line.trim(), x, y);
+                    line = word + ' ';
+                    y += lineHeight;
+                } else {
+                    line = test;
+                }
+            }
+            ctx.fillText(line.trim(), x, y);
+            return y + lineHeight;
+        }
+
+        function exportResults() {
+            const dominant = profilsData.profiles[window._dominantId];
+            const dominantAxis = profilsData.axes.find(a => a.profiles.includes(window._dominantId));
+            const complementaryId = dominantAxis.profiles.find(p => p !== window._dominantId);
+            const complementary = profilsData.profiles[complementaryId];
+
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 800;
+            canvas.height = 950;
+
+            // Fond blanc avec bordure subtile
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, 800, 950);
+            ctx.strokeStyle = '#e2e8f0';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(1, 1, 798, 948);
+
+            // Bande de couleur en haut
+            ctx.fillStyle = '#0d7c72';
+            ctx.fillRect(0, 0, 800, 6);
+
+            // Titre
+            ctx.fillStyle = '#0d7c72';
+            ctx.font = 'bold 26px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('Mon Profil Cognitif Professionnel', 400, 45);
+
+            // Graphique radar (copie du canvas Chart.js)
+            const chartCanvas = document.getElementById('userChart');
+            ctx.drawImage(chartCanvas, 125, 60, 550, 380);
+
+            // Icone + Titre du profil dominant
+            ctx.fillStyle = '#1e293b';
+            ctx.font = 'bold 24px sans-serif';
+            ctx.fillText(dominant.icon + '  ' + dominant.title, 400, 480);
+
+            // Axe
+            ctx.fillStyle = '#64748b';
+            ctx.font = '14px sans-serif';
+            ctx.fillText('Profil dominant — ' + dominantAxis.title, 400, 505);
+
+            // Description (summary)
+            ctx.fillStyle = '#475569';
+            ctx.font = 'italic 16px sans-serif';
+            let nextY = wrapText(ctx, '\u00AB ' + dominant.summary + ' \u00BB', 400, 535, 650, 22);
+
+            // Separator
+            nextY += 10;
+            ctx.strokeStyle = '#e2e8f0';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(100, nextY);
+            ctx.lineTo(700, nextY);
+            ctx.stroke();
+            nextY += 20;
+
+            // Scores radar (8 dimensions)
+            ctx.font = '13px sans-serif';
+            ctx.textAlign = 'left';
+            const labels = ['Rigueur', 'Créativité', 'Planification', 'Agilité', 'Focus Tâche', 'Focus Relation', 'Adaptabilité', 'Stabilité'];
+            const userData = userChartInstance.data.datasets[0].data;
+            const col1X = 120, col2X = 450;
+            for (let i = 0; i < 8; i++) {
+                const x = i < 4 ? col1X : col2X;
+                const y = nextY + (i % 4) * 24;
+                // Label
+                ctx.fillStyle = '#64748b';
+                ctx.fillText(labels[i] + ' :', x, y);
+                // Value bar background
+                const barX = x + 130;
+                ctx.fillStyle = '#e2e8f0';
+                ctx.fillRect(barX, y - 10, 100, 12);
+                // Value bar fill
+                ctx.fillStyle = '#0d9488';
+                ctx.fillRect(barX, y - 10, userData[i] * 10, 12);
+                // Value text
+                ctx.fillStyle = '#1e293b';
+                ctx.font = 'bold 13px sans-serif';
+                ctx.fillText(Math.round(userData[i] * 10) / 10 + '', barX + 108, y);
+                ctx.font = '13px sans-serif';
+            }
+            nextY += 4 * 24 + 15;
+
+            // Binôme complémentaire
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#fb923c';
+            ctx.font = 'bold 16px sans-serif';
+            ctx.fillText(complementary.icon + '  Binôme complémentaire : ' + complementary.title, 400, nextY);
+            nextY += 22;
+            ctx.fillStyle = '#64748b';
+            ctx.font = 'italic 14px sans-serif';
+            ctx.fillText('\u00AB ' + complementary.summary + ' \u00BB', 400, nextY);
+            nextY += 30;
+
+            // Footer
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '11px sans-serif';
+            ctx.fillText('Outil exploratoire non validé psychométriquement — Résultat indicatif, non diagnostique', 400, nextY);
+            nextY += 16;
+            ctx.fillText('Explorateur des Profils Professionnels — Dr FENOHASINA T.J. Félicien', 400, nextY);
+
+            // Télécharger
+            const link = document.createElement('a');
+            link.download = 'mon-profil-cognitif.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
         let chartInstance = null;
         const chartLabels = ['Rigueur', 'Créativité', 'Planification', 'Agilité', 'Focus Tâche', 'Focus Relation', 'Adaptabilité', 'Stabilité'];
 
@@ -1364,6 +1542,7 @@
                         <span class="profile-icon">${profile.icon}</span>
                         <h3 class="profile-title">${profile.title}</h3>
                         <p class="profile-summary">"${profile.summary}"</p>
+                        ${profile.exemple ? `<p class="profile-exemple"><em>${profile.exemple}</em></p>` : ''}
                     </div>
                     <div class="tabs-container" role="tablist" aria-label="Détails du profil ${profile.title}">
                         ${Object.keys(profile.details).map((key, index) => {
@@ -1496,6 +1675,7 @@
             const btn = document.querySelector('.references-toggle');
             list.classList.toggle('visible');
             btn.classList.toggle('open');
+            btn.setAttribute('aria-expanded', list.classList.contains('visible') ? 'true' : 'false');
         }
     </script>
 </body>

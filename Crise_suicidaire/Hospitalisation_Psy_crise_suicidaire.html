@@ -3,13 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Urgences Psy – Trois cas types (dépression avec idées suicidaires) — outil clinique interactif pour la psychiatrie et la sante mentale.">
   <title>Urgences Psy – Trois cas types (dépression avec idées suicidaires)</title>
   <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/questionnaire-light.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
   <style>
     :root {
       --psy: #3b82f6;
@@ -346,10 +348,10 @@
   <!-- Navigation -->
   <nav class="navigation-bar">
     <div class="nav-buttons">
-      <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+      <a href="../index.html" class="btn-home" aria-label="Accueil" title="Accueil"><i class="fas fa-home" aria-hidden="true"></i></a>
       <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
     </div>
-    <h1>Urgences Psychiatriques</h1>
+    <span class="nav-title">Urgences Psychiatriques</span>
     <span class="badge badge-crise">Crise</span>
   </nav>
 

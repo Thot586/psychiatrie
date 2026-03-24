@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Échelle d'Estime de Soi de Rosenberg (SERS) — outil clinique interactif pour la psychiatrie et la sante mentale.">
     <title>Échelle d'Estime de Soi de Rosenberg (SERS)</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/questionnaire-light.css">
     <style>
@@ -32,10 +34,10 @@
 <body class="light-questionnaire">
     <nav class="navigation-bar">
         <div class="nav-buttons">
-            <a href="../index.html" class="btn-home" title="Accueil"><i class="fas fa-home"></i></a>
+            <a href="../index.html" class="btn-home" aria-label="Accueil" title="Accueil"><i class="fas fa-home" aria-hidden="true"></i></a>
             <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
         </div>
-        <h1>Échelle d'Estime de Soi</h1>
+        <span class="nav-title">Échelle d'Estime de Soi</span>
         <span class="badge badge-cat-rehab">Rehab</span>
     </nav>
 
