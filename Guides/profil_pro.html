@@ -1221,11 +1221,20 @@
             resultsEl.style.display = 'block';
             resultsEl.classList.add('fade-in');
 
+            const isWeakMatch = bestCorr < 0.65;
+            const confidenceNote = isWeakMatch
+                ? `<div class="warning-box" style="margin-top: 1rem; text-align: left;">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Profil mixte — pas de dominante claire</h3>
+                    <p>Vos réponses ne correspondent clairement à aucun archétype unique (corrélation : ${(bestCorr * 100).toFixed(0)}%). Cela peut indiquer un <strong>fonctionnement équilibré</strong> entre plusieurs modes, des réponses proches du neutre, ou un remplissage rapide. Le profil ci-dessous est indicatif mais à interpréter avec prudence.</p>
+                  </div>`
+                : '';
+
             document.getElementById('dominant-profile').innerHTML = `
                 <div class="result-icon">${dominant.icon}</div>
                 <h3 class="result-title">${dominant.title}</h3>
                 <p class="result-summary">"${dominant.summary}"</p>
-                <p class="result-match">Profil dominant — ${dominantAxis.title}</p>
+                <p class="result-match">Profil dominant — ${dominantAxis.title} (concordance : ${(bestCorr * 100).toFixed(0)}%)</p>
+                ${confidenceNote}
                 <p style="font-size: 0.8rem; color: var(--color-text-dimmed); margin-top: 0.75rem; font-style: italic;">Rappel : ce résultat est exploratoire. Il reflète vos réponses à un instant donné, pas un trait stable. Les profils sont des archétypes simplificateurs — votre fonctionnement réel est plus nuancé et dépend du contexte (Fleeson & Jayawickreme, 2015).</p>
                 <div class="result-tabs" role="tablist" aria-label="Détails de votre profil dominant">
                     <button role="tab" class="profile-tab tab-active" aria-selected="true" tabindex="0" onclick="showResultTab('fonctionnement', this)">Fonctionnement</button>
