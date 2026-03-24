@@ -223,7 +223,7 @@
             border-color: rgba(13, 148, 136, 0.25);
         }
         .quiz-legend { color: var(--color-text-primary); font-weight: 500; margin-bottom: 0.25rem; font-size: 0.95rem; padding: 0; }
-        .quiz-hint { font-size: 0.8rem; color: var(--color-text-dimmed); font-style: italic; margin: 0 0 0.5rem; padding-left: 0.5rem; border-left: 2px solid var(--color-border); line-height: 1.5; }
+        .quiz-hint { font-size: 0.8rem; color: var(--color-text-dimmed); font-style: italic; margin: 0.5rem 0 0; padding-left: 0.5rem; border-left: 2px solid var(--color-border); line-height: 1.5; }
         .quiz-question p { color: var(--color-text-primary); font-weight: 500; margin-bottom: 0.75rem; font-size: 0.95rem; }
         .quiz-poles {
             display: flex; justify-content: space-between;
@@ -250,11 +250,6 @@
             font-weight: 700; transform: scale(1.05);
             box-shadow: inset 3px 3px 6px rgba(0,0,0,0.2), inset -2px -2px 4px rgba(255,255,255,0.1), 0 0 20px rgba(20,184,166,0.3);
         }
-        .quiz-scale-labels {
-            display: flex; justify-content: space-between;
-            font-size: 0.7rem; color: var(--color-text-dimmed); margin-top: 0.3rem; padding: 0 0.1rem;
-        }
-        .quiz-scale-labels span:nth-child(2) { text-align: center; }
         /* Focus visible on radio label */
         .quiz-radio-input:focus-visible + .quiz-radio-btn {
             outline: 2px solid #0369a1;
@@ -1133,7 +1128,6 @@
                 }
                 html += `<fieldset class="quiz-question" id="quiz-q${i}">
                     <legend class="quiz-legend">${i + 1}. ${q.text}</legend>
-                    ${q.hint ? `<p class="quiz-hint">${q.hint}</p>` : ''}
                     <div class="quiz-poles" aria-hidden="true"><span>← ${q.poleA}</span><span>${q.poleB} →</span></div>
                     <div class="quiz-scale" role="radiogroup" aria-label="${q.text}">
                         ${[1,2,3,4,5,6,7].map(v => `<label class="quiz-radio-label" for="q${i}_v${v}">
@@ -1141,7 +1135,7 @@
                             <span class="quiz-radio-btn">${v}</span>
                         </label>`).join('')}
                     </div>
-                    <div class="quiz-scale-labels" aria-hidden="true"><span>${q.poleA}</span><span>Neutre</span><span>${q.poleB}</span></div>
+                    ${q.hint ? `<p class="quiz-hint">${q.hint}</p>` : ''}
                 </fieldset>`;
             });
             container.innerHTML = html;
