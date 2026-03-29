@@ -69,38 +69,46 @@
             box-shadow: var(--neo-raised-lg);
         }
 
-        .intro-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            width: 100%;
-            background: none;
-            border: none;
-            padding: 0;
-            font: inherit;
-            text-align: left;
-        }
-
-        .intro-header h2 {
+        .intro-card h2 {
             font-size: 1.5rem;
             color: #0d7c72;
-            margin: 0;
+            margin: 0 0 1rem 0;
+        }
+
+        .intro-card > p {
+            color: var(--color-text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .science-toggle-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: none;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 0.6rem 1rem;
+            margin-top: 1rem;
+            cursor: pointer;
+            font: inherit;
+            font-size: 0.9rem;
+            color: #0d7c72;
+            transition: background 0.2s;
+        }
+
+        .science-toggle-btn:hover {
+            background: rgba(13, 124, 114, 0.06);
+        }
+
+        .science-toggle-btn:active {
+            transform: scale(0.98);
         }
 
         .intro-toggle {
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             color: #0d7c72;
             font-weight: bold;
-        }
-
-        .intro-content {
-            margin-top: 1rem;
-        }
-
-        .intro-content p {
-            color: var(--color-text-muted);
-            margin-bottom: 1rem;
+            margin-left: auto;
         }
 
         /* Warning box */
@@ -245,6 +253,10 @@
             transform: translateY(-1px); color: #0d9488;
             box-shadow: 6px 6px 12px rgba(0,0,0,0.1), -6px -6px 12px rgba(255,255,255,0.95);
         }
+        .quiz-radio-label:active .quiz-radio-btn {
+            transform: scale(0.95);
+            box-shadow: inset 2px 2px 4px rgba(0,0,0,0.1), inset -2px -2px 4px rgba(255,255,255,0.5);
+        }
         .quiz-radio-btn.selected {
             background: linear-gradient(145deg, #0d9488, #065f56); color: #ffffff;
             font-weight: 700; transform: scale(1.05);
@@ -276,6 +288,10 @@
             transform: translateY(-3px);
             box-shadow: 8px 8px 20px rgba(0,0,0,0.15), -6px -6px 14px rgba(255,255,255,0.9), 0 0 30px rgba(20,184,166,0.2);
         }
+        .btn-quiz-submit:active:not(:disabled) {
+            transform: translateY(1px);
+            box-shadow: 2px 2px 6px rgba(0,0,0,0.1), -2px -2px 4px rgba(255,255,255,0.7);
+        }
         .btn-quiz-submit:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
         .profile-result { background: var(--surface-card); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1rem; box-shadow: var(--neo-raised); text-align: center; }
         .profile-result .result-icon { font-size: 3rem; margin-bottom: 0.5rem; }
@@ -284,7 +300,12 @@
         .profile-result .result-match { font-size: 0.85rem; color: var(--color-text-dimmed); }
         .profile-result.complementary { border-top: 4px solid #fb923c; }
         .profile-result.complementary .result-title { color: #fb923c; }
-        .result-tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.25rem; margin: 1.5rem 0 1rem; border-bottom: 1px solid var(--color-border); }
+        .result-tabs {
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem;
+            margin: 1.5rem 0 1rem; padding: 0.5rem;
+            background: #e8edf2; border-radius: 14px;
+            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.08), inset -2px -2px 5px rgba(255,255,255,0.8);
+        }
         .result-tab-content {
             background: #f8fafc; border-radius: 16px; padding: 1.5rem;
             box-shadow: inset 4px 4px 8px rgba(0,0,0,0.06), inset -4px -4px 8px rgba(255,255,255,0.8);
@@ -359,6 +380,11 @@
         .accordion-header:hover {
             background: rgba(13, 124, 114, 0.08);
             box-shadow: var(--neo-raised-lg);
+        }
+
+        .accordion-header:active {
+            transform: scale(0.99);
+            box-shadow: var(--neo-inset);
         }
 
         .accordion-header.active {
@@ -529,49 +555,60 @@
             border-radius: 0 8px 8px 0;
         }
 
-        /* Tabs */
+        /* Tabs — Neomorphic buttons for max affordance */
         .tabs-container {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 0.25rem;
+            gap: 0.5rem;
             margin-bottom: 1rem;
-            padding-bottom: 0;
-            border-bottom: 1px solid var(--color-border);
+            padding: 0.5rem;
+            background: #e8edf2;
+            border-radius: 14px;
+            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.08), inset -2px -2px 5px rgba(255,255,255,0.8);
         }
 
         .profile-tab {
-            font-size: 0.875rem;
-            font-weight: 500;
-            padding: 0.5rem 0.75rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.6rem 1rem;
             border: none;
-            border-radius: 0;
-            border-bottom: 2px solid transparent;
-            background: none;
-            color: var(--color-text-muted);
+            border-radius: 10px;
+            background: #e8edf2;
+            color: #64748b;
             cursor: pointer;
-            transition: color 0.2s ease, border-bottom-color 0.2s ease;
-            box-shadow: none;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 3px 3px 6px rgba(0,0,0,0.1), -3px -3px 6px rgba(255,255,255,0.9);
+            position: relative;
         }
 
         .profile-tab:hover {
             color: #0d7c72;
-            border-bottom-color: rgba(13, 124, 114, 0.3);
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.12), -4px -4px 8px rgba(255,255,255,0.95);
+            transform: translateY(-1px);
+        }
+
+        .profile-tab:active {
+            transform: translateY(0);
+            box-shadow: inset 2px 2px 4px rgba(0,0,0,0.12), inset -2px -2px 4px rgba(255,255,255,0.7);
         }
 
         .profile-tab.tab-active {
-            background: none;
-            color: #0d7c72;
-            font-weight: 600;
-            border-bottom: 2px solid #0d7c72;
+            background: linear-gradient(145deg, #0d9488, #0a7a70);
+            color: #ffffff;
+            font-weight: 700;
+            box-shadow: 2px 2px 6px rgba(13, 148, 136, 0.35), -1px -1px 3px rgba(255,255,255,0.3), inset 1px 1px 2px rgba(255,255,255,0.15);
             transform: none;
-            box-shadow: none;
+        }
+
+        .profile-tab.tab-active:hover {
+            box-shadow: 3px 3px 8px rgba(13, 148, 136, 0.4), -1px -1px 3px rgba(255,255,255,0.3), inset 1px 1px 2px rgba(255,255,255,0.15);
+            transform: none;
         }
 
         .profile-tab.tab-inactive {
-            background: none;
-            color: var(--color-text-muted);
-            border-bottom: 2px solid transparent;
+            background: #e8edf2;
+            color: #64748b;
         }
 
         /* Profile content */
@@ -759,20 +796,21 @@
         </header>
 
         <section id="intro" class="intro-card">
-            <button class="intro-header" onclick="toggleIntro()" aria-expanded="false" aria-controls="intro-content" type="button">
-                <h2>Introduction & Précautions d'usage</h2>
-                <span id="intro-toggle-icon" class="intro-toggle" aria-hidden="true">+</span>
-            </button>
-            <div id="intro-content" class="intro-content" style="display: none;">
-                <p>Cet outil a pour vocation de fournir un langage commun pour mieux comprendre les différents modes de fonctionnement au travail. L'objectif est de transformer la diversité cognitive, souvent source de friction, en un levier de performance et de collaboration.</p>
-                <div class="warning-box">
-                    <h3><i class="fas fa-exclamation-triangle"></i> Avertissement : Des archétypes, pas des boîtes</h3>
-                    <p>Ces profils sont des <strong>archétypes</strong>, pas des étiquettes. Un individu est infiniment plus complexe. Utilisez cet outil non pas comme un diagnostic, mais comme un <strong>point de départ pour le dialogue</strong> et une meilleure compréhension mutuelle.</p>
-                </div>
+            <h2>Introduction & Précautions d'usage</h2>
+            <p>Cet outil a pour vocation de fournir un langage commun pour mieux comprendre les différents modes de fonctionnement au travail. L'objectif est de transformer la diversité cognitive, souvent source de friction, en un levier de performance et de collaboration.</p>
+            <div class="warning-box">
+                <h3><i class="fas fa-exclamation-triangle"></i> Avertissement : Des archétypes, pas des boîtes</h3>
+                <p>Ces profils sont des <strong>archétypes</strong>, pas des étiquettes. Un individu est infiniment plus complexe. Utilisez cet outil non pas comme un diagnostic, mais comme un <strong>point de départ pour le dialogue</strong> et une meilleure compréhension mutuelle.</p>
+            </div>
 
+            <button class="science-toggle-btn" onclick="toggleScience()" aria-expanded="false" aria-controls="science-details" type="button">
+                <i class="fas fa-flask"></i> En savoir plus : notes méthodologiques
+                <span id="science-toggle-icon" class="intro-toggle" aria-hidden="true">+</span>
+            </button>
+            <div id="science-details" style="display: none;">
                 <div class="science-note">
                     <h3><i class="fas fa-microscope"></i> Note méthodologique — Circularité et limites des typologies</h3>
-                    <p>Toute typologie fondée sur des traits comporte un risque de <strong>raisonnement circulaire</strong> : un comportement sert à définir un profil, puis ce profil est invoqué pour « expliquer » le même comportement (Cervone, 2005). Par exemple, dire qu'une personne est un « Plongeur Analytique » <em>parce qu'elle</em> analyse les données en détail, puis expliquer qu'elle analyse les données en détail <em>parce qu'elle est</em> un Plongeur Analytique, ne constitue pas une explication causale — c'est une description reformulée. Les profils présentés ici sont des <strong>outils descriptifs</strong>, non des explications causales du comportement.</p>
+                    <p>Toute typologie fondée sur des traits comporte un risque de <strong>raisonnement circulaire</strong> : un comportement sert à définir un profil, puis ce profil est invoqué pour « expliquer » le même comportement (Cervone, 2005). Par exemple, dire qu'une personne est un « Plongeur·euse Analytique » <em>parce qu'elle</em> analyse les données en détail, puis expliquer qu'elle analyse les données en détail <em>parce qu'elle est</em> un Plongeur·euse Analytique, ne constitue pas une explication causale — c'est une description reformulée. Les profils présentés ici sont des <strong>outils descriptifs</strong>, non des explications causales du comportement.</p>
                 </div>
 
                 <div class="science-note">
@@ -783,12 +821,12 @@
 
                 <div class="science-note">
                     <h3><i class="fas fa-brain"></i> Neurodiversité et profils cognitifs (Psychiatrie)</h3>
-                    <p>Les archétypes présentés ici recoupent partiellement des profils cognitifs décrits en psychiatrie. Le style analytique du « Plongeur » partage des traits avec le profil de <strong>systemizing élevé</strong> (Baron-Cohen, 2009), fréquent dans les troubles du spectre autistique. L'énergie du « Pionnier » évoque la <strong>recherche de nouveauté</strong> (<em>novelty seeking</em>) associée au TDAH (Barkley, 1997). Ces parallèles ne sont pas des diagnostics — ils illustrent que la <strong>neurodiversité est un continuum</strong> dont les profils professionnels ne sont qu'une facette.</p>
+                    <p>Les archétypes présentés ici recoupent partiellement des profils cognitifs décrits en psychiatrie. Le style analytique du « Plongeur·euse » partage des traits avec le profil de <strong>systemizing élevé</strong> (Baron-Cohen, 2009), fréquent dans les troubles du spectre autistique. L'énergie du « Pionnier·ère » évoque la <strong>recherche de nouveauté</strong> (<em>novelty seeking</em>) associée au TDAH (Barkley, 1997). Ces parallèles ne sont pas des diagnostics — ils illustrent que la <strong>neurodiversité est un continuum</strong> dont les profils professionnels ne sont qu'une facette.</p>
                 </div>
 
                 <div class="science-note">
                     <h3><i class="fas fa-users"></i> Construction sociale des profils (Sociologie, Psychologie sociale)</h3>
-                    <p>Les styles cognitifs ne sont pas purement innés : ils sont façonnés par l'<strong>habitus professionnel</strong> (Bourdieu, 1979) — l'ensemble des dispositions acquises au fil de la socialisation, de la formation et de l'expérience. L'identité au travail se construit dans l'interaction avec les pairs et la hiérarchie (Sainsaulieu, 1977). Attribuer un profil à un collègue comporte un risque de <strong>biais de confirmation</strong> et de catégorisation intergroupes (Tajfel & Turner, 1979) : une fois étiquetée, une personne peut être réduite à son archétype. Par ailleurs, la valorisation de certains profils varie selon les cultures : le « Pilote Orienté Tâche » est prisé dans les cultures individualistes mais peut être perçu comme autoritaire dans les cultures collectivistes (Hofstede, 2001).</p>
+                    <p>Les styles cognitifs ne sont pas purement innés : ils sont façonnés par l'<strong>habitus professionnel</strong> (Bourdieu, 1979) — l'ensemble des dispositions acquises au fil de la socialisation, de la formation et de l'expérience. L'identité au travail se construit dans l'interaction avec les pairs et la hiérarchie (Sainsaulieu, 1977). Attribuer un profil à un collègue comporte un risque de <strong>biais de confirmation</strong> et de catégorisation intergroupes (Tajfel & Turner, 1979) : une fois étiquetée, une personne peut être réduite à son archétype. Par ailleurs, la valorisation de certains profils varie selon les cultures : le « Pilote Orienté·e Tâche » est prisé dans les cultures individualistes mais peut être perçu comme autoritaire dans les cultures collectivistes (Hofstede, 2001).</p>
                 </div>
 
                 <div class="science-note">
@@ -951,7 +989,7 @@
             ],
             profiles: {
                 plongeur: {
-                    title: "Le Plongeur Analytique", summary: "Apporte rigueur et précision pour réduire les risques.", icon: '🔬', chartData: [9, 2, 8, 3, 7, 4, 3, 8],
+                    title: "Plongeur·euse Analytique", summary: "Apporte rigueur et précision pour réduire les risques.", icon: '🔬', chartData: [9, 2, 8, 3, 7, 4, 3, 8],
                     exemple: "En réunion, c'est celui qui demande « Quelles sont les données ? » avant de se prononcer.",
                     details: {
                         fonctionnement: "Aborde les problèmes avec logique, données factuelles et une pensée convergente (Guilford, 1967). Décompose, analyse et évalue de manière critique pour identifier la solution la plus juste. Ce style partage des traits avec le profil de systemizing élevé décrit par Baron-Cohen (2009).",
@@ -967,7 +1005,7 @@
                     }
                 },
                 explorateur: {
-                    title: "L'Explorateur Divergent", summary: "Génère des options et stimule l'innovation.", icon: '💡', chartData: [2, 9, 3, 8, 4, 6, 8, 2],
+                    title: "Explorateur·rice Divergent·e", summary: "Génère des options et stimule l'innovation.", icon: '💡', chartData: [2, 9, 3, 8, 4, 6, 8, 2],
                     exemple: "C'est celui qui lance « Et si on faisait complètement autrement ? » quand l'équipe tourne en rond.",
                     details: {
                         fonctionnement: "Générateur d'idées dont la pensée divergente (Guilford, 1967) produit une grande quantité d'options variées — fluence, flexibilité, originalité. À l'aise avec l'ambiguïté, la nouveauté et les approches non conventionnelles.",
@@ -983,7 +1021,7 @@
                     }
                 },
                 architecte: {
-                    title: "L'Architecte Méthodique", summary: "Transforme les stratégies en plans d'action concrets.", icon: '🏗️', chartData: [8, 3, 9, 2, 9, 5, 2, 9],
+                    title: "Architecte Méthodique", summary: "Transforme les stratégies en plans d'action concrets.", icon: '🏗️', chartData: [8, 3, 9, 2, 9, 5, 2, 9],
                     exemple: "C'est celui qui dit « Attendez, il nous faut un rétroplanning avant de commencer. »",
                     details: {
                         fonctionnement: "Fonctionne selon un registre que la recherche en psychologie de la personnalité associe à une haute Conscienciosité (Costa & McCrae, 1992) — le facteur le plus robuste pour prédire la performance professionnelle (Barrick & Mount, 1991). Son mode opératoire est défini par l'organisation, la fiabilité, la planification et un souci constant du détail.",
@@ -999,7 +1037,7 @@
                     }
                 },
                 navigateur: {
-                    title: "Le Navigateur Intuitif", summary: "Prend des décisions rapides dans l'incertitude.", icon: '🧭', chartData: [3, 7, 2, 9, 5, 8, 7, 3],
+                    title: "Navigateur·rice Intuitif·ive", summary: "Prend des décisions rapides dans l'incertitude.", icon: '🧭', chartData: [3, 7, 2, 9, 5, 8, 7, 3],
                     exemple: "C'est celui qui sent que « quelque chose cloche » dans le projet avant que les indicateurs ne le montrent.",
                     details: {
                         fonctionnement: "Prend des décisions rapides basées sur des 'pressentiments' (reconnaissance de schémas non-consciente). Ce mode est souvent associé à ce que Kahneman (2011) appelle le Système 1, bien que cette dichotomie soit une simplification heuristique — en réalité, intuition et analyse s'entremêlent constamment. Capte les signaux faibles.",
@@ -1015,7 +1053,7 @@
                     }
                 },
                 pilote: {
-                    title: "Le Pilote Orienté Tâche", summary: "Maintient le focus sur les objectifs et les résultats.", icon: '🎯', chartData: [7, 4, 8, 6, 9, 2, 4, 7],
+                    title: "Pilote Orienté·e Tâche", summary: "Maintient le focus sur les objectifs et les résultats.", icon: '🎯', chartData: [7, 4, 8, 6, 9, 2, 4, 7],
                     exemple: "C'est celui qui recentre : « OK, mais concrètement, qui fait quoi pour vendredi ? »",
                     details: {
                         fonctionnement: "Principalement focalisé sur l'accomplissement des objectifs, le respect des délais et l'efficacité. Définit clairement les rôles, planifie et suit les résultats.",
@@ -1031,7 +1069,7 @@
                     }
                 },
                 catalyseur: {
-                    title: "Le Catalyseur Social", summary: "Construit la confiance et facilite la communication.", icon: '❤️‍🔥', chartData: [4, 6, 3, 5, 2, 9, 6, 5],
+                    title: "Catalyseur·rice Social·e", summary: "Construit la confiance et facilite la communication.", icon: '❤️‍🔥', chartData: [4, 6, 3, 5, 2, 9, 6, 5],
                     exemple: "C'est celui qui remarque que Marie n'a pas parlé depuis 20 minutes et lui donne la parole.",
                     details: {
                         fonctionnement: "Associé à ce que le modèle des Big Five appelle une haute Agréabilité, bien que ce facteur soit le moins prédictif de la performance professionnelle — il est davantage lié à la satisfaction relationnelle et à la cohésion d'équipe (Salgado, 1997). Attention tournée vers l'harmonie du groupe et le bien-être. Privilégie la collaboration, la coopération et le consensus.",
@@ -1047,7 +1085,7 @@
                     }
                 },
                 pionnier: {
-                    title: "Le Pionnier Adaptatif", summary: "Agit comme un agent du changement et explore de nouvelles opportunités.", icon: '🚀', chartData: [3, 8, 4, 7, 5, 6, 9, 2],
+                    title: "Pionnier·ère Adaptatif·ive", summary: "Agit comme un agent du changement et explore de nouvelles opportunités.", icon: '🚀', chartData: [3, 8, 4, 7, 5, 6, 9, 2],
                     exemple: "C'est celui qui propose de tester un nouvel outil alors que l'ancien n'est pas encore maîtrisé.",
                     details: {
                         fonctionnement: "Associé à une haute Ouverture à l'Expérience (Costa & McCrae, 1992) et à la recherche de nouveauté (Barkley, 1997). Curieux, imaginatif, attiré par la nouveauté. Perçoit le changement comme une opportunité stimulante. La valorisation de ce profil varie selon les contextes culturels (Hofstede, 2001).",
@@ -1063,7 +1101,7 @@
                     }
                 },
                 stabilisateur: {
-                    title: "Le Stabilisateur Prudent", summary: "Assure la qualité, la fiabilité et la continuité.", icon: '⚓', chartData: [7, 2, 7, 3, 6, 4, 2, 9],
+                    title: "Stabilisateur·rice Prudent·e", summary: "Assure la qualité, la fiabilité et la continuité.", icon: '⚓', chartData: [7, 2, 7, 3, 6, 4, 2, 9],
                     exemple: "C'est celui qui rappelle : « La dernière fois qu'on a changé de méthode, on a perdu 3 semaines. »",
                     details: {
                         fonctionnement: "Fonctionne dans un registre que la littérature associe à une Ouverture à l'Expérience modérée — ce qui, loin d'être un déficit, est associé à la fiabilité, la constance et l'ancrage pragmatique (Kirton, 2003). Préférence pour les routines, les traditions et les méthodes éprouvées. Se sent en sécurité dans des environnements prévisibles.",
@@ -1106,6 +1144,7 @@
         ];
         const quizAnswers = new Array(16).fill(null);
         let userChartInstance = null;
+        let currentDominantId = null;
 
         const axisHeaders = [
             { icon: 'fa-microscope', title: "Traitement de l'Information", color: '#0d9488' },
@@ -1230,13 +1269,14 @@
                 ${confidenceNote}
                 <p style="font-size: 0.8rem; color: var(--color-text-dimmed); margin-top: 0.75rem; font-style: italic;">Rappel : ce résultat est exploratoire. Il reflète vos réponses à un instant donné, pas un trait stable. Les profils sont des archétypes simplificateurs — votre fonctionnement réel est plus nuancé et dépend du contexte (Fleeson & Jayawickreme, 2015).</p>
                 <div class="result-tabs" role="tablist" aria-label="Détails de votre profil dominant">
-                    <button role="tab" class="profile-tab tab-active" aria-selected="true" tabindex="0" onclick="showResultTab('fonctionnement', this)">Fonctionnement</button>
-                    <button role="tab" class="profile-tab tab-inactive" aria-selected="false" tabindex="-1" onclick="showResultTab('forces', this)">Forces</button>
-                    <button role="tab" class="profile-tab tab-inactive" aria-selected="false" tabindex="-1" onclick="showResultTab('limites', this)">Limites</button>
-                    <button role="tab" class="profile-tab tab-inactive" aria-selected="false" tabindex="-1" onclick="showResultTab('leviers', this)">Leviers</button>
+                    <button role="tab" class="profile-tab result-tab tab-active" data-result-tab="fonctionnement" aria-selected="true" tabindex="0">Fonctionnement</button>
+                    <button role="tab" class="profile-tab result-tab tab-inactive" data-result-tab="forces" aria-selected="false" tabindex="-1">Forces</button>
+                    <button role="tab" class="profile-tab result-tab tab-inactive" data-result-tab="limites" aria-selected="false" tabindex="-1">Limites</button>
+                    <button role="tab" class="profile-tab result-tab tab-inactive" data-result-tab="leviers" aria-selected="false" tabindex="-1">Leviers</button>
                 </div>
                 <div id="result-tab-content" role="tabpanel" class="result-tab-content">${dominant.enriched.fonctionnement}</div>
             `;
+            setupResultTabListeners();
 
             document.getElementById('complementary-profile').innerHTML = `
                 <div class="result-icon">${complementary.icon}</div>
@@ -1281,11 +1321,40 @@
             document.getElementById('userChart-alt').textContent = `Votre profil — ${altParts.join(', ')}. Profil dominant : ${dominant.title}.`;
 
             resultsEl.scrollIntoView({ behavior: 'smooth' });
-            window._dominantId = bestMatch;
+            currentDominantId = bestMatch;
         }
 
-        function showResultTab(tab, btn) {
-            const tabs = document.querySelectorAll('.result-tabs .profile-tab');
+        function setupResultTabListeners() {
+            const tabs = document.querySelectorAll('.result-tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => activateResultTab(tab));
+                tab.addEventListener('keydown', (e) => {
+                    const tabsArr = Array.from(tabs);
+                    const idx = tabsArr.indexOf(e.currentTarget);
+                    let newIdx = -1;
+                    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                        e.preventDefault();
+                        newIdx = (idx + 1) % tabsArr.length;
+                    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                        e.preventDefault();
+                        newIdx = (idx - 1 + tabsArr.length) % tabsArr.length;
+                    } else if (e.key === 'Home') {
+                        e.preventDefault();
+                        newIdx = 0;
+                    } else if (e.key === 'End') {
+                        e.preventDefault();
+                        newIdx = tabsArr.length - 1;
+                    }
+                    if (newIdx >= 0) {
+                        tabsArr[newIdx].focus();
+                        activateResultTab(tabsArr[newIdx]);
+                    }
+                });
+            });
+        }
+
+        function activateResultTab(btn) {
+            const tabs = document.querySelectorAll('.result-tab');
             tabs.forEach(t => {
                 t.classList.remove('tab-active'); t.classList.add('tab-inactive');
                 t.setAttribute('aria-selected', 'false'); t.setAttribute('tabindex', '-1');
@@ -1294,7 +1363,8 @@
             btn.classList.remove('tab-inactive');
             btn.setAttribute('aria-selected', 'true');
             btn.setAttribute('tabindex', '0');
-            const content = profilsData.profiles[window._dominantId].enriched[tab];
+            const tabKey = btn.dataset.resultTab;
+            const content = profilsData.profiles[currentDominantId].enriched[tabKey];
             const el = document.getElementById('result-tab-content');
             el.innerHTML = content;
             el.classList.remove('fade-in');
@@ -1332,9 +1402,9 @@
         }
 
         function exportResults() {
-            const dominant = profilsData.profiles[window._dominantId];
-            const dominantAxis = profilsData.axes.find(a => a.profiles.includes(window._dominantId));
-            const complementaryId = dominantAxis.profiles.find(p => p !== window._dominantId);
+            const dominant = profilsData.profiles[currentDominantId];
+            const dominantAxis = profilsData.axes.find(a => a.profiles.includes(currentDominantId));
+            const complementaryId = dominantAxis.profiles.find(p => p !== currentDominantId);
             const complementary = profilsData.profiles[complementaryId];
 
             const canvas = document.createElement('canvas');
@@ -1667,13 +1737,13 @@
             });
         }
 
-        function toggleIntro() {
-            const content = document.getElementById('intro-content');
-            const icon = document.getElementById('intro-toggle-icon');
-            const btn = document.querySelector('.intro-header');
+        function toggleScience() {
+            const content = document.getElementById('science-details');
+            const icon = document.getElementById('science-toggle-icon');
+            const btn = document.querySelector('.science-toggle-btn');
             const isHidden = content.style.display === 'none';
             content.style.display = isHidden ? 'block' : 'none';
-            icon.textContent = isHidden ? '-' : '+';
+            icon.textContent = isHidden ? '−' : '+';
             btn.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
         }
 
