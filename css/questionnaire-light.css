@@ -537,6 +537,69 @@ body.light-questionnaire .likert-btn.selected {
 }
 
 /* ========================================
+   Scale legend contrast fix for light theme
+   ======================================== */
+body.light-questionnaire .scale-legend {
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    margin-top: 0.5rem;
+}
+
+body.light-questionnaire .scale-legend-title {
+    color: var(--color-text-primary);
+    font-weight: 600;
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+body.light-questionnaire .scale-legend-grid {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+body.light-questionnaire .scale-legend-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    min-width: 70px;
+}
+
+body.light-questionnaire .scale-legend-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+
+body.light-questionnaire .scale-legend-text {
+    color: var(--color-text-primary);
+    font-weight: 500;
+    font-size: 0.7rem;
+    text-align: center;
+    line-height: 1.2;
+}
+
+/* ========================================
+   Domain & schema section headers
+   ======================================== */
+body.light-questionnaire .domain-section-header {
+    background: linear-gradient(135deg, rgba(var(--cat-rgb, 245, 158, 11), 0.06), rgba(var(--cat-rgb, 245, 158, 11), 0.02));
+}
+
+body.light-questionnaire .schema-section-header {
+    border-bottom-color: rgba(0, 0, 0, 0.08);
+}
+
+/* ========================================
    Validated checkbox / selection item
    ======================================== */
 body.light-questionnaire .substance-checkbox,
@@ -581,6 +644,77 @@ body.light-questionnaire .modal-content {
     background: linear-gradient(145deg, #ffffff, #f8fafc);
     border: 1px solid var(--color-border);
     color: var(--color-text-secondary);
+}
+
+body.light-questionnaire .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+body.light-questionnaire .modal-header h2 {
+    margin: 0;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+body.light-questionnaire .modal-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: #f8fafc;
+    color: #64748b;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+body.light-questionnaire .modal-close:hover {
+    background: #fee2e2;
+    color: #dc2626;
+    border-color: rgba(239, 68, 68, 0.2);
+}
+
+body.light-questionnaire .modal-body {
+    max-height: 60vh;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+body.light-questionnaire .modal-footer {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    padding-top: 1rem;
+    margin-top: 1rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+body.light-questionnaire .modal-footer button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    border: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+body.light-questionnaire .modal-footer button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 /* ========================================

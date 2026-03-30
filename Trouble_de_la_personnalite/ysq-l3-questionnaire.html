@@ -12,6 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
     <style>
         :root {
             --cat-main: #f59e0b;
@@ -31,6 +32,408 @@
         .likert-options input[type="radio"]:checked + label,
         .binary-options input[type="radio"]:checked + label,
         .radio-options input[type="radio"]:checked + label { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
+        /* ── Tooltips sur boutons d'échelle ── */
+        .scale-btn {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+        }
+        .scale-btn-value { font-weight: 600; }
+        .scale-btn-label { display: none; }
+
+        @media (min-width: 601px) {
+            .scale-btn:hover::after,
+            .scale-btn:focus::after {
+                content: attr(data-label);
+                position: absolute;
+                bottom: calc(100% + 8px);
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(30, 41, 59, 0.95);
+                color: #fff;
+                padding: 0.4rem 0.75rem;
+                border-radius: 8px;
+                font-size: 0.75rem;
+                font-weight: 500;
+                white-space: nowrap;
+                z-index: 100;
+                pointer-events: none;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                animation: tooltipFadeIn 0.15s ease;
+            }
+            .scale-btn:hover::before,
+            .scale-btn:focus::before {
+                content: '';
+                position: absolute;
+                bottom: calc(100% + 2px);
+                left: 50%;
+                transform: translateX(-50%);
+                border: 6px solid transparent;
+                border-top-color: rgba(30, 41, 59, 0.95);
+                z-index: 100;
+                pointer-events: none;
+            }
+            @keyframes tooltipFadeIn {
+                from { opacity: 0; transform: translateX(-50%) translateY(4px); }
+                to { opacity: 1; transform: translateX(-50%) translateY(0); }
+            }
+        }
+
+        @media (max-width: 600px) {
+            .scale-btn-label {
+                display: block;
+                font-size: 0.5rem;
+                line-height: 1.1;
+                color: var(--color-text-muted);
+                text-align: center;
+                max-width: 4.5rem;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            .scale-btn {
+                min-width: 44px;
+                min-height: 44px;
+            }
+            .scale-btn:hover::after,
+            .scale-btn:hover::before { display: none; }
+        }
+
+        /* ── Sections domaine & schéma ── */
+        .domain-section-header {
+            margin-top: 2.5rem;
+            margin-bottom: 1.5rem;
+            padding: 1.25rem 1.5rem;
+            background: linear-gradient(135deg, rgba(var(--cat-rgb), 0.08), rgba(var(--cat-rgb), 0.03));
+            border-left: 4px solid var(--cat-main);
+            border-radius: 0 12px 12px 0;
+        }
+        .domain-section-header:first-child { margin-top: 0; }
+        .domain-number {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--cat-readable);
+            margin-bottom: 0.25rem;
+        }
+        .domain-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--color-text-primary);
+            margin: 0;
+        }
+        .schema-section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        }
+        .schema-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.25rem 0.6rem;
+            background: rgba(var(--cat-rgb), 0.15);
+            color: var(--cat-readable);
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+        .schema-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--color-text-secondary);
+        }
+
+        @media (max-width: 600px) {
+            .domain-section-header {
+                margin-top: 2rem;
+                padding: 1rem;
+            }
+            .domain-title { font-size: 1rem; }
+            .schema-section-header { margin-top: 1rem; }
+        }
+
+        /* ── Radiogroup boutons ── */
+        .scale-button-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        /* ══════════════════════════════════════
+           RÉSULTATS — Synthèse, Radar, Domaines
+           ══════════════════════════════════════ */
+
+        /* ── Bannière synthèse ── */
+        .ysq-summary {
+            background: rgba(var(--cat-rgb), 0.08);
+            border-left: 4px solid var(--cat-main);
+            border-radius: 0 12px 12px 0;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .ysq-summary-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--cat-readable);
+            margin-bottom: 0.75rem;
+        }
+        .ysq-summary-stats {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        .ysq-summary-stat {
+            display: flex;
+            flex-direction: column;
+        }
+        .ysq-summary-number {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--cat-dark);
+            line-height: 1.2;
+        }
+        .ysq-summary-label {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-top: 0.15rem;
+        }
+        .ysq-summary-domains {
+            font-size: 0.8rem;
+            color: #475569;
+            margin-top: 0.25rem;
+        }
+        .ysq-summary-ok {
+            color: #16a34a;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        /* ── Radar chart ── */
+        .ysq-radar-container {
+            max-width: 520px;
+            margin: 0 auto 2rem;
+            position: relative;
+        }
+
+        /* ── Sections domaine (collapsibles) ── */
+        .ysq-domain-section {
+            margin-bottom: 1rem;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 12px;
+            overflow: hidden;
+            background: #fff;
+        }
+        .ysq-domain-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.25rem;
+            background: rgba(var(--cat-rgb), 0.05);
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.2s;
+            gap: 1rem;
+        }
+        .ysq-domain-header:hover {
+            background: rgba(var(--cat-rgb), 0.1);
+        }
+        .ysq-domain-header-left {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            flex: 1;
+        }
+        .ysq-domain-label {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #1e293b;
+        }
+        .ysq-domain-avg {
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        .ysq-domain-avg.low { color: #16a34a; }
+        .ysq-domain-avg.moderate { color: #d97706; }
+        .ysq-domain-avg.high { color: #dc2626; }
+        .ysq-domain-bar-bg {
+            width: 100%;
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 0.35rem;
+        }
+        .ysq-domain-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.6s ease;
+        }
+        .ysq-domain-chevron {
+            transition: transform 0.3s ease;
+            color: #94a3b8;
+            font-size: 0.85rem;
+        }
+        .ysq-domain-header.collapsed .ysq-domain-chevron {
+            transform: rotate(-90deg);
+        }
+        .ysq-domain-body {
+            padding: 0.75rem 1.25rem;
+            max-height: 2000px;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.3s ease;
+        }
+        .ysq-domain-body.collapsed {
+            max-height: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+
+        /* ── Cartes schéma ── */
+        .result-card {
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            border-radius: 10px;
+            background: #fff;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+            transition: all 0.2s ease;
+        }
+        .result-card:last-child { margin-bottom: 0; }
+        .result-card-significant {
+            border-left: 4px solid #ef4444;
+            background: rgba(239, 68, 68, 0.03);
+        }
+        .result-card-normal {
+            border-left: 4px solid #e2e8f0;
+            opacity: 0.6;
+        }
+        .result-card-normal:hover { opacity: 1; }
+        .result-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+        .result-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #1e293b;
+        }
+        .result-code {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            color: #94a3b8;
+            margin-left: 0.35rem;
+        }
+        .result-badges {
+            display: flex;
+            gap: 0.25rem;
+            flex-shrink: 0;
+        }
+        .result-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.15rem 0.5rem;
+            border-radius: 999px;
+            font-size: 0.65rem;
+            font-weight: 700;
+        }
+        .result-badge-red {
+            background: rgba(239, 68, 68, 0.12);
+            color: #dc2626;
+        }
+        .result-badge-purple {
+            background: rgba(124, 58, 237, 0.12);
+            color: #7c3aed;
+        }
+        .result-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        .result-value {
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+        .result-value-highlight-red {
+            font-size: 0.8rem;
+            color: #dc2626;
+            font-weight: 700;
+        }
+        .result-value-highlight-purple {
+            font-size: 0.8rem;
+            color: #7c3aed;
+            font-weight: 700;
+        }
+
+        .result-description {
+            font-size: 0.78rem;
+            color: #64748b;
+            margin-top: 0.6rem;
+            padding-top: 0.5rem;
+            border-top: 1px dashed rgba(0, 0, 0, 0.06);
+            line-height: 1.4;
+            font-style: italic;
+        }
+
+        /* ── Barres de progression schéma ── */
+        .result-bar-bg {
+            width: 100%;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+        .result-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        .bar-green { background: linear-gradient(90deg, #22c55e, #4ade80); }
+        .bar-yellow { background: linear-gradient(90deg, #eab308, #facc15); }
+        .bar-orange { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+        .bar-red { background: linear-gradient(90deg, #ef4444, #f87171); }
+
+        /* ── Interprétation ── */
+        .ysq-interpretation {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(0,0,0,0.06);
+        }
+
+        /* ── Print ── */
+        @media print {
+            .ysq-domain-body.collapsed {
+                max-height: none !important;
+                overflow: visible !important;
+                padding: 0.75rem 1.25rem !important;
+            }
+            .result-card-normal { opacity: 1 !important; }
+            .ysq-domain-chevron { display: none; }
+            .ysq-radar-container { max-width: 400px; }
+        }
+
+        /* ── Mobile résultats ── */
+        @media (max-width: 600px) {
+            .ysq-radar-container { max-width: 100%; }
+            .ysq-summary-stats { flex-direction: column; gap: 0.75rem; }
+            .result-metrics { grid-template-columns: 1fr; gap: 0.5rem; }
+            .ysq-domain-header { padding: 0.85rem 1rem; }
+            .ysq-domain-body { padding: 0.5rem 0.75rem; }
+        }
     </style>
 
 </head>
@@ -52,7 +455,7 @@
             <!-- Titre et progression -->
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
                 <h2 style="color: var(--color-text-primary); font-weight: 700; font-size: var(--font-size-lg);">Questionnaire des Schemas de Young</h2>
-                <div class="progress-stats">
+                <div class="progress-stats" role="status" aria-live="polite" aria-atomic="true">
                     <span id="progressText" class="progress-count">0 / 232</span>
                     <span id="progressPercent" class="progress-percent">0%</span>
                 </div>
@@ -68,11 +471,11 @@
                 <div class="scale-legend-title">Echelle de cotation</div>
                 <div class="scale-legend-grid">
                     <div class="scale-legend-item">
-                        <span class="scale-legend-number" style="background: rgba(100, 116, 139, 0.3); color: var(--color-text-secondary);">1</span>
+                        <span class="scale-legend-number" style="background: rgba(100, 116, 139, 0.55); color: #475569;">1</span>
                         <span class="scale-legend-text">Completement faux</span>
                     </div>
                     <div class="scale-legend-item">
-                        <span class="scale-legend-number" style="background: rgba(100, 116, 139, 0.3); color: var(--color-text-secondary);">2</span>
+                        <span class="scale-legend-number" style="background: rgba(100, 116, 139, 0.5); color: #475569;">2</span>
                         <span class="scale-legend-text">Le plus souvent faux</span>
                     </div>
                     <div class="scale-legend-item">
@@ -465,6 +868,23 @@ document.addEventListener('DOMContentLoaded', () => {
         pu: { name: "Punition", domain: "V" }
     };
 
+    const scaleLabels = {
+        1: "Completement faux",
+        2: "Le plus souvent faux",
+        3: "Plutot vrai que faux",
+        4: "Assez vrai",
+        5: "Le plus souvent vrai",
+        6: "Me decrit parfaitement"
+    };
+
+    const domainNames = {
+        "I": "Separation & Rejet",
+        "II": "Manque d'Autonomie & Performance",
+        "III": "Orientation vers les Autres",
+        "IV": "Survigilance & Inhibition",
+        "V": "Manque de Limites"
+    };
+
     // ═══════════════════════════════════════════════════════════════════════
     // ÉTAT DE L'APPLICATION
     // ═══════════════════════════════════════════════════════════════════════
@@ -497,22 +917,55 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function generateQuestions() {
         let html = '';
+        let currentDomain = null;
+        let currentSchema = null;
 
         questions.forEach((q, index) => {
+            const info = schemaInfo[q.schema];
+
+            // Header de domaine
+            if (info.domain !== currentDomain) {
+                currentDomain = info.domain;
+                html += `
+                    <div class="domain-section-header" id="domain-${currentDomain}">
+                        <div class="domain-number">Domaine ${currentDomain}</div>
+                        <h3 class="domain-title">${domainNames[currentDomain]}</h3>
+                    </div>
+                `;
+            }
+
+            // Sous-header de schéma
+            if (q.schema !== currentSchema) {
+                currentSchema = q.schema;
+                html += `
+                    <div class="schema-section-header" id="schema-${currentSchema}">
+                        <span class="schema-badge">${currentSchema.toUpperCase()}</span>
+                        <span class="schema-name">${info.name}</span>
+                    </div>
+                `;
+            }
+
             html += `
                 <div id="question-${q.id}" class="question-card" data-question="${q.id}">
                     <div style="display: flex; gap: 1rem;">
                         <span class="question-number">${q.id}</span>
                         <div style="flex: 1;">
                             <p class="question-text">${q.text}</p>
-                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                            <div class="scale-button-group" role="radiogroup"
+                                 aria-label="Cotation pour la question ${q.id}"
+                                 aria-required="true">
                                 ${[1,2,3,4,5,6].map(score => `
                                     <button type="button"
                                             class="scale-btn"
+                                            role="radio"
+                                            aria-checked="false"
                                             data-question="${q.id}"
                                             data-score="${score}"
-                                            aria-label="Score ${score}">
-                                        ${score}
+                                            data-label="${scaleLabels[score]}"
+                                            title="${scaleLabels[score]}"
+                                            aria-label="${score} - ${scaleLabels[score]}">
+                                        <span class="scale-btn-value">${score}</span>
+                                        <span class="scale-btn-label">${scaleLabels[score]}</span>
                                     </button>
                                 `).join('')}
                             </div>
@@ -527,6 +980,27 @@ document.addEventListener('DOMContentLoaded', () => {
         // Event listeners pour les boutons
         document.querySelectorAll('.scale-btn').forEach(btn => {
             btn.addEventListener('click', handleScoreClick);
+        });
+
+        // Navigation clavier dans les radiogroups
+        document.querySelectorAll('.scale-button-group').forEach(group => {
+            group.addEventListener('keydown', (e) => {
+                const buttons = Array.from(group.querySelectorAll('.scale-btn'));
+                const current = buttons.indexOf(e.target);
+                if (current === -1) return;
+
+                let next = -1;
+                if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                    next = (current + 1) % buttons.length;
+                } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                    next = (current - 1 + buttons.length) % buttons.length;
+                }
+
+                if (next !== -1) {
+                    e.preventDefault();
+                    buttons[next].focus();
+                }
+            });
         });
     }
 
@@ -548,10 +1022,12 @@ document.addEventListener('DOMContentLoaded', () => {
         // Désélectionner tous les boutons de cette question
         questionCard.querySelectorAll('.scale-btn').forEach(b => {
             b.classList.remove('selected');
+            b.setAttribute('aria-checked', 'false');
         });
 
         // Sélectionner le bouton cliqué
         btn.classList.add('selected');
+        btn.setAttribute('aria-checked', 'true');
 
         // Marquer la carte comme répondue
         questionCard.classList.add('answered');
@@ -650,51 +1126,287 @@ document.addEventListener('DOMContentLoaded', () => {
         return results;
     }
 
-    function displayResults() {
-        const results = calculateResults();
-        const sorted = Object.entries(results).sort((a, b) => b[1].mean - a[1].mean);
+    // ═══════════════════════════════════════════════════════════════════════
+    // HELPERS RÉSULTATS
+    // ═══════════════════════════════════════════════════════════════════════
 
-        let html = `
-            <div>
-                <p style="color: var(--color-text-secondary); font-size: var(--font-size-sm); margin-bottom: 1rem;">
-                    <strong>Interpretation :</strong> Une moyenne ≥ 4 est cliniquement significative.
-                    Un pourcentage ≥ 50% d'items 5-6 suggere un schema actif.
-                </p>
-        `;
+    const domainOrder = ['I', 'II', 'III', 'IV', 'V'];
 
-        sorted.forEach(([code, data]) => {
-            const isHighMean = data.mean >= 4;
-            const isHigh56 = data.percent56 >= 50;
-            const isSignificant = isHighMean || isHigh56;
+    const schemaShortLabels = {
+        ed: 'Car.Aff', ab: 'Aband.', ma: 'Mef/Ab', si: 'Isol.Soc', ds: 'Imp/Hon',
+        fa: 'Echec', di: 'Depend.', vu: 'Vulner.', eu: 'Fusion',
+        sb: 'Assuj.', ss: 'Abneg.', ei: 'Surctrl.Em',
+        us: 'Exig.El', et: 'Dr.Exag', is: 'Ctrl.Ins',
+        as: 'Rech.App', np: 'Neg/Pes', pu: 'Punition'
+    };
 
-            html += `
-                <div class="result-card ${isSignificant ? 'result-card-significant' : 'result-card-normal'}">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-                        <div>
-                            <span class="result-name">${data.name}</span>
-                            <span class="result-code">(${code.toUpperCase()})</span>
+    const schemaOrderByDomain = ['ed','ab','ma','si','ds','fa','di','vu','eu','sb','ss','ei','us','et','is','as','np','pu'];
+
+    const schemaDescriptions = {
+        ed: "Sentiment que vos besoins emotionnels (affection, empathie, protection) ne sont pas satisfaits par les autres.",
+        ab: "Crainte que les personnes proches vous quittent ou meurent, sentiment d'instabilite des liens.",
+        ma: "Croyance que les autres vont vous blesser, mentir, manipuler ou profiter de vous.",
+        si: "Sentiment d'etre isole du reste du monde, different des autres, de ne pas appartenir a un groupe.",
+        ds: "Conviction d'etre fondamentalement defectueux, mauvais, inferieur ou indigne d'etre aime.",
+        fa: "Croyance d'etre incompetent et voue a l'echec dans les domaines de reussite (etudes, travail).",
+        di: "Sentiment de ne pas pouvoir gerer les responsabilites quotidiennes sans l'aide des autres.",
+        vu: "Peur exageree qu'une catastrophe imminente va survenir et qu'on ne pourra pas l'empecher.",
+        eu: "Lien excessif avec une ou plusieurs personnes, au detriment de votre propre identite.",
+        sb: "Soumission excessive aux autres par crainte de leur colere, de l'abandon ou de represailles.",
+        ss: "Sacrifice excessif de vos propres besoins pour satisfaire ceux des autres.",
+        ei: "Inhibition excessive des emotions, des actions ou de la communication pour eviter la critique.",
+        us: "Standards personnels tres eleves et critiques envers soi-meme, perfectionnisme.",
+        et: "Croyance d'etre superieur aux autres, d'avoir des droits et privileges speciaux.",
+        is: "Difficulte a exercer un controle suffisant sur ses emotions et ses impulsions.",
+        as: "Recherche excessive de l'attention, de l'approbation et de la reconnaissance des autres.",
+        np: "Focalisation sur les aspects negatifs de la vie, tendance a minimiser le positif.",
+        pu: "Croyance que les erreurs doivent etre severement punies, y compris les siennes."
+    };
+
+    function getBarColorClass(mean) {
+        if (mean < 2) return 'bar-green';
+        if (mean < 3) return 'bar-yellow';
+        if (mean < 4) return 'bar-orange';
+        return 'bar-red';
+    }
+
+    function getSeverityClass(mean) {
+        if (mean < 3) return 'low';
+        if (mean < 4) return 'moderate';
+        return 'high';
+    }
+
+    function buildSummaryBanner(significantSchemas, activeDomains) {
+        const domainList = activeDomains.map(d => domainNames[d]).join(', ');
+        return `
+            <div class="ysq-summary">
+                <div class="ysq-summary-title"><i class="fas fa-chart-line"></i> Synthese du profil</div>
+                ${significantSchemas.length === 0 ? `
+                    <div class="ysq-summary-ok"><i class="fas fa-check-circle"></i> Aucun schema significatif detecte</div>
+                ` : `
+                    <div class="ysq-summary-stats">
+                        <div class="ysq-summary-stat">
+                            <span class="ysq-summary-number">${significantSchemas.length}/18</span>
+                            <span class="ysq-summary-label">schemas significatifs</span>
                         </div>
-                        <div style="display: flex; gap: 0.25rem;">
-                            ${isHighMean ? '<span class="result-badge result-badge-red">≥4</span>' : ''}
-                            ${isHigh56 ? '<span class="result-badge result-badge-purple">5-6≥50%</span>' : ''}
+                        <div class="ysq-summary-stat">
+                            <span class="ysq-summary-number">${activeDomains.length}/5</span>
+                            <span class="ysq-summary-label">domaines actives</span>
+                            <span class="ysq-summary-domains">${domainList}</span>
                         </div>
                     </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                        <div>
-                            <div class="result-value">Moyenne</div>
-                            <div class="${isHighMean ? 'result-value-highlight-red' : 'result-value'}" style="font-weight: 700;">${data.mean.toFixed(2).replace('.', ',')} / 6</div>
-                        </div>
-                        <div>
-                            <div class="result-value">Items 5-6</div>
-                            <div class="${isHigh56 ? 'result-value-highlight-purple' : 'result-value'}" style="font-weight: 700;">${data.count56}/${data.total} (${data.percent56.toFixed(0)}%)</div>
-                        </div>
+                `}
+            </div>
+        `;
+    }
+
+    function buildSchemaCard(code, data) {
+        const isHighMean = data.mean >= 4;
+        const isHigh56 = data.percent56 >= 50;
+        const isSignificant = isHighMean || isHigh56;
+        const barWidth = ((data.mean / 6) * 100).toFixed(1);
+
+        return `
+            <div class="result-card ${isSignificant ? 'result-card-significant' : 'result-card-normal'}">
+                <div class="result-card-header">
+                    <div>
+                        <span class="result-name">${data.name}</span>
+                        <span class="result-code">${code.toUpperCase()}</span>
+                    </div>
+                    <div class="result-badges">
+                        ${isHighMean ? '<span class="result-badge result-badge-red">≥4</span>' : ''}
+                        ${isHigh56 ? '<span class="result-badge result-badge-purple">5-6≥50%</span>' : ''}
                     </div>
                 </div>
-            `;
+                <div class="result-bar-bg">
+                    <div class="result-bar-fill ${getBarColorClass(data.mean)}" style="width: ${barWidth}%;"></div>
+                </div>
+                <div class="result-metrics">
+                    <div>
+                        <div class="result-value">Moyenne</div>
+                        <div class="${isHighMean ? 'result-value-highlight-red' : 'result-value'}" style="font-weight: 700;">${data.mean.toFixed(2).replace('.', ',')} / 6</div>
+                    </div>
+                    <div>
+                        <div class="result-value">Items 5-6</div>
+                        <div class="${isHigh56 ? 'result-value-highlight-purple' : 'result-value'}" style="font-weight: 700;">${data.count56}/${data.total} (${data.percent56.toFixed(0)}%)</div>
+                    </div>
+                </div>
+                ${isSignificant && schemaDescriptions[code] ? `<div class="result-description">${schemaDescriptions[code]}</div>` : ''}
+            </div>
+        `;
+    }
+
+    function buildDomainSection(domainCode, schemas, domainAvg, isActive) {
+        const sevClass = getSeverityClass(domainAvg);
+        const barWidth = ((domainAvg / 6) * 100).toFixed(1);
+        const collapsed = !isActive;
+        const sortedSchemas = [...schemas].sort((a, b) => b.mean - a.mean);
+
+        return `
+            <div class="ysq-domain-section">
+                <div class="ysq-domain-header ${collapsed ? 'collapsed' : ''}">
+                    <div class="ysq-domain-header-left">
+                        <span class="ysq-domain-label">Domaine ${domainCode} — ${domainNames[domainCode]}</span>
+                        <span class="ysq-domain-avg ${sevClass}">Moyenne : ${domainAvg.toFixed(2).replace('.', ',')} / 6</span>
+                        <div class="ysq-domain-bar-bg">
+                            <div class="ysq-domain-bar-fill ${getBarColorClass(domainAvg)}" style="width: ${barWidth}%;"></div>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-down ysq-domain-chevron"></i>
+                </div>
+                <div class="ysq-domain-body ${collapsed ? 'collapsed' : ''}">
+                    ${sortedSchemas.map(s => buildSchemaCard(s.code, s)).join('')}
+                </div>
+            </div>
+        `;
+    }
+
+    function initYSQRadarChart(results) {
+        const ctx = document.getElementById('ysqRadarChart');
+        if (!ctx || typeof Chart === 'undefined') return;
+
+        const labels = schemaOrderByDomain.map(c => schemaShortLabels[c]);
+        const data = schemaOrderByDomain.map(c => results[c].mean);
+
+        new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Seuil clinique (≥4)',
+                        data: Array(18).fill(4),
+                        backgroundColor: 'rgba(239, 68, 68, 0.04)',
+                        borderColor: 'rgba(239, 68, 68, 0.35)',
+                        borderWidth: 1.5,
+                        borderDash: [6, 4],
+                        pointRadius: 0,
+                        pointHoverRadius: 0,
+                        fill: false
+                    },
+                    {
+                        label: 'Moyenne par schema',
+                        data: data,
+                        backgroundColor: 'rgba(245, 158, 11, 0.12)',
+                        borderColor: 'rgba(245, 158, 11, 0.7)',
+                        borderWidth: 2,
+                        pointBackgroundColor: data.map(v =>
+                            v >= 4 ? '#ef4444' : v >= 3 ? '#f59e0b' : '#22c55e'
+                        ),
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 7
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 6,
+                        ticks: {
+                            stepSize: 1,
+                            color: 'rgba(0,0,0,0.35)',
+                            backdropColor: 'transparent',
+                            font: { size: 10 }
+                        },
+                        grid: { color: 'rgba(0,0,0,0.06)' },
+                        angleLines: { color: 'rgba(0,0,0,0.06)' },
+                        pointLabels: {
+                            font: { size: 10, weight: '500' },
+                            color: data.map(v =>
+                                v >= 4 ? '#dc2626' : v >= 3 ? '#b45309' : 'rgba(0,0,0,0.55)'
+                            )
+                        }
+                    }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        filter: (item) => item.datasetIndex === 1,
+                        callbacks: {
+                            title: (items) => {
+                                const idx = items[0].dataIndex;
+                                const code = schemaOrderByDomain[idx];
+                                return schemaInfo[code].name;
+                            },
+                            label: (ctx) => {
+                                const mean = ctx.raw;
+                                const status = mean >= 4 ? '⚠ Significatif' : 'Normal';
+                                return `Moyenne: ${mean.toFixed(2)}/6 — ${status}`;
+                            }
+                        }
+                    }
+                },
+                animation: { duration: 600, easing: 'easeOutQuart' }
+            }
+        });
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // AFFICHAGE DES RÉSULTATS
+    // ═══════════════════════════════════════════════════════════════════════
+
+    function displayResults() {
+        const results = calculateResults();
+
+        // Grouper par domaine
+        const domainSchemas = {};
+        const domainAverages = {};
+        domainOrder.forEach(d => { domainSchemas[d] = []; });
+
+        Object.entries(results).forEach(([code, data]) => {
+            domainSchemas[data.domain].push({ code, ...data });
         });
 
-        html += '</div>';
+        domainOrder.forEach(d => {
+            const schemas = domainSchemas[d];
+            domainAverages[d] = schemas.reduce((s, x) => s + x.mean, 0) / schemas.length;
+        });
+
+        // Schémas significatifs et domaines activés
+        const significantSchemas = Object.entries(results)
+            .filter(([_, d]) => d.mean >= 4 || d.percent56 >= 50);
+        const activeDomains = [...new Set(significantSchemas.map(([_, d]) => d.domain))];
+
+        // Construire le HTML
+        let html = '';
+
+        // 1. Bannière synthèse
+        html += buildSummaryBanner(significantSchemas, activeDomains);
+
+        // 2. Radar chart
+        html += '<div class="ysq-radar-container"><canvas id="ysqRadarChart"></canvas></div>';
+
+        // 3. Sections par domaine
+        domainOrder.forEach(d => {
+            const isActive = activeDomains.includes(d);
+            html += buildDomainSection(d, domainSchemas[d], domainAverages[d], isActive);
+        });
+
+        // 4. Note d'interprétation
+        html += `<div class="ysq-interpretation">
+            <strong>Interpretation :</strong> Une moyenne ≥ 4 est cliniquement significative (badge <span class="result-badge result-badge-red">≥4</span>).
+            Un pourcentage ≥ 50% d'items cotes 5-6 suggere un schema actif (badge <span class="result-badge result-badge-purple">5-6≥50%</span>).
+            Les domaines actives sont ouverts par defaut.
+        </div>`;
+
         resultsContent.innerHTML = html;
+
+        // Initialiser le radar chart
+        initYSQRadarChart(results);
+
+        // Listeners de collapse
+        document.querySelectorAll('.ysq-domain-header').forEach(header => {
+            header.addEventListener('click', () => {
+                header.classList.toggle('collapsed');
+                header.nextElementSibling.classList.toggle('collapsed');
+            });
+        });
+
         resultsModal.classList.remove('hidden');
     }
 
@@ -717,16 +1429,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function copyResults() {
         const results = calculateResults();
-        const sorted = Object.entries(results).sort((a, b) => b[1].mean - a[1].mean);
+
+        // Grouper par domaine
+        const domainSchemas = {};
+        const domainAverages = {};
+        domainOrder.forEach(d => { domainSchemas[d] = []; });
+        Object.entries(results).forEach(([code, data]) => {
+            domainSchemas[data.domain].push({ code, ...data });
+        });
+        domainOrder.forEach(d => {
+            const schemas = domainSchemas[d];
+            domainAverages[d] = schemas.reduce((s, x) => s + x.mean, 0) / schemas.length;
+        });
+
+        const significantCount = Object.values(results).filter(d => d.mean >= 4 || d.percent56 >= 50).length;
 
         let text = "RESULTATS YSQ-L3\n";
-        text += "================\n\n";
+        text += "=================\n";
+        text += `${significantCount}/18 schemas significatifs\n\n`;
 
-        sorted.forEach(([code, data]) => {
-            const flag = data.mean >= 4 ? " ⚠️" : "";
-            text += `${data.name} (${code.toUpperCase()})${flag}\n`;
-            text += `  Moyenne: ${data.mean.toFixed(2)}/6\n`;
-            text += `  Items 5-6: ${data.count56}/${data.total} (${data.percent56.toFixed(0)}%)\n\n`;
+        domainOrder.forEach(d => {
+            text += `DOMAINE ${d} — ${domainNames[d]} (moy: ${domainAverages[d].toFixed(2)}/6)\n`;
+            const sorted = [...domainSchemas[d]].sort((a, b) => b.mean - a.mean);
+            sorted.forEach(s => {
+                const flag = (s.mean >= 4 || s.percent56 >= 50) ? ' [SIGNIFICATIF]' : '';
+                text += `  ${s.name} (${s.code.toUpperCase()}) — Moy: ${s.mean.toFixed(2)}/6 — Items 5-6: ${s.count56}/${s.total} (${s.percent56.toFixed(0)}%)${flag}\n`;
+            });
+            text += '\n';
         });
 
         navigator.clipboard.writeText(text).then(() => {
