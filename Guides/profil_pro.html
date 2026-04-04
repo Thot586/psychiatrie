@@ -237,10 +237,10 @@
         }
         .quiz-axis-header:first-child { margin-top: 0; }
         .quiz-axis-header i { font-size: 1.1rem; }
-        fieldset.quiz-question { margin: 0; }
+        fieldset.quiz-question { margin: 0; margin-bottom: 2rem; }
         .quiz-question {
             background: #f8fafc; border: 2px solid transparent; border-radius: 16px;
-            padding: 1.5rem; margin-bottom: 2rem;
+            padding: 1.5rem;
             box-shadow: 8px 8px 16px rgba(0,0,0,0.07), -8px -8px 16px rgba(255,255,255,0.85);
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
@@ -346,7 +346,7 @@
         }
         /* Mobile: stack panels vertically + more spacing */
         @media (max-width: 600px) {
-            .quiz-question {
+            fieldset.quiz-question {
                 margin-bottom: 2.5rem;
                 padding: 1.25rem;
             }
