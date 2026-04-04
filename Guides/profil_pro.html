@@ -24,12 +24,29 @@
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Lexend:wght@700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Lexend:wght@700&display=swap"></noscript>
     <style>
+        /* Font fallback with size-adjust to reduce CLS during font swap */
+        @font-face {
+            font-family: 'Inter Fallback';
+            src: local('Arial');
+            size-adjust: 107%;
+            ascent-override: 90%;
+            descent-override: 22%;
+            line-gap-override: 0%;
+        }
+        @font-face {
+            font-family: 'Lexend Fallback';
+            src: local('Arial Black');
+            size-adjust: 110%;
+            ascent-override: 85%;
+            descent-override: 22%;
+            line-gap-override: 0%;
+        }
         /* Override font family */
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', 'Inter Fallback', sans-serif;
         }
         h1, h2, h3 {
-            font-family: 'Lexend', sans-serif;
+            font-family: 'Lexend', 'Lexend Fallback', sans-serif;
         }
 
         /* Main container */
@@ -233,48 +250,116 @@
         .quiz-legend { color: var(--color-text-primary); font-weight: 500; margin-bottom: 0.25rem; font-size: 0.95rem; padding: 0; }
         .quiz-hint { font-size: 0.8rem; color: var(--color-text-dimmed); font-style: italic; margin: 0.5rem 0 0; padding-left: 0.5rem; border-left: 2px solid var(--color-border); line-height: 1.5; }
         .quiz-question p { color: var(--color-text-primary); font-weight: 500; margin-bottom: 0.75rem; font-size: 0.95rem; }
-        .quiz-poles {
-            display: flex; justify-content: space-between;
-            font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem;
+        .quiz-global-instruction {
+            background: rgba(13, 148, 136, 0.08); border: 1px solid rgba(13, 148, 136, 0.2);
+            border-radius: 12px; padding: 0.85rem 1.25rem; margin: 1rem 0 1.5rem;
+            font-size: 0.88rem; color: #0f766e; line-height: 1.5;
+            display: flex; align-items: flex-start; gap: 0.6rem;
         }
-        .quiz-poles span:first-child { color: #0f766e; }
-        .quiz-poles span:last-child { color: #c2410c; }
-        .quiz-scale { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.4rem; }
-        .quiz-radio-label { cursor: pointer; display: block; }
-        .quiz-radio-btn {
+        .quiz-global-instruction i { margin-top: 0.15rem; flex-shrink: 0; }
+        /* Dual-panel container for two poles */
+        .quiz-dual-container {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+            margin-top: 0.5rem;
+        }
+        .quiz-instruction {
+            font-size: 0.8rem; color: var(--color-text-dimmed); text-align: center;
+            margin-bottom: 0.5rem; font-style: italic;
+        }
+        .quiz-pole-panel {
+            background: #f1f5f9; border-radius: 14px; padding: 1rem;
+            border-left: 4px solid transparent;
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.06), -4px -4px 8px rgba(255,255,255,0.9);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .quiz-pole-panel.pole-a { border-left-color: #0f766e; }
+        .quiz-pole-panel.pole-b { border-left-color: #c2410c; }
+        .quiz-pole-panel.pole-answered {
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.06), -4px -4px 8px rgba(255,255,255,0.9), 0 0 12px rgba(13, 148, 136, 0.15);
+        }
+        .quiz-pole-title {
+            font-size: 0.9rem; font-weight: 700; margin-bottom: 0.75rem;
+            line-height: 1.3;
+        }
+        .quiz-pole-panel.pole-a .quiz-pole-title { color: #0f766e; }
+        .quiz-pole-panel.pole-b .quiz-pole-title { color: #c2410c; }
+        .quiz-intensity-option { margin-bottom: 0.35rem; }
+        .quiz-intensity-option:last-child { margin-bottom: 0; }
+        .quiz-intensity-label {
+            display: flex; align-items: center; gap: 0.6rem;
+            padding: 0.5rem 0.75rem; border-radius: 10px; cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            background: transparent; border: 2px solid transparent;
+            font-size: 0.85rem; color: #475569; font-weight: 500;
+        }
+        .quiz-intensity-label:hover {
+            background: rgba(0,0,0,0.03);
+            transform: translateX(2px);
+        }
+        .quiz-intensity-dot {
+            width: 18px; height: 18px; border-radius: 50%;
+            border: 2px solid #cbd5e1; background: white;
+            transition: all 0.2s ease; flex-shrink: 0;
             display: flex; align-items: center; justify-content: center;
-            padding: 0.65rem 0.3rem; border-radius: 12px; border: none;
-            background: #f1f5f9; color: #475569;
-            font-size: 0.9rem; font-weight: 500; min-height: 48px;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 4px 4px 8px rgba(0,0,0,0.08), -4px -4px 8px rgba(255,255,255,0.9);
         }
-        .quiz-radio-label:hover .quiz-radio-btn {
-            transform: translateY(-1px); color: #0d9488;
-            box-shadow: 6px 6px 12px rgba(0,0,0,0.1), -6px -6px 12px rgba(255,255,255,0.95);
+        .quiz-intensity-dot::after {
+            content: ''; width: 8px; height: 8px; border-radius: 50%;
+            background: transparent; transition: all 0.2s ease;
         }
-        .quiz-radio-label:active .quiz-radio-btn {
-            transform: scale(0.95);
-            box-shadow: inset 2px 2px 4px rgba(0,0,0,0.1), inset -2px -2px 4px rgba(255,255,255,0.5);
+        /* Selected states per pole color */
+        .quiz-intensity-input { position: absolute; opacity: 0; pointer-events: none; }
+        .pole-a .quiz-intensity-input:checked + .quiz-intensity-label {
+            background: rgba(15, 118, 110, 0.08); border-color: rgba(15, 118, 110, 0.3);
         }
-        .quiz-radio-btn.selected {
-            background: linear-gradient(145deg, #0d9488, #065f56); color: #ffffff;
-            font-weight: 700; transform: scale(1.05);
-            box-shadow: inset 3px 3px 6px rgba(0,0,0,0.2), inset -2px -2px 4px rgba(255,255,255,0.1), 0 0 20px rgba(20,184,166,0.3);
+        .pole-a .quiz-intensity-input:checked + .quiz-intensity-label .quiz-intensity-dot {
+            border-color: #0f766e;
         }
-        /* Focus visible on radio label */
-        .quiz-radio-input:focus-visible + .quiz-radio-btn {
-            outline: 2px solid #0369a1;
-            outline-offset: 2px;
+        .pole-a .quiz-intensity-input:checked + .quiz-intensity-label .quiz-intensity-dot::after {
+            background: #0f766e;
         }
-        /* Selection bounce animation */
+        .pole-b .quiz-intensity-input:checked + .quiz-intensity-label {
+            background: rgba(194, 65, 12, 0.08); border-color: rgba(194, 65, 12, 0.3);
+        }
+        .pole-b .quiz-intensity-input:checked + .quiz-intensity-label .quiz-intensity-dot {
+            border-color: #c2410c;
+        }
+        .pole-b .quiz-intensity-input:checked + .quiz-intensity-label .quiz-intensity-dot::after {
+            background: #c2410c;
+        }
+        /* Intensity visual feedback — stronger color for higher values */
+        .pole-a .quiz-intensity-input[value="2"]:checked + .quiz-intensity-label { background: rgba(15, 118, 110, 0.13); }
+        .pole-a .quiz-intensity-input[value="3"]:checked + .quiz-intensity-label { background: rgba(15, 118, 110, 0.2); font-weight: 700; }
+        .pole-b .quiz-intensity-input[value="2"]:checked + .quiz-intensity-label { background: rgba(194, 65, 12, 0.13); }
+        .pole-b .quiz-intensity-input[value="3"]:checked + .quiz-intensity-label { background: rgba(194, 65, 12, 0.2); font-weight: 700; }
+        /* Focus visible */
+        .quiz-intensity-input:focus-visible + .quiz-intensity-label {
+            outline: 2px solid #0369a1; outline-offset: 2px;
+        }
+        /* Selection bounce */
         @keyframes selectBounce {
-            0% { transform: scale(1.05); }
-            50% { transform: scale(1.15); }
-            100% { transform: scale(1.05); }
+            0% { transform: translateX(2px); }
+            50% { transform: translateX(6px); }
+            100% { transform: translateX(2px); }
         }
-        .quiz-radio-btn.selected {
+        .quiz-intensity-input:checked + .quiz-intensity-label {
             animation: selectBounce 0.25s ease;
+        }
+        /* Mobile: stack panels vertically */
+        @media (max-width: 600px) {
+            .quiz-dual-container {
+                grid-template-columns: 1fr;
+            }
+            .quiz-dual-separator {
+                display: flex; align-items: center; gap: 0.5rem;
+                color: var(--color-text-dimmed); font-size: 0.8rem; font-weight: 600;
+                margin: 0.25rem 0;
+            }
+            .quiz-dual-separator::before, .quiz-dual-separator::after {
+                content: ''; flex: 1; height: 1px; background: var(--color-border);
+            }
+        }
+        @media (min-width: 601px) {
+            .quiz-dual-separator { display: none; }
         }
         .btn-quiz-submit {
             display: block; width: 100%; padding: 1.1rem; margin-top: 2rem;
@@ -313,6 +398,79 @@
         }
         .result-tab-content strong { color: var(--color-text-primary); }
         .result-tab-content .source { font-size: 0.8rem; color: var(--color-text-dimmed); font-style: italic; display: block; margin-top: 0.5rem; }
+
+        /* Top 3 profiles results */
+        .top-profiles-container { display: flex; flex-direction: column; gap: 1.25rem; }
+        .top-profile-card {
+            background: var(--surface-card); border-radius: var(--radius-lg);
+            padding: 1.5rem; box-shadow: var(--neo-raised);
+            border: 2px solid var(--color-border);
+            transition: border-color 0.3s ease;
+        }
+        .top-profile-card[data-rank="1"] { border-color: #0d9488; border-width: 3px; }
+        .top-profile-card[data-rank="2"] { border-color: rgba(13, 148, 136, 0.4); }
+        .top-profile-card[data-rank="3"] { border-color: rgba(100, 116, 139, 0.3); }
+        .top-profile-header {
+            display: flex; align-items: center; gap: 1rem; margin-bottom: 0.75rem;
+        }
+        .rank-badge {
+            width: 36px; height: 36px; border-radius: 50%; display: flex;
+            align-items: center; justify-content: center; font-weight: 800;
+            font-size: 1rem; flex-shrink: 0; font-family: 'Lexend', sans-serif;
+        }
+        .top-profile-card[data-rank="1"] .rank-badge { background: linear-gradient(145deg, #0d9488, #065f56); color: white; }
+        .top-profile-card[data-rank="2"] .rank-badge { background: linear-gradient(145deg, #14b8a6, #0d9488); color: white; }
+        .top-profile-card[data-rank="3"] .rank-badge { background: #e2e8f0; color: #64748b; }
+        .top-profile-icon { font-size: 2rem; flex-shrink: 0; }
+        .top-profile-info { flex: 1; min-width: 0; }
+        .top-profile-title {
+            font-size: 1.15rem; font-weight: 700; color: #0d7c72;
+            font-family: 'Lexend', sans-serif; margin: 0;
+        }
+        .top-profile-card[data-rank="1"] .top-profile-title { font-size: 1.3rem; }
+        .concordance-row {
+            display: flex; align-items: center; gap: 0.75rem; margin-top: 0.4rem;
+            flex-wrap: wrap;
+        }
+        .concordance-bar {
+            flex: 1; height: 10px; background: #e2e8f0; border-radius: 5px;
+            overflow: hidden;
+        }
+        .concordance-fill {
+            height: 100%; border-radius: 5px;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .top-profile-card[data-rank="1"] .concordance-fill { background: linear-gradient(90deg, #0d9488, #14b8a6); }
+        .top-profile-card[data-rank="2"] .concordance-fill { background: linear-gradient(90deg, #14b8a6, #5eead4); }
+        .top-profile-card[data-rank="3"] .concordance-fill { background: #94a3b8; }
+        .concordance-pct {
+            font-size: 1rem; font-weight: 800; min-width: 48px; text-align: right;
+            font-family: 'Lexend', sans-serif;
+        }
+        .top-profile-card[data-rank="1"] .concordance-pct { color: #0d7c72; font-size: 1.15rem; }
+        .top-profile-card[data-rank="2"] .concordance-pct { color: #0d9488; }
+        .top-profile-card[data-rank="3"] .concordance-pct { color: #64748b; }
+        .concordance-label {
+            font-size: 0.75rem; color: var(--color-text-dimmed); font-style: italic;
+            white-space: nowrap;
+        }
+        .top-profile-summary {
+            color: var(--color-text-muted); font-style: italic; font-size: 0.9rem;
+            margin: 0.5rem 0 0;
+        }
+        .top-profile-details-toggle {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            background: none; border: none; color: #0d9488; cursor: pointer;
+            font-size: 0.85rem; font-weight: 600; padding: 0.5rem 0; margin-top: 0.5rem;
+            transition: color 0.2s;
+        }
+        .top-profile-details-toggle:hover { color: #065f56; }
+        .top-profile-details-toggle i { transition: transform 0.3s ease; }
+        .top-profile-details-toggle.open i { transform: rotate(180deg); }
+        .top-profile-details-body {
+            display: none; margin-top: 0.75rem;
+        }
+        .top-profile-details-body.open { display: block; }
 
         /* Main layout grid */
         .main-grid {
@@ -838,13 +996,16 @@
 
         <section id="quiz" class="intro-card">
             <h2><i class="fas fa-compass"></i> Découvrez votre profil</h2>
-            <p style="color: var(--color-text-muted);">Positionnez-vous sur 16 situations professionnelles entre deux pôles. Il n'y a pas de bonne ou mauvaise réponse.</p>
+            <p style="color: var(--color-text-muted);">Pour chaque situation, évaluez votre affinité avec chaque pôle indépendamment. Vous pouvez vous reconnaître dans les deux ! Il n'y a pas de bonne ou mauvaise réponse.</p>
             <div class="quiz-progress">
-                <span id="quiz-progress-text" style="font-size: 0.85rem; color: var(--color-text-dimmed);" aria-live="polite" aria-atomic="true">0 / 16 réponses</span>
-                <div class="progress-bar"><div class="progress-fill" id="quiz-progress-fill"></div></div>
+                <span id="quiz-progress-text" style="font-size: 0.85rem; color: var(--color-text-dimmed);" aria-live="polite" aria-atomic="true">16 / 16 réponses</span>
+                <div class="progress-bar"><div class="progress-fill" id="quiz-progress-fill" style="width: 100%;"></div></div>
+            </div>
+            <div class="quiz-global-instruction">
+                <i class="fas fa-info-circle"></i> Pour chaque question, évaluez votre affinité avec <strong>chaque pôle indépendamment</strong>. Vous pouvez cocher une intensité forte sur les deux côtés si vous vous reconnaissez dans les deux.
             </div>
             <div id="quiz-questions"></div>
-            <button class="btn-quiz-submit" id="quiz-submit" onclick="submitQuiz()" disabled>
+            <button class="btn-quiz-submit" id="quiz-submit" onclick="submitQuiz()">
                 <i class="fas fa-chart-line"></i> Découvrir mon profil
             </button>
         </section>
@@ -855,8 +1016,9 @@
                 <canvas id="userChart" aria-hidden="true"></canvas>
             </div>
             <div id="userChart-alt" class="sr-only" aria-live="polite"></div>
-            <div id="dominant-profile" class="profile-result"></div>
-            <div id="complementary-profile" class="profile-result complementary"></div>
+            <div id="top-profiles"></div>
+            <div id="result-disclaimer" style="text-align: center; margin-top: 1rem;"></div>
+            <div id="complementary-profile" class="profile-result complementary" style="margin-top: 1.25rem;"></div>
             <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.5rem;">
                 <button class="btn-quiz-submit" style="flex: 1; min-width: 200px;" onclick="document.querySelector('.main-grid').scrollIntoView({behavior:'smooth'})">
                     <i class="fas fa-book-open"></i> Explorer tous les profils
@@ -1123,28 +1285,28 @@
         const quizQuestions = [
             // Axe 0 — Traitement de l'Information (poleA=analytique, poleB=exploratoire)
             { axis: 0, poleA: "Analyser en détail", poleB: "Explorer largement", text: "Face à un nouveau projet, je préfère...", hint: "Ex : On vous confie un nouveau dossier — vous étudiez chaque détail ou vous explorez d'abord les grandes lignes ?" },
-            { axis: 0, poleA: "Plusieurs options ouvertes", poleB: "Une seule bonne solution", text: "Je suis plus à l'aise quand je cherche...", reversed: true, hint: "Ex : En réunion de brainstorming, préférez-vous multiplier les pistes ou converger vers LA solution ?" },
+            { axis: 0, poleA: "Une seule bonne solution", poleB: "Plusieurs options ouvertes", text: "Je suis plus à l'aise quand je cherche...", hint: "Ex : En réunion de brainstorming, préférez-vous converger vers LA solution ou multiplier les pistes ?" },
             { axis: 0, poleA: "Approfondir un sujet", poleB: "Connecter des domaines différents", text: "Mon énergie intellectuelle va naturellement vers...", hint: "Ex : Quand vous lisez un article, vous creusez le sujet ou vous faites des liens avec d'autres domaines ?" },
-            { axis: 0, poleA: "Des idées nouvelles même incertaines", poleB: "Des données vérifiées", text: "Je fais davantage confiance à...", reversed: true, hint: "Ex : Pour prendre une décision, vous attendez les chiffres ou vous suivez une intuition prometteuse ?" },
+            { axis: 0, poleA: "Des données vérifiées", poleB: "Des idées nouvelles même incertaines", text: "Je fais davantage confiance à...", hint: "Ex : Pour prendre une décision, vous attendez les chiffres ou vous suivez une intuition prometteuse ?" },
             // Axe 1 — Processus d'Action (poleA=planificateur, poleB=agile)
             { axis: 1, poleA: "Planifier avant d'agir", poleB: "Ajuster en cours de route", text: "Ma façon de travailler naturelle est de...", hint: "Ex : Avant de commencer une tâche, vous faites un plan ou vous démarrez et ajustez en chemin ?" },
-            { axis: 1, poleA: "Mon intuition et mon expérience", poleB: "Un plan détaillé", text: "Pour prendre une décision, je m'appuie sur...", reversed: true, hint: "Ex : Face à un choix important, vous consultez votre expérience vécue ou vous construisez un tableau comparatif ?" },
+            { axis: 1, poleA: "Un plan détaillé", poleB: "Mon intuition et mon expérience", text: "Pour prendre une décision, je m'appuie sur...", hint: "Ex : Face à un choix important, vous construisez un tableau comparatif ou vous consultez votre expérience vécue ?" },
             { axis: 1, poleA: "Anticiper les risques", poleB: "Saisir les opportunités", text: "Ma priorité face à l'incertitude est de...", hint: "Ex : Un projet démarre avec beaucoup d'inconnues — vous listez les risques ou vous foncez pour voir ?" },
-            { axis: 1, poleA: "Improviser selon le contexte", poleB: "Respecter le processus", text: "En réunion, je suis plutôt celui/celle qui veut...", reversed: true, hint: "Ex : La réunion dérive — vous proposez de suivre l'ordre du jour ou vous laissez la discussion évoluer ?" },
+            { axis: 1, poleA: "Respecter le processus", poleB: "Improviser selon le contexte", text: "En réunion, je suis plutôt celui/celle qui veut...", hint: "Ex : La réunion dérive — vous proposez de suivre l'ordre du jour ou vous laissez la discussion évoluer ?" },
             // Axe 2 — Rapport aux Autres (poleA=tâche, poleB=relation)
             { axis: 2, poleA: "Les résultats d'abord", poleB: "Les relations d'abord", text: "Dans un projet d'équipe, je privilégie...", hint: "Ex : Un collègue a besoin d'aide mais la deadline approche — vous terminez votre tâche ou vous l'aidez d'abord ?" },
-            { axis: 2, poleA: "Être diplomate et inclusif", poleB: "Être direct et efficace", text: "Ma communication tend à...", reversed: true, hint: "Ex : Vous devez donner un retour négatif — vous allez droit au but ou vous enrobez le message ?" },
+            { axis: 2, poleA: "Être direct et efficace", poleB: "Être diplomate et inclusif", text: "Ma communication tend à...", hint: "Ex : Vous devez donner un retour négatif — vous allez droit au but ou vous enrobez le message ?" },
             { axis: 2, poleA: "La clarté des objectifs", poleB: "La cohésion du groupe", text: "Ce qui m'importe le plus dans une équipe, c'est...", hint: "Ex : Vous évaluez une équipe — vous regardez d'abord les résultats ou l'ambiance de travail ?" },
-            { axis: 2, poleA: "Chercher le consensus", poleB: "Trancher rapidement", text: "Face à un désaccord en équipe, je préfère...", reversed: true, hint: "Ex : Deux collègues ne sont pas d'accord — vous tranchez rapidement ou vous cherchez un compromis ?" },
+            { axis: 2, poleA: "Trancher rapidement", poleB: "Chercher le consensus", text: "Face à un désaccord en équipe, je préfère...", hint: "Ex : Deux collègues ne sont pas d'accord — vous tranchez rapidement ou vous cherchez un compromis ?" },
             // Axe 3 — Rapport à la Nouveauté (poleA=changement, poleB=stabilité)
             { axis: 3, poleA: "Changer et innover", poleB: "Optimiser l'existant", text: "Mon réflexe face à un processus établi est de...", hint: "Ex : Un outil que vous utilisez depuis 2 ans fonctionne bien — vous cherchez quand même mieux ou vous l'optimisez ?" },
-            { axis: 3, poleA: "Prendre du recul d'abord", poleB: "M'adapter rapidement", text: "Face au changement, ma première réaction est de...", reversed: true, hint: "Ex : On annonce une réorganisation — vous vous adaptez vite ou vous prenez du temps pour digérer ?" },
+            { axis: 3, poleA: "M'adapter rapidement", poleB: "Prendre du recul d'abord", text: "Face au changement, ma première réaction est de...", hint: "Ex : On annonce une réorganisation — vous vous adaptez vite ou vous prenez du temps pour digérer ?" },
             { axis: 3, poleA: "Les possibilités futures", poleB: "Les acquis concrets", text: "Ce qui me motive le plus, ce sont...", hint: "Ex : Qu'est-ce qui vous fait lever le matin — les projets à venir ou la satisfaction du travail bien fait ?" },
-            { axis: 3, poleA: "La maîtrise de mon domaine", poleB: "L'exploration de l'inconnu", text: "Je tire le plus de satisfaction de...", reversed: true, hint: "Ex : Fin de journée — vous êtes plus fier d'avoir maîtrisé votre sujet ou d'avoir exploré un nouveau domaine ?" }
+            { axis: 3, poleA: "L'exploration de l'inconnu", poleB: "La maîtrise de mon domaine", text: "Je tire le plus de satisfaction de...", hint: "Ex : Fin de journée — vous êtes plus fier d'avoir exploré un nouveau domaine ou d'avoir maîtrisé votre sujet ?" }
         ];
-        const quizAnswers = new Array(16).fill(null);
+        const quizAnswers = Array.from({length: 16}, () => ({ poleA: 0, poleB: 0 }));
         let userChartInstance = null;
-        let currentDominantId = null;
+        let currentTopRanked = null; // array of ranked profiles after quiz
 
         const axisHeaders = [
             { icon: 'fa-microscope', title: "Traitement de l'Information", color: '#0d9488' },
@@ -1152,6 +1314,8 @@
             { icon: 'fa-users', title: "Rapport aux Autres", color: '#7c3aed' },
             { icon: 'fa-seedling', title: "Rapport à la Nouveauté", color: '#ea580c' }
         ];
+
+        const intensityLabels = ['Pas du tout', 'Un peu', 'Modérément', 'Fortement'];
 
         function renderQuiz() {
             const container = document.getElementById('quiz-questions');
@@ -1165,86 +1329,100 @@
                         <i class="fas ${ah.icon}"></i> Axe ${currentAxis + 1} — ${ah.title}
                     </div>`;
                 }
+                const renderPole = (pole, label, poleClass) => {
+                    return `<div class="quiz-pole-panel ${poleClass}" role="radiogroup" aria-label="${label}">
+                        <div class="quiz-pole-title">${label}</div>
+                        ${intensityLabels.map((lbl, v) => `
+                            <div class="quiz-intensity-option">
+                                <input type="radio" name="q${i}_${pole}" value="${v}" id="q${i}_${pole}_v${v}" class="quiz-intensity-input"${v === 0 ? ' checked' : ''} />
+                                <label class="quiz-intensity-label" for="q${i}_${pole}_v${v}">
+                                    <span class="quiz-intensity-dot"></span>
+                                    ${lbl}
+                                </label>
+                            </div>
+                        `).join('')}
+                    </div>`;
+                };
                 html += `<fieldset class="quiz-question" id="quiz-q${i}">
                     <legend class="quiz-legend">${i + 1}. ${q.text}</legend>
-                    <div class="quiz-poles" aria-hidden="true"><span>← ${q.poleA}</span><span>${q.poleB} →</span></div>
-                    <div class="quiz-scale" role="radiogroup" aria-label="${q.text}">
-                        ${[1,2,3,4,5,6,7].map(v => `<label class="quiz-radio-label" for="q${i}_v${v}">
-                            <input type="radio" name="q${i}" value="${v}" id="q${i}_v${v}" class="quiz-radio-input sr-only" />
-                            <span class="quiz-radio-btn">${v}</span>
-                        </label>`).join('')}
+                    <div class="quiz-dual-container">
+                        ${renderPole('poleA', q.poleA, 'pole-a')}
+                        <div class="quiz-dual-separator">ET</div>
+                        ${renderPole('poleB', q.poleB, 'pole-b')}
                     </div>
                     ${q.hint ? `<p class="quiz-hint">${q.hint}</p>` : ''}
                 </fieldset>`;
             });
             container.innerHTML = html;
             // Attach change listeners
-            container.querySelectorAll('.quiz-radio-input').forEach(input => {
+            container.querySelectorAll('.quiz-intensity-input').forEach(input => {
                 input.addEventListener('change', (e) => {
-                    const name = e.target.name;
-                    const qIndex = parseInt(name.replace('q', ''));
-                    selectQuizAnswer(qIndex, parseInt(e.target.value));
+                    const parts = e.target.name.split('_'); // q0_poleA
+                    const qIndex = parseInt(parts[0].replace('q', ''));
+                    const pole = parts[1];
+                    selectQuizAnswer(qIndex, pole, parseInt(e.target.value));
                 });
             });
         }
 
-        function selectQuizAnswer(questionIndex, value) {
-            // Store corrected value: reverse if item polarity is flipped
-            const q = quizQuestions[questionIndex];
-            quizAnswers[questionIndex] = q.reversed ? (8 - value) : value;
-            // Update visual state on custom radio buttons
+        function selectQuizAnswer(questionIndex, pole, value) {
+            quizAnswers[questionIndex][pole] = value;
+            // Mark panel as answered
             const fieldset = document.getElementById(`quiz-q${questionIndex}`);
-            fieldset.querySelectorAll('.quiz-radio-btn').forEach(btn => btn.classList.remove('selected'));
-            const checkedLabel = fieldset.querySelector(`#q${questionIndex}_v${value}`);
-            if (checkedLabel) checkedLabel.closest('label').querySelector('.quiz-radio-btn').classList.add('selected');
-            // Animate the question card
-            fieldset.classList.add('answered');
-            const answered = quizAnswers.filter(a => a !== null).length;
+            const panelClass = pole === 'poleA' ? 'pole-a' : 'pole-b';
+            const panel = fieldset.querySelector(`.${panelClass}`);
+            if (panel) panel.classList.add('pole-answered');
+            // Mark question as fully answered when both poles are set
+            const a = quizAnswers[questionIndex];
+            if (a.poleA !== null && a.poleB !== null) {
+                fieldset.classList.add('answered');
+            }
+            // Update progress: count fully answered questions
+            const answered = quizAnswers.filter(a => a.poleA !== null && a.poleB !== null).length;
             document.getElementById('quiz-progress-text').textContent = `${answered} / 16 réponses`;
             document.getElementById('quiz-progress-fill').style.width = `${(answered / 16) * 100}%`;
             document.getElementById('quiz-submit').disabled = answered < 16;
         }
 
+        function computeScores() {
+            const maxPerProfile = 4 * 3; // 4 questions × max intensity 3 = 12
+            const profileScores = {};
+
+            profilsData.axes.forEach((axis, axisIndex) => {
+                const [profileA, profileB] = axis.profiles;
+                let sumA = 0, sumB = 0;
+                quizQuestions.forEach((q, qIndex) => {
+                    if (q.axis === axisIndex) {
+                        sumA += quizAnswers[qIndex].poleA || 0;
+                        sumB += quizAnswers[qIndex].poleB || 0;
+                    }
+                });
+                profileScores[profileA] = { raw: sumA, concordance: Math.round((sumA / maxPerProfile) * 100) };
+                profileScores[profileB] = { raw: sumB, concordance: Math.round((sumB / maxPerProfile) * 100) };
+            });
+
+            const ranked = Object.entries(profileScores)
+                .sort((a, b) => b[1].concordance - a[1].concordance)
+                .map(([id, data], rank) => ({ id, ...data, rank: rank + 1 }));
+
+            return { profileScores, ranked };
+        }
+
         function submitQuiz() {
-            const axisScores = [0, 1, 2, 3].map(axis => {
-                const questions = quizAnswers.filter((_, i) => quizQuestions[i].axis === axis);
-                return questions.reduce((sum, v) => sum + v, 0) / questions.length;
-            });
+            const { profileScores, ranked } = computeScores();
+            currentTopRanked = ranked;
 
-            // Scores moyens (1-7) → normalisés 0-10 → 8 dimensions radar
-            // Score bas sur un axe = poleA dominant, score haut = poleB dominant
-            // NB: les items reversed sont déjà corrigés dans selectQuizAnswer()
-            const s = axisScores.map(v => v / 7 * 10);
-            const userData = [
-                10 - s[0],  // Rigueur       ← bas axe0 = analytique
-                s[0],       // Créativité    ← haut axe0 = exploratoire
-                10 - s[1],  // Planification ← bas axe1 = planificateur
-                s[1],       // Agilité       ← haut axe1 = agile
-                10 - s[2],  // Focus Tâche   ← bas axe2 = orienté tâche
-                s[2],       // Focus Relation← haut axe2 = orienté relation
-                10 - s[3],  // Adaptabilité  ← bas axe3 = changement (poleA)
-                s[3]        // Stabilité     ← haut axe3 = stabilité (poleB)
-            ];
+            // Build radar data from concordances
+            // chartLabels order maps to: plongeur, explorateur, architecte, navigateur, pilote, catalyseur, pionnier, stabilisateur
+            const profileOrder = ['plongeur', 'explorateur', 'architecte', 'navigateur', 'pilote', 'catalyseur', 'pionnier', 'stabilisateur'];
+            const userData = profileOrder.map(id => profileScores[id].concordance / 10); // 0-100% → 0-10
 
-            // Find dominant profile: axis with max deviation from neutral determines the profile
-            // This avoids the bias where "flatter" chartData profiles match random answers more often
-            const neutral = 4; // neutral point on 1-7 Likert scale
-            let bestAxisIdx = 0, bestDev = 0;
-            axisScores.forEach((score, i) => {
-                const dev = Math.abs(score - neutral);
-                if (dev > bestDev) { bestDev = dev; bestAxisIdx = i; }
-            });
-            const axisProfilePairs = profilsData.axes.map(a => a.profiles); // [['plongeur','explorateur'], ...]
-            const bestMatch = axisScores[bestAxisIdx] <= neutral
-                ? axisProfilePairs[bestAxisIdx][0]   // low score → first profile (poleA)
-                : axisProfilePairs[bestAxisIdx][1];  // high score → second profile (poleB)
-            // Confidence = how far the dominant axis deviates (0-3 range → 0-100%)
-            const bestCorr = Math.min(bestDev / 3, 1);
+            const top3 = ranked.slice(0, 3);
+            const topProfile = profilsData.profiles[top3[0].id];
 
-            // Find complementary (opposite pole on dominant axis)
-            const dominant = profilsData.profiles[bestMatch];
-            const dominantAxis = profilsData.axes.find(a => a.profiles.includes(bestMatch));
-            const complementaryId = dominantAxis.profiles.find(p => p !== bestMatch);
+            // Complementary: opposite pole on same axis as #1
+            const topAxis = profilsData.axes.find(a => a.profiles.includes(top3[0].id));
+            const complementaryId = topAxis.profiles.find(p => p !== top3[0].id);
             const complementary = profilsData.profiles[complementaryId];
 
             // Show results
@@ -1253,36 +1431,94 @@
             resultsEl.style.display = 'block';
             resultsEl.classList.add('fade-in');
 
-            const isWeakMatch = bestCorr < 0.65;
-            const confidenceNote = isWeakMatch
-                ? `<div class="warning-box" style="margin-top: 1rem; text-align: left;">
+            // Check for non-informative pattern: all profiles above 80%
+            const highCount = ranked.filter(r => r.concordance >= 75).length;
+            const allSameHigh = highCount >= 6;
+
+            // Contextual messages
+            let contextMessage = '';
+            if (allSameHigh) {
+                contextMessage = `<div class="warning-box" style="margin-bottom: 1.25rem; text-align: left;">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Profil peu différencié</h3>
+                    <p>Vous avez indiqué une forte affinité avec la plupart des pôles (${highCount} profils au-dessus de 75%). Ce résultat est <strong>peu discriminant</strong> — il ne permet pas de dégager un profil caractéristique. Essayez de répondre en pensant à votre <em>première réaction naturelle</em> plutôt qu'à ce que vous êtes capable de faire.</p>
+                </div>`;
+            } else if (top3[0].concordance < 40) {
+                contextMessage = `<div class="warning-box" style="margin-bottom: 1.25rem; text-align: left;">
                     <h3><i class="fas fa-exclamation-triangle"></i> Profil mixte — pas de dominante claire</h3>
-                    <p>Vos réponses ne correspondent clairement à aucun archétype unique (corrélation : ${(bestCorr * 100).toFixed(0)}%). Cela peut indiquer un <strong>fonctionnement équilibré</strong> entre plusieurs modes, des réponses proches du neutre, ou un remplissage rapide. Le profil ci-dessous est indicatif mais à interpréter avec prudence.</p>
-                  </div>`
-                : '';
+                    <p>Aucun profil ne ressort nettement (concordance max : ${top3[0].concordance}%). Cela peut indiquer un <strong>fonctionnement équilibré</strong> entre plusieurs modes. Les résultats ci-dessous sont indicatifs.</p>
+                </div>`;
+            } else if (top3[0].concordance - top3[2].concordance < 10) {
+                contextMessage = `<div class="warning-box" style="margin-bottom: 1.25rem; text-align: left;">
+                    <h3><i class="fas fa-balance-scale"></i> Profil versatile</h3>
+                    <p>Vos trois profils principaux sont très proches. Cela suggère un <strong>fonctionnement polyvalent</strong> — vous mobilisez plusieurs modes selon le contexte.</p>
+                </div>`;
+            }
 
-            document.getElementById('dominant-profile').innerHTML = `
-                <div class="result-icon">${dominant.icon}</div>
-                <h3 class="result-title">${dominant.title}</h3>
-                <p class="result-summary">"${dominant.summary}"</p>
-                <p class="result-match">Profil dominant — ${dominantAxis.title} (concordance : ${(bestCorr * 100).toFixed(0)}%)</p>
-                ${confidenceNote}
-                <p style="font-size: 0.8rem; color: var(--color-text-dimmed); margin-top: 0.75rem; font-style: italic;">Rappel : ce résultat est exploratoire. Il reflète vos réponses à un instant donné, pas un trait stable. Les profils sont des archétypes simplificateurs — votre fonctionnement réel est plus nuancé et dépend du contexte (Fleeson & Jayawickreme, 2015).</p>
-                <div class="result-tabs" role="tablist" aria-label="Détails de votre profil dominant">
-                    <button role="tab" class="profile-tab result-tab tab-active" data-result-tab="fonctionnement" aria-selected="true" tabindex="0">Fonctionnement</button>
-                    <button role="tab" class="profile-tab result-tab tab-inactive" data-result-tab="forces" aria-selected="false" tabindex="-1">Forces</button>
-                    <button role="tab" class="profile-tab result-tab tab-inactive" data-result-tab="limites" aria-selected="false" tabindex="-1">Limites</button>
-                    <button role="tab" class="profile-tab result-tab tab-inactive" data-result-tab="leviers" aria-selected="false" tabindex="-1">Leviers</button>
-                </div>
-                <div id="result-tab-content" role="tabpanel" class="result-tab-content">${dominant.enriched.fonctionnement}</div>
+            // Render top 3 cards
+            let topCardsHtml = contextMessage + '<div class="top-profiles-container">';
+            function concordanceLabel(pct) {
+                if (pct >= 75) return 'Très forte affinité';
+                if (pct >= 50) return 'Forte affinité';
+                if (pct >= 25) return 'Affinité modérée';
+                return 'Faible affinité';
+            }
+            top3.forEach((entry, idx) => {
+                const profile = profilsData.profiles[entry.id];
+                const rank = idx + 1;
+                topCardsHtml += `
+                <div class="top-profile-card" data-rank="${rank}">
+                    <div class="top-profile-header">
+                        <span class="rank-badge">${rank}</span>
+                        <span class="top-profile-icon">${profile.icon}</span>
+                        <div class="top-profile-info">
+                            <h3 class="top-profile-title">${profile.title}</h3>
+                            <div class="concordance-row">
+                                <div class="concordance-bar"><div class="concordance-fill" style="width: 0%;" data-target="${entry.concordance}"></div></div>
+                                <span class="concordance-pct">${entry.concordance}%</span>
+                                <span class="concordance-label">${concordanceLabel(entry.concordance)}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="top-profile-summary">"${profile.summary}"</p>
+                    <button class="top-profile-details-toggle" onclick="toggleProfileDetails(this)" aria-expanded="false">
+                        <i class="fas fa-chevron-down"></i> Voir les détails
+                    </button>
+                    <div class="top-profile-details-body">
+                        <div class="result-tabs" role="tablist" aria-label="Détails de ${profile.title}">
+                            <button role="tab" class="profile-tab result-tab tab-active" data-profile-id="${entry.id}" data-result-tab="fonctionnement" aria-selected="true" tabindex="0">Fonctionnement</button>
+                            <button role="tab" class="profile-tab result-tab tab-inactive" data-profile-id="${entry.id}" data-result-tab="forces" aria-selected="false" tabindex="-1">Forces</button>
+                            <button role="tab" class="profile-tab result-tab tab-inactive" data-profile-id="${entry.id}" data-result-tab="limites" aria-selected="false" tabindex="-1">Limites</button>
+                            <button role="tab" class="profile-tab result-tab tab-inactive" data-profile-id="${entry.id}" data-result-tab="leviers" aria-selected="false" tabindex="-1">Leviers</button>
+                        </div>
+                        <div class="result-tab-content" id="result-tab-content-${entry.id}">${profile.enriched.fonctionnement}</div>
+                    </div>
+                </div>`;
+            });
+            topCardsHtml += '</div>';
+
+            document.getElementById('top-profiles').innerHTML = topCardsHtml;
+
+            // Animate concordance bars
+            requestAnimationFrame(() => {
+                document.querySelectorAll('.concordance-fill[data-target]').forEach(bar => {
+                    bar.style.width = bar.dataset.target + '%';
+                });
+            });
+
+            // Setup tab listeners for each profile card
+            setupAllResultTabListeners();
+
+            // Disclaimer
+            document.getElementById('result-disclaimer').innerHTML = `
+                <p style="font-size: 0.8rem; color: var(--color-text-dimmed); font-style: italic;">Rappel : ce résultat est exploratoire. Il reflète vos réponses à un instant donné, pas un trait stable. Les profils sont des archétypes simplificateurs — votre fonctionnement réel est plus nuancé et dépend du contexte (Fleeson & Jayawickreme, 2015).</p>
             `;
-            setupResultTabListeners();
 
+            // Complementary profile
             document.getElementById('complementary-profile').innerHTML = `
                 <div class="result-icon">${complementary.icon}</div>
                 <h3 class="result-title">Binôme complémentaire : ${complementary.title}</h3>
                 <p class="result-summary">"${complementary.summary}"</p>
-                <p class="result-match">Collaborer avec ce profil enrichit votre approche</p>
+                <p class="result-match">Le profil opposé à votre #1 sur l'axe « ${topAxis.title} » — collaborer avec ce profil enrichit votre approche</p>
             `;
 
             // User radar chart
@@ -1296,7 +1532,7 @@
                         { label: 'Votre profil', data: userData.map(v => Math.round(v * 10) / 10),
                           backgroundColor: 'rgba(20, 184, 166, 0.25)', borderColor: 'rgba(20, 184, 166, 1)',
                           pointBackgroundColor: 'rgba(20, 184, 166, 1)', pointBorderColor: '#fff', borderWidth: 2 },
-                        { label: dominant.title, data: dominant.chartData,
+                        { label: topProfile.title, data: topProfile.chartData,
                           backgroundColor: 'rgba(251, 146, 60, 0.15)', borderColor: 'rgba(251, 146, 60, 0.8)',
                           pointBackgroundColor: 'rgba(251, 146, 60, 0.8)', borderWidth: 1, borderDash: [5, 5] }
                     ]
@@ -1316,45 +1552,50 @@
                 }
             });
 
-            // Generate accessible text alternative for the radar chart
+            // Accessible text alternative
             const altParts = chartLabels.map((label, i) => `${label}: ${Math.round(userData[i] * 10) / 10}/10`);
-            document.getElementById('userChart-alt').textContent = `Votre profil — ${altParts.join(', ')}. Profil dominant : ${dominant.title}.`;
+            document.getElementById('userChart-alt').textContent = `Votre profil — ${altParts.join(', ')}. Top 1 : ${topProfile.title} (${top3[0].concordance}%).`;
 
             resultsEl.scrollIntoView({ behavior: 'smooth' });
-            currentDominantId = bestMatch;
         }
 
-        function setupResultTabListeners() {
-            const tabs = document.querySelectorAll('.result-tab');
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => activateResultTab(tab));
-                tab.addEventListener('keydown', (e) => {
-                    const tabsArr = Array.from(tabs);
-                    const idx = tabsArr.indexOf(e.currentTarget);
-                    let newIdx = -1;
-                    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-                        e.preventDefault();
-                        newIdx = (idx + 1) % tabsArr.length;
-                    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-                        e.preventDefault();
-                        newIdx = (idx - 1 + tabsArr.length) % tabsArr.length;
-                    } else if (e.key === 'Home') {
-                        e.preventDefault();
-                        newIdx = 0;
-                    } else if (e.key === 'End') {
-                        e.preventDefault();
-                        newIdx = tabsArr.length - 1;
-                    }
-                    if (newIdx >= 0) {
-                        tabsArr[newIdx].focus();
-                        activateResultTab(tabsArr[newIdx]);
-                    }
+        function toggleProfileDetails(btn) {
+            const body = btn.nextElementSibling;
+            const isOpen = body.classList.contains('open');
+            body.classList.toggle('open');
+            btn.classList.toggle('open');
+            btn.setAttribute('aria-expanded', !isOpen);
+            btn.innerHTML = isOpen
+                ? '<i class="fas fa-chevron-down"></i> Voir les détails'
+                : '<i class="fas fa-chevron-up"></i> Masquer les détails';
+        }
+
+        function setupAllResultTabListeners() {
+            document.querySelectorAll('.top-profile-card').forEach(card => {
+                const tabs = card.querySelectorAll('.result-tab');
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', () => activateResultTab(tab, card));
+                    tab.addEventListener('keydown', (e) => {
+                        const tabsArr = Array.from(tabs);
+                        const idx = tabsArr.indexOf(e.currentTarget);
+                        let newIdx = -1;
+                        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                            e.preventDefault(); newIdx = (idx + 1) % tabsArr.length;
+                        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                            e.preventDefault(); newIdx = (idx - 1 + tabsArr.length) % tabsArr.length;
+                        } else if (e.key === 'Home') {
+                            e.preventDefault(); newIdx = 0;
+                        } else if (e.key === 'End') {
+                            e.preventDefault(); newIdx = tabsArr.length - 1;
+                        }
+                        if (newIdx >= 0) { tabsArr[newIdx].focus(); activateResultTab(tabsArr[newIdx], card); }
+                    });
                 });
             });
         }
 
-        function activateResultTab(btn) {
-            const tabs = document.querySelectorAll('.result-tab');
+        function activateResultTab(btn, card) {
+            const tabs = card.querySelectorAll('.result-tab');
             tabs.forEach(t => {
                 t.classList.remove('tab-active'); t.classList.add('tab-inactive');
                 t.setAttribute('aria-selected', 'false'); t.setAttribute('tabindex', '-1');
@@ -1363,9 +1604,10 @@
             btn.classList.remove('tab-inactive');
             btn.setAttribute('aria-selected', 'true');
             btn.setAttribute('tabindex', '0');
+            const profileId = btn.dataset.profileId;
             const tabKey = btn.dataset.resultTab;
-            const content = profilsData.profiles[currentDominantId].enriched[tabKey];
-            const el = document.getElementById('result-tab-content');
+            const content = profilsData.profiles[profileId].enriched[tabKey];
+            const el = card.querySelector('.result-tab-content');
             el.innerHTML = content;
             el.classList.remove('fade-in');
             void el.offsetWidth;
@@ -1373,13 +1615,14 @@
         }
 
         function resetQuiz() {
-            quizAnswers.fill(null);
+            for (let i = 0; i < 16; i++) { quizAnswers[i] = { poleA: 0, poleB: 0 }; }
+            currentTopRanked = null;
             if (userChartInstance) { userChartInstance.destroy(); userChartInstance = null; }
             document.getElementById('quiz-results').style.display = 'none';
             document.getElementById('quiz').style.display = 'block';
-            document.getElementById('quiz-progress-text').textContent = '0 / 16 réponses';
-            document.getElementById('quiz-progress-fill').style.width = '0%';
-            document.getElementById('quiz-submit').disabled = true;
+            document.getElementById('quiz-progress-text').textContent = '16 / 16 réponses';
+            document.getElementById('quiz-progress-fill').style.width = '100%';
+            document.getElementById('quiz-submit').disabled = false;
             renderQuiz();
             document.getElementById('quiz').scrollIntoView({ behavior: 'smooth' });
         }
@@ -1402,22 +1645,24 @@
         }
 
         function exportResults() {
-            const dominant = profilsData.profiles[currentDominantId];
-            const dominantAxis = profilsData.axes.find(a => a.profiles.includes(currentDominantId));
-            const complementaryId = dominantAxis.profiles.find(p => p !== currentDominantId);
+            if (!currentTopRanked) return;
+            const top3 = currentTopRanked.slice(0, 3);
+            const topProfile = profilsData.profiles[top3[0].id];
+            const topAxis = profilsData.axes.find(a => a.profiles.includes(top3[0].id));
+            const complementaryId = topAxis.profiles.find(p => p !== top3[0].id);
             const complementary = profilsData.profiles[complementaryId];
 
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
             canvas.width = 800;
-            canvas.height = 950;
+            canvas.height = 1100;
 
             // Fond blanc avec bordure subtile
             ctx.fillStyle = '#ffffff';
-            ctx.fillRect(0, 0, 800, 950);
+            ctx.fillRect(0, 0, 800, 1100);
             ctx.strokeStyle = '#e2e8f0';
             ctx.lineWidth = 2;
-            ctx.strokeRect(1, 1, 798, 948);
+            ctx.strokeRect(1, 1, 798, 1098);
 
             // Bande de couleur en haut
             ctx.fillStyle = '#0d7c72';
@@ -1429,27 +1674,57 @@
             ctx.textAlign = 'center';
             ctx.fillText('Mon Profil Cognitif Professionnel', 400, 45);
 
-            // Graphique radar (copie du canvas Chart.js)
+            // Graphique radar
             const chartCanvas = document.getElementById('userChart');
             ctx.drawImage(chartCanvas, 125, 60, 550, 380);
 
-            // Icone + Titre du profil dominant
-            ctx.fillStyle = '#1e293b';
-            ctx.font = 'bold 24px sans-serif';
-            ctx.fillText(dominant.icon + '  ' + dominant.title, 400, 480);
+            let nextY = 470;
 
-            // Axe
-            ctx.fillStyle = '#64748b';
-            ctx.font = '14px sans-serif';
-            ctx.fillText('Profil dominant — ' + dominantAxis.title, 400, 505);
+            // Top 3 profiles
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#0d7c72';
+            ctx.font = 'bold 18px sans-serif';
+            ctx.fillText('Top 3 de vos profils', 400, nextY);
+            nextY += 30;
 
-            // Description (summary)
-            ctx.fillStyle = '#475569';
-            ctx.font = 'italic 16px sans-serif';
-            let nextY = wrapText(ctx, '\u00AB ' + dominant.summary + ' \u00BB', 400, 535, 650, 22);
+            const rankColors = ['#0d9488', '#14b8a6', '#94a3b8'];
+            top3.forEach((entry, idx) => {
+                const profile = profilsData.profiles[entry.id];
+                const y = nextY;
+
+                // Rank badge
+                ctx.fillStyle = rankColors[idx];
+                ctx.font = 'bold 16px sans-serif';
+                ctx.textAlign = 'left';
+                ctx.fillText(`#${idx + 1}`, 100, y);
+
+                // Icon + Title
+                ctx.fillStyle = '#1e293b';
+                ctx.font = 'bold 16px sans-serif';
+                ctx.fillText(profile.icon + '  ' + profile.title, 140, y);
+
+                // Concordance bar
+                const barX = 480;
+                ctx.fillStyle = '#e2e8f0';
+                ctx.fillRect(barX, y - 10, 150, 14);
+                ctx.fillStyle = rankColors[idx];
+                ctx.fillRect(barX, y - 10, entry.concordance * 1.5, 14);
+
+                // Percentage
+                ctx.fillStyle = '#1e293b';
+                ctx.font = 'bold 14px sans-serif';
+                ctx.fillText(entry.concordance + '%', barX + 158, y);
+
+                // Summary
+                ctx.fillStyle = '#64748b';
+                ctx.font = 'italic 12px sans-serif';
+                ctx.textAlign = 'left';
+                nextY = wrapText(ctx, '\u00AB ' + profile.summary + ' \u00BB', 140, y + 18, 520, 16);
+                nextY += 8;
+            });
 
             // Separator
-            nextY += 10;
+            nextY += 5;
             ctx.strokeStyle = '#e2e8f0';
             ctx.lineWidth = 1;
             ctx.beginPath();
@@ -1467,17 +1742,13 @@
             for (let i = 0; i < 8; i++) {
                 const x = i < 4 ? col1X : col2X;
                 const y = nextY + (i % 4) * 24;
-                // Label
                 ctx.fillStyle = '#64748b';
                 ctx.fillText(labels[i] + ' :', x, y);
-                // Value bar background
                 const barX = x + 130;
                 ctx.fillStyle = '#e2e8f0';
                 ctx.fillRect(barX, y - 10, 100, 12);
-                // Value bar fill
                 ctx.fillStyle = '#0d9488';
                 ctx.fillRect(barX, y - 10, userData[i] * 10, 12);
-                // Value text
                 ctx.fillStyle = '#1e293b';
                 ctx.font = 'bold 13px sans-serif';
                 ctx.fillText(Math.round(userData[i] * 10) / 10 + '', barX + 108, y);
