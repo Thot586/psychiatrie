@@ -240,7 +240,7 @@
         fieldset.quiz-question { margin: 0; }
         .quiz-question {
             background: #f8fafc; border: 2px solid transparent; border-radius: 16px;
-            padding: 1.5rem; margin-bottom: 1.25rem;
+            padding: 1.5rem; margin-bottom: 2rem;
             box-shadow: 8px 8px 16px rgba(0,0,0,0.07), -8px -8px 16px rgba(255,255,255,0.85);
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
@@ -344,8 +344,12 @@
         .quiz-intensity-input:checked + .quiz-intensity-label {
             animation: selectBounce 0.25s ease;
         }
-        /* Mobile: stack panels vertically */
+        /* Mobile: stack panels vertically + more spacing */
         @media (max-width: 600px) {
+            .quiz-question {
+                margin-bottom: 2.5rem;
+                padding: 1.25rem;
+            }
             .quiz-dual-container {
                 grid-template-columns: 1fr;
             }
@@ -996,11 +1000,7 @@
 
         <section id="quiz" class="intro-card">
             <h2><i class="fas fa-compass"></i> Découvrez votre profil</h2>
-            <p style="color: var(--color-text-muted);">Pour chaque situation, évaluez votre affinité avec chaque pôle indépendamment. Vous pouvez vous reconnaître dans les deux ! Il n'y a pas de bonne ou mauvaise réponse.</p>
-            <div class="quiz-progress">
-                <span id="quiz-progress-text" style="font-size: 0.85rem; color: var(--color-text-dimmed);" aria-live="polite" aria-atomic="true">16 / 16 réponses</span>
-                <div class="progress-bar"><div class="progress-fill" id="quiz-progress-fill" style="width: 100%;"></div></div>
-            </div>
+            <p style="color: var(--color-text-muted);">16 situations professionnelles, aucune bonne ou mauvaise réponse. Modifiez uniquement les pôles qui vous parlent.</p>
             <div class="quiz-global-instruction">
                 <i class="fas fa-info-circle"></i> Pour chaque question, évaluez votre affinité avec <strong>chaque pôle indépendamment</strong>. Vous pouvez cocher une intensité forte sur les deux côtés si vous vous reconnaissez dans les deux.
             </div>
@@ -1372,16 +1372,8 @@
             const panelClass = pole === 'poleA' ? 'pole-a' : 'pole-b';
             const panel = fieldset.querySelector(`.${panelClass}`);
             if (panel) panel.classList.add('pole-answered');
-            // Mark question as fully answered when both poles are set
-            const a = quizAnswers[questionIndex];
-            if (a.poleA !== null && a.poleB !== null) {
-                fieldset.classList.add('answered');
-            }
-            // Update progress: count fully answered questions
-            const answered = quizAnswers.filter(a => a.poleA !== null && a.poleB !== null).length;
-            document.getElementById('quiz-progress-text').textContent = `${answered} / 16 réponses`;
-            document.getElementById('quiz-progress-fill').style.width = `${(answered / 16) * 100}%`;
-            document.getElementById('quiz-submit').disabled = answered < 16;
+            // Mark question as visually modified
+            fieldset.classList.add('answered');
         }
 
         function computeScores() {
@@ -1620,8 +1612,6 @@
             if (userChartInstance) { userChartInstance.destroy(); userChartInstance = null; }
             document.getElementById('quiz-results').style.display = 'none';
             document.getElementById('quiz').style.display = 'block';
-            document.getElementById('quiz-progress-text').textContent = '16 / 16 réponses';
-            document.getElementById('quiz-progress-fill').style.width = '100%';
             document.getElementById('quiz-submit').disabled = false;
             renderQuiz();
             document.getElementById('quiz').scrollIntoView({ behavior: 'smooth' });
