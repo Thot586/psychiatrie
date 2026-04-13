@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="YMRS - Échelle de Manie de Young — outil clinique interactif pour la psychiatrie et la sante mentale.">
+    <meta name="description" content="YMRS - Échelle de Manie de Young — outil clinique interactif pour la psychiatrie et la santé mentale.">
     <title>YMRS - Échelle de Manie de Young</title>
 
     <!-- Font Awesome pour les icônes -->
@@ -97,7 +97,7 @@
         </section>
 
         <!-- Résultats -->
-        <section id="results" class="results-section" style="display: none;">
+        <section id="results" aria-live="polite" class="results-section" style="display: none;">
             <h2 style="text-align: center; margin-bottom: 2rem;">
                 <i class="fas fa-chart-bar"></i> Résultats de l'évaluation
             </h2>
@@ -109,7 +109,7 @@
                 <p class="score-label">sur 60 points</p>
             </div>
 
-            <div id="interpretationBox" class="interpretation"></div>
+            <div id="interpretationBox" class="interprétation"></div>
 
             <button class="btn-primary w-full" onclick="toggleDetails()" style="margin-top: 1.5rem;">
                 <i class="fas fa-list"></i> Voir les détails et diagnostics différentiels
@@ -396,17 +396,17 @@
 
         function updateResults() {
             const score = calculateScore();
-            const interpretation = getInterpretation(score);
+            const interprétation = getInterpretation(score);
             const differentials = getDifferentials(score);
 
             document.getElementById('totalScore').textContent = score;
 
             const interpretationBox = document.getElementById('interpretationBox');
-            interpretationBox.className = `interpretation ${interpretation.className}`;
+            interpretationBox.className = `interprétation ${interprétation.className}`;
             interpretationBox.innerHTML = `
-                <h3>${interpretation.level}</h3>
-                <p><strong>Interprétation :</strong> ${interpretation.description}</p>
-                <p><strong>Recommandation :</strong> ${interpretation.action}</p>
+                <h3>${interprétation.level}</h3>
+                <p><strong>Interprétation :</strong> ${interprétation.description}</p>
+                <p><strong>Recommandation :</strong> ${interprétation.action}</p>
             `;
 
             const detailsContent = document.getElementById('detailsContent');
@@ -488,14 +488,14 @@
             }
 
             const score = calculateScore();
-            const interpretation = getInterpretation(score);
+            const interprétation = getInterpretation(score);
 
             const data = {
                 questionnaire: "YMRS",
                 date: new Date().toISOString(),
                 answers: answers,
                 score: score,
-                interpretation: interpretation.level
+                interprétation: interprétation.level
             };
 
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });

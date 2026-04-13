@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="RAADS-R - Échelle Diagnostique de l'Autisme (Révisée) — outil clinique interactif pour la psychiatrie et la sante mentale.">
+    <meta name="description" content="RAADS-R - Échelle Diagnostique de l'Autisme (Révisée) — outil clinique interactif pour la psychiatrie et la santé mentale.">
     <title>RAADS-R - Échelle Diagnostique de l'Autisme (Révisée)</title>
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
@@ -85,7 +85,7 @@
         </section>
 
         <!-- Résultats -->
-        <section id="results" class="glass-card results-section" style="display: none;">
+        <section id="results" aria-live="polite" class="glass-card results-section" style="display: none;">
             <h2 style="text-align: center; margin-bottom: 2rem;"><i class="fas fa-chart-pie"></i> Résultats</h2>
 
             <div class="score-display">
@@ -95,7 +95,7 @@
                 </div>
             </div>
 
-            <div id="interpretationBox" class="interpretation"></div>
+            <div id="interpretationBox" class="interprétation"></div>
 
             <div class="subscale-grid" style="margin-top: 2rem;">
                 <div class="subscale-card">
@@ -186,7 +186,7 @@
             { text: "Je suis déstabilisé lorsque quelqu'un m'interrompt alors que je parle de quelque chose qui m'intéresse beaucoup.", subscale: 'interests', reversed: false },
             { text: "Il m'est difficile de percevoir les sentiments des autres lors d'une conversation.", subscale: 'social', reversed: false },
             { text: "J'aime avoir une conversation avec plusieurs personnes, par exemple lors d'un dîner, à l'école, ou au travail.", subscale: 'social', reversed: true },
-            { text: "Je prends les choses trop au premier degré, ainsi je passe à côté de ce que les gens essaient de dire.", subscale: 'language', reversed: false },
+            { text: "Je prends les choses trop au premier degré, ainsi je passé à côté de ce que les gens essaient de dire.", subscale: 'language', reversed: false },
             { text: "C'est très difficile pour moi de comprendre lorsque quelqu'un est gêné ou jaloux.", subscale: 'social', reversed: false },
             { text: "Certaines textures ordinaires qui ne posent aucun problème aux autres sont pour moi insupportables lorsqu'elles sont au contact de ma peau.", subscale: 'sensory', reversed: false },
             { text: "Je suis très contrarié lorsqu'on m'empêche de faire les choses à ma façon.", subscale: 'interests', reversed: false },
@@ -225,14 +225,14 @@
             { text: "J'aime que les choses se déroulent toujours de la même manière jour après jour, et même les petits changements dans mes routines me perturbent.", subscale: 'interests', reversed: false },
             { text: "Comment se faire des amis et s'intégrer socialement est un mystère pour moi.", subscale: 'social', reversed: false },
             { text: "Cela me calme de tourner en rond ou de me balancer sur une chaise lorsque je me sens stressé.", subscale: 'sensory', reversed: false },
-            { text: "La phrase « il a le cœur sur la main » n'a pas de sens pour moi.", subscale: 'language', reversed: false },
+            { text: "La phrase « il à le cœur sur la main » n'a pas de sens pour moi.", subscale: 'language', reversed: false },
             { text: "Si je suis dans un endroit où il y a beaucoup d'odeurs, de matières à toucher, de bruits ou de lumières intenses, je me sens anxieux ou effrayé.", subscale: 'sensory', reversed: false },
             { text: "Je sais faire la différence lorsque quelqu'un dit une chose mais veut en dire une autre.", subscale: 'language', reversed: true },
             { text: "J'aime être seul autant que possible.", subscale: 'social', reversed: false },
             { text: "Je garde mes pensées empilées dans ma mémoire comme dans un classeur, et je prends celles dont j'ai besoin en sélectionnant dans la pile.", subscale: 'sensory', reversed: false },
             { text: "Le même son peut paraître quelquefois très fort ou très doux alors que je sais qu'il n'a pas changé.", subscale: 'sensory', reversed: false },
             { text: "J'aime passer du temps à manger et parler avec ma famille et mes amis.", subscale: 'social', reversed: true },
-            { text: "Je ne supporte pas les choses que je n'aime pas.", subscale: 'sensory', reversed: false },
+            { text: "Je ne supporté pas les choses que je n'aime pas.", subscale: 'sensory', reversed: false },
             { text: "Je n'aime pas être tenu ou étreint.", subscale: 'sensory', reversed: false },
             { text: "Lorsque je vais quelque part, je dois suivre un parcours familier sinon je peux devenir très confus et perturbé.", subscale: 'interests', reversed: false },
             { text: "C'est difficile de comprendre ce que les autres personnes attendent de moi.", subscale: 'social', reversed: false },
@@ -314,7 +314,7 @@
             document.getElementById('totalScore').textContent = total;
             const interp = getInterpretation(total);
             const interpretationBox = document.getElementById('interpretationBox');
-            interpretationBox.className = `interpretation ${interp.className}`;
+            interpretationBox.className = `interprétation ${interp.className}`;
             interpretationBox.innerHTML = `<h3>${interp.level}</h3><p>${interp.desc}</p>`;
 
             // Sous-scores
@@ -400,7 +400,7 @@
                 answers: answers,
                 totalScore: total,
                 subscores: scores,
-                interpretation: getInterpretation(total).level
+                interprétation: getInterpretation(total).level
             };
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta name="description" content="RAS - Recovery Assessment Scale — outil clinique interactif pour la psychiatrie et la sante mentale.">
+    <meta name="description" content="RAS - Recovery Assessment Scale — outil clinique interactif pour la psychiatrie et la santé mentale.">
   <title>RAS - Recovery Assessment Scale</title>
   <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/questionnaire-light.css">
@@ -55,7 +55,7 @@
       <!-- Header -->
       <div class="ras-header">
         <h2><i class="fas fa-fist-raised"></i> Recovery Assessment Scale</h2>
-        <p class="subtitle">Echelle d'evaluation du retablissement personnel - 24 items</p>
+        <p class="subtitle">Échelle d'évaluation du rétablissement personnel - 24 items</p>
       </div>
 
       <!-- Instructions -->
@@ -65,12 +65,12 @@
         </div>
         <div class="alert-content">
           <h3>Instructions</h3>
-          <p>Ce questionnaire evalue votre processus de retablissement personnel. Indiquez dans quelle mesure vous etes d'accord avec chaque affirmation en vous basant sur votre experience actuelle.</p>
+          <p>Ce questionnaire évalue votre processus de rétablissement personnel. Indiquez dans quelle mesure vous êtes d'accord avec chaque affirmation en vous basant sur votre expérience actuelle.</p>
         </div>
       </div>
 
       <!-- Progress -->
-      <div class="progress-container">
+      <div class="progress-container" style="position: sticky; top: 60px; z-index: 50;">
         <div class="progress-bar">
           <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
         </div>
@@ -91,7 +91,7 @@
         </div>
 
         <div class="question-item" data-question="1">
-          <p class="question-text"><span class="question-number">1.</span> J'ai le desir de reussir.</p>
+          <p class="question-text"><span class="question-number">1.</span> J'ai le désir de réussir.</p>
           <div class="likert-scale">
             <div class="likert-option">
               <input type="radio" name="q1" id="q1_1" value="1">
@@ -331,7 +331,7 @@
           <div class="factor-icon"><i class="fas fa-hands-helping"></i></div>
           <div class="factor-title">
             <h3>Volonte de demander de l'aide</h3>
-            <span>3 items - Capacite a solliciter du soutien</span>
+            <span>3 items - Capacité a solliciter du soutien</span>
           </div>
         </div>
 
@@ -420,12 +420,12 @@
           <div class="factor-icon"><i class="fas fa-bullseye"></i></div>
           <div class="factor-title">
             <h3>Orientation vers les objectifs et le succes</h3>
-            <span>5 items - Capacite a avancer vers ses buts</span>
+            <span>5 items - Capacité a avancer vers ses buts</span>
           </div>
         </div>
 
         <div class="question-item" data-question="13">
-          <p class="question-text"><span class="question-number">13.</span> Je peux gerer ce qui arrive dans ma vie.</p>
+          <p class="question-text"><span class="question-number">13.</span> Je peux gérer ce qui arrive dans ma vie.</p>
           <div class="likert-scale">
             <div class="likert-option">
               <input type="radio" name="q13" id="q13_1" value="1">
@@ -503,7 +503,7 @@
         </div>
 
         <div class="question-item" data-question="16">
-          <p class="question-text"><span class="question-number">16.</span> J'ai une contribution importante a apporter a la vie.</p>
+          <p class="question-text"><span class="question-number">16.</span> J'ai une contribution importante a apporter à la vie.</p>
           <div class="likert-scale">
             <div class="likert-option">
               <input type="radio" name="q16" id="q16_1" value="1">
@@ -675,13 +675,13 @@
         <div class="factor-header">
           <div class="factor-icon"><i class="fas fa-shield-alt"></i></div>
           <div class="factor-title">
-            <h3>Non-domination par les symptomes</h3>
-            <span>3 items - Gestion des symptomes au quotidien</span>
+            <h3>Non-domination par les symptômes</h3>
+            <span>3 items - Gestion des symptômes au quotidien</span>
           </div>
         </div>
 
         <div class="question-item" data-question="22">
-          <p class="question-text"><span class="question-number">22.</span> Les symptomes interferent de moins en moins avec ma vie.</p>
+          <p class="question-text"><span class="question-number">22.</span> Les symptômes interfèrent de moins en moins avec ma vie.</p>
           <div class="likert-scale">
             <div class="likert-option">
               <input type="radio" name="q22" id="q22_1" value="1">
@@ -707,7 +707,7 @@
         </div>
 
         <div class="question-item" data-question="23">
-          <p class="question-text"><span class="question-number">23.</span> Mes symptomes semblent etre un probleme pour des periodes de temps de plus en plus courtes.</p>
+          <p class="question-text"><span class="question-number">23.</span> Mes symptômes semblent etre un problème pour des périodes de temps de plus en plus courtes.</p>
           <div class="likert-scale">
             <div class="likert-option">
               <input type="radio" name="q23" id="q23_1" value="1">
@@ -733,7 +733,7 @@
         </div>
 
         <div class="question-item" data-question="24">
-          <p class="question-text"><span class="question-number">24.</span> Je peux gerer mon probleme de sante mentale.</p>
+          <p class="question-text"><span class="question-number">24.</span> Je peux gérer mon problème de santé mentale.</p>
           <div class="likert-scale">
             <div class="likert-option">
               <input type="radio" name="q24" id="q24_1" value="1">
@@ -762,33 +762,33 @@
       <!-- Submit -->
       <div class="submit-section">
         <button type="button" class="btn-submit" id="btn-submit" onclick="calculateResults()" disabled>
-          <i class="fas fa-calculator"></i> Calculer les resultats
+          <i class="fas fa-calculator"></i> Calculer les résultats
         </button>
         <p style="color: var(--color-text-muted); margin-top: 1rem; font-size: var(--font-size-sm);">
-          Repondez a toutes les questions pour obtenir vos resultats
+          Répondez à toutes les questions pour obtenir vos résultats
         </p>
       </div>
     </div>
 
     <!-- Results Section -->
-    <div class="results-container" id="results-section">
+    <div class="results-container" id="results-section" aria-live="polite">
 
       <div class="ras-header">
-        <h2><i class="fas fa-chart-pie"></i> Resultats RAS</h2>
-        <p class="subtitle">Votre profil de retablissement personnel</p>
+        <h2><i class="fas fa-chart-pie"></i> Résultats RAS</h2>
+        <p class="subtitle">Votre profil de rétablissement personnel</p>
       </div>
 
       <!-- Total Score -->
       <div class="score-card">
         <div class="total-score" id="total-score">--</div>
         <div class="score-max">/ 120</div>
-        <div class="score-label">Score total de retablissement</div>
+        <div class="score-label">Score total de rétablissement</div>
       </div>
 
-      <!-- Interpretation -->
-      <div class="interpretation-card" id="interpretation-card">
-        <h3 class="interpretation-title"><i class="fas fa-lightbulb"></i> Interpretation</h3>
-        <p class="interpretation-text" id="interpretation-text"></p>
+      <!-- Interprétation -->
+      <div class="interprétation-card" id="interprétation-card">
+        <h3 class="interprétation-title"><i class="fas fa-lightbulb"></i> Interprétation</h3>
+        <p class="interprétation-text" id="interprétation-text"></p>
       </div>
 
       <!-- Factor Results -->
@@ -852,7 +852,7 @@
         <div class="factor-result-card">
           <div class="factor-result-header">
             <div class="factor-result-icon"><i class="fas fa-shield-alt"></i></div>
-            <span class="factor-result-title">Gestion des symptomes</span>
+            <span class="factor-result-title">Gestion des symptômes</span>
           </div>
           <div class="factor-score-bar">
             <div class="factor-score-fill" id="factor5-bar" style="width: 0%"></div>
@@ -866,7 +866,7 @@
 
       <!-- Radar Chart -->
       <div class="chart-container">
-        <h3 class="chart-title">Profil de retablissement</h3>
+        <h3 class="chart-title">Profil de rétablissement</h3>
         <div class="chart-wrapper">
           <canvas id="radarChart"></canvas>
         </div>
@@ -875,21 +875,21 @@
       <!-- Info Section -->
       <div class="info-section">
         <h3><i class="fas fa-info-circle"></i> A propos de la RAS</h3>
-        <p>La <strong>Recovery Assessment Scale (RAS)</strong> est un instrument d'auto-evaluation developpe par Corrigan et al. (1999) pour mesurer le retablissement personnel chez les personnes vivant avec des troubles psychiatriques.</p>
+        <p>La <strong>Recovery Assessment Scale (RAS)</strong> est un instrument d'auto-évaluation developpe par Corrigan et al. (1999) pour mesurer le rétablissement personnel chez les personnes vivant avec des troubles psychiatriques.</p>
         <p style="margin-top: 1rem;"><strong>Les 5 facteurs evalues :</strong></p>
         <ul>
           <li><strong>Confiance personnelle et espoir (9 items)</strong> : Croyance en soi et en un avenir positif</li>
-          <li><strong>Volonte de demander de l'aide (3 items)</strong> : Capacite a identifier et solliciter du soutien</li>
-          <li><strong>Orientation vers les objectifs (5 items)</strong> : Capacite a definir et poursuivre des buts</li>
+          <li><strong>Volonte de demander de l'aide (3 items)</strong> : Capacité a identifier et solliciter du soutien</li>
+          <li><strong>Orientation vers les objectifs (5 items)</strong> : Capacité a definir et poursuivre des buts</li>
           <li><strong>S'appuyer sur les autres (4 items)</strong> : Presence d'un reseau de soutien</li>
-          <li><strong>Non-domination par les symptomes (3 items)</strong> : Capacite a vivre malgre les symptomes</li>
+          <li><strong>Non-domination par les symptômes (3 items)</strong> : Capacité a vivre malgre les symptômes</li>
         </ul>
-        <p style="margin-top: 1rem;"><strong>Interpretation des scores :</strong></p>
+        <p style="margin-top: 1rem;"><strong>Interprétation des scores :</strong></p>
         <ul>
-          <li><strong>96-120</strong> : Retablissement tres avance - fort sentiment d'empowerment</li>
-          <li><strong>72-95</strong> : Retablissement en bonne voie - progression positive</li>
-          <li><strong>48-71</strong> : Retablissement en developpement - axes de travail identifies</li>
-          <li><strong>24-47</strong> : Debut du parcours - accompagnement soutenu recommande</li>
+          <li><strong>96-120</strong> : Rétablissement très avance - fort sentiment d'empowerment</li>
+          <li><strong>72-95</strong> : Rétablissement en bonne voie - progression positive</li>
+          <li><strong>48-71</strong> : Rétablissement en développement - axes de travail identifies</li>
+          <li><strong>24-47</strong> : Debut du parcours - accompagnement soutenu recommandé</li>
         </ul>
       </div>
 
@@ -911,8 +911,8 @@
 
   <!-- Footer -->
   <footer class="footer">
-    <p>Dr. FENOHASINA T.J. Felicien (Psychiatre)</p>
-    <p>&copy; 2025 - Centre Ressource de Rehabilitation</p>
+    <p>Dr. FENOHASINA T.J. Félicien (Psychiatre)</p>
+    <p>&copy; 2025 - Centre Ressource de Réhabilitation</p>
     <p class="license">RAS - Corrigan et al. (1999)</p>
   </footer>
 
@@ -923,7 +923,7 @@
       factor2: { items: [10, 11, 12], maxScore: 15, name: 'Demander de l\'aide' },
       factor3: { items: [13, 14, 15, 16, 17], maxScore: 25, name: 'Objectifs et succes' },
       factor4: { items: [18, 19, 20, 21], maxScore: 20, name: 'S\'appuyer sur les autres' },
-      factor5: { items: [22, 23, 24], maxScore: 15, name: 'Gestion des symptomes' }
+      factor5: { items: [22, 23, 24], maxScore: 15, name: 'Gestion des symptômes' }
     };
 
     const totalQuestions = 24;
@@ -989,18 +989,18 @@
       // Display total score
       document.getElementById('total-score').textContent = totalScore;
 
-      // Display interpretation
-      let interpretation = '';
+      // Display interprétation
+      let interprétation = '';
       if (totalScore >= 96) {
-        interpretation = 'Votre score indique un <strong>retablissement tres avance</strong>. Vous faites preuve d\'un fort sentiment d\'empowerment, d\'espoir et de confiance en vous. Vous avez developpe des ressources solides pour gerer votre vie et vos symptomes. Continuez a entretenir ces forces et a les partager avec d\'autres personnes dans leur parcours.';
+        interprétation = 'Votre score indique un <strong>rétablissement très avance</strong>. Vous faites preuve d\'un fort sentiment d\'empowerment, d\'espoir et de confiance en vous. Vous avez developpe des ressources solides pour gérer votre vie et vos symptômes. Continuez a entretenir ces forces et à les partager avec d\'autres personnes dans leur parcours.';
       } else if (totalScore >= 72) {
-        interpretation = 'Votre score suggere que votre <strong>retablissement est en bonne voie</strong>. Vous avez developpe plusieurs ressources importantes et vous progressez positivement. Identifiez les domaines ou vous pouvez encore renforcer vos capacites et continuez a avancer a votre rythme.';
+        interprétation = 'Votre score suggere que votre <strong>rétablissement est en bonne voie</strong>. Vous avez developpe plusieurs ressources importantes et vous progressez positivement. Identifiez les domaines ou vous pouvez encore renforcer vos capacites et continuez a avancer a votre rythme.';
       } else if (totalScore >= 48) {
-        interpretation = 'Votre score indique que votre <strong>retablissement est en developpement</strong>. Certaines forces sont presentes, mais des axes de travail peuvent etre identifies. Avec le soutien de votre equipe soignante, explorez les domaines ou vous souhaitez progresser. Chaque petit pas compte.';
+        interprétation = 'Votre score indique que votre <strong>rétablissement est en développement</strong>. Certaines forces sont présentes, mais des axes de travail peuvent etre identifies. Avec le soutien de votre équipe soignante, explorez les domaines ou vous souhaitez progresser. Chaque petit pas compte.';
       } else {
-        interpretation = 'Votre score suggere que vous etes au <strong>debut de votre parcours de retablissement</strong>. Un accompagnement soutenu est recommande. N\'oubliez pas que le retablissement est un processus personnel et unique - il n\'y a pas de bonne ou mauvaise facon de le vivre. Votre equipe soignante est la pour vous accompagner.';
+        interprétation = 'Votre score suggere que vous êtes au <strong>debut de votre parcours de rétablissement</strong>. Un accompagnement soutenu est recommandé. N\'oubliez pas que le rétablissement est un processus personnel et unique - il n\'y a pas de bonne ou mauvaise facon de le vivre. Votre équipe soignante est la pour vous accompagner.';
       }
-      document.getElementById('interpretation-text').innerHTML = interpretation;
+      document.getElementById('interprétation-text').innerHTML = interprétation;
 
       // Display factor scores
       Object.keys(factors).forEach((factorKey, index) => {

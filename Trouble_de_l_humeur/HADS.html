@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="HADS - Échelle Hospitalière d'Anxiété et de Dépression — outil clinique interactif pour la psychiatrie et la sante mentale.">
+    <meta name="description" content="HADS - Échelle Hospitalière d'Anxiété et de Dépression — outil clinique interactif pour la psychiatrie et la santé mentale.">
     <title>HADS - Échelle Hospitalière d'Anxiété et de Dépression</title>
 
     <!-- Font Awesome pour les icônes -->
@@ -47,7 +47,7 @@
             color: #ef4444;
             border: 1px solid rgba(239, 68, 68, 0.3);
         }
-        .subscale-badge.depression {
+        .subscale-badge.dépression {
             background: rgba(59, 130, 246, 0.15);
             color: #3b82f6;
             border: 1px solid rgba(59, 130, 246, 0.3);
@@ -74,7 +74,7 @@
             gap: 1.5rem;
             flex-wrap: wrap;
         }
-        .dual-interpretations .interpretation {
+        .dual-interpretations .interprétation {
             flex: 1;
             min-width: 250px;
         }
@@ -142,7 +142,7 @@
         </section>
 
         <!-- Résultats -->
-        <section id="results" class="results-section" style="display: none;">
+        <section id="results" aria-live="polite" class="results-section" style="display: none;">
             <h2 style="text-align: center; margin-bottom: 2rem;">
                 <i class="fas fa-chart-bar"></i> Résultats de votre évaluation
             </h2>
@@ -169,8 +169,8 @@
             </div>
 
             <div class="dual-interpretations">
-                <div id="anxietyInterpretationBox" class="interpretation"></div>
-                <div id="depressionInterpretationBox" class="interpretation"></div>
+                <div id="anxietyInterpretationBox" class="interprétation"></div>
+                <div id="depressionInterpretationBox" class="interprétation"></div>
             </div>
 
             <button class="btn-primary w-full" onclick="toggleDetails()" style="margin-top: 1.5rem;">
@@ -370,7 +370,7 @@
                 questionDiv.className = 'question-card';
 
                 const subscaleLabel = question.subscale === 'A' ? 'Anxiété' : 'Dépression';
-                const subscaleClass = question.subscale === 'A' ? 'anxiety' : 'depression';
+                const subscaleClass = question.subscale === 'A' ? 'anxiety' : 'dépression';
 
                 questionDiv.innerHTML = `
                     <div style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem;">
@@ -434,7 +434,7 @@
                 }
             });
 
-            return { anxiety: anxietyScore, depression: depressionScore };
+            return { anxiety: anxietyScore, dépression: depressionScore };
         }
 
         function getInterpretation(score, dimension) {
@@ -462,13 +462,13 @@
         function updateResults() {
             const scores = calculateScores();
             const anxietyInterp = getInterpretation(scores.anxiety, 'anxiety');
-            const depressionInterp = getInterpretation(scores.depression, 'depression');
+            const depressionInterp = getInterpretation(scores.dépression, 'dépression');
 
             document.getElementById('anxietyScore').textContent = scores.anxiety;
-            document.getElementById('depressionScore').textContent = scores.depression;
+            document.getElementById('depressionScore').textContent = scores.dépression;
 
             const anxietyBox = document.getElementById('anxietyInterpretationBox');
-            anxietyBox.className = `interpretation ${anxietyInterp.className}`;
+            anxietyBox.className = `interprétation ${anxietyInterp.className}`;
             anxietyBox.innerHTML = `
                 <h3><i class="fas fa-bolt"></i> Anxiété : ${anxietyInterp.level}</h3>
                 <p><strong>Interprétation :</strong> ${anxietyInterp.description}</p>
@@ -476,7 +476,7 @@
             `;
 
             const depressionBox = document.getElementById('depressionInterpretationBox');
-            depressionBox.className = `interpretation ${depressionInterp.className}`;
+            depressionBox.className = `interprétation ${depressionInterp.className}`;
             depressionBox.innerHTML = `
                 <h3><i class="fas fa-cloud-rain"></i> Dépression : ${depressionInterp.level}</h3>
                 <p><strong>Interprétation :</strong> ${depressionInterp.description}</p>
@@ -516,7 +516,7 @@
                     </div>
                 `).join('')}
 
-                <h4 style="color: #3b82f6; margin-top: 1.5rem; margin-bottom: 0.75rem;"><i class="fas fa-cloud-rain"></i> Items Dépression (score : ${scores.depression}/21)</h4>
+                <h4 style="color: #3b82f6; margin-top: 1.5rem; margin-bottom: 0.75rem;"><i class="fas fa-cloud-rain"></i> Items Dépression (score : ${scores.dépression}/21)</h4>
                 ${depressionItems.map(item => `
                     <div class="info-box" style="margin-bottom: 0.75rem;">
                         <h4 style="color: var(--color-primary-light); margin-bottom: 0.5rem;">Q${item.index}. ${item.text}</h4>
@@ -599,7 +599,7 @@
 
             const scores = calculateScores();
             const anxietyInterp = getInterpretation(scores.anxiety, 'anxiety');
-            const depressionInterp = getInterpretation(scores.depression, 'depression');
+            const depressionInterp = getInterpretation(scores.dépression, 'dépression');
 
             const data = {
                 questionnaire: "HADS",
@@ -607,11 +607,11 @@
                 answers: answers,
                 scores: {
                     anxiety: scores.anxiety,
-                    depression: scores.depression
+                    dépression: scores.dépression
                 },
-                interpretation: {
+                interprétation: {
                     anxiety: anxietyInterp.level,
-                    depression: depressionInterp.level
+                    dépression: depressionInterp.level
                 }
             };
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="PQ-16 - Questionnaire Prodromal — outil clinique interactif pour la psychiatrie et la sante mentale.">
+    <meta name="description" content="PQ-16 - Questionnaire Prodromal — outil clinique interactif pour la psychiatrie et la santé mentale.">
     <title>PQ-16 - Questionnaire Prodromal</title>
 
     <!-- Font Awesome pour les icônes -->
@@ -159,7 +159,7 @@
         </section>
 
         <!-- Résultats -->
-        <section id="results" class="results-section" style="display: none;">
+        <section id="results" aria-live="polite" class="results-section" style="display: none;">
             <h2 style="text-align: center; margin-bottom: 2rem;">
                 <i class="fas fa-chart-bar"></i> Résultats du dépistage
             </h2>
@@ -181,7 +181,7 @@
                 </div>
             </div>
 
-            <div id="interpretationBox" class="interpretation"></div>
+            <div id="interpretationBox" class="interprétation"></div>
 
             <button class="btn-primary w-full" onclick="toggleDetails()" style="margin-top: 1.5rem;">
                 <i class="fas fa-list"></i> Voir les détails et recommandations
@@ -214,7 +214,7 @@
     <!-- Footer -->
     <footer class="footer">
         <p><strong>PQ-16 - Prodromal Questionnaire-16</strong></p>
-        <p>Ising, H. K., Veling, W., Loewy, R. L., et al. (2012). The validity of the 16-item version of the Prodromal Questionnaire (PQ-16) to screen for ultra high risk of developing psychosis in the general help-seeking population. <em>Schizophrenia Research</em>, 136(1-3), 128–136. <a href="https://doi.org/10.1016/j.schres.2012.01.006" target="_blank">doi:10.1016/j.schres.2012.01.006</a></p>
+        <p>Ising, H. K., Veling, W., Loewy, R. L., et al. (2012). The validity of the 16-item version of the Prodromal Questionnaire (PQ-16) to screen for ultra high risk of developing psychosis in the général help-seeking population. <em>Schizophrenia Research</em>, 136(1-3), 128–136. <a href="https://doi.org/10.1016/j.schres.2012.01.006" target="_blank">doi:10.1016/j.schres.2012.01.006</a></p>
         <p>Loewy, R. L., Bearden, C. E., Johnson, J. K., Raine, A., & Cannon, T. D. (2005). The prodromal questionnaire (PQ): Preliminary validation of a self-report screening measure for prodromal and psychotic syndromes. <em>Schizophrenia Research</em>, 79(1), 117–125. <a href="https://doi.org/10.1016/j.schres.2005.03.007" target="_blank">doi:10.1016/j.schres.2005.03.007</a></p>
         <p style="margin-top: 0.5rem;">Adaptation numérique : Dr FENOHASINA Toto Jean Félicien (Psychiatre - FFI)</p>
         <p style="margin-top: 0.5rem;">
@@ -514,7 +514,7 @@
 
         function updateResults() {
             const { totalScore, distressTotal } = calculateScores();
-            const interpretation = getInterpretation(totalScore, distressTotal);
+            const interprétation = getInterpretation(totalScore, distressTotal);
             const recommendations = getRecommendations(totalScore, distressTotal);
             const positiveItems = getPositiveItems();
 
@@ -522,14 +522,14 @@
             document.getElementById('distressScore').textContent = distressTotal;
 
             const interpretationBox = document.getElementById('interpretationBox');
-            interpretationBox.className = `interpretation ${interpretation.className}`;
+            interpretationBox.className = `interprétation ${interprétation.className}`;
             let interpretationHTML = `
-                <h3>${interpretation.level}</h3>
-                <p><strong>Critère atteint :</strong> ${interpretation.criteria}</p>
-                <p><strong>Interprétation :</strong> ${interpretation.description}</p>
-                <p><strong>Recommandation :</strong> ${interpretation.action}</p>
+                <h3>${interprétation.level}</h3>
+                <p><strong>Critère atteint :</strong> ${interprétation.criteria}</p>
+                <p><strong>Interprétation :</strong> ${interprétation.description}</p>
+                <p><strong>Recommandation :</strong> ${interprétation.action}</p>
             `;
-            if (interpretation.className === 'critical') {
+            if (interprétation.className === 'critical') {
                 interpretationHTML += `
                     <div class="threshold-note">
                         <i class="fas fa-info-circle"></i> Les seuils de dépistage « fortement positif » (≥ 10 items ou ≥ 20 détresse) sont une interprétation clinique ajoutée et ne sont pas issus de la validation originale d'Ising et al. (2012), qui définit un seuil binaire (positif / négatif).
@@ -665,7 +665,7 @@
             }
 
             const { totalScore, distressTotal } = calculateScores();
-            const interpretation = getInterpretation(totalScore, distressTotal);
+            const interprétation = getInterpretation(totalScore, distressTotal);
             const positiveItems = getPositiveItems();
 
             const data = {
@@ -677,7 +677,7 @@
                     total: totalScore,
                     distress: distressTotal
                 },
-                interpretation: interpretation.level,
+                interprétation: interprétation.level,
                 positiveItems: positiveItems.map(item => ({
                     number: item.number,
                     distress: item.distress

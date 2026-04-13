@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta name="description" content="Auto-questionnaire d'Angst — Épisodes Hypomaniaques — outil clinique interactif pour la psychiatrie et la sante mentale.">
+    <meta name="description" content="Auto-questionnaire d'Angst — Épisodes Hypomaniaques — outil clinique interactif pour la psychiatrie et la santé mentale.">
   <title>Auto-questionnaire d'Angst — Épisodes Hypomaniaques</title>
   <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
@@ -231,7 +231,7 @@
     </div>
 
     <!-- Résultats -->
-    <div id="results" class="glass-card" style="display: none; margin-bottom: 1.5rem;">
+    <div id="results" aria-live="polite" class="glass-card" style="display: none; margin-bottom: 1.5rem;">
       <h2 class="card-title" style="text-align: center;">
         <i class="fas fa-chart-bar" style="color: var(--cat-readable);"></i> Résultats
       </h2>
@@ -290,7 +290,7 @@
   <footer class="footer">
     <p><strong>Auto-questionnaire d'Angst — Épisodes Hypomaniaques</strong></p>
     <p style="margin: 0.4rem 0;"><strong>Auteur original :</strong> Pr Jules Angst</p>
-    <p><strong>Adaptation numérique :</strong> Dr FENOHASINA T.J. Felicien (Psychiatre)</p>
+    <p><strong>Adaptation numérique :</strong> Dr FENOHASINA T.J. Félicien (Psychiatre)</p>
     <p>&copy; 2025 — Centre Ressource de Réhabilitation</p>
     <p class="license">Licence CC BY-NC-SA 4.0</p>
   </footer>
@@ -522,7 +522,7 @@
         date:             new Date().toISOString(),
         answers:          answers,
         score:            score,
-        interpretation:   interp.level,
+        interprétation:   interp.level,
         significant:      score > 10,
         positiveSymptoms: questions.filter((_, i) => answers[i] === true)
       };

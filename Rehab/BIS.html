@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="BIS - Birchwood Insight Scale — outil clinique interactif pour la psychiatrie et la sante mentale.">
+    <meta name="description" content="BIS - Birchwood Insight Scale — outil clinique interactif pour la psychiatrie et la santé mentale.">
     <title>BIS - Birchwood Insight Scale</title>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/questionnaire-light.css">
@@ -45,7 +45,7 @@
     <div class="container">
         <header class="page-header">
             <h2 class="page-title">Birchwood Insight Scale</h2>
-            <p class="page-subtitle">Evaluation de la conscience du trouble en 8 items</p>
+            <p class="page-subtitle">Évaluation de la conscience du trouble en 8 items</p>
         </header>
 
         <div class="alert alert-info">
@@ -54,7 +54,7 @@
             </div>
             <div class="alert-content">
                 <h3>Instructions</h3>
-                <p>Lisez chaque affirmation et indiquez si vous etes <strong>D'accord</strong>, <strong>Incertain(e)</strong>, ou <strong>Pas d'accord</strong>. Repondez selon ce que vous pensez reellement.</p>
+                <p>Lisez chaque affirmation et indiquez si vous êtes <strong>D'accord</strong>, <strong>Incertain(e)</strong>, ou <strong>Pas d'accord</strong>. Répondez selon ce que vous pensez réellement.</p>
             </div>
         </div>
 
@@ -64,13 +64,13 @@
         <!-- Submit Button -->
         <div style="text-align: center; margin: 2rem 0;">
             <button id="calculateBtn" class="btn-primary" style="padding: 1rem 2rem; font-size: 1.1rem;" disabled>
-                <i class="fas fa-eye" style="margin-right: 0.5rem;"></i>Voir mes resultats
+                <i class="fas fa-eye" style="margin-right: 0.5rem;"></i>Voir mes résultats
             </button>
-            <p id="warningText" style="color: var(--color-warning); font-size: var(--font-size-sm); margin-top: 0.5rem;">Veuillez repondre a toutes les questions</p>
+            <p id="warningText" style="color: var(--color-warning); font-size: var(--font-size-sm); margin-top: 0.5rem;">Veuillez répondre à toutes les questions</p>
         </div>
 
         <!-- Results Section -->
-        <div id="resultsSection" class="results-section">
+        <div id="resultsSection" class="results-section" aria-live="polite">
             <div class="score-display">
                 <div class="total-score" id="totalScore">0</div>
                 <div class="score-label">Score total / 12</div>
@@ -79,11 +79,11 @@
                 </div>
                 <div class="insight-labels">
                     <span>Insight faible</span>
-                    <span>Insight eleve</span>
+                    <span>Insight élevé</span>
                 </div>
             </div>
 
-            <div id="interpretationBox" class="interpretation-box">
+            <div id="interpretationBox" class="interprétation-box">
                 <h3 id="interpretationTitle"></h3>
                 <p id="interpretationText"></p>
             </div>
@@ -99,7 +99,7 @@
                 </div>
                 <div class="alert-content">
                     <h3>A propos de l'insight</h3>
-                    <p>L'insight (conscience du trouble) est un element important du retablissement. Un meilleur insight est souvent associe a une meilleure adherence au traitement et a de meilleurs resultats. Cependant, le developpement de l'insight est un processus graduel qui doit etre accompagne avec bienveillance.</p>
+                    <p>L'insight (conscience du trouble) est un élément important du rétablissement. Un meilleur insight est souvent associe a une meilleure adherence au traitement et a de meilleurs résultats. Cependant, le développement de l'insight est un processus graduel qui doit etre accompagne avec bienveillance.</p>
                 </div>
             </div>
 
@@ -112,24 +112,24 @@
     </div>
 
     <footer class="footer">
-        <p>Dr. FENOHASINA T.J. Felicien (Psychiatre)</p>
-        <p>&copy; 2025 - Centre Ressource de Rehabilitation</p>
+        <p>Dr. FENOHASINA T.J. Félicien (Psychiatre)</p>
+        <p>&copy; 2025 - Centre Ressource de Réhabilitation</p>
         <p class="license">Licence CC BY-NC-SA 4.0</p>
-        <p style="font-size: var(--font-size-xs); margin-top: 0.5rem;">Reference : Birchwood M, et al. (1994). Br J Psychiatry.</p>
+        <p style="font-size: var(--font-size-xs); margin-top: 0.5rem;">Référence : Birchwood M, et al. (1994). Br J Psychiatry.</p>
     </footer>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // BIS Questions - based on Birchwood et al. (1994)
     const questions = [
-        { id: 1, text: "Certains de mes symptomes sont dus a une maladie ou un probleme de sante mentale", subscale: "awareness", subscaleName: "Conscience de la maladie", reverse: false },
-        { id: 2, text: "Je n'ai pas de probleme de sante mentale", subscale: "awareness", subscaleName: "Conscience de la maladie", reverse: true },
-        { id: 3, text: "Certaines de mes experiences inhabituelles sont dues a une maladie", subscale: "relabeling", subscaleName: "Reattribution des symptomes", reverse: false },
-        { id: 4, text: "Mes experiences inhabituelles sont causees par d'autres personnes ou par des forces exterieures", subscale: "relabeling", subscaleName: "Reattribution des symptomes", reverse: true },
-        { id: 5, text: "Certaines de mes difficultes a penser clairement sont dues a une maladie", subscale: "relabeling", subscaleName: "Reattribution des symptomes", reverse: false },
-        { id: 6, text: "J'ai besoin d'un traitement pour mes problemes", subscale: "treatment", subscaleName: "Necessite du traitement", reverse: false },
-        { id: 7, text: "Mon sejour a l'hopital (ou mon suivi) est necessaire", subscale: "treatment", subscaleName: "Necessite du traitement", reverse: false },
-        { id: 8, text: "Le medecin a raison de me prescrire des medicaments", subscale: "treatment", subscaleName: "Necessite du traitement", reverse: false }
+        { id: 1, text: "Certains de mes symptômes sont dus a une maladie ou un problème de santé mentale", subscale: "awareness", subscaleName: "Conscience de la maladie", reverse: false },
+        { id: 2, text: "Je n'ai pas de problème de santé mentale", subscale: "awareness", subscaleName: "Conscience de la maladie", reverse: true },
+        { id: 3, text: "Certaines de mes expériences inhabituelles sont dues à une maladie", subscale: "relabeling", subscaleName: "Réattribution des symptômes", reverse: false },
+        { id: 4, text: "Mes expériences inhabituelles sont causées par d'autres personnes ou par des forces extérieures", subscale: "relabeling", subscaleName: "Réattribution des symptômes", reverse: true },
+        { id: 5, text: "Certaines de mes difficultés a penser clairement sont dues a une maladie", subscale: "relabeling", subscaleName: "Reattribution des symptômes", reverse: false },
+        { id: 6, text: "J'ai besoin d'un traitement pour mes problèmes", subscale: "treatment", subscaleName: "Nécessité du traitement", reverse: false },
+        { id: 7, text: "Mon sejour à l'hôpital (ou mon suivi) est nécessaire", subscale: "treatment", subscaleName: "Nécessité du traitement", reverse: false },
+        { id: 8, text: "Le médecin a raison de me prescrire des médicaments", subscale: "treatment", subscaleName: "Nécessité du traitement", reverse: false }
     ];
 
     const options = [
@@ -206,8 +206,8 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('calculateBtn').addEventListener('click', function() {
         const subscales = {
             awareness: { name: "Conscience de la maladie", score: 0, max: 4 },
-            relabeling: { name: "Reattribution des symptomes", score: 0, max: 6 },
-            treatment: { name: "Necessite du traitement", score: 0, max: 6 }
+            relabeling: { name: "Reattribution des symptômes", score: 0, max: 6 },
+            treatment: { name: "Nécessité du traitement", score: 0, max: 6 }
         };
 
         let totalScore = 0;
@@ -250,23 +250,23 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
         `).join('');
 
-        // Interpretation
+        // Interprétation
         const interpretationBox = document.getElementById('interpretationBox');
         const interpretationTitle = document.getElementById('interpretationTitle');
         const interpretationText = document.getElementById('interpretationText');
 
         if (totalScore >= 9) {
-            interpretationBox.className = 'interpretation-box high';
-            interpretationTitle.innerHTML = '<i class="fas fa-check-circle" style="color: #4ade80; margin-right: 0.5rem;"></i>Insight eleve';
-            interpretationText.textContent = "Votre score suggere une bonne conscience de votre etat de sante et de la necessite des soins. C'est un atout important pour votre retablissement.";
+            interpretationBox.className = 'interprétation-box high';
+            interpretationTitle.innerHTML = '<i class="fas fa-check-circle" style="color: #4ade80; margin-right: 0.5rem;"></i>Insight élevé';
+            interpretationText.textContent = "Votre score suggere une bonne conscience de votre état de santé et de la nécessité des soins. C'est un atout important pour votre rétablissement.";
         } else if (totalScore >= 5) {
-            interpretationBox.className = 'interpretation-box moderate';
+            interpretationBox.className = 'interprétation-box moderate';
             interpretationTitle.innerHTML = '<i class="fas fa-exclamation-circle" style="color: #fbbf24; margin-right: 0.5rem;"></i>Insight modere';
-            interpretationText.textContent = "Votre score suggere une conscience partielle de votre situation. Certains aspects de votre etat de sante ou du traitement peuvent encore etre explores avec votre equipe soignante.";
+            interpretationText.textContent = "Votre score suggere une conscience partielle de votre situation. Certains aspects de votre état de santé ou du traitement peuvent encore etre explores avec votre équipe soignante.";
         } else {
-            interpretationBox.className = 'interpretation-box low';
+            interpretationBox.className = 'interprétation-box low';
             interpretationTitle.innerHTML = '<i class="fas fa-info-circle" style="color: #f87171; margin-right: 0.5rem;"></i>Insight limite';
-            interpretationText.textContent = "Votre score suggere des difficultes a reconnaitre certains aspects de votre situation. Cela est courant et peut evoluer avec le temps et le dialogue avec votre equipe soignante.";
+            interpretationText.textContent = "Votre score suggere des difficultés a reconnaître certains aspects de votre situation. Cela est courant et peut evoluer avec le temps et le dialogue avec votre équipe soignante.";
         }
 
         // Show results

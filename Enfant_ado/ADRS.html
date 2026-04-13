@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="ADRS - Adolescent Depression Rating Scale — outil clinique interactif pour la psychiatrie et la sante mentale.">
+    <meta name="description" content="ADRS - Adolescent Depression Rating Scale — outil clinique interactif pour la psychiatrie et la santé mentale.">
     <title>ADRS - Adolescent Depression Rating Scale</title>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/questionnaire-light.css">
@@ -65,7 +65,7 @@
             <div class="info-box">
                 <h3><i class="fas fa-info-circle"></i> A propos de ce test</h3>
                 <p>
-                    10 questions rapides pour evaluer comment tu vas vraiment.
+                    10 questions rapides pour évaluer comment tu vas vraiment.
                     <br><br>
                     <strong><i class="fas fa-clock"></i> Temps :</strong> 2-3 minutes<br>
                     <strong><i class="fas fa-user"></i> Pour qui :</strong> Les jeunes qui veulent faire le point
@@ -75,10 +75,10 @@
             <div class="warning-box">
                 <h3><i class="fas fa-exclamation-triangle"></i> Important</h3>
                 <ul>
-                    <li>Ce test aide a comprendre, mais ne remplace pas une consultation</li>
+                    <li>Ce test aide à comprendre, mais ne remplace pas une consultation</li>
                     <li>Si tu vas mal, parle-en a quelqu'un de confiance</li>
                     <li>En cas d'urgence : <strong>3114</strong> (24h/7j, gratuit)</li>
-                    <li>Pour parler : <strong>Fil Sante Jeunes 0 800 235 236</strong></li>
+                    <li>Pour parler : <strong>Fil Santé Jeunes 0 800 235 236</strong></li>
                 </ul>
             </div>
         </div>
@@ -102,7 +102,7 @@
                 Reponds <span style="color: #14b8a6;">VRAI</span> ou <span style="color: #ef4444;">FAUX</span> pour chaque phrase
             </h3>
 
-            <div class="progress-container">
+            <div class="progress-container" style="position: sticky; top: 60px; z-index: 50;">
                 <div class="progress-bar">
                     <div class="progress-fill" id="progressBar" style="width: 0%"></div>
                 </div>
@@ -113,9 +113,9 @@
         </div>
 
         <!-- Results -->
-        <div id="results" class="results-section">
+        <div id="results" class="results-section" aria-live="polite">
             <h2 style="text-align: center; margin-bottom: 2rem;">
-                <i class="fas fa-chart-bar"></i> Tes resultats
+                <i class="fas fa-chart-bar"></i> Tes résultats
             </h2>
 
             <div class="score-display">
@@ -125,7 +125,7 @@
                 </div>
             </div>
 
-            <div id="interpretationBox" class="interpretation"></div>
+            <div id="interpretationBox" class="interprétation"></div>
 
             <div class="recommendation-card">
                 <h3><i class="fas fa-hand-holding-heart"></i> Que faire maintenant ?</h3>
@@ -133,7 +133,7 @@
             </div>
 
             <div class="glass-card" style="margin-top: 1.5rem;">
-                <h3><i class="fas fa-save"></i> Sauvegarder mes resultats</h3>
+                <h3><i class="fas fa-save"></i> Sauvegarder mes résultats</h3>
                 <div class="consent-box">
                     <label>
                         <input type="checkbox" id="exportConsent">
@@ -165,7 +165,7 @@
     <footer class="footer">
         <p><strong>ADRS - Adolescent Depression Rating Scale</strong></p>
         <p><strong>Auteurs originaux :</strong> Anne Revah-Levy, Boris Birmaher, Isabelle Gasquet, Bruno Falissard</p>
-        <p><strong>Adaptation numerique :</strong> Dr FENOHASINA | Psychiatre</p>
+        <p><strong>Adaptation numérique :</strong> Dr FENOHASINA | Psychiatre</p>
         <p>Reseau Sud Aquitain des Professionnels de Soins en Addictologie</p>
     </footer>
 
@@ -177,7 +177,7 @@
             "Il n'y a rien qui m'intéresse, plus rien ne m'amuse",
             "Ce que je fais ne sert à rien",
             "Au fond, quand c'est comme ça, j'ai envie de mourir",
-            "Je ne supporte pas grand-chose",
+            "Je ne supporté pas grand-chose",
             "Je me sens découragé(e)",
             "Je dors très mal",
             "À l'école, au boulot, je n'y arrive pas"
@@ -328,22 +328,22 @@
 
         function updateResults() {
             const score = calculateScore();
-            const interpretation = getInterpretation(score);
+            const interprétation = getInterpretation(score);
 
             document.getElementById('totalScore').textContent = score;
 
             const scoreCircle = document.getElementById('scoreCircle');
-            scoreCircle.className = `score-circle ${interpretation.className}`;
+            scoreCircle.className = `score-circle ${interprétation.className}`;
 
             const interpretationBox = document.getElementById('interpretationBox');
-            interpretationBox.className = `interpretation ${interpretation.className}`;
+            interpretationBox.className = `interprétation ${interprétation.className}`;
             interpretationBox.innerHTML = `
-                <h3 style="margin-bottom: 15px; font-size: 1.5rem;">${interpretation.level}</h3>
-                <p style="font-size: 1.1rem; line-height: 1.6;">${interpretation.description}</p>
+                <h3 style="margin-bottom: 15px; font-size: 1.5rem;">${interprétation.level}</h3>
+                <p style="font-size: 1.1rem; line-height: 1.6;">${interprétation.description}</p>
             `;
 
             const recommendationsList = document.getElementById('recommendations');
-            recommendationsList.innerHTML = interpretation.recommendations
+            recommendationsList.innerHTML = interprétation.recommendations
                 .map(rec => `<li>${rec}</li>`)
                 .join('');
 
@@ -424,14 +424,14 @@
             }
 
             const score = calculateScore();
-            const interpretation = getInterpretation(score);
+            const interprétation = getInterpretation(score);
 
             const data = {
                 questionnaire: "ADRS",
                 date: new Date().toISOString(),
                 answers: answers,
                 score: score,
-                interpretation: interpretation.level,
+                interprétation: interprétation.level,
                 criticalQuestionAlert: answers[5] === true
             };
 

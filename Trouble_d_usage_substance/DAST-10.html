@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="DAST-10 - Dépistage des Troubles liés aux Drogues — outil clinique interactif pour la psychiatrie et la sante mentale.">
+    <meta name="description" content="DAST-10 - Dépistage des Troubles liés aux Drogues — outil clinique interactif pour la psychiatrie et la santé mentale.">
     <title>DAST-10 - Dépistage des Troubles liés aux Drogues</title>
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
@@ -73,7 +73,7 @@
             <div id="questions"></div>
         </section>
 
-        <section id="results" class="glass-card results-section" style="display: none;">
+        <section id="results" aria-live="polite" class="glass-card results-section" style="display: none;">
             <h2 style="text-align: center; margin-bottom: 2rem;"><i class="fas fa-chart-pie"></i> Résultats</h2>
             <div class="score-display">
                 <div class="score-circle">
@@ -81,7 +81,7 @@
                     <span class="score-label">sur 10</span>
                 </div>
             </div>
-            <div id="interpretationBox" class="interpretation"></div>
+            <div id="interpretationBox" class="interprétation"></div>
             <button class="btn-primary" onclick="toggleDetails()" style="width: 100%; margin-top: 1rem;">
                 <i class="fas fa-list-ul"></i> Voir les recommandations détaillées
                 <span id="toggleIcon"><i class="fas fa-chevron-down"></i></span>
@@ -172,7 +172,7 @@
             const interp = getInterpretation(score);
             document.getElementById('totalScore').textContent = score;
             const box = document.getElementById('interpretationBox');
-            box.className = `interpretation ${interp.className}`;
+            box.className = `interprétation ${interp.className}`;
             box.innerHTML = `<h3>${interp.level}</h3><p><strong>Recommandation :</strong> ${interp.action}</p>`;
 
             document.getElementById('detailsContent').innerHTML = `
@@ -233,7 +233,7 @@
         function exportData() {
             if (!document.getElementById('exportConsent').checked) { alert("Veuillez cocher la case de consentement avant d''exporter."); return; }
             const score = answers.reduce((sum, val) => sum + (val || 0), 0);
-            const data = { questionnaire: "DAST-10", date: new Date().toISOString(), answers, score, interpretation: getInterpretation(score).level };
+            const data = { questionnaire: "DAST-10", date: new Date().toISOString(), answers, score, interprétation: getInterpretation(score).level };
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');

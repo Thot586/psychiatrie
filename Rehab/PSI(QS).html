@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Questionnaire de Satisfaction - Plan de Suivi Individualise (PSI) — outil clinique interactif pour la psychiatrie et la sante mentale.">
+    <meta name="description" content="Questionnaire de Satisfaction - Plan de Suivi Individualise (PSI) — outil clinique interactif pour la psychiatrie et la santé mentale.">
     <title>Questionnaire de Satisfaction - Plan de Suivi Individualise (PSI)</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -512,7 +512,7 @@
             <h2><i class="fas fa-info-circle"></i> A propos de ce questionnaire</h2>
             <p style="margin: 15px 0; line-height: 1.6; color: var(--color-text-muted);">
                 Cet outil a pour but de recueillir votre satisfaction concernant differents aspects de votre vie et de votre suivi.
-                Vos reponses nous aideront a mieux comprendre vos besoins, a definir ensemble vos objectifs de soins et a personnaliser votre accompagnement.
+                Vos réponses nous aideront a mieux comprendre vos besoins, a definir ensemble vos objectifs de soins et a personnaliser votre accompagnement.
             </p>
         </div>
 
@@ -522,7 +522,7 @@
                     <i class="fas fa-file-import"></i> Importer un questionnaire
                 </button>
                 <button class="btn btn-secondary" onclick="resetForm()">
-                    <i class="fas fa-sync-alt"></i> Reinitialiser
+                    <i class="fas fa-sync-alt"></i> Réinitialiser
                 </button>
             </div>
             <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="loadFile(event)">
@@ -543,17 +543,17 @@
             <div class="question-card">
                 <div class="question-header">
                     <span class="question-number"><i class="fas fa-comment"></i></span>
-                    <h3 class="question-text">Comment vous etes-vous senti pendant cet entretien ?</h3>
+                    <h3 class="question-text">Comment vous êtes-vous senti pendant cet entretien ?</h3>
                 </div>
                 <div class="satisfaction-scale" id="senti_scale">
                     <button class="satisfaction-btn" title="Pas bien du tout" onclick="selectEntretienSenti(1)">😞</button>
                     <button class="satisfaction-btn" title="Moyen" onclick="selectEntretienSenti(2)">😐</button>
                     <button class="satisfaction-btn" title="Bien" onclick="selectEntretienSenti(3)">🙂</button>
-                    <button class="satisfaction-btn" title="Tres bien" onclick="selectEntretienSenti(4)">😁</button>
+                    <button class="satisfaction-btn" title="Très bien" onclick="selectEntretienSenti(4)">😁</button>
                 </div>
                 <div class="satisfaction-labels">
                     <span>Pas bien du tout</span>
-                    <span>Tres bien</span>
+                    <span>Très bien</span>
                 </div>
                  <div class="input-group">
                     <label for="sentiComment">Commentaires</label>
@@ -570,15 +570,15 @@
                     <button class="satisfaction-btn" title="Pas du tout utile" onclick="selectEntretienUtile(1)">😞</button>
                     <button class="satisfaction-btn" title="Peu utile" onclick="selectEntretienUtile(2)">😐</button>
                     <button class="satisfaction-btn" title="Utile" onclick="selectEntretienUtile(3)">🙂</button>
-                    <button class="satisfaction-btn" title="Tres utile" onclick="selectEntretienUtile(4)">😁</button>
+                    <button class="satisfaction-btn" title="Très utile" onclick="selectEntretienUtile(4)">😁</button>
                 </div>
                 <div class="satisfaction-labels">
                     <span>Pas du tout utile</span>
-                    <span>Tres utile</span>
+                    <span>Très utile</span>
                 </div>
                 <div class="input-group">
                     <label for="utileComment">Commentaires</label>
-                    <textarea id="utileComment" rows="2" placeholder="Qu'est-ce qui a ete utile ou pourrait etre ameliore ?"></textarea>
+                    <textarea id="utileComment" rows="2" placeholder="Qu'est-ce qui a été utile ou pourrait etre améliore ?"></textarea>
                 </div>
             </div>
 
@@ -588,7 +588,7 @@
             </button>
         </div>
 
-        <div id="results" class="results-section">
+        <div id="results" class="results-section" aria-live="polite">
             <h2><i class="fas fa-chart-pie"></i> Synthese de la satisfaction</h2>
 
             <div id="radarChartContainer">
@@ -620,10 +620,10 @@
 
         <footer class="footer">
              <p>
-                <strong>Source :</strong> Inspire des principes du Plan de Suivi Individualise (PSI) developpes dans le cadre de la rehabilitation psychosociale en France, notamment au sein d'etablissements comme le Centre Hospitalier Le Vinatier.
+                <strong>Source :</strong> Inspire des principes du Plan de Suivi Individualise (PSI) developpes dans le cadre de la réhabilitation psychosociale en France, notamment au sein d'etablissements comme le Centre Hospitalier Le Vinatier.
             </p>
             <p>
-                <strong>Adaptation numerique :</strong> Dr FENOHASINA | Psychiatre - FFI
+                <strong>Adaptation numérique :</strong> Dr FENOHASINA | Psychiatre - FFI
             </p>
             <small>2025 - Tous droits reserves</small>
         </footer>
@@ -635,21 +635,21 @@
             { emoji: '😐', text: 'Peu satisfait' },
             { emoji: '🙂', text: 'Moyennement satisfait' },
             { emoji: '😊', text: 'Satisfait' },
-            { emoji: '😁', text: 'Tres satisfait' }
+            { emoji: '😁', text: 'Très satisfait' }
         ];
 
         const sentiLevels = [
             { emoji: '😞', text: 'Pas bien du tout' },
             { emoji: '😐', text: 'Moyen' },
             { emoji: '🙂', text: 'Bien' },
-            { emoji: '😁', text: 'Tres bien' }
+            { emoji: '😁', text: 'Très bien' }
         ];
 
         const utileLevels = [
             { emoji: '😞', text: 'Pas du tout utile' },
             { emoji: '😐', text: 'Peu utile' },
             { emoji: '🙂', text: 'Utile' },
-            { emoji: '😁', text: 'Tres utile' }
+            { emoji: '😁', text: 'Très utile' }
         ];
 
         const questions = [
@@ -657,19 +657,19 @@
             { id: 'quotidien', title: 'Quotidien', prompt: "Etes-vous satisfait(e) de la maniere dont vous gerez l'entretien de votre logement et de vos affaires personnelles ?" },
             { id: 'argent_papiers', title: "Argent/Papiers", prompt: "Etes-vous satisfait(e) de la maniere dont vous gerez votre budget et les documents administratifs ?" },
             { id: 'deplacements', title: 'Deplacements', prompt: "Etes-vous satisfait(e) de vos moyens de deplacements et de votre autonomie ?" },
-            { id: 'sante', title: 'Sante', prompt: "Etes-vous satisfait(e) de la maniere dont vous gerez votre sante et vos traitements ?" },
-            { id: 'maladie_symptomes', title: 'Maladie/Symptomes', prompt: "Etes-vous satisfait(e) de la maniere de gerer votre maladie ?" },
+            { id: 'santé', title: 'Santé', prompt: "Etes-vous satisfait(e) de la maniere dont vous gerez votre santé et vos traitements ?" },
+            { id: 'maladie_symptomes', title: 'Maladie/Symptomes', prompt: "Etes-vous satisfait(e) de la maniere de gérer votre maladie ?" },
             { id: 'traitement', title: 'Traitement', prompt: "Etes-vous satisfait(e) de vos traitements ?" },
             { id: 'addiction', title: 'Addiction', prompt: "Etes-vous satisfait(e) de votre gestion de la consommation de substances (tabac, alcool, etc.) ?" },
             { id: 'cognitif', title: 'Cognition', prompt: "Etes-vous satisfait(e) de vos capacites cognitives (attention, memoire, organisation, etc.) ?" },
-            { id: 'relations', title: 'Relations', prompt: "Etes-vous satisfait(e) de la qualite de vos relations avec les autres (amicales, familiales, sentimentales) ?" },
+            { id: 'relations', title: 'Relations', prompt: "Etes-vous satisfait(e) de la qualité de vos relations avec les autres (amicales, familiales, sentimentales) ?" },
             { id: 'loisirs', title: 'Loisirs', prompt: "Etes-vous satisfait(e) de la facon dont vous occupez votre temps libre ?" },
             { id: 'formation_emploi', title: 'Formation/Emploi', prompt: "Etes-vous satisfait(e) de votre niveau de formation et/ou de votre situation professionnelle ?" }
         ];
 
         let answers = new Array(questions.length).fill(null).map(() => ({
             satisfaction: null,
-            evolution: null,
+            évolution: null,
             aide: null,
             priorite: null
         }));
@@ -699,15 +699,15 @@
                     </div>
                     <div class="satisfaction-labels">
                         <span>Pas du tout</span>
-                        <span>Tres satisfait</span>
+                        <span>Très satisfait</span>
                     </div>
 
                     <div class="sub-questions-grid">
                         <div class="sub-question">
                             <p>Evolution souhaitee ?</p>
                             <div class="options-binary" id="evolution_${index}">
-                                <button class="option-btn no" onclick="selectSubAnswer(${index}, 'evolution', false)">Non</button>
-                                <button class="option-btn yes" onclick="selectSubAnswer(${index}, 'evolution', true)">Oui</button>
+                                <button class="option-btn no" onclick="selectSubAnswer(${index}, 'évolution', false)">Non</button>
+                                <button class="option-btn yes" onclick="selectSubAnswer(${index}, 'évolution', true)">Oui</button>
                             </div>
                         </div>
                         <div class="sub-question">
@@ -776,7 +776,7 @@
 
                 answers.forEach((answer, index) => {
                     const card = document.querySelectorAll('#questions .question-card')[index];
-                    if (answer.satisfaction === null || answer.evolution === null || answer.aide === null || answer.priorite === null) {
+                    if (answer.satisfaction === null || answer.évolution === null || answer.aide === null || answer.priorite === null) {
                         isComplete = false;
                         card.classList.add('error');
                         if (!firstErrorElement) firstErrorElement = card;
@@ -799,7 +799,7 @@
 
                 // 3. If incomplete, show errors and stop
                 if (!isComplete) {
-                    validationMessage.textContent = "Veuillez repondre a toutes les questions en surbrillance avant de valider.";
+                    validationMessage.textContent = "Veuillez répondre à toutes les questions en surbrillance avant de valider.";
                     validationMessage.style.display = 'block';
                     if (firstErrorElement) {
                         firstErrorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -824,7 +824,7 @@
                     <h4>${index + 1}. ${q.title}</h4>
                     <div class="summary-details">
                         <div><strong>Satisfaction :</strong> ${satisfactionText}</div>
-                        <div><strong>Evolution souhaitee :</strong> ${ans.evolution ? 'Oui' : 'Non'}</div>
+                        <div><strong>Evolution souhaitee :</strong> ${ans.évolution ? 'Oui' : 'Non'}</div>
                         <div><strong>Besoin d'aide :</strong> ${ans.aide ? 'Oui' : 'Non'}</div>
                         <div><strong>Priorite :</strong> ${ans.priorite ? 'Oui' : 'Non'}</div>
                     </div>
@@ -870,7 +870,7 @@
                 .filter(ans => ans.aide === true);
 
             if (actionItems.length === 0) {
-                actionPlanContainer.innerHTML = "<h3><i class='fas fa-star'></i> Plan d'action</h3><p>Aucun besoin d'aide specifique n'a ete identifie. C'est une excellente nouvelle !</p>";
+                actionPlanContainer.innerHTML = "<h3><i class='fas fa-star'></i> Plan d'action</h3><p>Aucun besoin d'aide spécifique n'a été identifié. C'est une excellente nouvelle !</p>";
                 return;
             }
 
@@ -953,7 +953,7 @@
 
         function resetForm() {
             answers = new Array(questions.length).fill(null).map(() => ({
-                satisfaction: null, evolution: null, aide: null, priorite: null
+                satisfaction: null, évolution: null, aide: null, priorite: null
             }));
             entretienSenti = null;
             entretienUtile = null;
@@ -991,7 +991,7 @@
                     domaine: questions[index].title,
                     satisfaction: ans.satisfaction,
                     satisfaction_text: ans.satisfaction ? satisfactionLevels[ans.satisfaction - 1].text : null,
-                    evolution_souhaitee: ans.evolution,
+                    evolution_souhaitee: ans.évolution,
                     besoin_aide: ans.aide,
                     priorite: ans.priorite
                 })),
@@ -1038,7 +1038,7 @@
                                 if (questionMatch) {
                                     const qIndex = questions.indexOf(questionMatch);
                                     if(response.satisfaction) selectSatisfaction(qIndex, response.satisfaction);
-                                    if(response.evolution_souhaitee !== null) selectSubAnswer(qIndex, 'evolution', response.evolution_souhaitee);
+                                    if(response.evolution_souhaitee !== null) selectSubAnswer(qIndex, 'évolution', response.evolution_souhaitee);
                                     if(response.besoin_aide !== null) selectSubAnswer(qIndex, 'aide', response.besoin_aide);
                                     if(response.priorite !== null) selectSubAnswer(qIndex, 'priorite', response.priorite);
                                 }
@@ -1054,7 +1054,7 @@
                             showResults(true);
                             alert("Donnees importees avec succes ! La synthese est maintenant affichee.");
                         } else {
-                            alert("Le fichier ne semble pas etre un export valide du questionnaire PSI-Satisfaction.");
+                            alert("Le fichier ne semble pas etre un export validé du questionnaire PSI-Satisfaction.");
                         }
                     } catch (error) {
                          alert("Erreur lors de la lecture du fichier : " + error.message);

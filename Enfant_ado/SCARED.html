@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="SCARED - Screen for Child Anxiety Related Disorders — outil clinique interactif pour la psychiatrie et la sante mentale.">
+    <meta name="description" content="SCARED - Screen for Child Anxiety Related Disorders — outil clinique interactif pour la psychiatrie et la santé mentale.">
     <title>SCARED - Screen for Child Anxiety Related Disorders</title>
 
     <!-- Font Awesome pour les icones -->
@@ -54,24 +54,24 @@
         <!-- En-tete -->
         <header class="glass-card" style="text-align: center; margin-bottom: 1.5rem;">
             <h2 class="gradient-text">Screen for Child Anxiety Related Disorders</h2>
-            <p>Questionnaire de depistage des troubles anxieux chez l'enfant et l'adolescent (8-18 ans)</p>
+            <p>Questionnaire de dépistage des troubles anxieux chez l'enfant et l'adolescent (8-18 ans)</p>
         </header>
 
         <!-- Informations -->
         <section class="info-box" style="background: linear-gradient(145deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05)); border-color: rgba(16, 185, 129, 0.3);">
             <h3 style="color: #34d399;"><i class="fas fa-info-circle"></i> A propos de ce questionnaire</h3>
-            <p>Le SCARED est un <strong>auto-questionnaire</strong> de depistage des troubles anxieux destine aux enfants et adolescents de <strong>8 a 18 ans</strong>. Il peut egalement etre rempli par les parents (version parent).</p>
-            <p style="margin-top: 0.5rem;">Il evalue 41 items repartis en 5 sous-echelles : Trouble panique/Symptomes somatiques, Anxiete generalisee, Anxiete de separation, Phobie sociale et Evitement scolaire.</p>
+            <p>Le SCARED est un <strong>auto-questionnaire</strong> de dépistage des troubles anxieux destiné aux enfants et adolescents de <strong>8 a 18 ans</strong>. Il peut également etre rempli par les parents (version parent).</p>
+            <p style="margin-top: 0.5rem;">Il évalue 41 items repartis en 5 sous-échelles : Trouble panique/Symptomes somatiques, Anxiété generalisee, Anxiété de séparation, Phobie sociale et Evitement scolaire.</p>
         </section>
 
         <!-- Avertissement -->
         <section class="warning-box">
             <h3><i class="fas fa-exclamation-triangle"></i> Avertissements importants</h3>
             <ul style="margin: 0; padding-left: 1.5rem;">
-                <li>Ce questionnaire est un outil de depistage et ne remplace pas une evaluation clinique complete</li>
-                <li>Les resultats doivent etre interpretes par un professionnel de sante</li>
-                <li>Un score total >= 25 suggere la presence d'un trouble anxieux</li>
-                <li>Les seuils par sous-echelle permettent d'identifier les types specifiques d'anxiete</li>
+                <li>Ce questionnaire est un outil de dépistage et ne remplace pas une évaluation clinique complete</li>
+                <li>Les résultats doivent etre interpretes par un professionnel de santé</li>
+                <li>Un score total >= 25 suggere la présence d'un trouble anxieux</li>
+                <li>Les seuils par sous-échelle permettent d'identifier les types spécifiques d'anxiété</li>
             </ul>
         </section>
 
@@ -82,7 +82,7 @@
                     <i class="fas fa-file-import"></i> Importer
                 </button>
                 <button class="btn-secondary" onclick="resetForm()">
-                    <i class="fas fa-redo"></i> Reinitialiser
+                    <i class="fas fa-redo"></i> Réinitialiser
                 </button>
             </div>
             <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="loadFile(event)">
@@ -90,16 +90,16 @@
 
         <!-- Instructions -->
         <section class="glass-card">
-            <h3 style="margin-bottom: 1rem;">Vous trouverez ci-dessous une liste de phrases qui decrivent comment les gens se sentent. Pour chaque phrase, indiquez si elle est "Pas vrai ou rarement vrai", "Quelquefois vrai" ou "Souvent vrai" pour vous. Repondez a toutes les questions du mieux que vous pouvez, meme si certaines ne semblent pas vous concerner exactement.</h3>
+            <h3 style="margin-bottom: 1rem;">Vous trouverez ci-dessous une liste de phrases qui decrivent comment les gens se sentent. Pour chaque phrase, indiquez si elle est "Pas vrai ou rarement vrai", "Quelquefois vrai" ou "Souvent vrai" pour vous. Répondez à toutes les questions du mieux que vous pouvez, meme si certaines ne semblent pas vous concerner exactement.</h3>
 
             <!-- Questions generees par JS -->
             <div id="questions"></div>
         </section>
 
-        <!-- Resultats -->
-        <section id="results" class="results-section" style="display: none;">
+        <!-- Résultats -->
+        <section id="results" aria-live="polite" class="results-section" style="display: none;">
             <h2 style="text-align: center; margin-bottom: 2rem;">
-                <i class="fas fa-chart-bar"></i> Resultats de l'evaluation
+                <i class="fas fa-chart-bar"></i> Résultats de l'évaluation
             </h2>
 
             <!-- Score total -->
@@ -110,16 +110,16 @@
                 <p class="score-label">Score total (sur 82)</p>
             </div>
 
-            <div id="interpretationBox" class="interpretation"></div>
+            <div id="interpretationBox" class="interprétation"></div>
 
-            <!-- Scores par sous-echelle -->
+            <!-- Scores par sous-échelle -->
             <div class="glass-card" style="margin-top: 1.5rem;">
-                <h3 style="margin-bottom: 1rem;"><i class="fas fa-list-ul"></i> Scores par sous-echelle</h3>
+                <h3 style="margin-bottom: 1rem;"><i class="fas fa-list-ul"></i> Scores par sous-échelle</h3>
                 <div id="subscaleScores"></div>
             </div>
 
             <button class="btn-primary w-full" onclick="toggleDetails()" style="margin-top: 1.5rem;">
-                <i class="fas fa-list"></i> Voir les details et interpretations par echelle
+                <i class="fas fa-list"></i> Voir les details et interpretations par échelle
                 <span id="toggleIcon"><i class="fas fa-chevron-down"></i></span>
             </button>
 
@@ -127,7 +127,7 @@
 
             <!-- Export -->
             <div class="glass-card" style="margin-top: 2rem;">
-                <h3><i class="fas fa-download"></i> Exporter les resultats</h3>
+                <h3><i class="fas fa-download"></i> Exporter les résultats</h3>
                 <div class="consent-box">
                     <label>
                         <input type="checkbox" id="exportConsent">
@@ -150,7 +150,7 @@
     <footer class="footer">
         <p><strong>SCARED - Screen for Child Anxiety Related Disorders</strong></p>
         <p>Auteurs originaux : Birmaher et al. (1997)</p>
-        <p>Adaptation numerique : Dr FENOHASINA | Psychiatre</p>
+        <p>Adaptation numérique : Dr FENOHASINA | Psychiatre</p>
         <p style="margin-top: 1rem;">
             <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr" target="_blank">
                 Licence CC BY-NC-SA 4.0
@@ -163,46 +163,46 @@
     <script>
         // Les 41 items du SCARED
         const questions = [
-            { text: "Quand j'ai peur, j'ai du mal a respirer", subscale: "panic" },
-            { text: "J'ai mal a la tete quand je suis a l'ecole", subscale: "school" },
+            { text: "Quand j'ai peur, j'ai du mal à respirer", subscale: "panic" },
+            { text: "J'ai mal à la tete quand je suis à l'école", subscale: "school" },
             { text: "Je n'aime pas etre avec des gens que je ne connais pas bien", subscale: "social" },
-            { text: "J'ai peur de dormir ailleurs que chez moi", subscale: "separation" },
+            { text: "J'ai peur de dormir ailleurs que chez moi", subscale: "séparation" },
             { text: "Je m'inquiete que les autres ne m'aiment pas", subscale: "generalized" },
-            { text: "Quand j'ai peur, j'ai l'impression que je vais m'evanouir", subscale: "panic" },
+            { text: "Quand j'ai peur, j'ai l'impression que je vais m'évanouir", subscale: "panic" },
             { text: "Je suis nerveux(se)", subscale: "generalized" },
-            { text: "Je suis mes parents partout ou ils vont", subscale: "separation" },
+            { text: "Je suis mes parents partout ou ils vont", subscale: "séparation" },
             { text: "Les gens me disent que j'ai l'air nerveux(se)", subscale: "panic" },
             { text: "Je me sens nerveux(se) avec des gens que je ne connais pas bien", subscale: "social" },
-            { text: "J'ai mal au ventre a l'ecole", subscale: "school" },
+            { text: "J'ai mal au ventre à l'école", subscale: "school" },
             { text: "Quand j'ai peur, j'ai l'impression de devenir fou/folle", subscale: "panic" },
-            { text: "Je m'inquiete de dormir seul(e)", subscale: "separation" },
+            { text: "Je m'inquiete de dormir seul(e)", subscale: "séparation" },
             { text: "Je m'inquiete d'etre aussi bon(ne) que les autres", subscale: "generalized" },
             { text: "Quand j'ai peur, les choses semblent irreelles", subscale: "panic" },
-            { text: "Je fais des cauchemars que quelque chose de mal arrive a mes parents", subscale: "separation" },
-            { text: "Je m'inquiete d'aller a l'ecole", subscale: "school" },
+            { text: "Je fais des cauchemars que quelque chose de mal arrive à mes parents", subscale: "séparation" },
+            { text: "Je m'inquiete d'aller à l'école", subscale: "school" },
             { text: "Quand j'ai peur, mon coeur bat vite", subscale: "panic" },
             { text: "Je tremble", subscale: "panic" },
-            { text: "Je fais des cauchemars que quelque chose de mal m'arrive", subscale: "separation" },
+            { text: "Je fais des cauchemars que quelque chose de mal m'arrive", subscale: "séparation" },
             { text: "Je m'inquiete que les choses tournent mal", subscale: "generalized" },
             { text: "Quand j'ai peur, je transpire beaucoup", subscale: "panic" },
             { text: "Je m'inquiete beaucoup", subscale: "generalized" },
             { text: "J'ai vraiment peur sans raison", subscale: "panic" },
-            { text: "J'ai peur d'etre seul(e) a la maison", subscale: "separation" },
-            { text: "J'ai du mal a parler avec des gens que je ne connais pas bien", subscale: "social" },
+            { text: "J'ai peur d'etre seul(e) à la maison", subscale: "séparation" },
+            { text: "J'ai du mal à parler avec des gens que je ne connais pas bien", subscale: "social" },
             { text: "Quand j'ai peur, j'ai l'impression d'etouffer", subscale: "panic" },
             { text: "Les gens me disent que je m'inquiete trop", subscale: "generalized" },
-            { text: "Je n'aime pas etre loin de ma famille", subscale: "separation" },
+            { text: "Je n'aime pas etre loin de ma famille", subscale: "séparation" },
             { text: "J'ai peur d'avoir des crises d'angoisse", subscale: "panic" },
-            { text: "Je m'inquiete que quelque chose de mal arrive a mes parents", subscale: "separation" },
+            { text: "Je m'inquiete que quelque chose de mal arrive à mes parents", subscale: "séparation" },
             { text: "Je suis timide avec des gens que je ne connais pas bien", subscale: "social" },
             { text: "Je m'inquiete de ce qui va se passer", subscale: "generalized" },
             { text: "Quand j'ai peur, j'ai envie de vomir", subscale: "panic" },
             { text: "Je m'inquiete de savoir si je fais bien les choses", subscale: "generalized" },
-            { text: "J'ai peur d'aller a l'ecole", subscale: "school" },
+            { text: "J'ai peur d'aller à l'école", subscale: "school" },
             { text: "Je m'inquiete des choses qui se sont deja passees", subscale: "generalized" },
             { text: "Quand j'ai peur, j'ai des vertiges", subscale: "panic" },
             { text: "Je me sens nerveux(se) quand je suis avec d'autres enfants et que je dois faire quelque chose devant eux", subscale: "social" },
-            { text: "Je me sens nerveux(se) quand je vais a des fetes ou des reunions", subscale: "social" },
+            { text: "Je me sens nerveux(se) quand je vais à des fetes ou des reunions", subscale: "social" },
             { text: "Je suis timide", subscale: "social" }
         ];
 
@@ -221,14 +221,14 @@
                 color: "#ef4444"
             },
             generalized: {
-                name: "Anxiete generalisee",
+                name: "Anxiété generalisee",
                 items: [5, 7, 14, 21, 23, 28, 33, 35, 37],
                 cutoff: 9,
                 maxScore: 18,
                 color: "#f59e0b"
             },
-            separation: {
-                name: "Anxiete de separation",
+            séparation: {
+                name: "Anxiété de séparation",
                 items: [4, 8, 13, 16, 20, 25, 29, 31],
                 cutoff: 5,
                 maxScore: 16,
@@ -343,41 +343,41 @@
             if (score < 25) return {
                 level: "Non significatif",
                 className: "low",
-                description: "Le score total est inferieur au seuil clinique.",
-                action: "Pas d'indication d'un trouble anxieux significatif. Surveillance de routine recommandee."
+                description: "Le score total est inférieur au seuil clinique.",
+                action: "Pas d'indication d'un trouble anxieux significatif. Surveillance de routine recommandée."
             };
             if (score < 30) return {
                 level: "Limite",
                 className: "moderate",
-                description: "Le score total suggere une anxiete moderee.",
-                action: "Une evaluation plus approfondie peut etre utile. Consultation recommandee."
+                description: "Le score total suggere une anxiété modérée.",
+                action: "Une évaluation plus approfondie peut etre utile. Consultation recommandée."
             };
             return {
                 level: "Significatif",
                 className: "high",
-                description: "Le score total suggere la presence probable d'un trouble anxieux.",
-                action: "Une evaluation clinique complete est recommandee. Consultation specialisee conseillee."
+                description: "Le score total suggere la présence probable d'un trouble anxieux.",
+                action: "Une évaluation clinique complete est recommandée. Consultation spécialisée conseillee."
             };
         }
 
         function updateResults() {
             const totalScore = calculateTotalScore();
-            const interpretation = getTotalInterpretation(totalScore);
+            const interprétation = getTotalInterpretation(totalScore);
 
             document.getElementById('totalScore').textContent = totalScore;
 
             const interpretationBox = document.getElementById('interpretationBox');
-            interpretationBox.className = `interpretation ${interpretation.className}`;
+            interpretationBox.className = `interprétation ${interprétation.className}`;
             interpretationBox.innerHTML = `
-                <h3>Score total : ${interpretation.level}</h3>
-                <p><strong>Interpretation :</strong> ${interpretation.description}</p>
-                <p><strong>Recommandation :</strong> ${interpretation.action}</p>
+                <h3>Score total : ${interprétation.level}</h3>
+                <p><strong>Interprétation :</strong> ${interprétation.description}</p>
+                <p><strong>Recommandation :</strong> ${interprétation.action}</p>
                 <p style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--color-text-muted);">
                     <i class="fas fa-info-circle"></i> Seuil clinique : >= 25 points
                 </p>
             `;
 
-            // Scores par sous-echelle
+            // Scores par sous-échelle
             const subscaleContainer = document.getElementById('subscaleScores');
             let subscaleHTML = '<div style="display: grid; gap: 0.75rem;">';
 
@@ -417,9 +417,9 @@
         function updateDetailsContent() {
             const detailsContent = document.getElementById('detailsContent');
 
-            let html = '<h3 style="margin-bottom: 1rem;">Interpretation detaillee par echelle</h3>';
+            let html = '<h3 style="margin-bottom: 1rem;">Interprétation détaillée par échelle</h3>';
 
-            // Interpretation par echelle
+            // Interprétation par échelle
             for (const [key, info] of Object.entries(subscaleInfo)) {
                 const score = calculateSubscaleScore(key);
                 const interp = getSubscaleInterpretation(key, score);
@@ -428,19 +428,19 @@
                 let description = '';
                 switch(key) {
                     case 'panic':
-                        description = 'Evalue les symptomes physiques de l\'anxiete et les attaques de panique : difficultes respiratoires, palpitations, tremblements, vertiges, nausees.';
+                        description = 'Évalue les symptômes physiques de l\'anxiété et les attaques de panique : difficultés respiratoires, palpitations, tremblements, vertiges, nausées.';
                         break;
                     case 'generalized':
-                        description = 'Evalue l\'anxiete generale et les inquietudes excessives concernant divers aspects de la vie quotidienne.';
+                        description = 'Évalue l\'anxiété générale et les inquietudes excessives concernant divers aspects de la vie quotidienne.';
                         break;
-                    case 'separation':
-                        description = 'Evalue la peur excessive liee a la separation des figures d\'attachement (parents, maison).';
+                    case 'séparation':
+                        description = 'Évalue la peur excessive liée à la séparation des figures d\'attachement (parents, maison).';
                         break;
                     case 'social':
-                        description = 'Evalue la peur des situations sociales et la timidete excessive avec les personnes non familieres.';
+                        description = 'Évalue la peur des situations sociales et la timidete excessive avec les personnes non familieres.';
                         break;
                     case 'school':
-                        description = 'Evalue la peur et l\'evitement lies au contexte scolaire, incluant les plaintes somatiques a l\'ecole.';
+                        description = 'Évalue la peur et l\'évitement liés au contexte scolaire, incluant les plaintes somatiques a l\'école.';
                         break;
                 }
 
@@ -458,10 +458,10 @@
             // Information supplementaire
             html += `
                 <div class="warning-box" style="margin-top: 1rem;">
-                    <h4><i class="fas fa-info-circle"></i> Note sur l'interpretation</h4>
-                    <p style="margin-bottom: 0.5rem;">Le <strong>SCARED</strong> est un outil de depistage valide pour les troubles anxieux chez l'enfant et l'adolescent.</p>
-                    <p style="margin-bottom: 0.5rem;">Un <strong>score total >= 25</strong> suggere la presence d'un trouble anxieux.</p>
-                    <p style="margin-bottom: 0;">Les scores des sous-echelles permettent d'orienter vers un type specifique de trouble anxieux, mais seule une evaluation clinique complete permet de poser un diagnostic.</p>
+                    <h4><i class="fas fa-info-circle"></i> Note sur l'interprétation</h4>
+                    <p style="margin-bottom: 0.5rem;">Le <strong>SCARED</strong> est un outil de dépistage validé pour les troubles anxieux chez l'enfant et l'adolescent.</p>
+                    <p style="margin-bottom: 0.5rem;">Un <strong>score total >= 25</strong> suggere la présence d'un trouble anxieux.</p>
+                    <p style="margin-bottom: 0;">Les scores des sous-échelles permettent d'orienter vers un type spécifique de trouble anxieux, mais seule une évaluation clinique complete permet de poser un diagnostic.</p>
                 </div>
             `;
 
@@ -526,7 +526,7 @@
             }
 
             const totalScore = calculateTotalScore();
-            const interpretation = getTotalInterpretation(totalScore);
+            const interprétation = getTotalInterpretation(totalScore);
 
             const subscaleResults = {};
             for (const [key, info] of Object.entries(subscaleInfo)) {
@@ -538,7 +538,7 @@
                     maxScore: info.maxScore,
                     cutoff: info.cutoff,
                     aboveCutoff: score >= info.cutoff,
-                    interpretation: interp.level
+                    interprétation: interp.level
                 };
             }
 
@@ -550,7 +550,7 @@
                 totalScore: totalScore,
                 maxTotalScore: 82,
                 clinicalCutoff: 25,
-                totalInterpretation: interpretation.level,
+                totalInterpretation: interprétation.level,
                 subscales: subscaleResults
             };
 

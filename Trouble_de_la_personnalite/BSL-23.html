@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="BSL-23 - Borderline Symptom List — outil clinique interactif pour la psychiatrie et la sante mentale.">
+    <meta name="description" content="BSL-23 - Borderline Symptom List — outil clinique interactif pour la psychiatrie et la santé mentale.">
     <title>BSL-23 - Borderline Symptom List</title>
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
@@ -99,8 +99,8 @@
             <div id="questions"></div>
         </section>
 
-        <!-- Resultats -->
-        <section id="results" class="glass-card results-section" style="display: none;">
+        <!-- Résultats -->
+        <section id="results" aria-live="polite" class="glass-card results-section" style="display: none;">
             <h2 style="text-align: center; margin-bottom: 2rem;"><i class="fas fa-chart-pie"></i> Résultats de votre évaluation</h2>
 
             <div class="scores-container">
@@ -127,10 +127,10 @@
                 </div>
             </div>
 
-            <div id="interpretationBox" class="interpretation"></div>
+            <div id="interpretationBox" class="interprétation"></div>
 
             <div id="criticalAlert" class="danger-box" style="display: none;">
-                <h3><i class="fas fa-exclamation-circle"></i> Alerte - Item critique</h3>
+                <h3><i class="fas fa-exclamation-circle"></i> Alerte - Item critiqué</h3>
                 <p id="criticalAlertText"></p>
             </div>
 
@@ -329,7 +329,7 @@
 
         function updateResults() {
             const { total, mean } = calculateScores();
-            const interpretation = getInterpretation(mean);
+            const interprétation = getInterpretation(mean);
 
             // Update scores
             document.getElementById('totalScore').textContent = total;
@@ -339,13 +339,13 @@
             const markerPosition = (mean / 4) * 100;
             document.getElementById('scoreMarker').style.left = `${markerPosition}%`;
 
-            // Update interpretation
+            // Update interprétation
             const interpretationBox = document.getElementById('interpretationBox');
-            interpretationBox.className = `interpretation ${interpretation.className}`;
+            interpretationBox.className = `interprétation ${interprétation.className}`;
             interpretationBox.innerHTML = `
-                <h3>Sévérité : ${interpretation.level}</h3>
-                <p><strong>Interprétation :</strong> ${interpretation.description}</p>
-                <p><strong>Recommandation :</strong> ${interpretation.action}</p>
+                <h3>Sévérité : ${interprétation.level}</h3>
+                <p><strong>Interprétation :</strong> ${interprétation.description}</p>
+                <p><strong>Recommandation :</strong> ${interprétation.action}</p>
             `;
 
             // Check critical item (item 18 - index 17)
@@ -540,7 +540,7 @@
             }
 
             const { total, mean } = calculateScores();
-            const interpretation = getInterpretation(mean);
+            const interprétation = getInterpretation(mean);
 
             const data = {
                 questionnaire: "BSL-23",
@@ -551,7 +551,7 @@
                     raw: total,
                     mean: parseFloat(mean.toFixed(2))
                 },
-                interpretation: interpretation.level,
+                interprétation: interprétation.level,
                 criticalItem: {
                     item: 18,
                     value: answers[CRITICAL_ITEM],

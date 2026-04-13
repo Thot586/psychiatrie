@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="RUD - Risque, Urgence, Dangerosite — outil clinique interactif pour la psychiatrie et la sante mentale.">
+    <meta name="description" content="RUD - Risque, Urgence, Dangerosite — outil clinique interactif pour la psychiatrie et la santé mentale.">
     <title>RUD - Risque, Urgence, Dangerosite</title>
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
@@ -133,14 +133,14 @@
             color: #b45309;
         }
 
-        .rud-card[data-level="eleve"].selected {
+        .rud-card[data-level="élevé"].selected {
             border-color: #ef4444;
             background: rgba(254, 242, 242, 0.95);
         }
-        .rud-card[data-level="eleve"].selected::after {
+        .rud-card[data-level="élevé"].selected::after {
             background: #ef4444;
         }
-        .rud-card[data-level="eleve"] .rud-card-title {
+        .rud-card[data-level="élevé"] .rud-card-title {
             color: #b91c1c;
         }
 
@@ -176,7 +176,7 @@
         }
         .rud-card[data-level="faible"] ul li::before { color: #15803d; }
         .rud-card[data-level="moyen"] ul li::before { color: #b45309; }
-        .rud-card[data-level="eleve"] ul li::before { color: #b91c1c; }
+        .rud-card[data-level="élevé"] ul li::before { color: #b91c1c; }
 
         /* Results badges */
         .rud-result-badges {
@@ -218,7 +218,7 @@
             border: 2px solid #f59e0b;
             color: #b45309;
         }
-        .rud-badge.level-eleve {
+        .rud-badge.level-élevé {
             background: rgba(254, 242, 242, 0.95);
             border: 2px solid #ef4444;
             color: #b91c1c;
@@ -320,18 +320,18 @@
         <!-- En-tete -->
         <header class="header-glow" style="text-align: center; margin-bottom: 2rem;">
             <h1><i class="fas fa-exclamation-triangle"></i> RUD - Risque, Urgence, Dangerosite</h1>
-            <p class="subtitle">Grille d'evaluation tripartite du potentiel suicidaire</p>
+            <p class="subtitle">Grille d'évaluation tripartite du potentiel suicidaire</p>
         </header>
 
         <!-- Ressources d'urgence -->
         <section class="glass-card danger-box">
             <h3><i class="fas fa-ambulance"></i> RESSOURCES D'URGENCE 24H/24</h3>
             <ul>
-                <li>Ligne nationale de prevention du suicide : <strong class="phone-number">3114</strong> (gratuit)</li>
+                <li>Ligne nationale de prévention du suicide : <strong class="phone-number">3114</strong> (gratuit)</li>
                 <li>SAMU : <strong class="phone-number">15</strong></li>
                 <li>SOS Amitie : <strong class="phone-number">09 72 39 40 50</strong></li>
                 <li>Suicide Ecoute : <strong class="phone-number">01 45 39 40 00</strong></li>
-                <li>En cas d'urgence immediate, rendez-vous aux urgences les plus proches</li>
+                <li>En cas d'urgence immédiate, rendez-vous aux urgences les plus proches</li>
             </ul>
         </section>
 
@@ -339,7 +339,7 @@
         <section class="glass-card info-box">
             <h2><i class="fas fa-info-circle"></i> A propos</h2>
             <p style="margin: 15px 0; line-height: 1.6;">
-                Le modele RUD est une grille tripartite d'evaluation du potentiel suicidaire, largement utilisee dans les urgences psychiatriques en France. Il distingue trois dimensions : le Risque (facteurs de vulnerabilite), l'Urgence (imminence du passage a l'acte) et la Dangerosite (acces aux moyens letaux). Cet outil est un hetero-questionnaire destine aux professionnels de sante.
+                Le modèle RUD est une grille tripartite d'évaluation du potentiel suicidaire, largement utilisée dans les urgences psychiatriques en France. Il distingue trois dimensions : le Risque (facteurs de vulnérabilité), l'Urgence (imminence du passage à l'acte) et la Dangerosite (acces aux moyens létaux). Cet outil est un hétéro-questionnaire destiné aux professionnels de santé.
             </p>
         </section>
 
@@ -348,10 +348,10 @@
             <h3><i class="fas fa-exclamation-triangle"></i> Avertissements</h3>
             <ul>
                 <li>Ce questionnaire aborde des sujets sensibles</li>
-                <li>Si vous etes en presence d'un patient en detresse, contactez immediatement le 3114 ou le 15</li>
-                <li>Les resultats necessitent une interpretation par un professionnel</li>
-                <li>En cas de risque eleve, une consultation urgente est necessaire</li>
-                <li>Cet outil aide les professionnels mais ne remplace pas une evaluation clinique complete.</li>
+                <li>Si vous êtes en présence d'un patient en détresse, contactez immédiatement le 3114 ou le 15</li>
+                <li>Les résultats nécessitent une interprétation par un professionnel</li>
+                <li>En cas de risque élevé, une consultation urgente est nécessaire</li>
+                <li>Cet outil aide les professionnels mais ne remplace pas une évaluation clinique complete.</li>
             </ul>
         </section>
 
@@ -359,13 +359,13 @@
         <section class="glass-card">
             <div class="control-buttons">
                 <button class="btn-danger" onclick="showEmergencyResources()">
-                    <i class="fas fa-phone-alt"></i> Aide immediate
+                    <i class="fas fa-phone-alt"></i> Aide immédiate
                 </button>
                 <button class="btn-primary" onclick="importData()">
                     <i class="fas fa-file-import"></i> Importer
                 </button>
                 <button class="btn-secondary" onclick="resetForm()">
-                    <i class="fas fa-redo"></i> Reinitialiser
+                    <i class="fas fa-redo"></i> Réinitialiser
                 </button>
             </div>
             <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="loadFile(event)">
@@ -373,7 +373,7 @@
 
         <!-- Progression -->
         <section class="glass-card">
-            <h3 style="text-align: center; margin-bottom: 0.75rem;"><i class="fas fa-tasks"></i> Progression de l'evaluation</h3>
+            <h3 style="text-align: center; margin-bottom: 0.75rem;"><i class="fas fa-tasks"></i> Progression de l'évaluation</h3>
             <div class="rud-progress">
                 <div class="rud-progress-item" id="progress-risque">
                     <i class="fas fa-check-circle check-icon"></i>
@@ -400,7 +400,7 @@
                 </div>
                 <div>
                     <h2>Section 1 : RISQUE</h2>
-                    <p>Facteurs de risque et de vulnerabilite</p>
+                    <p>Facteurs de risque et de vulnérabilité</p>
                 </div>
             </div>
 
@@ -409,11 +409,11 @@
                 <div class="rud-card" data-level="faible" data-value="1" data-dimension="risque" onclick="selectLevel(this)">
                     <div class="rud-card-title"><i class="fas fa-check-circle" style="color: #15803d;"></i> Faible</div>
                     <ul>
-                        <li>Pas d'antecedent de tentative de suicide</li>
+                        <li>Pas d'antécédent de tentative de suicide</li>
                         <li>Peu de facteurs de risque identifies</li>
                         <li>Bon reseau de soutien social</li>
                         <li>Bonnes capacites d'adaptation</li>
-                        <li>Facteurs de protection presents (projets, liens familiaux, spiritualite)</li>
+                        <li>Facteurs de protection présents (projets, liens familiaux, spiritualite)</li>
                     </ul>
                 </div>
 
@@ -430,12 +430,12 @@
                 </div>
 
                 <!-- Eleve -->
-                <div class="rud-card" data-level="eleve" data-value="3" data-dimension="risque" onclick="selectLevel(this)">
+                <div class="rud-card" data-level="élevé" data-value="3" data-dimension="risque" onclick="selectLevel(this)">
                     <div class="rud-card-title"><i class="fas fa-times-circle" style="color: #b91c1c;"></i> Eleve</div>
                     <ul>
-                        <li>Antecedents de tentatives repetees ou recentes</li>
+                        <li>Antecedents de tentatives répétées ou recentes</li>
                         <li>Nombreux facteurs de risque cumules</li>
-                        <li>Trouble psychiatrique severe actif</li>
+                        <li>Trouble psychiatrique sévère actif</li>
                         <li>Isolement social important</li>
                         <li>Desespoir intense, perte de sens</li>
                         <li>Abus de substances actif</li>
@@ -454,7 +454,7 @@
                 </div>
                 <div>
                     <h2>Section 2 : URGENCE</h2>
-                    <p>Imminence du passage a l'acte</p>
+                    <p>Imminence du passage à l'acte</p>
                 </div>
             </div>
 
@@ -463,11 +463,11 @@
                 <div class="rud-card" data-level="faible" data-value="1" data-dimension="urgence" onclick="selectLevel(this)">
                     <div class="rud-card-title"><i class="fas fa-check-circle" style="color: #15803d;"></i> Faible</div>
                     <ul>
-                        <li>Ideation suicidaire sans scenario precis</li>
-                        <li>Le patient cherche des solutions a ses problemes</li>
+                        <li>Ideation suicidaire sans scenario précis</li>
+                        <li>Le patient cherche des solutions a ses problèmes</li>
                         <li>Pense au suicide mais ne veut pas mourir</li>
-                        <li>Pas de date envisagee pour un passage a l'acte</li>
-                        <li>Capacite a se projeter dans l'avenir</li>
+                        <li>Pas de date envisagee pour un passage à l'acte</li>
+                        <li>Capacité a se projeter dans l'avenir</li>
                     </ul>
                 </div>
 
@@ -476,24 +476,24 @@
                     <div class="rud-card-title"><i class="fas fa-exclamation-circle" style="color: #b45309;"></i> Moyen</div>
                     <ul>
                         <li>Ideation suicidaire avec scenario envisage mais non planifie</li>
-                        <li>Equilibre emotionnel fragile</li>
-                        <li>Sentiment de desespoir important</li>
+                        <li>Equilibre émotionnel fragile</li>
+                        <li>Sentiment de désespoir important</li>
                         <li>Le patient envisage le suicide comme une solution possible</li>
-                        <li>Capacite de projection dans l'avenir reduite</li>
+                        <li>Capacité de projection dans l'avenir reduite</li>
                     </ul>
                 </div>
 
                 <!-- Eleve -->
-                <div class="rud-card" data-level="eleve" data-value="3" data-dimension="urgence" onclick="selectLevel(this)">
+                <div class="rud-card" data-level="élevé" data-value="3" data-dimension="urgence" onclick="selectLevel(this)">
                     <div class="rud-card-title"><i class="fas fa-times-circle" style="color: #b91c1c;"></i> Eleve</div>
                     <ul>
-                        <li>Planification claire et precise (quand, ou, comment)</li>
+                        <li>Planification claire et précise (quand, ou, comment)</li>
                         <li>Acces aux moyens envisages</li>
-                        <li>Date prevue pour le passage a l'acte</li>
+                        <li>Date prevue pour le passage à l'acte</li>
                         <li>Sentiment de souffrance insupportable</li>
                         <li>Perception d'un tunnel, pas d'autre issue</li>
                         <li>Messages d'adieu, don d'objets personnels</li>
-                        <li>Etat de crise aigue</li>
+                        <li>État de crise aigue</li>
                     </ul>
                 </div>
             </div>
@@ -509,7 +509,7 @@
                 </div>
                 <div>
                     <h2>Section 3 : DANGEROSITE</h2>
-                    <p>Acces aux moyens letaux et letalite du moyen envisage</p>
+                    <p>Acces aux moyens létaux et letalite du moyen envisage</p>
                 </div>
             </div>
 
@@ -518,7 +518,7 @@
                 <div class="rud-card" data-level="faible" data-value="1" data-dimension="dangerosite" onclick="selectLevel(this)">
                     <div class="rud-card-title"><i class="fas fa-check-circle" style="color: #15803d;"></i> Faible</div>
                     <ul>
-                        <li>Pas de moyen identifie</li>
+                        <li>Pas de moyen identifié</li>
                         <li>Pas d'acces a un moyen letal</li>
                         <li>Le moyen evoque est peu letal</li>
                     </ul>
@@ -528,19 +528,19 @@
                 <div class="rud-card" data-level="moyen" data-value="2" data-dimension="dangerosite" onclick="selectLevel(this)">
                     <div class="rud-card-title"><i class="fas fa-exclamation-circle" style="color: #b45309;"></i> Moyen</div>
                     <ul>
-                        <li>Moyen identifie mais pas immediatement accessible</li>
+                        <li>Moyen identifié mais pas immédiatement accessible</li>
                         <li>Acces possible mais non garanti</li>
-                        <li>Letalite moderee du moyen envisage</li>
+                        <li>Letalite modérée du moyen envisage</li>
                     </ul>
                 </div>
 
                 <!-- Eleve -->
-                <div class="rud-card" data-level="eleve" data-value="3" data-dimension="dangerosite" onclick="selectLevel(this)">
+                <div class="rud-card" data-level="élevé" data-value="3" data-dimension="dangerosite" onclick="selectLevel(this)">
                     <div class="rud-card-title"><i class="fas fa-times-circle" style="color: #b91c1c;"></i> Eleve</div>
                     <ul>
-                        <li>Moyen identifie et immediatement accessible</li>
-                        <li>Moyen hautement letal (arme a feu, pendaison, chute de hauteur, medication stockee)</li>
-                        <li>Preparations en cours (stockage de medicaments, reperage de lieu)</li>
+                        <li>Moyen identifié et immédiatement accessible</li>
+                        <li>Moyen hautement letal (arme a feu, pendaison, chute de hauteur, médication stockée)</li>
+                        <li>Preparations en cours (stockage de médicaments, repérage de lieu)</li>
                     </ul>
                 </div>
             </div>
@@ -549,28 +549,28 @@
         <!-- Bouton calculer -->
         <section class="glass-card" id="calculate-section" style="text-align: center;">
             <button class="btn-primary" onclick="calculateResults()" id="btnCalculate" disabled>
-                <i class="fas fa-chart-pie"></i> Voir les resultats
+                <i class="fas fa-chart-pie"></i> Voir les résultats
             </button>
             <p id="calculate-hint" style="margin-top: 0.75rem; font-size: 0.9rem; color: var(--color-text-muted);">
-                Selectionnez un niveau pour chaque dimension (Risque, Urgence, Dangerosite) avant de voir les resultats.
+                Selectionnez un niveau pour chaque dimension (Risque, Urgence, Dangerosite) avant de voir les résultats.
             </p>
         </section>
 
         <!-- ========================================
-             Resultats
+             Résultats
              ======================================== -->
-        <section id="results" class="glass-card results-section" style="display: none;">
-            <h2 style="text-align: center; margin-bottom: 2rem;"><i class="fas fa-clipboard-check"></i> Resultats de l'evaluation</h2>
+        <section id="results" aria-live="polite" class="glass-card results-section" style="display: none;">
+            <h2 style="text-align: center; margin-bottom: 2rem;"><i class="fas fa-clipboard-check"></i> Résultats de l'évaluation</h2>
 
             <!-- Badges R, U, D -->
             <div class="rud-result-badges" id="resultBadges"></div>
 
-            <!-- Interpretation globale -->
-            <div id="globalInterpretation" class="interpretation"></div>
+            <!-- Interprétation globale -->
+            <div id="globalInterpretation" class="interprétation"></div>
 
             <!-- Plan d'action -->
             <div class="info-box" style="margin-top: 1.5rem;">
-                <h4><i class="fas fa-tasks"></i> Plan d'action recommande</h4>
+                <h4><i class="fas fa-tasks"></i> Plan d'action recommandé</h4>
                 <ul id="actionPlan" class="action-plan-list"></ul>
             </div>
 
@@ -583,11 +583,11 @@
 
             <!-- Export -->
             <div class="glass-card" style="margin-top: 2rem; background: rgba(255,255,255,0.05);">
-                <h3><i class="fas fa-download"></i> Exporter les resultats</h3>
+                <h3><i class="fas fa-download"></i> Exporter les résultats</h3>
                 <div class="consent-box">
                     <label>
                         <input type="checkbox" id="exportConsent">
-                        <span>Je souhaite telecharger les resultats (evaluation, niveaux, date et notes) dans un fichier JSON sur mon appareil. <strong>Ces resultats constituent des donnees de sante -- je m'engage a les conserver de facon securisee et a ne les partager qu'avec un professionnel de sante de mon choix.</strong> Aucune donnee n'est transmise a un serveur.</span>
+                        <span>Je souhaite telecharger les résultats (évaluation, niveaux, date et notes) dans un fichier JSON sur mon appareil. <strong>Ces résultats constituent des données de santé -- je m'engage à les conserver de facon securisee et a ne les partager qu'avec un professionnel de santé de mon choix.</strong> Aucune donnée n'est transmise a un serveur.</span>
                     </label>
                 </div>
                 <div class="export-buttons">
@@ -614,9 +614,9 @@
 
     <footer class="footer">
         <p><strong>RUD - Risque, Urgence, Dangerosite</strong></p>
-        <p style="margin: 0.5rem 0;">Modele tripartite d'evaluation du potentiel suicidaire (Seguin, 2004 ; inspire du modele de Shea, 1999)</p>
-        <p><strong>Adaptation numerique :</strong> Dr FENOHASINA | Psychiatre</p>
-        <small>Licence CC BY-NC-SA 4.0 | Usage reserve aux professionnels de sante</small>
+        <p style="margin: 0.5rem 0;">Modèle tripartite d'évaluation du potentiel suicidaire (Seguin, 2004 ; inspire du modèle de Shea, 1999)</p>
+        <p><strong>Adaptation numérique :</strong> Dr FENOHASINA | Psychiatre</p>
+        <small>Licence CC BY-NC-SA 4.0 | Usage réservé aux professionnels de santé</small>
     </footer>
 
     <script src="../js/app.js" defer></script>
@@ -679,7 +679,7 @@
 
             btn.disabled = !allSelected;
             if (allSelected) {
-                hint.textContent = 'Toutes les dimensions sont evaluees. Cliquez pour voir les resultats.';
+                hint.textContent = 'Toutes les dimensions sont évaluées. Cliquez pour voir les résultats.';
                 hint.style.color = '#15803d';
             } else {
                 var missing = [];
@@ -705,7 +705,7 @@
 
             var globalLevel;
             if (maxValue === 3) {
-                globalLevel = 'eleve';
+                globalLevel = 'élevé';
             } else if (maxValue === 2) {
                 globalLevel = 'moyen';
             } else {
@@ -739,28 +739,28 @@
                     '</div>';
             }).join('');
 
-            // Global interpretation
+            // Global interprétation
             var interpDiv = document.getElementById('globalInterpretation');
             var configs = {
                 faible: {
                     title: 'Potentiel suicidaire faible',
-                    description: 'Toutes les dimensions sont evaluees a un niveau faible. Le risque de passage a l\'acte est faible mais une vigilance clinique reste necessaire.',
+                    description: 'Toutes les dimensions sont évaluées a un niveau faible. Le risque de passage a l\'acte est faible mais une vigilance clinique reste nécessaire.',
                     className: 'low'
                 },
                 moyen: {
                     title: 'Potentiel suicidaire moyen',
-                    description: 'Au moins une dimension presente un niveau moyen. Une surveillance active et un renforcement du suivi sont recommandes.',
+                    description: 'Au moins une dimension présente un niveau moyen. Une surveillance active et un renforcement du suivi sont recommandes.',
                     className: 'high'
                 },
-                eleve: {
-                    title: 'Potentiel suicidaire eleve',
-                    description: 'Au moins une dimension presente un niveau eleve. Des actions immediates sont necessaires pour assurer la securite du patient.',
+                élevé: {
+                    title: 'Potentiel suicidaire élevé',
+                    description: 'Au moins une dimension présente un niveau élevé. Des actions immédiates sont necessaires pour assurer la sécurité du patient.',
                     className: 'critical'
                 }
             };
 
             var config = configs[globalLevel];
-            interpDiv.className = 'interpretation ' + config.className;
+            interpDiv.className = 'interprétation ' + config.className;
             interpDiv.innerHTML = '<h3>' + config.title + '</h3>' +
                 '<p>' + config.description + '</p>';
 
@@ -770,21 +770,21 @@
                 faible: [
                     'Suivi ambulatoire standard',
                     'Renforcer les facteurs de protection',
-                    'Informer le patient des ressources d\'aide (3114, medecin traitant, CMP)',
+                    'Informer le patient des ressources d\'aide (3114, médecin traitant, CMP)',
                     'Reevaluation lors du prochain rendez-vous'
                 ],
                 moyen: [
                     '<strong>Consultation psychiatrique rapide</strong>',
-                    'Elaboration d\'un plan de securite avec le patient',
+                    'Elaboration d\'un plan de sécurité avec le patient',
                     'Renforcement du suivi ambulatoire',
                     'Informer l\'entourage avec accord du patient',
-                    'Reevaluation a court terme (sous 48-72h)'
+                    'Reevaluation à court terme (sous 48-72h)'
                 ],
-                eleve: [
-                    '<strong>Hospitalisation a envisager (SSR/SPDRE si necessaire)</strong>',
-                    '<strong>Restriction acces aux moyens letaux</strong>',
+                élevé: [
+                    '<strong>Hospitalisation a envisager (SSR/SPDRE si nécessaire)</strong>',
+                    '<strong>Restriction acces aux moyens létaux</strong>',
                     'Surveillance constante',
-                    'Evaluation psychiatrique urgente',
+                    'Évaluation psychiatrique urgente',
                     'Ne pas laisser le patient seul'
                 ]
             };
@@ -801,7 +801,7 @@
         // Emergency resources
         // ========================================
         function showEmergencyResources() {
-            alert("RESSOURCES D'URGENCE:\n\n3114 - Ligne nationale de prevention (24h/24)\n15 - SAMU\n09 72 39 40 50 - SOS Amitie\n01 45 39 40 00 - Suicide Ecoute\n\nRendez-vous aux urgences si necessaire.");
+            alert("RESSOURCES D'URGENCE:\n\n3114 - Ligne nationale de prévention (24h/24)\n15 - SAMU\n09 72 39 40 50 - SOS Amitie\n01 45 39 40 00 - Suicide Ecoute\n\nRendez-vous aux urgences si nécessaire.");
         }
 
         // ========================================
@@ -822,7 +822,7 @@
             });
             document.getElementById('results').style.display = 'none';
             document.getElementById('btnCalculate').disabled = true;
-            document.getElementById('calculate-hint').textContent = 'Selectionnez un niveau pour chaque dimension (Risque, Urgence, Dangerosite) avant de voir les resultats.';
+            document.getElementById('calculate-hint').textContent = 'Selectionnez un niveau pour chaque dimension (Risque, Urgence, Dangerosite) avant de voir les résultats.';
             document.getElementById('calculate-hint').style.color = '';
 
             var consent = document.getElementById('exportConsent');
@@ -873,7 +873,7 @@
 
                             alert("Donnees importees avec succes !");
                         } else {
-                            alert("Le fichier n'est pas un export RUD valide.");
+                            alert("Le fichier n'est pas un export RUD validé.");
                         }
                     } catch (error) {
                         alert("Erreur lors de la lecture du fichier.");
@@ -901,7 +901,7 @@
 
             var globalLevel;
             if (maxValue === 3) {
-                globalLevel = 'eleve';
+                globalLevel = 'élevé';
             } else if (maxValue === 2) {
                 globalLevel = 'moyen';
             } else {
@@ -916,7 +916,7 @@
                 dangerosite: selections.dangerosite ? { level: selections.dangerosite.level, value: selections.dangerosite.value } : null,
                 global_level: globalLevel,
                 notes: document.getElementById('clinicalNotes').value || '',
-                confidential: "Ces donnees sont strictement confidentielles et protegees par le secret medical."
+                confidential: "Ces données sont strictement confidentielles et protegees par le secret médical."
             };
 
             var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });

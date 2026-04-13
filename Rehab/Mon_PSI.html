@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Mon PSI - Mon Guide Personnel — outil clinique interactif pour la psychiatrie et la sante mentale.">
+    <meta name="description" content="Mon PSI - Mon Guide Personnel — outil clinique interactif pour la psychiatrie et la santé mentale.">
     <title>Mon PSI - Mon Guide Personnel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../css/styles.css">
@@ -112,7 +112,7 @@
                         </div>
                         <div id="journalEntries"></div>
                         <div class="add-note-area">
-                            <textarea id="newNote" class="note-input" placeholder="Comment vous sentez-vous aujourd'hui ? Notez vos progres, vos pensees..."></textarea>
+                            <textarea id="newNote" class="note-input" placeholder="Comment vous sentez-vous aujourd'hui ? Notez vos progrès, vos pensées..."></textarea>
                             <div class="action-buttons">
                                 <button class="btn btn-primary" onclick="addJournalEntry()">
                                     <i class="fas fa-pen"></i> Ajouter une note
@@ -165,7 +165,7 @@
             </div>
         </div>
 
-        <!-- Domain Detail Modal -->
+        <!-- Domain Détail Modal -->
         <div id="domainModal" class="modal">
             <div class="modal-content">
                 <div class="modal-header">
@@ -177,7 +177,7 @@
         </div>
 
         <footer class="footer">
-            <p><strong>Adaptation numerique :</strong> Dr FENOHASINA | Psychiatre - FFI</p>
+            <p><strong>Adaptation numérique :</strong> Dr FENOHASINA | Psychiatre - FFI</p>
             <small>2025 - Tous droits reserves</small>
         </footer>
     </div>
@@ -266,7 +266,7 @@
                         showDashboard();
                         showCelebration("PSI importe avec succes !");
                     } else {
-                        alert("Ce fichier ne semble pas etre un PSI valide.");
+                        alert("Ce fichier ne semble pas etre un PSI validé.");
                     }
                 } catch (error) {
                     alert("Erreur lors de la lecture du fichier : " + error.message);
@@ -308,14 +308,14 @@
             const deadlines = [];
             const now = new Date();
 
-            // Patterns to match different date formats
+            // Patterns to match différent date formats
             const patterns = [
                 /(\d{1,2})[\/-](\d{1,2})[\/-](\d{2,4})/g,  // DD/MM/YYYY or DD-MM-YYYY
                 /(\d{1,2})\s+(janvier|fevrier|mars|avril|mai|juin|juillet|aout|septembre|octobre|novembre|decembre)\s+(\d{2,4})/gi,
                 /dans\s+(\d+)\s+(jour|semaine|mois|an)/gi,
                 /(court|moyen|long)\s+terme/gi,
                 /urgent/gi,
-                /immediat/gi
+                /immédiat/gi
             ];
 
             let matches;
@@ -366,7 +366,7 @@
             }
 
             // Try term patterns
-            if (text.match(/urgent|immediat/i)) {
+            if (text.match(/urgent|immédiat/i)) {
                 const date = new Date(now);
                 date.setDate(date.getDate() + 7);
                 deadlines.push({
@@ -711,7 +711,7 @@
                 ctx.fillStyle = '#94a3b8';
                 ctx.font = '14px Arial';
                 ctx.textAlign = 'center';
-                ctx.fillText('Pas encore de donnees', width / 2, height / 2);
+                ctx.fillText('Pas encore de données', width / 2, height / 2);
                 return;
             }
 
@@ -824,7 +824,7 @@
         function showCheckIn() {
             const questions = [
                 "Comment vous sentez-vous aujourd'hui ?",
-                "Avez-vous pris vos medicaments ?",
+                "Avez-vous pris vos médicaments ?",
                 "Avez-vous bien dormi ?",
                 "Avez-vous fait une activite qui vous a fait du bien ?"
             ];
@@ -884,7 +884,7 @@
             alert(`
 CONSEILS D'UTILISATION
 
-Journal : Notez vos pensees et progres chaque jour
+Journal : Notez vos pensées et progrès chaque jour
 Taches : Cochez les objectifs accomplis
 Humeur : Suivez votre moral quotidiennement
 Echeances : Respectez les dates importantes
@@ -900,7 +900,7 @@ N'oubliez pas : Chaque petit pas compte !
         }
 
         function addVoiceNote() {
-            alert("Fonction vocale en developpement. Utilisez le texte pour le moment !");
+            alert("Fonction vocale en développement. Utilisez le texte pour le moment !");
         }
 
         function updateDateTime() {

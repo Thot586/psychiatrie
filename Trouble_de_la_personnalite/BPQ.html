@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta name="description" content="BPQ - Questionnaire sur la Personnalite Limite — outil clinique interactif pour la psychiatrie et la sante mentale.">
-  <title>BPQ - Questionnaire sur la Personnalite Limite</title>
+    <meta name="description" content="BPQ - Questionnaire sur la Personnalité Limite — outil clinique interactif pour la psychiatrie et la santé mentale.">
+  <title>BPQ - Questionnaire sur la Personnalité Limite</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/questionnaire-light.css">
@@ -37,26 +37,36 @@
       <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
     </div>
     <span class="nav-title">BPQ</span>
-    <span class="badge badge-cat-perso">Personnalite</span>
+    <span class="badge badge-cat-perso">Personnalité</span>
   </nav>
 
   <div class="container">
     <div class="header-section">
-      <h2>Questionnaire sur la Personnalite Limite</h2>
+      <h2>Questionnaire sur la Personnalité Limite</h2>
       <p class="subtitle">Poreh et al., 2006</p>
       <div class="toolbar">
-        <label class="btn" for="file-import"><i class="fas fa-file-import"></i> Importer un resultat</label>
+        <label class="btn" for="file-import"><i class="fas fa-file-import"></i> Importer un résultat</label>
         <input type="file" id="file-import" accept=".json" style="display:none"/>
       </div>
     </div>
 
     <div class="instructions">
-      <p><strong>Periode de reference :</strong> votre etat habituel depuis les deux dernieres annees ou plus</p>
-      <p>Pour chaque affirmation ci-dessous, indiquez si elle est <strong>Vraie</strong> ou <strong>Fausse</strong> pour vous. Il n'y a aucune bonne ou mauvaise reponse. Repondez le plus honnetement et spontanement possible. <strong>Toutes les questions doivent etre completees</strong> pour calculer les scores.</p>
+      <p><strong>Période de référence :</strong> votre état habituel depuis les deux dernières années ou plus</p>
+      <p>Pour chaque affirmation ci-dessous, indiquez si elle est <strong>Vraie</strong> ou <strong>Fausse</strong> pour vous. Il n'y a aucune bonne ou mauvaise réponse. Répondez le plus honnêtement et spontanément possible. <strong>Toutes les questions doivent être complétées</strong> pour calculer les scores.</p>
 
       <div style="margin-top: 1rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
-        <label for="eval-date" style="font-weight: 600; color: var(--color-text-primary);">Date de l'evaluation :</label>
+        <label for="eval-date" style="font-weight: 600; color: var(--color-text-primary);">Date de l'évaluation :</label>
         <input type="date" id="eval-date"/>
+      </div>
+    </div>
+
+    <div class="progress-container" id="progress-container">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+        <span style="font-size: 0.85rem; font-weight: 600; color: var(--color-text-primary);">Progression</span>
+        <span id="progress-text" style="font-size: 0.85rem; font-weight: 700; color: var(--cat-main);">0 / 80</span>
+      </div>
+      <div class="progress-bar" style="height: 6px; border-radius: 3px; background: var(--neo-bg); box-shadow: inset 2px 2px 4px rgba(0,0,0,0.1), inset -2px -2px 4px rgba(255,255,255,0.7);">
+        <div class="progress-fill" id="progress-fill" style="height: 100%; width: 0%; border-radius: 3px; transition: width 0.3s ease;"></div>
       </div>
     </div>
 
@@ -64,14 +74,14 @@
       <div id="qwrap"></div>
 
       <div class="actions">
-        <button type="submit" class="btn-primary"><i class="fas fa-calculator"></i> Calculer les resultats</button>
+        <button type="submit" class="btn-primary"><i class="fas fa-calculator"></i> Calculer les résultats</button>
       </div>
-      <p id="valmsg" class="validation">Veuillez repondre a toutes les questions.</p>
+      <p id="valmsg" class="validation">Veuillez répondre à toutes les questions.</p>
 
-      <div id="results" class="results-section" style="display: none;">
+      <div id="results" class="results-section" aria-live="polite" style="display: none;">
         <div class="grid">
           <div class="panel">
-            <h3>Resultats de l'evaluation</h3>
+            <h3>Résultats de l'évaluation</h3>
             <p id="eval-date-display" style="color: var(--color-text-muted); font-size: 0.9rem; margin-bottom: 1rem;"></p>
 
             <div class="score-display">
@@ -85,11 +95,11 @@
             <div class="score-slider">
               <div class="slider-track">
                 <div class="slider-zones">
-                  <div class="zone zone-very-low">Tres faible</div>
+                  <div class="zone zone-very-low">Très faible</div>
                   <div class="zone zone-low">Faible</div>
-                  <div class="zone zone-moderate">Moderee</div>
-                  <div class="zone zone-high">Elevee</div>
-                  <div class="zone zone-very-high">Tres elevee</div>
+                  <div class="zone zone-moderate">Modérée</div>
+                  <div class="zone zone-high">Élevée</div>
+                  <div class="zone zone-very-high">Très élevée</div>
                 </div>
                 <div class="score-marker" id="score-marker">
                   <div class="marker-value" id="marker-value">0</div>
@@ -107,7 +117,7 @@
                 </div>
                 <div class="slider-label" style="left: 62.5%;">
                   <div class="slider-label-value">50</div>
-                  <div class="slider-label-text">Seuil depistage</div>
+                  <div class="slider-label-text">Seuil dépistage</div>
                 </div>
                 <div class="slider-label" style="left: 75%;">
                   <div class="slider-label-value">60</div>
@@ -121,101 +131,101 @@
             </div>
 
             <details class="accordion">
-              <summary>Interpretation clinique detaillee</summary>
+              <summary>Interprétation clinique détaillée</summary>
               <div class="content">
                 <div id="interp-long"></div>
               </div>
             </details>
 
             <details class="accordion">
-              <summary>Pour les patients - comprendre votre resultat</summary>
+              <summary>Pour les patients - comprendre votre résultat</summary>
               <div class="content">
                 <p><strong>Qu'est-ce que le BPQ ?</strong></p>
-                <p>Le BPQ (Borderline Personality Questionnaire) est un questionnaire d'auto-evaluation qui mesure les traits et symptomes associes au trouble de la personnalite borderline (TPB). Il evalue votre fonctionnement habituel sur les deux dernieres annees ou plus.</p>
+                <p>Le BPQ (Borderline Personality Questionnaire) est un questionnaire d'auto-évaluation qui mesure les traits et symptômes associés au trouble de la personnalité borderline (TPB). Il évalue votre fonctionnement habituel sur les deux dernières années ou plus.</p>
 
-                <p><strong>Objectif : depistage et orientation</strong></p>
-                <p>Le BPQ est concu comme un <strong>outil de depistage</strong> qui peut :</p>
+                <p><strong>Objectif : dépistage et orientation</strong></p>
+                <p>Le BPQ est conçu comme un <strong>outil de dépistage</strong> qui peut :</p>
                 <ul>
-                  <li>Vous aider a identifier si vous presentez des traits borderline significatifs</li>
-                  <li>Vous orienter vers une evaluation clinique approfondie si necessaire</li>
-                  <li>Servir de point de depart a une discussion avec un professionnel de sante</li>
+                  <li>Vous aider à identifier si vous présentez des traits borderline significatifs</li>
+                  <li>Vous orienter vers une évaluation clinique approfondie si nécessaire</li>
+                  <li>Servir de point de départ à une discussion avec un professionnel de santé</li>
                 </ul>
 
-                <p class="note"><strong>Tres important :</strong> Un score eleve ne signifie pas automatiquement que vous avez un TPB. Seul un professionnel de sante qualifie (psychiatre, psychologue clinicien) peut poser ce diagnostic apres une evaluation complete. De nombreux symptomes du TPB se retrouvent dans d'autres troubles (TSPT complexe, TDAH, troubles de l'humeur, troubles anxieux).</p>
+                <p class="note"><strong>Très important :</strong> Un score élevé ne signifie pas automatiquement que vous avez un TPB. Seul un professionnel de santé qualifié (psychiatre, psychologue clinicien) peut poser ce diagnostic après une évaluation complète. De nombreux symptômes du TPB se retrouvent dans d'autres troubles (TSPT complexe, TDAH, troubles de l'humeur, troubles anxieux).</p>
 
-                <p><strong>Que faire avec votre resultat ?</strong></p>
+                <p><strong>Que faire avec votre résultat ?</strong></p>
                 <ul>
-                  <li><strong>Probabilite elevee ou tres elevee :</strong> Consultez un professionnel de sante mentale pour une evaluation diagnostique complete.</li>
-                  <li><strong>Probabilite moderee :</strong> Discutez-en avec un professionnel si ces difficultes impactent votre vie quotidienne.</li>
-                  <li><strong>Probabilite faible :</strong> Si vous ressentez des difficultes, n'hesitez pas a consulter malgre tout. Le score n'est qu'un indicateur.</li>
+                  <li><strong>Probabilité élevée ou très élevée :</strong> Consultez un professionnel de santé mentale pour une évaluation diagnostique complète.</li>
+                  <li><strong>Probabilité modérée :</strong> Discutez-en avec un professionnel si ces difficultés impactent votre vie quotidienne.</li>
+                  <li><strong>Probabilité faible :</strong> Si vous ressentez des difficultés, n'hésitez pas à consulter malgré tout. Le score n'est qu'un indicateur.</li>
                 </ul>
 
-                <p><strong>Les 9 dimensions evaluees</strong></p>
-                <p>Le BPQ examine 9 aspects differents : impulsivite, instabilite affective, peur de l'abandon, difficultes relationnelles, image de soi instable, comportements autodestructeurs, sentiment de vide, colere intense, et etats quasi-psychotiques. Vous pouvez consulter vos scores detailles dans l'accordeon dedie.</p>
+                <p><strong>Les 9 dimensions évaluées</strong></p>
+                <p>Le BPQ examine 9 aspects différents : impulsivité, instabilité affective, peur de l'abandon, difficultés relationnelles, image de soi instable, comportements autodestructeurs, sentiment de vide, colère intense, et états quasi-psychotiques. Vous pouvez consulter vos scores détaillés dans l'accordéon dédié.</p>
               </div>
             </details>
 
             <details class="accordion">
-              <summary>Pour les cliniciens - utilisation de l'echelle</summary>
+              <summary>Pour les cliniciens - utilisation de l'échelle</summary>
               <div class="content">
                 <p><strong>Contexte et validation</strong></p>
-                <p>Le BPQ (Poreh et al., 2006) est un questionnaire d'auto-evaluation de 80 items (Vrai/Faux) concu pour le depistage du TPB. Il evalue 9 dimensions correspondant aux criteres DSM et presente de bonnes proprietes psychometriques (alpha de Cronbach > 0.90 pour le score total).</p>
+                <p>Le BPQ (Poreh et al., 2006) est un questionnaire d'auto-évaluation de 80 items (Vrai/Faux) conçu pour le dépistage du TPB. Il évalue 9 dimensions correspondant aux critères DSM et présente de bonnes propriétés psychométriques (alpha de Cronbach > 0.90 pour le score total).</p>
 
-                <p><strong>Interpretation des seuils</strong></p>
-                <p>Cut-offs approximatifs derives de la pratique clinique. Poreh et al. (2006) ne definissent pas de paliers specifiques — le score total sert de variable continue :</p>
+                <p><strong>Interprétation des seuils</strong></p>
+                <p>Cut-offs approximatifs dérivés de la pratique clinique. Poreh et al. (2006) ne définissent pas de paliers spécifiques — le score total sert de variable continue :</p>
                 <ul>
-                  <li><strong>&lt; 40 :</strong> Probabilite tres faible de TPB. Traits sous-cliniques.</li>
-                  <li><strong>40-49 :</strong> Probabilite faible. Certains traits presents, surveillance si retentissement.</li>
-                  <li><strong>50-59 :</strong> Probabilite moderee. Zone ambigue necessitant evaluation clinique approfondie. Sensibilite elevee mais specificite moderee.</li>
-                  <li><strong>60-69 :</strong> Probabilite elevee. Forte presomption de TPB, evaluation diagnostique structuree recommandee (SCID-II, IPDE).</li>
-                  <li><strong>>= 70 :</strong> Probabilite tres elevee. Profil tres evocateur de TPB, mais considerer diagnostics differentiels.</li>
+                  <li><strong>&lt; 40 :</strong> Probabilité très faible de TPB. Traits sous-cliniques.</li>
+                  <li><strong>40-49 :</strong> Probabilité faible. Certains traits présents, surveillance si retentissement.</li>
+                  <li><strong>50-59 :</strong> Probabilité modérée. Zone ambiguë nécessitant évaluation clinique approfondie. Sensibilité élevée mais spécificité modérée.</li>
+                  <li><strong>60-69 :</strong> Probabilité élevée. Forte présomption de TPB, évaluation diagnostique structurée recommandée (SCID-II, IPDE).</li>
+                  <li><strong>>= 70 :</strong> Probabilité très élevée. Profil très évocateur de TPB, mais considérer diagnostics différentiels.</li>
                 </ul>
 
-                <p class="note"><strong>Note :</strong> Ces seuils sont indicatifs. Le cut-off optimal varie selon le contexte (prevalence attendue, cout des erreurs). En premiere ligne, privilegier ~52-55 pour equilibrer sensibilite/specificite. En contexte specialise, un seuil plus bas (~50) augmente la sensibilite.</p>
+                <p class="note"><strong>Note :</strong> Ces seuils sont indicatifs. Le cut-off optimal varie selon le contexte (prévalence attendue, coût des erreurs). En première ligne, privilégier ~52-55 pour équilibrer sensibilité/spécificité. En contexte spécialisé, un seuil plus bas (~50) augmente la sensibilité.</p>
 
                 <p><strong>Utilisation en pratique clinique</strong></p>
                 <ul>
-                  <li><strong>Depistage en premiere ligne :</strong> Identifier les patients necessitant evaluation specialisee</li>
-                  <li><strong>Complement a l'entretien clinique :</strong> Structurer l'exploration des symptomes</li>
-                  <li><strong>Analyse des sous-echelles :</strong> Identifier les domaines les plus problematiques pour cibler les interventions</li>
-                  <li><strong>Suivi longitudinal :</strong> Repetition possible pour objectiver l'evolution (bien que concu pour traits stables)</li>
+                  <li><strong>Dépistage en première ligne :</strong> Identifier les patients nécessitant évaluation spécialisée</li>
+                  <li><strong>Complément à l'entretien clinique :</strong> Structurer l'exploration des symptômes</li>
+                  <li><strong>Analyse des sous-échelles :</strong> Identifier les domaines les plus problématiques pour cibler les interventions</li>
+                  <li><strong>Suivi longitudinal :</strong> Répétition possible pour objectiver l'évolution (bien que conçu pour traits stables)</li>
                 </ul>
 
-                <p><strong>Limites et precautions</strong></p>
+                <p><strong>Limites et précautions</strong></p>
                 <ul>
-                  <li><strong>Auto-evaluation :</strong> Biais possibles (insight limite, desirabilite sociale, etat emotionnel actuel)</li>
-                  <li><strong>Chevauchement symptomatique :</strong> TSPT-C, troubles bipolaires, TDAH avec dysregulation emotionnelle peuvent donner des scores eleves</li>
+                  <li><strong>Auto-évaluation :</strong> Biais possibles (insight limité, désirabilité sociale, état émotionnel actuel)</li>
+                  <li><strong>Chevauchement symptomatique :</strong> TSPT-C, troubles bipolaires, TDAH avec dysrégulation émotionnelle peuvent donner des scores élevés</li>
                   <li><strong>Pas diagnostique :</strong> Le BPQ est un outil de screening, pas un instrument diagnostique autonome</li>
-                  <li><strong>Contexte culturel :</strong> Valider l'adequation des items avec le background culturel du patient</li>
-                  <li><strong>Comorbidites :</strong> Score total eleve peut refleter plusieurs troubles plutot qu'un TPB pur</li>
+                  <li><strong>Contexte culturel :</strong> Valider l'adéquation des items avec le background culturel du patient</li>
+                  <li><strong>Comorbidités :</strong> Score total élevé peut refléter plusieurs troubles plutôt qu'un TPB pur</li>
                 </ul>
 
-                <p><strong>Diagnostics differentiels a considerer</strong></p>
-                <p>Face a un score eleve, explorer systematiquement :</p>
+                <p><strong>Diagnostics différentiels à considérer</strong></p>
+                <p>Face à un score élevé, explorer systématiquement :</p>
                 <ul>
                   <li>TSPT complexe (chevauchement majeur avec TPB)</li>
                   <li>Trouble bipolaire (notamment type II, cyclothymie)</li>
-                  <li>TDAH avec dysregulation emotionnelle severe</li>
-                  <li>Troubles anxieux severes et chroniques</li>
-                  <li>Autres troubles de personnalite (cluster C notamment)</li>
+                  <li>TDAH avec dysrégulation émotionnelle sévère</li>
+                  <li>Troubles anxieux sévères et chroniques</li>
+                  <li>Autres troubles de personnalité (cluster C notamment)</li>
                 </ul>
 
-                <p class="note"><strong>Recommandation :</strong> Utilisez le BPQ comme premiere etape d'evaluation. Un score >=50 justifie une evaluation structuree (SCID-II). Integrez toujours les donnees longitudinales, l'anamnese developpementale, et le fonctionnement global avant de conclure au diagnostic de TPB.</p>
+                <p class="note"><strong>Recommandation :</strong> Utilisez le BPQ comme première étape d'évaluation. Un score >=50 justifie une évaluation structurée (SCID-II). Intégrez toujours les données longitudinales, l'anamnèse développementale, et le fonctionnement global avant de conclure au diagnostic de TPB.</p>
               </div>
             </details>
           </div>
 
           <details class="accordion">
-            <summary>Scores par dimension (9 sous-echelles)</summary>
+            <summary>Scores par dimension (9 sous-échelles)</summary>
             <div class="content">
-              <p style="margin-bottom: 1rem; font-size: 0.9rem;">Vos scores pour chacune des 9 dimensions evaluees par le BPQ</p>
+              <p style="margin-bottom: 1rem; font-size: 0.9rem;">Vos scores pour chacune des 9 dimensions évaluées par le BPQ</p>
               <div class="subscales-grid" id="subscales-scores"></div>
             </div>
           </details>
 
           <div class="panel">
-            <h3>Exporter votre resultat</h3>
-            <p style="font-size: 0.9rem; color: var(--color-text-muted);">Aucun stockage local n'est effectue. Pour exporter, cochez la case de consentement puis cliquez sur "Exporter".</p>
+            <h3>Exporter votre résultat</h3>
+            <p style="font-size: 0.9rem; color: var(--color-text-muted);">Aucun stockage local n'est effectué. Pour exporter, cochez la case de consentement puis cliquez sur "Exporter".</p>
             <label class="consent">
               <input type="checkbox" id="consent"/>
               <span>Je souhaite télécharger mes résultats (questionnaire, réponses, score et date) dans un fichier JSON sur mon appareil. <strong>Ces résultats constituent des données de santé — je les conserverai de façon sécurisée.</strong> Aucune donnée n'est transmise à un serveur.</span>
@@ -232,105 +242,105 @@
 
   <footer class="footer">
     <p><strong>&copy; Poreh et al., 2006 - Borderline Personality Questionnaire (BPQ)</strong></p>
-    <p>Traduction francaise a usage clinique. Le BPQ est un outil de depistage des traits borderline. Usage clinique et recherche avec attribution appropriee. Aucune donnee n'est stockee localement.</p>
-    <p>Adapte en version interactive par Dr FENOHASINA Toto Jean Felicien (Psychiatre - FFI).</p>
+    <p>Traduction française à usage clinique. Le BPQ est un outil de dépistage des traits borderline. Usage clinique et recherche avec attribution appropriée. Aucune donnée n'est stockée localement.</p>
+    <p>Adapté en version interactive par Dr FENOHASINA Toto Jean Félicien (Psychiatre - FFI).</p>
   </footer>
 
   <script>
-    // 80 items du BPQ (traduction francaise - Poreh et al., 2006)
+    // 80 items du BPQ (traduction française - Poreh et al., 2006)
     const questions = [
-      "Je fais souvent les choses sans y avoir bien pense.",
-      "Je deviens souvent deprime ou anxieux de facon soudaine et inattendue.",
+      "Je fais souvent les choses sans y avoir bien pensé.",
+      "Je deviens souvent déprimé ou anxieux de façon soudaine et inattendue.",
       "Les gens me quittent souvent.",
-      "Mes amis me decoivent rarement.",
-      "Je me sens inferieur aux autres personnes.",
-      "J'ai menace de me faire mal dans le passe.",
-      "Je ne crois pas avoir les habiletes necessaires pour faire quoi que ce soit de ma vie.",
-      "Je me mets rarement en colere envers les autres personnes.",
-      "Je me sens parfois comme si je n'etais pas reel.",
-      "Je n'aurai pas de relation sexuelle avec quelqu'un a moins de le connaitre depuis un certain temps.",
+      "Mes amis me déçoivent rarement.",
+      "Je me sens inférieur aux autres personnes.",
+      "J'ai menacé de me faire mal dans le passé.",
+      "Je ne crois pas avoir les habiletés nécessaires pour faire quoi que ce soit de ma vie.",
+      "Je me mets rarement en colère envers les autres personnes.",
+      "Je me sens parfois comme si je n'étais pas réel.",
+      "Je n'aurai pas de relation sexuelle avec quelqu'un à moins de le connaître depuis un certain temps.",
       "Je me sens parfois anxieux ou irritable, puis je deviens triste quelques heures plus tard.",
-      "Lorsque les gens pres de moi meurent ou me quittent, je me sens abandonne.",
-      "J'ai tendance a surestimer la possibilite d'une amitie, pour me rendre compte plus tard que ca ne fonctionnera pas.",
-      "Si j'etais davantage comme les autres personnes, je me sentirais mieux avec moi-meme.",
-      "J'ai deja volontairement tente de me blesser sans chercher a me tuer.",
-      "En general, ma vie est plutot ennuyante.",
-      "Je suis frequemment implique dans des bagarres.",
-      "J'ai parfois l'impression que les autres personnes cherchent a me nuire.",
-      "Mes amis m'ont deja dit que mes humeurs changent tres rapidement.",
+      "Lorsque les gens près de moi meurent ou me quittent, je me sens abandonné.",
+      "J'ai tendance à surestimer la possibilité d'une amitié, pour me rendre compte plus tard que ça ne fonctionnera pas.",
+      "Si j'étais davantage comme les autres personnes, je me sentirais mieux avec moi-même.",
+      "J'ai déjà volontairement tenté de me blesser sans chercher à me tuer.",
+      "En général, ma vie est plutôt ennuyante.",
+      "Je suis fréquemment impliqué dans des bagarres.",
+      "J'ai parfois l'impression que les autres personnes cherchent à me nuire.",
+      "Mes amis m'ont déjà dit que mes humeurs changent très rapidement.",
       "J'ai peur de passer du temps seul.",
-      "Les personnes qui semblent dignes de confiance me decoivent souvent.",
-      "J'ai deja fait une tentative de suicide dans le passe.",
-      "J'ai souvent l'impression que je n'ai rien a offrir aux autres.",
-      "J'ai de la difficulte a controler ma colere.",
-      "Je peux lire dans les pensees des gens.",
-      "J'ai essaye des drogues dures (cocaine, heroine, etc.)",
-      "Au cours d'une meme journee, mon humeur alterne frequemment entre la joie, la colere, l'anxiete et la depression.",
-      "Lorsque mes amis partent, je suis confiant que je vais les revoir a nouveau.",
-      "Mes amis me decoivent souvent.",
-      "Je me suis deja volontairement coupe.",
-      "Je me sens souvent seul et delaisse.",
-      "Je n'ai aucune difficulte a controler ma colere.",
+      "Les personnes qui semblent dignes de confiance me déçoivent souvent.",
+      "J'ai déjà fait une tentative de suicide dans le passé.",
+      "J'ai souvent l'impression que je n'ai rien à offrir aux autres.",
+      "J'ai de la difficulté à contrôler ma colère.",
+      "Je peux lire dans les pensées des gens.",
+      "J'ai essayé des drogues « dures » (cocaïne, héroïne, etc.).",
+      "Au cours d'une même journée, mon humeur alterne fréquemment entre la joie, la colère, l'anxiété et la dépression.",
+      "Lorsque mes amis partent, je suis confiant que je vais les revoir à nouveau.",
+      "Mes amis me déçoivent souvent.",
+      "Je me suis déjà volontairement coupé.",
+      "Je me sens souvent seul et délaissé.",
+      "Je n'ai aucune difficulté à contrôler ma colère.",
       "Je vois ou j'entends parfois des choses que les autres personnes ne voient ou n'entendent pas.",
       "Il n'est pas inhabituel pour moi d'avoir des relations sexuelles au premier rendez-vous.",
-      "Je me sens parfois tres triste, mais cette emotion peut rapidement changer.",
+      "Je me sens parfois très triste, mais cette émotion peut rapidement changer.",
       "Les gens me laissent souvent tomber.",
-      "Je souhaiterais etre davantage comme certains de mes amis.",
-      "J'ai deja tente de me blesser volontairement afin d'attirer l'attention.",
-      "Je suis souvent different avec les gens dans differentes situations, si bien que des fois je ne suis plus sur de qui je suis.",
-      "Je suis facilement irrite par les autres.",
-      "Il m'arrive de pouvoir reellement entendre ce que les gens pensent.",
+      "Je souhaiterais être davantage comme certains de mes amis.",
+      "J'ai déjà tenté de me blesser volontairement afin d'attirer l'attention.",
+      "Je suis souvent différent des gens dans différentes situations, si bien que des fois, je ne suis plus sûr de qui je suis.",
+      "Je suis facilement irrité par les autres.",
+      "Il m'arrive de pouvoir réellement entendre ce que les gens pensent.",
       "Je prends de la drogue quand j'en ai envie.",
       "Je me sens rarement triste ou anxieux.",
       "Personne ne m'aime.",
-      "Quand je fais confiance aux gens, ils me decoivent rarement.",
+      "Quand je fais confiance aux gens, ils me déçoivent rarement.",
       "J'ai l'impression que les gens ne m'aimeraient pas s'ils me connaissaient vraiment.",
-      "Je me mets facilement en colere.",
-      "Il est impossible de lire dans les pensees des autres.",
-      "Je me sens parfois tres heureux mais cette emotion peut rapidement changer.",
-      "Je trouve difficile de dependre des autres parce qu'ils ne seront pas la lorsque j'aurai besoin d'eux.",
+      "Je me mets facilement en colère.",
+      "Il est impossible de lire dans les pensées des autres.",
+      "Je me sens parfois très heureux mais cette émotion peut rapidement changer.",
+      "Je trouve difficile de dépendre des autres parce qu'ils ne seront pas là lorsque j'aurai besoin d'eux.",
       "Les relations avec les personnes significatives pour moi comportent beaucoup de hauts et de bas.",
-      "Je me sens mal a l'aise avec ma propre facon d'agir.",
-      "Je n'ai jamais tente de me blesser.",
+      "Je me sens mal à l'aise avec ma propre façon d'agir.",
+      "Je n'ai jamais tenté de me blesser.",
       "Je me sens rarement seul.",
-      "Je me rends souvent compte que la moindre petite chose me met en colere.",
-      "Parfois, il m'est difficile de distinguer ce qui est reel de ce que j'ai imagine.",
+      "Je me rends souvent compte que la moindre petite chose me met en colère.",
+      "Parfois, il m'est difficile de distinguer ce qui est réel de ce que j'ai imaginé.",
       "Quand je consomme de l'alcool, j'en abuse.",
-      "Je me considere comme etant une personne d'humeur changeante.",
-      "J'ai du mal a developper des relations significatives, car les gens m'abandonnent souvent.",
-      "Mes amis sont toujours la lorsque j'ai besoin d'eux.",
-      "Je souhaiterais etre quelqu'un d'autre.",
-      "J'ai l'impression que ma vie n'est pas interessante.",
-      "Souvent, lorsque je suis en colere, je frappe et brise des choses.",
-      "Je recois souvent des contraventions pour exces de vitesse.",
-      "J'ai souvent le sentiment d'etre sur une montagne russe emotionnelle.",
-      "J'ai l'impression que ma famille m'a delaisse.",
-      "Je suis tres a l'aise avec qui je suis.",
-      "Je fais souvent des choses de facon impulsive.",
+      "Je me considère comme étant une personne d'humeur changeante.",
+      "J'ai du mal à développer des relations significatives, car les gens m'abandonnent souvent.",
+      "Mes amis sont toujours là lorsque j'ai besoin d'eux.",
+      "Je souhaiterais être quelqu'un d'autre.",
+      "J'ai l'impression que ma vie n'est pas intéressante.",
+      "Souvent, lorsque je suis en colère, je frappe et brise des choses.",
+      "Je reçois souvent des contraventions pour excès de vitesse.",
+      "J'ai souvent le sentiment d'être sur une « montagne russe » émotionnelle.",
+      "J'ai l'impression que ma famille m'a délaissé.",
+      "Je suis très à l'aise avec qui je suis.",
+      "Je fais souvent des choses de façon impulsive.",
       "Ma vie n'a aucun but.",
       "Je ne suis pas certain de ce que je veux faire dans l'avenir.",
-      "Parfois, je mange tellement que je ressens de la douleur ou que je dois me forcer a vomir.",
+      "Parfois, je mange tellement que je ressens de la douleur ou que je dois me forcer à vomir.",
       "Les gens me disent que je suis une personne d'humeur changeante.",
       "Souvent, les personnes que j'aime me quittent.",
-      "En situation sociale, j'ai souvent l'impression que les autres vont decouvrir qui je suis vraiment et realiser que j'ai peu a offrir.",
-      "Je me suis deja retrouve a l'hopital apres avoir tente de me blesser.",
-      "J'ai souvent un sentiment de vide interieur.",
-      "Les autres me mettent souvent en colere.",
-      "Je suis souvent affole par l'idee qu'une personne importante pour moi puisse me quitter.",
-      "Je suis souvent confus quant a mes buts a long terme.",
-      "Les gens disent que je suis colerique."
+      "En situation sociale, j'ai souvent l'impression que les autres vont découvrir qui je suis vraiment et réaliser que j'ai peu à offrir.",
+      "Je me suis déjà retrouvé à l'hôpital après avoir tenté de me blesser.",
+      "J'ai souvent un sentiment de vide intérieur.",
+      "Les autres me mettent souvent en colère.",
+      "Je suis souvent affolé par l'idée qu'une personne importante pour moi puisse me quitter.",
+      "Je suis souvent confus quant à mes buts à long terme.",
+      "Les gens disent que je suis colérique."
     ];
 
-    // Definition des sous-echelles avec items inverses (cotation officielle)
+    // Définition des sous-échelles avec items inversés (cotation officielle)
     const subscales = {
       impulsivity: {
-        name: "Impulsivite",
+        name: "Impulsivité",
         items: [1, 10, 26, 34, 42, 57, 64, 68, 71],
         reversed: [10],
         max: 9
       },
       affective: {
-        name: "Instabilite Affective",
+        name: "Instabilité Affective",
         items: [2, 11, 19, 27, 35, 43, 49, 58, 65, 72],
         reversed: [43],
         max: 10
@@ -366,13 +376,13 @@
         max: 10
       },
       anger: {
-        name: "Colere Intense",
+        name: "Colère Intense",
         items: [8, 17, 24, 32, 40, 47, 55, 63, 77, 80],
         reversed: [8, 32],
         max: 10
       },
       psychotic: {
-        name: "Etats Quasi-Psychotiques",
+        name: "États Quasi-Psychotiques",
         items: [9, 18, 25, 33, 41, 48, 56],
         reversed: [48],
         max: 7
@@ -409,48 +419,60 @@
       `;
       qwrap.appendChild(div);
 
-      // Ajouter l'event pour marquer comme repondu
+      // Ajouter l'event pour marquer comme répondu
       div.querySelectorAll('input[type="radio"]').forEach(radio => {
         radio.addEventListener('change', () => {
           div.classList.add('answered');
+          updateProgress();
         });
       });
     });
 
-    // Fonctions d'interpretation
+    // Mise à jour de la barre de progression
+    const progressFill = document.getElementById('progress-fill');
+    const progressText = document.getElementById('progress-text');
+    function updateProgress() {
+      const answered = document.querySelectorAll('.question-card.answered').length;
+      const total = questions.length;
+      const pct = (answered / total) * 100;
+      progressFill.style.width = `${pct}%`;
+      progressText.textContent = `${answered} / ${total}`;
+    }
+
+    // Fonctions d'interprétation
     function getProbabilityInfo(total) {
       let probability, probabilityClass, probabilityColor, probabilityDesc, detailedDesc;
 
       if (total < 40) {
-        probability = "Tres faible";
+        probability = "Très faible";
         probabilityClass = "success";
         probabilityColor = "#a8d5ba";
-        probabilityDesc = "Profil peu evocateur de TPB. Traits borderline minimes ou absents.";
-        detailedDesc = "Votre score suggere une probabilite tres faible de trouble de la personnalite borderline. Les traits borderline sont minimes ou absents. Si vous ressentez des difficultes dans votre vie quotidienne, elles sont probablement liees a d'autres facteurs ou troubles qu'il serait pertinent d'explorer avec un professionnel.";
+        probabilityDesc = "Profil peu évocateur de TPB. Traits borderline minimes ou absents.";
+        detailedDesc = "Votre score suggère une probabilité très faible de trouble de la personnalité borderline. Les traits borderline sont minimes ou absents. Si vous ressentez des difficultés dans votre vie quotidienne, elles sont probablement liées à d'autres facteurs ou troubles qu'il serait pertinent d'explorer avec un professionnel.";
       } else if (total < 50) {
         probability = "Faible";
         probabilityClass = "success";
         probabilityColor = "#b8dfc4";
-        probabilityDesc = "Certains traits presents mais sous le seuil de depistage habituel.";
-        detailedDesc = "Votre score se situe dans une zone de faible probabilite. Certains traits borderline sont presents mais restent sous le seuil de depistage generalement utilise (~50-55). Si ces traits ont un impact significatif sur votre fonctionnement quotidien, une consultation peut neanmoins etre utile pour explorer d'autres explications possibles (anxiete, stress chronique, TDAH, etc.).";
+        probabilityDesc = "Certains traits présents mais sous le seuil de dépistage habituel.";
+        detailedDesc = "Votre score se situe dans une zone de faible probabilité. Certains traits borderline sont présents mais restent sous le seuil de dépistage généralement utilisé (~50-55). Si ces traits ont un impact significatif sur votre fonctionnement quotidien, une consultation peut néanmoins être utile pour explorer d'autres explications possibles (anxiété, stress chronique, TDAH, etc.).";
       } else if (total < 60) {
-        probability = "Moderee";
+        probability = "Modérée";
         probabilityClass = "warning";
         probabilityColor = "#f9d67a";
-        probabilityDesc = "Zone de depistage positif. Evaluation clinique approfondie recommandee.";
-        detailedDesc = "Votre score se situe dans la zone de depistage positif (seuil habituel ~50-55). Cela suggere une probabilite moderee de TPB et justifie une evaluation clinique approfondie par un professionnel qualifie. A ce niveau, la sensibilite du test est elevee (il detecte bien les personnes potentiellement concernees) mais la specificite est moderee (certaines personnes sans TPB peuvent aussi obtenir ce score). D'autres troubles peuvent presenter des symptomes similaires : TSPT complexe, TDAH avec dysregulation emotionnelle, troubles anxieux severes, troubles de l'humeur. Une evaluation diagnostique structuree (SCID-II, IPDE) est recommandee pour clarifier la situation.";
+        probabilityDesc = "Zone de dépistage positif. Évaluation clinique approfondie recommandée.";
+        detailedDesc = "Votre score se situe dans la zone de dépistage positif (seuil habituel ~50-55). Cela suggère une probabilité modérée de TPB et justifie une évaluation clinique approfondie par un professionnel qualifié. À ce niveau, la sensibilité du test est élevée (il détecte bien les personnes potentiellement concernées) mais la spécificité est modérée (certaines personnes sans TPB peuvent aussi obtenir ce score). D'autres troubles peuvent présenter des symptômes similaires : TSPT complexe, TDAH avec dysrégulation émotionnelle, troubles anxieux sévères, troubles de l'humeur. Une évaluation diagnostique structurée (SCID-II, IPDE) est recommandée pour clarifier la situation.";
       } else if (total < 70) {
-        probability = "Elevee";
+        probability = "Élevée";
         probabilityClass = "danger";
         probabilityColor = "#f5b895";
-        probabilityDesc = "Profil fortement evocateur de TPB. Evaluation diagnostique structuree recommandee.";
-        detailedDesc = "Votre score suggere une probabilite elevee de trouble de la personnalite borderline. Le profil est fortement evocateur et une evaluation diagnostique complete par un professionnel qualifie est fortement recommandee. Cette evaluation devrait idealement inclure un entretien clinique structure (SCID-II ou IPDE), une exploration de votre histoire developpementale, et l'exclusion d'autres troubles qui peuvent presenter des symptomes similaires. Si le diagnostic de TPB est confirme, sachez que des traitements efficaces existent (therapie comportementale dialectique, therapie basee sur la mentalisation, therapie des schemas) et peuvent significativement ameliorer la qualite de vie.";
+        probabilityDesc = "Profil fortement évocateur de TPB. Évaluation diagnostique structurée recommandée.";
+        detailedDesc = "Votre score suggère une probabilité élevée de trouble de la personnalité borderline. Le profil est fortement évocateur et une évaluation diagnostique complète par un professionnel qualifié est fortement recommandée. Cette évaluation devrait idéalement inclure un entretien clinique structuré (SCID-II ou IPDE), une exploration de votre histoire développementale, et l'exclusion d'autres troubles qui peuvent présenter des symptômes similaires. Si le diagnostic de TPB est confirmé, sachez que des traitements efficaces existent (thérapie comportementale dialectique, thérapie basée sur la mentalisation, thérapie des schémas) et peuvent significativement améliorer la qualité de vie.";
       } else {
-        probability = "Tres elevee";
+        probability = "Très élevée";
         probabilityClass = "danger";
         probabilityColor = "#ef9a9a";
-        probabilityDesc = "Profil tres evocateur de TPB avec symptomatologie extensive.";
-        detailedDesc = "Votre score suggere une probabilite tres elevee de trouble de la personnalite borderline, avec une symptomatologie extensive touchant la plupart des dimensions evaluees. Une consultation rapide avec un professionnel de sante mentale specialise est fortement recommandee. L'evaluation devrait etre complete et inclure l'exploration des comorbidites frequentes (depression, anxiete, TSPT, troubles des conduites alimentaires, addictions), l'evaluation du risque suicidaire, et la mise en place d'un plan de traitement adapte. Des psychotherapies specialisees ont montre leur efficacite pour le TPB et peuvent conduire a des ameliorations significatives et durables.";
+        probabilityDesc = "Profil très évocateur de TPB avec symptomatologie extensive.";
+        detailedDesc = "Votre score suggère une probabilité très élevée de trouble de la personnalité borderline, avec une symptomatologie extensive touchant la plupart des dimensions évaluées. Une consultation rapide avec un professionnel de santé mentale spécialisé est fortement recommandée. L'évaluation devrait être complète et inclure l'exploration des comorbidités fréquentes (dépression, anxiété, TSPT, troubles des conduites alimentaires, addictions), l'évaluation du risque suicidaire, et la mise en place d'un plan de traitement adapté. Des psychothérapies spécialisées ont montré leur efficacité pour le TPB et peuvent conduire à des améliorations significatives et durables.";
       }
 
       return {
@@ -475,17 +497,27 @@
     const subscalesScores = document.getElementById('subscales-scores');
 
     function computeAndRender(answers) {
-      // Verifier completude
+      // Vérifier complétude
+      const missing = [];
       for (let i = 1; i <= questions.length; i++) {
         if (answers[`q${i}`] === undefined) {
-          valmsg.style.display = 'block';
-          results.style.display = 'none';
-          return false;
+          missing.push(i);
         }
+      }
+      if (missing.length > 0) {
+        const list = missing.length <= 10
+          ? missing.join(', ')
+          : missing.slice(0, 10).join(', ') + `… (${missing.length} au total)`;
+        valmsg.innerHTML = `Veuillez répondre à toutes les questions. <strong>Questions manquantes :</strong> ${list}`;
+        valmsg.style.display = 'block';
+        results.style.display = 'none';
+        const firstMissing = document.getElementById(`question-${missing[0]}`);
+        if (firstMissing) firstMissing.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return false;
       }
       valmsg.style.display = 'none';
 
-      // Calculer le score total et les sous-echelles
+      // Calculer le score total et les sous-échelles
       let total = 0;
       const subscaleScores = {};
 
@@ -521,14 +553,14 @@
         month: 'long',
         day: 'numeric'
       });
-      evalDateDisplay.textContent = `Evaluation du ${dateFormatted}`;
+      evalDateDisplay.textContent = `Évaluation du ${dateFormatted}`;
 
-      // Probabilite
+      // Probabilité
       const probInfo = getProbabilityInfo(total);
       probabilityBadge.innerHTML = `
         <div style="text-align: center;">
           <div style="font-size: 1.5rem; font-weight: 800; color: ${probInfo.probabilityColor}; margin-bottom: 0.5rem;">
-            Probabilite ${probInfo.probability}
+            Probabilité ${probInfo.probability}
           </div>
           <div style="font-size: 0.9rem; color: var(--color-text-muted);">
             ${probInfo.probabilityDesc}
@@ -536,10 +568,10 @@
         </div>
       `;
 
-      // Interpretation detaillee
+      // Interprétation détaillée
       interpLong.innerHTML = `<p>${probInfo.detailedDesc}</p>
         <p class="threshold-note" style="margin-top: 0.75rem; font-size: 0.85rem; opacity: 0.85;">
-            <i class="fas fa-info-circle"></i> <strong>Note de transparence :</strong> Les paliers de score sont des reperes cliniques derives de la pratique. Poreh et al. (2006) ne definissent pas de seuils specifiques — le score total est concu comme variable continue.
+            <i class="fas fa-info-circle"></i> <strong>Note de transparence :</strong> Les paliers de score sont des repères cliniques dérivés de la pratique. Poreh et al. (2006) ne définissent pas de seuils spécifiques — le score total est conçu comme variable continue.
         </p>`;
 
       // Scores par dimension
@@ -562,7 +594,7 @@
         subscalesScores.appendChild(card);
       }
 
-      // Afficher les resultats
+      // Afficher les résultats
       results.style.display = 'block';
       results.scrollIntoView({ behavior: 'smooth' });
 
@@ -592,12 +624,12 @@
         try {
           const data = JSON.parse(e.target.result);
 
-          // Restaurer la date si presente
+          // Restaurer la date si présente
           if (data.evaluationDate) {
             evalDateInput.value = data.evaluationDate;
           }
 
-          // Restaurer les reponses
+          // Restaurer les réponses
           const responses = data.responses || data;
           for (let i = 1; i <= questions.length; i++) {
             const v = responses[`q${i}`];
@@ -609,6 +641,7 @@
               }
             }
           }
+          updateProgress();
           computeAndRender(responses);
         } catch {
           alert("Fichier invalide.");
@@ -639,7 +672,7 @@
         any = true;
       }
       if (!any) {
-        alert("Veuillez d'abord calculer un resultat.");
+        alert("Veuillez d'abord calculer un résultat.");
         return;
       }
 
@@ -669,7 +702,7 @@
       accordions.forEach(detail => {
         detail.setAttribute('open', 'true');
       });
-      // Afficher les resultats
+      // Afficher les résultats
       const resultsSection = document.getElementById('results');
       if (resultsSection) {
         resultsSection.style.display = 'block';

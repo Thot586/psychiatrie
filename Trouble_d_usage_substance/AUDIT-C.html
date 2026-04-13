@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="AUDIT-C - Version courte — outil clinique interactif pour la psychiatrie et la sante mentale.">
+    <meta name="description" content="AUDIT-C - Version courte — outil clinique interactif pour la psychiatrie et la santé mentale.">
     <title>AUDIT-C - Version courte</title>
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
@@ -158,7 +158,7 @@
             <div id="questions"></div>
         </section>
 
-        <section id="results" class="glass-card results-section" style="display: none;">
+        <section id="results" aria-live="polite" class="glass-card results-section" style="display: none;">
             <h2 style="text-align: center; margin-bottom: 2rem;"><i class="fas fa-chart-pie"></i> Résultats</h2>
             <div class="score-display">
                 <div class="score-circle">
@@ -166,7 +166,7 @@
                     <span class="score-label">sur 12</span>
                 </div>
             </div>
-            <div id="interpretationBox" class="interpretation"></div>
+            <div id="interpretationBox" class="interprétation"></div>
             <div id="auditFullPrompt" class="audit-full-prompt" style="display: none;">
                 <p><strong>Évaluation complète recommandée :</strong> l'AUDIT complet (10 questions) évalue plus précisément les conséquences et signes de dépendance.</p>
                 <a href="AUDIT.html" class="btn-primary" style="display: inline-block; padding: 0.5rem 1rem; text-decoration: none; border-radius: var(--radius-md);">
@@ -316,7 +316,7 @@
 
             document.getElementById('totalScore').textContent = score;
             const box = document.getElementById('interpretationBox');
-            box.className = `interpretation ${interp.className}`;
+            box.className = `interprétation ${interp.className}`;
             box.innerHTML = `<h3>${interp.level}</h3><p><em>Seuil (${genderLabel}) : ≥ ${threshold}</em></p><p><strong>Recommandation :</strong> ${interp.action}</p>`;
 
             document.getElementById('auditFullPrompt').style.display = interp.showAudit ? 'block' : 'none';
@@ -398,7 +398,7 @@
                 gender: selectedGender,
                 answers,
                 score,
-                interpretation: getInterpretation(score).level
+                interprétation: getInterpretation(score).level
             };
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);

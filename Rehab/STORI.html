@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="STORI - Stages Of Recovery Instrument — outil clinique interactif pour la psychiatrie et la sante mentale.">
+    <meta name="description" content="STORI - Stages Of Recovery Instrument — outil clinique interactif pour la psychiatrie et la santé mentale.">
     <title>STORI - Stages Of Recovery Instrument</title>
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
@@ -38,7 +38,7 @@
             <a href="../index.html" class="btn-home" aria-label="Accueil" title="Accueil"><i class="fas fa-home" aria-hidden="true"></i></a>
             <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
         </div>
-        <span class="nav-title">STORI - Evaluation du retablissement</span>
+        <span class="nav-title">STORI - Évaluation du rétablissement</span>
         <span class="badge badge-cat-rehab">Rehab</span>
     </nav>
 
@@ -52,25 +52,25 @@
         <div class="glass-card" id="introSection">
             <h2>A propos de ce questionnaire</h2>
             <p style="margin: 15px 0; line-height: 1.6;">
-                Le STORI est un instrument valide scientifiquement qui evalue votre progression dans le processus de retablissement.
+                Le STORI est un instrument validé scientifiquement qui évalue votre progression dans le processus de rétablissement.
                 Il explore vos sentiments actuels concernant votre vie et vous-meme depuis la maladie.
             </p>
 
             <div class="warning-box">
                 <h3><i class="fas fa-exclamation-triangle"></i> Avertissement important</h3>
                 <p>
-                    Si certaines questions vous derangent ou vous mettent mal a l'aise, n'hesitez pas a faire une pause et a en parler a un ami ou a contacter votre equipe soignante.
-                    Ce questionnaire n'est pas un diagnostic mais un outil d'evaluation du processus de retablissement.
+                    Si certaines questions vous dérangent ou vous mettent mal à l'aise, n'hesitez pas à faire une pause et a en parler a un ami ou a contacter votre équipe soignante.
+                    Ce questionnaire n'est pas un diagnostic mais un outil d'évaluation du processus de rétablissement.
                 </p>
             </div>
 
             <div class="info-box">
                 <h3><i class="fas fa-info-circle"></i> Instructions importantes</h3>
                 <ul style="margin-left: 20px; margin-top: 10px;">
-                    <li>Lisez d'abord les 5 questions de chaque groupe avant d'y repondre</li>
-                    <li>Repondez en fonction de comment vous vous sentez <strong>actuellement</strong></li>
-                    <li>Ne laissez pas votre humeur du moment influencer vos reponses</li>
-                    <li>Pensez a votre etat global ces derniers jours</li>
+                    <li>Lisez d'abord les 5 questions de chaque groupe avant d'y répondre</li>
+                    <li>Répondez en fonction de comment vous vous sentez <strong>actuellement</strong></li>
+                    <li>Ne laissez pas votre humeur du moment influencer vos réponses</li>
+                    <li>Pensez a votre état global ces derniers jours</li>
                 </ul>
             </div>
 
@@ -98,7 +98,7 @@
 
             <div class="control-buttons" style="margin-top: 30px; justify-content: center;">
                 <button class="btn btn-primary" onclick="startQuestionnaire()">
-                    <i class="fas fa-play"></i> Commencer l'evaluation
+                    <i class="fas fa-play"></i> Commencer l'évaluation
                 </button>
             </div>
         </div>
@@ -121,14 +121,14 @@
                     <i class="fas fa-random"></i> Test aleatoire
                 </button>
                 <button class="btn btn-secondary" onclick="resetQuestionnaire()">
-                    <i class="fas fa-redo"></i> Reinitialiser
+                    <i class="fas fa-redo"></i> Réinitialiser
                 </button>
             </div>
         </div>
 
         <!-- Questions Section -->
         <div class="glass-card" id="questionsSection" style="display: none;">
-            <h2 style="margin-bottom: 25px; color: var(--color-text-primary);">Repondez aux questions suivantes</h2>
+            <h2 style="margin-bottom: 25px; color: var(--color-text-primary);">Répondez aux questions suivantes</h2>
 
             <div class="info-box" id="reminderBox">
                 <p>
@@ -140,28 +140,28 @@
 
             <div style="display: flex; justify-content: space-between; margin-top: 30px; gap: 15px;">
                 <button class="btn btn-secondary" id="prevBtn" onclick="previousGroup()" disabled>
-                    <i class="fas fa-arrow-left"></i> Groupe precedent
+                    <i class="fas fa-arrow-left"></i> Groupe précédent
                 </button>
                 <button class="btn btn-primary" id="nextBtn" onclick="nextGroup()">
                     Groupe suivant <i class="fas fa-arrow-right"></i>
                 </button>
                 <button class="btn btn-primary" id="calculateBtn" onclick="calculateResults()" style="display: none; width: 100%;">
-                    <i class="fas fa-chart-bar"></i> Voir mes resultats
+                    <i class="fas fa-chart-bar"></i> Voir mes résultats
                 </button>
             </div>
         </div>
 
         <!-- Results Section -->
-        <div class="results-section" id="resultsSection">
+        <div class="results-section" aria-live="polite" id="resultsSection">
             <div class="glass-card">
-                <h2 style="text-align: center; margin-bottom: 30px; color: var(--color-text-primary);">Vos Resultats</h2>
+                <h2 style="text-align: center; margin-bottom: 30px; color: var(--color-text-primary);">Vos Résultats</h2>
 
                 <div class="current-stage" id="currentStageBox">
-                    <h2 id="currentStageTitle">Votre etape actuelle</h2>
+                    <h2 id="currentStageTitle">Votre étape actuelle</h2>
                     <p id="currentStageDescription"></p>
                 </div>
 
-                <h3 style="margin-bottom: 20px; color: var(--color-text-primary);">Scores detailles par etape</h3>
+                <h3 style="margin-bottom: 20px; color: var(--color-text-primary);">Scores détaillés par étape</h3>
                 <div id="stagesContainer"></div>
             </div>
 
@@ -177,34 +177,34 @@
             </div>
 
             <div class="glass-card">
-                <h3 style="margin-bottom: 20px; color: var(--color-text-primary);"><i class="fas fa-lightbulb"></i> Comprendre vos resultats</h3>
+                <h3 style="margin-bottom: 20px; color: var(--color-text-primary);"><i class="fas fa-lightbulb"></i> Comprendre vos résultats</h3>
 
                 <div style="margin-bottom: 25px;">
-                    <h4 style="color: var(--color-text-primary); margin-bottom: 15px;">Les 5 etapes du retablissement :</h4>
+                    <h4 style="color: var(--color-text-primary); margin-bottom: 15px;">Les 5 etapes du rétablissement :</h4>
 
                     <div class="stage-card" style="border-left-color: #6c757d;" onclick="showStageDescription(0)">
                         <h5 style="color: var(--color-text-primary); margin-bottom: 10px;">1. Moratoire</h5>
-                        <p style="color: var(--color-text-muted);">Une periode caracterisee par le repli, le desespoir et la confusion concernant l'identite.</p>
+                        <p style="color: var(--color-text-muted);">Une période caractérisée par le repli, le désespoir et la confusion concernant l'identité.</p>
                     </div>
 
                     <div class="stage-card" style="border-left-color: #fbbf24;" onclick="showStageDescription(1)">
                         <h5 style="color: var(--color-text-primary); margin-bottom: 10px;">2. Conscience</h5>
-                        <p style="color: var(--color-text-muted);">La prise de conscience que le retablissement est possible, souvent inspiree par d'autres.</p>
+                        <p style="color: var(--color-text-muted);">La prise de conscience que le rétablissement est possible, souvent inspirée par d'autres.</p>
                     </div>
 
                     <div class="stage-card" style="border-left-color: #fb923c;" onclick="showStageDescription(2)">
                         <h5 style="color: var(--color-text-primary); margin-bottom: 10px;">3. Preparation</h5>
-                        <p style="color: var(--color-text-muted);">L'apprentissage actif sur la maladie et les strategies de retablissement.</p>
+                        <p style="color: var(--color-text-muted);">L'apprentissage actif sur la maladie et les stratégies de rétablissement.</p>
                     </div>
 
                     <div class="stage-card" style="border-left-color: #0ea5e9;" onclick="showStageDescription(3)">
                         <h5 style="color: var(--color-text-primary); margin-bottom: 10px;">4. Reconstruction</h5>
-                        <p style="color: var(--color-text-muted);">Le travail actif pour construire une identite positive et atteindre des objectifs significatifs.</p>
+                        <p style="color: var(--color-text-muted);">Le travail actif pour construire une identité positive et atteindre des objectifs significatifs.</p>
                     </div>
 
                     <div class="stage-card" style="border-left-color: #10b981;" onclick="showStageDescription(4)">
                         <h5 style="color: var(--color-text-primary); margin-bottom: 10px;">5. Croissance</h5>
-                        <p style="color: var(--color-text-muted);">L'acceptation de la maladie comme partie de l'experience de vie, avec un sentiment de bien-etre et de resilience.</p>
+                        <p style="color: var(--color-text-muted);">L'acceptation de la maladie comme partie de l'expérience de vie, avec un sentiment de bien-être et de résilience.</p>
                     </div>
                 </div>
             </div>
@@ -212,7 +212,7 @@
             <div class="glass-card">
                  <div class="control-buttons" style="justify-content: center; margin-bottom: 0;">
                     <button class="btn btn-secondary" onclick="exportData()">
-                        <i class="fas fa-download"></i> Exporter mes resultats
+                        <i class="fas fa-download"></i> Exporter mes résultats
                     </button>
                     <button class="btn-print" onclick="window.print()">
                         <i class="fas fa-print"></i> Imprimer
@@ -225,12 +225,12 @@
             <p><strong>STORI - Stages Of Recovery Instrument</strong></p>
             <p>
                 <strong>Auteurs :</strong> Retta Andresen, Peter Caputi & Lindsay Oades (2006)<br>
-                <strong>Traduction francaise :</strong> P. Galay & J. Favrod
+                <strong>Traduction française :</strong> P. Galay & J. Favrod
             </p>
             <p>
-                <strong>Adaptation numerique :</strong> Dr FENOHASINA T.J. Felicien | Psychiatre - FFI
+                <strong>Adaptation numérique :</strong> Dr FENOHASINA T.J. Félicien | Psychiatre - FFI
             </p>
-            <p>&copy; 2025 - Outil d'evaluation psychometrique</p>
+            <p>&copy; 2025 - Outil d'évaluation psychometrique</p>
         </footer>
     </div>
 
@@ -253,56 +253,56 @@
             // Groupe 1
             [
                 "Je ne pense pas que les gens qui ont une maladie psychique puissent aller mieux.",
-                "J'ai seulement recemment decouvert que les gens avec une maladie psychique peuvent aller mieux.",
+                "J'ai seulement récemment découvert que les gens avec une maladie psychique peuvent aller mieux.",
                 "Je commence a apprendre comment je peux faire des choses pour moi-meme pour aller mieux.",
                 "Je travaille dur pour aller bien, et cela en vaudra la peine sur le long terme.",
-                "J'ai maintenant un sentiment de paix interieure au sujet de la vie avec la maladie."
+                "J'ai maintenant un sentiment de paix intérieure au sujet de la vie avec la maladie."
             ],
             // Groupe 2
             [
-                "Je sens que ma vie a ete ruinee par cette maladie.",
-                "J'ai commence seulement a realiser que ma vie n'a pas a etre affreuse pour toujours.",
-                "J'ai recemment commence a apprendre des gens qui vivent bien malgre une serieuse maladie.",
-                "Je commence a etre raisonnablement confiant a propos de remettre ma vie sur les rails.",
+                "Je sens que ma vie a été ruinee par cette maladie.",
+                "J'ai commence seulement a réaliser que ma vie n'a pas à être affreuse pour toujours.",
+                "J'ai récemment commence a apprendre des gens qui vivent bien malgre une sérieuse maladie.",
+                "Je commence à être raisonnablement confiant a propos de remettre ma vie sur les rails.",
                 "Ma vie est vraiment bonne maintenant et le futur s'annonce lumineux."
             ],
             // Groupe 3
             [
-                "Je me sens actuellement comme si je n'etais qu'une personne malade.",
-                "Parce que les autres ont confiance en moi, je commence tout juste a penser que peut-etre, je peux aller mieux.",
-                "Je commence seulement a realiser que la maladie ne change pas qui je suis en tant que personne.",
+                "Je me sens actuellement comme si je n'étais qu'une personne malade.",
+                "Parce que les autres ont confiance en moi, je commence tout juste a penser que peut-être, je peux aller mieux.",
+                "Je commence seulement a réaliser que la maladie ne change pas qui je suis en tant que personne.",
                 "Je commence actuellement a accepter la maladie comme une partie du tout qui fait ma personne.",
                 "Je suis heureux d'etre la personne que je suis."
             ],
             // Groupe 4
             [
                 "J'ai l'impression de ne plus savoir qui je suis.",
-                "J'ai recemment commence a reconnaitre qu'une partie de moi n'est pas affectee par la maladie.",
-                "Je commence juste a realiser que je peux toujours etre une personne de valeur.",
-                "J'apprends de nouvelles choses sur moi-meme alors que je travaille a mon retablissement.",
-                "Je pense que le fait d'avoir travaille pour depasser la maladie a fait de moi une personne meilleure."
+                "J'ai récemment commence a reconnaître qu'une partie de moi n'est pas affectée par la maladie.",
+                "Je commence juste a réaliser que je peux toujours etre une personne de valeur.",
+                "J'apprends de nouvelles choses sur moi-meme alors que je travaille à mon rétablissement.",
+                "Je pense que le fait d'avoir travaille pour dépasser la maladie a fait de moi une personne meilleure."
             ],
             // Groupe 5
             [
                 "Je ne serai jamais la personne que je pensais que je serais.",
                 "J'ai tout juste commence a accepter la maladie comme une partie de ma vie avec laquelle je vais devoir apprendre a vivre.",
-                "Je commence a reconnaitre ou sont mes forces et mes faiblesses.",
-                "Je commence a sentir que j'apporte une contribution de valeur a la vie.",
+                "Je commence a reconnaître ou sont mes forces et mes faiblesses.",
+                "Je commence a sentir que j'apporte une contribution de valeur à la vie.",
                 "J'accomplis des choses qui valent la peine et qui sont satisfaisantes dans ma vie."
             ],
             // Groupe 6
             [
-                "Je suis en colere que cela me soit arrive a moi.",
-                "J'ai commence tout juste a me demander si des choses positives pourraient ressortir de ce qui m'arrive.",
-                "Je commence a reflechir a quelles sont mes qualites particulieres.",
-                "En devant faire face a la maladie, j'apprends beaucoup au sujet de la vie.",
+                "Je suis en colère que cela me soit arrivé à moi.",
+                "J'ai commence tout juste à me demander si des choses positives pourraient ressortir de ce qui m'arrive.",
+                "Je commence a réfléchir a quelles sont mes qualités particulieres.",
+                "En devant faire face à la maladie, j'apprends beaucoup au sujet de la vie.",
                 "En surmontant la maladie, j'ai acquis de nouvelles valeurs dans la vie."
             ],
             // Groupe 7
             [
                 "Ma vie semble totalement inutile actuellement.",
-                "J'ai commence tout juste a penser que je peux peut-etre faire quelque chose de ma vie.",
-                "J'essaie de penser a des moyens d'apporter une contribution dans la vie.",
+                "J'ai commence tout juste a penser que je peux peut-être faire quelque chose de ma vie.",
+                "J'essaie de penser à des moyens d'apporter une contribution dans la vie.",
                 "Je travaille ces jours sur des choses de la vie qui sont personnellement importantes pour moi.",
                 "J'ai des projets importants qui me donnent une raison d'etre."
             ],
@@ -310,9 +310,9 @@
             [
                 "Je ne peux rien faire a propos de ma situation.",
                 "Je commence a penser que je pourrai faire quelque chose pour m'aider.",
-                "Je commence a me sentir plus confiant au sujet d'apprendre a vivre avec la maladie.",
+                "Je commence à me sentir plus confiant au sujet d'apprendre a vivre avec la maladie.",
                 "Il y a parfois des revers, mais je ne laisse pas tomber.",
-                "Je me rejouis de relever de nouveaux defis dans la vie."
+                "Je me rejouis de relever de nouveaux défis dans la vie."
             ],
             // Groupe 9
             [
@@ -320,14 +320,14 @@
                 "J'aimerais commencer a apprendre a m'occuper de moi correctement.",
                 "Je commence a en apprendre davantage sur la maladie psychique et sur comment je peux m'aider moi-meme.",
                 "Je me sens maintenant raisonnablement confiant en ce qui concerne la gestion de la maladie.",
-                "Maintenant, je peux bien gerer la maladie."
+                "Maintenant, je peux bien gérer la maladie."
             ],
             // Groupe 10
             [
                 "Il ne me semble pas que j'ai actuellement un quelconque controle sur ma vie.",
-                "J'aimerais commencer a apprendre a gerer la maladie.",
+                "J'aimerais commencer a apprendre a gérer la maladie.",
                 "Je commence seulement a travailler pour remettre ma vie sur les rails.",
-                "Je commence a me sentir responsable de ma propre vie.",
+                "Je commence à me sentir responsable de ma propre vie.",
                 "Je suis aux commandes de ma propre vie."
             ]
         ];
@@ -445,7 +445,7 @@
         function nextGroup() {
             // Check if current group is complete
             if (!answers[currentGroup].every(a => a !== null)) {
-                showModal('Groupe incomplet', 'Veuillez repondre a toutes les questions du groupe avant de continuer.');
+                showModal('Groupe incomplet', 'Veuillez répondre à toutes les questions du groupe avant de continuer.');
                 return;
             }
 
@@ -474,7 +474,7 @@
         }
 
         function resetQuestionnaire() {
-             if (confirm('Etes-vous sur de vouloir reinitialiser toutes vos reponses ?')) {
+             if (confirm('Etes-vous sur de vouloir réinitialiser toutes vos réponses ?')) {
                 answers = Array(10).fill(null).map(() => Array(5).fill(null));
                 currentGroup = 0;
 
@@ -496,7 +496,7 @@
             // Check if all questions are answered
             const totalAnswers = answers.flat().filter(a => a !== null).length;
             if (totalAnswers < 50) {
-                showModal('Questionnaire incomplet', `Veuillez repondre a toutes les questions. Il vous reste ${50 - totalAnswers} questions a completer.`);
+                showModal('Questionnaire incomplet', `Veuillez répondre à toutes les questions. Il vous reste ${50 - totalAnswers} questions a compléter.`);
                 return;
             }
 
@@ -539,7 +539,7 @@
             document.getElementById('reminderBox').style.display = 'none';
 
             // Display current stage
-            document.getElementById('currentStageTitle').textContent = `Etape actuelle : ${stageNames[currentStage]}`;
+            document.getElementById('currentStageTitle').textContent = `Étape actuelle : ${stageNames[currentStage]}`;
             document.getElementById('currentStageDescription').textContent = getStageDescription(currentStage);
 
             // Display stage scores
@@ -600,11 +600,11 @@
 
         function getStageDescription(stageIndex) {
             const descriptions = [
-                "Periode de repli, de confusion et de perte d'espoir face a la maladie.",
-                "Emergence de l'espoir et prise de conscience que le retablissement est possible.",
-                "Apprentissage actif et preparation au changement.",
-                "Reconstruction active d'une vie significative et d'une identite positive.",
-                "Acceptation, resilience et croissance personnelle a travers l'experience."
+                "Période de repli, de confusion et de perte d'espoir face à la maladie.",
+                "Emergence de l'espoir et prise de conscience que le rétablissement est possible.",
+                "Apprentissage actif et préparation au changement.",
+                "Reconstruction active d'une vie significative et d'une identité positive.",
+                "Acceptation, résilience et croissance personnelle à travers l'expérience."
             ];
             return descriptions[stageIndex];
         }
@@ -720,12 +720,12 @@
                             startQuestionnaire();
                             updateProgress();
                             calculateResults();
-                            showModal('Import reussi', 'Vos donnees ont ete importees et les resultats calcules.');
+                            showModal('Import reussi', 'Vos données ont été importees et les résultats calcules.');
                         } else {
-                            showModal('Erreur', 'Le fichier ne contient pas de donnees valides.');
+                            showModal('Erreur', 'Le fichier ne contient pas de données valides.');
                         }
                     } catch (error) {
-                        showModal('Erreur', 'Impossible de lire le fichier. Assurez-vous qu\'il s\'agit d\'un fichier JSON valide.');
+                        showModal('Erreur', 'Impossible de lire le fichier. Assurez-vous qu\'il s\'agit d\'un fichier JSON validé.');
                     }
                 };
                 reader.readAsText(file);

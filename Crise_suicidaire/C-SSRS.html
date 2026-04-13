@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="C-SSRS - Évaluation du Risque Suicidaire — outil clinique interactif pour la psychiatrie et la sante mentale.">
+    <meta name="description" content="C-SSRS - Évaluation du Risque Suicidaire — outil clinique interactif pour la psychiatrie et la santé mentale.">
     <title>C-SSRS - Évaluation du Risque Suicidaire</title>
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
@@ -203,10 +203,10 @@
         </section>
 
         <!-- Résultats -->
-        <section id="results" class="glass-card results-section" style="display: none;">
+        <section id="results" aria-live="polite" class="glass-card results-section" style="display: none;">
             <h2 style="text-align: center; margin-bottom: 2rem;"><i class="fas fa-clipboard-check"></i> Résultats de l'évaluation</h2>
 
-            <div id="riskLevel" class="interpretation"></div>
+            <div id="riskLevel" class="interprétation"></div>
 
             <div class="info-box" style="margin-top: 1.5rem;">
                 <h4><i class="fas fa-tasks"></i> Plan d'action recommandé</h4>
@@ -487,7 +487,7 @@
 
             const config = riskConfigs[riskLevel];
 
-            riskLevelDiv.className = `interpretation ${config.className}`;
+            riskLevelDiv.className = `interprétation ${config.className}`;
             riskLevelDiv.innerHTML = `
                 <h3>${config.title}</h3>
                 <p>${config.description}</p>
@@ -544,7 +544,7 @@
                             });
                             alert("Données importées avec succès !");
                         } else {
-                            alert("Le fichier n'est pas un export C-SSRS valide.");
+                            alert("Le fichier n'est pas un export C-SSRS validé.");
                         }
                     } catch (error) {
                         alert("Erreur lors de la lecture du fichier.");

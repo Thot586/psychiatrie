@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Guide Pratique TCD - Stratégies Interactives — outil clinique interactif pour la psychiatrie et la sante mentale.">
+    <meta name="description" content="Guide Pratique TCD - Stratégies Interactives — outil clinique interactif pour la psychiatrie et la santé mentale.">
     <title>Guide Pratique TCD - Stratégies Interactives</title>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/questionnaire-light.css">
@@ -629,11 +629,11 @@
             <p>Remplissez ce plan avec votre thérapeute ou seul·e. Imprimez-le ou faites une capture d'écran.</p>
             <div class="safety-field">
                 <label>Mes signes d'alerte (je sais que ça va mal quand…) :</label>
-                <textarea id="safety-signs" placeholder="Ex : Je ne dors plus, je m'isole, je me gratte les bras…"></textarea>
+                <textarea id="safety-signs" placeholder="Ex : Je ne dors plus, je m'isolé, je me gratte les bras…"></textarea>
             </div>
             <div class="safety-field">
                 <label>Mes 3 stratégies qui marchent :</label>
-                <textarea id="safety-strategies" placeholder="Ex : Eau froide sur le visage, appeler Maman, marcher 10 min…"></textarea>
+                <textarea id="safety-stratégies" placeholder="Ex : Eau froide sur le visage, appeler Maman, marcher 10 min…"></textarea>
             </div>
             <div class="safety-field">
                 <label>Personnes à appeler :</label>
@@ -646,7 +646,7 @@
             <button class="btn-print-plan" onclick="window.print()"><i class="fas fa-print"></i> Imprimer mon plan</button>
         </div>
 
-        <!-- Accordeon : Tolerance a la Detresse -->
+        <!-- Accordeon : Tolerance à la Detresse -->
         <div id="distress">
             <div class="strategy-card">
                 <h3 id="header-distress" onclick="toggleAccordion(this)" class="accordion-header">
@@ -672,7 +672,7 @@
                                 <ul class="falc-list">
                                     <li><strong>S - S'arrêter :</strong> Ne bougez plus. Figez-vous. Ne réagissez pas.</li>
                                     <li><strong>T - Temporiser :</strong> Prenez une pause. Respirez profondément.</li>
-                                    <li><strong>O - Observer :</strong> Remarquez ce qui se passe. (Vos pensées, vos émotions, la situation).</li>
+                                    <li><strong>O - Observer :</strong> Remarquez ce qui se passé. (Vos pensées, vos émotions, la situation).</li>
                                     <li><strong>P - Poursuivre :</strong> Agissez en pleine conscience. Pensez à vos objectifs. Choisissez l'action la plus efficace.</li>
                                 </ul>
                             </div>
@@ -796,9 +796,9 @@
         </div>
 
         <!-- Accordeon : Regulation Emotionnelle -->
-        <div id="emotions">
+        <div id="émotions">
             <div class="strategy-card">
-                <h3 id="header-emotions" onclick="toggleAccordion(this)" class="accordion-header">
+                <h3 id="header-émotions" onclick="toggleAccordion(this)" class="accordion-header">
                     <span class="accordion-header-main">
                         <span class="accordion-header-title">
                             <span class="icon-gradient"><i class="fas fa-cloud-sun"></i></span>
@@ -938,7 +938,7 @@
                     <span class="priority-badge priority-3">Base Quotidienne</span>
                 </h3>
                 <div class="accordion-content">
-                    <p style="margin-bottom: 1rem;"><strong>But :</strong> Être présent ici et maintenant. Voir ce qui se passe, dans mon corps et autour de moi, sans juger. Agir selon ce qui m'aide vraiment.</p>
+                    <p style="margin-bottom: 1rem;"><strong>But :</strong> Être présent ici et maintenant. Voir ce qui se passé, dans mon corps et autour de moi, sans juger. Agir selon ce qui m'aide vraiment.</p>
                     <ul class="technique-list">
                         <li class="technique-item" onclick="toggleDetail(this)">
                             <strong><i class="fas fa-eye"></i> Observer (Compétence QUOI)</strong>
@@ -1005,9 +1005,9 @@
         </div>
 
         <!-- Accordeon : References -->
-        <div id="references">
+        <div id="références">
             <div class="strategy-card">
-                <h3 id="header-references" onclick="toggleAccordion(this)" class="accordion-header">
+                <h3 id="header-références" onclick="toggleAccordion(this)" class="accordion-header">
                     <span class="accordion-header-main">
                         <span class="accordion-header-title">
                             <i class="fas fa-book"></i>
@@ -1044,7 +1044,7 @@
         // Module names pour chaque accordion
         const moduleNames = {
             'distress': 'Tolérance à la Détresse',
-            'emotions': 'Régulation des Émotions',
+            'émotions': 'Régulation des Émotions',
             'interpersonal': 'Efficacité Interpersonnelle',
             'mindfulness': 'Pleine Conscience'
         };
@@ -1072,9 +1072,9 @@
         }
 
         // --- TECHNIQUES (détails) ---
-        function toggleDetail(element) {
-            const allDetails = element.closest('.technique-list').querySelectorAll('.technique-item');
-            const isExpanding = !element.classList.contains('expanded');
+        function toggleDetail(élément) {
+            const allDetails = élément.closest('.technique-list').querySelectorAll('.technique-item');
+            const isExpanding = !élément.classList.contains('expanded');
 
             allDetails.forEach(item => {
                 item.classList.remove('expanded');
@@ -1082,10 +1082,10 @@
             });
 
             if (isExpanding) {
-                element.classList.add('expanded');
-                element.setAttribute('aria-expanded', 'true');
+                élément.classList.add('expanded');
+                élément.setAttribute('aria-expanded', 'true');
                 setTimeout(() => {
-                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    élément.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }, 150);
             }
         }
@@ -1189,7 +1189,7 @@
                 const stored = localStorage.getItem('tcd-safety-plan');
                 if (stored) {
                     const data = JSON.parse(stored);
-                    ['safety-signs', 'safety-strategies', 'safety-contacts', 'safety-place'].forEach(id => {
+                    ['safety-signs', 'safety-stratégies', 'safety-contacts', 'safety-place'].forEach(id => {
                         const el = document.getElementById(id);
                         if (el && data[id]) el.value = data[id];
                     });
@@ -1199,7 +1199,7 @@
 
         function saveSafetyPlan() {
             const data = {};
-            ['safety-signs', 'safety-strategies', 'safety-contacts', 'safety-place'].forEach(id => {
+            ['safety-signs', 'safety-stratégies', 'safety-contacts', 'safety-place'].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) data[id] = el.value;
             });
@@ -1271,16 +1271,16 @@
         }
 
         // --- QUIZ ---
-        function selectOption(questionId, answer, element) {
+        function selectOption(questionId, answer, élément) {
             quizAnswers[questionId] = answer;
 
-            const options = element.parentNode.querySelectorAll('.quiz-option');
+            const options = élément.parentNode.querySelectorAll('.quiz-option');
             options.forEach(opt => opt.classList.remove('selected'));
-            element.classList.add('selected');
+            élément.classList.add('selected');
 
             const targetMap = {
                 crisis: 'distress',
-                stressed: 'emotions',
+                stressed: 'émotions',
                 conflict: 'interpersonal',
                 calm: 'mindfulness'
             };
@@ -1343,7 +1343,7 @@
             });
 
             // Identifier le module de chaque technique et ajouter des boutons favoris
-            const moduleIds = ['distress', 'emotions', 'interpersonal', 'mindfulness'];
+            const moduleIds = ['distress', 'émotions', 'interpersonal', 'mindfulness'];
             let techIndex = 0;
 
             moduleIds.forEach(moduleId => {
@@ -1399,7 +1399,7 @@
 
             // Charger plan de sécurité
             loadSafetyPlan();
-            ['safety-signs', 'safety-strategies', 'safety-contacts', 'safety-place'].forEach(id => {
+            ['safety-signs', 'safety-stratégies', 'safety-contacts', 'safety-place'].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.addEventListener('input', saveSafetyPlan);
             });

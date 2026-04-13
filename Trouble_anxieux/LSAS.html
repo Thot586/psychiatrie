@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="LSAS - Échelle d'Anxiété Sociale de Liebowitz — outil clinique interactif pour la psychiatrie et la sante mentale.">
+    <meta name="description" content="LSAS - Échelle d'Anxiété Sociale de Liebowitz — outil clinique interactif pour la psychiatrie et la santé mentale.">
     <title>LSAS - Échelle d'Anxiété Sociale de Liebowitz</title>
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
@@ -42,7 +42,7 @@
             </button>
         </div>
         <span class="nav-title">LSAS</span>
-        <span class="badge badge-cat-anxiete">Anxiété</span>
+        <span class="badge badge-cat-anxiété">Anxiété</span>
     </nav>
 
     <main class="container">
@@ -104,7 +104,7 @@
         </section>
 
         <!-- Résultats -->
-        <section id="results" class="glass-card results-section" style="display: none;">
+        <section id="results" aria-live="polite" class="glass-card results-section" style="display: none;">
             <h2 style="text-align: center; margin-bottom: 2rem;">
                 <i class="fas fa-chart-pie"></i> Résultats de votre évaluation
             </h2>
@@ -130,7 +130,7 @@
                 </div>
             </div>
 
-            <div id="interpretationBox" class="interpretation"></div>
+            <div id="interpretationBox" class="interprétation"></div>
 
             <button class="btn-primary" onclick="toggleDetails()" style="width: 100%; margin-top: 1.5rem;">
                 <i class="fas fa-list-ul"></i> Voir les détails et recommandations
@@ -178,7 +178,7 @@
             "Manger dans un lieu public",
             "Boire en compagnie dans un lieu public",
             "Parler à quelqu'un d'autorité",
-            "Jouer, donner une representation ou parler devant un public",
+            "Jouer, donner une représentation ou parler devant un public",
             "Aller à une soirée",
             "Travailler en étant observé",
             "Écrire en étant observé",
@@ -402,7 +402,7 @@
 
         function updateResults() {
             const { totalScore, fearScore, avoidanceScore } = calculateScores();
-            const interpretation = getInterpretation(totalScore);
+            const interprétation = getInterpretation(totalScore);
             const recommendations = getRecommendations(totalScore);
 
             document.getElementById('totalScore').textContent = totalScore;
@@ -410,11 +410,11 @@
             document.getElementById('avoidanceScore').textContent = avoidanceScore;
 
             const interpretationBox = document.getElementById('interpretationBox');
-            interpretationBox.className = `interpretation ${interpretation.className}`;
+            interpretationBox.className = `interprétation ${interprétation.className}`;
             interpretationBox.innerHTML = `
-                <h3>Anxiété sociale ${interpretation.level}</h3>
-                <p><strong>Interprétation :</strong> ${interpretation.description}</p>
-                <p><strong>Recommandation :</strong> ${interpretation.action}</p>
+                <h3>Anxiété sociale ${interprétation.level}</h3>
+                <p><strong>Interprétation :</strong> ${interprétation.description}</p>
+                <p><strong>Recommandation :</strong> ${interprétation.action}</p>
             `;
 
             const detailsContent = document.getElementById('detailsContent');
@@ -507,7 +507,7 @@
                                 }
                             });
                         } else {
-                            alert("Le fichier n'est pas un export LSAS valide.");
+                            alert("Le fichier n'est pas un export LSAS validé.");
                         }
                     } catch (error) {
                         alert("Erreur lors de l'importation du fichier");
@@ -532,7 +532,7 @@
             }
 
             const { totalScore, fearScore, avoidanceScore } = calculateScores();
-            const interpretation = getInterpretation(totalScore);
+            const interprétation = getInterpretation(totalScore);
 
             const data = {
                 questionnaire: "LSAS",
@@ -543,7 +543,7 @@
                     fear: fearScore,
                     avoidance: avoidanceScore
                 },
-                interpretation: interpretation.level
+                interprétation: interprétation.level
             };
 
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });

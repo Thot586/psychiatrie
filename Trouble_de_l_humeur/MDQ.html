@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="MDQ - Dépistage des Troubles de l'Humeur — outil clinique interactif pour la psychiatrie et la sante mentale.">
+    <meta name="description" content="MDQ - Dépistage des Troubles de l'Humeur — outil clinique interactif pour la psychiatrie et la santé mentale.">
     <title>MDQ - Dépistage des Troubles de l'Humeur</title>
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
@@ -97,11 +97,11 @@
         </section>
 
         <!-- Résultats -->
-        <section id="results" class="glass-card results-section" style="display: none;">
+        <section id="results" aria-live="polite" class="glass-card results-section" style="display: none;">
             <h2 style="text-align: center; margin-bottom: 2rem;"><i class="fas fa-chart-pie"></i> Résultats</h2>
 
             <div id="criteriaSummary" class="criteria-summary"></div>
-            <div id="interpretationBox" class="interpretation"></div>
+            <div id="interpretationBox" class="interprétation"></div>
 
             <button class="btn-primary" onclick="toggleDetails()" style="width: 100%; margin-top: 1rem;">
                 <i class="fas fa-list-ul"></i> Voir les pistes diagnostiques différentielles
@@ -257,11 +257,11 @@
 
             const interpretationBox = document.getElementById('interpretationBox');
             if (isScreeningPositive) {
-                interpretationBox.className = 'interpretation high';
+                interpretationBox.className = 'interprétation high';
                 interpretationBox.innerHTML = `<h3>Dépistage Positif</h3><p>Vos réponses suggèrent la possibilité d'un trouble bipolaire. Ce n'est pas un diagnostic. Consultez un professionnel.</p>`;
                 updateDifferentials(true);
             } else {
-                interpretationBox.className = 'interpretation low';
+                interpretationBox.className = 'interprétation low';
                 interpretationBox.innerHTML = `<h3>Dépistage Négatif</h3><p>Vos réponses ne suggèrent pas un trouble bipolaire. Si vous avez des inquiétudes, parlez-en à un professionnel.</p>`;
                 updateDifferentials(false);
             }

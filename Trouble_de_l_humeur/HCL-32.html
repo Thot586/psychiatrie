@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Questionnaire HCL-32 - Depistage des symptomes hypomaniaques — outil clinique interactif pour la psychiatrie et la sante mentale.">
-    <title>Questionnaire HCL-32 - Depistage des symptomes hypomaniaques</title>
+    <meta name="description" content="Questionnaire HCL-32 - Dépistage des symptômes hypomaniaques — outil clinique interactif pour la psychiatrie et la santé mentale.">
+    <title>Questionnaire HCL-32 - Dépistage des symptômes hypomaniaques</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/questionnaire-light.css">
@@ -43,21 +43,21 @@
     <div class="container">
         <div class="glass-card" style="text-align: center; margin-bottom: 2rem;">
             <h2 style="margin-bottom: 0.5rem;">Questionnaire HCL-32</h2>
-            <p style="margin: 0;">Depistage des symptomes d'hypomanie</p>
+            <p style="margin: 0;">Dépistage des symptômes d'hypomanie</p>
         </div>
 
         <div class="glass-card">
             <h3><i class="fas fa-info-circle"></i> A propos de ce questionnaire</h3>
             <p style="line-height: 1.6;">
-                L'echelle HCL-32 (Hypomania Checklist-32) est un outil de depistage concu pour aider a identifier les personnes qui ont pu connaitre des episodes d'hypomanie, un symptome cle des troubles du spectre bipolaire. Repondez aux questions en pensant aux periodes ou vous vous sentiez "au top", plein(e) d'energie.
+                L'échelle HCL-32 (Hypomania Checklist-32) est un outil de dépistage conçu pour aider a identifier les personnes qui ont pu connaître des épisodes d'hypomanie, un symptôme cle des troubles du spectre bipolaire. Répondez aux questions en pensant aux périodes ou vous vous sentiez "au top", plein(e) d'énergie.
             </p>
             <div class="warning-box" style="margin-top: 1.5rem;">
                 <h3><i class="fas fa-exclamation-triangle"></i> Avertissements importants</h3>
                 <ul>
-                    <li>Cet auto-questionnaire est un outil de depistage et <strong>ne constitue pas un diagnostic</strong>.</li>
-                    <li>Il ne remplace en aucun cas une evaluation par un professionnel de sante qualifie (medecin, psychiatre).</li>
-                    <li>Les resultats doivent etre interpretes avec prudence et discutes avec un professionnel.</li>
-                    <li>En cas de detresse psychologique ou de pensees suicidaires, contactez le <strong>3114</strong> (gratuit, 24h/7j).</li>
+                    <li>Cet auto-questionnaire est un outil de dépistage et <strong>ne constitue pas un diagnostic</strong>.</li>
+                    <li>Il ne remplace en aucun cas une évaluation par un professionnel de santé qualifie (médecin, psychiatre).</li>
+                    <li>Les résultats doivent etre interpretes avec prudence et discutes avec un professionnel.</li>
+                    <li>En cas de détresse psychologique ou de pensées suicidaires, contactez le <strong>3114</strong> (gratuit, 24h/7j).</li>
                 </ul>
             </div>
         </div>
@@ -65,7 +65,7 @@
         <div class="glass-card">
             <div class="control-buttons">
                 <button class="btn btn-primary" onclick="importData()"><i class="fas fa-file-import"></i> Importer un questionnaire</button>
-                <button class="btn btn-secondary" onclick="resetForm()"><i class="fas fa-redo"></i> Reinitialiser</button>
+                <button class="btn btn-secondary" onclick="resetForm()"><i class="fas fa-redo"></i> Réinitialiser</button>
             </div>
             <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="loadFile(event)">
         </div>
@@ -73,20 +73,20 @@
         <!-- Part 1 -->
         <div class="glass-card">
             <h3 class="part-title"><i class="fas fa-clipboard-list"></i> Partie 1 : Symptomes</h3>
-            <p style="margin-bottom: 1.5rem;">Les questions suivantes concernent les periodes ou vous etiez "au top", plein(e) d'energie. Cochez "Oui" si l'affirmation s'applique a vous pendant ces periodes.</p>
+            <p style="margin-bottom: 1.5rem;">Les questions suivantes concernent les périodes ou vous etiez "au top", plein(e) d'énergie. Cochez "Oui" si l'affirmation s'applique a vous pendant ces périodes.</p>
             <div id="part1-questions"></div>
         </div>
 
         <!-- Part 2 -->
         <div class="glass-card">
             <h3 class="part-title"><i class="fas fa-chart-line"></i> Partie 2 : Impact et consequences</h3>
-            <p style="margin-bottom: 1.5rem;">Ces questions portent sur l'impact global de ces periodes "au top" sur votre vie.</p>
+            <p style="margin-bottom: 1.5rem;">Ces questions portent sur l'impact global de ces périodes "au top" sur votre vie.</p>
             <div id="part2-questions"></div>
         </div>
 
         <!-- Results -->
-        <div id="results" class="results-section glass-card">
-            <h2 style="text-align: center; margin-bottom: 2rem;"><i class="fas fa-chart-bar"></i> Resultats de votre evaluation</h2>
+        <div id="results" aria-live="polite" class="results-section glass-card">
+            <h2 style="text-align: center; margin-bottom: 2rem;"><i class="fas fa-chart-bar"></i> Résultats de votre évaluation</h2>
 
             <div class="score-display" style="text-align: center;">
                 <div class="score-circle">
@@ -95,7 +95,7 @@
                 </div>
             </div>
 
-            <div id="interpretationBox" class="interpretation"></div>
+            <div id="interpretationBox" class="interprétation"></div>
             <div id="part2Summary" class="details-content show" style="margin-top: 1.5rem;"></div>
 
             <button class="details-toggle" onclick="toggleDetails()">
@@ -105,7 +105,7 @@
             <div id="detailsContent" class="details-content"></div>
 
             <div style="margin-top: 2rem;">
-                <h3><i class="fas fa-save"></i> Exporter les resultats</h3>
+                <h3><i class="fas fa-save"></i> Exporter les résultats</h3>
                 <div class="consent-box">
                     <label>
                         <input type="checkbox" id="exportConsent">
@@ -122,7 +122,7 @@
         <footer class="footer">
             <p><strong>HCL-32 - Hypomania Checklist-32</strong></p>
             <p><strong>Auteurs originaux :</strong> Jules Angst, et al. (2005). The HCL-32: towards a self-assessment tool for hypomanic symptoms in outpatients. <em>Journal of Affective Disorders, 88</em>(2), 217-233.</p>
-            <p><strong>Adaptation numerique :</strong> Dr FENOHASINA | Psychiatre - FFI</p>
+            <p><strong>Adaptation numérique :</strong> Dr FENOHASINA | Psychiatre - FFI</p>
             <small>&copy; 2025 - Tous droits reserves</small>
         </footer>
     </div>
@@ -130,33 +130,33 @@
 <script>
     const part1Questions = [
         "Je dors moins.",
-        "J'ai plus d'energie et je suis plus actif(ve).",
+        "J'ai plus d'énergie et je suis plus actif(ve).",
         "Je suis plus sur(e) de moi.",
         "J'apprecie plus mon travail.",
         "Je suis plus sociable (plus d'appels telephoniques, je sors plus).",
         "Je veux voyager et je voyage plus.",
-        "J'ai tendance a conduire plus vite.",
+        "J'ai tendance à conduire plus vite.",
         "Je depense plus d'argent ou trop d'argent.",
         "Je prends plus de risques dans ma vie quotidienne.",
         "Je suis physiquement plus actif(ve) (sport, etc.).",
-        "Je planifie plus d'activites.",
+        "Je planifie plus d'activités.",
         "J'ai plus d'idees, je suis plus creatif(ve).",
         "Je suis moins timide ou inhibe(e).",
         "Je porte des vetements plus colores et plus extravagants.",
         "Je veux rencontrer et faire connaissance avec plus de gens.",
-        "Je suis plus interesse(e) par le sexe ou j'ai plus d'activites sexuelles.",
+        "Je suis plus intéressé(e) par le sexe ou j'ai plus d'activités sexuelles.",
         "Je flirte plus ou je suis plus familier(e) avec les autres.",
         "Je parle plus.",
         "Je pense plus vite.",
-        "Je prends des decisions plus facilement.",
-        "Mes pensees sautent d'un sujet a l'autre.",
+        "Je prends des décisions plus facilement.",
+        "Mes pensées sautent d'un sujet à l'autre.",
         "Je suis plus impatient(e) et/ou je m'enerve plus facilement.",
         "Je me dispute plus facilement.",
         "Mon humeur est meilleure, plus optimiste.",
         "Je bois plus de cafe.",
         "Je fume plus de cigarettes.",
         "Je bois plus d'alcool.",
-        "Je prends plus de medicaments (sedatifs, anxiolytiques, stimulants).",
+        "Je prends plus de médicaments (sedatifs, anxiolytiques, stimulants).",
         "Je suis de meilleure humeur le matin.",
         "Mes sens sont plus vifs (odorat, gout, ouie).",
         "Je suis plus facilement distrait(e).",
@@ -166,22 +166,22 @@
     const part2Questions = [
         {
             id: 'impact',
-            text: "Globalement, quel a ete l'impact de ces periodes sur votre vie ?",
-            options: ["Aucun probleme", "Problemes mineurs", "Problemes moderes", "Problemes serieux"]
+            text: "Globalement, quel a été l'impact de ces périodes sur votre vie ?",
+            options: ["Aucun problème", "Problemes mineurs", "Problemes moderes", "Problemes serieux"]
         },
         {
             id: 'reaction',
-            text: "Comment les autres ont-ils reagi a ces periodes ?",
-            options: ["Pas de reaction", "Amuses / positifs", "Inquiets", "Enerves / negatifs"]
+            text: "Comment les autres ont-ils reagi a ces périodes ?",
+            options: ["Pas de reaction", "Amuses / positifs", "Inquiets", "Enerves / négatifs"]
         },
         {
             id: 'duration',
-            text: "En moyenne, combien de temps durait une de ces periodes ?",
+            text: "En moyenne, combien de temps durait une de ces périodes ?",
             options: ["1 jour", "2-3 jours", "4-7 jours", "> 1 semaine"]
         },
         {
             id: 'feeling',
-            text: "Compare a votre etat habituel, comment vous sentiez-vous pendant ces periodes ?",
+            text: "Compare a votre état habituel, comment vous sentiez-vous pendant ces périodes ?",
             options: ["Mieux que d'habitude", "Pareil", "Moins bien"]
         }
     ];
@@ -264,40 +264,40 @@
             return {
                 level: "Positif",
                 className: "positive",
-                description: "Le score suggere la presence possible d'episodes d'hypomanie passes. Cela ne constitue pas un diagnostic, mais indique qu'une evaluation par un professionnel de la sante est fortement recommandee pour explorer davantage ces symptomes."
+                description: "Le score suggere la présence possible d'épisodes d'hypomanie passes. Cela ne constitue pas un diagnostic, mais indique qu'une évaluation par un professionnel de la santé est fortement recommandée pour explorer davantage ces symptômes."
             };
         }
         return {
             level: "Negatif",
             className: "negative",
-            description: "Le score ne suggere pas de symptomes significatifs d'hypomanie passee. Continuez a surveiller votre humeur et consultez un professionnel si vous avez des inquietudes."
+            description: "Le score ne suggere pas de symptômes significatifs d'hypomanie passee. Continuez a surveiller votre humeur et consultez un professionnel si vous avez des inquietudes."
         };
     }
 
     function getDifferentials(score) {
         if (score < 14) return [];
         return [
-            { name: "Trouble bipolaire de type II", description: "Caracterise par au moins un episode hypomaniaque et un episode depressif majeur. L'HCL-32 est specifiquement concu pour depister ce trouble." },
-            { name: "Cyclothymie", description: "Nombreux episodes hypomaniaques et depressifs qui ne remplissent pas les criteres complets d'un episode majeur, sur une duree d'au moins 2 ans." },
-            { name: "TDAH (Trouble du deficit de l'attention avec hyperactivite)", description: "Peut presenter des symptomes de distractibilite, d'impulsivite et d'hyperactivite qui peuvent chevaucher ceux de l'hypomanie, mais le TDAH est un etat plus chronique et moins episodique." },
-            { name: "Trouble de la personnalite borderline", description: "Caracterise par une instabilite de l'humeur, des relations et de l'image de soi. Les changements d'humeur sont souvent plus rapides et reactifs aux evenements interpersonnels." },
-            { name: "Trouble de la personnalite narcissique", description: "Peut inclure une confiance en soi elevee et une diminution du besoin de sommeil, mais est generalement associee a un besoin d'admiration et a un manque d'empathie." },
-            { name: "Trouble lie a l'usage de substances", description: "L'intoxication ou le sevrage de certaines substances (ex: stimulants, alcool) peut mimer des symptomes hypomaniaques." }
+            { name: "Trouble bipolaire de type II", description: "Caracterise par au moins un épisode hypomaniaque et un épisode dépressif majeur. L'HCL-32 est spécifiquement conçu pour dépister ce trouble." },
+            { name: "Cyclothymie", description: "Nombreux épisodes hypomaniaques et dépressifs qui ne remplissent pas les critères complets d'un épisode majeur, sur une duree d'au moins 2 ans." },
+            { name: "TDAH (Trouble du deficit de l'attention avec hyperactivite)", description: "Peut présenter des symptômes de distractibilite, d'impulsivite et d'hyperactivite qui peuvent chevaucher ceux de l'hypomanie, mais le TDAH est un état plus chronique et moins episodique." },
+            { name: "Trouble de la personnalité borderline", description: "Caracterise par une instabilite de l'humeur, des relations et de l'image de soi. Les changements d'humeur sont souvent plus rapides et reactifs aux événements interpersonnels." },
+            { name: "Trouble de la personnalité narcissique", description: "Peut inclure une confiance en soi élevée et une diminution du besoin de sommeil, mais est généralement associee a un besoin d'admiration et a un manque d'empathie." },
+            { name: "Trouble lie à l'usage de substances", description: "L'intoxication ou le sevrage de certaines substances (ex: stimulants, alcool) peut mimer des symptômes hypomaniaques." }
         ];
     }
 
     function updateResults() {
         const score = calculateScore();
-        const interpretation = getInterpretation(score);
+        const interprétation = getInterpretation(score);
         const differentials = getDifferentials(score);
 
         document.getElementById('totalScore').textContent = score;
 
         const interpretationBox = document.getElementById('interpretationBox');
-        interpretationBox.className = `interpretation ${interpretation.className}`;
+        interpretationBox.className = `interprétation ${interprétation.className}`;
         interpretationBox.innerHTML = `
-            <h3 style="margin-bottom: 0.75rem;">Depistage ${interpretation.level}</h3>
-            <p>${interpretation.description}</p>
+            <h3 style="margin-bottom: 0.75rem;">Dépistage ${interprétation.level}</h3>
+            <p>${interprétation.description}</p>
         `;
 
         const summaryContainer = document.getElementById('part2Summary');
@@ -377,7 +377,7 @@
                         }
                     });
                 } else {
-                    alert("Le fichier ne semble pas etre un questionnaire HCL-32 valide.");
+                    alert("Le fichier ne semble pas etre un questionnaire HCL-32 validé.");
                 }
             } catch (error) {
                 alert("Erreur lors de la lecture du fichier. Assurez-vous qu'il est au format JSON correct.");
@@ -393,7 +393,7 @@
         }
 
         const score = calculateScore();
-        const interpretation = getInterpretation(score);
+        const interprétation = getInterpretation(score);
 
         const data = {
             questionnaire: "HCL-32",
@@ -401,7 +401,7 @@
             answersPart1: answersPart1,
             answersPart2: answersPart2,
             score: score,
-            interpretation: interpretation.level
+            interprétation: interprétation.level
         };
 
         const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Santé Mentale en Milieu Pénitentiaire - Cas Cliniques — outil clinique interactif pour la psychiatrie et la sante mentale.">
+    <meta name="description" content="Santé Mentale en Milieu Pénitentiaire - Cas Cliniques — outil clinique interactif pour la psychiatrie et la santé mentale.">
     <title>Santé Mentale en Milieu Pénitentiaire - Cas Cliniques</title>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/questionnaire-light.css">
@@ -717,7 +717,7 @@
                             <p style="font-weight: 600; font-size: var(--font-size-lg); color: var(--color-text-primary); margin-bottom: 1rem;"><i class="fas fa-question-circle" style="color: #1d4ed8; margin-right: 0.5rem;"></i>Le détenu a-t-il verbalisé des idées de désespoir ou de mort ?</p>
                             <div>
                                 <button onclick="showDecisionResult('result-suicide')" class="decision-option"><i class="fas fa-exclamation-triangle" style="margin-right: 0.5rem; color: #ef4444;"></i>Oui : « tout est fini », « à quoi bon », mention de la mort</button>
-                                <button onclick="showDecisionResult('result-depression')" class="decision-option"><i class="fas fa-cloud-rain" style="margin-right: 0.5rem; color: #1d4ed8;"></i>Non, mais tristesse profonde et retrait persistant</button>
+                                <button onclick="showDecisionResult('result-dépression')" class="decision-option"><i class="fas fa-cloud-rain" style="margin-right: 0.5rem; color: #1d4ed8;"></i>Non, mais tristesse profonde et retrait persistant</button>
                             </div>
                         </div>
 
@@ -740,7 +740,7 @@
                             </ul>
                         </div>
 
-                        <div id="result-depression" class="decision-node hidden result-box warning">
+                        <div id="result-dépression" class="decision-node hidden result-box warning">
                             <h3><i class="fas fa-cloud-rain" style="margin-right: 0.5rem;"></i>Suspicion de dépression sévère</h3>
                             <p>Même sans verbalisation explicite d'idées suicidaires, ce tableau clinique nécessite une <strong>évaluation médicale rapide</strong> :</p>
                             <ul style="margin-top: 1rem; padding-left: 1.5rem;">
@@ -1005,11 +1005,11 @@
             <a href="https://www.facebook.com/Psykozy?locale=fr_FR" target="_blank" rel="noopener noreferrer">
                 <img src="../images/logos/psykozy.png" alt="Logo Psy-kôzy">
             </a>
-            <a href="https://centre-ressource-rehabilitation.org" target="_blank" rel="noopener noreferrer">
+            <a href="https://centre-ressource-réhabilitation.org" target="_blank" rel="noopener noreferrer">
                 <img src="../images/logos/crr.jpg" alt="Logo Centre Ressource Réhabilitation">
             </a>
         </div>
-        <p>Dr FENOHASINA T.J. Felicien (Psychiatre) | ASSOCIATION PSYKOZY MADAGASCAR</p>
+        <p>Dr FENOHASINA T.J. Félicien (Psychiatre) | ASSOCIATION PSYKOZY MADAGASCAR</p>
         <p>Dr MEUNIER Frédéric (Psychiatre) | CH - LE VINATIER</p>
         <p>
             <img src="../images/icons/cc-by-nc-sa.png" alt="CC BY-NC-SA" style="height: 20px; vertical-align: middle;">
@@ -1034,7 +1034,7 @@ document.addEventListener('DOMContentLoaded', function() {
         'reflexion-q1': {
             answer: 'C',
             correct: "<strong>Bravo !</strong> Vous avez raison de ne pas minimiser la situation. Les propos « tout est fini » sont un signal d'alarme qui ne doit jamais être banalisé. Le signalement est une obligation professionnelle et un acte de protection, pas une trahison.",
-            incorrect: "<strong>À revoir.</strong> La réponse C est correcte. Minimiser ou attendre « que ça passe » peut avoir des conséquences dramatiques. Les propos de désespoir doivent toujours être pris au sérieux et signalés, même si le collègue les banalise."
+            incorrect: "<strong>À revoir.</strong> La réponse C est correcte. Minimiser ou attendre « que ça passé » peut avoir des conséquences dramatiques. Les propos de désespoir doivent toujours être pris au sérieux et signalés, même si le collègue les banalise."
         },
         'action-q1': {
             answer: 'B',

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="PID-5-BF - Inventaire de Personnalité du DSM-5 (Forme Brève) — outil clinique interactif pour la psychiatrie et la sante mentale.">
+    <meta name="description" content="PID-5-BF - Inventaire de Personnalité du DSM-5 (Forme Brève) — outil clinique interactif pour la psychiatrie et la santé mentale.">
     <title>PID-5-BF - Inventaire de Personnalité du DSM-5 (Forme Brève)</title>
 
     <!-- Font Awesome pour les icônes -->
@@ -103,7 +103,7 @@
             </button>
         </div>
         <span class="nav-title">PID-5-BF</span>
-        <span class="badge badge-cat-perso">Personnalite</span>
+        <span class="badge badge-cat-perso">Personnalité</span>
     </nav>
 
     <div class="container">
@@ -152,7 +152,7 @@
         </section>
 
         <!-- Résultats -->
-        <section id="results" class="results-section" style="display: none;">
+        <section id="results" aria-live="polite" class="results-section" style="display: none;">
             <h2 style="text-align: center; margin-bottom: 2rem;">
                 <i class="fas fa-chart-bar"></i> Résultats de votre évaluation
             </h2>
@@ -164,7 +164,7 @@
                 <p class="score-label">sur 75 points</p>
             </div>
 
-            <div id="interpretationBox" class="interpretation"></div>
+            <div id="interpretationBox" class="interprétation"></div>
 
             <!-- Domain scores with progress bars -->
             <div class="glass-card domain-results" id="domainResults"></div>
@@ -242,7 +242,7 @@
 
         const questions = [
             // Affectivité Négative (1-5)
-            "J'ai souvent peur quand rien de spécial ne se passe",
+            "J'ai souvent peur quand rien de spécial ne se passé",
             "Je m'inquiète pour presque tout",
             "Je me sens souvent triste",
             "Je suis facilement contrarié(e)",
@@ -362,7 +362,7 @@
         }
 
         function getInterpretation(totalScore) {
-            // Overall interpretation based on total score
+            // Overall interprétation based on total score
             if (totalScore <= 25) return {
                 level: "Traits peu marqués",
                 className: "low",
@@ -385,17 +385,17 @@
 
         function updateResults() {
             const totalScore = calculateTotalScore();
-            const interpretation = getInterpretation(totalScore);
+            const interprétation = getInterpretation(totalScore);
 
             document.getElementById('totalScore').textContent = totalScore;
 
-            // Global interpretation
+            // Global interprétation
             const interpretationBox = document.getElementById('interpretationBox');
-            interpretationBox.className = `interpretation ${interpretation.className}`;
+            interpretationBox.className = `interprétation ${interprétation.className}`;
             interpretationBox.innerHTML = `
-                <h3>${interpretation.level}</h3>
-                <p><strong>Interprétation :</strong> ${interpretation.description}</p>
-                <p><strong>Recommandation :</strong> ${interpretation.action}</p>
+                <h3>${interprétation.level}</h3>
+                <p><strong>Interprétation :</strong> ${interprétation.description}</p>
+                <p><strong>Recommandation :</strong> ${interprétation.action}</p>
             `;
 
             // Domain scores with progress bars
@@ -539,7 +539,7 @@
             }
 
             const totalScore = calculateTotalScore();
-            const interpretation = getInterpretation(totalScore);
+            const interprétation = getInterpretation(totalScore);
 
             const domainScores = {};
             domains.forEach((domain, i) => {
@@ -556,7 +556,7 @@
                 date: new Date().toISOString(),
                 answers: answers,
                 totalScore: totalScore,
-                interpretation: interpretation.level,
+                interprétation: interprétation.level,
                 domainScores: domainScores
             };
 

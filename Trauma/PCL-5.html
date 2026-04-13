@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta name="description" content="PCL-5 - Questionnaire de Stress Post-Traumatique — outil clinique interactif pour la psychiatrie et la sante mentale.">
+    <meta name="description" content="PCL-5 - Questionnaire de Stress Post-Traumatique — outil clinique interactif pour la psychiatrie et la santé mentale.">
   <title>PCL-5 - Questionnaire de Stress Post-Traumatique</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="../css/styles.css">
@@ -46,17 +46,17 @@
       <p style="color: var(--color-text-muted);">(Weathers et al., 2013)</p>
 
       <div class="toolbar">
-        <label class="btn" for="file-import"><i class="fas fa-upload"></i> Importer un resultat</label>
+        <label class="btn" for="file-import"><i class="fas fa-upload"></i> Importer un résultat</label>
         <input type="file" id="file-import" accept=".json" style="display:none"/>
       </div>
     </div>
 
     <div class="instructions-box">
-      <p><strong>Periode de reference :</strong> Au cours du dernier mois.</p>
-      <p style="margin-top: 0.5rem;">Voici une liste de difficultes que les gens eprouvent parfois a la suite d'une experience stressante. Veuillez lire chaque enonce attentivement et indiquer dans quelle mesure ce probleme vous a affecte <strong>au cours du dernier mois</strong>. Il n'y a pas de bonne ou de mauvaise reponse.</p>
+      <p><strong>Période de référence :</strong> Au cours du dernier mois.</p>
+      <p style="margin-top: 0.5rem;">Voici une liste de difficultés que les gens éprouvent parfois à la suite d'une expérience stressante. Veuillez lire chaque énoncé attentivement et indiquer dans quelle mesure ce problème vous a affecte <strong>au cours du dernier mois</strong>. Il n'y a pas de bonne ou de mauvaise réponse.</p>
 
       <div style="margin-top: 1rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
-        <label for="eval-date" style="font-weight: 600; color: var(--color-text-primary);">Date de l'evaluation :</label>
+        <label for="eval-date" style="font-weight: 600; color: var(--color-text-primary);">Date de l'évaluation :</label>
         <input type="date" id="eval-date" class="date-input"/>
       </div>
     </div>
@@ -65,13 +65,13 @@
       <div id="qwrap"></div>
 
       <div class="actions">
-        <button type="submit" class="btn-primary" style="padding: 1rem 2rem; font-size: 1.05rem;"><i class="fas fa-calculator"></i> Calculer les resultats</button>
+        <button type="submit" class="btn-primary" style="padding: 1rem 2rem; font-size: 1.05rem;"><i class="fas fa-calculator"></i> Calculer les résultats</button>
       </div>
-      <p id="valmsg" class="validation">Veuillez repondre a toutes les questions.</p>
+      <p id="valmsg" class="validation">Veuillez répondre à toutes les questions.</p>
 
-      <div id="results">
+      <div id="results" aria-live="polite">
         <div class="panel">
-          <h3>Resultats de l'evaluation</h3>
+          <h3>Résultats de l'évaluation</h3>
           <p id="eval-date-display" style="color: var(--color-text-muted); font-size: 0.9rem; margin-bottom: 1rem;"></p>
 
           <div class="score-display">
@@ -86,7 +86,7 @@
             <div class="slider-track">
               <div class="slider-zones">
                 <div class="zone zone-low">Normal / Infra-clinique</div>
-                <div class="zone zone-high">Depistage Positif (>33)</div>
+                <div class="zone zone-high">Dépistage Positif (>33)</div>
               </div>
               <div class="score-marker" id="score-marker">
                 <div class="marker-value" id="marker-value">0</div>
@@ -110,30 +110,30 @@
           </div>
 
           <details class="accordion">
-            <summary>Interpretation clinique detaillee</summary>
+            <summary>Interprétation clinique détaillée</summary>
             <div class="content">
               <div id="interp-long"></div>
-              <div class="reference-box">
-                  <p style="font-weight:600; margin-bottom:0.5rem; color: var(--color-text-primary);">References utilisees pour l'interpretation :</p>
-                  <div class="reference-item">Ashbaugh, A. R., et al. (2016). Psychometric properties of the French version of the PCL-5. <em>International Journal of Mental Health and Addiction</em>, 14(6), 1058-1076.</div>
-                  <div class="reference-item">Weathers, F. W., et al. (2013). <em>The Posttraumatic Stress Disorder Checklist for DSM-5 (PCL-5)</em>. National Center for PTSD.</div>
+              <div class="référence-box">
+                  <p style="font-weight:600; margin-bottom:0.5rem; color: var(--color-text-primary);">References utilisées pour l'interprétation :</p>
+                  <div class="référence-item">Ashbaugh, A. R., et al. (2016). Psychometric properties of the French version of the PCL-5. <em>International Journal of Mental Health and Addiction</em>, 14(6), 1058-1076.</div>
+                  <div class="référence-item">Weathers, F. W., et al. (2013). <em>The Posttraumatic Stress Disorder Checklist for DSM-5 (PCL-5)</em>. National Center for PTSD.</div>
               </div>
             </div>
           </details>
 
           <details class="accordion">
-            <summary>Pour les patients - comprendre votre resultat</summary>
+            <summary>Pour les patients - comprendre votre résultat</summary>
             <div class="content">
               <p><strong>Qu'est-ce que le PCL-5 ?</strong></p>
-              <p>Le PCL-5 est un questionnaire de 20 questions qui evalue les symptomes de stress post-traumatique selon les criteres du manuel diagnostique DSM-5. Il est utilise pour depister les symptomes lies a un evenement traumatique passe.</p>
+              <p>Le PCL-5 est un questionnaire de 20 questions qui évalue les symptômes de stress post-traumatique selon les critères du manuel diagnostique DSM-5. Il est utilisé pour dépister les symptômes liés a un événement traumatique passé.</p>
 
               <p style="margin-top: 1rem;"><strong>Que signifie votre score ?</strong></p>
               <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
-                <li><strong>Score eleve (generalement 33 ou plus) :</strong> Cela suggere que vous presentez de nombreux symptomes associes au TSPT. Il est recommande de consulter un professionnel de sante (psychologue, psychiatre) pour une evaluation complete.</li>
-                <li><strong>Score bas :</strong> Vous presentez peu de symptomes, ou ceux-ci sont peu intenses.</li>
+                <li><strong>Score élevé (généralement 33 ou plus) :</strong> Cela suggere que vous presentez de nombreux symptômes associes au TSPT. Il est recommandé de consulter un professionnel de santé (psychologue, psychiatre) pour une évaluation complete.</li>
+                <li><strong>Score bas :</strong> Vous presentez peu de symptômes, ou ceux-ci sont peu intenses.</li>
               </ul>
 
-              <p class="note" style="margin-top: 1rem;"><strong>Important :</strong> Ce questionnaire est un outil d'aide et ne remplace pas un diagnostic medical. Seul un clinicien peut poser un diagnostic de Trouble de Stress Post-Traumatique apres un entretien approfondi.</p>
+              <p class="note" style="margin-top: 1rem;"><strong>Important :</strong> Ce questionnaire est un outil d'aide et ne remplace pas un diagnostic médical. Seul un clinicien peut poser un diagnostic de Trouble de Stress Post-Traumatique apres un entretien approfondi.</p>
             </div>
           </details>
 
@@ -141,31 +141,31 @@
             <summary>Pour les cliniciens - score et algorithme DSM-5</summary>
             <div class="content">
               <p><strong>Methodologie de cotation</strong></p>
-              <p>Le PCL-5 permet deux methodes d'interpretation validees par la litterature (Weathers et al., 2013; Ashbaugh et al., 2016) :</p>
+              <p>Le PCL-5 permet deux methodes d'interprétation validees par la litterature (Weathers et al., 2013; Ashbaugh et al., 2016) :</p>
 
               <p style="margin-top: 1rem;"><strong>1. Score Total (Cut-off)</strong></p>
-              <p>Un score total de <strong>31 a 33</strong> est generalement considere comme le seuil (cut-off) pour un depistage positif du TSPT.</p>
+              <p>Un score total de <strong>31 a 33</strong> est généralement considéré comme le seuil (cut-off) pour un dépistage positif du TSPT.</p>
               <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
-                  <li>Sensibilite elevee (.94) pour un seuil de 33 (Bovin et al., 2016).</li>
-                  <li>Utile pour le suivi de la severite des symptomes.</li>
-                  <li>Un changement de 5 a 10 points represente un changement clinique fiable, et 10-20 points un changement cliniquement significatif.</li>
+                  <li>Sensibilite élevée (.94) pour un seuil de 33 (Bovin et al., 2016).</li>
+                  <li>Utile pour le suivi de la sévérité des symptômes.</li>
+                  <li>Un changement de 5 a 10 points représente un changement clinique fiable, et 10-20 points un changement cliniquement significatif.</li>
               </ul>
 
               <p style="margin-top: 1rem;"><strong>2. Algorithme Diagnostique (DSM-5)</strong></p>
-              <p>Le PCL-5 peut etre cote en traitant chaque item note <strong>2 (Moderement) ou plus</strong> comme un symptome present. Pour un diagnostic de TSPT, le profil doit respecter la regle :</p>
+              <p>Le PCL-5 peut etre cote en traitant chaque item note <strong>2 (Modérément) ou plus</strong> comme un symptôme present. Pour un diagnostic de TSPT, le profil doit respecter la regle :</p>
               <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
-                  <li><strong>Critere B :</strong> Au moins 1 symptome intrusif (Q1-5)</li>
-                  <li><strong>Critere C :</strong> Au moins 1 symptome d'evitement (Q6-7)</li>
-                  <li><strong>Critere D :</strong> Au moins 2 symptomes cognitifs/humeur (Q8-14)</li>
-                  <li><strong>Critere E :</strong> Au moins 2 symptomes d'eveil/reactivite (Q15-20)</li>
+                  <li><strong>Critere B :</strong> Au moins 1 symptôme intrusif (Q1-5)</li>
+                  <li><strong>Critere C :</strong> Au moins 1 symptôme d'évitement (Q6-7)</li>
+                  <li><strong>Critere D :</strong> Au moins 2 symptômes cognitifs/humeur (Q8-14)</li>
+                  <li><strong>Critere E :</strong> Au moins 2 symptômes d'eveil/reactivite (Q15-20)</li>
               </ul>
               <div id="dsm-result" style="margin-top: 1rem; padding: 1rem; background: rgba(99, 102, 241, 0.1); border-radius: 8px; font-weight: 600; color: #818cf8;"></div>
 
               <p style="margin-top: 1rem;"><strong>Lacunes et limites actuelles</strong></p>
               <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
-                <li><strong>Sur-declaration :</strong> Les questionnaires auto-rapportes tendent a produire des scores plus eleves que les entretiens cliniques (CAPS-5).</li>
-                <li><strong>Recouvrement des symptomes :</strong> Certains symptomes (troubles du sommeil, concentration, irritabilite) sont peu specifiques et se retrouvent dans la depression ou les troubles anxieux generalises.</li>
-                <li><strong>Pistes de recherche :</strong> La validation de cut-offs specifiques pour des sous-populations francophones (militaires vs civils vs refugies) reste un champ d'etude necessaire.</li>
+                <li><strong>Sur-déclaration :</strong> Les questionnaires auto-rapportes tendent a produire des scores plus élevés que les entretiens cliniques (CAPS-5).</li>
+                <li><strong>Recouvrement des symptômes :</strong> Certains symptômes (troubles du sommeil, concentration, irritabilite) sont peu spécifiques et se retrouvent dans la dépression ou les troubles anxieux generalises.</li>
+                <li><strong>Pistes de recherche :</strong> La validation de cut-offs spécifiques pour des sous-populations francophones (militaires vs civils vs refugies) reste un champ d'etude nécessaire.</li>
               </ul>
             </div>
           </details>
@@ -174,14 +174,14 @@
         <details class="accordion">
           <summary>Scores par cluster (Criteres DSM-5)</summary>
           <div class="content">
-            <p class="small" style="margin-bottom: 1rem;">Scores detailles pour les 4 clusters de symptomes du DSM-5.</p>
+            <p class="small" style="margin-bottom: 1rem;">Scores détaillés pour les 4 clusters de symptômes du DSM-5.</p>
             <div class="subscales-grid" id="subscales-scores"></div>
           </div>
         </details>
 
         <div class="panel">
-          <h3>Exporter votre resultat</h3>
-          <p class="small">Aucun stockage local n'est effectue. Pour exporter, cochez la case de consentement puis cliquez sur Exporter.</p>
+          <h3>Exporter votre résultat</h3>
+          <p class="small">Aucun stockage local n'est effectué. Pour exporter, cochez la case de consentement puis cliquez sur Exporter.</p>
           <label class="consent">
             <input type="checkbox" id="consent"/>
             <span>Je souhaite télécharger mes résultats (questionnaire, réponses, score et date) dans un fichier JSON sur mon appareil. <strong>Ces résultats constituent des données de santé — je les conserverai de façon sécurisée.</strong> Aucune donnée n'est transmise à un serveur.</span>
@@ -197,8 +197,8 @@
 
   <footer class="footer">
     <p><strong>&copy; Weathers, F.W., Litz, B.T., Keane, T.M., Palmieri, P.A., Marx, B.P., & Schnurr, P.P. (2013).</strong></p>
-    <p>Le PCL-5 est un instrument du domaine public. Version francaise validee par Ashbaugh et al. (2016). Usage clinique et recherche. Aucune donnee n'est stockee sur serveur.</p>
-    <p>Adaptation en version numerique par le Dr FENOHASINA Toto Jean Felicien (Psychiatre).</p>
+    <p>Le PCL-5 est un instrument du domaine public. Version française validée par Ashbaugh et al. (2016). Usage clinique et recherche. Aucune donnée n'est stockée sur serveur.</p>
+    <p>Adaptation en version numérique par le Dr FENOHASINA Toto Jean Félicien (Psychiatre).</p>
   </footer>
 
   <script>

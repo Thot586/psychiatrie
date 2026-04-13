@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="ASSIST - Test de dépistage des substances — outil clinique interactif pour la psychiatrie et la sante mentale.">
+    <meta name="description" content="ASSIST - Test de dépistage des substances — outil clinique interactif pour la psychiatrie et la santé mentale.">
     <title>ASSIST - Test de dépistage des substances</title>
 
     <!-- Font Awesome pour les icones -->
@@ -133,7 +133,7 @@
         </section>
 
         <!-- Résultats -->
-        <section id="results" class="results-section" style="display: none;">
+        <section id="results" aria-live="polite" class="results-section" style="display: none;">
             <h2 style="text-align: center; margin-bottom: 2rem;">
                 <i class="fas fa-chart-bar"></i> Résultats de votre évaluation
             </h2>
@@ -263,7 +263,7 @@
             }
         ];
 
-        // Etat de l'application
+        // État de l'application
         let selectedSubstances = new Set();
         let answers = {}; // { substanceId: { q2: value, q3: value, ... } }
         let injectionAnswer = null;
@@ -320,7 +320,7 @@
         function continueToStep2() {
             if (selectedSubstances.size === 0) return;
 
-            // Cacher etape 1, afficher etape 2
+            // Cacher étape 1, afficher étape 2
             document.getElementById('step1').classList.remove('active');
             document.getElementById('step2').classList.add('active');
 
@@ -494,9 +494,9 @@
             selectedSubstances.forEach(substanceId => {
                 const substance = substances.find(s => s.id === substanceId);
                 const score = calculateScore(substanceId);
-                const interpretation = getInterpretation(substanceId, score);
+                const interprétation = getInterpretation(substanceId, score);
 
-                if (interpretation.level === 'Risque élevé') {
+                if (interprétation.level === 'Risque élevé') {
                     hasHighRisk = true;
                 }
 
@@ -507,11 +507,11 @@
                             ${substance.short}
                         </h4>
                         <div style="display: flex; align-items: center; gap: 1rem;">
-                            <span class="score-badge ${interpretation.className}">${score}</span>
+                            <span class="score-badge ${interprétation.className}">${score}</span>
                             <span style="color: var(--color-text-muted); font-size: var(--font-size-sm);">/ 39</span>
                         </div>
-                        <div class="risk-level ${interpretation.className}">
-                            <strong>${interpretation.level}</strong>
+                        <div class="risk-level ${interprétation.className}">
+                            <strong>${interprétation.level}</strong>
                         </div>
                     </div>
                 `;
@@ -519,9 +519,9 @@
                 detailsHTML += `
                     <div class="info-box" style="margin-bottom: 0.75rem;">
                         <h4 style="color: var(--color-primary-light); margin-bottom: 0.5rem;">${substance.short}</h4>
-                        <p style="margin: 0;"><strong>Score :</strong> ${score}/39 - ${interpretation.level}</p>
-                        <p style="margin: 0.5rem 0;"><strong>Interprétation :</strong> ${interpretation.description}</p>
-                        <p style="margin: 0;"><strong>Recommandation :</strong> ${interpretation.action}</p>
+                        <p style="margin: 0;"><strong>Score :</strong> ${score}/39 - ${interprétation.level}</p>
+                        <p style="margin: 0.5rem 0;"><strong>Interprétation :</strong> ${interprétation.description}</p>
+                        <p style="margin: 0;"><strong>Recommandation :</strong> ${interprétation.action}</p>
                     </div>
                 `;
             });
@@ -560,10 +560,10 @@
                     detailsHTML += `
                         <div class="danger-box" style="margin-bottom: 0.75rem;">
                             <h4><i class="fas fa-syringe"></i> Usage par injection</h4>
-                            <p style="margin: 0;">L'usage de drogues par injection expose a des risques majeurs (infections, surdosage, etc.).</p>
+                            <p style="margin: 0;">L'usage de drogues par injection expose à des risques majeurs (infections, surdosage, etc.).</p>
                             <p style="margin: 0.5rem 0;"><strong>Recommandations :</strong></p>
                             <ul style="margin: 0; padding-left: 1.5rem;">
-                                <li>Évaluation des pratiques a risque</li>
+                                <li>Évaluation des pratiques à risque</li>
                                 <li>Dépistage VIH, hépatites B et C</li>
                                 <li>Orientation vers un CSAPA ou CAARUD</li>
                                 <li>Information sur la reduction des risques</li>
@@ -651,7 +651,7 @@
 
                             updateContinueButton();
 
-                            // Si des réponses existent, passer a l'etape 2
+                            // Si des réponses existent, passer à l'étape 2
                             if (Object.keys(answers).length > 0 && Object.values(answers).some(a => Object.keys(a).length > 0)) {
                                 continueToStep2();
 
@@ -691,10 +691,10 @@
             selectedSubstances.forEach(id => {
                 const substance = substances.find(s => s.id === id);
                 const score = calculateScore(id);
-                const interpretation = getInterpretation(id, score);
+                const interprétation = getInterpretation(id, score);
                 scores[substance.short] = {
                     score: score,
-                    interpretation: interpretation.level
+                    interprétation: interprétation.level
                 };
             });
 

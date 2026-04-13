@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="AQ-50 - Quotient du Spectre Autistique — outil clinique interactif pour la psychiatrie et la sante mentale.">
+    <meta name="description" content="AQ-50 - Quotient du Spectre Autistique — outil clinique interactif pour la psychiatrie et la santé mentale.">
     <title>AQ-50 - Quotient du Spectre Autistique</title>
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
@@ -82,7 +82,7 @@
                 </div>
             </section>
 
-            <section id="results" class="glass-card results-section" style="display: none;">
+            <section id="results" aria-live="polite" class="glass-card results-section" style="display: none;">
                 <h2 style="text-align: center; margin-bottom: 2rem;"><i class="fas fa-chart-pie"></i> Résultats</h2>
 
                 <div class="score-display">
@@ -101,7 +101,7 @@
                     </div>
                 </div>
 
-                <div id="interpretationBox" class="interpretation"></div>
+                <div id="interpretationBox" class="interprétation"></div>
 
                 <details class="glass-card" style="margin-top: 1.5rem; background: rgba(255,255,255,0.05);">
                     <summary style="cursor: pointer; font-weight: 600;"><i class="fas fa-book"></i> Interprétation détaillée</summary>
@@ -200,7 +200,7 @@
             "Je trouve qu'il est difficile de décoder les intentions des autres.",
             "Les nouvelles situations me rendent anxieux(se).",
             "J'aime rencontrer de nouvelles personnes.",
-            "Je suis une personne qui a le sens de la diplomatie.",
+            "Je suis une personne qui à le sens de la diplomatie.",
             "Je ne suis pas très doué(e) pour me souvenir des dates de naissance des gens.",
             "Je trouve qu'il est très facile de jouer à des jeux de rôle avec des enfants."
         ];
@@ -272,7 +272,7 @@
 
         function interpretationLong(total) {
             if (total < 26) return "Votre score est inférieur à 26. Cette zone est associée à une probabilité plutôt faible de traits autistiques cliniquement significatifs.";
-            if (total <= 28) return "Votre score est entre 26 et 28, zone sensible au repérage. On recommande d'explorer le contexte avec un professionnel.";
+            if (total <= 28) return "Votre score est entre 26 et 28, zone sensible au repérage. On recommandé d'explorer le contexte avec un professionnel.";
             if (total <= 31) return "Votre score est entre 29 et 31 (compromis sensibilité/spécificité). L'interprétation dépend du contexte clinique.";
             return "Votre score est ≥ 32 (zone spécifique). Si accompagné d'un retentissement significatif, une évaluation standardisée est indiquée.";
         }
@@ -320,7 +320,7 @@
 
             const interp = getInterpretation(total);
             const interpretationBox = document.getElementById('interpretationBox');
-            interpretationBox.className = `interpretation ${interp.className}`;
+            interpretationBox.className = `interprétation ${interp.className}`;
             let interpHTML = `<h3>Probabilité ${interp.level}</h3><p>${interp.description}</p>`;
             interpHTML += `
                 <div class="threshold-note">

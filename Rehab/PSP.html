@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="PSP - Echelle de Performance Personnelle et Sociale — outil clinique interactif pour la psychiatrie et la sante mentale.">
-    <title>PSP - Echelle de Performance Personnelle et Sociale</title>
+    <meta name="description" content="PSP - Échelle de Performance Personnelle et Sociale — outil clinique interactif pour la psychiatrie et la santé mentale.">
+    <title>PSP - Échelle de Performance Personnelle et Sociale</title>
 
     <!-- Font Awesome pour les icones -->
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -216,24 +216,24 @@
     <div class="container">
         <!-- En-tete -->
         <header class="glass-card" style="text-align: center; margin-bottom: 1.5rem;">
-            <h2 class="gradient-text">PSP - Echelle de Performance Personnelle et Sociale</h2>
+            <h2 class="gradient-text">PSP - Échelle de Performance Personnelle et Sociale</h2>
             <p>Personal and Social Performance Scale (Morosini et al., 2000)</p>
         </header>
 
-        <!-- Information hetero-evaluation -->
+        <!-- Information hetero-évaluation -->
         <section class="hetero-box">
-            <h3><i class="fas fa-user-md"></i> Hetero-questionnaire clinicien</h3>
-            <p>Le PSP est une echelle d'evaluation du fonctionnement personnel et social validee pour les patients presentant des troubles psychiatriques severes. Cet outil est un <strong>hetero-questionnaire</strong> : il doit etre rempli par un clinicien sur la base d'un entretien avec le patient et de l'observation clinique. Il evalue 4 domaines de fonctionnement sur les <strong>30 derniers jours</strong>.</p>
+            <h3><i class="fas fa-user-md"></i> Hétéro-questionnaire clinicien</h3>
+            <p>Le PSP est une échelle d'évaluation du fonctionnement personnel et social validée pour les patients presentant des troubles psychiatriques sévères. Cet outil est un <strong>hétéro-questionnaire</strong> : il doit etre rempli par un clinicien sur la base d'un entretien avec le patient et de l'observation clinique. Il évalue 4 domaines de fonctionnement sur les <strong>30 derniers jours</strong>.</p>
         </section>
 
         <!-- Avertissement -->
         <section class="warning-box">
             <h3><i class="fas fa-exclamation-triangle"></i> Avertissements importants</h3>
             <ul style="margin: 0; padding-left: 1.5rem;">
-                <li>Cette echelle necessite une formation a son utilisation</li>
-                <li>L'evaluation doit etre realisee par un professionnel de sante qualifie</li>
-                <li>Les resultats doivent etre interpretes dans le contexte clinique global</li>
-                <li>Les resultats necessitent une interpretation par un professionnel</li>
+                <li>Cette échelle nécessité une formation a son utilisation</li>
+                <li>L'évaluation doit etre réalisée par un professionnel de santé qualifie</li>
+                <li>Les résultats doivent etre interpretes dans le contexte clinique global</li>
+                <li>Les résultats nécessitent une interprétation par un professionnel</li>
             </ul>
         </section>
 
@@ -244,7 +244,7 @@
                     <i class="fas fa-file-import"></i> Importer
                 </button>
                 <button class="btn-secondary" onclick="resetForm()">
-                    <i class="fas fa-redo"></i> Reinitialiser
+                    <i class="fas fa-redo"></i> Réinitialiser
                 </button>
             </div>
             <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="loadFile(event)">
@@ -266,7 +266,7 @@
                             <span class="question-number" style="font-size: 0.85rem; padding: 0.25rem 0.6rem;">A</span>
                             <strong style="font-size: 1.1rem;">Activites socialement utiles</strong>
                         </div>
-                        <div class="domain-subtitle">Inclut le travail, les etudes, le benevolat et toute activite socialement utile ou constructive.</div>
+                        <div class="domain-subtitle">Inclut le travail, les études, le benevolat et toute activite socialement utile ou constructive.</div>
                     </div>
                 </div>
                 <div class="psp-options" id="options-a"></div>
@@ -281,7 +281,7 @@
                             <span class="question-number" style="font-size: 0.85rem; padding: 0.25rem 0.6rem;">B</span>
                             <strong style="font-size: 1.1rem;">Relations personnelles et sociales</strong>
                         </div>
-                        <div class="domain-subtitle">Inclut les relations avec la famille, les amis, les collegues et les contacts sociaux en general.</div>
+                        <div class="domain-subtitle">Inclut les relations avec la famille, les amis, les collegues et les contacts sociaux en général.</div>
                     </div>
                 </div>
                 <div class="psp-options" id="options-b"></div>
@@ -318,10 +318,10 @@
             </div>
         </section>
 
-        <!-- Resultats -->
-        <section id="results" class="results-section" style="display: none;">
+        <!-- Résultats -->
+        <section id="results" aria-live="polite" class="results-section" style="display: none;">
             <h2 style="text-align: center; margin-bottom: 2rem;">
-                <i class="fas fa-chart-bar"></i> Resultats de l'evaluation
+                <i class="fas fa-chart-bar"></i> Résultats de l'évaluation
             </h2>
 
             <!-- Score global -->
@@ -332,18 +332,18 @@
                 <p class="score-label">sur 100 points (Score PSP global)</p>
             </div>
 
-            <!-- Interpretation -->
-            <div id="interpretationBox" class="interpretation"></div>
+            <!-- Interprétation -->
+            <div id="interpretationBox" class="interprétation"></div>
 
             <!-- Barres par domaine -->
             <div class="glass-card" style="margin-top: 1.5rem;">
-                <h3 style="margin-bottom: 1rem;"><i class="fas fa-th-list"></i> Detail par domaine</h3>
+                <h3 style="margin-bottom: 1rem;"><i class="fas fa-th-list"></i> Détail par domaine</h3>
                 <div class="domain-bars" id="domainBars"></div>
             </div>
 
             <!-- Details -->
             <button class="btn-primary w-full" onclick="toggleDetails()" style="margin-top: 1.5rem;">
-                <i class="fas fa-list"></i> Voir les details de l'evaluation
+                <i class="fas fa-list"></i> Voir les details de l'évaluation
                 <span id="toggleIcon"><i class="fas fa-chevron-down"></i></span>
             </button>
 
@@ -351,11 +351,11 @@
 
             <!-- Export -->
             <div class="glass-card" style="margin-top: 2rem;">
-                <h3><i class="fas fa-download"></i> Exporter les resultats</h3>
+                <h3><i class="fas fa-download"></i> Exporter les résultats</h3>
                 <div class="consent-box">
                     <label>
                         <input type="checkbox" id="exportConsent">
-                        <span>Je souhaite telecharger les resultats (questionnaire, reponses, score et date) dans un fichier JSON sur mon appareil. <strong>Ces resultats constituent des donnees de sante - je m'engage a les conserver de facon securisee et a ne les partager qu'avec un professionnel de sante de mon choix.</strong> Aucune donnee n'est transmise a un serveur.</span>
+                        <span>Je souhaite telecharger les résultats (questionnaire, réponses, score et date) dans un fichier JSON sur mon appareil. <strong>Ces résultats constituent des données de santé - je m'engage à les conserver de facon securisee et a ne les partager qu'avec un professionnel de santé de mon choix.</strong> Aucune donnée n'est transmise a un serveur.</span>
                     </label>
                 </div>
                 <div class="export-buttons">
@@ -374,7 +374,7 @@
     <footer class="footer">
         <p><strong>PSP - Personal and Social Performance Scale</strong></p>
         <p>Auteurs : Morosini PL, Magliano L, Brambilla L, Ugolini S, Pioli R (2000)</p>
-        <p>Adaptation numerique : Dr FENOHASINA | Psychiatre</p>
+        <p>Adaptation numérique : Dr FENOHASINA | Psychiatre</p>
         <p style="margin-top: 1rem;">
             <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr" target="_blank">
                 Licence CC BY-NC-SA 4.0
@@ -409,31 +409,31 @@
             }
         };
 
-        // Options d'evaluation (identiques pour les 4 domaines)
+        // Options d'évaluation (identiques pour les 4 domaines)
         const options = [
             { value: 1, label: "Absent", description: "Fonctionnement excellent dans ce domaine" },
-            { value: 2, label: "Leger", description: "Difficultes mineures, pas d'impact significatif" },
-            { value: 3, label: "Manifeste", description: "Difficultes notables mais ne necessitant pas d'aide professionnelle reguliere" },
-            { value: 4, label: "Marque", description: "Difficultes marquees, necessitant une aide professionnelle" },
-            { value: 5, label: "Severe", description: "Difficultes severes, fonctionnement tres reduit dans ce domaine" },
-            { value: 6, label: "Tres severe", description: "Incapacite totale de fonctionner dans ce domaine" }
+            { value: 2, label: "Léger", description: "Difficultes mineures, pas d'impact significatif" },
+            { value: 3, label: "Manifeste", description: "Difficultes notables mais ne nécessitant pas d'aide professionnelle régulière" },
+            { value: 4, label: "Marqué", description: "Difficultes marquees, nécessitant une aide professionnelle" },
+            { value: 5, label: "Sévère", description: "Difficultes sévères, fonctionnement très reduit dans ce domaine" },
+            { value: 6, label: "Très sévère", description: "Incapacite totale de fonctionner dans ce domaine" }
         ];
 
-        // Labels de severite
+        // Labels de sévérité
         const severityLabels = {
             1: "Absent",
-            2: "Leger",
+            2: "Léger",
             3: "Manifeste",
-            4: "Marque",
-            5: "Severe",
-            6: "Tres severe"
+            4: "Marqué",
+            5: "Sévère",
+            6: "Très sévère"
         };
 
         // Deductions pour le calcul du score PSP (algorithme standard)
-        // Absent=0, Leger=3, Manifeste=7, Marque=12, Severe=19, Tres severe=26
+        // Absent=0, Léger=3, Manifeste=7, Marqué=12, Sévère=19, Très sévère=26
         const deductions = [0, 0, 3, 7, 12, 19, 26];
 
-        // Etat des reponses
+        // État des réponses
         let answers = { a: null, b: null, c: null, d: null };
 
         function initializeOptions() {
@@ -491,25 +491,25 @@
                 level: "Fonctionnement bon a excellent",
                 className: "low",
                 description: "Difficultes mineures a absentes",
-                action: "Le patient presente un bon niveau de fonctionnement personnel et social. Maintenir le suivi et les strategies actuelles."
+                action: "Le patient présente un bon niveau de fonctionnement personnel et social. Maintenir le suivi et les stratégies actuelles."
             };
             if (score >= 51) return {
-                level: "Fonctionnement avec difficultes manifestes",
+                level: "Fonctionnement avec difficultés manifestes",
                 className: "moderate",
                 description: "Difficultes notables dans un ou plusieurs domaines",
-                action: "Un accompagnement cible sur les domaines en difficulte est recommande. Envisager des interventions psychosociales specifiques."
+                action: "Un accompagnement cible sur les domaines en difficulté est recommandé. Envisager des interventions psychosociales spécifiques."
             };
             if (score >= 31) return {
-                level: "Fonctionnement avec difficultes marquees",
+                level: "Fonctionnement avec difficultés marquees",
                 className: "high",
-                description: "Necessite un soutien professionnel regulier",
-                action: "Une prise en charge rehabilitative structuree est recommandee. Evaluer les besoins en termes d'accompagnement quotidien."
+                description: "Nécessité un soutien professionnel régulier",
+                action: "Une prise en charge rehabilitative structurée est recommandée. Évaluer les besoins en termes d'accompagnement quotidien."
             };
             return {
                 level: "Fonctionnement severement altere",
                 className: "critical",
-                description: "Necessite une prise en charge intensive et un soutien constant",
-                action: "Une prise en charge intensive et multidisciplinaire est necessaire. Evaluer les besoins en termes d'hebergement et d'accompagnement continu."
+                description: "Nécessité une prise en charge intensive et un soutien constant",
+                action: "Une prise en charge intensive et multidisciplinaire est nécessaire. Évaluer les besoins en termes d'hebergement et d'accompagnement continu."
             };
         }
 
@@ -536,69 +536,69 @@
             const actionMap = {
                 a: {
                     4: [
-                        "Evaluer les capacites professionnelles residuelles",
-                        "Envisager un travail protege ou accompagne (ESAT, emploi accompagne)",
+                        "Évaluer les capacites professionnelles residuelles",
+                        "Envisager un travail protégé ou accompagne (ESAT, emploi accompagne)",
                         "Proposer une formation adaptee ou un bilan de competences"
                     ],
                     5: [
                         "Orientation vers un centre de readaptation professionnelle",
-                        "Mise en place d'activites structurees en milieu protege",
-                        "Evaluation des besoins en accompagnement quotidien"
+                        "Mise en place d'activités structurees en milieu protégé",
+                        "Évaluation des besoins en accompagnement quotidien"
                     ],
                     6: [
-                        "Accompagnement quotidien pour les activites de base",
+                        "Accompagnement quotidien pour les activités de base",
                         "Programme de jour structure adapte",
-                        "Reevaluation reguliere des capacites fonctionnelles"
+                        "Reevaluation régulière des capacites fonctionnelles"
                     ]
                 },
                 b: {
                     4: [
                         "Programme d'entrainement aux habiletes sociales",
-                        "Groupe therapeutique de socialisation",
+                        "Groupe thérapeutique de socialisation",
                         "Accompagnement dans les demarches sociales"
                     ],
                     5: [
                         "Accompagnement individualise dans les interactions sociales",
-                        "Mediation familiale si necessaire",
-                        "Evaluation de l'isolement et mise en place de mesures correctives"
+                        "Mediation familiale si nécessaire",
+                        "Évaluation de l'isolement et mise en place de mesures correctives"
                     ],
                     6: [
                         "Accompagnement intensif pour toute interaction sociale",
                         "Programme de restauration du lien social",
-                        "Evaluation de la necessite d'un hebergement accompagne"
+                        "Évaluation de la nécessité d'un hebergement accompagne"
                     ]
                 },
                 c: {
                     4: [
-                        "Programme d'education therapeutique sur l'hygiene et les soins",
+                        "Programme d'education thérapeutique sur l'hygiene et les soins",
                         "Accompagnement aux soins medicaux et dentaires",
-                        "Suivi nutritionnel si necessaire"
+                        "Suivi nutritionnel si nécessaire"
                     ],
                     5: [
-                        "Aide a domicile pour les soins personnels quotidiens",
+                        "Aide à domicile pour les soins personnels quotidiens",
                         "Suivi infirmier rapproche",
-                        "Evaluation des besoins en aide a la vie quotidienne"
+                        "Évaluation des besoins en aide à la vie quotidienne"
                     ],
                     6: [
                         "Accompagnement constant pour les soins personnels",
                         "Envisager un placement en structure adaptee",
-                        "Surveillance medicale rapprochee"
+                        "Surveillance médicale rapprochee"
                     ]
                 },
                 d: {
                     4: [
-                        "Programme de gestion de la colere et des emotions",
-                        "Evaluation du risque de passage a l'acte",
-                        "Ajustement du traitement pharmacologique si necessaire"
+                        "Programme de gestion de la colère et des émotions",
+                        "Évaluation du risque de passage à l'acte",
+                        "Ajustement du traitement pharmacologique si nécessaire"
                     ],
                     5: [
-                        "Surveillance rapprochee des comportements a risque",
-                        "Plan de prevention de la violence",
-                        "Envisager une hospitalisation si necessaire"
+                        "Surveillance rapprochee des comportements à risque",
+                        "Plan de prévention de la violence",
+                        "Envisager une hospitalisation si nécessaire"
                     ],
                     6: [
                         "Prise en charge en milieu hospitalier securise",
-                        "Evaluation psychiatrique approfondie",
+                        "Évaluation psychiatrique approfondie",
                         "Plan de gestion de crise individualise"
                     ]
                 }
@@ -609,19 +609,19 @@
 
         function updateResults() {
             const score = calculateScore();
-            const interpretation = getInterpretation(score);
+            const interprétation = getInterpretation(score);
             const recommendations = getRecommendations();
 
             // Score global
             document.getElementById('totalScore').textContent = score;
 
-            // Interpretation
+            // Interprétation
             const interpretationBox = document.getElementById('interpretationBox');
-            interpretationBox.className = `interpretation ${interpretation.className}`;
+            interpretationBox.className = `interprétation ${interprétation.className}`;
             interpretationBox.innerHTML = `
-                <h3>${interpretation.level} (Score : ${score}/100)</h3>
-                <p><strong>Interpretation :</strong> ${interpretation.description}</p>
-                <p><strong>Recommandation :</strong> ${interpretation.action}</p>
+                <h3>${interprétation.level} (Score : ${score}/100)</h3>
+                <p><strong>Interprétation :</strong> ${interprétation.description}</p>
+                <p><strong>Recommandation :</strong> ${interprétation.action}</p>
             `;
 
             // Barres par domaine
@@ -646,14 +646,14 @@
             }).join('');
 
             // Details
-            updateDetails(score, interpretation, recommendations);
+            updateDetails(score, interprétation, recommendations);
         }
 
-        function updateDetails(score, interpretation, recommendations) {
+        function updateDetails(score, interprétation, recommendations) {
             const detailsContent = document.getElementById('detailsContent');
 
             let html = `
-                <h3 style="margin-bottom: 1.5rem;"><i class="fas fa-clipboard-check"></i> Details de l'evaluation PSP</h3>
+                <h3 style="margin-bottom: 1.5rem;"><i class="fas fa-clipboard-check"></i> Details de l'évaluation PSP</h3>
             `;
 
             // Tableau recapitulatif
@@ -665,7 +665,7 @@
                             <tr style="border-bottom: 2px solid rgba(0,0,0,0.1);">
                                 <th style="text-align: left; padding: 0.5rem;">Domaine</th>
                                 <th style="text-align: center; padding: 0.5rem;">Score</th>
-                                <th style="text-align: center; padding: 0.5rem;">Severite</th>
+                                <th style="text-align: center; padding: 0.5rem;">Sévérité</th>
                                 <th style="text-align: center; padding: 0.5rem;">Deduction</th>
                             </tr>
                         </thead>
@@ -700,7 +700,7 @@
                     ${recommendations.map(rec => `
                         <div class="info-box" style="margin-bottom: 0.75rem;">
                             <h4 style="color: var(--cat-readable); margin-bottom: 0.5rem;">
-                                ${rec.domain} - Severite : ${rec.severity}
+                                ${rec.domain} - Sévérité : ${rec.severity}
                             </h4>
                             <ul style="margin: 0; padding-left: 1.5rem;">
                                 ${rec.actions.map(action => `<li style="margin-bottom: 0.25rem;">${action}</li>`).join('')}
@@ -711,21 +711,21 @@
             } else {
                 html += `
                     <div class="info-box">
-                        <h4 style="color: var(--cat-readable); margin-bottom: 0.5rem;">Aucun domaine avec difficulte marquee ou plus</h4>
+                        <h4 style="color: var(--cat-readable); margin-bottom: 0.5rem;">Aucun domaine avec difficulté marquée ou plus</h4>
                         <p>Le fonctionnement du patient est globalement preserve. Maintenir le suivi actuel et renforcer les facteurs protecteurs.</p>
                     </div>
                 `;
             }
 
-            // Guide d'interpretation
+            // Guide d'interprétation
             html += `
                 <div class="info-box" style="margin-top: 1.5rem;">
-                    <h4 style="color: var(--cat-readable); margin-bottom: 1rem;"><i class="fas fa-info-circle"></i> Guide d'interpretation du score PSP</h4>
+                    <h4 style="color: var(--cat-readable); margin-bottom: 1rem;"><i class="fas fa-info-circle"></i> Guide d'interprétation du score PSP</h4>
                     <ul style="margin: 0; padding-left: 1.5rem; line-height: 2;">
                         <li><strong>71-100 :</strong> Fonctionnement bon a excellent - Difficultes mineures a absentes</li>
-                        <li><strong>51-70 :</strong> Fonctionnement avec difficultes manifestes - Difficultes notables dans un ou plusieurs domaines</li>
-                        <li><strong>31-50 :</strong> Fonctionnement avec difficultes marquees - Necessite un soutien professionnel regulier</li>
-                        <li><strong>1-30 :</strong> Fonctionnement severement altere - Necessite une prise en charge intensive et un soutien constant</li>
+                        <li><strong>51-70 :</strong> Fonctionnement avec difficultés manifestes - Difficultes notables dans un ou plusieurs domaines</li>
+                        <li><strong>31-50 :</strong> Fonctionnement avec difficultés marquees - Nécessité un soutien professionnel régulier</li>
+                        <li><strong>1-30 :</strong> Fonctionnement severement altere - Nécessité une prise en charge intensive et un soutien constant</li>
                     </ul>
                 </div>
             `;
@@ -745,7 +745,7 @@
         function resetForm() {
             answers = { a: null, b: null, c: null, d: null };
 
-            // Reinitialiser les boutons
+            // Réinitialiser les boutons
             Object.keys(domains).forEach(key => {
                 options.forEach(opt => {
                     document.getElementById(`${key}_opt${opt.value}`).classList.remove('selected');
@@ -779,7 +779,7 @@
                                 }
                             });
                         } else {
-                            alert('Format de fichier invalide. Veuillez importer un fichier PSP valide.');
+                            alert('Format de fichier invalide. Veuillez importer un fichier PSP validé.');
                         }
                     } catch (error) {
                         alert("Erreur lors de l'importation du fichier: " + error.message);
@@ -798,7 +798,7 @@
             }
 
             const score = calculateScore();
-            const interpretation = getInterpretation(score);
+            const interprétation = getInterpretation(score);
 
             const data = {
                 questionnaire: "PSP",
@@ -810,7 +810,7 @@
                     D: answers.d
                 },
                 globalScore: score,
-                interpretation: interpretation.level
+                interprétation: interprétation.level
             };
 
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });

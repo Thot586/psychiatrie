@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="DIVA-5 - Entretien Diagnostique pour le TDAH chez l'Adulte — outil clinique interactif pour la psychiatrie et la sante mentale.">
+    <meta name="description" content="DIVA-5 - Entretien Diagnostique pour le TDAH chez l'Adulte — outil clinique interactif pour la psychiatrie et la santé mentale.">
     <title>DIVA-5 - Entretien Diagnostique pour le TDAH chez l'Adulte</title>
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
@@ -116,31 +116,31 @@
         </section>
 
         <!-- Résultats -->
-        <section id="results" class="glass-card results-section" style="display: none;">
+        <section id="results" aria-live="polite" class="glass-card results-section" style="display: none;">
             <h2 style="text-align: center; margin-bottom: 2rem;"><i class="fas fa-chart-pie"></i> Résumé Diagnostique (DSM-5)</h2>
 
             <div class="subscale-grid">
                 <div class="subscale-card">
                     <h4><i class="fas fa-brain"></i> A1. Inattention</h4>
                     <div class="subscale-score">Adulte: <span id="score-inattention-adult">0</span>/9</div>
-                    <div id="result-inattention" class="interpretation low" style="margin-top: 0.5rem; padding: 0.5rem;"></div>
+                    <div id="result-inattention" class="interprétation low" style="margin-top: 0.5rem; padding: 0.5rem;"></div>
                 </div>
                 <div class="subscale-card">
                     <h4><i class="fas fa-bolt"></i> A2. Hyperactivité/Impulsivité</h4>
                     <div class="subscale-score">Adulte: <span id="score-hyperactivity-adult">0</span>/9</div>
-                    <div id="result-hyperactivity" class="interpretation low" style="margin-top: 0.5rem; padding: 0.5rem;"></div>
+                    <div id="result-hyperactivity" class="interprétation low" style="margin-top: 0.5rem; padding: 0.5rem;"></div>
                 </div>
                 <div class="subscale-card">
                     <h4><i class="fas fa-calendar"></i> B. Antériorité</h4>
-                    <div id="result-onset" class="interpretation low" style="margin-top: 0.5rem; padding: 0.5rem;"></div>
+                    <div id="result-onset" class="interprétation low" style="margin-top: 0.5rem; padding: 0.5rem;"></div>
                 </div>
                 <div class="subscale-card">
                     <h4><i class="fas fa-exclamation-circle"></i> C & D. Retentissement</h4>
-                    <div id="result-impairment" class="interpretation low" style="margin-top: 0.5rem; padding: 0.5rem;"></div>
+                    <div id="result-impairment" class="interprétation low" style="margin-top: 0.5rem; padding: 0.5rem;"></div>
                 </div>
             </div>
 
-            <div id="interpretationBox" class="interpretation" style="margin-top: 2rem;"></div>
+            <div id="interpretationBox" class="interprétation" style="margin-top: 2rem;"></div>
         </section>
     </main>
 
@@ -273,47 +273,47 @@
             // Inattention result
             const inattentionResult = document.getElementById('result-inattention');
             if (inattentionAdult >= 5) {
-                inattentionResult.className = 'interpretation low';
+                inattentionResult.className = 'interprétation low';
                 inattentionResult.textContent = `Critère rempli (${inattentionAdult} ≥ 5)`;
             } else {
-                inattentionResult.className = 'interpretation high';
+                inattentionResult.className = 'interprétation high';
                 inattentionResult.textContent = `Non rempli (${inattentionAdult} < 5)`;
             }
 
             // Hyperactivity result
             const hyperactivityResult = document.getElementById('result-hyperactivity');
             if (hyperactivityAdult >= 5) {
-                hyperactivityResult.className = 'interpretation low';
+                hyperactivityResult.className = 'interprétation low';
                 hyperactivityResult.textContent = `Critère rempli (${hyperactivityAdult} ≥ 5)`;
             } else {
-                hyperactivityResult.className = 'interpretation high';
+                hyperactivityResult.className = 'interprétation high';
                 hyperactivityResult.textContent = `Non rempli (${hyperactivityAdult} < 5)`;
             }
 
             // Criterion B
             const onsetResult = document.getElementById('result-onset');
             if (scores.criterionB === 'oui') {
-                onsetResult.className = 'interpretation low';
+                onsetResult.className = 'interprétation low';
                 onsetResult.textContent = 'Oui - Symptômes présents avant 12 ans';
             } else if (scores.criterionB === 'non') {
-                onsetResult.className = 'interpretation high';
+                onsetResult.className = 'interprétation high';
                 onsetResult.textContent = 'Non - Symptômes apparus après 12 ans';
             } else {
-                onsetResult.className = 'interpretation moderate';
+                onsetResult.className = 'interprétation moderate';
                 onsetResult.textContent = 'Non évalué';
             }
 
             // Impairment
             const impairmentResult = document.getElementById('result-impairment');
             if (scores.impairmentAdult === 'oui' && scores.impairmentChild === 'oui') {
-                impairmentResult.className = 'interpretation low';
+                impairmentResult.className = 'interprétation low';
                 impairmentResult.textContent = 'Oui - Retentissement aux deux périodes';
             } else {
-                impairmentResult.className = 'interpretation high';
+                impairmentResult.className = 'interprétation high';
                 impairmentResult.textContent = 'Non ou incomplet';
             }
 
-            // Overall interpretation
+            // Overall interprétation
             const interpretationBox = document.getElementById('interpretationBox');
             const allCriteriaMet = (inattentionAdult >= 5 || hyperactivityAdult >= 5) &&
                                    scores.criterionB === 'oui' &&
@@ -328,10 +328,10 @@
                 } else {
                     presentation = 'Hyperactive/Impulsive prédominante';
                 }
-                interpretationBox.className = 'interpretation low';
+                interpretationBox.className = 'interprétation low';
                 interpretationBox.innerHTML = `<h3>Critères DSM-5 potentiellement remplis</h3><p>Présentation suggérée : <strong>${presentation}</strong><br>Le diagnostic différentiel (critère E) doit être vérifié cliniquement.</p>`;
             } else {
-                interpretationBox.className = 'interpretation moderate';
+                interpretationBox.className = 'interprétation moderate';
                 interpretationBox.innerHTML = `<h3>Critères DSM-5 non remplis</h3><p>Un ou plusieurs critères diagnostiques ne sont pas satisfaits selon l'entretien actuel.</p>`;
             }
 

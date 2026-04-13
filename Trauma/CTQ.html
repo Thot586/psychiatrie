@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="CTQ - Childhood Trauma Questionnaire — outil clinique interactif pour la psychiatrie et la sante mentale.">
+    <meta name="description" content="CTQ - Childhood Trauma Questionnaire — outil clinique interactif pour la psychiatrie et la santé mentale.">
     <title>CTQ - Childhood Trauma Questionnaire</title>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/questionnaire-light.css">
@@ -68,7 +68,7 @@
         </section>
 
         <!-- Progress Bar -->
-        <div class="progress-container" id="progress-container" style="display: none;">
+        <div class="progress-container" id="progress-container" style="position: sticky; top: 60px; z-index: 50; display: none;">
             <div class="progress-bar">
                 <div class="progress-fill" id="progress-fill"></div>
             </div>
@@ -92,7 +92,7 @@
         </div>
 
         <!-- Results -->
-        <section class="glass-card" id="results-section" style="display: none;">
+        <section class="glass-card" id="results-section" aria-live="polite" style="display: none;">
             <h2 style="text-align: center; margin-bottom: 1.5rem;"><i class="fas fa-chart-bar"></i> Résultats CTQ</h2>
 
             <div style="display: flex; justify-content: center; margin-bottom: 2rem;">
@@ -110,10 +110,10 @@
                 <p>Ce questionnaire contient des items de minimisation/déni. Un score élevé à ces items peut indiquer une tendance à minimiser les expériences traumatiques.</p>
             </div>
 
-            <!-- Interpretation -->
+            <!-- Interprétation -->
             <div class="glass-card" style="margin-top: 1.5rem; border-left: 4px solid #6366f1;">
                 <h3><i class="fas fa-clipboard-list"></i> Interprétation</h3>
-                <div id="interpretation-text"></div>
+                <div id="interprétation-text"></div>
             </div>
 
             <!-- Actions -->
@@ -133,8 +133,8 @@
 
     <footer class="footer">
         <p><strong>&copy; Bernstein et al. (1994, 2003) - Childhood Trauma Questionnaire (CTQ)</strong></p>
-        <p>Adapte en version interactive par Dr FENOHASINA T.J. Felicien (Psychiatre)</p>
-        <p>&copy; 2025 - Centre Ressource de Rehabilitation</p>
+        <p>Adapté en version interactive par Dr FENOHASINA T.J. Félicien (Psychiatre)</p>
+        <p>&copy; 2025 - Centre Ressource de Réhabilitation</p>
         <p class="license">Licence CC BY-NC-SA 4.0</p>
     </footer>
 
@@ -150,7 +150,7 @@
 
         const questions = [
             { id: 1, text: "Je n'ai pas eu assez à manger.", subscale: "PN", reversed: false },
-            { id: 2, text: "Je savais qu'il y avait quelqu'un pour prendre soin de moi et me proteger.", subscale: "PN", reversed: true },
+            { id: 2, text: "Je savais qu'il y avait quelqu'un pour prendre soin de moi et me protéger.", subscale: "PN", reversed: true },
             { id: 3, text: "Des membres de ma famille m'ont traité(e) de 'stupide', 'paresseux(se)' ou 'laid(e)'.", subscale: "EA", reversed: false },
             { id: 4, text: "Mes parents étaient trop ivres ou drogué(e)s pour s'occuper de la famille.", subscale: "PN", reversed: false },
             { id: 5, text: "Il y avait quelqu'un dans ma famille qui m'aidait à me sentir important(e) ou spécial(e).", subscale: "EN", reversed: true },
@@ -174,18 +174,18 @@
             { id: 23, text: "Quelqu'un a essayé de me faire faire des choses sexuelles ou de me faire regarder des choses sexuelles.", subscale: "SA", reversed: false },
             { id: 24, text: "Quelqu'un m'a agressé(e) sexuellement.", subscale: "SA", reversed: false },
             { id: 25, text: "Je crois avoir été maltraité(e) émotionnellement.", subscale: "EA", reversed: false },
-            { id: 26, text: "Il y avait quelqu'un pour m'emmener chez le medecin si j'en avais besoin.", subscale: "PN", reversed: true },
+            { id: 26, text: "Il y avait quelqu'un pour m'emmener chez le médecin si j'en avais besoin.", subscale: "PN", reversed: true },
             { id: 27, text: "Je crois avoir été abusé(e) sexuellement.", subscale: "SA", reversed: false },
             { id: 28, text: "Ma famille était une source de force et de soutien.", subscale: "EN", reversed: true }
         ];
 
         const subscaleInfo = {
-            EA: { name: "Abus Émotionnel", cutoffs: { none: 8, low: 9, moderate: 13, severe: 16 } },
-            PA: { name: "Abus Physique", cutoffs: { none: 7, low: 8, moderate: 10, severe: 13 } },
-            SA: { name: "Abus Sexuel", cutoffs: { none: 5, low: 6, moderate: 8, severe: 13 } },
-            EN: { name: "Négligence Émotionnelle", cutoffs: { none: 9, low: 10, moderate: 15, severe: 18 } },
-            PN: { name: "Négligence Physique", cutoffs: { none: 7, low: 8, moderate: 10, severe: 13 } },
-            MD: { name: "Minimisation/Déni", cutoffs: { none: 0, low: 1, moderate: 2, severe: 3 } }
+            EA: { name: "Abus Émotionnel", cutoffs: { none: 8, low: 9, moderate: 13, sévère: 16 } },
+            PA: { name: "Abus Physique", cutoffs: { none: 7, low: 8, moderate: 10, sévère: 13 } },
+            SA: { name: "Abus Sexuel", cutoffs: { none: 5, low: 6, moderate: 8, sévère: 13 } },
+            EN: { name: "Négligence Émotionnelle", cutoffs: { none: 9, low: 10, moderate: 15, sévère: 18 } },
+            PN: { name: "Négligence Physique", cutoffs: { none: 7, low: 8, moderate: 10, sévère: 13 } },
+            MD: { name: "Minimisation/Déni", cutoffs: { none: 0, low: 1, moderate: 2, sévère: 3 } }
         };
 
         const options = [
@@ -298,7 +298,7 @@
             if (score <= cutoffs.none) return { level: "none", label: "Aucun/Minimal", class: "severity-none" };
             if (score <= cutoffs.low) return { level: "low", label: "Léger", class: "severity-low" };
             if (score <= cutoffs.moderate) return { level: "moderate", label: "Modéré", class: "severity-moderate" };
-            return { level: "severe", label: "Sévère", class: "severity-severe" };
+            return { level: "sévère", label: "Sévère", class: "severity-sévère" };
         }
 
         function displayResults(subscaleScores, totalScore) {
@@ -330,7 +330,7 @@
                         <div class="subscale-bar">
                             <div class="subscale-fill ${severity.level}" style="width: ${percentage}%"></div>
                         </div>
-                        <p class="subscale-interpretation">Seuils: Aucun ≤${info.cutoffs.none}, Léger ${info.cutoffs.none + 1}-${info.cutoffs.low}, Modéré ${info.cutoffs.low + 1}-${info.cutoffs.moderate}, Sévère >${info.cutoffs.moderate}</p>
+                        <p class="subscale-interprétation">Seuils: Aucun ≤${info.cutoffs.none}, Léger ${info.cutoffs.none + 1}-${info.cutoffs.low}, Modéré ${info.cutoffs.low + 1}-${info.cutoffs.moderate}, Sévère >${info.cutoffs.moderate}</p>
                     </div>
                 `;
             });
@@ -343,13 +343,13 @@
                         <span class="subscale-name" style="color: #fbbf24;">${subscaleInfo.MD.name}</span>
                         <span class="subscale-score" style="color: #fbbf24;">${mdScore}/15</span>
                     </div>
-                    <p class="subscale-interpretation">Un score ≥10 suggère une possible minimisation ou déni des expériences traumatiques.</p>
+                    <p class="subscale-interprétation">Un score ≥10 suggère une possible minimisation ou déni des expériences traumatiques.</p>
                 </div>
             `;
 
             subscalesDiv.innerHTML = subscalesHTML;
 
-            // Generate interpretation
+            // Generate interprétation
             generateInterpretation(subscaleScores, totalScore);
 
             // Scroll to results
@@ -357,13 +357,13 @@
         }
 
         function generateInterpretation(subscaleScores, totalScore) {
-            let interpretation = '';
+            let interprétation = '';
             const significantTraumas = [];
 
             const mainSubscales = ['EA', 'PA', 'SA', 'EN', 'PN'];
             mainSubscales.forEach(key => {
                 const severity = getSeverityLevel(key, subscaleScores[key]);
-                if (severity.level === 'moderate' || severity.level === 'severe') {
+                if (severity.level === 'moderate' || severity.level === 'sévère') {
                     significantTraumas.push({
                         name: subscaleInfo[key].name,
                         level: severity.label
@@ -372,20 +372,20 @@
             });
 
             if (significantTraumas.length === 0) {
-                interpretation = `<p style="color: #34d399;"><i class="fas fa-check-circle"></i> Les scores obtenus ne suggèrent pas de traumatismes significatifs durant l'enfance. Cependant, ce questionnaire est un outil de dépistage et ne remplace pas une évaluation clinique complète.</p>`;
+                interprétation = `<p style="color: #34d399;"><i class="fas fa-check-circle"></i> Les scores obtenus ne suggèrent pas de traumatismes significatifs durant l'enfance. Cependant, ce questionnaire est un outil de dépistage et ne remplace pas une évaluation clinique complète.</p>`;
             } else {
-                interpretation = `<p><i class="fas fa-exclamation-circle" style="color: #f87171;"></i> Les résultats suggèrent des expériences traumatiques potentiellement significatives dans les domaines suivants :</p><ul style="margin: 1rem 0; padding-left: 1.5rem;">`;
+                interprétation = `<p><i class="fas fa-exclamation-circle" style="color: #f87171;"></i> Les résultats suggèrent des expériences traumatiques potentiellement significatives dans les domaines suivants :</p><ul style="margin: 1rem 0; padding-left: 1.5rem;">`;
                 significantTraumas.forEach(t => {
-                    interpretation += `<li><strong>${t.name}</strong> : niveau ${t.level.toLowerCase()}</li>`;
+                    interprétation += `<li><strong>${t.name}</strong> : niveau ${t.level.toLowerCase()}</li>`;
                 });
-                interpretation += `</ul><p style="color: var(--color-text-muted);">Ces résultats méritent une exploration approfondie avec un professionnel de santé mentale spécialisé dans le trauma.</p>`;
+                interprétation += `</ul><p style="color: var(--color-text-muted);">Ces résultats méritent une exploration approfondie avec un professionnel de santé mentale spécialisé dans le trauma.</p>`;
             }
 
             if (subscaleScores.MD >= 10) {
-                interpretation += `<p style="margin-top: 1rem; color: #fbbf24;"><i class="fas fa-exclamation-triangle"></i> <strong>Note :</strong> Le score de minimisation/déni est élevé (${subscaleScores.MD}/15), ce qui peut indiquer une tendance à sous-évaluer les expériences traumatiques.</p>`;
+                interprétation += `<p style="margin-top: 1rem; color: #fbbf24;"><i class="fas fa-exclamation-triangle"></i> <strong>Note :</strong> Le score de minimisation/déni est élevé (${subscaleScores.MD}/15), ce qui peut indiquer une tendance à sous-évaluer les expériences traumatiques.</p>`;
             }
 
-            document.getElementById('interpretation-text').innerHTML = interpretation;
+            document.getElementById('interprétation-text').innerHTML = interprétation;
         }
 
         function resetQuestionnaire() {

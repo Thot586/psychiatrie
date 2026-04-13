@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="Psychiatrie Transculturelle — ressources cliniques interactives pour la psychiatrie et la santé mentale.">
+  <title>Psychiatrie Transculturelle</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
+  <style>
+    .portal-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+    .portal-card {
+        background: linear-gradient(145deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-xl);
+        padding: 1.5rem;
+        text-decoration: none;
+        display: block;
+        transition: all var(--transition-slow);
+    }
+    .portal-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--color-border-active);
+        box-shadow: var(--shadow-glow);
+    }
+    .portal-card h3 { color: var(--color-text-primary); margin-bottom: 0.5rem; }
+    .portal-card p { color: var(--color-text-muted); font-size: var(--font-size-sm); }
+    .portal-card .card-description {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 1rem;
+        border-radius: var(--radius-md);
+        margin-bottom: 1rem;
+        border: 1px solid var(--color-border);
+    }
+    .portal-card .btn-start {
+        display: inline-block;
+        padding: 0.5rem 1.25rem;
+        border-radius: var(--radius-md);
+        font-weight: 600;
+        text-align: center;
+        transition: all var(--transition-normal);
+        text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navigation-bar">
+    <div class="nav-buttons">
+        <a href="../index.html" class="btn-home" aria-label="Accueil" title="Accueil"><i class="fas fa-home" aria-hidden="true"></i></a>
+        <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
+    </div>
+    <span class="nav-title">Transculturelle</span>
+    <span class="badge" style="background: #ec4899; color: white;">Transculturelle</span>
+  </nav>
+
+  <div class="container">
+
+    <header class="page-header">
+      <p class="subtitle">
+        Approches transculturelles et intégratives en psychiatrie : effets contextuels, modèle bio-psycho-social et culturel.
+      </p>
+    </header>
+
+    <section class="section">
+      <div class="portal-grid">
+
+        <a href="Effets_contextuels.html" class="portal-card">
+          <h3>Effets Contextuels</h3>
+          <div class="card-description">
+            <p>Analyse des effets contextuels en médecine et psychiatrie. Comprendre comment le contexte culturel, social et environnemental influence la présentation clinique et la réponse thérapeutique.</p>
+          </div>
+          <span class="btn-start" style="background: #ec4899; color: white;">
+            Consulter &rarr;
+          </span>
+        </a>
+
+        <a href="Psychiatrie_integrative.html" class="portal-card">
+          <h3>Psychiatrie Intégrative</h3>
+          <div class="card-description">
+            <p>Pour une psychiatrie intégrative : un modèle bio-psycho-social et culturel. Approche holistique intégrant les dimensions biologiques, psychologiques, sociales et culturelles du soin.</p>
+          </div>
+          <span class="btn-start" style="background: #ec4899; color: white;">
+            Consulter &rarr;
+          </span>
+        </a>
+
+      </div>
+    </section>
+
+  </div>
+
+  <footer class="footer">
+    <p>Dr. FENOHASINA T.J. Félicien (Psychiatre)</p>
+    <p>&copy; 2025 - Centre Ressource de Réhabilitation</p>
+    <p style="font-size: var(--font-size-xs); color: var(--color-text-muted); margin-top: 0.5rem;">Licence CC BY-NC-SA 4.0</p>
+  </footer>
+
+</body>
+</html>

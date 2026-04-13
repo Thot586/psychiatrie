@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Échelle d'Estime de Soi de Rosenberg (SERS) — outil clinique interactif pour la psychiatrie et la sante mentale.">
+    <meta name="description" content="Échelle d'Estime de Soi de Rosenberg (SERS) — outil clinique interactif pour la psychiatrie et la santé mentale.">
     <title>Échelle d'Estime de Soi de Rosenberg (SERS)</title>
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
@@ -107,7 +107,7 @@
             <div id="questions"></div>
         </div>
 
-        <div id="results" class="results-section">
+        <div id="results" class="results-section" aria-live="polite">
             <div class="glass-card">
                 <h2 style="text-align: center; margin-bottom: 30px; color: var(--color-text-primary);"><i class="fas fa-chart-bar"></i> Résultats de votre évaluation</h2>
 
@@ -118,7 +118,7 @@
                     </div>
                 </div>
 
-                <div id="interpretationBox" class="interpretation"></div>
+                <div id="interpretationBox" class="interprétation"></div>
 
                 <div class="dimensions-analysis">
                     <h3 style="margin-bottom: 15px; color: var(--color-text-primary);">Analyse des dimensions</h3>
@@ -340,7 +340,7 @@
                 };
             } else {
                 return {
-                    level: "Estime de soi tres forte",
+                    level: "Estime de soi très forte",
                     className: "very-high",
                     description: "Votre estime de soi est très forte. Vous êtes très affirmé(e) et confiant(e) en votre valeur personnelle.",
                     action: "Excellente estime de soi. Veiller à rester ouvert(e) aux feedbacks et maintenir l'empathie envers les autres."
@@ -416,7 +416,7 @@
 
         function updateResults() {
             const scores = calculateScore();
-            const interpretation = getInterpretation(scores.total);
+            const interprétation = getInterpretation(scores.total);
             const recommendations = getRecommendations(scores.total);
 
             document.getElementById('totalScore').textContent = scores.total;
@@ -424,11 +424,11 @@
             document.getElementById('negativeScore').textContent = scores.negative;
 
             const interpretationBox = document.getElementById('interpretationBox');
-            interpretationBox.className = `interpretation ${interpretation.className}`;
+            interpretationBox.className = `interprétation ${interprétation.className}`;
             interpretationBox.innerHTML = `
-                <h3 style="margin-bottom: 10px;">${interpretation.level}</h3>
-                <p style="color: var(--color-text-muted);"><strong>Interprétation :</strong> ${interpretation.description}</p>
-                <p style="color: var(--color-text-muted);"><strong>Recommandation :</strong> ${interpretation.action}</p>
+                <h3 style="margin-bottom: 10px;">${interprétation.level}</h3>
+                <p style="color: var(--color-text-muted);"><strong>Interprétation :</strong> ${interprétation.description}</p>
+                <p style="color: var(--color-text-muted);"><strong>Recommandation :</strong> ${interprétation.action}</p>
             `;
 
             const detailsContent = document.getElementById('detailsContent');
@@ -524,7 +524,7 @@
             }
 
             const scores = calculateScore();
-            const interpretation = getInterpretation(scores.total);
+            const interprétation = getInterpretation(scores.total);
 
             const data = {
                 questionnaire: "SERS - Rosenberg Self-Esteem Scale",
@@ -535,7 +535,7 @@
                     positive_items: scores.positive,
                     negative_items: scores.negative
                 },
-                interpretation: interpretation.level
+                interprétation: interprétation.level
             };
 
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });

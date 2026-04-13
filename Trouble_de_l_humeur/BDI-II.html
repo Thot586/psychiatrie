@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="BDI-II - Inventaire de Dépression de Beck — outil clinique interactif pour la psychiatrie et la sante mentale.">
+    <meta name="description" content="BDI-II - Inventaire de Dépression de Beck — outil clinique interactif pour la psychiatrie et la santé mentale.">
     <title>BDI-II - Inventaire de Dépression de Beck</title>
 
     <!-- Font Awesome pour les icônes -->
@@ -97,7 +97,7 @@
         </section>
 
         <!-- Résultats -->
-        <section id="results" class="results-section" style="display: none;">
+        <section id="results" aria-live="polite" class="results-section" style="display: none;">
             <h2 style="text-align: center; margin-bottom: 2rem;">
                 <i class="fas fa-chart-bar"></i> Résultats de votre évaluation
             </h2>
@@ -109,7 +109,7 @@
                 <p class="score-label">sur 63 points</p>
             </div>
 
-            <div id="interpretationBox" class="interpretation"></div>
+            <div id="interpretationBox" class="interprétation"></div>
 
             <button class="btn-primary w-full" onclick="toggleDetails()" style="margin-top: 1.5rem;">
                 <i class="fas fa-list"></i> Voir les détails et diagnostics différentiels
@@ -509,14 +509,14 @@
 
         function updateResults() {
             const score = calculateScore();
-            const interpretation = getInterpretation(score);
+            const interprétation = getInterpretation(score);
             const differentials = getDifferentials(score);
             const symptomAnalysis = getSymptomAnalysis();
 
             document.getElementById('totalScore').textContent = score;
 
             const interpretationBox = document.getElementById('interpretationBox');
-            interpretationBox.className = `interpretation ${interpretation.className}`;
+            interpretationBox.className = `interprétation ${interprétation.className}`;
 
             // Ajouter un avertissement spécial si score suicidaire élevé
             let suicidalWarning = '';
@@ -531,9 +531,9 @@
             }
 
             interpretationBox.innerHTML = `
-                <h3>Dépression ${interpretation.level}</h3>
-                <p><strong>Interprétation :</strong> ${interpretation.description}</p>
-                <p><strong>Recommandation :</strong> ${interpretation.action}</p>
+                <h3>Dépression ${interprétation.level}</h3>
+                <p><strong>Interprétation :</strong> ${interprétation.description}</p>
+                <p><strong>Recommandation :</strong> ${interprétation.action}</p>
                 ${suicidalWarning}
             `;
 
@@ -647,7 +647,7 @@
             }
 
             const score = calculateScore();
-            const interpretation = getInterpretation(score);
+            const interprétation = getInterpretation(score);
             const symptomAnalysis = getSymptomAnalysis();
 
             const data = {
@@ -655,7 +655,7 @@
                 date: new Date().toISOString(),
                 answers: answers,
                 score: score,
-                interpretation: interpretation.level,
+                interprétation: interprétation.level,
                 symptomAnalysis: {
                     cognitiveAffectiveScore: symptomAnalysis.cognitive,
                     somaticScore: symptomAnalysis.somatic

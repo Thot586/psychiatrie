@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="GAD-7 - Évaluation de l'Anxiété — outil clinique interactif pour la psychiatrie et la sante mentale.">
+    <meta name="description" content="GAD-7 - Évaluation de l'Anxiété — outil clinique interactif pour la psychiatrie et la santé mentale.">
     <title>GAD-7 - Évaluation de l'Anxiété</title>
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
@@ -42,7 +42,7 @@
             </button>
         </div>
         <span class="nav-title">GAD-7</span>
-        <span class="badge badge-cat-anxiete">Anxiété</span>
+        <span class="badge badge-cat-anxiété">Anxiété</span>
     </nav>
 
     <main class="container">
@@ -101,7 +101,7 @@
         </section>
 
         <!-- Résultats -->
-        <section id="results" class="glass-card results-section" style="display: none;">
+        <section id="results" aria-live="polite" class="glass-card results-section" style="display: none;">
             <h2 style="text-align: center; margin-bottom: 2rem;"><i class="fas fa-chart-pie"></i> Résultats de votre évaluation</h2>
 
             <div class="score-display">
@@ -111,7 +111,7 @@
                 </div>
             </div>
 
-            <div id="interpretationBox" class="interpretation"></div>
+            <div id="interpretationBox" class="interprétation"></div>
 
             <button class="btn-primary" onclick="toggleDetails()" style="width: 100%; margin-top: 1rem;">
                 <i class="fas fa-list-ul"></i> Voir les détails et diagnostics différentiels
@@ -302,17 +302,17 @@
 
         function updateResults() {
             const score = calculateScore();
-            const interpretation = getInterpretation(score);
+            const interprétation = getInterpretation(score);
             const differentials = getDifferentials(score);
 
             document.getElementById('totalScore').textContent = score;
 
             const interpretationBox = document.getElementById('interpretationBox');
-            interpretationBox.className = `interpretation ${interpretation.className}`;
+            interpretationBox.className = `interprétation ${interprétation.className}`;
             interpretationBox.innerHTML = `
-                <h3>Anxiété ${interpretation.level}</h3>
-                <p><strong>Interprétation :</strong> ${interpretation.description}</p>
-                <p><strong>Recommandation :</strong> ${interpretation.action}</p>
+                <h3>Anxiété ${interprétation.level}</h3>
+                <p><strong>Interprétation :</strong> ${interprétation.description}</p>
+                <p><strong>Recommandation :</strong> ${interprétation.action}</p>
             `;
 
             const detailsContent = document.getElementById('detailsContent');
@@ -394,7 +394,7 @@
             }
 
             const score = calculateScore();
-            const interpretation = getInterpretation(score);
+            const interprétation = getInterpretation(score);
 
             const data = {
                 questionnaire: "GAD-7",
@@ -402,7 +402,7 @@
                 answers: answers,
                 difficulty: difficulty,
                 score: score,
-                interpretation: interpretation.level
+                interprétation: interprétation.level
             };
 
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });

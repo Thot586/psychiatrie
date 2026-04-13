@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="EQ - Quotient d'Empathie — outil clinique interactif pour la psychiatrie et la sante mentale.">
+    <meta name="description" content="EQ - Quotient d'Empathie — outil clinique interactif pour la psychiatrie et la santé mentale.">
     <title>EQ - Quotient d'Empathie</title>
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
@@ -85,7 +85,7 @@
         </section>
 
         <!-- Résultats -->
-        <section id="results" class="glass-card results-section" style="display: none;">
+        <section id="results" aria-live="polite" class="glass-card results-section" style="display: none;">
             <h2 style="text-align: center; margin-bottom: 2rem;"><i class="fas fa-chart-pie"></i> Résultats</h2>
 
             <div class="score-display">
@@ -95,7 +95,7 @@
                 </div>
             </div>
 
-            <div id="interpretationBox" class="interpretation"></div>
+            <div id="interpretationBox" class="interprétation"></div>
 
             <div class="subscale-grid" style="margin-top: 2rem;">
                 <div class="subscale-card">
@@ -167,7 +167,7 @@
             {text: "Dans une conversation, j'ai tendance à me centrer sur mes propres pensées plutôt que sur celles de mon interlocuteur.", empathy: true, reversed: true, type: "cognitive"},
             {text: "Je préfère les farces aux jeux de mots.", empathy: false, reversed: false, type: null},
             {text: "Je vis au jour le jour.", empathy: false, reversed: false, type: null},
-            {text: "Quand j'étais enfant, j'aimais couper des vers de terre pour voir ce qui se passe.", empathy: false, reversed: false, type: null},
+            {text: "Quand j'étais enfant, j'aimais couper des vers de terre pour voir ce qui se passé.", empathy: false, reversed: false, type: null},
             {text: "Je détecte rapidement si quelqu'un dit une chose qui en signifie une autre.", empathy: true, reversed: false, type: "cognitive"},
             {text: "J'ai de solides convictions sur la moralité.", empathy: false, reversed: false, type: null},
             {text: "Je ne comprends pas comment des choses vexent tant certaines personnes.", empathy: true, reversed: true, type: "cognitive"},
@@ -194,7 +194,7 @@
             {text: "Lorsque je regarde le journal télévisé, je suis triste de voir des personnes qui souffrent.", empathy: true, reversed: false, type: "affective"},
             {text: "Mes amis me parlent généralement de leurs problèmes car ils disent que je suis très compréhensif(ve).", empathy: true, reversed: false, type: "affective"},
             {text: "Je peux sentir quand je dérange les autres, même s'ils ne me le disent pas.", empathy: true, reversed: false, type: "cognitive"},
-            {text: "Je commence souvent de nouveaux passe-temps qui m'ennuient vite et je passe à autre chose.", empathy: false, reversed: false, type: null},
+            {text: "Je commence souvent de nouveaux passé-temps qui m'ennuient vite et je passé à autre chose.", empathy: false, reversed: false, type: null},
             {text: "Des fois, on me dit que j'exagère quand je charrie les gens.", empathy: false, reversed: false, type: null},
             {text: "Je serais bien trop anxieux(se) de monter sur un manège de montagnes russes.", empathy: false, reversed: false, type: null},
             {text: "On me dit souvent que je suis insensible même si je ne vois pas toujours pourquoi.", empathy: true, reversed: true, type: "affective"},
@@ -313,7 +313,7 @@
             document.getElementById('totalScore').textContent = total;
             const interp = getInterpretation(total);
             const interpretationBox = document.getElementById('interpretationBox');
-            interpretationBox.className = `interpretation ${interp.className}`;
+            interpretationBox.className = `interprétation ${interp.className}`;
             interpretationBox.innerHTML = `<h3>${interp.level}</h3><p>${interp.desc}</p>`;
 
             document.getElementById('score-cog').textContent = cogScore;
@@ -416,7 +416,7 @@
                 answers: answers,
                 totalScore: total,
                 subscores: { cognitive: cogScore, affective: affScore },
-                interpretation: getInterpretation(total).level
+                interprétation: getInterpretation(total).level
             };
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);

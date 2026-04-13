@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Questionnaire Y-BOCS - Evaluation du Trouble Obsessionnel-Compulsif — outil clinique interactif pour la psychiatrie et la sante mentale.">
-    <title>Questionnaire Y-BOCS - Evaluation du Trouble Obsessionnel-Compulsif</title>
+    <meta name="description" content="Questionnaire Y-BOCS - Évaluation du Trouble Obsessionnel-Compulsif — outil clinique interactif pour la psychiatrie et la santé mentale.">
+    <title>Questionnaire Y-BOCS - Évaluation du Trouble Obsessionnel-Compulsif</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/questionnaire-light.css">
@@ -37,19 +37,19 @@
             <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
         </div>
         <span class="nav-title">Y-BOCS</span>
-        <span class="badge badge-cat-anxiete">Anxiete</span>
+        <span class="badge badge-cat-anxiété">Anxiété</span>
     </nav>
 
     <div class="container">
         <div class="glass-card" style="text-align: center; margin-bottom: 2rem;">
             <h2 style="margin-bottom: 0.5rem;">Questionnaire Y-BOCS</h2>
-            <p style="margin: 0;">Echelle d'obsessions-compulsions de Yale-Brown (auto-evaluation)</p>
+            <p style="margin: 0;">Échelle d'obsessions-compulsions de Yale-Brown (auto-évaluation)</p>
         </div>
 
         <div class="glass-card">
             <h3><i class="fas fa-info-circle"></i> A propos de ce questionnaire</h3>
             <p style="line-height: 1.6;">
-                L'echelle Y-BOCS (Goodman et al., 1989) est l'un des outils de reference pour evaluer la severite des symptomes du Trouble Obsessionnel-Compulsif (TOC). Elle mesure l'impact des obsessions (pensees envahissantes) et des compulsions (comportements repetitifs) sur votre vie au cours de la <strong>semaine ecoulee</strong>.
+                L'échelle Y-BOCS (Goodman et al., 1989) est l'un des outils de référence pour évaluer la sévérité des symptômes du Trouble Obsessionnel-Compulsif (TOC). Elle mesure l'impact des obsessions (pensées envahissantes) et des compulsions (comportements repetitifs) sur votre vie au cours de la <strong>semaine écoulée</strong>.
             </p>
 
             <div class="control-buttons" style="margin-top: 1.5rem;">
@@ -57,7 +57,7 @@
                     <i class="fas fa-file-import"></i> Importer un questionnaire
                 </button>
                 <button class="btn btn-secondary" onclick="resetForm()">
-                    <i class="fas fa-redo"></i> Reinitialiser
+                    <i class="fas fa-redo"></i> Réinitialiser
                 </button>
             </div>
             <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="loadFile(event)">
@@ -66,32 +66,32 @@
                 <h3><i class="fas fa-exclamation-triangle"></i> Avertissement important</h3>
                 <ul>
                     <li>Cet auto-questionnaire est un outil d'information et de sensibilisation, <strong>il ne constitue pas un diagnostic</strong>.</li>
-                    <li>Seul un professionnel de sante qualifie (medecin, psychiatre, psychologue) peut poser un diagnostic.</li>
-                    <li>Les resultats sont indicatifs. Une interpretation clinique par un professionnel est necessaire.</li>
-                    <li>Si vous etes en detresse, n'hesitez pas a chercher de l'aide. <strong>Numero national de prevention du suicide : 3114</strong> (gratuit, 24h/7j).</li>
+                    <li>Seul un professionnel de santé qualifie (médecin, psychiatre, psychologue) peut poser un diagnostic.</li>
+                    <li>Les résultats sont indicatifs. Une interprétation clinique par un professionnel est nécessaire.</li>
+                    <li>Si vous êtes en détresse, n'hesitez pas a chercher de l'aide. <strong>Numero national de prévention du suicide : 3114</strong> (gratuit, 24h/7j).</li>
                 </ul>
             </div>
         </div>
 
         <div class="glass-card">
-            <h3><i class="fas fa-lightbulb"></i> Pour vous aider a identifier vos symptomes</h3>
-            <p style="margin-bottom: 1rem;">Le TOC peut se manifester de nombreuses facons. Voici des exemples courants d'obsessions et de compulsions pour vous aider a reflechir a vos propres experiences avant de repondre.</p>
+            <h3><i class="fas fa-lightbulb"></i> Pour vous aider a identifier vos symptômes</h3>
+            <p style="margin-bottom: 1rem;">Le TOC peut se manifester de nombreuses facons. Voici des exemples courants d'obsessions et de compulsions pour vous aider a réfléchir a vos propres experiences avant de répondre.</p>
             <details>
-                <summary>Exemples d'obsessions (pensees)</summary>
+                <summary>Exemples d'obsessions (pensées)</summary>
                 <ul>
-                    <li><strong>Contamination :</strong> Peur des microbes, de la salete, des produits chimiques, de contaminer les autres.</li>
+                    <li><strong>Contamination :</strong> Peur des microbes, de la saleté, des produits chimiques, de contaminer les autres.</li>
                     <li><strong>Agressivite :</strong> Peur de se faire du mal ou de faire du mal aux autres (physiquement, verbalement), images violentes.</li>
-                    <li><strong>Symetrie et exactitude :</strong> Besoin imperieux que les choses soient parfaitement alignees, ordonnees, ou "justes".</li>
-                    <li><strong>Religieuses (scrupules) :</strong> Inquietude excessive sur le blaspheme, la moralite, le bien et le mal.</li>
-                    <li><strong>Sexuelles :</strong> Pensees, images ou impulsions sexuelles non desirees, percues comme perverses ou interdites.</li>
-                    <li><strong>Somatiques :</strong> Inquietude excessive concernant une maladie ou une partie du corps.</li>
+                    <li><strong>Symétrie et exactitude :</strong> Besoin imperieux que les choses soient parfaitement alignees, ordonnees, ou "justes".</li>
+                    <li><strong>Religieuses (scrupules) :</strong> Inquiétude excessive sur le blasphème, la moralite, le bien et le mal.</li>
+                    <li><strong>Sexuelles :</strong> Pensees, images ou impulsions sexuelles non désirées, perçues comme perverses ou interdites.</li>
+                    <li><strong>Somatiques :</strong> Inquiétude excessive concernant une maladie ou une partie du corps.</li>
                 </ul>
             </details>
             <details>
                 <summary>Exemples de compulsions (comportements)</summary>
                 <ul>
                     <li><strong>Lavage / Nettoyage :</strong> Se laver les mains de maniere excessive, nettoyer son environnement de facon ritualisee.</li>
-                    <li><strong>Verification :</strong> Verifier a de multiples reprises les serrures, les appareils menagers, que l'on n'a blesse personne.</li>
+                    <li><strong>Vérification :</strong> Verifier a de multiples reprises les serrures, les appareils menagers, que l'on n'a blesse personne.</li>
                     <li><strong>Repetition / Comptage :</strong> Repeter une action un certain nombre de fois, compter des objets ou dans sa tete.</li>
                     <li><strong>Ordre / Arrangement :</strong> Ranger, aligner ou organiser les objets jusqu'a ce que cela semble "parfait".</li>
                     <li><strong>Rituels mentaux :</strong> Se repeter des mots ou des prieres en silence, neutraliser une "mauvaise" pensee par une "bonne".</li>
@@ -101,12 +101,12 @@
         </div>
 
         <div class="glass-card">
-            <h3 style="margin-bottom: 1.5rem;">Veuillez cocher la case correspondant le mieux a votre etat, en moyenne, dans la semaine ecoulee.</h3>
+            <h3 style="margin-bottom: 1.5rem;">Veuillez cocher la case correspondant le mieux a votre état, en moyenne, dans la semaine écoulée.</h3>
             <div id="questions"></div>
         </div>
 
-        <div id="results" class="results-section glass-card">
-            <h2 style="text-align: center; margin-bottom: 2rem;"><i class="fas fa-chart-bar"></i> Vos Resultats</h2>
+        <div id="results" aria-live="polite" class="results-section glass-card">
+            <h2 style="text-align: center; margin-bottom: 2rem;"><i class="fas fa-chart-bar"></i> Vos Résultats</h2>
 
             <div class="score-display" style="text-align: center;">
                 <div class="score-circle">
@@ -115,20 +115,20 @@
                 </div>
                 <div class="sub-scores-display">
                     <div class="sub-score-box">
-                        <h3>Severite des Obsessions</h3>
+                        <h3>Sévérité des Obsessions</h3>
                         <div id="obsessionScore" class="sub-score-value">0 <span>/ 20</span></div>
                     </div>
                     <div class="sub-score-box">
-                        <h3>Severite des Compulsions</h3>
+                        <h3>Sévérité des Compulsions</h3>
                         <div id="compulsionScore" class="sub-score-value">0 <span>/ 20</span></div>
                     </div>
                 </div>
             </div>
 
-            <div id="interpretationBox" class="interpretation"></div>
+            <div id="interpretationBox" class="interprétation"></div>
 
             <div style="margin-top: 2rem;">
-                <h3><i class="fas fa-save"></i> Exporter les resultats</h3>
+                <h3><i class="fas fa-save"></i> Exporter les résultats</h3>
                 <div class="consent-box">
                     <label>
                         <input type="checkbox" id="exportConsent">
@@ -149,7 +149,7 @@
         <footer class="footer">
             <p><strong>Y-BOCS - Yale-Brown Obsessive Compulsive Scale</strong></p>
             <p><strong>Auteurs originaux :</strong> Goodman, W.K., Price, L.H., Rasmussen, S.A., et al. (1989).</p>
-            <p><strong>Adaptation numerique :</strong> Dr FENOHASINA | Psychiatre - FFI</p>
+            <p><strong>Adaptation numérique :</strong> Dr FENOHASINA | Psychiatre - FFI</p>
             <small>&copy; 2025 - Tous droits reserves</small>
         </footer>
     </div>
@@ -157,15 +157,15 @@
     <script>
         const questions = [
             // Obsessions
-            { type: 'obsession', text: "Combien de temps vos pensees obsedantes occupent-elles votre esprit ? (Combien de temps gagneriez-vous si vous n'aviez pas ces pensees ?)" },
-            { type: 'obsession', text: "Dans quelle mesure vos pensees obsedantes vous genent-elles dans votre vie sociale, professionnelle, ou vos etudes ?" },
-            { type: 'obsession', text: "Quel niveau d'angoisse, d'anxiete ou de detresse ces pensees obsedantes creent-elles en vous ?" },
-            { type: 'obsession', text: "Quel effort faites-vous pour resister a ces pensees obsedantes (les ignorer, les chasser) ?" },
-            { type: 'obsession', text: "Quel controle avez-vous sur vos pensees obsedantes ? (A quel point parvenez-vous a les stopper ou a les detourner ?)" },
+            { type: 'obsession', text: "Combien de temps vos pensées obsédantes occupent-elles votre esprit ? (Combien de temps gagneriez-vous si vous n'aviez pas ces pensées ?)" },
+            { type: 'obsession', text: "Dans quelle mesure vos pensées obsédantes vous gênent-elles dans votre vie sociale, professionnelle, ou vos études ?" },
+            { type: 'obsession', text: "Quel niveau d'angoisse, d'anxiété ou de détresse ces pensées obsédantes créent-elles en vous ?" },
+            { type: 'obsession', text: "Quel effort faites-vous pour resister a ces pensées obsédantes (les ignorer, les chasser) ?" },
+            { type: 'obsession', text: "Quel controle avez-vous sur vos pensées obsédantes ? (A quel point parvenez-vous à les stopper ou à les détourner ?)" },
             // Compulsions
-            { type: 'compulsion', text: "Combien de temps passez-vous a accomplir des rituels (comportements compulsifs) ? (Combien de temps de plus que les autres pour les activites quotidiennes ?)" },
-            { type: 'compulsion', text: "Dans quelle mesure vos rituels vous genent-ils dans votre vie sociale, professionnelle ou vos etudes ? Y a-t-il des choses que vous ne faites pas a cause d'eux ?" },
-            { type: 'compulsion', text: "Comment vous sentiriez-vous si on vous empechait de faire vos rituels ? Quel serait votre degre d'anxiete ?" },
+            { type: 'compulsion', text: "Combien de temps passez-vous a accomplir des rituels (comportements compulsifs) ? (Combien de temps de plus que les autres pour les activités quotidiennes ?)" },
+            { type: 'compulsion', text: "Dans quelle mesure vos rituels vous gênent-ils dans votre vie sociale, professionnelle ou vos études ? Y a-t-il des choses que vous ne faites pas à cause d'eux ?" },
+            { type: 'compulsion', text: "Comment vous sentiriez-vous si on vous empêchait de faire vos rituels ? Quel serait votre degre d'anxiété ?" },
             { type: 'compulsion', text: "Quel effort faites-vous pour resister a vos compulsions ?" },
             { type: 'compulsion', text: "Quel controle avez-vous sur vos rituels ? (Vous sentez-vous contraint(e) de les accomplir ?)" }
         ];
@@ -174,26 +174,26 @@
             // Options pour les items 1, 2, 3, 6, 7, 8
             [
                 { value: 0, label: "Nul / Aucune" },
-                { value: 1, label: "Leger / Faible (ex: < 1h/jour)" },
+                { value: 1, label: "Léger / Faible (ex: < 1h/jour)" },
                 { value: 2, label: "Moyen / Net (ex: 1 a 3h/jour)" },
-                { value: 3, label: "Important / Severe (ex: 3 a 8h/jour)" },
-                { value: 4, label: "Extreme / Invalidant (ex: > 8h/jour)" }
+                { value: 3, label: "Important / Sévère (ex: 3 a 8h/jour)" },
+                { value: 4, label: "Extrême / Invalidant (ex: > 8h/jour)" }
             ],
             // Options pour les items 4, 9 (Resistance)
             [
                 { value: 0, label: "J'essaie toujours de resister" },
                 { value: 1, label: "J'essaie de resister la plupart du temps" },
                 { value: 2, label: "Je fais quelques efforts pour resister" },
-                { value: 3, label: "Je cede sans essayer de controler, mais a contrecoeur" },
-                { value: 4, label: "Je cede completement et volontiers a tout" }
+                { value: 3, label: "Je cède sans essayer de contrôler, mais a contrecoeur" },
+                { value: 4, label: "Je cède complètement et volontiers a tout" }
             ],
             // Options pour les items 5, 10 (Controle)
             [
                 { value: 0, label: "Controle total" },
                 { value: 1, label: "Beaucoup de controle (j'y arrive avec un peu d'effort)" },
-                { value: 2, label: "Controle moyen (j'y arrive parfois, avec difficulte)" },
-                { value: 3, label: "Peu de controle (j'arrive rarement a les stopper)" },
-                { value: 4, label: "Aucun controle (je suis totalement depourvu de volonte face a elles)" }
+                { value: 2, label: "Controle moyen (j'y arrive parfois, avec difficulté)" },
+                { value: 3, label: "Peu de controle (j'arrive rarement à les stopper)" },
+                { value: 4, label: "Aucun controle (je suis totalement dépourvu de volonte face à elles)" }
             ]
         ];
 
@@ -280,40 +280,40 @@
         function getInterpretation(score) {
             if (score <= 7) return {
                 level: "Subclinique", className: "subclinical",
-                description: "Les symptomes rapportes sont minimes et n'atteignent probablement pas un seuil cliniquement significatif."
+                description: "Les symptômes rapportes sont minimes et n'atteignent probablement pas un seuil cliniquement significatif."
             };
             if (score <= 15) return {
-                level: "Leger", className: "mild",
-                description: "Les symptomes sont presents et peuvent causer une certaine gene, mais leur impact sur le quotidien reste limite."
+                level: "Léger", className: "mild",
+                description: "Les symptômes sont présents et peuvent causer une certaine gene, mais leur impact sur le quotidien reste limite."
             };
             if (score <= 23) return {
-                level: "Modere", className: "moderate",
-                description: "Les symptomes sont clairement presents, frequents, et entrainent une interference notable dans la vie quotidienne. Un seuil de 16 est souvent utilise dans les etudes pour identifier un TOC cliniquement significatif."
+                level: "Modéré", className: "moderate",
+                description: "Les symptômes sont clairement présents, fréquents, et entraînent une interférence notable dans la vie quotidienne. Un seuil de 16 est souvent utilisé dans les études pour identifier un TOC cliniquement significatif."
             };
             if (score <= 31) return {
-                level: "Severe", className: "severe",
-                description: "Les symptomes sont envahissants, causent une detresse importante et perturbent considerablement le fonctionnement social, professionnel ou personnel."
+                level: "Sévère", className: "sévère",
+                description: "Les symptômes sont envahissants, causent une détresse importante et perturbent considerablement le fonctionnement social, professionnel ou personnel."
             };
             return {
-                level: "Extreme", className: "extreme",
-                description: "Les symptomes sont presque constants, extremement invalidants et dominent la quasi-totalite de la vie de la personne."
+                level: "Extrême", className: "extrême",
+                description: "Les symptômes sont presque constants, extremement invalidants et dominent la quasi-totalite de la vie de la personne."
             };
         }
 
         function updateResults() {
             const { totalScore, obsessionScore, compulsionScore } = calculateScores();
-            const interpretation = getInterpretation(totalScore);
+            const interprétation = getInterpretation(totalScore);
 
             document.getElementById('totalScore').textContent = totalScore;
             document.getElementById('obsessionScore').innerHTML = `${obsessionScore} <span>/ 20</span>`;
             document.getElementById('compulsionScore').innerHTML = `${compulsionScore} <span>/ 20</span>`;
 
             const interpretationBox = document.getElementById('interpretationBox');
-            interpretationBox.className = `interpretation ${interpretation.className}`;
+            interpretationBox.className = `interprétation ${interprétation.className}`;
             interpretationBox.innerHTML = `
-                <h3 style="margin-bottom: 0.75rem;">Severite du TOC : ${interpretation.level}</h3>
-                <p style="margin-bottom: 1rem;">${interpretation.description}</p>
-                <p style="font-weight: bold;">Il est fortement recommande de discuter de ces resultats avec un professionnel de sante pour une evaluation complete.</p>
+                <h3 style="margin-bottom: 0.75rem;">Sévérité du TOC : ${interprétation.level}</h3>
+                <p style="margin-bottom: 1rem;">${interprétation.description}</p>
+                <p style="font-weight: bold;">Il est fortement recommandé de discuter de ces résultats avec un professionnel de santé pour une évaluation complete.</p>
             `;
         }
 
@@ -350,10 +350,10 @@
                             }
                         });
                     } else {
-                        alert("Le fichier JSON n'est pas valide ou ne correspond pas au format Y-BOCS.");
+                        alert("Le fichier JSON n'est pas validé ou ne correspond pas au format Y-BOCS.");
                     }
                 } catch (error) {
-                    alert("Erreur lors de la lecture du fichier. Assurez-vous qu'il s'agit d'un fichier JSON valide.");
+                    alert("Erreur lors de la lecture du fichier. Assurez-vous qu'il s'agit d'un fichier JSON validé.");
                     console.error("JSON Parse Error:", error);
                 }
             };
@@ -366,12 +366,12 @@
                 return;
             }
             if (!answers.every(a => a !== null)) {
-                alert("Veuillez repondre a toutes les questions avant d'exporter.");
+                alert("Veuillez répondre à toutes les questions avant d'exporter.");
                 return;
             }
 
             const { totalScore, obsessionScore, compulsionScore } = calculateScores();
-            const interpretation = getInterpretation(totalScore);
+            const interprétation = getInterpretation(totalScore);
 
             const dataToExport = {
                 questionnaire: "Y-BOCS",
@@ -382,9 +382,9 @@
                     obsessions: obsessionScore,
                     compulsions: compulsionScore
                 },
-                interpretation: {
-                    level: interpretation.level,
-                    description: interpretation.description
+                interprétation: {
+                    level: interprétation.level,
+                    description: interprétation.description
                 }
             };
 
@@ -400,7 +400,7 @@
         }
 
         function printResults() {
-            // Afficher les resultats avant impression
+            // Afficher les résultats avant impression
             const resultsSection = document.getElementById('results');
             if (resultsSection) {
                 resultsSection.style.display = 'block';

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="ASRS - Évaluation du TDAH Adulte — outil clinique interactif pour la psychiatrie et la sante mentale.">
+    <meta name="description" content="ASRS - Évaluation du TDAH Adulte — outil clinique interactif pour la psychiatrie et la santé mentale.">
     <title>ASRS - Évaluation du TDAH Adulte</title>
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
@@ -93,10 +93,10 @@
         </form>
 
         <!-- Résultats -->
-        <section id="results" class="glass-card results-section" style="display: none;">
+        <section id="results" aria-live="polite" class="glass-card results-section" style="display: none;">
             <h2 style="text-align: center; margin-bottom: 2rem;"><i class="fas fa-clipboard-check"></i> Vos Résultats</h2>
 
-            <div id="main-result-card" class="interpretation"></div>
+            <div id="main-result-card" class="interprétation"></div>
 
             <!-- Export -->
             <div class="glass-card" style="margin-top: 2rem; background: rgba(255,255,255,0.05);">
@@ -278,13 +278,13 @@
             const positiveScreen = scoreA >= 4;
 
             if (positiveScreen) {
-                mainResultCard.className = 'interpretation high';
+                mainResultCard.className = 'interprétation high';
                 mainResultCard.innerHTML = `
                     <h3><i class="fas fa-check-circle"></i> Dépistage positif pour les symptômes du TDAH</h3>
                     <p>Score : <strong>${scoreA}/6</strong>. Une évaluation par un professionnel est recommandée.</p>
                 `;
             } else {
-                mainResultCard.className = 'interpretation low';
+                mainResultCard.className = 'interprétation low';
                 mainResultCard.innerHTML = `
                     <h3><i class="fas fa-info-circle"></i> Dépistage négatif</h3>
                     <p>Score : <strong>${scoreA}/6</strong>. Si vous avez des difficultés, consultez tout de même un professionnel.</p>

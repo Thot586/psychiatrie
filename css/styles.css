@@ -974,6 +974,12 @@ input:focus-visible {
    ======================================== */
 .progress-container {
     margin-bottom: 1.5rem;
+    position: sticky;
+    top: 60px;
+    z-index: 50;
+    background: var(--neo-bg);
+    padding: 0.5rem 0;
+    border-radius: var(--radius-md);
 }
 
 .progress-bar {

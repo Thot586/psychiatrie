@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="PANSS - Échelle des Syndromes Positifs et Négatifs — outil clinique interactif pour la psychiatrie et la sante mentale.">
+    <meta name="description" content="PANSS - Échelle des Syndromes Positifs et Négatifs — outil clinique interactif pour la psychiatrie et la santé mentale.">
     <title>PANSS - Échelle des Syndromes Positifs et Négatifs</title>
 
     <!-- Font Awesome pour les icônes -->
@@ -101,7 +101,7 @@
         </section>
 
         <!-- Résultats -->
-        <section id="results" class="results-section" style="display: none;">
+        <section id="results" aria-live="polite" class="results-section" style="display: none;">
             <h2 style="text-align: center; margin-bottom: 2rem;">
                 <i class="fas fa-chart-bar"></i> Résultats de l'évaluation
             </h2>
@@ -113,7 +113,7 @@
                 <p class="score-label">sur 210 points (score total)</p>
             </div>
 
-            <div id="interpretationBox" class="interpretation"></div>
+            <div id="interpretationBox" class="interprétation"></div>
 
             <!-- Scores par sous-échelle -->
             <div class="glass-card" style="margin-top: 1.5rem;">
@@ -189,22 +189,22 @@
             { id: "N6", text: "Manque de spontanéité et de fluidité dans la conversation", subscale: "negative" },
             { id: "N7", text: "Pensée stéréotypée", subscale: "negative" },
             // Psychopathologie Générale (G1-G16)
-            { id: "G1", text: "Préoccupations somatiques", subscale: "general" },
-            { id: "G2", text: "Anxiété", subscale: "general" },
-            { id: "G3", text: "Sentiments de culpabilité", subscale: "general" },
-            { id: "G4", text: "Tension", subscale: "general" },
-            { id: "G5", text: "Maniérisme et troubles de la posture", subscale: "general" },
-            { id: "G6", text: "Dépression", subscale: "general" },
-            { id: "G7", text: "Ralentissement moteur", subscale: "general" },
-            { id: "G8", text: "Non-coopération", subscale: "general" },
-            { id: "G9", text: "Contenu inhabituel de la pensée", subscale: "general" },
-            { id: "G10", text: "Désorientation", subscale: "general" },
-            { id: "G11", text: "Manque d'attention", subscale: "general" },
-            { id: "G12", text: "Manque de jugement et de prise de conscience", subscale: "general" },
-            { id: "G13", text: "Trouble de la volition", subscale: "general" },
-            { id: "G14", text: "Mauvais contrôle pulsionnel", subscale: "general" },
-            { id: "G15", text: "Préoccupation excessive de soi", subscale: "general" },
-            { id: "G16", text: "Évitement social actif", subscale: "general" }
+            { id: "G1", text: "Préoccupations somatiques", subscale: "général" },
+            { id: "G2", text: "Anxiété", subscale: "général" },
+            { id: "G3", text: "Sentiments de culpabilité", subscale: "général" },
+            { id: "G4", text: "Tension", subscale: "général" },
+            { id: "G5", text: "Maniérisme et troubles de la posture", subscale: "général" },
+            { id: "G6", text: "Dépression", subscale: "général" },
+            { id: "G7", text: "Ralentissement moteur", subscale: "général" },
+            { id: "G8", text: "Non-coopération", subscale: "général" },
+            { id: "G9", text: "Contenu inhabituel de la pensée", subscale: "général" },
+            { id: "G10", text: "Désorientation", subscale: "général" },
+            { id: "G11", text: "Manque d'attention", subscale: "général" },
+            { id: "G12", text: "Manque de jugement et de prise de conscience", subscale: "général" },
+            { id: "G13", text: "Trouble de la volition", subscale: "général" },
+            { id: "G14", text: "Mauvais contrôle pulsionnel", subscale: "général" },
+            { id: "G15", text: "Préoccupation excessive de soi", subscale: "général" },
+            { id: "G16", text: "Évitement social actif", subscale: "général" }
         ];
 
         // Options de cotation (1-7)
@@ -222,14 +222,14 @@
         const subscales = {
             positive: { name: "Échelle Positive", items: [0, 1, 2, 3, 4, 5, 6], maxScore: 49 },
             negative: { name: "Échelle Négative", items: [7, 8, 9, 10, 11, 12, 13], maxScore: 49 },
-            general: { name: "Psychopathologie Générale", items: [14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], maxScore: 112 }
+            général: { name: "Psychopathologie Générale", items: [14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], maxScore: 112 }
         };
 
         // Titres des sections
         const sectionHeaders = {
             positive: "Échelle Positive (P1-P7)",
             negative: "Échelle Négative (N1-N7)",
-            general: "Psychopathologie Générale (G1-G16)"
+            général: "Psychopathologie Générale (G1-G16)"
         };
 
         let answers = new Array(30).fill(null);
@@ -355,18 +355,18 @@
 
         function updateResults() {
             const score = calculateScore();
-            const interpretation = getInterpretation(score);
+            const interprétation = getInterpretation(score);
             const subScores = calculateSubscaleScores();
 
             document.getElementById('totalScore').textContent = score;
 
             // Interprétation
             const interpretationBox = document.getElementById('interpretationBox');
-            interpretationBox.className = `interpretation ${interpretation.className}`;
+            interpretationBox.className = `interprétation ${interprétation.className}`;
             interpretationBox.innerHTML = `
-                <h3>${interpretation.level}</h3>
-                <p><strong>Interprétation :</strong> ${interpretation.description}</p>
-                <p><strong>Recommandation :</strong> ${interpretation.action}</p>
+                <h3>${interprétation.level}</h3>
+                <p><strong>Interprétation :</strong> ${interprétation.description}</p>
+                <p><strong>Recommandation :</strong> ${interprétation.action}</p>
             `;
 
             // Scores par sous-échelle
@@ -431,11 +431,11 @@
             let detailsHTML = '<h3 style="margin-bottom: 1rem;">Détail des réponses par item :</h3>';
 
             // Regrouper par sous-échelle
-            const subscaleKeys = ['positive', 'negative', 'general'];
+            const subscaleKeys = ['positive', 'negative', 'général'];
             const subscaleLabels = {
                 positive: 'Échelle Positive',
                 negative: 'Échelle Négative',
-                general: 'Psychopathologie Générale'
+                général: 'Psychopathologie Générale'
             };
 
             subscaleKeys.forEach(key => {
@@ -514,7 +514,7 @@
             }
 
             const score = calculateScore();
-            const interpretation = getInterpretation(score);
+            const interprétation = getInterpretation(score);
             const subScores = calculateSubscaleScores();
             const composite = subScores.positive.score - subScores.negative.score;
 
@@ -535,10 +535,10 @@
                 subscaleScores: {
                     positive: subScores.positive.score,
                     negative: subScores.negative.score,
-                    general: subScores.general.score
+                    général: subScores.général.score
                 },
                 compositeIndex: composite,
-                interpretation: interpretation.level
+                interprétation: interprétation.level
             };
 
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="CDI-2 - Children's Depression Inventory 2 — outil clinique interactif pour la psychiatrie et la sante mentale.">
+    <meta name="description" content="CDI-2 - Children's Depression Inventory 2 — outil clinique interactif pour la psychiatrie et la santé mentale.">
     <title>CDI-2 - Children's Depression Inventory 2</title>
 
     <!-- Font Awesome pour les icones -->
@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/questionnaire-light.css">
 
-    <!-- Styles specifiques CDI-2 -->
+    <!-- Styles spécifiques CDI-2 -->
     <style>
         :root {
             --cat-main: #14b8a6;
@@ -56,16 +56,16 @@
         <!-- En-tete -->
         <header class="glass-card" style="text-align: center; margin-bottom: 1.5rem;">
             <h2 class="gradient-text">Children's Depression Inventory 2</h2>
-            <p>Inventaire de depression de l'enfant - Version Auto-questionnaire (7-17 ans)</p>
+            <p>Inventaire de dépression de l'enfant - Version Auto-questionnaire (7-17 ans)</p>
         </header>
 
         <!-- Informations -->
         <section class="info-box">
             <h3><i class="fas fa-info-circle"></i> A propos de ce questionnaire</h3>
-            <p>Le CDI-2 (Children's Depression Inventory 2) est un auto-questionnaire de reference pour evaluer les symptomes depressifs chez l'enfant et l'adolescent de <strong>7 a 17 ans</strong>.</p>
-            <p style="margin-top: 0.5rem;">Il comprend <strong>28 items</strong> evaluant les symptomes depressifs au cours des <strong>deux dernieres semaines</strong>. Chaque item presente 3 affirmations parmi lesquelles choisir celle qui decrit le mieux les sentiments recents.</p>
+            <p>Le CDI-2 (Children's Depression Inventory 2) est un auto-questionnaire de référence pour évaluer les symptômes dépressifs chez l'enfant et l'adolescent de <strong>7 a 17 ans</strong>.</p>
+            <p style="margin-top: 0.5rem;">Il comprend <strong>28 items</strong> évaluant les symptômes dépressifs au cours des <strong>deux dernières semaines</strong>. Chaque item présente 3 affirmations parmi lesquelles choisir celle qui décrit le mieux les sentiments recents.</p>
             <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--color-text-dimmed);">
-                <i class="fas fa-users"></i> Note : Il existe egalement des versions parent et enseignant du CDI-2 pour une evaluation multimodale.
+                <i class="fas fa-users"></i> Note : Il existe également des versions parent et enseignant du CDI-2 pour une évaluation multimodale.
             </p>
         </section>
 
@@ -73,22 +73,22 @@
         <section class="warning-box">
             <h3><i class="fas fa-exclamation-triangle"></i> Avertissements importants</h3>
             <ul style="margin: 0; padding-left: 1.5rem;">
-                <li>Ce questionnaire est un outil de depistage et ne remplace pas une evaluation clinique complete</li>
-                <li>Les resultats doivent etre interpretes par un professionnel de sante mentale</li>
-                <li><strong>L'item 9 evalue les idees suicidaires</strong> - une reponse positive necessite une evaluation urgente</li>
-                <li>En cas de crise : <strong>3114</strong> (numero national de prevention du suicide, 24h/7j)</li>
-                <li>Fil Sante Jeunes : <strong>0 800 235 236</strong> (anonyme et gratuit)</li>
+                <li>Ce questionnaire est un outil de dépistage et ne remplace pas une évaluation clinique complete</li>
+                <li>Les résultats doivent etre interpretes par un professionnel de santé mentale</li>
+                <li><strong>L'item 9 évalue les idees suicidaires</strong> - une réponse positive nécessité une évaluation urgente</li>
+                <li>En cas de crise : <strong>3114</strong> (numéro national de prévention du suicide, 24h/7j)</li>
+                <li>Fil Santé Jeunes : <strong>0 800 235 236</strong> (anonyme et gratuit)</li>
             </ul>
         </section>
 
-        <!-- Alerte item critique (cachee par defaut) -->
+        <!-- Alerte item critique (cachee par défaut) -->
         <section id="criticalItemAlert" class="critical-alert">
             <h4><i class="fas fa-exclamation-circle"></i> Alerte - Pensees suicidaires detectees</h4>
-            <p>Une reponse indiquant des pensees de se faire du mal a ete selectionnee. Il est important d'en parler immediatement a un adulte de confiance ou de contacter :</p>
+            <p>Une réponse indiquant des pensées de se faire du mal à ete sélectionnée. Il est important d'en parler immédiatement a un adulte de confiance ou de contacter :</p>
             <ul style="margin: 0.5rem 0; padding-left: 1.5rem; color: var(--color-text-muted); font-size: 0.875rem;">
-                <li><strong>3114</strong> - Numero national de prevention du suicide (24h/7j)</li>
-                <li><strong>0 800 235 236</strong> - Fil Sante Jeunes (anonyme et gratuit)</li>
-                <li>Les urgences de l'hopital le plus proche</li>
+                <li><strong>3114</strong> - Numero national de prévention du suicide (24h/7j)</li>
+                <li><strong>0 800 235 236</strong> - Fil Santé Jeunes (anonyme et gratuit)</li>
+                <li>Les urgences de l'hôpital le plus proche</li>
             </ul>
         </section>
 
@@ -99,7 +99,7 @@
                     <i class="fas fa-file-import"></i> Importer
                 </button>
                 <button class="btn-secondary" onclick="resetForm()">
-                    <i class="fas fa-redo"></i> Reinitialiser
+                    <i class="fas fa-redo"></i> Réinitialiser
                 </button>
             </div>
             <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="loadFile(event)">
@@ -107,10 +107,10 @@
 
         <!-- Instructions -->
         <section class="glass-card">
-            <h3 style="margin-bottom: 1rem;">Pour chaque groupe de phrases, choisis la phrase qui decrit le mieux comment tu t'es senti(e) au cours des <strong>deux dernieres semaines</strong>.</h3>
+            <h3 style="margin-bottom: 1rem;">Pour chaque groupe de phrases, choisis la phrase qui décrit le mieux comment tu t'es senti(e) au cours des <strong>deux dernières semaines</strong>.</h3>
 
             <!-- Barre de progression -->
-            <div class="progress-container" style="margin-bottom: 1.5rem;">
+            <div class="progress-container" style="position: sticky; top: 60px; z-index: 50; margin-bottom: 1.5rem;">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                     <span style="color: var(--color-text-muted); font-size: 0.875rem;">Progression</span>
                     <span id="progressText" style="color: var(--color-text-primary); font-weight: 600;">0/28</span>
@@ -124,10 +124,10 @@
             <div id="questions"></div>
         </section>
 
-        <!-- Resultats -->
-        <section id="results" class="results-section" style="display: none;">
+        <!-- Résultats -->
+        <section id="results" aria-live="polite" class="results-section" style="display: none;">
             <h2 style="text-align: center; margin-bottom: 2rem;">
-                <i class="fas fa-chart-bar"></i> Resultats de l'evaluation
+                <i class="fas fa-chart-bar"></i> Résultats de l'évaluation
             </h2>
 
             <!-- Score total -->
@@ -138,18 +138,18 @@
                 <p class="score-label">Score total (sur 56)</p>
             </div>
 
-            <div id="interpretationBox" class="interpretation"></div>
+            <div id="interpretationBox" class="interprétation"></div>
 
-            <!-- Alerte critique dans les resultats -->
+            <!-- Alerte critique dans les résultats -->
             <div id="criticalResultAlert" class="critical-alert" style="margin-bottom: 1.5rem;">
                 <h4><i class="fas fa-exclamation-circle"></i> Attention - Pensees suicidaires</h4>
-                <p>Le questionnaire a revele des pensees de se faire du mal. Une consultation urgente avec un professionnel de sante mentale est necessaire.</p>
-                <p style="margin-top: 0.5rem;"><strong>Contactez immediatement le 3114 ou rendez-vous aux urgences.</strong></p>
+                <p>Le questionnaire a révélé des pensées de se faire du mal. Une consultation urgente avec un professionnel de santé mentale est nécessaire.</p>
+                <p style="margin-top: 0.5rem;"><strong>Contactez immédiatement le 3114 ou rendez-vous aux urgences.</strong></p>
             </div>
 
             <!-- Scores par dimension -->
             <div class="glass-card" style="margin-top: 1.5rem;">
-                <h3 style="margin-bottom: 1rem;"><i class="fas fa-list-ul"></i> Interpretation du score</h3>
+                <h3 style="margin-bottom: 1rem;"><i class="fas fa-list-ul"></i> Interprétation du score</h3>
                 <div id="scoreInterpretation"></div>
             </div>
 
@@ -168,7 +168,7 @@
 
             <!-- Export -->
             <div class="glass-card" style="margin-top: 2rem;">
-                <h3><i class="fas fa-download"></i> Exporter les resultats</h3>
+                <h3><i class="fas fa-download"></i> Exporter les résultats</h3>
                 <div class="consent-box">
                     <label>
                         <input type="checkbox" id="exportConsent">
@@ -191,7 +191,7 @@
     <footer class="footer">
         <p><strong>CDI-2 - Children's Depression Inventory 2</strong></p>
         <p>Auteur original : Maria Kovacs, Ph.D. (1977, revision 2011)</p>
-        <p>Adaptation numerique : Dr FENOHASINA | Psychiatre</p>
+        <p>Adaptation numérique : Dr FENOHASINA | Psychiatre</p>
         <p style="margin-top: 1rem;">
             <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr" target="_blank">
                 Licence CC BY-NC-SA 4.0
@@ -224,7 +224,7 @@
             },
             {
                 id: 3,
-                theme: "Sentiment d'echec",
+                theme: "Sentiment d'échec",
                 options: [
                     { value: 0, text: "Je reussis la plupart des choses" },
                     { value: 1, text: "J'echoue dans beaucoup de choses" },
@@ -264,14 +264,14 @@
                 options: [
                     { value: 0, text: "Je m'aime bien" },
                     { value: 1, text: "Je ne m'aime pas" },
-                    { value: 2, text: "Je me deteste" }
+                    { value: 2, text: "Je me déteste" }
                 ]
             },
             {
                 id: 8,
                 theme: "Se blamer",
                 options: [
-                    { value: 0, text: "Les choses mauvaises ne sont generalement pas de ma faute" },
+                    { value: 0, text: "Les choses mauvaises ne sont généralement pas de ma faute" },
                     { value: 1, text: "Beaucoup de choses mauvaises sont de ma faute" },
                     { value: 2, text: "Toutes les choses mauvaises sont de ma faute" }
                 ]
@@ -281,8 +281,8 @@
                 theme: "Idees suicidaires",
                 critical: true,
                 options: [
-                    { value: 0, text: "Je ne pense pas a me faire du mal" },
-                    { value: 1, text: "Je pense a me faire du mal mais je ne le ferais pas" },
+                    { value: 0, text: "Je ne pense pas à me faire du mal" },
+                    { value: 1, text: "Je pense à me faire du mal mais je ne le ferais pas" },
                     { value: 2, text: "Je veux me faire du mal" }
                 ]
             },
@@ -317,9 +317,9 @@
                 id: 13,
                 theme: "Indecision",
                 options: [
-                    { value: 0, text: "J'arrive facilement a prendre des decisions" },
-                    { value: 1, text: "J'ai du mal a prendre des decisions" },
-                    { value: 2, text: "Je n'arrive pas du tout a prendre des decisions" }
+                    { value: 0, text: "J'arrive facilement a prendre des décisions" },
+                    { value: 1, text: "J'ai du mal à prendre des décisions" },
+                    { value: 2, text: "Je n'arrive pas du tout a prendre des décisions" }
                 ]
             },
             {
@@ -327,7 +327,7 @@
                 theme: "Image de soi",
                 options: [
                     { value: 0, text: "Je suis content(e) de mon apparence" },
-                    { value: 1, text: "Il y a des choses dans mon apparence que je n'aime pas" },
+                    { value: 1, text: "Il y à des choses dans mon apparence que je n'aime pas" },
                     { value: 2, text: "Je suis moche" }
                 ]
             },
@@ -335,9 +335,9 @@
                 id: 15,
                 theme: "Travail scolaire",
                 options: [
-                    { value: 0, text: "Faire mes devoirs n'est pas un gros probleme" },
-                    { value: 1, text: "J'ai souvent du mal a me forcer a faire mes devoirs" },
-                    { value: 2, text: "Je n'arrive pas a faire mes devoirs" }
+                    { value: 0, text: "Faire mes devoirs n'est pas un gros problème" },
+                    { value: 1, text: "J'ai souvent du mal à me forcer à faire mes devoirs" },
+                    { value: 2, text: "Je n'arrive pas à faire mes devoirs" }
                 ]
             },
             {
@@ -345,8 +345,8 @@
                 theme: "Sommeil",
                 options: [
                     { value: 0, text: "Je dors bien" },
-                    { value: 1, text: "J'ai quelques problemes de sommeil" },
-                    { value: 2, text: "J'ai de gros problemes de sommeil" }
+                    { value: 1, text: "J'ai quelques problèmes de sommeil" },
+                    { value: 2, text: "J'ai de gros problèmes de sommeil" }
                 ]
             },
             {
@@ -371,9 +371,9 @@
                 id: 19,
                 theme: "Inquietudes somatiques",
                 options: [
-                    { value: 0, text: "Je n'ai pas mal au ventre, pas de maux de tete, ni de nausees" },
-                    { value: 1, text: "J'ai parfois mal au ventre, des maux de tete ou des nausees" },
-                    { value: 2, text: "J'ai souvent mal au ventre, des maux de tete ou des nausees" }
+                    { value: 0, text: "Je n'ai pas mal au ventre, pas de maux de tete, ni de nausées" },
+                    { value: 1, text: "J'ai parfois mal au ventre, des maux de tete ou des nausées" },
+                    { value: 2, text: "J'ai souvent mal au ventre, des maux de tete ou des nausées" }
                 ]
             },
             {
@@ -387,11 +387,11 @@
             },
             {
                 id: 21,
-                theme: "Plaisir a l'ecole",
+                theme: "Plaisir à l'école",
                 options: [
-                    { value: 0, text: "Je m'amuse a l'ecole" },
-                    { value: 1, text: "Je ne m'amuse pas souvent a l'ecole" },
-                    { value: 2, text: "Je ne m'amuse jamais a l'ecole" }
+                    { value: 0, text: "Je m'amuse à l'école" },
+                    { value: 1, text: "Je ne m'amuse pas souvent à l'école" },
+                    { value: 2, text: "Je ne m'amuse jamais à l'école" }
                 ]
             },
             {
@@ -407,9 +407,9 @@
                 id: 23,
                 theme: "Performance scolaire",
                 options: [
-                    { value: 0, text: "Je travaille bien a l'ecole" },
-                    { value: 1, text: "Je ne travaille pas aussi bien a l'ecole qu'avant" },
-                    { value: 2, text: "Je travaille tres mal a l'ecole" }
+                    { value: 0, text: "Je travaille bien à l'école" },
+                    { value: 1, text: "Je ne travaille pas aussi bien à l'école qu'avant" },
+                    { value: 2, text: "Je travaille très mal à l'école" }
                 ]
             },
             {
@@ -434,7 +434,7 @@
                 id: 26,
                 theme: "Obeissance",
                 options: [
-                    { value: 0, text: "Je fais generalement ce qu'on me dit" },
+                    { value: 0, text: "Je fais généralement ce qu'on me dit" },
                     { value: 1, text: "Je ne fais pas ce qu'on me dit la plupart du temps" },
                     { value: 2, text: "Je ne fais jamais ce qu'on me dit" }
                 ]
@@ -450,16 +450,16 @@
             },
             {
                 id: 28,
-                theme: "Anxiete de performance",
+                theme: "Anxiété de performance",
                 options: [
                     { value: 0, text: "Je n'ai pas peur d'echouer" },
                     { value: 1, text: "Je m'inquiete parfois d'echouer" },
-                    { value: 2, text: "J'ai tres peur d'echouer" }
+                    { value: 2, text: "J'ai très peur d'echouer" }
                 ]
             }
         ];
 
-        // Seuils d'interpretation (scores bruts)
+        // Seuils d'interprétation (scores bruts)
         const interpretationThresholds = {
             average: { min: 0, max: 12 },
             highAverage: { min: 13, max: 18 },
@@ -478,7 +478,7 @@
                 questionDiv.className = question.critical ? 'question-card critical' : 'question-card';
 
                 const criticalBadge = question.critical ?
-                    '<span class="critical-badge"><i class="fas fa-exclamation-triangle"></i> Item critique</span>' : '';
+                    '<span class="critical-badge"><i class="fas fa-exclamation-triangle"></i> Item critiqué</span>' : '';
 
                 questionDiv.innerHTML = `
                     <div style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem;">
@@ -500,7 +500,7 @@
                     ${question.critical ? `
                         <div class="critical-alert" id="criticalAlert${index}">
                             <h4><i class="fas fa-phone"></i> Besoin d'aide ?</h4>
-                            <p>Si tu as des pensees de te faire du mal, parle a un adulte de confiance ou appelle le <strong>3114</strong> (24h/7j, gratuit).</p>
+                            <p>Si tu as des pensées de te faire du mal, parle a un adulte de confiance ou appelle le <strong>3114</strong> (24h/7j, gratuit).</p>
                         </div>
                     ` : ''}
                 `;
@@ -565,29 +565,29 @@
         function getInterpretation(score) {
             if (score <= interpretationThresholds.average.max) {
                 return {
-                    level: "Moyen (pas de symptomes significatifs)",
+                    level: "Moyen (pas de symptômes significatifs)",
                     className: "low",
                     badgeClass: "badge-low",
-                    description: "Le score se situe dans la zone moyenne, suggerant une absence de symptomes depressifs significatifs.",
+                    description: "Le score se situe dans la zone moyenne, suggerant une absence de symptômes dépressifs significatifs.",
                     recommendations: [
                         "Continuer a maintenir un mode de vie equilibre",
-                        "Encourager les activites sociales et physiques",
+                        "Encourager les activités sociales et physiques",
                         "Maintenir une communication ouverte avec l'enfant/adolescent",
-                        "Refaire l'evaluation si des changements de comportement sont observes"
+                        "Refaire l'évaluation si des changements de comportement sont observes"
                     ]
                 };
             }
             if (score <= interpretationThresholds.highAverage.max) {
                 return {
-                    level: "Moyen superieur",
+                    level: "Moyen supérieur",
                     className: "moderate",
                     badgeClass: "badge-moderate",
-                    description: "Le score se situe legerement au-dessus de la moyenne. Une surveillance est recommandee.",
+                    description: "Le score se situe legerement au-dessus de la moyenne. Une surveillance est recommandée.",
                     recommendations: [
-                        "Surveillance reguliere de l'humeur et du comportement",
-                        "Encourager l'expression des emotions",
-                        "Maintenir des activites agreables et un rythme de vie regulier",
-                        "Consultation avec un professionnel si les symptomes persistent ou s'aggravent",
+                        "Surveillance régulière de l'humeur et du comportement",
+                        "Encourager l'expression des émotions",
+                        "Maintenir des activités agreables et un rythme de vie régulier",
+                        "Consultation avec un professionnel si les symptômes persistent ou s'aggravent",
                         "Reevaluation dans 2-4 semaines"
                     ]
                 };
@@ -597,26 +597,26 @@
                     level: "Eleve",
                     className: "high",
                     badgeClass: "badge-high",
-                    description: "Le score est eleve, indiquant des symptomes depressifs significatifs necessitant une attention particuliere.",
+                    description: "Le score est élevé, indiquant des symptômes dépressifs significatifs nécessitant une attention particuliere.",
                     recommendations: [
-                        "Consultation recommandee avec un professionnel de sante mentale",
-                        "Evaluation clinique complete conseillee",
-                        "Mise en place d'un suivi regulier",
+                        "Consultation recommandée avec un professionnel de santé mentale",
+                        "Évaluation clinique complete conseillee",
+                        "Mise en place d'un suivi régulier",
                         "Soutien psychologique a envisager",
-                        "Surveillance etroite de l'evolution des symptomes"
+                        "Surveillance etroite de l'évolution des symptômes"
                     ]
                 };
             }
             return {
-                level: "Tres eleve",
+                level: "Très élevé",
                 className: "very-elevated",
                 badgeClass: "badge-critical",
-                description: "Le score est tres eleve, suggerant des symptomes depressifs severes necessitant une prise en charge rapide.",
+                description: "Le score est très élevé, suggerant des symptômes dépressifs sévères nécessitant une prise en charge rapide.",
                 recommendations: [
                     "Consultation urgente avec un pedopsychiatre ou psychologue",
-                    "Evaluation approfondie des idees suicidaires",
+                    "Évaluation approfondie des idees suicidaires",
                     "Mise en place d'un suivi intensif",
-                    "Consideration d'une prise en charge specialisee",
+                    "Consideration d'une prise en charge spécialisée",
                     "Soutien de l'entourage familial et scolaire",
                     "En cas de crise : contacter le 3114 ou se rendre aux urgences"
                 ]
@@ -625,17 +625,17 @@
 
         function updateResults() {
             const score = calculateScore();
-            const interpretation = getInterpretation(score);
+            const interprétation = getInterpretation(score);
 
             document.getElementById('totalScore').textContent = score;
 
-            // Interpretation box
+            // Interprétation box
             const interpretationBox = document.getElementById('interpretationBox');
-            interpretationBox.className = `interpretation ${interpretation.className}`;
+            interpretationBox.className = `interprétation ${interprétation.className}`;
             interpretationBox.innerHTML = `
-                <h3>Niveau : ${interpretation.level}</h3>
+                <h3>Niveau : ${interprétation.level}</h3>
                 <p><strong>Score brut :</strong> ${score}/56</p>
-                <p style="margin-top: 0.5rem;">${interpretation.description}</p>
+                <p style="margin-top: 0.5rem;">${interprétation.description}</p>
             `;
 
             // Critical item alert in results
@@ -645,14 +645,14 @@
                 document.getElementById('criticalResultAlert').classList.remove('show');
             }
 
-            // Score interpretation section
+            // Score interprétation section
             const scoreInterpretation = document.getElementById('scoreInterpretation');
             scoreInterpretation.innerHTML = `
                 <div style="display: grid; gap: 0.75rem;">
                     <div style="padding: 0.75rem; background: var(--color-bg-card); border-radius: var(--radius-md);">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
                             <span style="font-weight: 600;">Zone du score</span>
-                            <span class="badge ${interpretation.badgeClass}">${interpretation.level}</span>
+                            <span class="badge ${interprétation.badgeClass}">${interprétation.level}</span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 0.75rem;">
                             <div style="flex: 1; background: var(--color-bg-tertiary); border-radius: 4px; height: 8px; overflow: hidden;">
@@ -663,22 +663,22 @@
                     </div>
 
                     <div style="padding: 1rem; background: var(--color-bg-card); border-radius: var(--radius-md); margin-top: 0.5rem;">
-                        <h4 style="color: var(--color-text-primary); margin-bottom: 0.75rem; font-size: 0.9rem;">Echelle d'interpretation :</h4>
+                        <h4 style="color: var(--color-text-primary); margin-bottom: 0.75rem; font-size: 0.9rem;">Échelle d'interprétation :</h4>
                         <div style="display: grid; gap: 0.5rem; font-size: 0.85rem;">
                             <div style="display: flex; justify-content: space-between; padding: 0.5rem; background: ${score <= 12 ? 'rgba(6, 182, 212, 0.1)' : 'transparent'}; border-radius: 4px; ${score <= 12 ? 'border: 1px solid rgba(6, 182, 212, 0.3);' : ''}">
                                 <span style="color: var(--color-text-muted);">0-12 : Moyen</span>
-                                <span style="color: #4ade80;">Pas de symptomes significatifs</span>
+                                <span style="color: #4ade80;">Pas de symptômes significatifs</span>
                             </div>
                             <div style="display: flex; justify-content: space-between; padding: 0.5rem; background: ${score >= 13 && score <= 18 ? 'rgba(6, 182, 212, 0.1)' : 'transparent'}; border-radius: 4px; ${score >= 13 && score <= 18 ? 'border: 1px solid rgba(6, 182, 212, 0.3);' : ''}">
-                                <span style="color: var(--color-text-muted);">13-18 : Moyen superieur</span>
-                                <span style="color: #fbbf24;">Surveillance recommandee</span>
+                                <span style="color: var(--color-text-muted);">13-18 : Moyen supérieur</span>
+                                <span style="color: #fbbf24;">Surveillance recommandée</span>
                             </div>
                             <div style="display: flex; justify-content: space-between; padding: 0.5rem; background: ${score >= 19 && score <= 25 ? 'rgba(6, 182, 212, 0.1)' : 'transparent'}; border-radius: 4px; ${score >= 19 && score <= 25 ? 'border: 1px solid rgba(6, 182, 212, 0.3);' : ''}">
                                 <span style="color: var(--color-text-muted);">19-25 : Eleve</span>
-                                <span style="color: #fb923c;">Consultation recommandee</span>
+                                <span style="color: #fb923c;">Consultation recommandée</span>
                             </div>
                             <div style="display: flex; justify-content: space-between; padding: 0.5rem; background: ${score >= 26 ? 'rgba(6, 182, 212, 0.1)' : 'transparent'}; border-radius: 4px; ${score >= 26 ? 'border: 1px solid rgba(6, 182, 212, 0.3);' : ''}">
-                                <span style="color: var(--color-text-muted);">26+ : Tres eleve</span>
+                                <span style="color: var(--color-text-muted);">26+ : Très élevé</span>
                                 <span style="color: #f87171;">Consultation urgente</span>
                             </div>
                         </div>
@@ -690,7 +690,7 @@
             const recommendationsDiv = document.getElementById('recommendations');
             recommendationsDiv.innerHTML = `
                 <ul style="margin: 0; padding-left: 1.5rem; color: var(--color-text-muted);">
-                    ${interpretation.recommendations.map(rec => `<li style="margin-bottom: 0.5rem;">${rec}</li>`).join('')}
+                    ${interprétation.recommendations.map(rec => `<li style="margin-bottom: 0.5rem;">${rec}</li>`).join('')}
                 </ul>
             `;
 
@@ -701,7 +701,7 @@
         function updateDetailsContent() {
             const detailsContent = document.getElementById('detailsContent');
 
-            let html = '<h3 style="margin-bottom: 1rem;">Detail des reponses par item</h3>';
+            let html = '<h3 style="margin-bottom: 1rem;">Détail des réponses par item</h3>';
             html += '<div style="display: grid; gap: 0.5rem;">';
 
             questions.forEach((question, index) => {
@@ -736,7 +736,7 @@
                         <li><strong>Version parent</strong> : rempli par les parents</li>
                         <li><strong>Version enseignant</strong> : rempli par l'enseignant</li>
                     </ul>
-                    <p style="margin: 0.5rem 0 0 0; font-size: 0.875rem;">Une evaluation multimodale combinant plusieurs versions est recommandee pour une evaluation complete.</p>
+                    <p style="margin: 0.5rem 0 0 0; font-size: 0.875rem;">Une évaluation multimodale combinant plusieurs versions est recommandée pour une évaluation complete.</p>
                 </div>
             `;
 
@@ -811,7 +811,7 @@
             }
 
             const score = calculateScore();
-            const interpretation = getInterpretation(score);
+            const interprétation = getInterpretation(score);
 
             const itemDetails = questions.map((q, i) => ({
                 item: i + 1,
@@ -828,8 +828,8 @@
                 answers: answers,
                 totalScore: score,
                 maxScore: 56,
-                interpretation: interpretation.level,
-                interpretationClass: interpretation.className,
+                interprétation: interprétation.level,
+                interpretationClass: interprétation.className,
                 criticalItemAlert: answers[8] > 0,
                 itemDetails: itemDetails
             };

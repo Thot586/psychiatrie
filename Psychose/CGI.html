@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="CGI - Clinical Global Impression — outil clinique interactif pour la psychiatrie et la sante mentale.">
+    <meta name="description" content="CGI - Clinical Global Impression — outil clinique interactif pour la psychiatrie et la santé mentale.">
     <title>CGI - Clinical Global Impression</title>
 
     <!-- Font Awesome pour les icônes -->
@@ -154,7 +154,7 @@
         </section>
 
         <!-- Résultats -->
-        <section id="results" class="results-section" style="display: none;">
+        <section id="results" aria-live="polite" class="results-section" style="display: none;">
             <h2 style="text-align: center; margin-bottom: 2rem;">
                 <i class="fas fa-chart-bar"></i> Résultats de l'évaluation
             </h2>
@@ -177,7 +177,7 @@
                 </div>
             </div>
 
-            <div class="interpretation-grid" id="interpretations"></div>
+            <div class="interprétation-grid" id="interpretations"></div>
 
             <button class="btn-primary w-full" onclick="toggleDetails()" style="margin-top: 1.5rem; background: linear-gradient(135deg, #7c3aed, #9333ea);">
                 <i class="fas fa-list"></i> Voir les détails d'interprétation
@@ -260,7 +260,7 @@
             { value: 4, label: "Dépassent l'effet thérapeutique" }
         ];
 
-        // Variables d'etat
+        // Variables d'état
         let cgiS = null;
         let cgiI = null;
         let cgiE = null; // {therapeutic: 1-4, sideEffects: 1-4, score: 1-16}
@@ -359,16 +359,16 @@
             checkCompletion();
         }
 
-        // Verification completion
+        // Vérification completion
         function checkCompletion() {
-            // Au moins CGI-S doit etre rempli pour afficher les resultats
+            // Au moins CGI-S doit etre rempli pour afficher les résultats
             if (cgiS !== null) {
                 updateResults();
                 document.getElementById('results').style.display = 'block';
             }
         }
 
-        // Interpretation CGI-S
+        // Interprétation CGI-S
         function interpretCGIS(score) {
             if (score <= 2) return {
                 level: "Pas de maladie significative",
@@ -387,7 +387,7 @@
             };
         }
 
-        // Interpretation CGI-I
+        // Interprétation CGI-I
         function interpretCGII(score) {
             if (score === 0) return {
                 level: "Non évalué",
@@ -416,7 +416,7 @@
             };
         }
 
-        // Interpretation CGI-E
+        // Interprétation CGI-E
         function interpretCGIE(score) {
             if (score <= 4) return {
                 level: "Bon rapport bénéfice/risque",
@@ -440,7 +440,7 @@
             };
         }
 
-        // Mise a jour des resultats
+        // Mise a jour des résultats
         function updateResults() {
             // CGI-S
             if (cgiS !== null) {
@@ -475,7 +475,7 @@
             let existingItem = document.getElementById(`interp_${type}`);
 
             const html = `
-                <div class="interpretation-item" id="interp_${type}">
+                <div class="interprétation-item" id="interp_${type}">
                     <h4>CGI-${type}: ${interp.level}</h4>
                     <p>${interp.description}</p>
                 </div>

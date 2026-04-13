@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="SDQ - Strengths and Difficulties Questionnaire — outil clinique interactif pour la psychiatrie et la sante mentale.">
+    <meta name="description" content="SDQ - Strengths and Difficulties Questionnaire — outil clinique interactif pour la psychiatrie et la santé mentale.">
     <title>SDQ - Strengths and Difficulties Questionnaire</title>
 
     <!-- Font Awesome pour les icones -->
@@ -54,24 +54,24 @@
         <!-- En-tete -->
         <header class="glass-card" style="text-align: center; margin-bottom: 1.5rem;">
             <h2 class="gradient-text">Strengths and Difficulties Questionnaire</h2>
-            <p>Questionnaire des forces et difficultes - Version Parents (4-17 ans)</p>
+            <p>Questionnaire des forces et difficultés - Version Parents (4-17 ans)</p>
         </header>
 
         <!-- Informations -->
         <section class="info-box">
             <h3><i class="fas fa-info-circle"></i> A propos de ce questionnaire</h3>
-            <p>Le SDQ est un bref questionnaire de depistage des troubles emotionnels et comportementaux chez l'enfant et l'adolescent. Cette <strong>version parents</strong> (hetero-questionnaire) est destinee aux enfants et adolescents de <strong>4 a 17 ans</strong>.</p>
-            <p style="margin-top: 0.5rem;">Il evalue 25 attributs, repartis en 5 echelles de 5 items : symptomes emotionnels, problemes de comportement, hyperactivite/inattention, problemes relationnels avec les pairs, et comportement prosocial.</p>
+            <p>Le SDQ est un bref questionnaire de dépistage des troubles émotionnels et comportementaux chez l'enfant et l'adolescent. Cette <strong>version parents</strong> (hétéro-questionnaire) est destinée aux enfants et adolescents de <strong>4 a 17 ans</strong>.</p>
+            <p style="margin-top: 0.5rem;">Il évalue 25 attributs, repartis en 5 échelles de 5 items : symptômes émotionnels, problèmes de comportement, hyperactivite/inattention, problèmes relationnels avec les pairs, et comportement prosocial.</p>
         </section>
 
         <!-- Avertissement -->
         <section class="warning-box">
             <h3><i class="fas fa-exclamation-triangle"></i> Avertissements importants</h3>
             <ul style="margin: 0; padding-left: 1.5rem;">
-                <li>Ce questionnaire est un outil de depistage et ne remplace pas une evaluation clinique complete</li>
-                <li>Les resultats doivent etre interpretes par un professionnel de sante</li>
-                <li>Il s'agit d'un hetero-questionnaire : le parent repond pour l'enfant</li>
-                <li>Une evaluation multimodale (parents, enseignants, enfant) est recommandee</li>
+                <li>Ce questionnaire est un outil de dépistage et ne remplace pas une évaluation clinique complete</li>
+                <li>Les résultats doivent etre interpretes par un professionnel de santé</li>
+                <li>Il s'agit d'un hétéro-questionnaire : le parent répond pour l'enfant</li>
+                <li>Une évaluation multimodale (parents, enseignants, enfant) est recommandée</li>
             </ul>
         </section>
 
@@ -82,7 +82,7 @@
                     <i class="fas fa-file-import"></i> Importer
                 </button>
                 <button class="btn-secondary" onclick="resetForm()">
-                    <i class="fas fa-redo"></i> Reinitialiser
+                    <i class="fas fa-redo"></i> Réinitialiser
                 </button>
             </div>
             <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="loadFile(event)">
@@ -90,36 +90,36 @@
 
         <!-- Instructions -->
         <section class="glass-card">
-            <h3 style="margin-bottom: 1rem;">Pour chaque affirmation, veuillez indiquer si elle est "Pas vraie", "Un peu vraie" ou "Tres vraie" pour votre enfant. Repondez du mieux que vous pouvez, meme si vous n'etes pas absolument certain(e).</h3>
+            <h3 style="margin-bottom: 1rem;">Pour chaque affirmation, veuillez indiquer si elle est "Pas vraie", "Un peu vraie" ou "Très vraie" pour votre enfant. Répondez du mieux que vous pouvez, meme si vous n'êtes pas absolument certain(e).</h3>
 
             <!-- Questions generees par JS -->
             <div id="questions"></div>
         </section>
 
-        <!-- Resultats -->
-        <section id="results" class="results-section" style="display: none;">
+        <!-- Résultats -->
+        <section id="results" aria-live="polite" class="results-section" style="display: none;">
             <h2 style="text-align: center; margin-bottom: 2rem;">
-                <i class="fas fa-chart-bar"></i> Resultats de l'evaluation
+                <i class="fas fa-chart-bar"></i> Résultats de l'évaluation
             </h2>
 
-            <!-- Score total de difficultes -->
+            <!-- Score total de difficultés -->
             <div class="score-display">
                 <div class="score-circle">
                     <span class="score-value" id="totalScore">0</span>
                 </div>
-                <p class="score-label">Score total de difficultes (sur 40)</p>
+                <p class="score-label">Score total de difficultés (sur 40)</p>
             </div>
 
-            <div id="interpretationBox" class="interpretation"></div>
+            <div id="interpretationBox" class="interprétation"></div>
 
-            <!-- Scores par sous-echelle -->
+            <!-- Scores par sous-échelle -->
             <div class="glass-card" style="margin-top: 1.5rem;">
-                <h3 style="margin-bottom: 1rem;"><i class="fas fa-list-ul"></i> Scores par sous-echelle</h3>
+                <h3 style="margin-bottom: 1rem;"><i class="fas fa-list-ul"></i> Scores par sous-échelle</h3>
                 <div id="subscaleScores"></div>
             </div>
 
             <button class="btn-primary w-full" onclick="toggleDetails()" style="margin-top: 1.5rem;">
-                <i class="fas fa-list"></i> Voir les details et interpretations par echelle
+                <i class="fas fa-list"></i> Voir les details et interpretations par échelle
                 <span id="toggleIcon"><i class="fas fa-chevron-down"></i></span>
             </button>
 
@@ -127,7 +127,7 @@
 
             <!-- Export -->
             <div class="glass-card" style="margin-top: 2rem;">
-                <h3><i class="fas fa-download"></i> Exporter les resultats</h3>
+                <h3><i class="fas fa-download"></i> Exporter les résultats</h3>
                 <div class="consent-box">
                     <label>
                         <input type="checkbox" id="exportConsent">
@@ -150,7 +150,7 @@
     <footer class="footer">
         <p><strong>SDQ - Strengths and Difficulties Questionnaire</strong></p>
         <p>Auteur original : Robert Goodman (1997)</p>
-        <p>Adaptation numerique : Dr FENOHASINA | Psychiatre</p>
+        <p>Adaptation numérique : Dr FENOHASINA | Psychiatre</p>
         <p style="margin-top: 1rem;">
             <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr" target="_blank">
                 Licence CC BY-NC-SA 4.0
@@ -165,11 +165,11 @@
         const questions = [
             { text: "Attentionne(e) envers les autres, tient compte de ce qu'ils ressentent", subscale: "prosocial", reversed: false },
             { text: "Agite(e), hyperactif(ve), ne tient pas en place", subscale: "hyperactivity", reversed: false },
-            { text: "Se plaint souvent de maux de tete, de ventre ou de nausees", subscale: "emotional", reversed: false },
+            { text: "Se plaint souvent de maux de tete, de ventre ou de nausées", subscale: "emotional", reversed: false },
             { text: "Partage facilement avec les autres enfants", subscale: "prosocial", reversed: false },
             { text: "Fait souvent des coleres ou s'emporte facilement", subscale: "conduct", reversed: false },
-            { text: "Plutot solitaire, a tendance a jouer seul(e)", subscale: "peers", reversed: false },
-            { text: "En general obeissant(e), fait ce que les adultes demandent", subscale: "conduct", reversed: true },
+            { text: "Plutot solitaire, a tendance à jouer seul(e)", subscale: "peers", reversed: false },
+            { text: "En général obeissant(e), fait ce que les adultes demandent", subscale: "conduct", reversed: true },
             { text: "A beaucoup de soucis, parait souvent inquiet(ete)", subscale: "emotional", reversed: false },
             { text: "Aide volontiers quand quelqu'un s'est fait mal, est malade ou triste", subscale: "prosocial", reversed: false },
             { text: "Ne tient pas en place ou se tortille constamment", subscale: "hyperactivity", reversed: false },
@@ -177,14 +177,14 @@
             { text: "Se bagarre souvent avec les autres enfants ou les tyrannise", subscale: "conduct", reversed: false },
             { text: "Souvent malheureux(se), abattu(e) ou pleure souvent", subscale: "emotional", reversed: false },
             { text: "Generalement aime(e) des autres enfants", subscale: "peers", reversed: true },
-            { text: "Facilement distrait(e), a du mal a se concentrer", subscale: "hyperactivity", reversed: false },
+            { text: "Facilement distrait(e), a du mal à se concentrer", subscale: "hyperactivity", reversed: false },
             { text: "Anxieux(se) ou s'accroche dans les situations nouvelles, perd facilement ses moyens", subscale: "emotional", reversed: false },
             { text: "Gentil(le) avec les enfants plus jeunes", subscale: "prosocial", reversed: false },
             { text: "Ment ou triche souvent", subscale: "conduct", reversed: false },
             { text: "Harcele(e) ou tyrannise(e) par d'autres enfants", subscale: "peers", reversed: false },
             { text: "Propose souvent d'aider les autres (parents, enseignants, autres enfants)", subscale: "prosocial", reversed: false },
             { text: "Reflechit avant d'agir", subscale: "hyperactivity", reversed: true },
-            { text: "Vole a la maison, a l'ecole ou ailleurs", subscale: "conduct", reversed: false },
+            { text: "Vole à la maison, à l'école ou ailleurs", subscale: "conduct", reversed: false },
             { text: "S'entend mieux avec les adultes qu'avec les autres enfants", subscale: "peers", reversed: false },
             { text: "A beaucoup de peurs, facilement effraye(e)", subscale: "emotional", reversed: false },
             { text: "Va jusqu'au bout des taches, a une bonne capacite d'attention", subscale: "hyperactivity", reversed: true }
@@ -193,18 +193,18 @@
         const options = [
             { value: 0, label: "Pas vrai" },
             { value: 1, label: "Un peu vrai" },
-            { value: 2, label: "Tres vrai" }
+            { value: 2, label: "Très vrai" }
         ];
 
         const subscaleInfo = {
-            emotional: { name: "Symptomes emotionnels", items: [3, 8, 13, 16, 24], color: "#5c6bc0" },
+            emotional: { name: "Symptomes émotionnels", items: [3, 8, 13, 16, 24], color: "#5c6bc0" },
             conduct: { name: "Problemes de comportement", items: [5, 7, 12, 18, 22], color: "#ef5350" },
             hyperactivity: { name: "Hyperactivite/inattention", items: [2, 10, 15, 21, 25], color: "#ff9800" },
             peers: { name: "Problemes avec les pairs", items: [6, 11, 14, 19, 23], color: "#26a69a" },
             prosocial: { name: "Comportement prosocial", items: [1, 4, 9, 17, 20], color: "#66bb6a", positive: true }
         };
 
-        // Seuils d'interpretation par sous-echelle
+        // Seuils d'interprétation par sous-échelle
         const thresholds = {
             emotional: { normal: [0, 3], borderline: [4, 4], abnormal: [5, 10] },
             conduct: { normal: [0, 2], borderline: [3, 3], abnormal: [4, 10] },
@@ -311,12 +311,12 @@
             const thresh = thresholds[subscaleKey];
 
             if (subscaleKey === 'prosocial') {
-                // Pour le prosocial, c'est inverse : score eleve = bien
+                // Pour le prosocial, c'est inverse : score élevé = bien
                 if (score >= thresh.normal[0]) return { level: "Normal", className: "low" };
                 if (score === thresh.borderline[0]) return { level: "Limite", className: "moderate" };
                 return { level: "Anormal", className: "high" };
             } else {
-                // Pour les autres echelles : score bas = bien
+                // Pour les autres échelles : score bas = bien
                 if (score <= thresh.normal[1]) return { level: "Normal", className: "low" };
                 if (score >= thresh.borderline[0] && score <= thresh.borderline[1]) return { level: "Limite", className: "moderate" };
                 return { level: "Anormal", className: "high" };
@@ -327,38 +327,38 @@
             if (score <= 13) return {
                 level: "Normal",
                 className: "low",
-                description: "Le score total de difficultes se situe dans la zone normale.",
-                action: "Pas d'indication de difficultes significatives. Surveillance de routine."
+                description: "Le score total de difficultés se situe dans la zone normale.",
+                action: "Pas d'indication de difficultés significatives. Surveillance de routine."
             };
             if (score <= 16) return {
                 level: "Limite",
                 className: "moderate",
-                description: "Le score total de difficultes se situe dans la zone limite.",
-                action: "Une evaluation plus approfondie peut etre utile. Surveillance recommandee."
+                description: "Le score total de difficultés se situe dans la zone limite.",
+                action: "Une évaluation plus approfondie peut etre utile. Surveillance recommandée."
             };
             return {
                 level: "Anormal",
                 className: "high",
-                description: "Le score total de difficultes se situe dans la zone anormale.",
-                action: "Une evaluation clinique complete est recommandee. Consultation specialisee conseillee."
+                description: "Le score total de difficultés se situe dans la zone anormale.",
+                action: "Une évaluation clinique complete est recommandée. Consultation spécialisée conseillee."
             };
         }
 
         function updateResults() {
             const totalScore = calculateTotalDifficulties();
-            const interpretation = getTotalInterpretation(totalScore);
+            const interprétation = getTotalInterpretation(totalScore);
 
             document.getElementById('totalScore').textContent = totalScore;
 
             const interpretationBox = document.getElementById('interpretationBox');
-            interpretationBox.className = `interpretation ${interpretation.className}`;
+            interpretationBox.className = `interprétation ${interprétation.className}`;
             interpretationBox.innerHTML = `
-                <h3>Score total : ${interpretation.level}</h3>
-                <p><strong>Interpretation :</strong> ${interpretation.description}</p>
-                <p><strong>Recommandation :</strong> ${interpretation.action}</p>
+                <h3>Score total : ${interprétation.level}</h3>
+                <p><strong>Interprétation :</strong> ${interprétation.description}</p>
+                <p><strong>Recommandation :</strong> ${interprétation.action}</p>
             `;
 
-            // Scores par sous-echelle
+            // Scores par sous-échelle
             const subscaleContainer = document.getElementById('subscaleScores');
             let subscaleHTML = '<div style="display: grid; gap: 0.75rem;">';
 
@@ -397,9 +397,9 @@
         function updateDetailsContent() {
             const detailsContent = document.getElementById('detailsContent');
 
-            let html = '<h3 style="margin-bottom: 1rem;">Interpretation detaillee par echelle</h3>';
+            let html = '<h3 style="margin-bottom: 1rem;">Interprétation détaillée par échelle</h3>';
 
-            // Interpretation par echelle
+            // Interprétation par échelle
             for (const [key, info] of Object.entries(subscaleInfo)) {
                 const score = calculateSubscaleScore(key);
                 const interp = getSubscaleInterpretation(key, score);
@@ -417,7 +417,7 @@
                         <h4 style="color: ${info.color}; margin-bottom: 0.5rem;">${info.name}</h4>
                         <p><strong>Score obtenu :</strong> ${score}/10 - <strong>${interp.level}</strong></p>
                         <p style="font-size: 0.85rem; color: var(--color-text-muted);">Seuils : ${rangeInfo}</p>
-                        ${key === 'prosocial' ? '<p style="font-size: 0.85rem; color: var(--color-text-muted); margin-top: 0.5rem;"><em>Note : Pour cette echelle positive, un score eleve est favorable.</em></p>' : ''}
+                        ${key === 'prosocial' ? '<p style="font-size: 0.85rem; color: var(--color-text-muted); margin-top: 0.5rem;"><em>Note : Pour cette échelle positive, un score élevé est favorable.</em></p>' : ''}
                     </div>
                 `;
             }
@@ -425,9 +425,9 @@
             // Information supplementaire
             html += `
                 <div class="warning-box" style="margin-top: 1rem;">
-                    <h4><i class="fas fa-info-circle"></i> Note sur l'interpretation</h4>
-                    <p style="margin-bottom: 0.5rem;">Le <strong>score total de difficultes</strong> est la somme des echelles : Symptomes emotionnels + Problemes de comportement + Hyperactivite + Problemes avec les pairs.</p>
-                    <p style="margin-bottom: 0;">L'echelle <strong>Comportement prosocial</strong> n'est <u>pas</u> incluse dans ce score total car elle mesure des forces et non des difficultes.</p>
+                    <h4><i class="fas fa-info-circle"></i> Note sur l'interprétation</h4>
+                    <p style="margin-bottom: 0.5rem;">Le <strong>score total de difficultés</strong> est la somme des échelles : Symptomes émotionnels + Problemes de comportement + Hyperactivite + Problemes avec les pairs.</p>
+                    <p style="margin-bottom: 0;">L'échelle <strong>Comportement prosocial</strong> n'est <u>pas</u> incluse dans ce score total car elle mesure des forces et non des difficultés.</p>
                 </div>
             `;
 
@@ -492,7 +492,7 @@
             }
 
             const totalScore = calculateTotalDifficulties();
-            const interpretation = getTotalInterpretation(totalScore);
+            const interprétation = getTotalInterpretation(totalScore);
 
             const subscaleResults = {};
             for (const [key, info] of Object.entries(subscaleInfo)) {
@@ -501,7 +501,7 @@
                 subscaleResults[key] = {
                     name: info.name,
                     score: score,
-                    interpretation: interp.level
+                    interprétation: interp.level
                 };
             }
 
@@ -511,7 +511,7 @@
                 date: new Date().toISOString(),
                 answers: answers,
                 totalDifficultiesScore: totalScore,
-                totalInterpretation: interpretation.level,
+                totalInterpretation: interprétation.level,
                 subscales: subscaleResults
             };
 

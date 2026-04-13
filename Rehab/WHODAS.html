@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="WHODAS 2.0 - WHO Disability Assessment Schedule — outil clinique interactif pour la psychiatrie et la sante mentale.">
+    <meta name="description" content="WHODAS 2.0 - WHO Disability Assessment Schedule — outil clinique interactif pour la psychiatrie et la santé mentale.">
     <title>WHODAS 2.0 - WHO Disability Assessment Schedule</title>
 
     <!-- Font Awesome pour les icones -->
@@ -57,23 +57,23 @@
         <!-- En-tete -->
         <header class="glass-card" style="text-align: center; margin-bottom: 1.5rem;">
             <h2 class="gradient-text">WHO Disability Assessment Schedule 2.0</h2>
-            <p>Evaluation du fonctionnement et du handicap - Version courte (12 items)</p>
+            <p>Évaluation du fonctionnement et du handicap - Version courte (12 items)</p>
         </header>
 
         <!-- Informations -->
         <section class="info-box">
             <h3><i class="fas fa-info-circle"></i> A propos de ce questionnaire</h3>
-            <p>Le WHODAS 2.0 (World Health Organization Disability Assessment Schedule) est un outil d'evaluation standardise developpe par l'OMS. Il mesure le fonctionnement et le handicap dans <strong>6 domaines de la vie</strong> au cours des <strong>30 derniers jours</strong>.</p>
-            <p style="margin-top: 0.75rem;">Cet outil est base sur la Classification Internationale du Fonctionnement, du handicap et de la sante (CIF) et permet une evaluation transversale applicable a toutes les conditions de sante.</p>
+            <p>Le WHODAS 2.0 (World Health Organization Disability Assessment Schedule) est un outil d'évaluation standardise developpe par l'OMS. Il mesure le fonctionnement et le handicap dans <strong>6 domaines de la vie</strong> au cours des <strong>30 derniers jours</strong>.</p>
+            <p style="margin-top: 0.75rem;">Cet outil est base sur la Classification Internationale du Fonctionnement, du handicap et de la santé (CIF) et permet une évaluation transversale applicable a toutes les conditions de santé.</p>
         </section>
 
         <!-- Avertissement -->
         <section class="warning-box">
             <h3><i class="fas fa-exclamation-triangle"></i> Avertissements importants</h3>
             <ul style="margin: 0; padding-left: 1.5rem;">
-                <li>Ce questionnaire ne remplace pas une evaluation clinique complete</li>
-                <li>Les resultats sont indicatifs et necessitent une interpretation professionnelle</li>
-                <li>Repondez en pensant a votre situation au cours des 30 derniers jours</li>
+                <li>Ce questionnaire ne remplace pas une évaluation clinique complete</li>
+                <li>Les résultats sont indicatifs et nécessitent une interprétation professionnelle</li>
+                <li>Répondez en pensant a votre situation au cours des 30 derniers jours</li>
                 <li>Tenez compte de l'aide technique ou personnelle dont vous disposez</li>
             </ul>
         </section>
@@ -85,7 +85,7 @@
                     <i class="fas fa-file-import"></i> Importer
                 </button>
                 <button class="btn-secondary" onclick="resetForm()">
-                    <i class="fas fa-redo"></i> Reinitialiser
+                    <i class="fas fa-redo"></i> Réinitialiser
                 </button>
             </div>
             <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="loadFile(event)">
@@ -95,7 +95,7 @@
         <section class="glass-card">
             <h3 style="margin-bottom: 1rem;"><i class="fas fa-clipboard-list"></i> Instructions</h3>
             <p style="color: var(--color-text-muted); margin-bottom: 1.5rem;">
-                Au cours des <strong>30 derniers jours</strong>, a quel point avez-vous eu des difficultes pour realiser les activites suivantes ?
+                Au cours des <strong>30 derniers jours</strong>, a quel point avez-vous eu des difficultés pour réaliser les activités suivantes ?
                 Tenez compte de la facon dont vous faites habituellement l'activite, en incluant l'utilisation d'aides techniques ou l'aide d'une personne.
             </p>
 
@@ -122,7 +122,7 @@
                     </div>
                     <div class="domain-title">
                         <h3>Domaine 2 - Mobilite</h3>
-                        <p>Se deplacer et se mouvoir</p>
+                        <p>Se déplacer et se mouvoir</p>
                     </div>
                     <span class="domain-score-badge" id="domain2Score">0/8</span>
                 </div>
@@ -182,7 +182,7 @@
                     </div>
                     <div class="domain-title">
                         <h3>Domaine 6 - Participation</h3>
-                        <p>Engagement dans la societe</p>
+                        <p>Engagement dans la société</p>
                     </div>
                     <span class="domain-score-badge" id="domain6Score">0/8</span>
                 </div>
@@ -190,10 +190,10 @@
             </div>
         </section>
 
-        <!-- Resultats -->
-        <section id="results" class="results-section" style="display: none;">
+        <!-- Résultats -->
+        <section id="results" aria-live="polite" class="results-section" style="display: none;">
             <h2 style="text-align: center; margin-bottom: 2rem;">
-                <i class="fas fa-chart-bar"></i> Resultats de votre evaluation
+                <i class="fas fa-chart-bar"></i> Résultats de votre évaluation
             </h2>
 
             <!-- Mode de cotation -->
@@ -222,7 +222,7 @@
                 <p class="score-label" id="scoreLabel">sur 48 points</p>
             </div>
 
-            <div id="interpretationBox" class="interpretation"></div>
+            <div id="interpretationBox" class="interprétation"></div>
 
             <!-- Graphique radar -->
             <div class="glass-card">
@@ -234,36 +234,36 @@
 
             <!-- Scores par domaine -->
             <div class="glass-card">
-                <h3 style="margin-bottom: 1.5rem;"><i class="fas fa-layer-group"></i> Scores detailles par domaine</h3>
+                <h3 style="margin-bottom: 1.5rem;"><i class="fas fa-layer-group"></i> Scores détaillés par domaine</h3>
                 <div id="domainResults"></div>
             </div>
 
-            <!-- Interpretation des niveaux -->
+            <!-- Interprétation des niveaux -->
             <div class="glass-card">
-                <h3 style="margin-bottom: 1rem;"><i class="fas fa-info-circle"></i> Guide d'interpretation</h3>
+                <h3 style="margin-bottom: 1rem;"><i class="fas fa-info-circle"></i> Guide d'interprétation</h3>
                 <p style="color: var(--color-text-muted); margin-bottom: 1rem;">
                     Les seuils ci-dessous sont indicatifs et bases sur le score simple (0-48).
                 </p>
-                <div class="interpretation-grid" id="interpretationGrid">
-                    <div class="interpretation-card" data-level="none">
-                        <div class="interpretation-range">0 - 4</div>
-                        <div class="interpretation-label">Aucun handicap</div>
+                <div class="interprétation-grid" id="interpretationGrid">
+                    <div class="interprétation-card" data-level="none">
+                        <div class="interprétation-range">0 - 4</div>
+                        <div class="interprétation-label">Aucun handicap</div>
                     </div>
-                    <div class="interpretation-card" data-level="mild">
-                        <div class="interpretation-range">5 - 9</div>
-                        <div class="interpretation-label">Handicap leger</div>
+                    <div class="interprétation-card" data-level="mild">
+                        <div class="interprétation-range">5 - 9</div>
+                        <div class="interprétation-label">Handicap leger</div>
                     </div>
-                    <div class="interpretation-card" data-level="moderate">
-                        <div class="interpretation-range">10 - 14</div>
-                        <div class="interpretation-label">Handicap modere</div>
+                    <div class="interprétation-card" data-level="moderate">
+                        <div class="interprétation-range">10 - 14</div>
+                        <div class="interprétation-label">Handicap modere</div>
                     </div>
-                    <div class="interpretation-card" data-level="severe">
-                        <div class="interpretation-range">15 - 19</div>
-                        <div class="interpretation-label">Handicap severe</div>
+                    <div class="interprétation-card" data-level="sévère">
+                        <div class="interprétation-range">15 - 19</div>
+                        <div class="interprétation-label">Handicap sévère</div>
                     </div>
-                    <div class="interpretation-card" data-level="extreme">
-                        <div class="interpretation-range">20+</div>
-                        <div class="interpretation-label">Handicap extreme</div>
+                    <div class="interprétation-card" data-level="extrême">
+                        <div class="interprétation-range">20+</div>
+                        <div class="interprétation-label">Handicap extrême</div>
                     </div>
                 </div>
             </div>
@@ -278,7 +278,7 @@
 
             <!-- Export -->
             <div class="glass-card" style="margin-top: 2rem;">
-                <h3><i class="fas fa-download"></i> Exporter les resultats</h3>
+                <h3><i class="fas fa-download"></i> Exporter les résultats</h3>
                 <div class="consent-box">
                     <label>
                         <input type="checkbox" id="exportConsent">
@@ -300,9 +300,9 @@
     <!-- Footer -->
     <footer class="footer">
         <p><strong>WHODAS 2.0 - WHO Disability Assessment Schedule</strong></p>
-        <p>Developpe par l'Organisation Mondiale de la Sante (OMS), 2010</p>
-        <p>Base sur la Classification Internationale du Fonctionnement, du handicap et de la sante (CIF)</p>
-        <p style="margin-top: 0.5rem;">Adaptation numerique : Dr FENOHASINA | Psychiatre</p>
+        <p>Developpe par l'Organisation Mondiale de la Santé (OMS), 2010</p>
+        <p>Base sur la Classification Internationale du Fonctionnement, du handicap et de la santé (CIF)</p>
+        <p style="margin-top: 0.5rem;">Adaptation numérique : Dr FENOHASINA | Psychiatre</p>
         <p style="margin-top: 1rem;">
             <a href="https://www.who.int/standards/classifications/international-classification-of-functioning-disability-and-health" target="_blank">
                 Documentation officielle OMS
@@ -329,8 +329,8 @@
                 name: "Mobilite",
                 icon: "fa-walking",
                 questions: [
-                    { id: 3, text: "Rester debout pendant de longues periodes comme 30 minutes ?" },
-                    { id: 4, text: "Se deplacer a l'interieur de votre domicile ?" }
+                    { id: 3, text: "Rester debout pendant de longues périodes comme 30 minutes ?" },
+                    { id: 4, text: "Se déplacer à l'intérieur de votre domicile ?" }
                 ]
             },
             {
@@ -357,7 +357,7 @@
                 icon: "fa-home",
                 questions: [
                     { id: 9, text: "Prendre en charge vos responsabilites domestiques ?" },
-                    { id: 10, text: "Effectuer votre travail ou vos etudes quotidien(ne)s ? (ou vos activites principales)" }
+                    { id: 10, text: "Effectuer votre travail ou vos études quotidien(ne)s ? (ou vos activités principales)" }
                 ]
             },
             {
@@ -365,18 +365,18 @@
                 name: "Participation",
                 icon: "fa-hands-helping",
                 questions: [
-                    { id: 11, text: "Vous engager dans des activites communautaires (fetes, activites religieuses, etc.) de la meme facon que n'importe qui d'autre ?" },
-                    { id: 12, text: "A quel point avez-vous ete emotionnellement affecte(e) par votre probleme de sante ?" }
+                    { id: 11, text: "Vous engager dans des activités communautaires (fetes, activités religieuses, etc.) de la meme facon que n'importe qui d'autre ?" },
+                    { id: 12, text: "A quel point avez-vous ete emotionnellement affecte(e) par votre problème de santé ?" }
                 ]
             }
         ];
 
         const options = [
-            { value: 0, label: "Aucune", description: "Aucune difficulte" },
-            { value: 1, label: "Legere", description: "Difficulte legere" },
-            { value: 2, label: "Moderee", description: "Difficulte moderee" },
-            { value: 3, label: "Severe", description: "Difficulte severe" },
-            { value: 4, label: "Extreme/Impossible", description: "Difficulte extreme ou impossible" }
+            { value: 0, label: "Aucune", description: "Aucune difficulté" },
+            { value: 1, label: "Legere", description: "Difficulte légère" },
+            { value: 2, label: "Moderee", description: "Difficulte modérée" },
+            { value: 3, label: "Sévère", description: "Difficulte sévère" },
+            { value: 4, label: "Extrême/Impossible", description: "Difficulte extrême ou impossible" }
         ];
 
         let answers = new Array(12).fill(null);
@@ -508,36 +508,36 @@
                 return {
                     level: "Handicap leger",
                     className: "low",
-                    description: "Vous presentez des difficultes legeres dans certains domaines de fonctionnement.",
-                    action: "Identifier les domaines concernes et envisager des adaptations mineures si necessaire."
+                    description: "Vous presentez des difficultés legeres dans certains domaines de fonctionnement.",
+                    action: "Identifier les domaines concernes et envisager des adaptations mineures si nécessaire."
                 };
             } else if (score <= 14) {
                 return {
                     level: "Handicap modere",
                     className: "moderate",
-                    description: "Vous presentez des difficultes moderees qui peuvent impacter votre vie quotidienne.",
-                    action: "Une evaluation approfondie est recommandee. Envisager un accompagnement adapte."
+                    description: "Vous presentez des difficultés moderees qui peuvent impacter votre vie quotidienne.",
+                    action: "Une évaluation approfondie est recommandée. Envisager un accompagnement adapté."
                 };
             } else if (score <= 19) {
                 return {
-                    level: "Handicap severe",
+                    level: "Handicap sévère",
                     className: "high",
-                    description: "Vous presentez des difficultes importantes dans plusieurs domaines de fonctionnement.",
-                    action: "Un accompagnement specialise est recommande. Evaluation multidisciplinaire conseillée."
+                    description: "Vous presentez des difficultés importantes dans plusieurs domaines de fonctionnement.",
+                    action: "Un accompagnement spécialisé est recommandé. Évaluation multidisciplinaire conseillée."
                 };
             } else {
                 return {
-                    level: "Handicap extreme",
+                    level: "Handicap extrême",
                     className: "critical",
-                    description: "Vous presentez des difficultes majeures qui impactent significativement votre autonomie.",
-                    action: "Prise en charge globale necessaire. Coordination des soins et accompagnement intensif recommandes."
+                    description: "Vous presentez des difficultés majeures qui impactent significativement votre autonomie.",
+                    action: "Prise en charge globale nécessaire. Coordination des soins et accompagnement intensif recommandes."
                 };
             }
         }
 
         function updateResults() {
             const scores = calculateScores();
-            const interpretation = getInterpretation(scores.total.simple);
+            const interprétation = getInterpretation(scores.total.simple);
 
             // Update total score display
             if (scoringMode === 'simple') {
@@ -548,27 +548,27 @@
                 document.getElementById('scoreLabel').textContent = 'de handicap';
             }
 
-            // Update interpretation
+            // Update interprétation
             const interpretationBox = document.getElementById('interpretationBox');
-            interpretationBox.className = `interpretation ${interpretation.className}`;
+            interpretationBox.className = `interprétation ${interprétation.className}`;
             interpretationBox.innerHTML = `
-                <h3>${interpretation.level}</h3>
-                <p><strong>Interpretation :</strong> ${interpretation.description}</p>
-                <p><strong>Recommandation :</strong> ${interpretation.action}</p>
+                <h3>${interprétation.level}</h3>
+                <p><strong>Interprétation :</strong> ${interprétation.description}</p>
+                <p><strong>Recommandation :</strong> ${interprétation.action}</p>
             `;
 
-            // Update interpretation grid
-            const cards = document.querySelectorAll('.interpretation-card');
+            // Update interprétation grid
+            const cards = document.querySelectorAll('.interprétation-card');
             cards.forEach(card => card.classList.remove('active'));
 
             let activeLevel;
             if (scores.total.simple <= 4) activeLevel = 'none';
             else if (scores.total.simple <= 9) activeLevel = 'mild';
             else if (scores.total.simple <= 14) activeLevel = 'moderate';
-            else if (scores.total.simple <= 19) activeLevel = 'severe';
-            else activeLevel = 'extreme';
+            else if (scores.total.simple <= 19) activeLevel = 'sévère';
+            else activeLevel = 'extrême';
 
-            const activeCard = document.querySelector(`.interpretation-card[data-level="${activeLevel}"]`);
+            const activeCard = document.querySelector(`.interprétation-card[data-level="${activeLevel}"]`);
             if (activeCard) activeCard.classList.add('active');
 
             // Update domain results
@@ -600,7 +600,7 @@
             updateRadarChart(scores.domains);
 
             // Update detailed recommendations
-            updateDetailedRecommendations(scores, interpretation);
+            updateDetailedRecommendations(scores, interprétation);
         }
 
         function updateRadarChart(domainScores) {
@@ -621,7 +621,7 @@
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: 'Niveau de difficulte',
+                        label: 'Niveau de difficulté',
                         data: data,
                         backgroundColor: 'rgba(14, 165, 233, 0.2)',
                         borderColor: 'rgba(14, 165, 233, 0.8)',
@@ -681,7 +681,7 @@
             });
         }
 
-        function updateDetailedRecommendations(scores, interpretation) {
+        function updateDetailedRecommendations(scores, interprétation) {
             const detailsContent = document.getElementById('detailsContent');
 
             // Find problematic domains (score > 4 for simple, > 50% for complex)
@@ -695,7 +695,7 @@
                 recommendationsHtml += `
                     <div class="warning-box" style="margin-bottom: 1.5rem;">
                         <h4 style="color: #fbbf24; margin-bottom: 0.5rem;">
-                            <i class="fas fa-exclamation-circle"></i> Domaines necessitant une attention particuliere
+                            <i class="fas fa-exclamation-circle"></i> Domaines nécessitant une attention particuliere
                         </h4>
                         <ul style="margin: 0; padding-left: 1.5rem;">
                             ${problematicDomains.map(d => `<li>${d.name} (score: ${d.simple}/8)</li>`).join('')}
@@ -712,34 +712,34 @@
                         'Utiliser des aide-memoire (agendas, rappels sur telephone)',
                         'Fractionner les taches complexes en etapes simples',
                         'Amenager un environnement calme pour la concentration',
-                        'Envisager une evaluation neuropsychologique si les difficultes persistent'
+                        'Envisager une évaluation neuropsychologique si les difficultés persistent'
                     ]
                 },
                 'Mobilite': {
                     title: 'Ameliorer la mobilite',
                     tips: [
-                        'Consulter un kinesitherapeute pour un programme adapte',
-                        'Evaluer le besoin d\'aides techniques (canne, deambulateur)',
+                        'Consulter un kinesitherapeute pour un programme adapté',
+                        'Évaluer le besoin d\'aides techniques (canne, deambulateur)',
                         'Adapter l\'environnement domestique (barres d\'appui, rampes)',
-                        'Pratiquer une activite physique adaptee regulierement'
+                        'Pratiquer une activite physique adaptee régulièrement'
                     ]
                 },
                 'Soins personnels': {
                     title: 'Autonomie dans les soins',
                     tips: [
-                        'Evaluer le besoin d\'aides techniques pour la toilette',
+                        'Évaluer le besoin d\'aides techniques pour la toilette',
                         'Envisager l\'intervention d\'un ergotherapeute',
-                        'Organiser l\'espace de vie pour faciliter les activites',
-                        'Considerer une aide a domicile si necessaire'
+                        'Organiser l\'espace de vie pour faciliter les activités',
+                        'Considerer une aide à domicile si nécessaire'
                     ]
                 },
                 'Relations': {
                     title: 'Ameliorer les relations sociales',
                     tips: [
-                        'Participer a des groupes de soutien ou activites communautaires',
+                        'Participer à des groupes de soutien ou activités communautaires',
                         'Envisager un accompagnement psychologique (TCC, groupe)',
-                        'Developper des strategies de communication',
-                        'Maintenir un contact regulier avec les proches'
+                        'Developper des stratégies de communication',
+                        'Maintenir un contact régulier avec les proches'
                     ]
                 },
                 'Activites quotidiennes': {
@@ -748,16 +748,16 @@
                         'Etablir des routines quotidiennes structurees',
                         'Utiliser des outils de planification et d\'organisation',
                         'Deleguer certaines taches si possible',
-                        'Envisager un accompagnement pour le retour a l\'emploi si necessaire'
+                        'Envisager un accompagnement pour le retour a l\'emploi si nécessaire'
                     ]
                 },
                 'Participation': {
                     title: 'Inclusion sociale',
                     tips: [
-                        'Identifier les activites communautaires accessibles',
+                        'Identifier les activités communautaires accessibles',
                         'Rejoindre des associations ou groupes d\'entraide',
                         'Travailler sur l\'estime de soi et la confiance',
-                        'Envisager un soutien psychologique pour l\'impact emotionnel'
+                        'Envisager un soutien psychologique pour l\'impact émotionnel'
                     ]
                 }
             };
@@ -786,7 +786,7 @@
                         <i class="fas fa-info-circle"></i> Comprendre les scores WHODAS 2.0
                     </h4>
                     <p style="color: var(--color-text-muted); line-height: 1.8; margin-bottom: 1rem;">
-                        <strong>Score simple (0-48) :</strong> Somme directe des reponses. Plus le score est eleve, plus le handicap est important.<br>
+                        <strong>Score simple (0-48) :</strong> Somme directe des réponses. Plus le score est élevé, plus le handicap est important.<br>
                         <strong>Score complexe (0-100%) :</strong> Conversion en pourcentage pour faciliter la comparaison.
                     </p>
                     <p style="color: var(--color-text-muted); line-height: 1.8;">
@@ -796,7 +796,7 @@
                         - <strong>Soins personnels :</strong> Hygiene, habillement<br>
                         - <strong>Relations :</strong> Interactions sociales<br>
                         - <strong>Activites quotidiennes :</strong> Travail, taches domestiques<br>
-                        - <strong>Participation :</strong> Engagement communautaire, impact emotionnel
+                        - <strong>Participation :</strong> Engagement communautaire, impact émotionnel
                     </p>
                 </div>
             `;
@@ -870,7 +870,7 @@
                                 toggleScoringMode(data.scoringMode);
                             }
                         } else {
-                            alert("Format de fichier invalide. Veuillez importer un fichier WHODAS 2.0 valide.");
+                            alert("Format de fichier invalide. Veuillez importer un fichier WHODAS 2.0 validé.");
                         }
                     } catch (error) {
                         alert("Erreur lors de l'importation du fichier: " + error.message);
@@ -889,7 +889,7 @@
             }
 
             const scores = calculateScores();
-            const interpretation = getInterpretation(scores.total.simple);
+            const interprétation = getInterpretation(scores.total.simple);
 
             const data = {
                 questionnaire: "WHODAS 2.0",
@@ -906,7 +906,7 @@
                         complex: d.complex
                     }))
                 },
-                interpretation: interpretation.level
+                interprétation: interprétation.level
             };
 
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });

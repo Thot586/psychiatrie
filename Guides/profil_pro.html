@@ -172,12 +172,12 @@
             margin-top: 0.5rem;
         }
 
-        .references-section {
+        .références-section {
             margin-top: 1.5rem;
             border-top: 1px solid var(--color-border);
             padding-top: 1rem;
         }
-        .references-toggle {
+        .références-toggle {
             background: none;
             border: none;
             color: #475569;
@@ -190,26 +190,26 @@
             gap: 0.5rem;
             padding: 0.5rem 0;
         }
-        .references-toggle:hover { color: #0d7c72; }
-        .references-toggle .icon {
+        .références-toggle:hover { color: #0d7c72; }
+        .références-toggle .icon {
             transition: transform 0.3s ease;
             font-size: 0.75rem;
         }
-        .references-toggle.open .icon { transform: rotate(90deg); }
-        .references-list {
+        .références-toggle.open .icon { transform: rotate(90deg); }
+        .références-list {
             display: none;
             padding: 1rem 0;
         }
-        .references-list.visible { display: block; }
-        .references-list h4 {
+        .références-list.visible { display: block; }
+        .références-list h4 {
             color: #475569;
             font-size: 0.85rem;
             margin: 1rem 0 0.5rem 0;
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
-        .references-list h4:first-child { margin-top: 0; }
-        .references-list p {
+        .références-list h4:first-child { margin-top: 0; }
+        .références-list p {
             color: var(--color-text-muted);
             font-size: 0.8rem;
             line-height: 1.6;
@@ -1080,12 +1080,12 @@
             </div>
         </div>
 
-        <div class="references-section">
-            <button class="references-toggle" onclick="toggleReferences()" aria-expanded="false" aria-controls="references-list">
+        <div class="références-section">
+            <button class="références-toggle" onclick="toggleReferences()" aria-expanded="false" aria-controls="références-list">
                 <span class="icon"><i class="fas fa-caret-right"></i></span>
                 <i class="fas fa-book"></i> Références scientifiques
             </button>
-            <div id="references-list" class="references-list">
+            <div id="références-list" class="références-list">
                 <h4>Fondements théoriques</h4>
                 <p>Barrick, M. R., & Mount, M. K. (1991). The Big Five personality dimensions and job performance: A meta-analysis. <em>Personnel Psychology</em>, <em>44</em>(1), 1–26. https://doi.org/10.1111/j.1744-6570.1991.tb00688.x</p>
                 <p>Blake, R. R., & Mouton, J. S. (1964). <em>The managerial grid: Key orientations for achieving production through people</em>. Gulf Publishing.</p>
@@ -1119,7 +1119,7 @@
                 <p>Bourdieu, P. (1979). <em>La distinction : Critique sociale du jugement</em>. Minuit.</p>
                 <p>Hofstede, G. (2001). <em>Culture's consequences</em> (2nd ed.). Sage.</p>
                 <p>Sainsaulieu, R. (1977). <em>L'identité au travail</em>. Presses de Sciences Po.</p>
-                <p>Tajfel, H., & Turner, J. C. (1979). An integrative theory of intergroup conflict. In W. G. Austin & S. Worchel (Eds.), <em>The social psychology of intergroup relations</em> (pp. 33–47). Brooks/Cole.</p>
+                <p>Tajfel, H., & Turner, J. C. (1979). An intégrative theory of intergroup conflict. In W. G. Austin & S. Worchel (Eds.), <em>The social psychology of intergroup relations</em> (pp. 33–47). Brooks/Cole.</p>
 
                 <h4>Psychométrie</h4>
                 <p>American Educational Research Association, American Psychological Association, & National Council on Measurement in Education. (2014). <em>Standards for educational and psychological testing</em>.</p>
@@ -1147,7 +1147,7 @@
                 { id: 'axe1', title: "Traitement de l'Information", description: "Recueillir, organiser et utiliser l'info.", profiles: ['plongeur', 'explorateur'] },
                 { id: 'axe2', title: "Processus d'Action", description: "Passer de la réflexion à la décision.", profiles: ['architecte', 'navigateur'] },
                 { id: 'axe3', title: "Rapport aux Autres", description: "Prioriser la tâche ou l'harmonie du groupe.", profiles: ['pilote', 'catalyseur'] },
-                { id: 'axe4', title: "Rapport a la Nouveaute", description: "Réagir face au changement et à la structure.", profiles: ['pionnier', 'stabilisateur'] }
+                { id: 'axe4', title: "Rapport à la Nouveaute", description: "Réagir face au changement et à la structure.", profiles: ['pionnier', 'stabilisateur'] }
             ],
             profiles: {
                 plongeur: {
@@ -1156,7 +1156,7 @@
                     details: {
                         fonctionnement: "Aborde les problèmes avec logique, données factuelles et une pensée convergente (Guilford, 1967). Décompose, analyse et évalue de manière critique pour identifier la solution la plus juste. Ce style partage des traits avec le profil de systemizing élevé décrit par Baron-Cohen (2009).",
                         forces: "Attention méticuleuse aux détails, capacité à identifier des tendances dans les données, démarche structurée qui apporte clarté et discipline, rôle de 'garde-fou'. Réduit le « bruit » décisionnel (Sibony, Kahneman & Sunstein, 2021).",
-                        limites: "Risque de 'paralyse par l'analyse', peut être perçu comme rigide ou excessivement critique, peut négliger les dimensions humaines et émotionnelles. Peut inhiber la sécurité psychologique si sa rigueur critique est perçue comme du jugement (Edmondson, 2019).",
+                        limites: "Risque de 'paralyse par l'analyse', peut être perçu comme rigide ou excessivement critiqué, peut négliger les dimensions humaines et émotionnelles. Peut inhiber la sécurité psychologique si sa rigueur critique est perçue comme du jugement (Edmondson, 2019).",
                         leviers: "Développer la flexibilité cognitive — « repenser » ses hypothèses (Grant, 2021). Cultiver un état d'esprit de croissance (Dweck). Pour l'équipe : fournir des données claires, fixer des délais et valoriser sa rigueur."
                     },
                     enriched: {
@@ -1236,13 +1236,13 @@
                     details: {
                         fonctionnement: "Associé à ce que le modèle des Big Five appelle une haute Agréabilité, bien que ce facteur soit le moins prédictif de la performance professionnelle — il est davantage lié à la satisfaction relationnelle et à la cohésion d'équipe (Salgado, 1997). Attention tournée vers l'harmonie du groupe et le bien-être. Privilégie la collaboration, la coopération et le consensus.",
                         forces: "Exceptionnel pour créer une forte cohésion d'équipe et un environnement psychologiquement sûr, excellent médiateur, favorise une communication ouverte et durable. Incarne les 3 facteurs de l'intelligence collective : sensibilité sociale, égalité de parole, diversité (Woolley et al., 2010). Créateur naturel de sécurité psychologique (Edmondson, 2019). « Multiplicateur » par excellence (Wiseman, 2010).",
-                        limites: "Réticent à prendre des décisions impopulaires ou à donner un feedback critique, peut manquer d'assertivité, risque d'être exploité ou de ne pas défendre ses propres intérêts. Risque d'éviter le conflit productif — niveau 2 de la pyramide de Lencioni (2002). Trop de consensus = pensée de groupe, pas assez de repensement (Grant, 2021).",
+                        limites: "Réticent à prendre des décisions impopulaires ou à donner un feedback critiqué, peut manquer d'assertivité, risque d'être exploité ou de ne pas défendre ses propres intérêts. Risque d'éviter le conflit productif — niveau 2 de la pyramide de Lencioni (2002). Trop de consensus = pensée de groupe, pas assez de repensement (Grant, 2021).",
                         leviers: "Apprendre à distinguer 'être gentil' de 'être efficace'. S'entraîner au feedback constructif et à dire 'non'. Pour l'équipe : reconnaître son rôle de 'glue' sociale, le coacher pour développer son assertivité. Distinguer conflit productif (idées) vs destructif (personnes) (Lencioni, 2002). Faciliter des débats structurés plutôt que chercher l'unanimité (Sibony, 2020)."
                     },
                     enriched: {
                         fonctionnement: "Leadership <strong>orienté relation</strong> — associé à une haute Agréabilité (Costa & McCrae, 1992). Attention tournée vers l'harmonie, la cohésion et le bien-être. L'Agréabilité est le facteur Big Five le <strong>moins prédictif de la performance individuelle</strong>, mais le plus lié à la satisfaction relationnelle et à la cohésion d'équipe (Salgado, 1997).<span class='source'>Costa & McCrae (1992) ; Salgado (1997)</span>",
                         forces: "Le leadership relationnel génère une <strong>+8% de productivité réelle</strong> (vs +4% pour le task-oriented) grâce à une plus grande cohésion d'équipe et un meilleur apprentissage collectif (méta-analyse). Crée un environnement psychologiquement sûr propice à l'innovation. Incarne les <strong>3 facteurs de l'intelligence collective</strong> : sensibilité sociale, égalité de parole, diversité <span class='source'>(Woolley et al., 2010)</span>. Créateur naturel de <strong>sécurité psychologique</strong> <span class='source'>(Edmondson, 2019)</span>. <strong>« Multiplicateur »</strong> par excellence <span class='source'>(Wiseman, 2010)</span>.<span class='source'>Salgado (1997) ; Woolley et al. (2010) ; Edmondson (2019) ; Wiseman (2010)</span>",
-                        limites: "Si poussé trop loin, la <strong>chimie d'équipe</strong> peut détourner des objectifs concrets. Réticence à prendre des décisions impopulaires ou à donner un feedback critique. Risque d'être exploité par des profils plus assertifs. Risque d'éviter le <strong>conflit productif</strong> — niveau 2 de la pyramide de Lencioni <span class='source'>(2002)</span>. Trop de consensus = <strong>pensée de groupe</strong>, pas assez de repensement <span class='source'>(Grant, 2021)</span>.<span class='source'>Salgado (1997) ; Lencioni (2002) ; Grant (2021)</span>",
+                        limites: "Si poussé trop loin, la <strong>chimie d'équipe</strong> peut détourner des objectifs concrets. Réticence à prendre des décisions impopulaires ou à donner un feedback critiqué. Risque d'être exploité par des profils plus assertifs. Risque d'éviter le <strong>conflit productif</strong> — niveau 2 de la pyramide de Lencioni <span class='source'>(2002)</span>. Trop de consensus = <strong>pensée de groupe</strong>, pas assez de repensement <span class='source'>(Grant, 2021)</span>.<span class='source'>Salgado (1997) ; Lencioni (2002) ; Grant (2021)</span>",
                         leviers: "Apprendre à distinguer <strong>« être gentil » de « être efficace »</strong>. S'entraîner au feedback constructif (méthode SBI : Situation-Behavior-Impact). Intégrer les deux orientations (tâche + relation). Pour l'équipe : valoriser son rôle de « glue sociale ». Distinguer <strong>conflit productif</strong> (idées) vs destructif (personnes) <span class='source'>(Lencioni, 2002)</span>. Faciliter des <strong>débats structurés</strong> plutôt que chercher l'unanimité <span class='source'>(Sibony, 2020)</span>.<span class='source'>Salgado (1997) ; Blake & Mouton (1964) ; Lencioni (2002) ; Sibony (2020)</span>"
                     }
                 },
@@ -2009,8 +2009,8 @@
         }
 
         function toggleReferences() {
-            const list = document.getElementById('references-list');
-            const btn = document.querySelector('.references-toggle');
+            const list = document.getElementById('références-list');
+            const btn = document.querySelector('.références-toggle');
             list.classList.toggle('visible');
             btn.classList.toggle('open');
             btn.setAttribute('aria-expanded', list.classList.contains('visible') ? 'true' : 'false');

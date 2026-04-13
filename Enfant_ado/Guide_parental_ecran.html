@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Guide Parental sur les Écrans (0-18 ans) — outil clinique interactif pour la psychiatrie et la sante mentale.">
+    <meta name="description" content="Guide Parental sur les Écrans (0-18 ans) — outil clinique interactif pour la psychiatrie et la santé mentale.">
     <title>Guide Parental sur les Écrans (0-18 ans)</title>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/questionnaire-light.css">
@@ -262,7 +262,7 @@
         }
 
         /* References section */
-        .references-list {
+        .références-list {
             background: var(--surface-table);
             border: 1px solid var(--color-border);
             border-radius: var(--radius-lg);
@@ -270,12 +270,12 @@
             max-height: 60vh;
             overflow-y: auto;
         }
-        .references-list p {
+        .références-list p {
             font-size: 0.875rem;
             margin-bottom: 1rem;
             color: var(--color-text-muted);
         }
-        .references-list em {
+        .références-list em {
             color: var(--color-text-secondary);
         }
 
@@ -316,7 +316,7 @@
             <button data-target="inefficaces" class="nav-btn">Stratégies Inefficaces</button>
             <button data-target="guide" class="nav-btn">Guide par Age</button>
             <button data-target="lacunes" class="nav-btn">Angles Morts</button>
-            <button data-target="references" class="nav-btn">Références</button>
+            <button data-target="références" class="nav-btn">Références</button>
         </nav>
 
         <main id="main-content" class="main-content">
@@ -368,10 +368,10 @@
                 </div>
             </section>
 
-            <section id="references" class="content-section">
+            <section id="références" class="content-section">
                 <h2 class="section-title">Références Scientifiques</h2>
                 <p class="section-subtitle">Ce guide s'appuie sur une revue de la littérature scientifique. Voici les principales sources citées.</p>
-                <div class="references-list" id="references-container"></div>
+                <div class="références-list" id="références-container"></div>
             </section>
         </main>
     </div>
@@ -384,11 +384,11 @@
             <a href="https://www.facebook.com/Psykozy?locale=fr_FR" target="_blank" rel="noopener noreferrer">
                 <img src="../images/logos/psykozy.png" alt="Logo Psy-kozy">
             </a>
-            <a href="https://centre-ressource-rehabilitation.org" target="_blank" rel="noopener noreferrer">
-                <img src="../images/logos/crr.jpg" alt="Logo Centre Ressource Rehabilitation">
+            <a href="https://centre-ressource-réhabilitation.org" target="_blank" rel="noopener noreferrer">
+                <img src="../images/logos/crr.jpg" alt="Logo Centre Ressource Réhabilitation">
             </a>
         </div>
-        <p>Dr FENOHASINA T.J. Felicien (Psychiatre - FFI)</p>
+        <p>Dr FENOHASINA T.J. Félicien (Psychiatre - FFI)</p>
         <p>
             <img src="../images/icons/cc-by-nc-sa.png" alt="CC BY-NC-SA" style="height: 20px; vertical-align: middle;">
             <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr" target="_blank" rel="noopener noreferrer">Licence CC BY-NC-SA 4.0</a> -
@@ -454,7 +454,7 @@ document.addEventListener('DOMContentLoaded', function () {
         { title: "Mythe 1 : 'Les écrans rendent les enfants passifs et non créatifs.'", content: "<p style='font-size: 0.875rem; color: var(--color-text-muted); line-height: 1.6;'><strong>Ce que les études révèlent :</strong> L'impact dépend entièrement de l'usage. Si la consommation passive peut se substituer au jeu, les écrans sont aussi de puissants outils de création. De nombreux jeux vidéo, par exemple, stimulent la créativité, la résolution de problèmes et la résilience face à l'échec (Granic et al., 2014). La question est de guider l'enfant vers ces usages interactifs et créatifs.</p>" },
         { title: "Mythe 2 : 'Toutes les applications dites 'éducatives' sont bénéfiques.'", content: "<p style='font-size: 0.875rem; color: var(--color-text-muted); line-height: 1.6;'><strong>Ce qu'il faut savoir :</strong> Une large part des applications 'éducatives' sont de faible qualité pédagogique. Pour être efficace, une application doit reposer sur 4 piliers (Hirsh-Pasek et al., 2015) : l'apprentissage <strong>Actif</strong> (qui fait réfléchir), l'<strong>Engagement</strong> (sans distraction), le sens (<strong>Significatif</strong>) et l'<strong>Interaction Sociale</strong>. L'efficacité est quasi systématiquement augmentée lorsque l'utilisation est accompagnée par un parent (Kim et al., 2021).</p>" },
         { title: "Mythe 3 : 'Exposer un bébé aux écrans lui apprendra des mots plus vite.'", content: "<p style='font-size: 0.875rem; color: var(--color-text-muted); line-height: 1.6;'><strong>La réalité du développement :</strong> C'est faux. L'acquisition du langage avant 3 ans repose sur les interactions sociales directes. La recherche a identifié un 'effet de déficit vidéo' : les tout-petits apprennent beaucoup moins bien d'un écran que d'une personne réelle. Une exposition précoce et prolongée peut même affecter négativement le vocabulaire (Costantino et al., 2023). La seule exception est l'appel vidéo (clavardage vidéo en Québécois) avec un proche, car il préserve l'interaction sociale.</p>" },
-        { title: "Mythe 4 : 'L'interdiction totale des écrans est la meilleure solution.'", content: "<p style='font-size: 0.875rem; color: var(--color-text-muted); line-height: 1.6;'><strong>Pourquoi cette approche est risquée :</strong> Elle est souvent contre-productive. Elle peut déclencher un 'effet fruit défendu' (théorie de la réactance de Brehm, 1966), rendant les écrans encore plus désirables. Des stratégies trop restrictives sont associées à une augmentation de l'usage en cachette et à une dégradation de la relation parent-ado (Nathanson, 2002; Valkenburg et al., 2013). L'objectif n'est pas d'interdire, mais d'éduquer à l'autorégulation et à l'esprit critique.</p>" }
+        { title: "Mythe 4 : 'L'interdiction totale des écrans est la meilleure solution.'", content: "<p style='font-size: 0.875rem; color: var(--color-text-muted); line-height: 1.6;'><strong>Pourquoi cette approche est risquée :</strong> Elle est souvent contre-productive. Elle peut déclencher un 'effet fruit défendu' (théorie de la réactance de Brehm, 1966), rendant les écrans encore plus désirables. Des stratégies trop restrictives sont associées à une augmentation de l'usage en cachette et à une dégradation de la relation parent-ado (Nathanson, 2002; Valkenburg et al., 2013). L'objectif n'est pas d'interdire, mais d'éduquer à l'autorégulation et à l'esprit critiqué.</p>" }
     ];
 
     const inefficacesData = [
@@ -473,7 +473,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const ageData = {
         "age-0-3": { title: "De 0 à 3 ans : L'Âge de l'Interaction", content: `<p style="margin-bottom: 0.5rem;"><strong>Enjeux développementaux :</strong> Développement sensori-moteur, lien d'attachement, acquisition du langage par l'interaction directe.</p><p style="margin-bottom: 1rem;"><strong>Ce qu'il faut faire :</strong> Priorité absolue aux interactions humaines. Pas d'écran passif avant 03 ans. La seule exception est l' <strong>appel vidéo interactif</strong> avec des proches, car il maintient le dialogue social. Éviter la TV en fond sonore qui appauvrit les échanges parent-enfant (Costantino et al., 2023).</p><div class="guide-blockquote"><p class="label">Phrase clé :</p><p>"Regardons ensemble ce que fait Mamie à l'écran ! Tu vois, elle te fait coucou !"</p></div>` },
         "age-3-6": { title: "De 3 à 6 ans : L'Âge de la Découverte Guidée", content: `<p style="margin-bottom: 0.5rem;"><strong>Enjeux développementaux :</strong> Jeu symbolique, imagination, début de l'autorégulation.</p><p style="margin-bottom: 1rem;"><strong>Ce qu'il faut faire :</strong> Le <strong>co-visionnage systématique</strong> est la règle. Ne jamais laisser un enfant seul. Choisir des contenus de haute qualité (rythme lent, pro-sociaux). Limiter le temps à <strong>~1 heure par jour</strong>. Établir des règles claires et des rituels (pas d'écrans pendant les repas et 1h avant le coucher).</p><div class="guide-blockquote"><p class="label">Phrase clé :</p><p>"Après cet épisode, on éteint et on va dessiner. Quelle couleur avait la voiture du héros ?"</p></div>` },
-        "age-7-12": { title: "De 7 à 12 ans : L'Âge de l'Éducation aux Médias", content: `<p style="margin-bottom: 0.5rem;"><strong>Enjeux développementaux :</strong> Pensée critique, socialisation avec les pairs, initiation à la littératie numérique.</p><p style="margin-bottom: 1rem;"><strong>Ce qu'il faut faire :</strong> Passer du rôle de 'contrôleur' à 'médiateur'. Élaborer ensemble un <strong>'plan médiatique familial'</strong> (règles pour tous, y compris les parents). Discuter de sécurité en ligne et développer son <strong>esprit critique</strong> (publicités, fake news). La règle de base : les appareils chargent la nuit dans une pièce commune.</p><div class="guide-blockquote"><p class="label">Phrase clé :</p><p>"Cette info sur TikTok, d'où vient-elle ? Cherchons ensemble si d'autres sources fiables confirment."</p></div>` },
+        "age-7-12": { title: "De 7 à 12 ans : L'Âge de l'Éducation aux Médias", content: `<p style="margin-bottom: 0.5rem;"><strong>Enjeux développementaux :</strong> Pensée critiqué, socialisation avec les pairs, initiation à la littératie numérique.</p><p style="margin-bottom: 1rem;"><strong>Ce qu'il faut faire :</strong> Passer du rôle de 'contrôleur' à 'médiateur'. Élaborer ensemble un <strong>'plan médiatique familial'</strong> (règles pour tous, y compris les parents). Discuter de sécurité en ligne et développer son <strong>esprit critiqué</strong> (publicités, fake news). La règle de base : les appareils chargent la nuit dans une pièce commune.</p><div class="guide-blockquote"><p class="label">Phrase clé :</p><p>"Cette info sur TikTok, d'où vient-elle ? Cherchons ensemble si d'autres sources fiables confirment."</p></div>` },
         "age-13-18": { title: "De 13 à 18 ans : L'Âge de l'Autonomie Accompagnée", content: `<p style="margin-bottom: 0.5rem;"><strong>Enjeux développementaux :</strong> Construction de l'identité, relations sociales, image de soi en ligne, régulation du sommeil.</p><p style="margin-bottom: 1rem;"><strong>Ce qu'il faut faire :</strong> Évoluer vers l'accompagnement. <strong>Négocier les règles</strong> plutôt que les imposer. Maintenir un dialogue ouvert sur les expériences en ligne (Comment te sens-tu après Instagram ?). Le plus important : <strong>être un modèle</strong> avec votre propre usage des écrans. Mettre en place un 'couvre-feu digital' pour toute la famille.</p><div class="guide-blockquote"><p class="label">Phrase clé :</p><p>"Je ne suis pas là pour t'espionner, mais pour comprendre. Est-ce que ce réseau social te motive ou te laisse un sentiment de vide ?"</p></div>` }
     };
 
@@ -493,8 +493,8 @@ document.addEventListener('DOMContentLoaded', function () {
         "Kim, J., Gilbert, J., Yu, Q., & Gale, C. (2021). Measures matter: A meta-analysis of the effects of educational apps on preschool to grade 3 children's literacy and math skills. <em>AERA Open, 7</em>.",
         "Madigan, S., Browne, D., Racine, N., Mori, C., & Tough, S. (2019). Association between screen time and children's performance on a developmental screening test. <em>JAMA Pediatrics, 173</em>(3), 244-250.",
         "Mayo Clinic. (2024, June 19). Screen time and children: How to guide your child.",
-        "Muppalla, S. K., V., S. L., G., M., & K., A. (2023). Effects of excessive screen time on child development: An updated review and strategies for management. <em>Cureus, 15</em>(6), e40551.",
-        "Nathanson, A. I. (2002). The unintended effects of parental mediation of television on adolescents. <em>Media Psychology, 4</em>(3), 207-230.",
+        "Muppalla, S. K., V., S. L., G., M., & K., A. (2023). Effects of excessive screen time on child development: An updated review and stratégies for management. <em>Cureus, 15</em>(6), e40551.",
+        "Nathanson, A. I. (2002). The unintended effects of parental mediation of télévision on adolescents. <em>Media Psychology, 4</em>(3), 207-230.",
         "Nikken, P., & Jansz, J. (2014). Developing a scale to measure parental mediation of young children's internet use. <em>Learning, Media and Technology, 39</em>(2), 250-266.",
         "Raising Children Network. (n.d.). Privacy, trust & monitoring: Teenage years.",
         "Reid Chassiakos, Y., Radesky, J., Christakis, D., Moreno, M. A., & Cross, C. (2016). Children and adolescents and digital media. <em>Pediatrics, 138</em>(5), e20162593.",
@@ -536,8 +536,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Populate references section
-    const referencesContainer = document.getElementById('references-container');
+    // Populate références section
+    const referencesContainer = document.getElementById('références-container');
     if (referencesContainer) {
         referencesContainer.innerHTML = referencesData.map(ref => `<p>${ref}</p>`).join('');
     }

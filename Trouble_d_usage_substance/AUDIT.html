@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="AUDIT - Évaluation de la Consommation d'Alcool — outil clinique interactif pour la psychiatrie et la sante mentale.">
+    <meta name="description" content="AUDIT - Évaluation de la Consommation d'Alcool — outil clinique interactif pour la psychiatrie et la santé mentale.">
     <title>AUDIT - Évaluation de la Consommation d'Alcool</title>
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
@@ -86,7 +86,7 @@
         </section>
 
         <!-- Résultats -->
-        <section id="results" class="glass-card results-section" style="display: none;">
+        <section id="results" aria-live="polite" class="glass-card results-section" style="display: none;">
             <h2 style="text-align: center; margin-bottom: 2rem;"><i class="fas fa-chart-pie"></i> Résultats</h2>
 
             <div class="score-display">
@@ -96,7 +96,7 @@
                 </div>
             </div>
 
-            <div id="interpretationBox" class="interpretation"></div>
+            <div id="interpretationBox" class="interprétation"></div>
 
             <button class="btn-primary" onclick="toggleDetails()" style="width: 100%; margin-top: 1rem;">
                 <i class="fas fa-list-ul"></i> Voir les recommandations détaillées
@@ -215,7 +215,7 @@
             const interp = getInterpretation(score);
             document.getElementById('totalScore').textContent = score;
             const interpretationBox = document.getElementById('interpretationBox');
-            interpretationBox.className = `interpretation ${interp.className}`;
+            interpretationBox.className = `interprétation ${interp.className}`;
             interpretationBox.innerHTML = `<h3>${interp.level}</h3><p><strong>Recommandation :</strong> ${interp.action}</p>`;
 
             document.getElementById('detailsContent').innerHTML = `
@@ -280,7 +280,7 @@
                 date: new Date().toISOString(),
                 answers: answers,
                 score: score,
-                interpretation: getInterpretation(score).level
+                interprétation: getInterpretation(score).level
             };
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);

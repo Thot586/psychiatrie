@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="BAI - Inventaire d'Anxiété de Beck — outil clinique interactif pour la psychiatrie et la sante mentale.">
+    <meta name="description" content="BAI - Inventaire d'Anxiété de Beck — outil clinique interactif pour la psychiatrie et la santé mentale.">
     <title>BAI - Inventaire d'Anxiété de Beck</title>
 
     <!-- Font Awesome pour les icônes -->
@@ -47,7 +47,7 @@
             </button>
         </div>
         <span class="nav-title">BAI</span>
-        <span class="badge badge-cat-anxiete">Anxiété</span>
+        <span class="badge badge-cat-anxiété">Anxiété</span>
     </nav>
 
     <div class="container">
@@ -97,7 +97,7 @@
         </section>
 
         <!-- Résultats -->
-        <section id="results" class="results-section" style="display: none;">
+        <section id="results" aria-live="polite" class="results-section" style="display: none;">
             <h2 style="text-align: center; margin-bottom: 2rem;">
                 <i class="fas fa-chart-bar"></i> Résultats de votre évaluation
             </h2>
@@ -109,7 +109,7 @@
                 <p class="score-label">sur 63 points</p>
             </div>
 
-            <div id="interpretationBox" class="interpretation"></div>
+            <div id="interpretationBox" class="interprétation"></div>
 
             <button class="btn-primary w-full" onclick="toggleDetails()" style="margin-top: 1.5rem;">
                 <i class="fas fa-list"></i> Voir les détails et diagnostics différentiels
@@ -319,18 +319,18 @@
 
         function updateResults() {
             const score = calculateScore();
-            const interpretation = getInterpretation(score);
+            const interprétation = getInterpretation(score);
             const differentials = getDifferentials(score);
             const symptomAnalysis = getSymptomAnalysis();
 
             document.getElementById('totalScore').textContent = score;
 
             const interpretationBox = document.getElementById('interpretationBox');
-            interpretationBox.className = `interpretation ${interpretation.className}`;
+            interpretationBox.className = `interprétation ${interprétation.className}`;
             interpretationBox.innerHTML = `
-                <h3>Anxiété ${interpretation.level}</h3>
-                <p><strong>Interprétation :</strong> ${interpretation.description}</p>
-                <p><strong>Recommandation :</strong> ${interpretation.action}</p>
+                <h3>Anxiété ${interprétation.level}</h3>
+                <p><strong>Interprétation :</strong> ${interprétation.description}</p>
+                <p><strong>Recommandation :</strong> ${interprétation.action}</p>
             `;
 
             const detailsContent = document.getElementById('detailsContent');
@@ -422,7 +422,7 @@
             }
 
             const score = calculateScore();
-            const interpretation = getInterpretation(score);
+            const interprétation = getInterpretation(score);
             const symptomAnalysis = getSymptomAnalysis();
 
             const data = {
@@ -430,7 +430,7 @@
                 date: new Date().toISOString(),
                 answers: answers,
                 score: score,
-                interpretation: interpretation.level,
+                interprétation: interprétation.level,
                 symptomAnalysis: {
                     somaticScore: symptomAnalysis.somatic,
                     cognitiveScore: symptomAnalysis.cognitive
