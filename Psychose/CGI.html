@@ -15,11 +15,11 @@
     <link rel="stylesheet" href="../css/questionnaire-light.css">
     <style>
         :root {
-            --cat-main: #7c3aed;
-            --cat-dark: #6d28d9;
-            --cat-light: #a78bfa;
-            --cat-rgb: 124, 58, 237;
-            --cat-readable: #6d28d9;
+            --cat-main: #6d28d9;
+            --cat-dark: #5b21b6;
+            --cat-light: #8b5cf6;
+            --cat-rgb: 109, 40, 217;
+            --cat-readable: #5b21b6;
         }
         .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
         .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
@@ -56,7 +56,7 @@
             <span class="hetero-badge">
                 <i class="fas fa-user-md"></i> HÉTÉRO-ÉVALUATION
             </span>
-            <h2 class="gradient-text" style="background: linear-gradient(135deg, #7c3aed, #9333ea); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Clinical Global Impression</h2>
+            <h2 class="gradient-text" style="background: linear-gradient(135deg, #6d28d9, #9333ea); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Clinical Global Impression</h2>
             <p>Évaluation globale du patient par le clinicien - 3 items</p>
         </header>
 
@@ -100,9 +100,9 @@
         <section class="glass-card">
             <div class="question-card">
                 <div style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem;">
-                    <span class="question-number" style="background: linear-gradient(135deg, #7c3aed, #9333ea);">1</span>
+                    <span class="question-number" style="background: linear-gradient(135deg, #6d28d9, #9333ea);">1</span>
                     <div>
-                        <h3 style="margin: 0; color: #7c3aed;">CGI-S - Sévérité de la maladie</h3>
+                        <h3 style="margin: 0; color: #6d28d9;">CGI-S - Sévérité de la maladie</h3>
                         <p class="question-text" style="margin-top: 0.5rem;">Compte tenu de votre expérience clinique totale avec ce type de patient, quel est le niveau de sévérité actuel de la maladie mentale du patient ?</p>
                     </div>
                 </div>
@@ -114,9 +114,9 @@
         <section class="glass-card">
             <div class="question-card">
                 <div style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem;">
-                    <span class="question-number" style="background: linear-gradient(135deg, #7c3aed, #9333ea);">2</span>
+                    <span class="question-number" style="background: linear-gradient(135deg, #6d28d9, #9333ea);">2</span>
                     <div>
-                        <h3 style="margin: 0; color: #7c3aed;">CGI-I - Amélioration globale</h3>
+                        <h3 style="margin: 0; color: #6d28d9;">CGI-I - Amélioration globale</h3>
                         <p class="question-text" style="margin-top: 0.5rem;">Par rapport à l'état du patient au début du traitement, comment évaluez-vous le changement actuel ?</p>
                     </div>
                 </div>
@@ -128,9 +128,9 @@
         <section class="glass-card">
             <div class="question-card">
                 <div style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem;">
-                    <span class="question-number" style="background: linear-gradient(135deg, #7c3aed, #9333ea);">3</span>
+                    <span class="question-number" style="background: linear-gradient(135deg, #6d28d9, #9333ea);">3</span>
                     <div>
-                        <h3 style="margin: 0; color: #7c3aed;">CGI-E - Index d'efficacité thérapeutique</h3>
+                        <h3 style="margin: 0; color: #6d28d9;">CGI-E - Index d'efficacité thérapeutique</h3>
                         <p class="question-text" style="margin-top: 0.5rem;">Comment évaluez-vous le rapport efficacité/effets indésirables du traitement ?</p>
                     </div>
                 </div>
@@ -179,7 +179,7 @@
 
             <div class="interprétation-grid" id="interpretations"></div>
 
-            <button class="btn-primary w-full" onclick="toggleDetails()" style="margin-top: 1.5rem; background: linear-gradient(135deg, #7c3aed, #9333ea);">
+            <button class="btn-primary w-full" onclick="toggleDetails()" style="margin-top: 1.5rem; background: linear-gradient(135deg, #6d28d9, #9333ea);">
                 <i class="fas fa-list"></i> Voir les détails d'interprétation
                 <span id="toggleIcon"><i class="fas fa-chevron-down"></i></span>
             </button>
@@ -196,7 +196,7 @@
                     </label>
                 </div>
                 <div class="export-buttons">
-                    <button class="btn-primary" onclick="exportData()" style="background: linear-gradient(135deg, #7c3aed, #9333ea);">
+                    <button class="btn-primary" onclick="exportData()" style="background: linear-gradient(135deg, #6d28d9, #9333ea);">
                         <i class="fas fa-file-export"></i> Exporter en JSON
                     </button>
                     <button class="btn-print" onclick="printResults()">
@@ -495,7 +495,7 @@
 
             html += `
                 <div class="info-box" style="margin-bottom: 1rem;">
-                    <h4 style="color: #7c3aed;">CGI-S (Sévérité)</h4>
+                    <h4 style="color: #6d28d9;">CGI-S (Sévérité)</h4>
                     <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
                         <li><strong>1-2</strong> : Pas de maladie significative</li>
                         <li><strong>3-4</strong> : Maladie légère à modérée</li>
@@ -504,7 +504,7 @@
                 </div>
 
                 <div class="info-box" style="margin-bottom: 1rem;">
-                    <h4 style="color: #7c3aed;">CGI-I (Amélioration)</h4>
+                    <h4 style="color: #6d28d9;">CGI-I (Amélioration)</h4>
                     <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
                         <li><strong>1-2</strong> : Amélioration significative</li>
                         <li><strong>3</strong> : Amélioration légère</li>
@@ -515,7 +515,7 @@
                 </div>
 
                 <div class="info-box" style="margin-bottom: 1rem;">
-                    <h4 style="color: #7c3aed;">CGI-E (Index d'efficacité)</h4>
+                    <h4 style="color: #6d28d9;">CGI-E (Index d'efficacité)</h4>
                     <p style="margin-bottom: 0.5rem;">Score de 1 à 16 combinant l'effet thérapeutique (lignes) et les effets indésirables (colonnes) :</p>
                     <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
                         <li><strong>1-4</strong> : Bon rapport bénéfice/risque</li>

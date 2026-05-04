@@ -13,7 +13,7 @@
         :root {
             --cat-main: #14b8a6;
             --cat-dark: #0d9488;
-            --cat-light: #2dd4bf;
+            --cat-light: #0f766e;
             --cat-rgb: 20, 184, 166;
             --cat-readable: #0d9488;
         }
@@ -104,8 +104,8 @@
             color: var(--cat-readable);
         }
         .case-tab.active-amber {
-            background: rgba(245, 158, 11, 0.1);
-            border-color: #f59e0b;
+            background: rgba(194, 65, 12, 0.1);
+            border-color: #c2410c;
             color: var(--accent-amber);
         }
         .case-tab h4 { margin: 0 0 0.25rem 0; font-size: 1.1rem; }
@@ -119,7 +119,7 @@
             margin-bottom: 1.5rem;
         }
         .scénario-box.teal { border-left: 4px solid var(--cat-main); }
-        .scénario-box.amber { border-left: 4px solid #f59e0b; }
+        .scénario-box.amber { border-left: 4px solid #c2410c; }
         .scénario-box p {
             color: var(--color-text-secondary);
             line-height: 1.8;
@@ -208,7 +208,7 @@
         }
         .result-box h3 { color: var(--accent-green); margin-bottom: 0.5rem; }
         .result-box p { color: var(--color-text-muted); }
-        .result-box.warning { background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3); }
+        .result-box.warning { background: rgba(194, 65, 12, 0.1); border-color: rgba(194, 65, 12, 0.3); }
         .result-box.warning h3 { color: var(--accent-amber); }
         .result-box.danger { background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3); }
         .result-box.danger h3 { color: var(--accent-red); }
@@ -265,7 +265,7 @@
         .feature-card h4 { color: var(--color-text-primary); margin-bottom: 0.5rem; font-size: 1rem; }
         .feature-card p { color: var(--color-text-muted); font-size: var(--font-size-sm); margin: 0; }
         .feature-card.teal { border-left: 4px solid var(--cat-main); }
-        .feature-card.amber { border-left: 4px solid #f59e0b; }
+        .feature-card.amber { border-left: 4px solid #c2410c; }
 
         .action-list {
             list-style: none;
@@ -409,20 +409,20 @@
                     <!-- Dépression Case -->
                     <div id="case-dépression" class="case-content active">
                         <div class="scenario-box teal">
-                            <h3 style="color: #2dd4bf; margin-bottom: 1rem;"><i class="fas fa-file-alt" style="margin-right: 0.5rem;"></i>Cas 1 : La fatigue de Rasoa</h3>
+                            <h3 style="color: #0f766e; margin-bottom: 1rem;"><i class="fas fa-file-alt" style="margin-right: 0.5rem;"></i>Cas 1 : La fatigue de Rasoa</h3>
                             <p><strong>Rasoa, 72 ans</strong>, vit en EHPAD depuis 6 mois après le décès de son mari. Elle consulte fréquemment l'infirmière pour des plaintes multiples : maux de tête, douleurs abdominales, fatigué. Les bilans somatiques sont normaux. Le personnel note qu'elle ne participe plus aux activités, reste dans sa chambre, mange peu. Elle dit qu'elle « attend la fin » et qu'elle est « un fardeau pour tout le monde ». Elle a perdu 4 kg en 2 mois. Elle à des antécédents de dépression traitée il y a 20 ans.</p>
                         </div>
                         <div class="feature-grid">
                             <div class="feature-card teal">
-                                <h4><i class="fas fa-birthday-cake" style="color: #2dd4bf; margin-right: 0.5rem;"></i>Âge</h4>
+                                <h4><i class="fas fa-birthday-cake" style="color: #0f766e; margin-right: 0.5rem;"></i>Âge</h4>
                                 <p>72 ans</p>
                             </div>
                             <div class="feature-card teal">
-                                <h4><i class="fas fa-home" style="color: #2dd4bf; margin-right: 0.5rem;"></i>Lieu de vie</h4>
+                                <h4><i class="fas fa-home" style="color: #0f766e; margin-right: 0.5rem;"></i>Lieu de vie</h4>
                                 <p>EHPAD depuis 6 mois</p>
                             </div>
                             <div class="feature-card teal">
-                                <h4><i class="fas fa-heart-broken" style="color: #2dd4bf; margin-right: 0.5rem;"></i>Événement récent</h4>
+                                <h4><i class="fas fa-heart-broken" style="color: #0f766e; margin-right: 0.5rem;"></i>Événement récent</h4>
                                 <p>Décès du conjoint</p>
                             </div>
                         </div>
@@ -431,20 +431,20 @@
                     <!-- Delirium Case -->
                     <div id="case-delirium" class="case-content">
                         <div class="scenario-box amber">
-                            <h3 style="color: #fbbf24; margin-bottom: 1rem;"><i class="fas fa-file-alt" style="margin-right: 0.5rem;"></i>Cas 2 : La confusion de Rakoto</h3>
+                            <h3 style="color: #ea580c; margin-bottom: 1rem;"><i class="fas fa-file-alt" style="margin-right: 0.5rem;"></i>Cas 2 : La confusion de Rakoto</h3>
                             <p><strong>Rakoto, 78 ans</strong>, est hospitalisé en chirurgie pour une fracture du col du fémur opérée il y a 3 jours. Depuis hier soir, il est agité, ne reconnaît plus l'équipe soignante, essaie d'arracher sa perfusion. Il dit voir « des gens dans la chambre » et pense être chez lui. La nuit, il est très agité ; le jour, il alterne entre somnolence et agitation. Il était autonome avant l'hospitalisation. Antécédents : HTA, diabète type 2, prothèse auditive.</p>
                         </div>
                         <div class="feature-grid">
                             <div class="feature-card amber">
-                                <h4><i class="fas fa-birthday-cake" style="color: #fbbf24; margin-right: 0.5rem;"></i>Âge</h4>
+                                <h4><i class="fas fa-birthday-cake" style="color: #ea580c; margin-right: 0.5rem;"></i>Âge</h4>
                                 <p>78 ans</p>
                             </div>
                             <div class="feature-card amber">
-                                <h4><i class="fas fa-procedures" style="color: #fbbf24; margin-right: 0.5rem;"></i>Contexte</h4>
+                                <h4><i class="fas fa-procedures" style="color: #ea580c; margin-right: 0.5rem;"></i>Contexte</h4>
                                 <p>Post-opératoire J3 (fracture col fémoral)</p>
                             </div>
                             <div class="feature-card amber">
-                                <h4><i class="fas fa-clock" style="color: #fbbf24; margin-right: 0.5rem;"></i>Installation</h4>
+                                <h4><i class="fas fa-clock" style="color: #ea580c; margin-right: 0.5rem;"></i>Installation</h4>
                                 <p>Brutale (depuis hier soir)</p>
                             </div>
                         </div>
@@ -478,7 +478,7 @@
 
                     <!-- Dépression Évaluation -->
                     <div id="eval-dépression" class="case-content active">
-                        <h3 style="color: #2dd4bf; margin-bottom: 1rem;"><i class="fas fa-search" style="margin-right: 0.5rem;"></i>Évaluation de Rasoa</h3>
+                        <h3 style="color: #0f766e; margin-bottom: 1rem;"><i class="fas fa-search" style="margin-right: 0.5rem;"></i>Évaluation de Rasoa</h3>
 
                         <div class="accordion-container">
                             <button type="button" class="accordion-button" data-target="acc-dep-1">
@@ -504,7 +504,7 @@
                             </button>
                             <div id="acc-dep-2" class="accordion-content">
                                 <div class="accordion-content-inner">
-                                    <p style="color: #f87171;"><strong>⚠️ ATTENTION :</strong> Le suicide du sujet âgé est souvent sous-estimé.</p>
+                                    <p style="color: #b91c1c;"><strong>⚠️ ATTENTION :</strong> Le suicide du sujet âgé est souvent sous-estimé.</p>
                                     <ul>
                                         <li>Taux de suicide élevé chez les > 75 ans</li>
                                         <li>Méthodes plus létales, moins de signaux d'alerte</li>
@@ -567,11 +567,11 @@
 
                     <!-- Delirium Évaluation -->
                     <div id="eval-delirium" class="case-content">
-                        <h3 style="color: #fbbf24; margin-bottom: 1rem;"><i class="fas fa-search" style="margin-right: 0.5rem;"></i>Évaluation de Rakoto</h3>
+                        <h3 style="color: #ea580c; margin-bottom: 1rem;"><i class="fas fa-search" style="margin-right: 0.5rem;"></i>Évaluation de Rakoto</h3>
 
                         <div class="accordion-container">
                             <button type="button" class="accordion-button" data-target="acc-del-1">
-                                <span><i class="fas fa-bolt" style="color: #f59e0b; margin-right: 0.5rem;"></i>1. Reconnaître le délirium (confusion aiguë)</span>
+                                <span><i class="fas fa-bolt" style="color: #c2410c; margin-right: 0.5rem;"></i>1. Reconnaître le délirium (confusion aiguë)</span>
                                 <i class="fas fa-chevron-down accordion-arrow"></i>
                             </button>
                             <div id="acc-del-1" class="accordion-content">
@@ -587,7 +587,7 @@
                             </div>
 
                             <button type="button" class="accordion-button" data-target="acc-del-2">
-                                <span><i class="fas fa-search-plus" style="color: #f59e0b; margin-right: 0.5rem;"></i>2. Rechercher les causes</span>
+                                <span><i class="fas fa-search-plus" style="color: #c2410c; margin-right: 0.5rem;"></i>2. Rechercher les causes</span>
                                 <i class="fas fa-chevron-down accordion-arrow"></i>
                             </button>
                             <div id="acc-del-2" class="accordion-content">
@@ -624,12 +624,12 @@
                                         <li>Corticoïdes</li>
                                         <li>Antibiotiques (fluoroquinolones)</li>
                                     </ul>
-                                    <p style="color: #f87171;"><strong>⚠️</strong> Revoir systématiquement les prescriptions récentes chez un patient confus.</p>
+                                    <p style="color: #b91c1c;"><strong>⚠️</strong> Revoir systématiquement les prescriptions récentes chez un patient confus.</p>
                                 </div>
                             </div>
 
                             <button type="button" class="accordion-button" data-target="acc-del-4">
-                                <span><i class="fas fa-balance-scale" style="color: #f59e0b; margin-right: 0.5rem;"></i>4. Délirium vs Démence</span>
+                                <span><i class="fas fa-balance-scale" style="color: #c2410c; margin-right: 0.5rem;"></i>4. Délirium vs Démence</span>
                                 <i class="fas fa-chevron-down accordion-arrow"></i>
                             </button>
                             <div id="acc-del-4" class="accordion-content">
@@ -738,15 +738,15 @@
                         <div id="node-start" class="decision-node">
                             <p style="font-weight: 600; font-size: var(--font-size-lg); color: var(--color-text-primary); margin-bottom: 1rem;"><i class="fas fa-question-circle" style="color: #14b8a6; margin-right: 0.5rem;"></i>Patient âgé avec troubles du comportement ou de l'humeur. Quel est le mode d'installation ?</p>
                             <div>
-                                <button onclick="showDecisionNode('node-aigu')" class="decision-option"><i class="fas fa-bolt" style="margin-right: 0.5rem; color: #f59e0b;"></i>Aigu (heures/jours) avec fluctuation</button>
+                                <button onclick="showDecisionNode('node-aigu')" class="decision-option"><i class="fas fa-bolt" style="margin-right: 0.5rem; color: #c2410c;"></i>Aigu (heures/jours) avec fluctuation</button>
                                 <button onclick="showDecisionNode('node-progressif')" class="decision-option"><i class="fas fa-chart-line" style="margin-right: 0.5rem; color: #14b8a6;"></i>Progressif (semaines/mois)</button>
                             </div>
                         </div>
 
                         <div id="node-aigu" class="decision-node hidden">
-                            <p style="font-weight: 600; font-size: var(--font-size-lg); color: var(--color-text-primary); margin-bottom: 1rem;"><i class="fas fa-question-circle" style="color: #f59e0b; margin-right: 0.5rem;"></i>Y a-t-il une inattention marquée et une altération de la conscience ?</p>
+                            <p style="font-weight: 600; font-size: var(--font-size-lg); color: var(--color-text-primary); margin-bottom: 1rem;"><i class="fas fa-question-circle" style="color: #c2410c; margin-right: 0.5rem;"></i>Y a-t-il une inattention marquée et une altération de la conscience ?</p>
                             <div>
-                                <button onclick="showDecisionResult('result-delirium')" class="decision-option"><i class="fas fa-check" style="margin-right: 0.5rem; color: #4ade80;"></i>Oui → Délirium probable</button>
+                                <button onclick="showDecisionResult('result-delirium')" class="decision-option"><i class="fas fa-check" style="margin-right: 0.5rem; color: #15803d;"></i>Oui → Délirium probable</button>
                                 <button onclick="showDecisionResult('result-autre-aigu')" class="decision-option"><i class="fas fa-times" style="margin-right: 0.5rem; color: #ef4444;"></i>Non → Autre cause aiguë à rechercher</button>
                             </div>
                         </div>
@@ -754,7 +754,7 @@
                         <div id="node-progressif" class="decision-node hidden">
                             <p style="font-weight: 600; font-size: var(--font-size-lg); color: var(--color-text-primary); margin-bottom: 1rem;"><i class="fas fa-question-circle" style="color: #14b8a6; margin-right: 0.5rem;"></i>Quel est le tableau clinique prédominant ?</p>
                             <div>
-                                <button onclick="showDecisionResult('result-dépression')" class="decision-option"><i class="fas fa-cloud-rain" style="margin-right: 0.5rem; color: #60a5fa;"></i>Tristesse, plaintes somatiques, perte d'intérêt</button>
+                                <button onclick="showDecisionResult('result-dépression')" class="decision-option"><i class="fas fa-cloud-rain" style="margin-right: 0.5rem; color: #1d4ed8;"></i>Tristesse, plaintes somatiques, perte d'intérêt</button>
                                 <button onclick="showDecisionResult('result-demence')" class="decision-option"><i class="fas fa-brain" style="margin-right: 0.5rem; color: #a855f7;"></i>Troubles de la mémoire, désorientation progressive</button>
                             </div>
                         </div>
@@ -837,7 +837,7 @@
 
                     <!-- Dépression Management -->
                     <div id="pec-dépression" class="case-content active">
-                        <h3 style="color: #2dd4bf; margin-bottom: 1rem;"><i class="fas fa-procedures" style="margin-right: 0.5rem;"></i>Prise en charge de Rasoa</h3>
+                        <h3 style="color: #0f766e; margin-bottom: 1rem;"><i class="fas fa-procedures" style="margin-right: 0.5rem;"></i>Prise en charge de Rasoa</h3>
 
                         <h4 style="margin-bottom: 1rem; color: var(--color-text-primary);"><i class="fas fa-pills" style="color: #14b8a6; margin-right: 0.5rem;"></i>Traitement médicamenteux</h4>
                         <ul class="action-list">
@@ -873,9 +873,9 @@
 
                     <!-- Delirium Management -->
                     <div id="pec-delirium" class="case-content">
-                        <h3 style="color: #fbbf24; margin-bottom: 1rem;"><i class="fas fa-procedures" style="margin-right: 0.5rem;"></i>Prise en charge de Rakoto</h3>
+                        <h3 style="color: #ea580c; margin-bottom: 1rem;"><i class="fas fa-procedures" style="margin-right: 0.5rem;"></i>Prise en charge de Rakoto</h3>
 
-                        <h4 style="margin-bottom: 1rem; color: var(--color-text-primary);"><i class="fas fa-search-plus" style="color: #f59e0b; margin-right: 0.5rem;"></i>1. Traiter la cause</h4>
+                        <h4 style="margin-bottom: 1rem; color: var(--color-text-primary);"><i class="fas fa-search-plus" style="color: #c2410c; margin-right: 0.5rem;"></i>1. Traiter la cause</h4>
                         <ul class="action-list">
                             <li><strong>Bilan étiologique :</strong> NFS, iono, créat, CRP, BU, glycémie, TSH.</li>
                             <li><strong>Chez Rakoto :</strong> Rechercher infection (pulmonaire, urinaire), globe vésical, fécalome, douleur mal contrôlée.</li>
@@ -883,7 +883,7 @@
                             <li><strong>Corriger les troubles métaboliques :</strong> Hydratation, correction électrolytique.</li>
                         </ul>
 
-                        <h4 style="margin: 1.5rem 0 1rem; color: var(--color-text-primary);"><i class="fas fa-bed" style="color: #f59e0b; margin-right: 0.5rem;"></i>2. Mesures non médicamenteuses</h4>
+                        <h4 style="margin: 1.5rem 0 1rem; color: var(--color-text-primary);"><i class="fas fa-bed" style="color: #c2410c; margin-right: 0.5rem;"></i>2. Mesures non médicamenteuses</h4>
                         <ul class="action-list">
                             <li><strong>Réorientation :</strong> Calendrier, horloge visible, photos familiales, objets familiers.</li>
                             <li><strong>Environnement calme :</strong> Lumière douce, réduire le bruit, éviter les changements de chambre.</li>
@@ -893,7 +893,7 @@
                             <li><strong>Présence rassurante :</strong> Famille si possible, personnel stable.</li>
                         </ul>
 
-                        <h4 style="margin: 1.5rem 0 1rem; color: var(--color-text-primary);"><i class="fas fa-pills" style="color: #f59e0b; margin-right: 0.5rem;"></i>3. Traitement symptomatique (si nécessaire)</h4>
+                        <h4 style="margin: 1.5rem 0 1rem; color: var(--color-text-primary);"><i class="fas fa-pills" style="color: #c2410c; margin-right: 0.5rem;"></i>3. Traitement symptomatique (si nécessaire)</h4>
                         <ul class="action-list">
                             <li><strong>En dernier recours :</strong> Si agitation mettant en danger le patient ou les soins.</li>
                             <li><strong>Halopéridol :</strong> 0.5-1 mg PO ou IM, dose minimale efficace.</li>
@@ -954,7 +954,7 @@
                     </div>
 
                     <div style="margin-top: 2rem;">
-                        <h3 style="margin-bottom: 1rem;"><i class="fas fa-tasks" style="color: #4ade80; margin-right: 0.5rem;"></i>Checklist d'auto-évaluation</h3>
+                        <h3 style="margin-bottom: 1rem;"><i class="fas fa-tasks" style="color: #15803d; margin-right: 0.5rem;"></i>Checklist d'auto-évaluation</h3>
                         <div class="checklist-item">
                             <input id="check-1" type="checkbox">
                             <label for="check-1">Je sais reconnaître une dépression masquée chez le sujet âgé</label>
@@ -989,7 +989,7 @@
                         </div>
 
                         <div id="checklist-result" style="margin-top: 1rem; padding: 1rem; background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); display: none;">
-                            <p style="color: #4ade80; margin: 0;"><i class="fas fa-check-circle" style="margin-right: 0.5rem;"></i><span id="checklist-count">0</span>/8 compétences validées</p>
+                            <p style="color: #15803d; margin: 0;"><i class="fas fa-check-circle" style="margin-right: 0.5rem;"></i><span id="checklist-count">0</span>/8 compétences validées</p>
                         </div>
                     </div>
 

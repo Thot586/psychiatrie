@@ -13,7 +13,7 @@
         :root {
             --cat-main: #ef4444;
             --cat-dark: #dc2626;
-            --cat-light: #f87171;
+            --cat-light: #b91c1c;
             --cat-rgb: 239, 68, 68;
             --cat-readable: #b91c1c;
         }
@@ -216,7 +216,7 @@
         }
         .result-box h3 { color: var(--accent-green); margin-bottom: 0.5rem; }
         .result-box p { color: var(--color-text-muted); }
-        .result-box.warning { background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3); }
+        .result-box.warning { background: rgba(194, 65, 12, 0.1); border-color: rgba(194, 65, 12, 0.3); }
         .result-box.warning h3 { color: var(--accent-amber); }
         .result-box.danger { background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3); }
         .result-box.danger h3 { color: var(--accent-red); }
@@ -450,20 +450,20 @@
                     <!-- Agitation Case -->
                     <div id="case-agitation" class="case-content active">
                         <div class="scenario-box orange">
-                            <h3 style="color: #fb923c; margin-bottom: 1rem;"><i class="fas fa-file-alt" style="margin-right: 0.5rem;"></i>Cas 1 : L'agitation de Razafindravao</h3>
+                            <h3 style="color: #9a3412; margin-bottom: 1rem;"><i class="fas fa-file-alt" style="margin-right: 0.5rem;"></i>Cas 1 : L'agitation de Razafindravao</h3>
                             <p><strong>Razafindravao, 42 ans</strong>, est amené aux urgences par la police après avoir été trouvé en pleine nuit dans la rue, criant des propos incohérents. Il est agité, déambule sans cesse, parle fort et vite. Il affirme être poursuivi par des « ennemis invisibles » et que la radio lui envoie des messages. Il n'a pas dormi depuis plusieurs jours. Son haleine sent l'alcool. Il refuse tout contact et devient menaçant lorsqu'on s'approche de lui. Aucun antécédent psychiatrique connu, mais la famille signale un épisode similaire il y a 5 ans.</p>
                         </div>
                         <div class="feature-grid">
                             <div class="feature-card orange">
-                                <h4><i class="fas fa-user-clock" style="color: #fb923c; margin-right: 0.5rem;"></i>Âge</h4>
+                                <h4><i class="fas fa-user-clock" style="color: #9a3412; margin-right: 0.5rem;"></i>Âge</h4>
                                 <p>42 ans</p>
                             </div>
                             <div class="feature-card orange">
-                                <h4><i class="fas fa-car" style="color: #fb923c; margin-right: 0.5rem;"></i>Mode d'arrivée</h4>
+                                <h4><i class="fas fa-car" style="color: #9a3412; margin-right: 0.5rem;"></i>Mode d'arrivée</h4>
                                 <p>Amené par la police</p>
                             </div>
                             <div class="feature-card orange">
-                                <h4><i class="fas fa-history" style="color: #fb923c; margin-right: 0.5rem;"></i>Antécédents</h4>
+                                <h4><i class="fas fa-history" style="color: #9a3412; margin-right: 0.5rem;"></i>Antécédents</h4>
                                 <p>Épisode similaire il y a 5 ans</p>
                             </div>
                         </div>
@@ -519,7 +519,7 @@
 
                     <!-- Agitation Évaluation -->
                     <div id="eval-agitation" class="case-content active">
-                        <h3 style="color: #fb923c; margin-bottom: 1rem;"><i class="fas fa-search" style="margin-right: 0.5rem;"></i>Évaluation de Razafindravao</h3>
+                        <h3 style="color: #9a3412; margin-bottom: 1rem;"><i class="fas fa-search" style="margin-right: 0.5rem;"></i>Évaluation de Razafindravao</h3>
 
                         <div class="accordion-container">
                             <button type="button" class="accordion-button" data-target="acc-agit-1">
@@ -623,7 +623,7 @@
                                         <li>Bilan hépatique, fonction rénale, coagulation</li>
                                         <li>Traitement par N-acétylcystéine si indiqué</li>
                                     </ul>
-                                    <p style="color: #f87171;"><strong>⚠️ IMPORTANT :</strong> L'IMV au paracétamol peut être mortelle même si le patient semble stable initialement. La toxicité hépatique peut apparaître 24-72h après l'ingestion.</p>
+                                    <p style="color: #b91c1c;"><strong>⚠️ IMPORTANT :</strong> L'IMV au paracétamol peut être mortelle même si le patient semble stable initialement. La toxicité hépatique peut apparaître 24-72h après l'ingestion.</p>
                                 </div>
                             </div>
 
@@ -734,8 +734,8 @@
                         <div id="node-psychose" class="decision-node hidden">
                             <p style="font-weight: 600; font-size: var(--font-size-lg); color: var(--color-text-primary); margin-bottom: 1rem;"><i class="fas fa-question-circle" style="color: #a855f7; margin-right: 0.5rem;"></i>Y a-t-il des éléments thymiques associés ?</p>
                             <div>
-                                <button onclick="showDecisionResult('result-manie')" class="decision-option"><i class="fas fa-arrow-up" style="margin-right: 0.5rem; color: #fbbf24;"></i>Euphorie, mégalomanie, réduction du sommeil → épisode maniaque</button>
-                                <button onclick="showDecisionResult('result-schizo')" class="decision-option"><i class="fas fa-minus" style="margin-right: 0.5rem; color: #60a5fa;"></i>Pas d'élément thymique prédominant → psychose aiguë / schizophrénie</button>
+                                <button onclick="showDecisionResult('result-manie')" class="decision-option"><i class="fas fa-arrow-up" style="margin-right: 0.5rem; color: #ea580c;"></i>Euphorie, mégalomanie, réduction du sommeil → épisode maniaque</button>
+                                <button onclick="showDecisionResult('result-schizo')" class="decision-option"><i class="fas fa-minus" style="margin-right: 0.5rem; color: #1d4ed8;"></i>Pas d'élément thymique prédominant → psychose aiguë / schizophrénie</button>
                             </div>
                         </div>
 
@@ -743,7 +743,7 @@
                             <p style="font-weight: 600; font-size: var(--font-size-lg); color: var(--color-text-primary); margin-bottom: 1rem;"><i class="fas fa-question-circle" style="color: #a855f7; margin-right: 0.5rem;"></i>Quel est le niveau de risque suicidaire actuel ?</p>
                             <div>
                                 <button onclick="showDecisionResult('result-hospit')" class="decision-option"><i class="fas fa-hospital" style="margin-right: 0.5rem; color: #ef4444;"></i>Élevé : idéation persistante, isolement, moyens accessibles</button>
-                                <button onclick="showDecisionResult('result-ambu')" class="decision-option"><i class="fas fa-home" style="margin-right: 0.5rem; color: #4ade80;"></i>Modéré : ambivalence, soutien présent, alliance thérapeutique</button>
+                                <button onclick="showDecisionResult('result-ambu')" class="decision-option"><i class="fas fa-home" style="margin-right: 0.5rem; color: #15803d;"></i>Modéré : ambivalence, soutien présent, alliance thérapeutique</button>
                             </div>
                         </div>
 
@@ -883,7 +883,7 @@
 
                     <!-- Agitation Management -->
                     <div id="pec-agitation" class="case-content active">
-                        <h3 style="color: #fb923c; margin-bottom: 1rem;"><i class="fas fa-procedures" style="margin-right: 0.5rem;"></i>Prise en charge de Razafindravao</h3>
+                        <h3 style="color: #9a3412; margin-bottom: 1rem;"><i class="fas fa-procedures" style="margin-right: 0.5rem;"></i>Prise en charge de Razafindravao</h3>
 
                         <div class="emergency-protocol">
                             <h4><i class="fas fa-exclamation-triangle"></i> Protocole de désescalade</h4>
@@ -896,7 +896,7 @@
                             </ol>
                         </div>
 
-                        <h4 style="margin: 1.5rem 0 1rem; color: var(--color-text-primary);"><i class="fas fa-pills" style="color: #fb923c; margin-right: 0.5rem;"></i>Options thérapeutiques</h4>
+                        <h4 style="margin: 1.5rem 0 1rem; color: var(--color-text-primary);"><i class="fas fa-pills" style="color: #9a3412; margin-right: 0.5rem;"></i>Options thérapeutiques</h4>
                         <ul class="action-list">
                             <li><strong>1ère intention (voie orale) :</strong> Diazépam 10-20 mg PO ou Loxapine 50-100 mg PO, à renouveler si besoin.</li>
                             <li><strong>Si refus ou échec :</strong> Loxapine 50-100 mg IM ou Halopéridol 5-10 mg IM + Benzodiazépine IM.</li>
@@ -1002,7 +1002,7 @@
                     </div>
 
                     <div style="margin-top: 2rem;">
-                        <h3 style="margin-bottom: 1rem;"><i class="fas fa-tasks" style="color: #4ade80; margin-right: 0.5rem;"></i>Checklist d'auto-évaluation</h3>
+                        <h3 style="margin-bottom: 1rem;"><i class="fas fa-tasks" style="color: #15803d; margin-right: 0.5rem;"></i>Checklist d'auto-évaluation</h3>
                         <p style="color: var(--color-text-muted); margin-bottom: 1rem;">Cochez les compétences acquises :</p>
 
                         <div class="checklist-item">
@@ -1039,7 +1039,7 @@
                         </div>
 
                         <div id="checklist-result" style="margin-top: 1rem; padding: 1rem; background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); display: none;">
-                            <p style="color: #4ade80; margin: 0;"><i class="fas fa-check-circle" style="margin-right: 0.5rem;"></i><span id="checklist-count">0</span>/8 compétences validées</p>
+                            <p style="color: #15803d; margin: 0;"><i class="fas fa-check-circle" style="margin-right: 0.5rem;"></i><span id="checklist-count">0</span>/8 compétences validées</p>
                         </div>
                     </div>
 

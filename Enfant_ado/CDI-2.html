@@ -19,7 +19,7 @@
         :root {
             --cat-main: #14b8a6;
             --cat-dark: #0d9488;
-            --cat-light: #2dd4bf;
+            --cat-light: #0f766e;
             --cat-rgb: 20, 184, 166;
             --cat-readable: #0d9488;
         }
@@ -84,7 +84,7 @@
         <!-- Alerte item critique (cachee par défaut) -->
         <section id="criticalItemAlert" class="critical-alert">
             <h4><i class="fas fa-exclamation-circle"></i> Alerte - Pensees suicidaires detectees</h4>
-            <p>Une réponse indiquant des pensées de se faire du mal à ete sélectionnée. Il est important d'en parler immédiatement a un adulte de confiance ou de contacter :</p>
+            <p>Une réponse indiquant des pensées de se faire du mal a été sélectionnée. Il est important d'en parler immédiatement à un adulte de confiance ou de contacter :</p>
             <ul style="margin: 0.5rem 0; padding-left: 1.5rem; color: var(--color-text-muted); font-size: 0.875rem;">
                 <li><strong>3114</strong> - Numero national de prévention du suicide (24h/7j)</li>
                 <li><strong>0 800 235 236</strong> - Fil Santé Jeunes (anonyme et gratuit)</li>
@@ -133,7 +133,7 @@
             <!-- Score total -->
             <div class="score-display">
                 <div class="score-circle">
-                    <span class="score-value" id="totalScore">0</span>
+                    <span class="score-value" id="totalScore" role="status" aria-label="Score total">0</span>
                 </div>
                 <p class="score-label">Score total (sur 56)</p>
             </div>
@@ -478,7 +478,7 @@
                 questionDiv.className = question.critical ? 'question-card critical' : 'question-card';
 
                 const criticalBadge = question.critical ?
-                    '<span class="critical-badge"><i class="fas fa-exclamation-triangle"></i> Item critiqué</span>' : '';
+                    '<span class="critical-badge"><i class="fas fa-exclamation-triangle"></i> Item critique</span>' : '';
 
                 questionDiv.innerHTML = `
                     <div style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem;">
@@ -667,19 +667,19 @@
                         <div style="display: grid; gap: 0.5rem; font-size: 0.85rem;">
                             <div style="display: flex; justify-content: space-between; padding: 0.5rem; background: ${score <= 12 ? 'rgba(6, 182, 212, 0.1)' : 'transparent'}; border-radius: 4px; ${score <= 12 ? 'border: 1px solid rgba(6, 182, 212, 0.3);' : ''}">
                                 <span style="color: var(--color-text-muted);">0-12 : Moyen</span>
-                                <span style="color: #4ade80;">Pas de symptômes significatifs</span>
+                                <span style="color: #15803d;">Pas de symptômes significatifs</span>
                             </div>
                             <div style="display: flex; justify-content: space-between; padding: 0.5rem; background: ${score >= 13 && score <= 18 ? 'rgba(6, 182, 212, 0.1)' : 'transparent'}; border-radius: 4px; ${score >= 13 && score <= 18 ? 'border: 1px solid rgba(6, 182, 212, 0.3);' : ''}">
                                 <span style="color: var(--color-text-muted);">13-18 : Moyen supérieur</span>
-                                <span style="color: #fbbf24;">Surveillance recommandée</span>
+                                <span style="color: #b45309;">Surveillance recommandée</span>
                             </div>
                             <div style="display: flex; justify-content: space-between; padding: 0.5rem; background: ${score >= 19 && score <= 25 ? 'rgba(6, 182, 212, 0.1)' : 'transparent'}; border-radius: 4px; ${score >= 19 && score <= 25 ? 'border: 1px solid rgba(6, 182, 212, 0.3);' : ''}">
                                 <span style="color: var(--color-text-muted);">19-25 : Eleve</span>
-                                <span style="color: #fb923c;">Consultation recommandée</span>
+                                <span style="color: #9a3412;">Consultation recommandée</span>
                             </div>
                             <div style="display: flex; justify-content: space-between; padding: 0.5rem; background: ${score >= 26 ? 'rgba(6, 182, 212, 0.1)' : 'transparent'}; border-radius: 4px; ${score >= 26 ? 'border: 1px solid rgba(6, 182, 212, 0.3);' : ''}">
                                 <span style="color: var(--color-text-muted);">26+ : Très élevé</span>
-                                <span style="color: #f87171;">Consultation urgente</span>
+                                <span style="color: #b91c1c;">Consultation urgente</span>
                             </div>
                         </div>
                     </div>

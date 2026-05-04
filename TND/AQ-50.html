@@ -13,7 +13,7 @@
         :root {
             --cat-main: #8b5cf6;
             --cat-dark: #7c3aed;
-            --cat-light: #a78bfa;
+            --cat-light: #5b21b6;
             --cat-rgb: 139, 92, 246;
             --cat-readable: #7c3aed;
         }
@@ -87,7 +87,7 @@
 
                 <div class="score-display">
                     <div class="score-circle">
-                        <span class="score-number" id="totalscore">0</span>
+                        <span class="score-number" id="totalscore" role="status" aria-label="Score total">0</span>
                         <span class="score-label">sur 50</span>
                     </div>
                 </div>
@@ -272,7 +272,7 @@
 
         function interpretationLong(total) {
             if (total < 26) return "Votre score est inférieur à 26. Cette zone est associée à une probabilité plutôt faible de traits autistiques cliniquement significatifs.";
-            if (total <= 28) return "Votre score est entre 26 et 28, zone sensible au repérage. On recommandé d'explorer le contexte avec un professionnel.";
+            if (total <= 28) return "Votre score est entre 26 et 28, zone sensible au repérage. On recommande d'explorer le contexte avec un professionnel.";
             if (total <= 31) return "Votre score est entre 29 et 31 (compromis sensibilité/spécificité). L'interprétation dépend du contexte clinique.";
             return "Votre score est ≥ 32 (zone spécifique). Si accompagné d'un retentissement significatif, une évaluation standardisée est indiquée.";
         }

@@ -15,11 +15,11 @@
     <link rel="stylesheet" href="../css/questionnaire-light.css">
     <style>
         :root {
-            --cat-main: #10b981;
-            --cat-dark: #059669;
-            --cat-light: #34d399;
-            --cat-rgb: 16, 185, 129;
-            --cat-readable: #059669;
+            --cat-main: #06b6d4;
+            --cat-dark: #0891b2;
+            --cat-light: #0e7490;
+            --cat-rgb: 6, 182, 212;
+            --cat-readable: #0e7490;
         }
         .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
         .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
@@ -327,7 +327,7 @@
             <!-- Score global -->
             <div class="score-display">
                 <div class="score-circle">
-                    <span class="score-value" id="totalScore">0</span>
+                    <span class="score-value" id="totalScore" role="status" aria-label="Score total">0</span>
                 </div>
                 <p class="score-label">sur 100 points (Score PSP global)</p>
             </div>
@@ -415,8 +415,8 @@
             { value: 2, label: "Léger", description: "Difficultes mineures, pas d'impact significatif" },
             { value: 3, label: "Manifeste", description: "Difficultes notables mais ne nécessitant pas d'aide professionnelle régulière" },
             { value: 4, label: "Marqué", description: "Difficultes marquees, nécessitant une aide professionnelle" },
-            { value: 5, label: "Sévère", description: "Difficultes sévères, fonctionnement très reduit dans ce domaine" },
-            { value: 6, label: "Très sévère", description: "Incapacite totale de fonctionner dans ce domaine" }
+            { value: 5, label: "Sévère", description: "Difficultés sévères, fonctionnement très réduit dans ce domaine" },
+            { value: 6, label: "Très sévère", description: "Incapacité totale de fonctionner dans ce domaine" }
         ];
 
         // Labels de sévérité

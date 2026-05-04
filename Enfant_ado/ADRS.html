@@ -13,7 +13,7 @@
         :root {
             --cat-main: #14b8a6;
             --cat-dark: #0d9488;
-            --cat-light: #2dd4bf;
+            --cat-light: #0f766e;
             --cat-rgb: 20, 184, 166;
             --cat-readable: #0d9488;
         }
@@ -120,7 +120,7 @@
 
             <div class="score-display">
                 <div class="score-circle" id="scoreCircle">
-                    <span class="score-number" id="totalScore">0</span>
+                    <span class="score-number" id="totalScore" role="status" aria-label="Score total">0</span>
                     <span class="score-label">sur 10</span>
                 </div>
             </div>
@@ -353,7 +353,7 @@
                 alertBox.style.cssText = `
                     background: linear-gradient(145deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1));
                     border: 2px solid rgba(239, 68, 68, 0.5);
-                    color: #f87171;
+                    color: #b91c1c;
                     padding: 25px;
                     border-radius: 12px;
                     margin: 30px 0;

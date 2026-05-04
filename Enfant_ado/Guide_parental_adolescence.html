@@ -30,7 +30,7 @@
         .guide-card p, .guide-card li { color: var(--color-text-muted); }
 
         /* Couleurs Teal pour Enfant/Ado */
-        .badge-enfant { background: rgba(20, 184, 166, 0.15); color: #2dd4bf; border: 1px solid rgba(20, 184, 166, 0.3); }
+        .badge-enfant { background: rgba(20, 184, 166, 0.15); color: #0f766e; border: 1px solid rgba(20, 184, 166, 0.3); }
 
         /* Navigation SPA */
         .spa-nav {
@@ -536,9 +536,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Iceberg Chart
     const icebergData = {
-        opposition: { labels: ["Besoin d'Autonomie", "Sentiment d'injustice", "Opposition"], explanation: `<h4>Derriere l'opposition :</h4><p><strong>Besoin cache :</strong> Un immense besoin <strong style="color: #2dd4bf;">d'autonomie</strong> et de se sentir competent.</p><blockquote><strong>Piste d'action :</strong> Offrir des choix encadres. "Preferes-tu faire tes devoirs avant ou apres le diner ?"</blockquote>` },
-        agressivite: { labels: ["Besoin de Reconnaissance", "Colere / Frustration", "Agressivite"], explanation: `<h4>Derriere l'agressivite :</h4><p><strong>Besoin cache :</strong> Un besoin de <strong style="color: #2dd4bf;">reconnaissance</strong>, de se sentir entendu.</p><blockquote><strong>Piste d'action :</strong> Valider l'emotion. "Je vois que tu es furieux, mais les insultes ne sont pas acceptables."</blockquote>` },
-        repli: { labels: ["Besoin de Sécurité", "Peur / Tristesse", "Repli sur soi"], explanation: `<h4>Derriere le repli :</h4><p><strong>Besoin cache :</strong> Un besoin de <strong style="color: #2dd4bf;">sécurité</strong> et d'acceptation face à la peur de l'échec.</p><blockquote><strong>Piste d'action :</strong> Offrir une présence silencieuse. "Je suis la si tu as besoin."</blockquote>` }
+        opposition: { labels: ["Besoin d'Autonomie", "Sentiment d'injustice", "Opposition"], explanation: `<h4>Derriere l'opposition :</h4><p><strong>Besoin cache :</strong> Un immense besoin <strong style="color: #0f766e;">d'autonomie</strong> et de se sentir competent.</p><blockquote><strong>Piste d'action :</strong> Offrir des choix encadres. "Preferes-tu faire tes devoirs avant ou apres le diner ?"</blockquote>` },
+        agressivite: { labels: ["Besoin de Reconnaissance", "Colere / Frustration", "Agressivite"], explanation: `<h4>Derriere l'agressivite :</h4><p><strong>Besoin cache :</strong> Un besoin de <strong style="color: #0f766e;">reconnaissance</strong>, de se sentir entendu.</p><blockquote><strong>Piste d'action :</strong> Valider l'emotion. "Je vois que tu es furieux, mais les insultes ne sont pas acceptables."</blockquote>` },
+        repli: { labels: ["Besoin de Sécurité", "Peur / Tristesse", "Repli sur soi"], explanation: `<h4>Derriere le repli :</h4><p><strong>Besoin cache :</strong> Un besoin de <strong style="color: #0f766e;">sécurité</strong> et d'acceptation face à la peur de l'échec.</p><blockquote><strong>Piste d'action :</strong> Offrir une présence silencieuse. "Je suis la si tu as besoin."</blockquote>` }
     };
     const icebergSelector = document.getElementById('iceberg-selector');
     const icebergExplanation = document.getElementById('iceberg-explanation');
@@ -561,7 +561,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Populate Accordions
     const outilsData = [
-        { title: "1. Le Renforcement Positif", content: `<p style="margin-bottom: 0.75rem; font-size: 0.875rem;"><strong>Le concept :</strong> Souligner et valoriser les efforts et les comportements positifs, meme petits. C'est le pilier des "Parent Management Training" (PMT).</p><div class="stat-card"><p class="font-semibold" style="font-size: 0.875rem;">Preuve scientifique : <span class="evidence-badge evidence-high">Élevée</span></p><p style="margin-top: 0.5rem; font-size: 0.8rem;">Les PMT reduisent les comportements perturbateurs avec un effet durable (Mingebach et al., 2018).</p></div><blockquote style="margin-top: 1rem; background: rgba(30, 41, 59, 0.5); border-left: 4px solid #14b8a6; padding: 0.75rem 1rem; border-radius: 0 8px 8px 0;"><strong>Phrase type :</strong> "J'ai vraiment apprecie ton aide. Merci."</blockquote>` },
+        { title: "1. Le Renforcement Positif", content: `<p style="margin-bottom: 0.75rem; font-size: 0.875rem;"><strong>Le concept :</strong> Souligner et valoriser les efforts et les comportements positifs, même petits. C'est le pilier des "Parent Management Training" (PMT).</p><div class="stat-card"><p class="font-semibold" style="font-size: 0.875rem;">Preuve scientifique : <span class="evidence-badge evidence-high">Élevée</span></p><p style="margin-top: 0.5rem; font-size: 0.8rem;">Les PMT réduisent les comportements perturbateurs avec un effet durable (Mingebach et al., 2018).</p></div><blockquote style="margin-top: 1rem; background: rgba(30, 41, 59, 0.5); border-left: 4px solid #14b8a6; padding: 0.75rem 1rem; border-radius: 0 8px 8px 0;"><strong>Phrase type :</strong> "J'ai vraiment apprécié ton aide. Merci."</blockquote>` },
         { title: "2. Les Consequences Logiques et Coherentes", content: `<p style="margin-bottom: 0.75rem; font-size: 0.875rem;"><strong>Le concept :</strong> Appliquer une consequence educative et proportionnee a une regle transgressee. La coherence entre les parents est cruciale.</p><div class="stat-card"><p class="font-semibold" style="font-size: 0.875rem;">Preuve scientifique : <span class="evidence-badge evidence-high">Élevée</span></p><p style="margin-top: 0.5rem; font-size: 0.8rem;">L'incoherence parentale est un facteur de risque majeur des troubles du comportement.</p></div><blockquote style="margin-top: 1rem; background: rgba(30, 41, 59, 0.5); border-left: 4px solid #14b8a6; padding: 0.75rem 1rem; border-radius: 0 8px 8px 0;"><strong>Exemple :</strong> "Comme l'heure de retour n'a pas été respectée, la sortie de samedi est annulee, comme convenu."</blockquote>` },
         { title: "3. La Resistance Non-Violente (NVR)", content: `<p style="margin-bottom: 0.75rem; font-size: 0.875rem;"><strong>Le concept :</strong> Face à l'agressivite, le parent cesse l'escalade mais marque une opposition ferme et calme. Il annonce ses actions et s'y tient.</p><div class="stat-card"><p class="font-semibold" style="font-size: 0.875rem;">Preuve scientifique : <span class="evidence-badge evidence-low">Faible mais prometteuse</span></p><p style="margin-top: 0.5rem; font-size: 0.8rem;">Un ECR a montre que la NVR reduisait significativement la violence filio-parentale (Omer & Lebowitz, 2016).</p></div>` }
     ];
@@ -579,7 +579,7 @@ document.addEventListener('DOMContentLoaded', function () {
             container.innerHTML = data.map(item => `
                 <div class="accordion-item" style="${isAlert ? 'border-color: rgba(239, 68, 68, 0.3);' : ''}">
                     <button class="accordion-header">
-                        <span style="${isAlert ? 'color: #f87171;' : ''}">${item.title}</span>
+                        <span style="${isAlert ? 'color: #b91c1c;' : ''}">${item.title}</span>
                         <span class="icon">+</span>
                     </button>
                     <div class="accordion-content">

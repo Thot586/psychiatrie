@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Design System — Psychiatrie / Le Vinatier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Architects+Daughter&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<style>
+  :root {
+    /* PAPER MODE (sketchy wireframe) */
+    --paper:        #f5f0e6;
+    --paper-2:      #ebe4d3;
+    --paper-line:   #2a2a2a;
+    --paper-stroke: rgba(42,42,42,0.85);
+    --paper-stroke-soft: rgba(42,42,42,0.55);
+    --paper-stroke-faint: rgba(42,42,42,0.18);
+    --ink:          #1a1a1a;
+    --ink-soft:     #4a4a4a;
+    --ink-faint:    #7a7a7a;
+    --accent:       #c14a3a;   /* annotation coral / red pencil */
+    --accent-2:     #1f6f8b;   /* blue pencil for callouts */
+    --accent-yellow: #f3c34d;  /* highlighter */
+
+    /* DARK MODE (real app preview, mirrors css/styles.css) */
+    --d-primary: #0ea5e9;
+    --d-primary-light: #38bdf8;
+    --d-primary-dark: #0284c7;
+    --d-bg: #0f172a;
+    --d-bg-2: #1e293b;
+    --d-card: rgba(30,41,59,0.9);
+    --d-card-hover: rgba(51,65,85,0.8);
+    --d-text: #f8fafc;
+    --d-text-2: #e2e8f0;
+    --d-text-muted: #b0bec9;
+    --d-text-dim: #8896a7;
+    --d-border: rgba(255,255,255,0.08);
+    --d-border-active: rgba(56,189,248,0.3);
+    --neo-bg: #1e293b;
+    --neo-shadow-dark: rgba(0,0,0,0.5);
+    --neo-shadow-light: rgba(255,255,255,0.05);
+    --neo-raised: 5px 5px 10px var(--neo-shadow-dark), -5px -5px 10px var(--neo-shadow-light);
+    --neo-pressed: inset 4px 4px 8px var(--neo-shadow-dark), inset -4px -4px 8px var(--neo-shadow-light);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Architects Daughter', 'Caveat', cursive;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.55;
+    /* paper grain */
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(42,42,42,0.025) 0, transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(193,74,58,0.03) 0, transparent 40%),
+      repeating-linear-gradient(0deg, transparent 0 31px, rgba(42,42,42,0.04) 31px 32px);
+  }
+
+  /* SHELL ----------------------------------------------- */
+  .shell { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+
+  aside.nav {
+    position: sticky; top: 0; height: 100vh; overflow-y: auto;
+    border-right: 2px dashed var(--paper-stroke-soft);
+    padding: 28px 18px 28px 22px;
+    background: var(--paper-2);
+  }
+  .nav-brand {
+    font-family: 'Caveat', cursive;
+    font-size: 28px; font-weight: 700; line-height: 1.05;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .nav-sub {
+    font-family: 'Architects Daughter', cursive;
+    font-size: 12px; color: var(--ink-faint);
+    margin-bottom: 22px; letter-spacing: 0.5px;
+  }
+  .nav-section-title {
+    font-family: 'Caveat', cursive;
+    font-size: 18px; color: var(--accent);
+    margin: 18px 0 6px 0;
+    border-bottom: 1.5px dashed var(--paper-stroke-faint);
+    padding-bottom: 2px;
+  }
+  .nav a {
+    display: block;
+    font-family: 'Architects Daughter', cursive;
+    font-size: 14px; color: var(--ink-soft);
+    padding: 4px 6px; margin: 1px 0;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: all 0.15s;
+  }
+  .nav a:hover { background: rgba(193,74,58,0.08); color: var(--ink); }
+  .nav a.active { background: rgba(193,74,58,0.15); color: var(--accent); font-weight: bold; }
+  .nav-num { display: inline-block; width: 22px; color: var(--ink-faint); font-size: 12px; }
+
+  main { padding: 40px 56px 120px 56px; max-width: 1200px; }
+
+  /* TOP BAR --------------------------------------------- */
+  .topbar {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 14px; margin-bottom: 36px;
+    position: relative;
+  }
+  .topbar h1 {
+    font-family: 'Caveat', cursive;
+    font-size: 56px; line-height: 0.95;
+    margin: 0; font-weight: 700;
+    color: var(--ink);
+  }
+  .topbar .stamp {
+    border: 2px solid var(--accent);
+    color: var(--accent);
+    font-family: 'Caveat', cursive;
+    font-size: 18px;
+    padding: 4px 14px;
+    transform: rotate(-4deg);
+    background: rgba(245,240,230,0.7);
+    letter-spacing: 1px;
+    align-self: flex-start;
+    margin-top: 6px;
+  }
+  .topbar-meta {
+    font-family: 'Architects Daughter', cursive;
+    font-size: 13px; color: var(--ink-faint);
+    margin-top: 8px;
+  }
+
+  /* SECTION --------------------------------------------- */
+  section.ds-section { margin-bottom: 80px; scroll-margin-top: 20px; }
+  .ds-section-h {
+    font-family: 'Caveat', cursive;
+    font-size: 38px; font-weight: 700;
+    color: var(--ink);
+    margin: 0 0 4px 0;
+    display: flex; align-items: baseline; gap: 14px;
+  }
+  .ds-section-num {
+    font-family: 'Caveat', cursive;
+    font-size: 22px; color: var(--accent);
+    border: 2px solid var(--accent);
+    border-radius: 50%;
+    width: 38px; height: 38px;
+    display: inline-flex; align-items: center; justify-content: center;
+    transform: rotate(-3deg);
+  }
+  .ds-section-sub {
+    font-family: 'Architects Daughter', cursive;
+    font-size: 15px; color: var(--ink-soft);
+    margin: 0 0 24px 0;
+    border-left: 3px solid var(--accent-yellow);
+    padding-left: 10px;
+  }
+
+  /* SKETCH FRAME (low-fi container) --------------------- */
+  .sketch {
+    border: 2px solid var(--paper-stroke);
+    border-radius: 6px;
+    background: var(--paper);
+    padding: 18px;
+    position: relative;
+    box-shadow: 3px 3px 0 var(--paper-stroke-faint);
+  }
+  .sketch.dashed { border-style: dashed; }
+  .sketch-label {
+    position: absolute;
+    top: -12px; left: 12px;
+    background: var(--paper);
+    padding: 0 8px;
+    font-family: 'Caveat', cursive;
+    font-size: 16px; color: var(--accent);
+    font-weight: 700;
+  }
+  .sketch-tag {
+    position: absolute;
+    top: -10px; right: 12px;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'Architects Daughter', cursive;
+    font-size: 10px;
+    padding: 2px 8px;
+    letter-spacing: 0.5px;
+    border-radius: 2px;
+  }
+
+  /* DARK PREVIEW (mini app surface inside paper) -------- */
+  .preview {
+    background: linear-gradient(135deg, var(--d-bg) 0%, var(--d-bg-2) 50%, var(--d-bg) 100%);
+    border-radius: 8px;
+    padding: 24px;
+    color: var(--d-text-2);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    position: relative;
+    overflow: hidden;
+  }
+  .preview::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+  .preview > * { position: relative; }
+
+  /* GRID HELPERS ---------------------------------------- */
+  .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .row-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .row-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .row-fit { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 14px; }
+
+  /* CALLOUT / ANNOTATION -------------------------------- */
+  .callout {
+    font-family: 'Caveat', cursive;
+    font-size: 17px;
+    color: var(--accent);
+    display: inline-flex; align-items: center; gap: 6px;
+    transform: rotate(-1deg);
+  }
+  .callout::before { content: '↳'; font-size: 22px; line-height: 0.5; }
+  .annot {
+    font-family: 'Caveat', cursive;
+    color: var(--accent);
+    font-size: 16px;
+    line-height: 1.2;
+  }
+  .arrow-down::after { content: ' ↓'; color: var(--accent); }
+  .arrow-right::after { content: ' →'; color: var(--accent); }
+
+  .pin {
+    background: var(--accent-yellow);
+    color: var(--ink);
+    font-family: 'Architects Daughter', cursive;
+    font-size: 11px;
+    padding: 2px 6px;
+    transform: rotate(-2deg);
+    display: inline-block;
+    border-radius: 2px;
+    box-shadow: 1px 1px 0 rgba(0,0,0,0.15);
+  }
+
+  /* TOKEN TABLE ----------------------------------------- */
+  table.tokens {
+    width: 100%; border-collapse: collapse;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+  }
+  table.tokens th, table.tokens td {
+    text-align: left; padding: 7px 10px;
+    border-bottom: 1px dashed var(--paper-stroke-faint);
+    vertical-align: middle;
+  }
+  table.tokens th {
+    font-family: 'Caveat', cursive;
+    font-size: 16px; color: var(--accent);
+    border-bottom: 2px solid var(--paper-stroke);
+  }
+  table.tokens td.swatch-cell { width: 50px; }
+  .swatch {
+    width: 32px; height: 32px;
+    border: 1.5px solid var(--paper-stroke);
+    border-radius: 4px;
+    display: inline-block;
+    box-shadow: 1px 1px 0 var(--paper-stroke-faint);
+  }
+  .swatch.lg { width: 56px; height: 56px; }
+
+  /* CONTRAST CHIP --------------------------------------- */
+  .contrast-chip {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    border: 1.5px solid var(--ink);
+  }
+  .pass-aaa { background: #c8e6c9; border-color: #2e7d32; color: #1b5e20; }
+  .pass-aa { background: #fff3a3; border-color: #b08900; color: #5d4500; }
+  .fail { background: #f8c9c9; border-color: #b71c1c; color: #7d0000; }
+
+  /* DO / DONT ------------------------------------------- */
+  .dodont { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 14px; }
+  .do, .dont {
+    border: 2px solid var(--paper-stroke);
+    border-radius: 6px;
+    padding: 12px 14px;
+    background: var(--paper);
+    position: relative;
+  }
+  .do { border-color: #2e7d32; }
+  .dont { border-color: #b71c1c; }
+  .do::before, .dont::before {
+    position: absolute; top: -12px; left: 10px;
+    background: var(--paper); padding: 0 8px;
+    font-family: 'Caveat', cursive; font-size: 18px; font-weight: 700;
+  }
+  .do::before { content: '✓ DO'; color: #2e7d32; }
+  .dont::before { content: '✗ DON\'T'; color: #b71c1c; }
+
+  /* WIRE BOX (placeholder element) ---------------------- */
+  .wire {
+    border: 1.5px solid var(--paper-stroke);
+    border-radius: 4px;
+    padding: 8px 10px;
+    background: rgba(255,255,255,0.4);
+    font-family: 'Architects Daughter', cursive;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  .wire.dashed { border-style: dashed; }
+  .wire.fill {
+    background: repeating-linear-gradient(
+      45deg,
+      var(--paper-stroke-faint) 0 6px,
+      transparent 6px 12px
+    );
+    color: var(--ink);
+  }
+  .wire.solid { background: var(--ink); color: var(--paper); }
+
+  /* TYPE specimen --------------------------------------- */
+  .type-spec { display: grid; grid-template-columns: 90px 1fr; gap: 16px; align-items: baseline; padding: 8px 0; border-bottom: 1px dashed var(--paper-stroke-faint); }
+  .type-spec .label { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-faint); }
+  .type-spec .demo { font-family: 'Inter', sans-serif; color: var(--ink); }
+
+  /* TWEAKS panel ---------------------------------------- */
+  #tweaks-mount { position: fixed; bottom: 0; right: 0; z-index: 9999; }
+
+  /* COLOR-MODE switch: when html.clean is set, swap fonts to Inter */
+  html.clean body { font-family: 'Inter', sans-serif; }
+  html.clean .ds-section-h, html.clean .topbar h1, html.clean .nav-brand,
+  html.clean .ds-section-num, html.clean .sketch-label, html.clean .nav-section-title,
+  html.clean .callout, html.clean .annot, html.clean table.tokens th,
+  html.clean .do::before, html.clean .dont::before {
+    font-family: 'Inter', sans-serif !important;
+    transform: none !important;
+  }
+  html.clean .topbar h1 { font-size: 40px; font-weight: 700; }
+  html.clean .ds-section-h { font-size: 28px; font-weight: 700; }
+  html.clean .ds-section-num { border-radius: 6px; font-size: 14px; }
+  html.clean .sketch { box-shadow: none; }
+  html.clean .nav { background: #fafafa; }
+
+  /* PRINT */
+  @media print {
+    aside.nav { display: none; }
+    .shell { grid-template-columns: 1fr; }
+    main { padding: 20px; }
+    section.ds-section { page-break-inside: avoid; }
+  }
+
+  @media (max-width: 900px) {
+    .shell { grid-template-columns: 1fr; }
+    aside.nav { position: static; height: auto; }
+    main { padding: 24px; }
+    .row-2, .row-3, .row-4 { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="nav">
+    <div class="nav-brand">Design System</div>
+    <div class="nav-sub">PSYCHIATRIE · LE VINATIER · v1.0 audit</div>
+
+    <div class="nav-section-title">Foundations</div>
+    <a href="#intro"><span class="nav-num">00</span>Intro &amp; principles</a>
+    <a href="#tokens"><span class="nav-num">01</span>Token architecture</a>
+    <a href="#color"><span class="nav-num">02</span>Color (audit)</a>
+    <a href="#categories"><span class="nav-num">03</span>Category palette</a>
+    <a href="#type"><span class="nav-num">04</span>Typography</a>
+    <a href="#layout"><span class="nav-num">05</span>Layout &amp; spacing</a>
+    <a href="#radius"><span class="nav-num">06</span>Radius, shadow, motion</a>
+    <a href="#icons"><span class="nav-num">07</span>Iconography</a>
+
+    <div class="nav-section-title">Components</div>
+    <a href="#buttons"><span class="nav-num">08</span>Buttons &amp; controls</a>
+    <a href="#forms"><span class="nav-num">09</span>Forms &amp; inputs</a>
+    <a href="#cards"><span class="nav-num">10</span>Cards (3 variants)</a>
+    <a href="#badges"><span class="nav-num">11</span>Badges &amp; pills</a>
+    <a href="#boxes"><span class="nav-num">12</span>Info / warning boxes</a>
+    <a href="#nav-comp"><span class="nav-num">13</span>Navigation</a>
+
+    <div class="nav-section-title">Patterns</div>
+    <a href="#question-pattern"><span class="nav-num">14</span>Questionnaire flow</a>
+    <a href="#results-pattern"><span class="nav-num">15</span>Score &amp; results</a>
+    <a href="#a11y"><span class="nav-num">16</span>Accessibility</a>
+    <a href="#print"><span class="nav-num">17</span>Print</a>
+
+    <div style="margin-top: 28px; padding-top: 14px; border-top: 1px dashed var(--paper-stroke-faint); font-family: 'Architects Daughter'; font-size: 11px; color: var(--ink-faint);">
+      Audit · Mai 2026<br/>
+      Dr Fenohasina T.J. Félicien
+    </div>
+  </aside>
+
+  <main>
+    <div class="topbar">
+      <div>
+        <h1>Design System.</h1>
+        <div class="topbar-meta">Audit + spec · Questionnaires &amp; Ressources en Psychiatrie · Centre Hospitalier Le Vinatier</div>
+      </div>
+      <div class="stamp">DRAFT v1</div>
+    </div>
+
+    <div id="content-mount"></div>
+
+  </main>
+</div>
+
+<div id="tweaks-mount"></div>
+
+<script type="text/babel" data-presets="env,react" src="ds-sections.jsx"></script>
+<script type="text/babel" data-presets="env,react" src="ds-tweaks.jsx"></script>
+<script type="text/babel" data-presets="env,react">
+  const root = ReactDOM.createRoot(document.getElementById('content-mount'));
+  root.render(<window.DSContent />);
+  const tweaksRoot = ReactDOM.createRoot(document.getElementById('tweaks-mount'));
+  tweaksRoot.render(<window.DSTweaks />);
+
+  // active nav highlight
+  const links = document.querySelectorAll('aside.nav a');
+  const sections = [...document.querySelectorAll('section.ds-section')];
+  function onScroll() {
+    const y = window.scrollY + 80;
+    let active = sections[0];
+    for (const s of sections) { if (s.offsetTop <= y) active = s; }
+    links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + (active && active.id)));
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  setTimeout(onScroll, 200);
+</script>
+
+</body>
+</html>

@@ -12,11 +12,11 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --cat-main: #0ea5e9;
-            --cat-dark: #0284c7;
-            --cat-light: #38bdf8;
-            --cat-rgb: 14, 165, 233;
-            --cat-readable: #0284c7;
+            --cat-main: #06b6d4;
+            --cat-dark: #0891b2;
+            --cat-light: #0e7490;
+            --cat-rgb: 6, 182, 212;
+            --cat-readable: #0e7490;
         }
         .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
         .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
@@ -81,7 +81,7 @@
         <!-- Results Section -->
         <div id="resultsSection" class="results-section" aria-live="polite">
             <div class="score-display">
-                <div class="total-score" id="totalScore">0</div>
+                <div class="total-score" id="totalScore" role="status" aria-label="Score total">0</div>
                 <div class="score-label">Score global / 100</div>
             </div>
 
@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', function() {
         { id: 10, text: "J'ai été capable de gérer mes émotions", dimension: "RE", dimensionName: "Resilience", reverse: false },
         { id: 11, text: "J'ai eu des problèmes de santé physique", dimension: "PhW", dimensionName: "Bien-etre physique", reverse: true },
         { id: 12, text: "Je me suis senti(e) en forme physiquement", dimension: "PhW", dimensionName: "Bien-etre physique", reverse: false },
-        { id: 13, text: "J'ai pu gérer mon argent moi-meme", dimension: "AU", dimensionName: "Autonomie", reverse: false },
+        { id: 13, text: "J'ai pu gérer mon argent moi-même", dimension: "AU", dimensionName: "Autonomie", reverse: false },
         { id: 14, text: "J'ai pu faire mes activités quotidiennes seul(e)", dimension: "AU", dimensionName: "Autonomie", reverse: false },
         { id: 15, text: "J'ai été satisfait(e) de ma vie sentimentale", dimension: "SL", dimensionName: "Vie sentimentale", reverse: false },
         { id: 16, text: "J'ai eu des relations intimes satisfaisantes", dimension: "SL", dimensionName: "Vie sentimentale", reverse: false },

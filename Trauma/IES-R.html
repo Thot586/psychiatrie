@@ -100,7 +100,7 @@
 
           <div class="score-display">
             <div class="score-number">
-              <div class="score-value" id="totalscore">0</div>
+              <div class="score-value" id="totalscore" role="status" aria-label="Score total">0</div>
               <div class="score-label">Score total / 88</div>
             </div>
             <div class="mean-score">
@@ -147,7 +147,7 @@
             <div class="content">
               <div id="interp-long"></div>
               <div class="référence-box">
-                  <p style="font-weight:600; margin-bottom:0.5rem; color: var(--color-text-primary);">References utilisées pour l'interprétation :</p>
+                  <p style="font-weight:600; margin-bottom:0.5rem; color: var(--color-text-primary);">Références utilisées pour l'interprétation :</p>
                   <div class="référence-item">Weiss, D. S., & Marmar, C. R. (1997). The Impact of Event Scale-Revised. In J. P. Wilson & T. M. Keane (Eds.), <em>Assessing psychological trauma and PTSD</em> (pp. 399-411). Guilford Press.</div>
                   <div class="référence-item">Creamer, M., Bell, R., & Failla, S. (2003). Psychometric properties of the Impact of Event Scale-Revised. <em>Behaviour Research and Therapy</em>, 41(12), 1489-1496.</div>
                   <div class="référence-item">Brunet, A., St-Hilaire, A., Jehel, L., & King, S. (2003). Validation of a French version of the Impact of Event Scale-Revised. <em>Canadian Journal of Psychiatry</em>, 48(1), 56-61.</div>
@@ -346,7 +346,7 @@
         severityClass = "success";
         severityColor = "#22c55e";
         severityDesc = "Score moyen inférieur au seuil clinique (1.5).";
-        detailedDesc = `Votre score moyen (${mean.toFixed(2)}) est inférieur au seuil de 1.5, ce qui suggere que l'événement traumatique n'a actuellement pas d'impact majeur sur votre fonctionnement quotidien. Cependant, si vous ressentez une détresse meme légère, n'hesitez pas a en parler a un professionnel.`;
+        detailedDesc = `Votre score moyen (${mean.toFixed(2)}) est inférieur au seuil de 1.5, ce qui suggere que l'événement traumatique n'a actuellement pas d'impact majeur sur votre fonctionnement quotidien. Cependant, si vous ressentez une détresse même légère, n'hesitez pas a en parler a un professionnel.`;
       } else if (mean < 2.5) {
         severity = "Significatif";
         severityClass = "warning";

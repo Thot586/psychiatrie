@@ -17,7 +17,7 @@
         :root {
             --cat-main: #14b8a6;
             --cat-dark: #0d9488;
-            --cat-light: #2dd4bf;
+            --cat-light: #0f766e;
             --cat-rgb: 20, 184, 166;
             --cat-readable: #0d9488;
         }
@@ -59,7 +59,7 @@
 
         <!-- Informations -->
         <section class="info-box" style="background: linear-gradient(145deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05)); border-color: rgba(16, 185, 129, 0.3);">
-            <h3 style="color: #34d399;"><i class="fas fa-info-circle"></i> A propos de ce questionnaire</h3>
+            <h3 style="color: #15803d;"><i class="fas fa-info-circle"></i> A propos de ce questionnaire</h3>
             <p>Le SCARED est un <strong>auto-questionnaire</strong> de dépistage des troubles anxieux destiné aux enfants et adolescents de <strong>8 a 18 ans</strong>. Il peut également etre rempli par les parents (version parent).</p>
             <p style="margin-top: 0.5rem;">Il évalue 41 items repartis en 5 sous-échelles : Trouble panique/Symptomes somatiques, Anxiété generalisee, Anxiété de séparation, Phobie sociale et Evitement scolaire.</p>
         </section>
@@ -90,7 +90,7 @@
 
         <!-- Instructions -->
         <section class="glass-card">
-            <h3 style="margin-bottom: 1rem;">Vous trouverez ci-dessous une liste de phrases qui decrivent comment les gens se sentent. Pour chaque phrase, indiquez si elle est "Pas vrai ou rarement vrai", "Quelquefois vrai" ou "Souvent vrai" pour vous. Répondez à toutes les questions du mieux que vous pouvez, meme si certaines ne semblent pas vous concerner exactement.</h3>
+            <h3 style="margin-bottom: 1rem;">Vous trouverez ci-dessous une liste de phrases qui decrivent comment les gens se sentent. Pour chaque phrase, indiquez si elle est "Pas vrai ou rarement vrai", "Quelquefois vrai" ou "Souvent vrai" pour vous. Répondez à toutes les questions du mieux que vous pouvez, même si certaines ne semblent pas vous concerner exactement.</h3>
 
             <!-- Questions generees par JS -->
             <div id="questions"></div>
@@ -105,7 +105,7 @@
             <!-- Score total -->
             <div class="score-display">
                 <div class="score-circle" style="background: linear-gradient(135deg, #10b981, #059669);">
-                    <span class="score-value" id="totalScore">0</span>
+                    <span class="score-value" id="totalScore" role="status" aria-label="Score total">0</span>
                 </div>
                 <p class="score-label">Score total (sur 82)</p>
             </div>

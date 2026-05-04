@@ -2,6 +2,8 @@
    Dark Theme Template - Design System
    ======================================== */
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
 /* ========================================
    Variables CSS - Palette & Tokens
    ======================================== */
@@ -45,7 +47,7 @@
     --color-text-primary: #f8fafc;
     --color-text-secondary: #e2e8f0;
     --color-text-muted: #b0bec9;
-    --color-text-dimmed: #8896a7;
+    --color-text-dimmed: #a0aec0; /* a11y: bumped from #8896a7 → AA at 14px (design system v1) */
 
     --color-border: rgba(255, 255, 255, 0.08);
     --color-border-hover: rgba(255, 255, 255, 0.2);
@@ -81,7 +83,7 @@
     --transition-normal: 0.2s ease;
     --transition-slow: 0.3s ease;
 
-    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     --font-size-xs: 0.75rem;
     --font-size-sm: 0.875rem;
     --font-size-base: 1rem;
@@ -90,6 +92,40 @@
     --font-size-2xl: 1.5rem;
     --font-size-3xl: 1.875rem;
     --font-size-4xl: 2.25rem;
+
+    /* ========================================
+       Tier 2 — Semantic tokens (design system v1)
+       Additive layer on top of primitives. Components should
+       gradually migrate to use these instead of primitives.
+       ======================================== */
+
+    /* Surfaces */
+    --surface-page:     var(--color-bg-dark);
+    --surface-raised:   var(--color-bg-card);
+    --surface-sunken:   var(--neo-bg);
+    --surface-overlay-strong: var(--surface-card-solid);
+
+    /* Text */
+    --text-strong:   var(--color-text-primary);
+    --text-default:  var(--color-text-secondary);
+    --text-muted:    var(--color-text-muted);
+    --text-subtle:   var(--color-text-dimmed);
+
+    /* Action */
+    --action-primary:       var(--color-primary);
+    --action-primary-hover: var(--color-primary-light);
+    --action-primary-press: var(--color-primary-dark);
+
+    /* Feedback */
+    --feedback-ok:    var(--color-success);
+    --feedback-warn:  var(--color-warning);
+    --feedback-error: var(--color-danger);
+    --feedback-info:  var(--color-info);
+
+    /* Borders */
+    --border-default: var(--color-border);
+    --border-strong:  var(--color-border-hover);
+    --border-focus:   var(--color-border-active);
 }
 
 /* ========================================
@@ -124,6 +160,54 @@ body::before {
     background-size: 50px 50px;
     pointer-events: none;
     z-index: 0;
+}
+
+/* ========================================
+   Touch targets (a11y · design system v1)
+   Hard rule: never below 44×44 for any tap target.
+   Promoted from mobile-only to global.
+   ======================================== */
+button,
+.btn-primary,
+.btn-secondary,
+.btn-back,
+.btn-print,
+.btn-export,
+.btn-home,
+.option-btn,
+.answer-btn,
+.scale-btn,
+.binary-options label,
+.radio-options label,
+.likert-options label,
+input[type="radio"] + label,
+input[type="checkbox"] + label,
+.filter-btn {
+    min-height: 44px;
+}
+
+/* ========================================
+   Skip link (a11y · design system v1)
+   Visible only when focused via keyboard.
+   ======================================== */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 8px;
+    z-index: 10000;
+    padding: 8px 16px;
+    background: var(--color-primary);
+    color: #ffffff;
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    transition: top var(--transition-fast);
+}
+.skip-link:focus,
+.skip-link:focus-visible {
+    top: 8px;
+    outline: 2px solid var(--color-primary-light);
+    outline-offset: 2px;
 }
 
 /* ========================================
@@ -442,21 +526,25 @@ a:hover {
 
 /* ========================================
    Category Badges — Navigation bar
+   Design System v1: 9 distinct hue families, no collisions.
    White text on solid colored backgrounds (WCAG AA ≥ 4.5:1 for all)
    ======================================== */
-.badge-cat-tnd      { background: #7c3aed; color: #ffffff; border: none; }
-.badge-cat-humeur   { background: #2563eb; color: #ffffff; border: none; }
-.badge-cat-anxiete  { background: #047857; color: #ffffff; border: none; }
-.badge-cat-perso    { background: #b45309; color: #ffffff; border: none; }
-.badge-cat-substance{ background: #db2777; color: #ffffff; border: none; }
-.badge-cat-trauma   { background: #4f46e5; color: #ffffff; border: none; }
-.badge-cat-crise    { background: #3e6b99; color: #ffffff; border: none; }
-.badge-cat-enfant   { background: #0d7c72; color: #ffffff; border: none; }
-.badge-cat-rehab    { background: #0284c7; color: #ffffff; border: none; }
-.badge-cat-psychose { background: #6d28d9; color: #ffffff; border: none; }
-.badge-cat-guides   { background: #64748b; color: #ffffff; border: none; }
-.badge-cat-clinique { background: #92400e; color: #ffffff; border: none; }
-.badge-cat-recherche{ background: #0284c7; color: #ffffff; border: none; }
+.badge-cat-tnd            { background: #7c3aed; color: #ffffff; border: none; }  /* violet */
+.badge-cat-psychose       { background: #5b21b6; color: #ffffff; border: none; }  /* indigo-deep */
+.badge-cat-humeur         { background: #2563eb; color: #ffffff; border: none; }  /* blue */
+.badge-cat-rehab          { background: #0891b2; color: #ffffff; border: none; }  /* cyan (was #0284c7, colliding with Humeur) */
+.badge-cat-trauma         { background: #4f46e5; color: #ffffff; border: none; }  /* indigo */
+.badge-cat-crise          { background: #3e6b99; color: #ffffff; border: none; }  /* slate-blue */
+.badge-cat-anxiete        { background: #047857; color: #ffffff; border: none; }  /* green */
+.badge-cat-enfant         { background: #0d7c72; color: #ffffff; border: none; }  /* teal */
+.badge-cat-perso          { background: #b45309; color: #ffffff; border: none; }  /* amber */
+.badge-cat-clinique       { background: #9a3412; color: #ffffff; border: none; }  /* terracotta (was #92400e) */
+.badge-cat-substance      { background: #db2777; color: #ffffff; border: none; }  /* pink */
+.badge-cat-transculturelle{ background: #9d174d; color: #ffffff; border: none; }  /* rose-soft */
+.badge-cat-guides         { background: #64748b; color: #ffffff; border: none; }  /* slate */
+.badge-cat-ressources     { background: #475569; color: #ffffff; border: none; }  /* steel */
+.badge-cat-recherche      { background: #475569; color: #ffffff; border: none; }  /* steel (alias) */
+.badge-cat-design         { background: #c14a3a; color: #ffffff; border: none; }  /* coral — design system */
 
 /* ========================================
    Modal
@@ -1637,10 +1725,25 @@ button:disabled,
     .btn-print,
     .btn-primary[onclick*="export"],
     .export-buttons,
+    .skip-link,
+    .progress-container,
     footer,
     .warning-box,
     .info-box {
         display: none !important;
+    }
+
+    /* Design System v1 : type scale optimisée A4 */
+    body, p, li {
+        font-size: 11pt !important;
+        line-height: 1.4 !important;
+    }
+    h1 { font-size: 18pt !important; }
+    h2 { font-size: 15pt !important; }
+    h3 { font-size: 13pt !important; }
+    h4 { font-size: 12pt !important; }
+    .subtitle, .caption, small {
+        font-size: 9pt !important;
     }
 
     /* Afficher les résultats et détails */

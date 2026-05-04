@@ -11,11 +11,11 @@
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
     <style>
         :root {
-            --cat-main: #0ea5e9;
-            --cat-dark: #0284c7;
-            --cat-light: #38bdf8;
-            --cat-rgb: 14, 165, 233;
-            --cat-readable: #0284c7;
+            --cat-main: #06b6d4;
+            --cat-dark: #0891b2;
+            --cat-light: #0e7490;
+            --cat-rgb: 6, 182, 212;
+            --cat-readable: #0e7490;
         }
         .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
         .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
@@ -145,7 +145,7 @@
             <div class="task-card">
                 <h4>Vigilance (détection de lettre)</h4>
                 <p>Dans la sequence suivante, comptez mentalement le nombre de fois ou vous entendez/voyez la lettre "A" :</p>
-                <p style="font-family: monospace; font-size: 1.1rem; letter-spacing: 0.5rem; color: #a78bfa; margin: 1rem 0;">F B A C M N A A J K L B A F A K D E A A A J A M O F A A B</p>
+                <p style="font-family: monospace; font-size: 1.1rem; letter-spacing: 0.5rem; color: #5b21b6; margin: 1rem 0;">F B A C M N A A J K L B A F A K D E A A A J A M O F A A B</p>
                 <p>Il y a <strong>11 lettres "A"</strong> dans cette sequence.</p>
                 <div class="checkbox-group">
                     <div class="checkbox-item">
@@ -433,7 +433,7 @@
         <!-- Results Section -->
         <div id="resultsSection" class="results-section" aria-live="polite">
             <div class="score-display">
-                <div class="total-score" id="totalScore">0</div>
+                <div class="total-score" id="totalScore" role="status" aria-label="Score total">0</div>
                 <div class="score-max">/ 30 points</div>
             </div>
 
@@ -522,15 +522,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (totalScore >= 26) {
             interpretationBox.className = 'interprétation-box normal';
-            interpretationTitle.innerHTML = '<i class="fas fa-check-circle" style="color: #4ade80; margin-right: 0.5rem;"></i>Fonctionnement cognitif normal';
+            interpretationTitle.innerHTML = '<i class="fas fa-check-circle" style="color: #15803d; margin-right: 0.5rem;"></i>Fonctionnement cognitif normal';
             interpretationText.textContent = 'Votre score suggere un fonctionnement cognitif dans les limites de la normale. Aucun deficit significatif n\'est détecte par ce dépistage.';
         } else if (totalScore >= 18) {
             interpretationBox.className = 'interprétation-box mild';
-            interpretationTitle.innerHTML = '<i class="fas fa-exclamation-triangle" style="color: #fbbf24; margin-right: 0.5rem;"></i>Deficit cognitif leger possible';
+            interpretationTitle.innerHTML = '<i class="fas fa-exclamation-triangle" style="color: #b45309; margin-right: 0.5rem;"></i>Deficit cognitif leger possible';
             interpretationText.textContent = 'Votre score suggere un possible deficit cognitif leger (MCI). Une évaluation neuropsychologique complete est recommandée pour confirmer et caracteriser ces difficultés.';
         } else {
             interpretationBox.className = 'interprétation-box moderate';
-            interpretationTitle.innerHTML = '<i class="fas fa-times-circle" style="color: #f87171; margin-right: 0.5rem;"></i>Deficit cognitif significatif probable';
+            interpretationTitle.innerHTML = '<i class="fas fa-times-circle" style="color: #b91c1c; margin-right: 0.5rem;"></i>Deficit cognitif significatif probable';
             interpretationText.textContent = 'Votre score suggere un deficit cognitif significatif. Une consultation neurologique et une évaluation neuropsychologique approfondie sont fortement recommandees.';
         }
 

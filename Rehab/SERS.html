@@ -11,11 +11,11 @@
     <link rel="stylesheet" href="../css/questionnaire-light.css">
     <style>
         :root {
-            --cat-main: #0ea5e9;
-            --cat-dark: #0284c7;
-            --cat-light: #38bdf8;
-            --cat-rgb: 14, 165, 233;
-            --cat-readable: #0284c7;
+            --cat-main: #06b6d4;
+            --cat-dark: #0891b2;
+            --cat-light: #0e7490;
+            --cat-rgb: 6, 182, 212;
+            --cat-readable: #0e7490;
         }
         .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
         .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
@@ -113,7 +113,7 @@
 
                 <div class="score-display">
                     <div class="score-circle">
-                        <span class="score-number" id="totalScore">0</span>
+                        <span class="score-number" id="totalScore" role="status" aria-label="Score total">0</span>
                         <span class="score-label">sur 40</span>
                     </div>
                 </div>
@@ -436,12 +436,12 @@
                 <h3 style="margin-bottom: 20px; color: var(--color-text-primary);">Recommandations personnalisées</h3>
                 ${recommendations.map(rec => `
                     <div class="recommendation-item">
-                        <h4><i class="fas fa-check-circle" style="color: #0ea5e9;"></i> ${rec.title}</h4>
+                        <h4><i class="fas fa-check-circle" style="color: #06b6d4;"></i> ${rec.title}</h4>
                         <p>${rec.content}</p>
                     </div>
                 `).join('')}
 
-                <div style="margin-top: 30px; padding: 20px; background: linear-gradient(145deg, rgba(14, 165, 233, 0.1), rgba(14, 165, 233, 0.05)); border-radius: 10px; border: 1px solid rgba(14, 165, 233, 0.3);">
+                <div style="margin-top: 30px; padding: 20px; background: linear-gradient(145deg, rgba(6, 182, 212, 0.1), rgba(6, 182, 212, 0.05)); border-radius: 10px; border: 1px solid rgba(6, 182, 212, 0.3);">
                     <h4 style="color: var(--color-text-primary); margin-bottom: 15px;"><i class="fas fa-bookmark"></i> Comprendre les scores</h4>
                     <p style="color: var(--color-text-muted); line-height: 1.8;">
                         <strong>Interprétation des scores :</strong><br>
@@ -455,7 +455,7 @@
                         &bull; <strong>Items positifs</strong> : Évaluent l'acceptation de soi et la reconnaissance de ses qualités<br>
                         &bull; <strong>Items négatifs (inversés)</strong> : Évaluent l'auto-dépréciation et les pensées négatives sur soi<br><br>
 
-                        <em><i class="fas fa-lightbulb" style="color: #0ea5e9;"></i> L'estime de soi est modifiable et peut être améliorée avec du travail personnel et/ou thérapeutique</em>
+                        <em><i class="fas fa-lightbulb" style="color: #06b6d4;"></i> L'estime de soi est modifiable et peut être améliorée avec du travail personnel et/ou thérapeutique</em>
                     </p>
                 </div>
             `;

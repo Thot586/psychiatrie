@@ -15,11 +15,11 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --cat-main: #0ea5e9;
-            --cat-dark: #0284c7;
-            --cat-light: #38bdf8;
-            --cat-rgb: 14, 165, 233;
-            --cat-readable: #0284c7;
+            --cat-main: #06b6d4;
+            --cat-dark: #0891b2;
+            --cat-light: #0e7490;
+            --cat-rgb: 6, 182, 212;
+            --cat-readable: #0e7490;
         }
         .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
         .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
@@ -780,7 +780,7 @@
 
       <!-- Total Score -->
       <div class="score-card">
-        <div class="total-score" id="total-score">--</div>
+        <div class="total-score" id="total-score" role="status" aria-label="Score total">--</div>
         <div class="score-max">/ 120</div>
         <div class="score-label">Score total de rétablissement</div>
       </div>

@@ -18,11 +18,11 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --cat-main: #0ea5e9;
-            --cat-dark: #0284c7;
-            --cat-light: #38bdf8;
-            --cat-rgb: 14, 165, 233;
-            --cat-readable: #0284c7;
+            --cat-main: #06b6d4;
+            --cat-dark: #0891b2;
+            --cat-light: #0e7490;
+            --cat-rgb: 6, 182, 212;
+            --cat-readable: #0e7490;
         }
         .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
         .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
@@ -217,7 +217,7 @@
             <!-- Score total -->
             <div class="score-display">
                 <div class="score-circle">
-                    <span class="score-value" id="totalScore">0</span>
+                    <span class="score-value" id="totalScore" role="status" aria-label="Score total">0</span>
                 </div>
                 <p class="score-label" id="scoreLabel">sur 48 points</p>
             </div>
@@ -365,8 +365,8 @@
                 name: "Participation",
                 icon: "fa-hands-helping",
                 questions: [
-                    { id: 11, text: "Vous engager dans des activités communautaires (fetes, activités religieuses, etc.) de la meme facon que n'importe qui d'autre ?" },
-                    { id: 12, text: "A quel point avez-vous ete emotionnellement affecte(e) par votre problème de santé ?" }
+                    { id: 11, text: "Vous engager dans des activités communautaires (fetes, activités religieuses, etc.) de la même facon que n'importe qui d'autre ?" },
+                    { id: 12, text: "A quel point avez-vous ete émotionnellement affecté(e) par votre problème de santé ?" }
                 ]
             }
         ];
@@ -623,10 +623,10 @@
                     datasets: [{
                         label: 'Niveau de difficulté',
                         data: data,
-                        backgroundColor: 'rgba(14, 165, 233, 0.2)',
-                        borderColor: 'rgba(14, 165, 233, 0.8)',
+                        backgroundColor: 'rgba(6, 182, 212, 0.2)',
+                        borderColor: 'rgba(6, 182, 212, 0.8)',
                         borderWidth: 2,
-                        pointBackgroundColor: 'rgba(14, 165, 233, 1)',
+                        pointBackgroundColor: 'rgba(6, 182, 212, 1)',
                         pointBorderColor: '#fff',
                         pointRadius: 5,
                         pointHoverRadius: 7
@@ -667,7 +667,7 @@
                             backgroundColor: 'rgba(15, 23, 42, 0.9)',
                             titleColor: '#f8fafc',
                             bodyColor: '#e2e8f0',
-                            borderColor: 'rgba(14, 165, 233, 0.3)',
+                            borderColor: 'rgba(6, 182, 212, 0.3)',
                             borderWidth: 1,
                             callbacks: {
                                 label: function(context) {
@@ -694,7 +694,7 @@
             if (problematicDomains.length > 0) {
                 recommendationsHtml += `
                     <div class="warning-box" style="margin-bottom: 1.5rem;">
-                        <h4 style="color: #fbbf24; margin-bottom: 0.5rem;">
+                        <h4 style="color: #b45309; margin-bottom: 0.5rem;">
                             <i class="fas fa-exclamation-circle"></i> Domaines nécessitant une attention particuliere
                         </h4>
                         <ul style="margin: 0; padding-left: 1.5rem;">

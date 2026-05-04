@@ -86,25 +86,27 @@
             color: #e2e8f0;
             font-size: 0.85rem;
         }
-        /* Couleurs par catégorie */
-        .cat-tnd .category-icon { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
-        .cat-humeur .category-icon { background: linear-gradient(135deg, #3b82f6, #2563eb); }
-        .cat-anxiété .category-icon { background: linear-gradient(135deg, #10b981, #059669); }
-        .cat-personnalité .category-icon { background: linear-gradient(135deg, #f59e0b, #d97706); }
-        .cat-substance .category-icon { background: linear-gradient(135deg, #ec4899, #db2777); }
-        .cat-trauma .category-icon { background: linear-gradient(135deg, #6366f1, #4f46e5); }
-        .cat-crise .category-icon { background: linear-gradient(135deg, #5b7fa6, #3e6b99); }
-        .cat-enfant .category-icon { background: linear-gradient(135deg, #14b8a6, #0d9488); }
-        .cat-rehab .category-icon { background: linear-gradient(135deg, #0ea5e9, #0284c7); }
-        .cat-guides .category-icon { background: linear-gradient(135deg, #64748b, #475569); }
-        .cat-psychose .category-icon { background: linear-gradient(135deg, #7c3aed, #5b21b6); }
-        .cat-clinique .category-icon { background: linear-gradient(135deg, #f59e0b, #d97706); }
-        .cat-recherche .category-icon { background: linear-gradient(135deg, #10b981, #059669); }
-        .cat-transculturelle .category-icon { background: linear-gradient(135deg, #ec4899, #db2777); }
-        .cat-ressources .category-icon { background: linear-gradient(135deg, #64748b, #475569); }
+        /* Couleurs par catégorie — Design System v1 (9 hue families, no collisions) */
+        .cat-tnd .category-icon { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }            /* violet */
+        .cat-psychose .category-icon { background: linear-gradient(135deg, #6d28d9, #5b21b6); }       /* indigo-deep — shifted from violet */
+        .cat-humeur .category-icon { background: linear-gradient(135deg, #3b82f6, #2563eb); }         /* blue */
+        .cat-rehab .category-icon { background: linear-gradient(135deg, #06b6d4, #0891b2); }          /* cyan — shifted from sky-blue (was colliding with Humeur) */
+        .cat-trauma .category-icon { background: linear-gradient(135deg, #6366f1, #4f46e5); }         /* indigo */
+        .cat-crise .category-icon { background: linear-gradient(135deg, #5b7fa6, #3e6b99); }          /* slate-blue */
+        .cat-anxiété .category-icon { background: linear-gradient(135deg, #10b981, #059669); }        /* green */
+        .cat-enfant .category-icon { background: linear-gradient(135deg, #14b8a6, #0d9488); }         /* teal */
+        .cat-personnalité .category-icon { background: linear-gradient(135deg, #f59e0b, #d97706); }   /* amber */
+        .cat-clinique .category-icon { background: linear-gradient(135deg, #c2410c, #9a3412); }       /* terracotta — shifted from amber (was colliding with Personnalité) */
+        .cat-substance .category-icon { background: linear-gradient(135deg, #ec4899, #db2777); }      /* pink */
+        .cat-transculturelle .category-icon { background: linear-gradient(135deg, #be185d, #9d174d); }/* rose-soft — shifted from pink (was colliding with Substance) */
+        .cat-guides .category-icon { background: linear-gradient(135deg, #64748b, #475569); }         /* slate */
+        .cat-ressources .category-icon { background: linear-gradient(135deg, #475569, #334155); }     /* steel — shifted darker (distinct from Guides) */
+        .cat-recherche .category-icon { background: linear-gradient(135deg, #10b981, #059669); }      /* green — kept (legacy) */
+        .cat-design .category-icon { background: linear-gradient(135deg, #c14a3a, #92281a); }         /* coral — design system accent */
     </style>
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Aller au contenu principal</a>
     <header class="header-glow">
         <div class="max-w-xl mx-auto text-center relative z-10">
             <span class="badge badge-primary mb-4" style="display: inline-block; margin-bottom: 1.5rem;">
@@ -119,7 +121,7 @@
         </div>
     </header>
 
-    <main style="max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem;" class="relative z-10">
+    <main id="main-content" style="max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem;" class="relative z-10">
 
         <section class="warning-box" style="margin-bottom: 3rem;">
             <h3><i class="fas fa-exclamation-triangle" style="margin-right: 0.5rem;"></i>Avertissement important</h3>

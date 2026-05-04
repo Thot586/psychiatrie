@@ -16,7 +16,7 @@
     :root {
       --cat-main:     #3b82f6;
       --cat-dark:     #2563eb;
-      --cat-light:    #93c5fd;
+      --cat-light:    #1e40af;
       --cat-rgb:      59, 130, 246;
       --cat-readable: #2563eb;
     }
@@ -59,7 +59,7 @@
     }
     body.light-questionnaire .yn-btn {
       color: #475569;
-      border-color: #cbd5e1;
+      border-color: #475569;
     }
     body.light-questionnaire .yn-btn:hover {
       border-color: var(--cat-readable);
@@ -72,7 +72,7 @@
     }
     body.light-questionnaire .yn-btn.selected-non {
       background: rgba(100, 116, 139, 0.10);
-      border-color: #94a3b8;
+      border-color: #475569;
       color: #64748b;
     }
 
@@ -239,7 +239,7 @@
       <!-- Score circle -->
       <div style="display: flex; justify-content: center; margin: 1.5rem 0;">
         <div class="score-circle" id="scoreCircle">
-          <span class="score-number" id="totalScore">0</span>
+          <span class="score-number" id="totalScore" role="status" aria-label="Score total">0</span>
           <span class="score-label">sur 20</span>
         </div>
       </div>

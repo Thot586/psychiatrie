@@ -11,11 +11,11 @@
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
     <style>
         :root {
-            --cat-main: #0ea5e9;
-            --cat-dark: #0284c7;
-            --cat-light: #38bdf8;
-            --cat-rgb: 14, 165, 233;
-            --cat-readable: #0284c7;
+            --cat-main: #06b6d4;
+            --cat-dark: #0891b2;
+            --cat-light: #0e7490;
+            --cat-rgb: 6, 182, 212;
+            --cat-readable: #0e7490;
         }
         .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
         .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
@@ -72,7 +72,7 @@
         <!-- Results Section -->
         <div id="resultsSection" class="results-section" aria-live="polite">
             <div class="score-display">
-                <div class="total-score" id="totalScore">0</div>
+                <div class="total-score" id="totalScore" role="status" aria-label="Score total">0</div>
                 <div class="score-label">Score total / 12</div>
                 <div class="insight-meter">
                     <div class="insight-fill" id="insightFill" style="width: 0%; background: linear-gradient(90deg, #ef4444, #fbbf24, #22c55e);"></div>
@@ -126,9 +126,9 @@ document.addEventListener('DOMContentLoaded', function() {
         { id: 2, text: "Je n'ai pas de problème de santé mentale", subscale: "awareness", subscaleName: "Conscience de la maladie", reverse: true },
         { id: 3, text: "Certaines de mes expériences inhabituelles sont dues à une maladie", subscale: "relabeling", subscaleName: "Réattribution des symptômes", reverse: false },
         { id: 4, text: "Mes expériences inhabituelles sont causées par d'autres personnes ou par des forces extérieures", subscale: "relabeling", subscaleName: "Réattribution des symptômes", reverse: true },
-        { id: 5, text: "Certaines de mes difficultés a penser clairement sont dues a une maladie", subscale: "relabeling", subscaleName: "Reattribution des symptômes", reverse: false },
+        { id: 5, text: "Certaines de mes difficultés à penser clairement sont dues à une maladie", subscale: "relabeling", subscaleName: "Réattribution des symptômes", reverse: false },
         { id: 6, text: "J'ai besoin d'un traitement pour mes problèmes", subscale: "treatment", subscaleName: "Nécessité du traitement", reverse: false },
-        { id: 7, text: "Mon sejour à l'hôpital (ou mon suivi) est nécessaire", subscale: "treatment", subscaleName: "Nécessité du traitement", reverse: false },
+        { id: 7, text: "Mon séjour à l'hôpital (ou mon suivi) est nécessaire", subscale: "treatment", subscaleName: "Nécessité du traitement", reverse: false },
         { id: 8, text: "Le médecin a raison de me prescrire des médicaments", subscale: "treatment", subscaleName: "Nécessité du traitement", reverse: false }
     ];
 
@@ -206,7 +206,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('calculateBtn').addEventListener('click', function() {
         const subscales = {
             awareness: { name: "Conscience de la maladie", score: 0, max: 4 },
-            relabeling: { name: "Reattribution des symptômes", score: 0, max: 6 },
+            relabeling: { name: "Réattribution des symptômes", score: 0, max: 6 },
             treatment: { name: "Nécessité du traitement", score: 0, max: 6 }
         };
 
@@ -257,15 +257,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (totalScore >= 9) {
             interpretationBox.className = 'interprétation-box high';
-            interpretationTitle.innerHTML = '<i class="fas fa-check-circle" style="color: #4ade80; margin-right: 0.5rem;"></i>Insight élevé';
+            interpretationTitle.innerHTML = '<i class="fas fa-check-circle" style="color: #15803d; margin-right: 0.5rem;"></i>Insight élevé';
             interpretationText.textContent = "Votre score suggere une bonne conscience de votre état de santé et de la nécessité des soins. C'est un atout important pour votre rétablissement.";
         } else if (totalScore >= 5) {
             interpretationBox.className = 'interprétation-box moderate';
-            interpretationTitle.innerHTML = '<i class="fas fa-exclamation-circle" style="color: #fbbf24; margin-right: 0.5rem;"></i>Insight modere';
+            interpretationTitle.innerHTML = '<i class="fas fa-exclamation-circle" style="color: #b45309; margin-right: 0.5rem;"></i>Insight modere';
             interpretationText.textContent = "Votre score suggere une conscience partielle de votre situation. Certains aspects de votre état de santé ou du traitement peuvent encore etre explores avec votre équipe soignante.";
         } else {
             interpretationBox.className = 'interprétation-box low';
-            interpretationTitle.innerHTML = '<i class="fas fa-info-circle" style="color: #f87171; margin-right: 0.5rem;"></i>Insight limite';
+            interpretationTitle.innerHTML = '<i class="fas fa-info-circle" style="color: #b91c1c; margin-right: 0.5rem;"></i>Insight limite';
             interpretationText.textContent = "Votre score suggere des difficultés a reconnaître certains aspects de votre situation. Cela est courant et peut evoluer avec le temps et le dialogue avec votre équipe soignante.";
         }
 

@@ -13,7 +13,7 @@
         :root {
             --cat-main: #14b8a6;
             --cat-dark: #0d9488;
-            --cat-light: #2dd4bf;
+            --cat-light: #0f766e;
             --cat-rgb: 20, 184, 166;
             --cat-readable: #0d9488;
             --cat-light-bg: rgba(20, 184, 166, 0.1);
@@ -60,10 +60,10 @@
 
         /* Spécificité 0,3,0 pour surcharger questionnaire-light.css */
         body.light-questionnaire .sticky-header .step-btn {
-            color: #94a3b8;
+            color: #475569;
         }
         body.light-questionnaire .sticky-header .step-btn:hover {
-            color: #cbd5e1;
+            color: #475569;
         }
 
         .step-btn:hover {
@@ -357,7 +357,7 @@
         .feedback-box.incorrect {
             background: rgba(239, 68, 68, 0.1);
             border: 1px solid rgba(239, 68, 68, 0.3);
-            color: #f87171;
+            color: #b91c1c;
         }
 
         /* Arbre décisionnel */
@@ -430,8 +430,8 @@
         }
 
         .decision-result.warning {
-            background: rgba(245, 158, 11, 0.1);
-            border: 1px solid rgba(245, 158, 11, 0.3);
+            background: rgba(194, 65, 12, 0.1);
+            border: 1px solid rgba(194, 65, 12, 0.3);
         }
 
         .decision-result.danger {
@@ -580,8 +580,8 @@
         }
 
         .info-box.amber {
-            background: rgba(245, 158, 11, 0.1);
-            border-left: 4px solid #f59e0b;
+            background: rgba(194, 65, 12, 0.1);
+            border-left: 4px solid #c2410c;
         }
 
         .info-box.red {
@@ -1186,19 +1186,19 @@
                     </div>
 
                     <div class="decision-result warning" id="mirana-result-mixte">
-                        <h4 style="color: #f59e0b;"><i class="fas fa-exclamation-circle"></i> Comorbidité possible</h4>
+                        <h4 style="color: #c2410c;"><i class="fas fa-exclamation-circle"></i> Comorbidité possible</h4>
                         <p style="color: var(--color-text-secondary);">Un trouble anxieux de séparation peut coexister avec une phobie sociale ou une anxiété généralisée. L'évaluation doit explorer l'ensemble des domaines anxieux.</p>
                         <button class="btn-restart" onclick="restartMiranaTree()">Recommencer</button>
                     </div>
 
                     <div class="decision-result warning" id="mirana-result-sociale">
-                        <h4 style="color: #f59e0b;"><i class="fas fa-info-circle"></i> Phobie sociale à évoquer</h4>
+                        <h4 style="color: #c2410c;"><i class="fas fa-info-circle"></i> Phobie sociale à évoquer</h4>
                         <p style="color: var(--color-text-secondary);">Si l'évitement scolaire est lié à la peur du jugement des autres plutôt qu'à la séparation, envisager une anxiété sociale.</p>
                         <button class="btn-restart" onclick="restartMiranaTree()">Recommencer</button>
                     </div>
 
                     <div class="decision-result warning" id="mirana-result-generalisee">
-                        <h4 style="color: #f59e0b;"><i class="fas fa-info-circle"></i> Anxiété généralisée à évoquer</h4>
+                        <h4 style="color: #c2410c;"><i class="fas fa-info-circle"></i> Anxiété généralisée à évoquer</h4>
                         <p style="color: var(--color-text-secondary);">Si les inquiétudes sont multiples et concernent de nombreux domaines (santé, performance, avenir...), évoquer un TAG.</p>
                         <button class="btn-restart" onclick="restartMiranaTree()">Recommencer</button>
                     </div>
@@ -1249,7 +1249,7 @@
                         <tr>
                             <td>6</td>
                             <td>Refus de dormir hors de la maison</td>
-                            <td style="color: #f59e0b;">? À explorer</td>
+                            <td style="color: #c2410c;">? À explorer</td>
                         </tr>
                         <tr>
                             <td>7</td>
@@ -1324,7 +1324,7 @@
                     </div>
 
                     <div class="decision-result warning" id="tahiry-result-modere">
-                        <h4 style="color: #f59e0b;"><i class="fas fa-exclamation-triangle"></i> RISQUE MODÉRÉ - Vigilance renforcée</h4>
+                        <h4 style="color: #c2410c;"><i class="fas fa-exclamation-triangle"></i> RISQUE MODÉRÉ - Vigilance renforcée</h4>
                         <p style="color: var(--color-text-secondary);">Suivi ambulatoire rapproché possible si entourage fiable et engagement de la patiente. Contrat de non-passage à l'acte. Rendez-vous rapide en CMP.</p>
                         <button class="btn-restart" onclick="restartTahiryTree()">Recommencer</button>
                     </div>
@@ -1467,7 +1467,7 @@
                                 <li>Féliciter les efforts de l'enfant, même petits</li>
                             </ul>
                             <h4 style="color: var(--color-text-primary); margin-bottom: 0.5rem;">Ce qu'il faut éviter :</h4>
-                            <ul style="color: #f87171;">
+                            <ul style="color: #b91c1c;">
                                 <li>Les réassurances excessives (« il ne m'arrivera JAMAIS rien »)</li>
                                 <li>Les départs en cachette</li>
                                 <li>Céder au refus scolaire de façon prolongée</li>

@@ -12,17 +12,17 @@
     <style>
         /* Badge et couleurs Rehab - Sky Blue */
         .badge-rehab {
-            background: rgba(14, 165, 233, 0.15);
-            color: #38bdf8;
-            border: 1px solid rgba(14, 165, 233, 0.3);
+            background: rgba(6, 182, 212, 0.15);
+            color: #0e7490;
+            border: 1px solid rgba(6, 182, 212, 0.3);
         }
-        .question-number { background: linear-gradient(135deg, #0ea5e9, #0284c7); }
-        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(14, 165, 233, 0.15); }
-        .score-circle { border-color: #0ea5e9; box-shadow: var(--neo-pressed), 0 0 30px rgba(14, 165, 233, 0.2); }
-        .score-value { color: #38bdf8; }
-        .btn-primary { border-color: #0ea5e9; color: #38bdf8; }
-        .btn-primary:hover { background: linear-gradient(135deg, #0ea5e9, #0284c7); }
-        .progress-fill { background: linear-gradient(90deg, #0ea5e9, #38bdf8); box-shadow: 0 0 8px rgba(14, 165, 233, 0.4); }
+        .question-number { background: linear-gradient(135deg, #06b6d4, #0891b2); }
+        .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(6, 182, 212, 0.15); }
+        .score-circle { border-color: #06b6d4; box-shadow: var(--neo-pressed), 0 0 30px rgba(6, 182, 212, 0.2); }
+        .score-value { color: #0e7490; }
+        .btn-primary { border-color: #06b6d4; color: #0e7490; }
+        .btn-primary:hover { background: linear-gradient(135deg, #06b6d4, #0891b2); }
+        .progress-fill { background: linear-gradient(90deg, #06b6d4, #22d3ee); box-shadow: 0 0 8px rgba(6, 182, 212, 0.4); }
 
         /* Header Section */
         .header-section {
@@ -73,8 +73,8 @@
         .input-group input:focus,
         .input-group textarea:focus {
             outline: none;
-            border-color: #0ea5e9;
-            box-shadow: 0 0 15px rgba(14, 165, 233, 0.2);
+            border-color: #06b6d4;
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.2);
         }
 
         .input-group input::placeholder,
@@ -210,7 +210,7 @@
         .option-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            border-color: #0ea5e9;
+            border-color: #06b6d4;
         }
 
         .option-btn.selected.yes {
@@ -260,7 +260,7 @@
             background: rgba(255, 255, 255, 0.05);
             border-radius: 12px;
             padding: 20px;
-            border-left: 5px solid #0ea5e9;
+            border-left: 5px solid #06b6d4;
         }
 
         .summary-item h4 {
@@ -411,7 +411,7 @@
             width: 20px;
             height: 20px;
             cursor: pointer;
-            accent-color: #0ea5e9;
+            accent-color: #06b6d4;
         }
 
         /* Export Buttons */
@@ -900,12 +900,12 @@
                     datasets: [{
                         label: 'Niveau de Satisfaction',
                         data: data,
-                        backgroundColor: 'rgba(14, 165, 233, 0.2)',
-                        borderColor: 'rgba(14, 165, 233, 1)',
-                        pointBackgroundColor: 'rgba(14, 165, 233, 1)',
+                        backgroundColor: 'rgba(6, 182, 212, 0.2)',
+                        borderColor: 'rgba(6, 182, 212, 1)',
+                        pointBackgroundColor: 'rgba(6, 182, 212, 1)',
                         pointBorderColor: '#fff',
                         pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: 'rgba(14, 165, 233, 1)'
+                        pointHoverBorderColor: 'rgba(6, 182, 212, 1)'
                     }]
                 },
                 options: {

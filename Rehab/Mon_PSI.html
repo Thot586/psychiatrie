@@ -10,11 +10,11 @@
     <link rel="stylesheet" href="../css/questionnaire-light.css">
     <style>
         :root {
-            --cat-main: #0ea5e9;
-            --cat-dark: #0284c7;
-            --cat-light: #38bdf8;
-            --cat-rgb: 14, 165, 233;
-            --cat-readable: #0284c7;
+            --cat-main: #06b6d4;
+            --cat-dark: #0891b2;
+            --cat-light: #0e7490;
+            --cat-rgb: 6, 182, 212;
+            --cat-readable: #0e7490;
         }
         .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
         .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
@@ -573,7 +573,7 @@
 
                 <div style="margin-bottom: 20px;">
                     <h4><i class="fas fa-bullseye"></i> Objectifs</h4>
-                    <p style="background: rgba(14, 165, 233, 0.1) !important;">${domain.situation_souhaitee || 'Non renseigne'}</p>
+                    <p style="background: rgba(6, 182, 212, 0.1) !important;">${domain.situation_souhaitee || 'Non renseigne'}</p>
                 </div>
 
                 <div style="margin-bottom: 20px;">
@@ -720,7 +720,7 @@
             const stepX = width / (recentMoods.length - 1);
             const stepY = height / 5;
 
-            ctx.strokeStyle = '#0ea5e9';
+            ctx.strokeStyle = '#06b6d4';
             ctx.lineWidth = 2;
             ctx.beginPath();
 
@@ -735,7 +735,7 @@
                 }
 
                 // Draw point
-                ctx.fillStyle = '#0ea5e9';
+                ctx.fillStyle = '#06b6d4';
                 ctx.beginPath();
                 ctx.arc(x, y, 4, 0, 2 * Math.PI);
                 ctx.fill();

@@ -17,7 +17,7 @@
         :root {
             --cat-main: #14b8a6;
             --cat-dark: #0d9488;
-            --cat-light: #2dd4bf;
+            --cat-light: #0f766e;
             --cat-rgb: 20, 184, 166;
             --cat-readable: #0d9488;
         }
@@ -90,7 +90,7 @@
 
         <!-- Instructions -->
         <section class="glass-card">
-            <h3 style="margin-bottom: 1rem;">Pour chaque affirmation, veuillez indiquer si elle est "Pas vraie", "Un peu vraie" ou "Très vraie" pour votre enfant. Répondez du mieux que vous pouvez, meme si vous n'êtes pas absolument certain(e).</h3>
+            <h3 style="margin-bottom: 1rem;">Pour chaque affirmation, veuillez indiquer si elle est "Pas vraie", "Un peu vraie" ou "Très vraie" pour votre enfant. Répondez du mieux que vous pouvez, même si vous n'êtes pas absolument certain(e).</h3>
 
             <!-- Questions generees par JS -->
             <div id="questions"></div>
@@ -105,7 +105,7 @@
             <!-- Score total de difficultés -->
             <div class="score-display">
                 <div class="score-circle">
-                    <span class="score-value" id="totalScore">0</span>
+                    <span class="score-value" id="totalScore" role="status" aria-label="Score total">0</span>
                 </div>
                 <p class="score-label">Score total de difficultés (sur 40)</p>
             </div>

@@ -12,7 +12,7 @@
         :root {
             --cat-main: #f59e0b;
             --cat-dark: #d97706;
-            --cat-light: #fbbf24;
+            --cat-light: #b45309;
             --cat-rgb: 245, 158, 11;
             --cat-readable: #b45309;
         }
@@ -74,7 +74,7 @@
             <h3>Score de sévérité</h3>
             <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem; flex-wrap: wrap;">
               <div class="bigscore">
-                <span id="totalscore">0</span>
+                <span id="totalscore" role="status" aria-label="Score total">0</span>
                 <small>/ 36</small>
               </div>
               <div id="severity-badge"></div>

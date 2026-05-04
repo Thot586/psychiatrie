@@ -12,11 +12,11 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --cat-main: #0ea5e9;
-            --cat-dark: #0284c7;
-            --cat-light: #38bdf8;
-            --cat-rgb: 14, 165, 233;
-            --cat-readable: #0284c7;
+            --cat-main: #06b6d4;
+            --cat-dark: #0891b2;
+            --cat-light: #0e7490;
+            --cat-rgb: 6, 182, 212;
+            --cat-readable: #0e7490;
         }
         .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
         .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
@@ -187,17 +187,17 @@
                         <p style="color: var(--color-text-muted);">Une période caractérisée par le repli, le désespoir et la confusion concernant l'identité.</p>
                     </div>
 
-                    <div class="stage-card" style="border-left-color: #fbbf24;" onclick="showStageDescription(1)">
+                    <div class="stage-card" style="border-left-color: #b45309;" onclick="showStageDescription(1)">
                         <h5 style="color: var(--color-text-primary); margin-bottom: 10px;">2. Conscience</h5>
                         <p style="color: var(--color-text-muted);">La prise de conscience que le rétablissement est possible, souvent inspirée par d'autres.</p>
                     </div>
 
-                    <div class="stage-card" style="border-left-color: #fb923c;" onclick="showStageDescription(2)">
+                    <div class="stage-card" style="border-left-color: #9a3412;" onclick="showStageDescription(2)">
                         <h5 style="color: var(--color-text-primary); margin-bottom: 10px;">3. Preparation</h5>
                         <p style="color: var(--color-text-muted);">L'apprentissage actif sur la maladie et les stratégies de rétablissement.</p>
                     </div>
 
-                    <div class="stage-card" style="border-left-color: #0ea5e9;" onclick="showStageDescription(3)">
+                    <div class="stage-card" style="border-left-color: #06b6d4;" onclick="showStageDescription(3)">
                         <h5 style="color: var(--color-text-primary); margin-bottom: 10px;">4. Reconstruction</h5>
                         <p style="color: var(--color-text-muted);">Le travail actif pour construire une identité positive et atteindre des objectifs significatifs.</p>
                     </div>
@@ -254,7 +254,7 @@
             [
                 "Je ne pense pas que les gens qui ont une maladie psychique puissent aller mieux.",
                 "J'ai seulement récemment découvert que les gens avec une maladie psychique peuvent aller mieux.",
-                "Je commence a apprendre comment je peux faire des choses pour moi-meme pour aller mieux.",
+                "Je commence a apprendre comment je peux faire des choses pour moi-même pour aller mieux.",
                 "Je travaille dur pour aller bien, et cela en vaudra la peine sur le long terme.",
                 "J'ai maintenant un sentiment de paix intérieure au sujet de la vie avec la maladie."
             ],
@@ -279,7 +279,7 @@
                 "J'ai l'impression de ne plus savoir qui je suis.",
                 "J'ai récemment commence a reconnaître qu'une partie de moi n'est pas affectée par la maladie.",
                 "Je commence juste a réaliser que je peux toujours etre une personne de valeur.",
-                "J'apprends de nouvelles choses sur moi-meme alors que je travaille à mon rétablissement.",
+                "J'apprends de nouvelles choses sur moi-même alors que je travaille à mon rétablissement.",
                 "Je pense que le fait d'avoir travaille pour dépasser la maladie a fait de moi une personne meilleure."
             ],
             // Groupe 5
@@ -318,7 +318,7 @@
             [
                 "Les autres savent mieux que moi ce qui est bon pour moi.",
                 "J'aimerais commencer a apprendre a m'occuper de moi correctement.",
-                "Je commence a en apprendre davantage sur la maladie psychique et sur comment je peux m'aider moi-meme.",
+                "Je commence a en apprendre davantage sur la maladie psychique et sur comment je peux m'aider moi-même.",
                 "Je me sens maintenant raisonnablement confiant en ce qui concerne la gestion de la maladie.",
                 "Maintenant, je peux bien gérer la maladie."
             ],
@@ -333,7 +333,7 @@
         ];
 
         const stageNames = ["Moratoire", "Conscience", "Preparation", "Reconstruction", "Croissance"];
-        const stageColors = ["#6c757d", "#fbbf24", "#fb923c", "#0ea5e9", "#10b981"];
+        const stageColors = ["#6c757d", "#fbbf24", "#fb923c", "#06b6d4", "#10b981"];
 
         // Process mapping: which groups belong to which process
         const processMapping = {
@@ -552,11 +552,11 @@
                 const isCurrentStage = index === currentStage;
 
                 stagesHtml += `
-                    <div class="stage-card" style="border-left-color: ${stageColors[index]}; ${isCurrentStage ? 'background: linear-gradient(145deg, rgba(14, 165, 233, 0.2), rgba(14, 165, 233, 0.1));' : ''}" onclick="showStageDescription(${index})">
+                    <div class="stage-card" style="border-left-color: ${stageColors[index]}; ${isCurrentStage ? 'background: linear-gradient(145deg, rgba(6, 182, 212, 0.2), rgba(6, 182, 212, 0.1));' : ''}" onclick="showStageDescription(${index})">
                         <div class="stage-header">
                             <span class="stage-title">
                                 ${stageNames[index]}
-                                ${isCurrentStage ? '<i class="fas fa-check-circle" style="color: #0ea5e9;"></i>' : ''}
+                                ${isCurrentStage ? '<i class="fas fa-check-circle" style="color: #06b6d4;"></i>' : ''}
                             </span>
                             <span class="stage-score" style="background: ${stageColors[index]};">
                                 ${score}
@@ -629,10 +629,10 @@
                     datasets: [{
                         label: 'Score moyen',
                         data: Object.values(processScores),
-                        backgroundColor: 'rgba(14, 165, 233, 0.2)',
-                        borderColor: 'rgba(14, 165, 233, 0.8)',
+                        backgroundColor: 'rgba(6, 182, 212, 0.2)',
+                        borderColor: 'rgba(6, 182, 212, 0.8)',
                         borderWidth: 2,
-                        pointBackgroundColor: 'rgba(14, 165, 233, 1)',
+                        pointBackgroundColor: 'rgba(6, 182, 212, 1)',
                         pointBorderColor: '#fff',
                         pointRadius: 6,
                         pointHoverRadius: 8

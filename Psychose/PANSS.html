@@ -15,11 +15,11 @@
     <link rel="stylesheet" href="../css/questionnaire-light.css">
     <style>
         :root {
-            --cat-main: #7c3aed;
-            --cat-dark: #6d28d9;
-            --cat-light: #a78bfa;
-            --cat-rgb: 124, 58, 237;
-            --cat-readable: #6d28d9;
+            --cat-main: #6d28d9;
+            --cat-dark: #5b21b6;
+            --cat-light: #8b5cf6;
+            --cat-rgb: 109, 40, 217;
+            --cat-readable: #5b21b6;
         }
         .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
         .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
@@ -108,7 +108,7 @@
 
             <div class="score-display">
                 <div class="score-circle psychose">
-                    <span class="score-value" id="totalScore">0</span>
+                    <span class="score-value" id="totalScore" role="status" aria-label="Score total">0</span>
                 </div>
                 <p class="score-label">sur 210 points (score total)</p>
             </div>

@@ -17,7 +17,7 @@
         :root {
             --cat-main: #f59e0b;
             --cat-dark: #d97706;
-            --cat-light: #fbbf24;
+            --cat-light: #b45309;
             --cat-rgb: 245, 158, 11;
             --cat-readable: #b45309;
         }
@@ -279,7 +279,7 @@
         }
         .ysq-domain-chevron {
             transition: transform 0.3s ease;
-            color: #94a3b8;
+            color: #475569;
             font-size: 0.85rem;
         }
         .ysq-domain-header.collapsed .ysq-domain-chevron {
@@ -332,7 +332,7 @@
             font-size: 0.7rem;
             font-weight: 700;
             letter-spacing: 0.05em;
-            color: #94a3b8;
+            color: #475569;
             margin-left: 0.35rem;
         }
         .result-badges {
@@ -479,7 +479,7 @@
                         <span class="scale-legend-text">Le plus souvent faux</span>
                     </div>
                     <div class="scale-legend-item">
-                        <span class="scale-legend-number" style="background: rgba(251, 191, 36, 0.2); color: #fbbf24;">3</span>
+                        <span class="scale-legend-number" style="background: rgba(251, 191, 36, 0.2); color: #b45309;">3</span>
                         <span class="scale-legend-text">Plutot vrai que faux</span>
                     </div>
                     <div class="scale-legend-item">
@@ -507,7 +507,7 @@
             <h2><i class="fas fa-info-circle"></i> Instructions</h2>
             <p>
                 Lisez chaque affirmation et évaluez dans quelle mesure elle vous décrit.
-                <strong>Basez votre réponse sur ce que vous ressentez emotionnellement</strong>,
+                <strong>Basez votre réponse sur ce que vous ressentez émotionnellement</strong>,
                 et non pas sur ce que vous pensez rationnellement etre vrai pour vous.
             </p>
         </div>
@@ -586,7 +586,7 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 9, text: "J'ai rarement eu une personne forte pour me donner de bons conseils ou pour me guider lorsque je ne savais pas quoi faire.", schéma: "ed" },
 
         // Abandon (AB) - items 10-26
-        { id: 10, text: "Je suis préoccupé(e) par le fait que les gens que j'aime vont mourir bientot meme s'il y a peu de raisons médicales à ma préoccupation.", schéma: "ab" },
+        { id: 10, text: "Je suis préoccupé(e) par le fait que les gens que j'aime vont mourir bientôt même s'il y a peu de raisons médicales à ma préoccupation.", schéma: "ab" },
         { id: 11, text: "Je m'accroche aux gens dont je suis proche par peur qu'ils ne me quittent.", schéma: "ab" },
         { id: 12, text: "Je crains que les gens dont je me sens proche ne me quittent ou ne m'abandonnent.", schéma: "ab" },
         { id: 13, text: "J'ai le sentiment de manquer d'une base stable qui me soutienne affectivement.", schéma: "ab" },
@@ -595,14 +595,14 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 16, text: "Je finirai seul(e).", schéma: "ab" },
         { id: 17, text: "Quand je sens que quelqu'un a qui je tiens s'éloigne de moi, je deviens désespéré.", schéma: "ab" },
         { id: 18, text: "Quelquefois j'ai tellement peur que les gens m'abandonnent que je les repousse.", schéma: "ab" },
-        { id: 19, text: "Je deviens bouleverse(e) quand quelqu'un me laisse seul(e) meme pour une courte période.", schéma: "ab" },
+        { id: 19, text: "Je deviens bouleversé(e) quand quelqu'un me laisse seul(e) même pour une courte période.", schéma: "ab" },
         { id: 20, text: "Je ne peux compter sur la présence régulière de ceux qui me soutiennent.", schéma: "ab" },
         { id: 21, text: "Je ne peux me permettre d'etre vraiment proche des autres car je ne peux etre sur(e) qu'ils seront toujours la.", schéma: "ab" },
         { id: 22, text: "Il me semble que les personnes importantes dans ma vie sont toujours en train de venir et de repartir.", schéma: "ab" },
         { id: 23, text: "J'ai très peur que les personnes que j'aime ne trouvent quelqu'un d'autre qu'elles preferent et qu'elles m'abandonnent.", schéma: "ab" },
-        { id: 24, text: "Les gens qui me sont proches ont toujours ete très imprévisibles : un moment ils sont disponibles et gentils, puis, ils sont faches, contraries, querelleurs, preoccupes par eux-memes...", schéma: "ab" },
+        { id: 24, text: "Les gens qui me sont proches ont toujours été très imprévisibles : un moment ils sont disponibles et gentils, puis, ils sont fâchés, contrariés, querelleurs, préoccupés par eux-mêmes...", schéma: "ab" },
         { id: 25, text: "J'ai tellement besoin des autres que j'ai peur de les perdre.", schéma: "ab" },
-        { id: 26, text: "Je ne peux etre moi-meme ou exprimer ce que je ressens veritablement, sinon les autres vont me quitter.", schéma: "ab" },
+        { id: 26, text: "Je ne peux etre moi-même ou exprimer ce que je ressens veritablement, sinon les autres vont me quitter.", schéma: "ab" },
 
         // Méfiance / Abus (MA) - items 27-43
         { id: 27, text: "J'ai l'impression que les autres vont profiter de moi.", schéma: "ma" },
@@ -621,17 +621,17 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 40, text: "Je souscris à la croyance : \"Controle ou tu seras controle(e).\"", schéma: "ma" },
         { id: 41, text: "Je me mets en colère quand je pense aux facons dont j'ai été maltraité(e) par les autres tout au long de ma vie.", schéma: "ma" },
         { id: 42, text: "Tout au long de ma vie, mes proches ont profite de moi et m'ont utilise(e) a leurs propres desseins.", schéma: "ma" },
-        { id: 43, text: "J'ai été physiquement, emotionnellement, ou sexuellement abuse(e) par des personnes importantes de ma vie.", schéma: "ma" },
+        { id: 43, text: "J'ai été physiquement, émotionnellement, ou sexuellement abuse(e) par des personnes importantes de ma vie.", schéma: "ma" },
 
         // Isolement Social (SI) - items 44-53
         { id: 44, text: "Je ne suis pas adapté(e).", schéma: "si" },
         { id: 45, text: "Je suis fondamentalement différent(e) des autres.", schéma: "si" },
-        { id: 46, text: "Je suis a part ; je suis un(e) solitaire.", schéma: "si" },
+        { id: 46, text: "Je suis à part ; je suis un(e) solitaire.", schéma: "si" },
         { id: 47, text: "Je me sens etranger(ere) aux autres.", schéma: "si" },
         { id: 48, text: "Je me sens isolé(e) et seul(e).", schéma: "si" },
         { id: 49, text: "Je me sens toujours à l'extérieur des groupes.", schéma: "si" },
         { id: 50, text: "Personne ne me comprend vraiment.", schéma: "si" },
-        { id: 51, text: "Ma famille a toujours ete différente des autres familles.", schéma: "si" },
+        { id: 51, text: "Ma famille a toujours été différente des autres familles.", schéma: "si" },
         { id: 52, text: "J'ai parfois le sentiment d'etre un etranger.", schéma: "si" },
         { id: 53, text: "Si je disparaissais demain, personne ne le remarquerait.", schéma: "si" },
 
@@ -665,13 +665,13 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 77, text: "Je compare souvent mes réalisations a celles des autres et je trouve qu'ils réussissent beaucoup mieux.", schéma: "fa" },
 
         // Dépendance / Incompétence (DI) - items 78-92
-        { id: 78, text: "Je ne me sens pas capable de me debrouiller par moi-meme dans la vie de tous les jours.", schéma: "di" },
+        { id: 78, text: "Je ne me sens pas capable de me debrouiller par moi-même dans la vie de tous les jours.", schéma: "di" },
         { id: 79, text: "J'ai besoin des autres pour m'aider a m'en sortir.", schéma: "di" },
-        { id: 80, text: "Je n'ai pas le sentiment que je puisse bien m'adapter par moi-meme.", schéma: "di" },
-        { id: 81, text: "Je crois que les autres peuvent prendre soin de moi mieux que je ne le peux moi-meme.", schéma: "di" },
+        { id: 80, text: "Je n'ai pas le sentiment que je puisse bien m'adapter par moi-même.", schéma: "di" },
+        { id: 81, text: "Je crois que les autres peuvent prendre soin de moi mieux que je ne le peux moi-même.", schéma: "di" },
         { id: 82, text: "J'ai des difficultés a prendre en charge de nouvelles taches en dehors du travail a moins que quelqu'un ne me guide.", schéma: "di" },
         { id: 83, text: "Je me considéré comme une personne dépendante en ce qui concerne la vie de tous les jours.", schéma: "di" },
-        { id: 84, text: "Je bousille tout ce que j'entreprends, meme à l'extérieur du travail (ou de l'école).", schéma: "di" },
+        { id: 84, text: "Je bousille tout ce que j'entreprends, même à l'extérieur du travail (ou de l'école).", schéma: "di" },
         { id: 85, text: "Je suis stupide dans la plupart des domaines de la vie.", schéma: "di" },
         { id: 86, text: "Si je me fie à mon jugement dans la vie de tous les jours, je vais prendre la mauvaise decision.", schéma: "di" },
         { id: 87, text: "Je manque de bon sens.", schéma: "di" },
@@ -682,23 +682,23 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 92, text: "Je me sens depasse(e) par les responsabilites de tous les jours.", schéma: "di" },
 
         // Vulnérabilité (VU) - items 93-104
-        { id: 93, text: "Il ne me semble pas possible d'echapper au sentiment que quelque chose de mauvais va bientot se passer.", schéma: "vu" },
+        { id: 93, text: "Il ne me semble pas possible d'echapper au sentiment que quelque chose de mauvais va bientôt se passer.", schéma: "vu" },
         { id: 94, text: "J'ai l'impression qu'un desastre naturel, criminel, financier ou médical pourrait frapper a tout moment.", schéma: "vu" },
         { id: 95, text: "J'ai peur de devenir un(e) sans domicile fixe ou un(e) mendiant(e).", schéma: "vu" },
         { id: 96, text: "J'ai peur d'etre attaque(e).", schéma: "vu" },
         { id: 97, text: "Je prends de grandes précautions pour éviter de tomber malade ou d'etre blesse(e).", schéma: "vu" },
-        { id: 98, text: "J'ai peur d'avoir une maladie grave, meme si rien de serieux n'a été diagnostique par un médecin.", schéma: "vu" },
+        { id: 98, text: "J'ai peur d'avoir une maladie grave, même si rien de serieux n'a été diagnostique par un médecin.", schéma: "vu" },
         { id: 99, text: "Je suis quelqu'un de peureux(se).", schéma: "vu" },
         { id: 100, text: "Je me soucie beaucoup de ce qui va mal dans le monde : le crime, la pollution, etc.", schéma: "vu" },
         { id: 101, text: "J'ai souvent le sentiment que je pourrais devenir fou(folle).", schéma: "vu" },
         { id: 102, text: "J'ai souvent l'impression que je vais avoir une crise d'angoisse.", schéma: "vu" },
-        { id: 103, text: "J'ai souvent peur d'avoir une crise cardiaque ou un cancer, meme s'il y a peu de raisons médicales de s'en soucier.", schéma: "vu" },
+        { id: 103, text: "J'ai souvent peur d'avoir une crise cardiaque ou un cancer, même s'il y a peu de raisons médicales de s'en soucier.", schéma: "vu" },
         { id: 104, text: "Je pense que le monde est un endroit dangereux.", schéma: "vu" },
 
         // Fusion (EU) - items 105-115
         { id: 105, text: "Je n'ai pas pu me separer de ma mere ou de mon pere comme semblent le faire les gens de mon age.", schéma: "eu" },
         { id: 106, text: "Mes parents et moi avons tendance à etre sur-impliques dans nos vies et nos problèmes reciproques.", schéma: "eu" },
-        { id: 107, text: "Il est très difficile, pour mes parents et moi-meme, de garder secrets, chacun pour soi, certains details intimes, sans nous sentir trahis ou coupables.", schéma: "eu" },
+        { id: 107, text: "Il est très difficile, pour mes parents et moi-même, de garder secrets, chacun pour soi, certains details intimes, sans nous sentir trahis ou coupables.", schéma: "eu" },
         { id: 108, text: "Mes parents et moi devons nous parler presque tous les jours, sinon l'un de nous se sent coupable, blesse(e), decu(e), ou seul(e).", schéma: "eu" },
         { id: 109, text: "J'ai souvent l'impression de ne pas avoir une identité distincte de celle de mes parents ou de mon partenaire.", schéma: "eu" },
         { id: 110, text: "J'ai souvent l'impression que mes parents vivent à travers moi — je n'ai pas une vie qui me soit propre.", schéma: "eu" },
@@ -714,7 +714,7 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 117, text: "Je pense que si je fais ce que je veux, je cours apres les problèmes.", schéma: "sb" },
         { id: 118, text: "Je sens que je n'ai pas d'autre choix que de me soumettre aux souhaits des autres, sinon ils exerceront des represailles ou me rejetteront d'une facon ou d'une autre.", schéma: "sb" },
         { id: 119, text: "Dans mes relations, je laisse l'autre avoir le dessus sur moi.", schéma: "sb" },
-        { id: 120, text: "Je laisse toujours les autres choisir à ma place, si bien que je ne sais pas vraiment ce que je veux moi-meme.", schéma: "sb" },
+        { id: 120, text: "Je laisse toujours les autres choisir à ma place, si bien que je ne sais pas vraiment ce que je veux moi-même.", schéma: "sb" },
         { id: 121, text: "J'ai le sentiment que les décisions importantes de ma vie n'etaient pas vraiment les miennes.", schéma: "sb" },
         { id: 122, text: "Je me soucie beaucoup de plaire aux autres, pour qu'ils ne me rejettent pas.", schéma: "sb" },
         { id: 123, text: "J'ai beaucoup de difficultés a exiger que mes droits soient respectes et que mes sentiments soient pris en compte.", schéma: "sb" },
@@ -727,15 +727,15 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 128, text: "Je donne davantage aux autres que je ne recois en retour.", schéma: "ss" },
         { id: 129, text: "Je suis celui (celle) qui finit généralement par prendre soin des gens dont je suis proche.", schéma: "ss" },
         { id: 130, text: "Il n'y a presque rien que je ne puisse supporter lorsque j'aime quelqu'un.", schéma: "ss" },
-        { id: 131, text: "Je suis quelqu'un de bon car je pense aux autres plus qu'a moi-meme.", schéma: "ss" },
+        { id: 131, text: "Je suis quelqu'un de bon car je pense aux autres plus qu'a moi-même.", schéma: "ss" },
         { id: 132, text: "Au travail, je suis habituellement celui (celle) qui est volontaire pour faire des heures ou des taches supplementaires.", schéma: "ss" },
         { id: 133, text: "Meme si je suis très occupe(e), je trouve toujours du temps pour les autres.", schéma: "ss" },
         { id: 134, text: "Je peux m'en sortir avec vraiment très peu car mes besoins sont minimes.", schéma: "ss" },
         { id: 135, text: "Je ne suis heureux(se) que si les gens qui m'entourent le sont aussi.", schéma: "ss" },
         { id: 136, text: "Je suis tellement occupe(e) à me devouer pour les gens qui m'importent que j'ai très peu de temps pour moi.", schéma: "ss" },
-        { id: 137, text: "J'ai toujours ete celui (celle) qui écoute les problèmes des autres.", schéma: "ss" },
+        { id: 137, text: "J'ai toujours été celui (celle) qui écoute les problèmes des autres.", schéma: "ss" },
         { id: 138, text: "Je me sens plus à l'aise pour donner un cadeau que pour en recevoir un.", schéma: "ss" },
-        { id: 139, text: "On me voit comme quelqu'un qui en fait trop pour les autres et pas assez pour lui-meme.", schéma: "ss" },
+        { id: 139, text: "On me voit comme quelqu'un qui en fait trop pour les autres et pas assez pour lui-même.", schéma: "ss" },
         { id: 140, text: "Peu importe combien je donne, ce n'est jamais assez.", schéma: "ss" },
         { id: 141, text: "Si je fais ce que je veux, je me sens vraiment mal à l'aise.", schéma: "ss" },
         { id: 142, text: "Il m'est vraiment difficile de demander aux autres de se soucier de mes besoins.", schéma: "ss" },
@@ -790,14 +790,14 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 182, text: "Si je ne peux pas atteindre un but, je suis facilement frustre(e) et j'abandonne.", schéma: "is" },
         { id: 183, text: "Il m'est très difficile de sacrifier une gratification immédiate pour mener a bien un projet à long terme.", schéma: "is" },
         { id: 184, text: "Quand je me mets en colère, il est frequent que je ne puisse pas du tout me contrôler.", schéma: "is" },
-        { id: 185, text: "J'ai tendance à abuser de certaines choses, meme si je sais que c'est mauvais pour moi.", schéma: "is" },
+        { id: 185, text: "J'ai tendance à abuser de certaines choses, même si je sais que c'est mauvais pour moi.", schéma: "is" },
         { id: 186, text: "Je m'ennuie très facilement.", schéma: "is" },
         { id: 187, text: "Quand les taches deviennent difficiles, je ne peux souvent pas perseverer pour les terminer.", schéma: "is" },
         { id: 188, text: "Je ne peux pas me concentrer longtemps sur quoi que ce soit.", schéma: "is" },
-        { id: 189, text: "Je ne peux pas me forcer à faire des choses qui ne me plaisent pas meme quand je sais que c'est pour mon bien.", schéma: "is" },
+        { id: 189, text: "Je ne peux pas me forcer à faire des choses qui ne me plaisent pas même quand je sais que c'est pour mon bien.", schéma: "is" },
         { id: 190, text: "Je me mets en colère à la moindre offense.", schéma: "is" },
-        { id: 191, text: "J'ai rarement ete capable de tenir mes engagements.", schéma: "is" },
-        { id: 192, text: "Je ne peux presque jamais m'empecher de montrer aux gens mes véritables sentiments, meme si cela doit me coûter cher.", schéma: "is" },
+        { id: 191, text: "J'ai rarement été capable de tenir mes engagements.", schéma: "is" },
+        { id: 192, text: "Je ne peux presque jamais m'empecher de montrer aux gens mes véritables sentiments, même si cela doit me coûter cher.", schéma: "is" },
         { id: 193, text: "J'agis souvent impulsivement et je le regrette plus tard.", schéma: "is" },
 
         // DOMAINE V — Manque de Limites
@@ -832,16 +832,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Punition (PU) - items 219-232
         { id: 219, text: "Si je fais une erreur, je mérite d'etre puni(e).", schéma: "pu" },
-        { id: 220, text: "Si je ne donne pas le meilleur de moi-meme, je dois m'attendre a echouer.", schéma: "pu" },
+        { id: 220, text: "Si je ne donne pas le meilleur de moi-même, je dois m'attendre a echouer.", schéma: "pu" },
         { id: 221, text: "Je n'ai aucune excuse si je fais une erreur.", schéma: "pu" },
         { id: 222, text: "Les gens qui ne font pas leur part de travail a fond devraient etre punis d'une maniere ou d'une autre.", schéma: "pu" },
         { id: 223, text: "La plupart du temps, je n'accepte pas les excuses des autres : ils n'ont pas pris leurs responsabilites et ils en paient les consequences.", schéma: "pu" },
         { id: 224, text: "Si je ne fais pas mon travail, je devrai en subir les consequences.", schéma: "pu" },
-        { id: 225, text: "Je pense souvent à mes erreurs passees et je me mets en colère contre moi-meme.", schéma: "pu" },
+        { id: 225, text: "Je pense souvent à mes erreurs passees et je me mets en colère contre moi-même.", schéma: "pu" },
         { id: 226, text: "Lorsque les gens font quelque chose de mal, j'ai du mal à appliquer la phrase : \"pardonnez et oubliez\".", schéma: "pu" },
-        { id: 227, text: "Je garde de la rancune envers les gens, meme s'ils se sont excuses.", schéma: "pu" },
+        { id: 227, text: "Je garde de la rancune envers les gens, même s'ils se sont excuses.", schéma: "pu" },
         { id: 228, text: "Je me sens enerve(e) à l'idee que quelqu'un s'est tire trop facilement d'un mauvais pas.", schéma: "pu" },
-        { id: 229, text: "Je me mets en colère lorsque des gens se trouvent des excuses, ou lorsqu'ils accusent les autres pour des problèmes dont ils sont eux-memes responsables.", schéma: "pu" },
+        { id: 229, text: "Je me mets en colère lorsque des gens se trouvent des excuses, ou lorsqu'ils accusent les autres pour des problèmes dont ils sont eux-mêmes responsables.", schéma: "pu" },
         { id: 230, text: "Peu importe les raisons, quand je fais une erreur, je devrais en payer le prix.", schéma: "pu" },
         { id: 231, text: "Je m'en veux enormement lorsque je bousille quelque chose.", schéma: "pu" },
         { id: 232, text: "Je suis quelqu'un de mauvais qui mérite d'etre puni.", schéma: "pu" }
@@ -1155,7 +1155,7 @@ document.addEventListener('DOMContentLoaded', () => {
         sb: "Soumission excessive aux autres par crainte de leur colère, de l'abandon ou de represailles.",
         ss: "Sacrifice excessif de vos propres besoins pour satisfaire ceux des autres.",
         ei: "Inhibition excessive des émotions, des actions ou de la communication pour éviter la critiqué.",
-        us: "Standards personnels très élevés et critiques envers soi-meme, perfectionnisme.",
+        us: "Standards personnels très élevés et critiques envers soi-même, perfectionnisme.",
         et: "Croyance d'etre supérieur aux autres, d'avoir des droits et privileges speciaux.",
         is: "Difficulte a exercer un controle suffisant sur ses émotions et ses impulsions.",
         as: "Recherche excessive de l'attention, de l'approbation et de la reconnaissance des autres.",

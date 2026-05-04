@@ -13,7 +13,7 @@
         :root {
             --cat-main: #f59e0b;
             --cat-dark: #d97706;
-            --cat-light: #fbbf24;
+            --cat-light: #b45309;
             --cat-rgb: 245, 158, 11;
             --cat-readable: #b45309;
         }
@@ -109,7 +109,7 @@
                     <div class="mean-label">Score moyen (0-4)</div>
                 </div>
                 <div class="mean-score">
-                    <div class="mean-value" id="totalScore">0</div>
+                    <div class="mean-value" id="totalScore" role="status" aria-label="Score total">0</div>
                     <div class="mean-label">Score brut (0-92)</div>
                 </div>
             </div>
@@ -130,7 +130,7 @@
             <div id="interpretationBox" class="interprétation"></div>
 
             <div id="criticalAlert" class="danger-box" style="display: none;">
-                <h3><i class="fas fa-exclamation-circle"></i> Alerte - Item critiqué</h3>
+                <h3><i class="fas fa-exclamation-circle"></i> Alerte - Item critique</h3>
                 <p id="criticalAlertText"></p>
             </div>
 
@@ -446,7 +446,7 @@
             } else {
                 recommendationsHTML += `
                     <div class="differential-item" style="border-color: rgba(239, 68, 68, 0.5);">
-                        <h4 style="color: #f87171;">Intervention urgente</h4>
+                        <h4 style="color: #b91c1c;">Intervention urgente</h4>
                         <p>Évaluation psychiatrique complète recommandée. Considération d'une hospitalisation (temps complet ou de jour) si risque élevé ou détérioration fonctionnelle majeure.</p>
                     </div>
                     <div class="differential-item">

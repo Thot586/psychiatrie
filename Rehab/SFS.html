@@ -12,11 +12,11 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --cat-main: #0ea5e9;
-            --cat-dark: #0284c7;
-            --cat-light: #38bdf8;
-            --cat-rgb: 14, 165, 233;
-            --cat-readable: #0284c7;
+            --cat-main: #06b6d4;
+            --cat-dark: #0891b2;
+            --cat-light: #0e7490;
+            --cat-rgb: 6, 182, 212;
+            --cat-readable: #0e7490;
         }
         .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
         .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
@@ -81,7 +81,7 @@
         <!-- Results Section -->
         <div id="resultsSection" class="results-section" aria-live="polite">
             <div class="score-display">
-                <div class="total-score" id="totalScore">0</div>
+                <div class="total-score" id="totalScore" role="status" aria-label="Score total">0</div>
                 <div class="score-label">Score global moyen</div>
             </div>
 
@@ -154,7 +154,7 @@ document.addEventListener('DOMContentLoaded', function() {
             icon: "fa-tasks",
             description: "Activites quotidiennes effectuees",
             questions: [
-                { id: "ip1", text: "J'ai fait mes courses moi-meme" },
+                { id: "ip1", text: "J'ai fait mes courses moi-même" },
                 { id: "ip2", text: "J'ai prepare mes repas" },
                 { id: "ip3", text: "J'ai fait le ménage ou le rangement de mon lieu de vie" },
                 { id: "ip4", text: "J'ai gere mes affaires administratives (factures, courrier, RDV)" }
