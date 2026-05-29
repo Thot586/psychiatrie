@@ -2,7 +2,9 @@
    Dark Theme Template - Design System
    ======================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+/* Polices et icônes vendorisées localement (hors-ligne) — voir /vendor */
+@import url('../vendor/fonts/fonts.css');
+@import url('../vendor/font-awesome/css/all.min.css');
 
 /* ========================================
    Variables CSS - Palette & Tokens
