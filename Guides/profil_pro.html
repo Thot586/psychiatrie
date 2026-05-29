@@ -13,16 +13,10 @@
     <!-- Critical CSS -->
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/questionnaire-light.css">
-    <!-- Font Awesome — async (non-bloquant) -->
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
-    <!-- Chart.js — defer (non-bloquant, execute apres parsing) -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
-    <!-- Google Fonts — async (non-bloquant) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Lexend:wght@700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Lexend:wght@700&display=swap"></noscript>
+    <!-- Dépendances vendorisées localement (fonctionne hors-ligne) -->
+    <link rel="stylesheet" href="../vendor/font-awesome/css/all.min.css">
+    <link rel="stylesheet" href="../vendor/fonts/fonts.css">
+    <script src="../vendor/chartjs/chart.umd.min.js" defer></script>
     <style>
         /* Font fallback with size-adjust to reduce CLS during font swap */
         @font-face {
@@ -67,7 +61,7 @@
 
         .page-header h1 {
             font-size: 2.5rem;
-            color: #0d7c72;
+            color: var(--brand-teal);
             margin-bottom: 0.5rem;
         }
 
@@ -88,7 +82,7 @@
 
         .intro-card h2 {
             font-size: 1.5rem;
-            color: #0d7c72;
+            color: var(--brand-teal);
             margin: 0 0 1rem 0;
         }
 
@@ -109,7 +103,7 @@
             cursor: pointer;
             font: inherit;
             font-size: 0.9rem;
-            color: #0d7c72;
+            color: var(--brand-teal);
             transition: background 0.2s;
         }
 
@@ -123,7 +117,7 @@
 
         .intro-toggle {
             font-size: 1.2rem;
-            color: #0d7c72;
+            color: var(--brand-teal);
             font-weight: bold;
             margin-left: auto;
         }
@@ -172,12 +166,12 @@
             margin-top: 0.5rem;
         }
 
-        .références-section {
+        .references-section {
             margin-top: 1.5rem;
             border-top: 1px solid var(--color-border);
             padding-top: 1rem;
         }
-        .références-toggle {
+        .references-toggle {
             background: none;
             border: none;
             color: #475569;
@@ -190,26 +184,26 @@
             gap: 0.5rem;
             padding: 0.5rem 0;
         }
-        .références-toggle:hover { color: #0d7c72; }
-        .références-toggle .icon {
+        .references-toggle:hover { color: var(--brand-teal); }
+        .references-toggle .icon {
             transition: transform 0.3s ease;
             font-size: 0.75rem;
         }
-        .références-toggle.open .icon { transform: rotate(90deg); }
-        .références-list {
+        .references-toggle.open .icon { transform: rotate(90deg); }
+        .references-list {
             display: none;
             padding: 1rem 0;
         }
-        .références-list.visible { display: block; }
-        .références-list h4 {
+        .references-list.visible { display: block; }
+        .references-list h4 {
             color: #475569;
             font-size: 0.85rem;
             margin: 1rem 0 0.5rem 0;
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
-        .références-list h4:first-child { margin-top: 0; }
-        .références-list p {
+        .references-list h4:first-child { margin-top: 0; }
+        .references-list p {
             color: var(--color-text-muted);
             font-size: 0.8rem;
             line-height: 1.6;
@@ -219,16 +213,6 @@
         }
 
         /* Quiz */
-        .quiz-progress {
-            position: sticky; top: 70px; z-index: 50;
-            background: #f8fafc;
-            padding: 0.75rem 1.25rem; margin: -1.25rem -1.5rem 1.5rem;
-            border-bottom: 1px solid var(--color-border);
-            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
-        .quiz-progress .progress-bar { height: 6px; background: #e2e8f0; border-radius: 3px; margin-top: 0.5rem; box-shadow: inset 2px 2px 4px rgba(0,0,0,0.06), inset -2px -2px 4px rgba(255,255,255,0.8); }
-        .quiz-progress .progress-fill { height: 100%; background: linear-gradient(90deg, #14b8a6, #0d9488); border-radius: 3px; transition: width 0.3s ease; width: 0%; }
         .quiz-axis-header {
             display: flex; align-items: center; gap: 0.75rem;
             padding: 0.75rem 0; margin: 1.75rem 0 0.75rem;
@@ -253,7 +237,7 @@
         .quiz-global-instruction {
             background: rgba(13, 148, 136, 0.08); border: 1px solid rgba(13, 148, 136, 0.2);
             border-radius: 12px; padding: 0.85rem 1.25rem; margin: 1rem 0 1.5rem;
-            font-size: 0.88rem; color: #0f766e; line-height: 1.5;
+            font-size: 0.88rem; color: var(--brand-teal-deep); line-height: 1.5;
             display: flex; align-items: flex-start; gap: 0.6rem;
         }
         .quiz-global-instruction i { margin-top: 0.15rem; flex-shrink: 0; }
@@ -272,7 +256,7 @@
             box-shadow: 4px 4px 8px rgba(0,0,0,0.06), -4px -4px 8px rgba(255,255,255,0.9);
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
-        .quiz-pole-panel.pole-a { border-left-color: #0f766e; }
+        .quiz-pole-panel.pole-a { border-left-color: var(--brand-teal-deep); }
         .quiz-pole-panel.pole-b { border-left-color: #c2410c; }
         .quiz-pole-panel.pole-answered {
             box-shadow: 4px 4px 8px rgba(0,0,0,0.06), -4px -4px 8px rgba(255,255,255,0.9), 0 0 12px rgba(13, 148, 136, 0.15);
@@ -281,7 +265,7 @@
             font-size: 0.9rem; font-weight: 700; margin-bottom: 0.75rem;
             line-height: 1.3;
         }
-        .quiz-pole-panel.pole-a .quiz-pole-title { color: #0f766e; }
+        .quiz-pole-panel.pole-a .quiz-pole-title { color: var(--brand-teal-deep); }
         .quiz-pole-panel.pole-b .quiz-pole-title { color: #c2410c; }
         .quiz-intensity-option { margin-bottom: 0.35rem; }
         .quiz-intensity-option:last-child { margin-bottom: 0; }
@@ -312,10 +296,10 @@
             background: rgba(15, 118, 110, 0.08); border-color: rgba(15, 118, 110, 0.3);
         }
         .pole-a .quiz-intensity-input:checked + .quiz-intensity-label .quiz-intensity-dot {
-            border-color: #0f766e;
+            border-color: var(--brand-teal-deep);
         }
         .pole-a .quiz-intensity-input:checked + .quiz-intensity-label .quiz-intensity-dot::after {
-            background: #0f766e;
+            background: var(--brand-teal-deep);
         }
         .pole-b .quiz-intensity-input:checked + .quiz-intensity-label {
             background: rgba(194, 65, 12, 0.08); border-color: rgba(194, 65, 12, 0.3);
@@ -367,7 +351,7 @@
         }
         .btn-quiz-submit {
             display: block; width: 100%; padding: 1.1rem; margin-top: 2rem;
-            background: linear-gradient(145deg, #0d9488, #065f56); color: white;
+            background: linear-gradient(145deg, var(--brand-teal-2), var(--brand-teal-dark)); color: white;
             border: none; border-radius: 14px; font-size: 1.05rem; font-weight: 700;
             cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 6px 6px 14px rgba(0,0,0,0.12), -4px -4px 10px rgba(255,255,255,0.8);
@@ -384,7 +368,7 @@
         .btn-quiz-submit:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
         .profile-result { background: var(--surface-card); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1rem; box-shadow: var(--neo-raised); text-align: center; }
         .profile-result .result-icon { font-size: 3rem; margin-bottom: 0.5rem; }
-        .profile-result .result-title { font-size: 1.5rem; color: #0d7c72; font-family: 'Lexend', sans-serif; margin: 0; }
+        .profile-result .result-title { font-size: 1.5rem; color: var(--brand-teal); font-family: 'Lexend', sans-serif; margin: 0; }
         .profile-result .result-summary { color: var(--color-text-muted); font-style: italic; margin: 0.5rem 0; }
         .profile-result .result-match { font-size: 0.85rem; color: var(--color-text-dimmed); }
         .profile-result.complementary { border-top: 4px solid #fb923c; }
@@ -411,7 +395,7 @@
             border: 2px solid var(--color-border);
             transition: border-color 0.3s ease;
         }
-        .top-profile-card[data-rank="1"] { border-color: #0d9488; border-width: 3px; }
+        .top-profile-card[data-rank="1"] { border-color: var(--brand-teal-2); border-width: 3px; }
         .top-profile-card[data-rank="2"] { border-color: rgba(13, 148, 136, 0.4); }
         .top-profile-card[data-rank="3"] { border-color: rgba(100, 116, 139, 0.3); }
         .top-profile-header {
@@ -422,13 +406,13 @@
             align-items: center; justify-content: center; font-weight: 800;
             font-size: 1rem; flex-shrink: 0; font-family: 'Lexend', sans-serif;
         }
-        .top-profile-card[data-rank="1"] .rank-badge { background: linear-gradient(145deg, #0d9488, #065f56); color: white; }
-        .top-profile-card[data-rank="2"] .rank-badge { background: linear-gradient(145deg, #14b8a6, #0d9488); color: white; }
-        .top-profile-card[data-rank="3"] .rank-badge { background: #e2e8f0; color: #64748b; }
+        .top-profile-card[data-rank="1"] .rank-badge { background: linear-gradient(145deg, var(--brand-teal-2), var(--brand-teal-dark)); color: white; }
+        .top-profile-card[data-rank="2"] .rank-badge { background: linear-gradient(145deg, var(--brand-teal-light), var(--brand-teal-2)); color: white; }
+        .top-profile-card[data-rank="3"] .rank-badge { background: #e2e8f0; color: #475569; }
         .top-profile-icon { font-size: 2rem; flex-shrink: 0; }
         .top-profile-info { flex: 1; min-width: 0; }
         .top-profile-title {
-            font-size: 1.15rem; font-weight: 700; color: #0d7c72;
+            font-size: 1.15rem; font-weight: 700; color: var(--brand-teal);
             font-family: 'Lexend', sans-serif; margin: 0;
         }
         .top-profile-card[data-rank="1"] .top-profile-title { font-size: 1.3rem; }
@@ -444,15 +428,15 @@
             height: 100%; border-radius: 5px;
             transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .top-profile-card[data-rank="1"] .concordance-fill { background: linear-gradient(90deg, #0d9488, #14b8a6); }
-        .top-profile-card[data-rank="2"] .concordance-fill { background: linear-gradient(90deg, #14b8a6, #5eead4); }
+        .top-profile-card[data-rank="1"] .concordance-fill { background: linear-gradient(90deg, var(--brand-teal-2), var(--brand-teal-light)); }
+        .top-profile-card[data-rank="2"] .concordance-fill { background: linear-gradient(90deg, var(--brand-teal-light), #5eead4); }
         .top-profile-card[data-rank="3"] .concordance-fill { background: #94a3b8; }
         .concordance-pct {
             font-size: 1rem; font-weight: 800; min-width: 48px; text-align: right;
             font-family: 'Lexend', sans-serif;
         }
-        .top-profile-card[data-rank="1"] .concordance-pct { color: #0d7c72; font-size: 1.15rem; }
-        .top-profile-card[data-rank="2"] .concordance-pct { color: #0d9488; }
+        .top-profile-card[data-rank="1"] .concordance-pct { color: var(--brand-teal); font-size: 1.15rem; }
+        .top-profile-card[data-rank="2"] .concordance-pct { color: var(--brand-teal-2); }
         .top-profile-card[data-rank="3"] .concordance-pct { color: #64748b; }
         .concordance-label {
             font-size: 0.75rem; color: var(--color-text-dimmed); font-style: italic;
@@ -464,11 +448,11 @@
         }
         .top-profile-details-toggle {
             display: inline-flex; align-items: center; gap: 0.4rem;
-            background: none; border: none; color: #0d9488; cursor: pointer;
+            background: none; border: none; color: var(--brand-teal-2); cursor: pointer;
             font-size: 0.85rem; font-weight: 600; padding: 0.5rem 0; margin-top: 0.5rem;
             transition: color 0.2s;
         }
-        .top-profile-details-toggle:hover { color: #065f56; }
+        .top-profile-details-toggle:hover { color: var(--brand-teal-dark); }
         .top-profile-details-toggle i { transition: transform 0.3s ease; }
         .top-profile-details-toggle.open i { transform: rotate(180deg); }
         .top-profile-details-body {
@@ -502,7 +486,7 @@
 
         .sidebar-title {
             font-size: 1.5rem;
-            color: #0d7c72;
+            color: var(--brand-teal);
             margin-bottom: 1.5rem;
             text-align: center;
         }
@@ -546,17 +530,22 @@
 
         .accordion-header:active {
             transform: scale(0.99);
-            box-shadow: var(--neo-inset);
+            box-shadow: var(--neo-pressed);
+        }
+
+        .accordion-header:focus-visible {
+            outline: 2px solid #0369a1;
+            outline-offset: 2px;
         }
 
         .accordion-header.active {
             background: rgba(13, 124, 114, 0.15);
-            border-left-color: #0d7c72;
+            border-left-color: var(--brand-teal);
         }
 
         .accordion-header h3 {
             font-size: 1rem;
-            color: #0d7c72;
+            color: var(--brand-teal);
             margin: 0 0 0.25rem 0;
         }
 
@@ -567,7 +556,7 @@
         }
 
         .accordion-header .icon {
-            color: #0d7c72;
+            color: var(--brand-teal);
             font-weight: bold;
             font-size: 1.25rem;
             transition: transform 0.3s ease;
@@ -628,7 +617,7 @@
 
         .axis-title {
             font-size: 1.875rem;
-            color: #0d7c72;
+            color: var(--brand-teal);
             text-align: center;
             margin-bottom: 0.5rem;
         }
@@ -671,7 +660,7 @@
         .profile-card {
             background: var(--surface-card);
             border: 1px solid var(--color-border);
-            border-top: 4px solid #0d9488;
+            border-top: 4px solid var(--brand-teal-2);
             border-radius: var(--radius-xl);
             padding: 1.5rem;
             display: flex;
@@ -713,7 +702,7 @@
             margin-top: 0.5rem;
             padding: 0.5rem 0.75rem;
             background: rgba(13, 124, 114, 0.06);
-            border-left: 3px solid #0d9488;
+            border-left: 3px solid var(--brand-teal-2);
             border-radius: 0 8px 8px 0;
         }
 
@@ -737,7 +726,7 @@
             border: none;
             border-radius: 10px;
             background: #e8edf2;
-            color: #64748b;
+            color: #475569;
             cursor: pointer;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 3px 3px 6px rgba(0,0,0,0.1), -3px -3px 6px rgba(255,255,255,0.9);
@@ -745,7 +734,7 @@
         }
 
         .profile-tab:hover {
-            color: #0d7c72;
+            color: var(--brand-teal);
             box-shadow: 4px 4px 8px rgba(0,0,0,0.12), -4px -4px 8px rgba(255,255,255,0.95);
             transform: translateY(-1px);
         }
@@ -756,7 +745,7 @@
         }
 
         .profile-tab.tab-active {
-            background: linear-gradient(145deg, #0d9488, #0a7a70);
+            background: linear-gradient(145deg, var(--brand-teal-2), var(--brand-teal-mid));
             color: #ffffff;
             font-weight: 700;
             box-shadow: 2px 2px 6px rgba(13, 148, 136, 0.35), -1px -1px 3px rgba(255,255,255,0.3), inset 1px 1px 2px rgba(255,255,255,0.15);
@@ -770,7 +759,7 @@
 
         .profile-tab.tab-inactive {
             background: #e8edf2;
-            color: #64748b;
+            color: #475569;
         }
 
         /* Profile content */
@@ -896,7 +885,7 @@
             left: 1rem;
             z-index: 9999;
             padding: 0.75rem 1.25rem;
-            background: #0d7c72;
+            background: var(--brand-teal);
             color: #fff;
             border-radius: 0 0 8px 8px;
             font-weight: 600;
@@ -924,13 +913,127 @@
             .navigation-bar, .footer { display: none !important; }
             body { background: white !important; }
             body::before { display: none !important; }
-            .intro-card, .details-panel, .profile-card, .accordion-item {
+            .intro-card, .details-panel, .profile-card, .accordion-item,
+            .quiz-question, .top-profile-card, .result-tab-content, .quiz-pole-panel,
+            .axis-gauge-row, .profile-result {
                 background: white !important;
                 border: 1px solid #ccc !important;
                 color: black !important;
             }
-            h1, h2, h3 { color: #0d9488 !important; }
+            h1, h2, h3 { color: var(--brand-teal-2) !important; }
             p { color: #333 !important; }
+            .quiz-question, .top-profile-card, .result-tab-content, .quiz-pole-panel,
+            .axis-gauge-row, .profile-result, .tabs-container, .result-tabs,
+            .accordion-item, .intro-card, .details-panel, .profile-card { box-shadow: none !important; }
+            details > *:not(summary) { display: block !important; }
+            .top-profile-details-body, #science-details, #binome-detail,
+            .references-list { display: block !important; }
+            .profile-content[hidden] { display: block !important; }
+        }
+    </style>
+    <style id="result-styles">
+        :root {
+            --brand-teal: #0d7c72;
+            --brand-teal-2: #0d9488;
+            --brand-teal-dark: #065f56;
+            --brand-teal-deep: #0f766e;
+            --brand-teal-mid: #0a7a70;
+            --brand-teal-light: #14b8a6;
+        }
+        .concordance-pct-band {
+            font-family: 'Lexend', sans-serif; font-weight: 700; font-size: 0.9rem;
+            color: var(--brand-teal); min-width: auto; white-space: nowrap;
+        }
+
+        .profiles-details { margin-top: 1.5rem; }
+        .profiles-details > summary {
+            cursor: pointer; list-style: none; font-family: 'Lexend', sans-serif; font-weight: 600;
+            font-size: 0.95rem; color: var(--brand-teal); padding: 0.85rem 1.25rem; border-radius: 12px;
+            background: rgba(13,124,114,0.06); border: 1px solid rgba(13,124,114,0.2);
+            display: flex; align-items: center; gap: 0.6rem; transition: background 0.2s;
+        }
+        .profiles-details > summary::-webkit-details-marker { display: none; }
+        .profiles-details > summary:hover { background: rgba(13,124,114,0.12); }
+        .profiles-details[open] > summary { border-radius: 12px 12px 0 0; }
+        body.light-questionnaire .profiles-details > summary { background: rgba(13,124,114,0.06); color: var(--brand-teal); }
+        body.light-questionnaire .profiles-details > summary:hover { background: rgba(13,124,114,0.12); color: var(--brand-teal); }
+        body.light-questionnaire .profiles-details[open] > summary { background: rgba(13,124,114,0.12); color: var(--brand-teal); }
+        .profiles-details-body { padding-top: 1.5rem; }
+        .profiles-details-intro { color: var(--color-text-dimmed); font-size: 0.85rem; font-style: italic; margin: 0 0 1.5rem; }
+
+        #axis-gauges h3.protoB-title { font-size: 1.15rem; color: var(--brand-teal); margin: 0 0 0.35rem; }
+        #axis-gauges .protoB-intro { color: var(--color-text-muted); font-size: 0.88rem; margin: 0 0 1.5rem; }
+
+        #binome-head .result-icon { font-size: 2.5rem; }
+        .explore-binomes { margin-top: 1rem; }
+        body.light-questionnaire .explore-binomes > summary {
+            cursor: pointer; list-style: none; display: inline-flex; align-items: center; gap: 0.4rem;
+            background: none; box-shadow: none; border-radius: 0; padding: 0.5rem 0; transform: none;
+            color: var(--brand-teal); font-weight: 600; font-size: 0.85rem; font-family: 'Lexend', sans-serif;
+        }
+        body.light-questionnaire .explore-binomes > summary:hover { background: none; box-shadow: none; transform: none; color: var(--brand-teal-mid); }
+        body.light-questionnaire .explore-binomes[open] > summary { background: none; border-radius: 0; color: var(--brand-teal); }
+        .explore-binomes > summary::-webkit-details-marker { display: none; }
+        .explore-binomes > summary::before { content: '▸'; display: inline-block; transition: transform 0.2s ease; }
+        .explore-binomes[open] > summary::before { transform: rotate(90deg); }
+        .binome-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem; }
+        .binome-chip {
+            font: inherit; font-size: 0.8rem; cursor: pointer; padding: 0.4rem 0.75rem; border-radius: 999px;
+            border: 1px solid var(--color-border); background: #fff; color: #475569;
+            display: inline-flex; align-items: center; gap: 0.35rem; transition: all 0.15s ease;
+        }
+        .binome-chip:hover { border-color: var(--brand-teal-2); color: var(--brand-teal); }
+        .binome-chip.chip-active { background: linear-gradient(145deg, var(--brand-teal-2), var(--brand-teal-mid)); color: #fff; border-color: transparent; }
+        .axis-gauge-row {
+            background: #f8fafc; border-radius: 16px; padding: 1.25rem 1.5rem; margin-bottom: 1.25rem;
+            box-shadow: 6px 6px 14px rgba(0,0,0,0.06), -6px -6px 14px rgba(255,255,255,0.85);
+        }
+        .axis-gauge-head { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 1rem; }
+        .axis-gauge-num {
+            width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Lexend',sans-serif; font-weight: 800; font-size: 0.8rem;
+            background: #e2e8f0; color: #475569;
+        }
+        .axis-gauge-title { font-family: 'Lexend',sans-serif; font-weight: 700; font-size: 1rem; color: #334155; }
+        .axis-gauge-tag {
+            margin-left: auto; font-size: 0.8rem; font-weight: 700; padding: 0.2rem 0.7rem; border-radius: 999px;
+        }
+        .axis-gauge-tag.band-eq { background: rgba(100,116,139,0.15); color: #475569; }
+        .axis-gauge-tag.band-1  { background: rgba(13,148,136,0.12); color: var(--brand-teal-deep); }
+        .axis-gauge-tag.band-2  { background: rgba(13,148,136,0.2);  color: var(--brand-teal-deep); }
+        .axis-gauge-tag.band-3  { background: linear-gradient(145deg,var(--brand-teal-2),var(--brand-teal-mid)); color: #fff; }
+        .axis-gauge-scale { display: grid; grid-template-columns: minmax(90px,1fr) 2.4fr minmax(90px,1fr); align-items: center; gap: 0.75rem; }
+        .axis-pole { font-size: 0.82rem; font-weight: 600; line-height: 1.2; }
+        .axis-pole-a { color: var(--brand-teal-deep); text-align: right; }
+        .axis-pole-b { color: #c2410c; text-align: left; }
+        .axis-gauge-track {
+            position: relative; height: 12px; border-radius: 6px;
+            background: linear-gradient(90deg, rgba(15,118,110,0.22), #e2e8f0 50%, rgba(194,65,12,0.22));
+            box-shadow: inset 2px 2px 4px rgba(0,0,0,0.08), inset -2px -2px 4px rgba(255,255,255,0.8);
+        }
+        .axis-gauge-center { position: absolute; left: 50%; top: -3px; bottom: -3px; width: 2px; background: rgba(0,0,0,0.15); transform: translateX(-50%); }
+        .axis-gauge-marker {
+            position: absolute; top: 50%; width: 20px; height: 20px; border-radius: 50%;
+            background: #fff; border: 3px solid var(--brand-teal); transform: translate(-50%,-50%);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2); transition: left 0.8s cubic-bezier(0.4,0,0.2,1);
+        }
+        .axis-gauge-note {
+            margin-top: 0.75rem; font-size: 0.8rem; padding: 0.5rem 0.8rem; border-radius: 8px;
+            display: flex; align-items: center; gap: 0.5rem;
+        }
+        .axis-gauge-note.note-ambi { background: rgba(245,158,11,0.10); color: #b45309; border: 1px solid rgba(245,158,11,0.3); }
+        .axis-gauge-note.note-low  { background: rgba(100,116,139,0.10); color: #475569; border: 1px solid rgba(100,116,139,0.3); }
+        .protoB-tendances {
+            margin-top: 0.5rem; padding: 1rem 1.25rem; border-radius: 12px;
+            background: rgba(13,124,114,0.06); border-left: 4px solid var(--brand-teal-2);
+            font-size: 0.88rem; color: var(--color-text-muted);
+        }
+        .protoB-tendances strong { color: var(--brand-teal); }
+        @media (max-width: 600px) {
+            .axis-gauge-scale { grid-template-columns: 1fr; gap: 0.4rem; }
+            .axis-pole-a, .axis-pole-b { text-align: center; }
+            .axis-gauge-tag { margin-left: 0; }
         }
     </style>
 </head>
@@ -983,7 +1086,7 @@
 
                 <div class="science-note">
                     <h3><i class="fas fa-brain"></i> Neurodiversité et profils cognitifs (Psychiatrie)</h3>
-                    <p>Les archétypes présentés ici recoupent partiellement des profils cognitifs décrits en psychiatrie. Le style analytique du « Plongeur·euse » partage des traits avec le profil de <strong>systemizing élevé</strong> (Baron-Cohen, 2009), fréquent dans les troubles du spectre autistique. L'énergie du « Pionnier·ère » évoque la <strong>recherche de nouveauté</strong> (<em>novelty seeking</em>) associée au TDAH (Barkley, 1997). Ces parallèles ne sont pas des diagnostics — ils illustrent que la <strong>neurodiversité est un continuum</strong> dont les profils professionnels ne sont qu'une facette.</p>
+                    <p>Certaines notions de styles cognitifs au travail recoupent partiellement des concepts étudiés en psychiatrie — par exemple le <strong>systemizing</strong> (Baron-Cohen, 2009) ou la <strong>recherche de nouveauté</strong> (<em>novelty seeking</em>, Barkley, 1997). Ces rapprochements sont <strong>purement conceptuels et généraux</strong> : un mode de fonctionnement au travail n'est <strong>en aucun cas</strong> un indice de trouble, et ces parallèles ne doivent jamais servir à s'auto-diagnostiquer ni à étiqueter un·e collègue. Ils rappellent seulement que la <strong>neurodiversité est un continuum</strong> dont les profils professionnels ne sont qu'une facette lointaine.</p>
                 </div>
 
                 <div class="science-note">
@@ -1000,25 +1103,37 @@
 
         <section id="quiz" class="intro-card">
             <h2><i class="fas fa-compass"></i> Découvrez votre profil</h2>
-            <p style="color: var(--color-text-muted);">16 situations professionnelles, aucune bonne ou mauvaise réponse. Modifiez uniquement les pôles qui vous parlent.</p>
+            <p style="color: var(--color-text-muted);">16 situations professionnelles, aucune bonne ou mauvaise réponse. Pour chaque situation, indiquez à quel point chaque pôle vous décrit ; les deux échelles sont indépendantes.</p>
             <div class="quiz-global-instruction">
                 <i class="fas fa-info-circle"></i> Pour chaque question, évaluez votre affinité avec <strong>chaque pôle indépendamment</strong>. Vous pouvez cocher une intensité forte sur les deux côtés si vous vous reconnaissez dans les deux.
             </div>
             <div id="quiz-questions"></div>
             <button class="btn-quiz-submit" id="quiz-submit" onclick="submitQuiz()">
-                <i class="fas fa-chart-line"></i> Découvrir mon profil
+                <i class="fas fa-chart-line" aria-hidden="true"></i> Découvrir mon profil
             </button>
+            <p id="quiz-submit-hint" style="text-align:center; font-size:0.8rem; color: var(--color-text-dimmed); margin-top:0.5rem;"></p>
         </section>
 
         <section id="quiz-results" class="intro-card" style="display: none;" aria-live="polite">
-            <h2><i class="fas fa-star"></i> Votre profil cognitif</h2>
-            <div class="chart-container" style="max-width: 450px; height: 350px; margin: 0 auto 2rem;" role="img" aria-label="Graphique radar de votre profil cognitif sur 8 dimensions">
-                <canvas id="userChart" aria-hidden="true"></canvas>
-            </div>
-            <div id="userChart-alt" class="sr-only" aria-live="polite"></div>
-            <div id="top-profiles"></div>
-            <div id="result-disclaimer" style="text-align: center; margin-top: 1rem;"></div>
-            <div id="complementary-profile" class="profile-result complementary" style="margin-top: 1.25rem;"></div>
+            <h2 id="results-heading" tabindex="-1"><i class="fas fa-star" aria-hidden="true"></i> Votre profil cognitif</h2>
+
+            <div id="result-disclaimer" style="margin-bottom: 1.25rem;"></div>
+            <div id="context-message"></div>
+            <div id="axis-gauges"></div>
+
+            <details class="profiles-details">
+                <summary><i class="fas fa-id-badge" aria-hidden="true"></i> Voir les profils illustratifs</summary>
+                <div class="profiles-details-body">
+                    <p class="profiles-details-intro">Ces archétypes illustrent vos tendances ; ce ne sont pas des étiquettes et ils n'ont aucune valeur diagnostique.</p>
+                    <div class="chart-container" style="max-width: 450px; margin: 0 auto 2rem;" role="img" aria-label="Graphique radar de vos affinités avec les 8 profils">
+                        <canvas id="userChart" aria-hidden="true"></canvas>
+                    </div>
+                    <div id="userChart-alt" class="sr-only" aria-live="polite"></div>
+                    <div id="top-profiles"></div>
+                    <div id="complementary-profile" class="profile-result complementary" style="margin-top: 1.25rem;"></div>
+                </div>
+            </details>
+
             <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.5rem;">
                 <button class="btn-quiz-submit" style="flex: 1; min-width: 200px;" onclick="document.querySelector('.main-grid').scrollIntoView({behavior:'smooth'})">
                     <i class="fas fa-book-open"></i> Explorer tous les profils
@@ -1070,8 +1185,8 @@
 
             <!-- Text -->
             <div class="footer-text">
-                <p>RASOLONAIVO MIhaja (Philosophe, Admin Page FB Atelier de réflexion) ;</p>
-                <p>Dr FENOHASINA T.J. Félicien (Psychiatre)</p>
+                <p>Dr FENOHASINA T.J. Félicien (Psychiatre) ;</p>
+                <p>RASOLONAIVO MIhaja (Philosophe, Admin Page FB Atelier de réflexion)</p>
                 <div class="footer-license">
                     <img src="../images/icons/cc-by-nc-sa.png" alt="Icône Creative Commons BY-NC-SA" loading="lazy" width="80" height="15">
                     <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr" target="_blank" rel="noopener noreferrer">Licence CC BY-NC-SA 4.0</a> -
@@ -1080,39 +1195,38 @@
             </div>
         </div>
 
-        <div class="références-section">
-            <button class="références-toggle" onclick="toggleReferences()" aria-expanded="false" aria-controls="références-list">
+        <div class="references-section">
+            <button class="references-toggle" onclick="toggleReferences()" aria-expanded="false" aria-controls="references-list">
                 <span class="icon"><i class="fas fa-caret-right"></i></span>
                 <i class="fas fa-book"></i> Références scientifiques
             </button>
-            <div id="références-list" class="références-list">
+            <div id="references-list" class="references-list">
                 <h4>Fondements théoriques</h4>
                 <p>Barrick, M. R., & Mount, M. K. (1991). The Big Five personality dimensions and job performance: A meta-analysis. <em>Personnel Psychology</em>, <em>44</em>(1), 1–26. https://doi.org/10.1111/j.1744-6570.1991.tb00688.x</p>
                 <p>Blake, R. R., & Mouton, J. S. (1964). <em>The managerial grid: Key orientations for achieving production through people</em>. Gulf Publishing.</p>
                 <p>Costa, P. T., Jr., & McCrae, R. R. (1992). <em>Revised NEO Personality Inventory (NEO-PI-R) and NEO Five-Factor Inventory (NEO-FFI) professional manual</em>. Psychological Assessment Resources.</p>
+                <p>De Raad, B., & Peabody, D. (2005). Cross-culturally recurrent personality factors: Analyses of three factors. <em>European Journal of Personality</em>, <em>19</em>(6), 451–474. https://doi.org/10.1002/per.550</p>
                 <p>Guilford, J. P. (1967). <em>The nature of human intelligence</em>. McGraw-Hill.</p>
                 <p>Kahneman, D. (2011). <em>Thinking, fast and slow</em>. Farrar, Straus and Giroux.</p>
                 <p>Kirton, M. J. (2003). <em>Adaption-innovation: In the context of diversity and change</em>. Routledge.</p>
 
                 <h4>Méta-analyses et validations</h4>
+                <p>Carter, N. T., Dalal, D. K., Boyce, A. S., O'Connell, M. S., Kung, M.-C., & Delgado, K. M. (2014). Uncovering curvilinear relationships between conscientiousness and job performance: How theoretically appropriate measurement makes an empirical difference. <em>Journal of Applied Psychology</em>, <em>99</em>(4), 564–586. https://doi.org/10.1037/a0034688</p>
                 <p>Cropley, A. (2006). In praise of convergent thinking. <em>Creativity Research Journal</em>, <em>18</em>(3), 391–404. https://doi.org/10.1207/s15326934crj1803_13</p>
-                <p>Judge, T. A., Piccolo, R. F., & Ilies, R. (2004). The forgotten ones? The validity of consideration and initiating structure in leadership research. <em>Journal of Applied Psychology</em>, <em>89</em>(1), 36–51. https://doi.org/10.1037/0021-9010.89.1.36</p>
+                <p>Kepes, S., & McDaniel, M. A. (2015). The validity of conscientiousness is overestimated in the prediction of job performance. <em>PLOS ONE</em>, <em>10</em>(10), e0141468. https://doi.org/10.1371/journal.pone.0141468</p>
                 <p>Salgado, J. F. (1997). The five factor model of personality and job performance in the European Community. <em>Journal of Applied Psychology</em>, <em>82</em>(1), 30–43. https://doi.org/10.1037/0021-9010.82.1.30</p>
 
                 <h4>Limites méthodologiques (circularité, effet Barnum)</h4>
-                <p>Block, J. (2010). The five-factor framing of personality and beyond: Some ruminations. <em>Psychological Inquiry</em>, <em>21</em>(1), 2–25. https://doi.org/10.1080/10478401003596626</p>
                 <p>Cervone, D. (2005). Personality architecture: Within-person structures and processes. <em>Annual Review of Psychology</em>, <em>56</em>, 423–452. https://doi.org/10.1146/annurev.psych.56.091103.070229</p>
                 <p>Fleeson, W., & Jayawickreme, E. (2015). Whole Trait Theory. <em>Journal of Research in Personality</em>, <em>56</em>, 82–92. https://doi.org/10.1016/j.jrp.2014.10.009</p>
                 <p>Forer, B. R. (1949). The fallacy of personal validation: A classroom demonstration of gullibility. <em>The Journal of Abnormal and Social Psychology</em>, <em>44</em>(1), 118–123. https://doi.org/10.1037/h0059240</p>
-                <p>Meehl, P. E. (1956). Wanted—A good cookbook. <em>American Psychologist</em>, <em>11</em>(6), 263–272. https://doi.org/10.1037/h0044164</p>
 
                 <h4>Psychiatrie et neurodiversité</h4>
                 <p>Barkley, R. A. (1997). Behavioral inhibition, sustained attention, and executive functions. <em>Psychological Bulletin</em>, <em>121</em>(1), 65–94. https://doi.org/10.1037/0033-2909.121.1.65</p>
                 <p>Baron-Cohen, S. (2009). Autism: The empathizing-systemizing (E-S) theory. <em>Annals of the New York Academy of Sciences</em>, <em>1156</em>, 68–80. https://doi.org/10.1111/j.1749-6632.2009.04467.x</p>
 
                 <h4>Psychologie organisationnelle</h4>
-                <p>Ashton, M. C., & Lee, K. (2007). Empirical, theoretical, and practical advantages of the HEXACO model. <em>Personality and Social Psychology Review</em>, <em>11</em>(2), 150–166. https://doi.org/10.1177/1088868306294907</p>
-                <p>Holland, J. L. (1997). <em>Making vocational choices</em> (3rd ed.). Psychological Assessment Resources.</p>
+                <p>Dweck, C. S. (2006). <em>Mindset: The new psychology of success</em>. Random House.</p>
                 <p>Wilmot, M. P., & Ones, D. S. (2019). A century of research on conscientiousness at work. <em>PNAS</em>, <em>116</em>(46), 23004–23010. https://doi.org/10.1073/pnas.1908430116</p>
 
                 <h4>Sociologie, anthropologie et psychologie sociale</h4>
@@ -1135,12 +1249,20 @@
                 <p>Steiner, I. D. (1972). <em>Group Process and Productivity</em>. Academic Press.</p>
                 <p>Wiseman, L. (2010). <em>Multipliers: How the Best Leaders Make Everyone Smarter</em>. HarperBusiness.</p>
                 <p>Woolley, A. W., Chabris, C. F., Pentland, A., Hashmi, N., & Malone, T. W. (2010). Evidence for a Collective Intelligence Factor in the Performance of Human Groups. <em>Science</em>, <em>330</em>(6004), 686–688. https://doi.org/10.1126/science.1193147</p>
+
+                <h4>Pour aller plus loin (lectures complémentaires)</h4>
+                <p>Ashton, M. C., & Lee, K. (2007). Empirical, theoretical, and practical advantages of the HEXACO model. <em>Personality and Social Psychology Review</em>, <em>11</em>(2), 150–166. https://doi.org/10.1177/1088868306294907</p>
+                <p>Block, J. (2010). The five-factor framing of personality and beyond: Some ruminations. <em>Psychological Inquiry</em>, <em>21</em>(1), 2–25. https://doi.org/10.1080/10478401003596626</p>
+                <p>Holland, J. L. (1997). <em>Making vocational choices</em> (3rd ed.). Psychological Assessment Resources.</p>
+                <p>Judge, T. A., Piccolo, R. F., & Ilies, R. (2004). The forgotten ones? The validity of consideration and initiating structure in leadership research. <em>Journal of Applied Psychology</em>, <em>89</em>(1), 36–51. https://doi.org/10.1037/0021-9010.89.1.36</p>
+                <p>Meehl, P. E. (1956). Wanted—A good cookbook. <em>American Psychologist</em>, <em>11</em>(6), 263–272. https://doi.org/10.1037/h0044164</p>
             </div>
         </div>
     </footer>
 
     </div>
 
+    <script src="complementarity-data.js"></script>
     <script>
         const profilsData = {
             axes: [
@@ -1154,16 +1276,16 @@
                     title: "Plongeur·euse Analytique", summary: "Apporte rigueur et précision pour réduire les risques.", icon: '🔬', chartData: [9, 2, 8, 3, 7, 4, 3, 8],
                     exemple: "En réunion, c'est celui qui demande « Quelles sont les données ? » avant de se prononcer.",
                     details: {
-                        fonctionnement: "Aborde les problèmes avec logique, données factuelles et une pensée convergente (Guilford, 1967). Décompose, analyse et évalue de manière critique pour identifier la solution la plus juste. Ce style partage des traits avec le profil de systemizing élevé décrit par Baron-Cohen (2009).",
+                        fonctionnement: "Aborde les problèmes avec logique, données factuelles et une pensée convergente (Guilford, 1967). Décompose, analyse et évalue de manière critique pour identifier la solution la plus juste.",
                         forces: "Attention méticuleuse aux détails, capacité à identifier des tendances dans les données, démarche structurée qui apporte clarté et discipline, rôle de 'garde-fou'. Réduit le « bruit » décisionnel (Sibony, Kahneman & Sunstein, 2021).",
                         limites: "Risque de 'paralyse par l'analyse', peut être perçu comme rigide ou excessivement critiqué, peut négliger les dimensions humaines et émotionnelles. Peut inhiber la sécurité psychologique si sa rigueur critique est perçue comme du jugement (Edmondson, 2019).",
-                        leviers: "Développer la flexibilité cognitive — « repenser » ses hypothèses (Grant, 2021). Cultiver un état d'esprit de croissance (Dweck). Pour l'équipe : fournir des données claires, fixer des délais et valoriser sa rigueur."
+                        leviers: "Développer la flexibilité cognitive — « repenser » ses hypothèses (Grant, 2021). Cultiver un état d'esprit de croissance (Dweck, 2006). Pour l'équipe : fournir des données claires, fixer des délais et valoriser sa rigueur."
                     },
                     enriched: {
-                        fonctionnement: "<strong>Pensée convergente</strong> (Guilford, 1967) : ce mode cognitif privilégie la vitesse, la précision et la logique pour converger vers la solution optimale. La connaissance factuelle y joue un rôle central — elle est à la fois source d'idées, chemin vers les solutions et critère d'efficacité (Cropley, 2006). Ce profil partage des caractéristiques avec le <strong>systemizing élevé</strong> décrit en psychiatrie (Baron-Cohen, 2009).<span class='source'>Guilford (1967) ; Cropley (2006) ; Baron-Cohen (2009)</span>",
+                        fonctionnement: "<strong>Pensée convergente</strong> (Guilford, 1967) : ce mode cognitif privilégie la vitesse, la précision et la logique pour converger vers la solution optimale. La connaissance factuelle y joue un rôle central — elle est à la fois source d'idées, chemin vers les solutions et critère d'efficacité (Cropley, 2006).<span class='source'>Guilford (1967) ; Cropley (2006)</span>",
                         forces: "La rigueur analytique est un <strong>garde-fou</strong> essentiel contre les décisions impulsives et les biais cognitifs. Elle réduit le <strong>bruit décisionnel</strong> — cette variabilité indésirable dans les jugements que Sibony, Kahneman et Sunstein (2021) identifient comme un fléau organisationnel silencieux. La pensée convergente excelle dans les environnements où une seule réponse correcte existe. En termes de <strong>pertes de processus</strong> (Steiner, 1972), ce profil minimise les pertes de coordination en clarifiant les critères de décision.<span class='source'>Cropley (2006) ; Sibony et al. (2021) ; Steiner (1972)</span>",
                         limites: "La <strong>paralysie par l'analyse</strong> survient quand la recherche de la solution parfaite bloque l'action. Risque de <strong>« pensée figée »</strong> (Grant, 2021) : l'incapacité à repenser ses hypothèses face à de nouvelles données. Ce profil peut inhiber la <strong>sécurité psychologique</strong> (Edmondson, 2019) si sa rigueur critique est perçue comme du jugement, décourageant la prise de parole des autres. La pensée convergente seule ne produit pas d'innovation (Cropley, 2006).<span class='source'>Grant (2021) ; Edmondson (2019) ; Cropley (2006)</span>",
-                        leviers: "Intégrer des <strong>cycles divergent→convergent itératifs</strong> : brainstormer d'abord, puis évaluer. Cultiver un <strong>état d'esprit de croissance</strong> (Dweck) : « je peux aussi être créatif ». Pratiquer le rôle de <strong>multiplicateur</strong> (Wiseman, 2010) : poser des questions au lieu de trancher, pour amplifier l'intelligence collective. Pratiquer la métacognition : « Quelle est l'information minimale viable ? »<span class='source'>Cropley (2006) ; Dweck ; Wiseman (2010)</span>"
+                        leviers: "Intégrer des <strong>cycles divergent→convergent itératifs</strong> : brainstormer d'abord, puis évaluer. Cultiver un <strong>état d'esprit de croissance</strong> (Dweck, 2006) : « je peux aussi être créatif ». Pratiquer le rôle de <strong>multiplicateur</strong> (Wiseman, 2010) : poser des questions au lieu de trancher, pour amplifier l'intelligence collective. Pratiquer la métacognition : « Quelle est l'information minimale viable ? »<span class='source'>Cropley (2006) ; Dweck (2006) ; Wiseman (2010)</span>"
                     }
                 },
                 explorateur: {
@@ -1189,13 +1311,13 @@
                         fonctionnement: "Fonctionne selon un registre que la recherche en psychologie de la personnalité associe à une haute Conscienciosité (Costa & McCrae, 1992) — le facteur le plus robuste pour prédire la performance professionnelle (Barrick & Mount, 1991). Son mode opératoire est défini par l'organisation, la fiabilité, la planification et un souci constant du détail.",
                         forces: "Fiabilité, haute qualité d'exécution, excelle dans l'organisation de projets complexes, persévérance et autodiscipline. Prédicteur le plus robuste de la performance au travail. Maître de l'hygiène décisionnelle — réduit le bruit par les processus (Sibony et al., 2021). Minimise les pertes de coordination (Steiner, 1972).",
                         limites: "Peut être rigide et résistant au changement, difficulté face à l'ambiguïté, risque de micro-management, stressé par les situations chaotiques. Risque de « pensée congelée » face au changement (Grant, 2021). Un excès de contrôle tue l'autonomie des collaborateurs (Pink, 2009).",
-                        leviers: "Accroître sa flexibilité (ex: planifier l'imprévu), s'entraîner à la délégation. Pour l'équipe : communiquer les changements en amont, l'impliquer dans la création des plans. Planifier l'imprévu comme opportunité d'apprentissage (Dweck). Pratiquer la discipline « Investisseur » du multiplicateur : déléguer avec confiance (Wiseman, 2010)."
+                        leviers: "Accroître sa flexibilité (ex: planifier l'imprévu), s'entraîner à la délégation. Pour l'équipe : communiquer les changements en amont, l'impliquer dans la création des plans. Planifier l'imprévu comme opportunité d'apprentissage (Dweck, 2006). Pratiquer la discipline « Investisseur » du multiplicateur : déléguer avec confiance (Wiseman, 2010)."
                     },
                     enriched: {
                         fonctionnement: "Incarnation de la <strong>haute Conscienciosité</strong> (Costa & McCrae, 1992) — le facteur le plus robuste pour prédire la performance professionnelle. Méta-analyse de Wilmot & Ones (2019) sur 1,1 million de participants : la conscienciosité a un effet positif dans 98% des variables étudiées.<span class='source'>Costa & McCrae (1992) ; Wilmot & Ones (2019)</span>",
                         forces: "<strong>Fiabilité et qualité d'exécution</strong> exceptionnelles. Excelle dans l'organisation de projets complexes. La conscienciosité est le prédicteur le plus constant de la performance dans toutes les catégories d'emploi (Barrick & Mount, 1991). Maître de l'<strong>hygiène décisionnelle</strong> — réduit le bruit par les processus <span class='source'>(Sibony et al., 2021)</span>. Minimise les <strong>pertes de coordination</strong> <span class='source'>(Steiner, 1972)</span>.<span class='source'>Barrick & Mount (1991) ; Wilmot & Ones (2019) ; Sibony et al. (2021) ; Steiner (1972)</span>",
-                        limites: "La relation conscienciosité→performance est <strong>curvilinéaire</strong> : un excès peut réduire la performance par rigidité et micro-management (Carter et al., 2014). La validité prédictive est surestimée d'environ 30% en raison du biais de publication (Credé et al., 2012). Risque de <strong>« pensée congelée »</strong> face au changement <span class='source'>(Grant, 2021)</span>. Un excès de contrôle tue l'<strong>autonomie</strong> des collaborateurs <span class='source'>(Pink, 2009)</span>.<span class='source'>Carter et al. (2014) ; Grant (2021) ; Pink (2009)</span>",
-                        leviers: "<strong>Planifier l'imprévu</strong> : réserver des créneaux non structurés. S'entraîner à la délégation avec des objectifs clairs mais sans micro-management. Pour l'équipe : communiquer les changements en amont, l'impliquer dans la création des plans. Planifier l'imprévu comme <strong>opportunité d'apprentissage</strong> <span class='source'>(Dweck)</span>. Pratiquer la discipline <strong>« Investisseur »</strong> du multiplicateur : déléguer avec confiance <span class='source'>(Wiseman, 2010)</span>.<span class='source'>Wilmot & Ones (2019) ; Dweck ; Wiseman (2010)</span>"
+                        limites: "La relation conscienciosité→performance est <strong>curvilinéaire</strong> : un excès peut réduire la performance par rigidité et micro-management (Carter et al., 2014). La validité prédictive de la conscienciosité serait surestimée d'environ 30% en raison du biais de publication (Kepes & McDaniel, 2015). Risque de <strong>« pensée congelée »</strong> face au changement <span class='source'>(Grant, 2021)</span>. Un excès de contrôle tue l'<strong>autonomie</strong> des collaborateurs <span class='source'>(Pink, 2009)</span>.<span class='source'>Carter et al. (2014) ; Grant (2021) ; Pink (2009)</span>",
+                        leviers: "<strong>Planifier l'imprévu</strong> : réserver des créneaux non structurés. S'entraîner à la délégation avec des objectifs clairs mais sans micro-management. Pour l'équipe : communiquer les changements en amont, l'impliquer dans la création des plans. Planifier l'imprévu comme <strong>opportunité d'apprentissage</strong> <span class='source'>(Dweck, 2006)</span>. Pratiquer la discipline <strong>« Investisseur »</strong> du multiplicateur : déléguer avec confiance <span class='source'>(Wiseman, 2010)</span>.<span class='source'>Wilmot & Ones (2019) ; Dweck (2006) ; Wiseman (2010)</span>"
                     }
                 },
                 navigateur: {
@@ -1250,15 +1372,15 @@
                     title: "Pionnier·ère Adaptatif·ive", summary: "Agit comme un agent du changement et explore de nouvelles opportunités.", icon: '🚀', chartData: [3, 8, 4, 7, 5, 6, 9, 2],
                     exemple: "C'est celui qui propose de tester un nouvel outil alors que l'ancien n'est pas encore maîtrisé.",
                     details: {
-                        fonctionnement: "Associé à une haute Ouverture à l'Expérience (Costa & McCrae, 1992) et à la recherche de nouveauté (Barkley, 1997). Curieux, imaginatif, attiré par la nouveauté. Perçoit le changement comme une opportunité stimulante. La valorisation de ce profil varie selon les contextes culturels (Hofstede, 2001).",
-                        forces: "Capacité d'adaptation exceptionnelle, moteur pour l'innovation, apprend et se développe continuellement tout au long de sa carrière. Incarne la flexibilité cognitive et la capacité de repensement (Grant, 2021). Motivé par l'autonomie et le sens (Pink, 2009). État d'esprit de croissance naturel (Dweck).",
+                        fonctionnement: "Associé à une haute Ouverture à l'Expérience (Costa & McCrae, 1992). Curieux, imaginatif, attiré par la nouveauté. Perçoit le changement comme une opportunité stimulante. La valorisation de ce profil varie selon les contextes culturels (Hofstede, 2001).",
+                        forces: "Capacité d'adaptation exceptionnelle, moteur pour l'innovation, apprend et se développe continuellement tout au long de sa carrière. Incarne la flexibilité cognitive et la capacité de repensement (Grant, 2021). Motivé par l'autonomie et le sens (Pink, 2009). État d'esprit de croissance naturel (Dweck, 2006).",
                         limites: "Aversion pour la routine, peut manquer de discipline pour les tâches répétitives, peut être perçu comme manquant de pragmatisme, son appétit pour le changement peut être déstabilisant. Difficulté avec l'engagement durable — trop d'options, pas de suivi (Lencioni, 2002). Peut créer des pertes de motivation chez ceux qui préfèrent la stabilité (Steiner, 1972).",
                         leviers: "Apprendre à valoriser aussi les phases d'exécution. S'associer à des profils plus structurés. Pour l'équipe : le positionner comme agent du changement, lui donner des objectifs clairs. Ancrer l'innovation dans la maîtrise — approfondir avant de passer à autre chose (Pink, 2009). Discipline « Investisseur » : développer les autres, pas juste lancer des idées (Wiseman, 2010)."
                     },
                     enriched: {
-                        fonctionnement: "Haute <strong>Ouverture à l'Expérience</strong> (Costa & McCrae, 1992) — curieux, imaginatif, attiré par la nouveauté. Ce profil évoque la <strong>recherche de nouveauté</strong> (<em>novelty seeking</em>) décrite dans la littérature sur le TDAH (Barkley, 1997). La valorisation de ce style varie fortement selon les cultures (Hofstede, 2001) — prisé dans les cultures individualistes, il peut être perçu comme déstabilisant dans les cultures collectivistes.<span class='source'>Costa & McCrae (1992) ; Barkley (1997) ; Hofstede (2001)</span>",
-                        forces: "Capacité d'<strong>adaptation exceptionnelle</strong> au changement. Moteur de l'innovation. Apprend et se développe continuellement. L'Ouverture est associée au succès dans les métiers créatifs et les environnements incertains. Incarne la <strong>flexibilité cognitive</strong> et la capacité de repensement <span class='source'>(Grant, 2021)</span>. Motivé par l'<strong>autonomie</strong> et le <strong>sens</strong> <span class='source'>(Pink, 2009)</span>. <strong>État d'esprit de croissance</strong> naturel <span class='source'>(Dweck)</span>.<span class='source'>Costa & McCrae (1992) ; Grant (2021) ; Pink (2009) ; Dweck</span>",
-                        limites: "L'Ouverture à l'Expérience est le facteur Big Five le <strong>moins stable</strong> — il fluctue davantage selon le contexte que les autres traits (De Raad & Peabody, 2005). Aversion pour la routine, difficulté avec les tâches répétitives, peut être perçu comme manquant de pragmatisme. Difficulté avec l'<strong>engagement durable</strong> — trop d'options, pas de suivi <span class='source'>(Lencioni, 2002)</span>. Peut créer des <strong>pertes de motivation</strong> chez ceux qui préfèrent la stabilité <span class='source'>(Steiner, 1972)</span>.<span class='source'>De Raad & Peabody (2005) ; Lencioni (2002) ; Steiner (1972)</span>",
+                        fonctionnement: "Haute <strong>Ouverture à l'Expérience</strong> (Costa & McCrae, 1992) — curieux, imaginatif, attiré par la nouveauté. La valorisation de ce style varie fortement selon les cultures (Hofstede, 2001) — prisé dans les cultures individualistes, il peut être perçu comme déstabilisant dans les cultures collectivistes.<span class='source'>Costa & McCrae (1992) ; Hofstede (2001)</span>",
+                        forces: "Capacité d'<strong>adaptation exceptionnelle</strong> au changement. Moteur de l'innovation. Apprend et se développe continuellement. L'Ouverture est associée au succès dans les métiers créatifs et les environnements incertains. Incarne la <strong>flexibilité cognitive</strong> et la capacité de repensement <span class='source'>(Grant, 2021)</span>. Motivé par l'<strong>autonomie</strong> et le <strong>sens</strong> <span class='source'>(Pink, 2009)</span>. <strong>État d'esprit de croissance</strong> naturel <span class='source'>(Dweck, 2006)</span>.<span class='source'>Costa & McCrae (1992) ; Grant (2021) ; Pink (2009) ; Dweck (2006)</span>",
+                        limites: "L'Ouverture à l'Expérience (Intellect) est le facteur Big Five le <strong>moins répliqué d'une langue à l'autre</strong> — il apparaît de façon moins cohérente que les autres dans les études translinguistiques (De Raad & Peabody, 2005). Aversion pour la routine, difficulté avec les tâches répétitives, peut être perçu comme manquant de pragmatisme. Difficulté avec l'<strong>engagement durable</strong> — trop d'options, pas de suivi <span class='source'>(Lencioni, 2002)</span>. Peut créer des <strong>pertes de motivation</strong> chez ceux qui préfèrent la stabilité <span class='source'>(Steiner, 1972)</span>.<span class='source'>De Raad & Peabody (2005) ; Lencioni (2002) ; Steiner (1972)</span>",
                         leviers: "S'associer à des <strong>profils structurés</strong> (Architecte, Stabilisateur) pour l'exécution. Valoriser les phases d'exécution comme des opportunités d'apprentissage. Pour l'équipe : le positionner comme agent du changement avec des objectifs clairs et mesurables. Ancrer l'innovation dans la <strong>maîtrise</strong> — approfondir avant de passer à autre chose <span class='source'>(Pink, 2009)</span>. Discipline <strong>« Investisseur »</strong> : développer les autres, pas juste lancer des idées <span class='source'>(Wiseman, 2010)</span>.<span class='source'>Kirton (2003) ; Pink (2009) ; Wiseman (2010)</span>"
                     }
                 },
@@ -1268,13 +1390,13 @@
                     details: {
                         fonctionnement: "Fonctionne dans un registre que la littérature associe à une Ouverture à l'Expérience modérée — ce qui, loin d'être un déficit, est associé à la fiabilité, la constance et l'ancrage pragmatique (Kirton, 2003). Préférence pour les routines, les traditions et les méthodes éprouvées. Se sent en sécurité dans des environnements prévisibles.",
                         forces: "Fiabilité et constance dans l'exécution, garantit la continuité et la qualité, excellent pour optimiser les systèmes, apporte un point de vue pragmatique qui sert de contrepoids. Réduit les pertes de motivation en maintenant la continuité (Steiner, 1972). Contribue à la confiance — niveau 1 de la pyramide de Lencioni (2002) — par sa prévisibilité.",
-                        limites: "Potentielle résistance au changement, peut paraître rigide ou fermé, risque de désengagement si les changements sont trop rapides ou mal expliqués. Risque de « pensée congelée » et de résistance au changement nécessaire (Grant, 2021). Peut basculer vers un état d'esprit fixe (Dweck).",
+                        limites: "Potentielle résistance au changement, peut paraître rigide ou fermé, risque de désengagement si les changements sont trop rapides ou mal expliqués. Risque de « pensée congelée » et de résistance au changement nécessaire (Grant, 2021). Peut basculer vers un état d'esprit fixe (Dweck, 2006).",
                         leviers: "Travailler sa perception du changement, se concentrer sur les bénéfices concrets. Pour l'équipe : communiquer le 'pourquoi' du changement, l'impliquer dans l'amélioration des processus. Pratiquer le « repensement » en se concentrant sur les bénéfices mesurables du changement (Grant, 2021). Participer aux audits de bruit pour voir où les processus actuels échouent (Sibony et al., 2021)."
                     },
                     enriched: {
                         fonctionnement: "Ouverture à l'Expérience <strong>modérée</strong> — ce qui, loin d'être un déficit, est associé à la fiabilité, la constance et l'ancrage pragmatique (Kirton, 2003). Préférence pour les routines, les traditions et les méthodes éprouvées. Se sent en sécurité dans des environnements prévisibles. L'habitus professionnel (Bourdieu, 1979) façonne cette préférence pour la stabilité.<span class='source'>Kirton (2003) ; Bourdieu (1979)</span>",
                         forces: "<strong>Fiabilité et constance</strong> dans l'exécution. Garantit la continuité et la qualité des processus. Excellent pour optimiser les systèmes existants. Apporte un point de vue <strong>pragmatique</strong> qui sert de contrepoids essentiel aux profils innovateurs. Réduit les <strong>pertes de motivation</strong> en maintenant la continuité <span class='source'>(Steiner, 1972)</span>. Contribue à la <strong>confiance</strong> — niveau 1 de la pyramide de Lencioni <span class='source'>(2002)</span> — par sa prévisibilité.<span class='source'>Kirton (2003) ; Steiner (1972) ; Lencioni (2002)</span>",
-                        limites: "Potentielle <strong>résistance au changement</strong> — peut paraître rigide ou fermé. Risque de désengagement si les changements sont trop rapides ou mal communiqués. Cette résistance peut être renforcée par l'identité au travail construite autour de la maîtrise (Sainsaulieu, 1977). Risque de <strong>« pensée congelée »</strong> et de résistance au changement nécessaire <span class='source'>(Grant, 2021)</span>. Peut basculer vers un <strong>état d'esprit fixe</strong> <span class='source'>(Dweck)</span>.<span class='source'>Sainsaulieu (1977) ; Grant (2021) ; Dweck</span>",
+                        limites: "Potentielle <strong>résistance au changement</strong> — peut paraître rigide ou fermé. Risque de désengagement si les changements sont trop rapides ou mal communiqués. Cette résistance peut être renforcée par l'identité au travail construite autour de la maîtrise (Sainsaulieu, 1977). Risque de <strong>« pensée congelée »</strong> et de résistance au changement nécessaire <span class='source'>(Grant, 2021)</span>. Peut basculer vers un <strong>état d'esprit fixe</strong> <span class='source'>(Dweck, 2006)</span>.<span class='source'>Sainsaulieu (1977) ; Grant (2021) ; Dweck (2006)</span>",
                         leviers: "Travailler la perception du changement en se concentrant sur les <strong>bénéfices concrets</strong> et mesurables. Pour l'équipe : communiquer le « pourquoi » du changement, l'impliquer dans l'<strong>amélioration continue</strong> des processus existants plutôt que dans la rupture. Pratiquer le <strong>« repensement »</strong> en se concentrant sur les bénéfices mesurables du changement <span class='source'>(Grant, 2021)</span>. Participer aux <strong>audits de bruit</strong> pour voir où les processus actuels échouent <span class='source'>(Sibony et al., 2021)</span>.<span class='source'>Kirton (2003) ; Sainsaulieu (1977) ; Grant (2021) ; Sibony et al. (2021)</span>"
                     }
                 },
@@ -1305,6 +1427,7 @@
             { axis: 3, poleA: "L'exploration de l'inconnu", poleB: "La maîtrise de mon domaine", text: "Je tire le plus de satisfaction de...", hint: "Ex : Fin de journée — vous êtes plus fier d'avoir exploré un nouveau domaine ou d'avoir maîtrisé votre sujet ?" }
         ];
         const quizAnswers = Array.from({length: 16}, () => ({ poleA: 0, poleB: 0 }));
+        const MIN_ANSWERS = 4;
         let userChartInstance = null;
         let currentTopRanked = null; // array of ranked profiles after quiz
 
@@ -1316,6 +1439,30 @@
         ];
 
         const intensityLabels = ['Pas du tout', 'Un peu', 'Modérément', 'Fortement'];
+
+        function countAnswered() {
+            return quizAnswers.filter(a => a.poleA > 0 || a.poleB > 0).length;
+        }
+
+        function updateSubmitState() {
+            const btn = document.getElementById('quiz-submit');
+            const hint = document.getElementById('quiz-submit-hint');
+            if (!btn) return;
+            const n = countAnswered();
+            btn.disabled = n < MIN_ANSWERS;
+            if (hint) hint.textContent = n < MIN_ANSWERS
+                ? `Répondez à au moins ${MIN_ANSWERS} situations pour découvrir votre profil (${n}/${MIN_ANSWERS}).`
+                : '';
+        }
+
+        function hideDecorativeIcons(root = document) {
+            root.querySelectorAll('i.fas, i.far, i.fab').forEach(ic => ic.setAttribute('aria-hidden', 'true'));
+        }
+
+        // Forme prononçable pour lecteurs d'écran : retire le point médian d'écriture inclusive
+        function spokenTitle(t) {
+            return t.replace(/·[A-Za-zÀ-ÿ]+/g, '').replace(/\s{2,}/g, ' ').trim();
+        }
 
         function renderQuiz() {
             const container = document.getElementById('quiz-questions');
@@ -1334,7 +1481,7 @@
                         <div class="quiz-pole-title">${label}</div>
                         ${intensityLabels.map((lbl, v) => `
                             <div class="quiz-intensity-option">
-                                <input type="radio" name="q${i}_${pole}" value="${v}" id="q${i}_${pole}_v${v}" class="quiz-intensity-input"${v === 0 ? ' checked' : ''} />
+                                <input type="radio" name="q${i}_${pole}" value="${v}" id="q${i}_${pole}_v${v}" class="quiz-intensity-input" />
                                 <label class="quiz-intensity-label" for="q${i}_${pole}_v${v}">
                                     <span class="quiz-intensity-dot"></span>
                                     ${lbl}
@@ -1363,6 +1510,8 @@
                     selectQuizAnswer(qIndex, pole, parseInt(e.target.value));
                 });
             });
+            updateSubmitState();
+            hideDecorativeIcons(container);
         }
 
         function selectQuizAnswer(questionIndex, pole, value) {
@@ -1374,6 +1523,7 @@
             if (panel) panel.classList.add('pole-answered');
             // Mark question as visually modified
             fieldset.classList.add('answered');
+            updateSubmitState();
         }
 
         function computeScores() {
@@ -1394,13 +1544,14 @@
             });
 
             const ranked = Object.entries(profileScores)
-                .sort((a, b) => b[1].concordance - a[1].concordance)
+                .sort((a, b) => b[1].concordance - a[1].concordance || b[1].raw - a[1].raw || a[0].localeCompare(b[0]))
                 .map(([id, data], rank) => ({ id, ...data, rank: rank + 1 }));
 
             return { profileScores, ranked };
         }
 
         function submitQuiz() {
+            if (countAnswered() < MIN_ANSWERS) return;
             const { profileScores, ranked } = computeScores();
             currentTopRanked = ranked;
 
@@ -1423,7 +1574,7 @@
             resultsEl.style.display = 'block';
             resultsEl.classList.add('fade-in');
 
-            // Check for non-informative pattern: all profiles above 80%
+            // Profil peu différencié : 6+ profils sur 8 au-dessus de 75%
             const highCount = ranked.filter(r => r.concordance >= 75).length;
             const allSameHigh = highCount >= 6;
 
@@ -1447,7 +1598,8 @@
             }
 
             // Render top 3 cards
-            let topCardsHtml = contextMessage + '<div class="top-profiles-container">';
+            document.getElementById('context-message').innerHTML = contextMessage;
+            let topCardsHtml = '<div class="top-profiles-container">';
             function concordanceLabel(pct) {
                 if (pct >= 75) return 'Très forte affinité';
                 if (pct >= 50) return 'Forte affinité';
@@ -1461,13 +1613,12 @@
                 <div class="top-profile-card" data-rank="${rank}">
                     <div class="top-profile-header">
                         <span class="rank-badge">${rank}</span>
-                        <span class="top-profile-icon">${profile.icon}</span>
+                        <span class="top-profile-icon" aria-hidden="true">${profile.icon}</span>
                         <div class="top-profile-info">
-                            <h3 class="top-profile-title">${profile.title}</h3>
+                            <h3 class="top-profile-title" aria-label="${spokenTitle(profile.title)}">${profile.title}</h3>
                             <div class="concordance-row">
                                 <div class="concordance-bar"><div class="concordance-fill" style="width: 0%;" data-target="${entry.concordance}"></div></div>
-                                <span class="concordance-pct">${entry.concordance}%</span>
-                                <span class="concordance-label">${concordanceLabel(entry.concordance)}</span>
+                                <span class="concordance-pct concordance-pct-band">${concordanceLabel(entry.concordance)}</span>
                             </div>
                         </div>
                     </div>
@@ -1477,12 +1628,12 @@
                     </button>
                     <div class="top-profile-details-body">
                         <div class="result-tabs" role="tablist" aria-label="Détails de ${profile.title}">
-                            <button role="tab" class="profile-tab result-tab tab-active" data-profile-id="${entry.id}" data-result-tab="fonctionnement" aria-selected="true" tabindex="0">Fonctionnement</button>
-                            <button role="tab" class="profile-tab result-tab tab-inactive" data-profile-id="${entry.id}" data-result-tab="forces" aria-selected="false" tabindex="-1">Forces</button>
-                            <button role="tab" class="profile-tab result-tab tab-inactive" data-profile-id="${entry.id}" data-result-tab="limites" aria-selected="false" tabindex="-1">Limites</button>
-                            <button role="tab" class="profile-tab result-tab tab-inactive" data-profile-id="${entry.id}" data-result-tab="leviers" aria-selected="false" tabindex="-1">Leviers</button>
+                            <button role="tab" id="rtab-${entry.id}-fonctionnement" aria-controls="result-tab-content-${entry.id}" class="profile-tab result-tab tab-active" data-profile-id="${entry.id}" data-result-tab="fonctionnement" aria-selected="true" tabindex="0">Fonctionnement</button>
+                            <button role="tab" id="rtab-${entry.id}-forces" aria-controls="result-tab-content-${entry.id}" class="profile-tab result-tab tab-inactive" data-profile-id="${entry.id}" data-result-tab="forces" aria-selected="false" tabindex="-1">Forces</button>
+                            <button role="tab" id="rtab-${entry.id}-limites" aria-controls="result-tab-content-${entry.id}" class="profile-tab result-tab tab-inactive" data-profile-id="${entry.id}" data-result-tab="limites" aria-selected="false" tabindex="-1">Limites</button>
+                            <button role="tab" id="rtab-${entry.id}-leviers" aria-controls="result-tab-content-${entry.id}" class="profile-tab result-tab tab-inactive" data-profile-id="${entry.id}" data-result-tab="leviers" aria-selected="false" tabindex="-1">Leviers</button>
                         </div>
-                        <div class="result-tab-content" id="result-tab-content-${entry.id}">${profile.enriched.fonctionnement}</div>
+                        <div class="result-tab-content" id="result-tab-content-${entry.id}" role="tabpanel" aria-labelledby="rtab-${entry.id}-fonctionnement" tabindex="0">${profile.enriched.fonctionnement}</div>
                     </div>
                 </div>`;
             });
@@ -1502,53 +1653,49 @@
 
             // Disclaimer
             document.getElementById('result-disclaimer').innerHTML = `
-                <p style="font-size: 0.8rem; color: var(--color-text-dimmed); font-style: italic;">Rappel : ce résultat est exploratoire. Il reflète vos réponses à un instant donné, pas un trait stable. Les profils sont des archétypes simplificateurs — votre fonctionnement réel est plus nuancé et dépend du contexte (Fleeson & Jayawickreme, 2015).</p>
+                <p style="font-size: 0.8rem; color: var(--color-text-dimmed); font-style: italic;">Rappel : ce résultat est exploratoire. Il reflète vos réponses à un instant donné, pas un trait stable. Les profils sont des archétypes simplificateurs — votre fonctionnement réel est plus nuancé et dépend du contexte (Fleeson & Jayawickreme, 2015). Les scores reflètent aussi votre style de réponse (tendance à cocher fort ou faible), pas seulement le contenu de vos choix.</p>
             `;
 
-            // Complementary profile
-            document.getElementById('complementary-profile').innerHTML = `
-                <div class="result-icon">${complementary.icon}</div>
-                <h3 class="result-title">Binôme complémentaire : ${complementary.title}</h3>
-                <p class="result-summary">"${complementary.summary}"</p>
-                <p class="result-match">Le profil opposé à votre #1 sur l'axe « ${topAxis.title} » — collaborer avec ce profil enrichit votre approche</p>
-            `;
+            binomeSelf = top3[0].id;
+            renderBinomeShell(complementaryId);
 
-            // User radar chart
-            const ctx = document.getElementById('userChart').getContext('2d');
-            if (userChartInstance) userChartInstance.destroy();
-            userChartInstance = new Chart(ctx, {
-                type: 'radar',
-                data: {
-                    labels: chartLabels,
-                    datasets: [
-                        { label: 'Votre profil', data: userData.map(v => Math.round(v * 10) / 10),
-                          backgroundColor: 'rgba(20, 184, 166, 0.25)', borderColor: 'rgba(20, 184, 166, 1)',
-                          pointBackgroundColor: 'rgba(20, 184, 166, 1)', pointBorderColor: '#fff', borderWidth: 2 },
-                        { label: topProfile.title, data: topProfile.chartData,
-                          backgroundColor: 'rgba(251, 146, 60, 0.15)', borderColor: 'rgba(251, 146, 60, 0.8)',
-                          pointBackgroundColor: 'rgba(251, 146, 60, 0.8)', borderWidth: 1, borderDash: [5, 5] }
-                    ]
-                },
-                options: {
-                    responsive: true, maintainAspectRatio: false,
-                    scales: { r: {
-                        angleLines: { color: 'rgba(0, 0, 0, 0.1)' },
-                        grid: { color: 'rgba(0, 0, 0, 0.1)' },
-                        pointLabels: { font: { size: 11, weight: 600, family: 'Inter' }, color: '#334155' },
-                        ticks: { backdropColor: 'rgba(255, 255, 255, 0.85)', color: '#64748b', stepSize: 2 },
-                        suggestedMin: 0, suggestedMax: 10
-                    }},
-                    plugins: {
-                        legend: { position: 'top', labels: { font: { family: 'Inter' }, color: '#334155' } }
+            const altParts = profileLabels.map((label, i) => `${label}: ${Math.round(userData[i] * 10) / 10}/10`);
+            document.getElementById('userChart-alt').textContent = `Vos affinités — ${altParts.join(', ')}. Profil le plus proche : ${topProfile.title}.`;
+
+            if (typeof Chart !== 'undefined') {
+                const ctx = document.getElementById('userChart').getContext('2d');
+                if (userChartInstance) userChartInstance.destroy();
+                userChartInstance = new Chart(ctx, {
+                    type: 'radar',
+                    data: {
+                        labels: profileLabels,
+                        datasets: [
+                            { label: 'Vos affinités', data: userData.map(v => Math.round(v * 10) / 10),
+                              backgroundColor: 'rgba(20, 184, 166, 0.25)', borderColor: 'rgba(20, 184, 166, 1)',
+                              pointBackgroundColor: 'rgba(20, 184, 166, 1)', pointBorderColor: '#fff', borderWidth: 2 }
+                        ]
+                    },
+                    options: {
+                        responsive: true, maintainAspectRatio: false,
+                        scales: { r: {
+                            angleLines: { color: 'rgba(0, 0, 0, 0.1)' },
+                            grid: { color: 'rgba(0, 0, 0, 0.1)' },
+                            pointLabels: { font: { size: 11, weight: 600, family: 'Inter' }, color: '#334155' },
+                            ticks: { backdropColor: 'rgba(255, 255, 255, 0.85)', color: '#64748b', stepSize: 2 },
+                            suggestedMin: 0, suggestedMax: 10
+                        }},
+                        plugins: {
+                            legend: { position: 'top', labels: { font: { family: 'Inter' }, color: '#334155' } }
+                        }
                     }
-                }
-            });
+                });
+            }
 
-            // Accessible text alternative
-            const altParts = chartLabels.map((label, i) => `${label}: ${Math.round(userData[i] * 10) / 10}/10`);
-            document.getElementById('userChart-alt').textContent = `Votre profil — ${altParts.join(', ')}. Top 1 : ${topProfile.title} (${top3[0].concordance}%).`;
+            buildAxisGauges(profileScores);
 
+            hideDecorativeIcons(resultsEl);
             resultsEl.scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('results-heading').focus({ preventScroll: true });
         }
 
         function toggleProfileDetails(btn) {
@@ -1558,8 +1705,8 @@
             btn.classList.toggle('open');
             btn.setAttribute('aria-expanded', !isOpen);
             btn.innerHTML = isOpen
-                ? '<i class="fas fa-chevron-down"></i> Voir les détails'
-                : '<i class="fas fa-chevron-up"></i> Masquer les détails';
+                ? '<i class="fas fa-chevron-down" aria-hidden="true"></i> Voir les détails'
+                : '<i class="fas fa-chevron-up" aria-hidden="true"></i> Masquer les détails';
         }
 
         function setupAllResultTabListeners() {
@@ -1601,6 +1748,7 @@
             const content = profilsData.profiles[profileId].enriched[tabKey];
             const el = card.querySelector('.result-tab-content');
             el.innerHTML = content;
+            el.setAttribute('aria-labelledby', btn.id);
             el.classList.remove('fade-in');
             void el.offsetWidth;
             el.classList.add('fade-in');
@@ -1612,7 +1760,6 @@
             if (userChartInstance) { userChartInstance.destroy(); userChartInstance = null; }
             document.getElementById('quiz-results').style.display = 'none';
             document.getElementById('quiz').style.display = 'block';
-            document.getElementById('quiz-submit').disabled = false;
             renderQuiz();
             document.getElementById('quiz').scrollIntoView({ behavior: 'smooth' });
         }
@@ -1635,7 +1782,9 @@
         }
 
         function exportResults() {
-            if (!currentTopRanked) return;
+            if (!currentTopRanked || !userChartInstance) return;
+            const profilesDetails = document.querySelector('.profiles-details');
+            if (profilesDetails && !profilesDetails.open) { profilesDetails.open = true; userChartInstance.resize(); }
             const top3 = currentTopRanked.slice(0, 3);
             const topProfile = profilsData.profiles[top3[0].id];
             const topAxis = profilsData.axes.find(a => a.profiles.includes(top3[0].id));
@@ -1674,7 +1823,7 @@
             ctx.textAlign = 'center';
             ctx.fillStyle = '#0d7c72';
             ctx.font = 'bold 18px sans-serif';
-            ctx.fillText('Top 3 de vos profils', 400, nextY);
+            ctx.fillText('Vos affinités principales', 400, nextY);
             nextY += 30;
 
             const rankColors = ['#0d9488', '#14b8a6', '#94a3b8'];
@@ -1726,7 +1875,7 @@
             // Scores radar (8 dimensions)
             ctx.font = '13px sans-serif';
             ctx.textAlign = 'left';
-            const labels = ['Rigueur', 'Créativité', 'Planification', 'Agilité', 'Focus Tâche', 'Focus Relation', 'Adaptabilité', 'Stabilité'];
+            const labels = profileLabels;
             const userData = userChartInstance.data.datasets[0].data;
             const col1X = 120, col2X = 450;
             for (let i = 0; i < 8; i++) {
@@ -1771,12 +1920,30 @@
             link.click();
         }
 
-        let chartInstance = null;
+        let axisChartInstance = null;
         const chartLabels = ['Rigueur', 'Créativité', 'Planification', 'Agilité', 'Focus Tâche', 'Focus Relation', 'Adaptabilité', 'Stabilité'];
+        const profileLabels = ['Plongeur', 'Explorateur', 'Architecte', 'Navigateur', 'Pilote', 'Catalyseur', 'Pionnier', 'Stabilisateur'];
+
+        function pairKey(a, b) { return [a, b].sort().join('|'); }
+        function getComplementarity(a, b) { return complementarity[pairKey(a, b)] || null; }
+        const BINOME_TABS = [
+            { key: 'pourquoi', label: 'Pourquoi' },
+            { key: 'frictions', label: 'Frictions' },
+            { key: 'collaborer', label: 'Collaborer' },
+            { key: 'developper', label: 'Développer' }
+        ];
+        let binomeSelf = null, binomeOther = null, binomeTab = 'pourquoi';
 
         document.addEventListener('DOMContentLoaded', () => {
             renderAccordion();
             renderQuiz();
+            const profilesDetails = document.querySelector('.profiles-details');
+            if (profilesDetails) {
+                profilesDetails.addEventListener('toggle', () => {
+                    if (profilesDetails.open && userChartInstance) userChartInstance.resize();
+                });
+            }
+            hideDecorativeIcons();
         });
 
         function renderAccordion() {
@@ -1786,7 +1953,7 @@
                 const accordionItem = document.createElement('div');
                 accordionItem.className = 'accordion-item';
                 accordionItem.innerHTML = `
-                    <div id="header-${axe.id}" class="accordion-header" role="button" tabindex="0" aria-expanded="false" aria-controls="panel-${axe.id}">
+                    <div id="header-${axe.id}" class="accordion-header" role="button" tabindex="0" aria-expanded="false" aria-controls="axis-details-container">
                         <div>
                             <h3>${axe.title}</h3>
                             <p>${axe.description}</p>
@@ -1814,13 +1981,11 @@
             allHeaders.forEach(header => {
                 if (header.id !== clickedHeader.id) {
                     header.classList.remove('active');
-                    header.querySelector('.icon').classList.remove('rotate-45');
                     header.setAttribute('aria-expanded', 'false');
                 }
             });
 
             clickedHeader.classList.toggle('active');
-            clickedHeader.querySelector('.icon').classList.toggle('rotate-45');
             const isActive = clickedHeader.classList.contains('active');
             clickedHeader.setAttribute('aria-expanded', isActive ? 'true' : 'false');
 
@@ -1861,6 +2026,7 @@
 
             initializeChart(profile1, profile2);
             setupTabListeners();
+            hideDecorativeIcons(detailsContainer);
             if (window.innerWidth < 1024) {
                  document.getElementById('details').scrollIntoView({ behavior: 'smooth' });
             }
@@ -1877,8 +2043,8 @@
             return `
                 <div id="profile-card-${profileId}" class="profile-card">
                     <div class="profile-header">
-                        <span class="profile-icon">${profile.icon}</span>
-                        <h3 class="profile-title">${profile.title}</h3>
+                        <span class="profile-icon" aria-hidden="true">${profile.icon}</span>
+                        <h3 class="profile-title" aria-label="${spokenTitle(profile.title)}">${profile.title}</h3>
                         <p class="profile-summary">"${profile.summary}"</p>
                         ${profile.exemple ? `<p class="profile-exemple"><em>${profile.exemple}</em></p>` : ''}
                     </div>
@@ -1958,9 +2124,10 @@
         }
 
         function initializeChart(profile1, profile2) {
+            if (typeof Chart === 'undefined') return;
             const ctx = document.getElementById('profileChart').getContext('2d');
-            if(chartInstance) chartInstance.destroy();
-            chartInstance = new Chart(ctx, {
+            if(axisChartInstance) axisChartInstance.destroy();
+            axisChartInstance = new Chart(ctx, {
                 type: 'radar',
                 data: {
                     labels: chartLabels,
@@ -1998,6 +2165,187 @@
             });
         }
 
+        const axisPoles = {
+            axe1: { a: 'Analytique', b: 'Exploratoire' },
+            axe2: { a: 'Planificateur', b: 'Intuitif' },
+            axe3: { a: 'Orienté tâche', b: 'Orienté relation' },
+            axe4: { a: 'Innovation', b: 'Stabilité' }
+        };
+
+        function axisBand(contrast) {
+            const m = Math.abs(contrast);
+            if (m <= 2) return { label: 'Équilibré', cls: 'band-eq' };
+            if (m <= 6) return { label: 'Léger penchant', cls: 'band-1' };
+            if (m <= 9) return { label: 'Penchant marqué', cls: 'band-2' };
+            return { label: 'Très marqué', cls: 'band-3' };
+        }
+
+        function buildAxisGauges(scores) {
+            const tendances = [];
+            let rows = '';
+            profilsData.axes.forEach((axis, i) => {
+                const [idA, idB] = axis.profiles;
+                const sumA = scores[idA].raw, sumB = scores[idB].raw;
+                const contrast = sumA - sumB;
+                const poles = axisPoles[axis.id];
+                const band = axisBand(contrast);
+                const sideName = contrast > 0 ? poles.a : poles.b;
+                const tag = band.cls === 'band-eq' ? band.label : `${band.label} : ${sideName.toLowerCase()}`;
+                const markerLeft = Math.max(3, Math.min(97, 50 - (contrast / 12) * 50));
+
+                let note = '';
+                if (sumA >= 7 && sumB >= 7) {
+                    note = `<div class="axis-gauge-note note-ambi"><i class="fas fa-exchange-alt" aria-hidden="true"></i> Vous vous reconnaissez fortement dans les deux pôles — polyvalence ou ambivalence sur cet axe.</div>`;
+                } else if (sumA <= 3 && sumB <= 3) {
+                    note = `<div class="axis-gauge-note note-low"><i class="fas fa-circle-info" aria-hidden="true"></i> Peu d'éléments retenus sur cet axe — résultat peu informatif ici.</div>`;
+                }
+
+                if (Math.abs(contrast) >= 3) {
+                    tendances.push(profilsData.profiles[contrast > 0 ? idA : idB].title);
+                }
+
+                rows += `
+                <div class="axis-gauge-row">
+                    <div class="axis-gauge-head">
+                        <span class="axis-gauge-num">${i + 1}</span>
+                        <span class="axis-gauge-title">${axis.title}</span>
+                        <span class="axis-gauge-tag ${band.cls}">${tag}</span>
+                    </div>
+                    <div class="axis-gauge-scale">
+                        <span class="axis-pole axis-pole-a">${poles.a}</span>
+                        <div class="axis-gauge-track">
+                            <div class="axis-gauge-center"></div>
+                            <div class="axis-gauge-marker" style="left:${markerLeft}%;"></div>
+                        </div>
+                        <span class="axis-pole axis-pole-b">${poles.b}</span>
+                    </div>
+                    ${note}
+                </div>`;
+            });
+
+            const tendanceHtml = tendances.length
+                ? `<div class="protoB-tendances"><strong>Tendances qui se dégagent :</strong> ${tendances.join(', ')}. <em>Ce sont des illustrations, pas des étiquettes.</em></div>`
+                : `<div class="protoB-tendances">Aucune tendance nette ne se dégage — votre fonctionnement paraît équilibré entre les pôles.</div>`;
+
+            document.getElementById('axis-gauges').innerHTML = `
+                <h3 class="protoB-title">Votre positionnement sur les 4 axes</h3>
+                <p class="protoB-intro">Sur chaque axe, le curseur indique vers quel pôle vous penchez ; plus il est proche du centre, plus vous êtes équilibré·e.</p>
+                ${rows}
+                ${tendanceHtml}`;
+        }
+
+        function binomeFieldValue(field) {
+            const c = getComplementarity(binomeSelf, binomeOther);
+            const missing = '<em>Contenu en cours de rédaction.</em>';
+            if (!c) return missing;
+            if (field === 'developper') return (c.developper && c.developper[binomeSelf]) || missing;
+            return c[field] || missing;
+        }
+
+        function updateBinomeHead() {
+            const other = profilsData.profiles[binomeOther];
+            const axis = profilsData.axes.find(a => a.profiles.includes(binomeSelf) && a.profiles.includes(binomeOther));
+            const match = axis
+                ? `Le profil opposé à votre profil principal sur l'axe « ${axis.title} » — un contrepoint naturel.`
+                : `Un autre profil avec lequel composer — une combinaison à explorer.`;
+            document.getElementById('binome-head').innerHTML = `
+                <div class="result-icon" aria-hidden="true">${other.icon}</div>
+                <h3 class="result-title" aria-label="Binôme : ${spokenTitle(other.title)}">Binôme : ${other.title}</h3>
+                <p class="result-summary">"${other.summary}"</p>
+                <p class="result-match">${match}</p>`;
+        }
+
+        function updateBinomePanel() {
+            document.getElementById('binome-panel').innerHTML = binomeFieldValue(binomeTab);
+        }
+
+        function renderBinomeShell(otherId) {
+            binomeOther = otherId;
+            binomeTab = 'pourquoi';
+            const tabsHtml = BINOME_TABS.map((t, i) =>
+                `<button role="tab" id="btab-${t.key}" aria-controls="binome-panel" class="profile-tab result-tab ${i === 0 ? 'tab-active' : 'tab-inactive'}" data-binome-tab="${t.key}" aria-selected="${i === 0}" tabindex="${i === 0 ? '0' : '-1'}">${t.label}</button>`
+            ).join('');
+            const chipsHtml = Object.keys(profilsData.profiles).filter(id => id !== binomeSelf).map(id =>
+                `<button type="button" class="binome-chip${id === otherId ? ' chip-active' : ''}" data-other="${id}" onclick="selectBinome('${id}')"><span aria-hidden="true">${profilsData.profiles[id].icon}</span> ${profilsData.profiles[id].title}</button>`
+            ).join('');
+            document.getElementById('complementary-profile').innerHTML = `
+                <div id="binome-head"></div>
+                <button class="top-profile-details-toggle" onclick="toggleBinomeDetail(this)" aria-expanded="false" aria-controls="binome-detail">
+                    <i class="fas fa-chevron-down"></i> Pourquoi & comment collaborer
+                </button>
+                <div id="binome-detail" class="top-profile-details-body">
+                    <div class="result-tabs" role="tablist" aria-label="Détails du binôme">${tabsHtml}</div>
+                    <div class="result-tab-content" id="binome-panel" role="tabpanel" aria-labelledby="btab-pourquoi" tabindex="0"></div>
+                </div>
+                <details class="explore-binomes">
+                    <summary>Explorer d'autres binômes avec votre profil principal</summary>
+                    <div class="binome-chips">${chipsHtml}</div>
+                </details>`;
+            document.querySelectorAll('#binome-detail .result-tab').forEach(tab => {
+                tab.addEventListener('click', () => activateBinomeTab(tab));
+                tab.addEventListener('keydown', binomeTabKeydown);
+            });
+            updateBinomeHead();
+            updateBinomePanel();
+            hideDecorativeIcons(document.getElementById('complementary-profile'));
+        }
+
+        function selectBinome(otherId) {
+            binomeOther = otherId;
+            binomeTab = 'pourquoi';
+            document.querySelectorAll('#binome-detail .result-tab').forEach(t => {
+                const active = t.dataset.binomeTab === 'pourquoi';
+                t.classList.toggle('tab-active', active);
+                t.classList.toggle('tab-inactive', !active);
+                t.setAttribute('aria-selected', String(active));
+                t.setAttribute('tabindex', active ? '0' : '-1');
+            });
+            document.getElementById('binome-panel').setAttribute('aria-labelledby', 'btab-pourquoi');
+            document.querySelectorAll('.binome-chip').forEach(c => c.classList.toggle('chip-active', c.dataset.other === otherId));
+            updateBinomeHead();
+            updateBinomePanel();
+            const detail = document.getElementById('binome-detail');
+            if (!detail.classList.contains('open')) {
+                toggleBinomeDetail(document.querySelector('#complementary-profile .top-profile-details-toggle'));
+            }
+        }
+
+        function activateBinomeTab(tab) {
+            document.querySelectorAll('#binome-detail .result-tab').forEach(t => {
+                t.classList.remove('tab-active'); t.classList.add('tab-inactive');
+                t.setAttribute('aria-selected', 'false'); t.setAttribute('tabindex', '-1');
+            });
+            tab.classList.add('tab-active'); tab.classList.remove('tab-inactive');
+            tab.setAttribute('aria-selected', 'true'); tab.setAttribute('tabindex', '0');
+            binomeTab = tab.dataset.binomeTab;
+            const panel = document.getElementById('binome-panel');
+            panel.innerHTML = binomeFieldValue(binomeTab);
+            panel.setAttribute('aria-labelledby', tab.id);
+            panel.classList.remove('fade-in'); void panel.offsetWidth; panel.classList.add('fade-in');
+        }
+
+        function binomeTabKeydown(e) {
+            const tabs = Array.from(document.querySelectorAll('#binome-detail .result-tab'));
+            const idx = tabs.indexOf(e.currentTarget);
+            let n = -1;
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); n = (idx + 1) % tabs.length; }
+            else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); n = (idx - 1 + tabs.length) % tabs.length; }
+            else if (e.key === 'Home') { e.preventDefault(); n = 0; }
+            else if (e.key === 'End') { e.preventDefault(); n = tabs.length - 1; }
+            if (n >= 0) { tabs[n].focus(); activateBinomeTab(tabs[n]); }
+        }
+
+        function toggleBinomeDetail(btn) {
+            const body = document.getElementById('binome-detail');
+            const isOpen = body.classList.contains('open');
+            body.classList.toggle('open');
+            btn.classList.toggle('open');
+            btn.setAttribute('aria-expanded', String(!isOpen));
+            btn.innerHTML = isOpen
+                ? '<i class="fas fa-chevron-down" aria-hidden="true"></i> Pourquoi & comment collaborer'
+                : '<i class="fas fa-chevron-up" aria-hidden="true"></i> Masquer';
+        }
+
         function toggleScience() {
             const content = document.getElementById('science-details');
             const icon = document.getElementById('science-toggle-icon');
@@ -2009,8 +2357,8 @@
         }
 
         function toggleReferences() {
-            const list = document.getElementById('références-list');
-            const btn = document.querySelector('.références-toggle');
+            const list = document.getElementById('references-list');
+            const btn = document.querySelector('.references-toggle');
             list.classList.toggle('visible');
             btn.classList.toggle('open');
             btn.setAttribute('aria-expanded', list.classList.contains('visible') ? 'true' : 'false');
