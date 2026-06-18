@@ -12,10 +12,10 @@
         .section-title { border-bottom: 3px solid #0ea5e9; }
         .citation { color: var(--color-text-muted); font-size: 0.9em; font-style: italic; }
         .accordion-header { transition: background-color 0.2s ease-in-out; }
-        .accordion-header.active { background: linear-gradient(135deg, rgba(14, 165, 233, 0.15), rgba(6, 182, 212, 0.1)); border-color: #0ea5e9; }
+        .accordion-header.active { background: linear-gradient(135deg, rgba(14, 165, 233, 0.15), rgba(6, 182, 212, 0.1)); border-color: #0369a1; }
         .accordion-content { transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), padding 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
         .nav-link-coping { transition: all 0.2s ease-in-out; border-bottom: 2px solid transparent; }
-        .nav-link-coping.active { color: #0ea5e9; border-bottom-color: #0ea5e9; }
+        .nav-link-coping.active { color: #0369a1; border-bottom-color: #0369a1; }
         .nav-link-coping:hover { color: #0284c7; }
         .accordion-item {
             background: var(--surface-card);
@@ -65,7 +65,7 @@
 
         <header class="text-center" style="margin-bottom: 3rem;">
             <h1 style="font-size: 2.5rem; font-weight: 700; color: var(--color-text-primary); margin-bottom: 1rem;">
-                <i class="fas fa-brain" style="color: #0ea5e9;"></i> Stratégies de Coping
+                <i class="fas fa-brain" style="color: #0369a1;"></i> Stratégies de Coping
             </h1>
             <p style="color: var(--color-text-secondary); font-size: 1.125rem; max-width: 800px; margin: 0 auto;">
                 Un outil interactif pour comprendre comment nous faisons face au stress, basé sur la recherche scientifique.
@@ -79,11 +79,11 @@
             </h2>
             <div style="max-width: 900px; margin: 0 auto;">
                 <div style="margin-bottom: 2rem;">
-                    <h3 style="font-weight: 700; font-size: 1.25rem; margin-bottom: 0.75rem; color: #0ea5e9;">Pourquoi s'intéresser au coping ?</h3>
+                    <h3 style="font-weight: 700; font-size: 1.25rem; margin-bottom: 0.75rem; color: #0369a1;">Pourquoi s'intéresser au coping ?</h3>
                     <p style="color: var(--color-text-secondary); line-height: 1.7;">Le stress fait partie intégrante de la vie. La manière dont nous y faisons face — nos stratégies de coping — a un impact direct et profond sur notre santé mentale, notre bien-être et même notre santé physique. Comprendre ces stratégies n'est pas un simple exercice académique ; c'est acquérir une compétence de vie essentielle. Cet outil a pour but de rendre cette connaissance accessible, nuancée et directement applicable, en se basant sur des articles scientifiques.</p>
                 </div>
                 <div>
-                    <h3 style="font-weight: 700; font-size: 1.25rem; margin-bottom: 0.75rem; color: #0ea5e9;">Définitions Clés</h3>
+                    <h3 style="font-weight: 700; font-size: 1.25rem; margin-bottom: 0.75rem; color: #0369a1;">Définitions Clés</h3>
                     <p style="color: var(--color-text-secondary); line-height: 1.7; margin-bottom: 0.75rem;">
                         <strong style="color: var(--color-text-primary);">Stress :</strong> Ce n'est pas juste un événement, mais une <strong>transaction</strong> entre une personne et son environnement, qui survient lorsque les exigences perçues dépassent les ressources perçues <span class="citation">(Lazarus & Folkman, 1984)</span>.
                     </p>
@@ -106,7 +106,7 @@
             <div style="max-width: 900px; margin: 0 auto;">
                 <!-- Approche -->
                 <div style="margin-bottom: 2rem;">
-                    <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: #0ea5e9;">
+                    <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: #0369a1;">
                         <i class="fas fa-arrow-right"></i> Stratégies d'Approche (Engagement)
                     </h3>
                     <div id="accordion-approche" style="display: flex; flex-direction: column; gap: 0.75rem;">
@@ -115,7 +115,7 @@
                 </div>
                 <!-- Évitement -->
                 <div>
-                    <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: #f59e0b;">
+                    <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: #b45309;">
                         <i class="fas fa-arrow-left"></i> Stratégies d'Évitement (Désengagement)
                     </h3>
                     <div id="accordion-évitement" style="display: flex; flex-direction: column; gap: 0.75rem;">
@@ -136,10 +136,10 @@
             <div style="background: var(--surface-inset); padding: 1.5rem; border-radius: var(--radius-lg); border: 1px solid var(--color-border); max-width: 700px; margin: 0 auto;">
                 <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1.5rem; color: var(--color-text-primary);">Ma situation stressante est-elle...</h3>
                 <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-bottom: 1.5rem;">
-                    <button id="btn-controllable" class="btn-primary" style="background: linear-gradient(135deg, #0ea5e9, #06b6d4); padding: 0.75rem 1.5rem;">
+                    <button id="btn-controllable" class="btn-primary" style="background: linear-gradient(135deg, #0369a1, #075985); color:#fff; padding: 0.75rem 1.5rem;">
                         <i class="fas fa-check-circle"></i> Contrôlable
                     </button>
-                    <button id="btn-uncontrollable" class="btn-primary" style="background: linear-gradient(135deg, #f59e0b, #d97706); padding: 0.75rem 1.5rem;">
+                    <button id="btn-uncontrollable" class="btn-primary" style="background: linear-gradient(135deg, #b45309, #92400e); color:#fff; padding: 0.75rem 1.5rem;">
                         <i class="fas fa-times-circle"></i> Incontrôlable
                     </button>
                 </div>
@@ -359,13 +359,13 @@
                     </div>
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
                         <div class="accordion-detail-card advantage-card">
-                            <h4 style="font-weight: 600; font-size: 1.1rem; color: #10b981; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                            <h4 style="font-weight: 600; font-size: 1.1rem; color: #047857; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
                                 <i class="fas fa-check-circle"></i> Intérêts / Avantages
                             </h4>
                             <p style="color: var(--color-text-secondary); font-size: 0.9rem;">${details.advantages}</p>
                         </div>
                         <div class="accordion-detail-card risk-card">
-                            <h4 style="font-weight: 600; font-size: 1.1rem; color: #ef4444; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                            <h4 style="font-weight: 600; font-size: 1.1rem; color: #b91c1c; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
                                 <i class="fas fa-exclamation-triangle"></i> Limites / Risques
                             </h4>
                             <p style="color: var(--color-text-secondary); font-size: 0.9rem;">${details.risks}</p>
@@ -427,13 +427,13 @@
         const resultDiv = document.getElementById('fit-result');
         document.getElementById('btn-controllable').addEventListener('click', () => {
             const fitData = data.fit.controllable;
-            resultDiv.innerHTML = `<div style="text-align: left;"><h4 style="font-weight: 700; color: #0ea5e9;">${fitData.title}</h4><p style="margin-top: 0.5rem; color: var(--color-text-secondary);">${fitData.text}</p></div>`;
+            resultDiv.innerHTML = `<div style="text-align: left;"><h4 style="font-weight: 700; color: #0369a1;">${fitData.title}</h4><p style="margin-top: 0.5rem; color: var(--color-text-secondary);">${fitData.text}</p></div>`;
             resultDiv.style.background = 'rgba(14, 165, 233, 0.1)';
             resultDiv.style.borderColor = 'rgba(14, 165, 233, 0.3)';
         });
         document.getElementById('btn-uncontrollable').addEventListener('click', () => {
             const fitData = data.fit.uncontrollable;
-            resultDiv.innerHTML = `<div style="text-align: left;"><h4 style="font-weight: 700; color: #f59e0b;">${fitData.title}</h4><p style="margin-top: 0.5rem; color: var(--color-text-secondary);">${fitData.text}</p></div>`;
+            resultDiv.innerHTML = `<div style="text-align: left;"><h4 style="font-weight: 700; color: #b45309;">${fitData.title}</h4><p style="margin-top: 0.5rem; color: var(--color-text-secondary);">${fitData.text}</p></div>`;
             resultDiv.style.background = 'rgba(245, 158, 11, 0.1)';
             resultDiv.style.borderColor = 'rgba(245, 158, 11, 0.3)';
         });
