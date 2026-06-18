@@ -19,7 +19,9 @@
         }
         .guide-card h3 { color: var(--color-text-primary); margin-bottom: 0.75rem; }
         .guide-card p, .guide-card li { color: var(--color-text-muted); }
-        .badge-guides { background: rgba(100, 116, 139, 0.15); color: #475569; border: 1px solid rgba(100, 116, 139, 0.3); }
+        .badge-guides { background: #64748b; color: #ffffff; border: none; }
+        /* Contraste mode clair (AA) : accents et bleu clair lisibles sur fond clair */
+        body.light-questionnaire { --accent-green: #166534; --accent-amber: #92400e; --accent-red: #b91c1c; --color-primary-light: #0369a1; }
 
         html { scroll-behavior: smooth; }
 
@@ -406,7 +408,7 @@
                             <span>Danger imminent pour soi/autrui</span>
                         </label>
                     </div>
-                    <div id="checklist-result" class="checklist-result" style="background: rgba(30, 41, 59, 0.6); border: 1px solid var(--color-border); color: var(--color-text-muted);">
+                    <div id="checklist-result" class="checklist-result" style="background: #f1f5f9; border: 1px solid var(--color-border); color: #475569;">
                         Sélectionnez les signes observés pour une recommandation.
                     </div>
                 </div>
