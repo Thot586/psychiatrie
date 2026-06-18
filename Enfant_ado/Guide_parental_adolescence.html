@@ -76,7 +76,7 @@
             color: var(--color-text-secondary);
         }
         .nav-btn.active {
-            background: linear-gradient(135deg, rgba(20, 184, 166, 0.9), rgba(13, 148, 136, 0.9));
+            background: linear-gradient(135deg, #0f766e, #115e59);
             color: white;
             box-shadow: 0 4px 15px rgba(20, 184, 166, 0.3);
         }
@@ -179,7 +179,7 @@
             margin: 0;
         }
         .stat-card .font-semibold {
-            color: #a5b4fc;
+            color: #4338ca;
         }
 
         /* Evidence badges */
@@ -192,7 +192,7 @@
             letter-spacing: 0.05em;
         }
         .evidence-high { background: #15803d; color: white; }
-        .evidence-moderate { background: #d97706; color: white; }
+        .evidence-moderate { background: #b45309; color: white; }
         .evidence-low { background: #b91c1c; color: white; }
 
         /* Brain diagram */
@@ -211,7 +211,7 @@
         }
         .brain-bar .limbic {
             flex: 7;
-            background: linear-gradient(135deg, #ef4444, #dc2626);
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -223,7 +223,7 @@
         }
         .brain-bar .prefrontal {
             flex: 3;
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -321,6 +321,9 @@
         .styled-list strong {
             color: var(--color-text-secondary);
         }
+        /* Contraste AA : blockquotes (fond sombre translucide + texte sombre) → fond clair ; stat-card */
+        body.light-questionnaire blockquote { background: #f1f5f9 !important; }
+        body.light-questionnaire .stat-card p { color: #475569; }
     </style>
 </head>
 <body class="light-questionnaire">
