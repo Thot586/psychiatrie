@@ -72,6 +72,9 @@
             color: #0f172a;
         }
         .step-btn.active .step-number { background: var(--cat-light); color: #0f172a; }
+        body.light-questionnaire .sticky-header .step-btn { color: #475569; }
+        body.light-questionnaire .sticky-header .step-btn.active { background: #b91c1c; color: #ffffff; border-color: #b91c1c; }
+        body.light-questionnaire .sticky-header .step-btn.active .step-number { background: rgba(255,255,255,0.25); color: #ffffff; }
 
         /* Content sections */
         .step-content { display: none; animation: fadeIn 0.5s ease-in-out; }
@@ -108,7 +111,7 @@
         .case-tab.active-purple {
             background: rgba(168, 85, 247, 0.1);
             border-color: #a855f7;
-            color: #c084fc;
+            color: #7e22ce;
         }
         .case-tab h4 { margin: 0 0 0.25rem 0; font-size: 1.1rem; }
         .case-tab p { margin: 0; font-size: var(--font-size-sm); }
@@ -380,6 +383,10 @@
             body { background: white !important; }
             .step-content { display: block !important; }
         }
+        /* Contraste AA : texte de listes/paragraphes des encadrés légèrement assombri */
+        body.light-questionnaire .accordion-content-inner li,
+        body.light-questionnaire .accordion-content-inner p,
+        body.light-questionnaire .action-list li { color: #475569; }
     </style>
 </head>
 <body class="light-questionnaire">
@@ -470,20 +477,20 @@
                     <!-- Suicide Case -->
                     <div id="case-suicide" class="case-content">
                         <div class="scenario-box purple">
-                            <h3 style="color: #c084fc; margin-bottom: 1rem;"><i class="fas fa-file-alt" style="margin-right: 0.5rem;"></i>Cas 2 : La détresse de Kanto</h3>
+                            <h3 style="color: #7e22ce; margin-bottom: 1rem;"><i class="fas fa-file-alt" style="margin-right: 0.5rem;"></i>Cas 2 : La détresse de Kanto</h3>
                             <p><strong>Kanto, 28 ans</strong>, est admise aux urgences après une intoxication médicamenteuse volontaire (IMV). Elle a ingéré une vingtaine de comprimés de paracétamol après une rupture sentimentale il y a 3 jours. C'est sa colocataire qui l'a trouvée et a appelé les secours. Kanto est consciente mais prostrée, parle peu. Elle dit qu'elle « voulait que ça s'arrête ». Elle à des antécédents de dépression traitée il y a 2 ans. Elle vit seule depuis la rupture, a perdu son emploi le mois dernier, et dit n'avoir « plus personne ».</p>
                         </div>
                         <div class="feature-grid">
                             <div class="feature-card purple">
-                                <h4><i class="fas fa-user-clock" style="color: #c084fc; margin-right: 0.5rem;"></i>Âge</h4>
+                                <h4><i class="fas fa-user-clock" style="color: #7e22ce; margin-right: 0.5rem;"></i>Âge</h4>
                                 <p>28 ans</p>
                             </div>
                             <div class="feature-card purple">
-                                <h4><i class="fas fa-pills" style="color: #c084fc; margin-right: 0.5rem;"></i>Motif d'admission</h4>
+                                <h4><i class="fas fa-pills" style="color: #7e22ce; margin-right: 0.5rem;"></i>Motif d'admission</h4>
                                 <p>IMV paracétamol (~20 cp)</p>
                             </div>
                             <div class="feature-card purple">
-                                <h4><i class="fas fa-history" style="color: #c084fc; margin-right: 0.5rem;"></i>Antécédents</h4>
+                                <h4><i class="fas fa-history" style="color: #7e22ce; margin-right: 0.5rem;"></i>Antécédents</h4>
                                 <p>Dépression traitée il y a 2 ans</p>
                             </div>
                         </div>
@@ -606,7 +613,7 @@
 
                     <!-- Suicide Évaluation -->
                     <div id="eval-suicide" class="case-content">
-                        <h3 style="color: #c084fc; margin-bottom: 1rem;"><i class="fas fa-search" style="margin-right: 0.5rem;"></i>Évaluation de Kanto</h3>
+                        <h3 style="color: #7e22ce; margin-bottom: 1rem;"><i class="fas fa-search" style="margin-right: 0.5rem;"></i>Évaluation de Kanto</h3>
 
                         <div class="accordion-container">
                             <button type="button" class="accordion-button" data-target="acc-sui-1">
@@ -741,7 +748,7 @@
                             <p style="font-weight: 600; font-size: var(--font-size-lg); color: var(--color-text-primary); margin-bottom: 1rem;"><i class="fas fa-question-circle" style="color: #a855f7; margin-right: 0.5rem;"></i>Quel est le niveau de risque suicidaire actuel ?</p>
                             <div>
                                 <button onclick="showDecisionResult('result-hospit')" class="decision-option"><i class="fas fa-hospital" style="margin-right: 0.5rem; color: #ef4444;"></i>Élevé : idéation persistante, isolement, moyens accessibles</button>
-                                <button onclick="showDecisionResult('result-ambu')" class="decision-option"><i class="fas fa-home" style="margin-right: 0.5rem; color: #15803d;"></i>Modéré : ambivalence, soutien présent, alliance thérapeutique</button>
+                                <button onclick="showDecisionResult('result-ambu')" class="decision-option"><i class="fas fa-home" style="margin-right: 0.5rem; color: #166534;"></i>Modéré : ambivalence, soutien présent, alliance thérapeutique</button>
                             </div>
                         </div>
 
@@ -913,7 +920,7 @@
 
                     <!-- Suicide Management -->
                     <div id="pec-suicide" class="case-content">
-                        <h3 style="color: #c084fc; margin-bottom: 1rem;"><i class="fas fa-procedures" style="margin-right: 0.5rem;"></i>Prise en charge de Kanto</h3>
+                        <h3 style="color: #7e22ce; margin-bottom: 1rem;"><i class="fas fa-procedures" style="margin-right: 0.5rem;"></i>Prise en charge de Kanto</h3>
 
                         <div class="emergency-protocol">
                             <h4><i class="fas fa-heartbeat"></i> Prise en charge somatique urgente</h4>
@@ -925,7 +932,7 @@
                             </ol>
                         </div>
 
-                        <h4 style="margin: 1.5rem 0 1rem; color: var(--color-text-primary);"><i class="fas fa-brain" style="color: #c084fc; margin-right: 0.5rem;"></i>Prise en charge psychiatrique</h4>
+                        <h4 style="margin: 1.5rem 0 1rem; color: var(--color-text-primary);"><i class="fas fa-brain" style="color: #7e22ce; margin-right: 0.5rem;"></i>Prise en charge psychiatrique</h4>
                         <ul class="action-list">
                             <li><strong>Entretien psychiatrique :</strong> Dès que l'état somatique le permet, évaluation complète du risque suicidaire.</li>
                             <li><strong>Alliance thérapeutique :</strong> Posture empathique, sans jugement, valider la souffrance.</li>
@@ -934,7 +941,7 @@
                             <li><strong>Orientation :</strong> Hospitalisation psychiatrique compte tenu du risque élevé.</li>
                         </ul>
 
-                        <h4 style="margin: 1.5rem 0 1rem; color: var(--color-text-primary);"><i class="fas fa-clipboard-list" style="color: #c084fc; margin-right: 0.5rem;"></i>Éléments du plan de sécurité</h4>
+                        <h4 style="margin: 1.5rem 0 1rem; color: var(--color-text-primary);"><i class="fas fa-clipboard-list" style="color: #7e22ce; margin-right: 0.5rem;"></i>Éléments du plan de sécurité</h4>
                         <div class="feature-grid">
                             <div class="feature-card purple">
                                 <h4>1. Signaux d'alerte</h4>
@@ -1000,7 +1007,7 @@
                     </div>
 
                     <div style="margin-top: 2rem;">
-                        <h3 style="margin-bottom: 1rem;"><i class="fas fa-tasks" style="color: #15803d; margin-right: 0.5rem;"></i>Checklist d'auto-évaluation</h3>
+                        <h3 style="margin-bottom: 1rem;"><i class="fas fa-tasks" style="color: #166534; margin-right: 0.5rem;"></i>Checklist d'auto-évaluation</h3>
                         <p style="color: var(--color-text-muted); margin-bottom: 1rem;">Cochez les compétences acquises :</p>
 
                         <div class="checklist-item">
@@ -1037,7 +1044,7 @@
                         </div>
 
                         <div id="checklist-result" style="margin-top: 1rem; padding: 1rem; background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); display: none;">
-                            <p style="color: #15803d; margin: 0;"><i class="fas fa-check-circle" style="margin-right: 0.5rem;"></i><span id="checklist-count">0</span>/8 compétences validées</p>
+                            <p style="color: #166534; margin: 0;"><i class="fas fa-check-circle" style="margin-right: 0.5rem;"></i><span id="checklist-count">0</span>/8 compétences validées</p>
                         </div>
                     </div>
 
