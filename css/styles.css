@@ -534,14 +534,14 @@ a:hover {
 .badge-cat-tnd            { background: #7c3aed; color: #ffffff; border: none; }  /* violet */
 .badge-cat-psychose       { background: #5b21b6; color: #ffffff; border: none; }  /* indigo-deep */
 .badge-cat-humeur         { background: #2563eb; color: #ffffff; border: none; }  /* blue */
-.badge-cat-rehab          { background: #0891b2; color: #ffffff; border: none; }  /* cyan (was #0284c7, colliding with Humeur) */
+.badge-cat-rehab          { background: #0e7490; color: #ffffff; border: none; }  /* cyan-700 (AA: blanc ≥4.5) */
 .badge-cat-trauma         { background: #4f46e5; color: #ffffff; border: none; }  /* indigo */
 .badge-cat-crise          { background: #3e6b99; color: #ffffff; border: none; }  /* slate-blue */
 .badge-cat-anxiete        { background: #047857; color: #ffffff; border: none; }  /* green */
 .badge-cat-enfant         { background: #0d7c72; color: #ffffff; border: none; }  /* teal */
 .badge-cat-perso          { background: #b45309; color: #ffffff; border: none; }  /* amber */
 .badge-cat-clinique       { background: #9a3412; color: #ffffff; border: none; }  /* terracotta (was #92400e) */
-.badge-cat-substance      { background: #db2777; color: #ffffff; border: none; }  /* pink */
+.badge-cat-substance      { background: #be185d; color: #ffffff; border: none; }  /* pink-700 (AA: blanc ≥4.5) */
 .badge-cat-transculturelle{ background: #9d174d; color: #ffffff; border: none; }  /* rose-soft */
 .badge-cat-guides         { background: #64748b; color: #ffffff; border: none; }  /* slate */
 .badge-cat-ressources     { background: #475569; color: #ffffff; border: none; }  /* steel */
