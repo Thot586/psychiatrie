@@ -232,7 +232,8 @@
             border-color: rgba(13, 148, 136, 0.25);
         }
         .quiz-legend { color: var(--color-text-primary); font-weight: 500; margin-bottom: 0.25rem; font-size: 0.95rem; padding: 0; }
-        .quiz-hint { font-size: 0.8rem; color: var(--color-text-dimmed); font-style: italic; margin: 0.5rem 0 0; padding-left: 0.5rem; border-left: 2px solid var(--color-border); line-height: 1.5; }
+        .quiz-hint { font-size: 0.82rem; color: var(--color-text-dimmed); font-style: italic; margin: 0.4rem 0 0.9rem; padding: 0.4rem 0.7rem; background: rgba(13,148,136,0.04); border-left: 3px solid rgba(13,148,136,0.3); border-radius: 0 8px 8px 0; line-height: 1.5; }
+        .quiz-hint i { color: var(--brand-teal-2); font-style: normal; margin-right: 0.15rem; }
         .quiz-question p { color: var(--color-text-primary); font-weight: 500; margin-bottom: 0.75rem; font-size: 0.95rem; }
         .quiz-global-instruction {
             background: rgba(13, 148, 136, 0.08); border: 1px solid rgba(13, 148, 136, 0.2);
@@ -909,8 +910,105 @@
             border: 0;
         }
 
+        .quiz-meta {
+            display: inline-flex; align-items: center; gap: 0.45rem;
+            font-size: 0.85rem; color: var(--color-text-dimmed); font-weight: 500;
+            margin: 0 0 0.5rem;
+        }
+        .quiz-meta i { color: var(--brand-teal-2); }
+
+        .quiz-progress { display: flex; align-items: center; gap: 0.85rem; margin: 0.5rem 0 1.75rem; }
+        .quiz-progress-track {
+            flex: 1; height: 10px; border-radius: 6px; background: #e2e8f0;
+            box-shadow: inset 2px 2px 4px rgba(0,0,0,0.08), inset -2px -2px 4px rgba(255,255,255,0.8);
+            overflow: hidden;
+        }
+        .quiz-progress-fill {
+            height: 100%; width: 0%; border-radius: 6px;
+            background: linear-gradient(90deg, var(--brand-teal-2), var(--brand-teal-light));
+            transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
+        }
+        .quiz-progress-label {
+            font-family: 'Lexend', sans-serif; font-weight: 700; font-size: 0.82rem;
+            color: var(--brand-teal-dark); white-space: nowrap; flex-shrink: 0;
+        }
+
+        .quiz-question-flash { animation: quizFlash 1.2s ease; }
+        @keyframes quizFlash {
+            0%, 100% { box-shadow: 8px 8px 16px rgba(0,0,0,0.07), -8px -8px 16px rgba(255,255,255,0.85); }
+            25%, 60% { box-shadow: 0 0 0 3px rgba(13,148,136,0.5), 8px 8px 16px rgba(0,0,0,0.07); }
+        }
+
+        .sticky-cta {
+            position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
+            padding: 0.7rem 1rem calc(0.7rem + env(safe-area-inset-bottom, 0px));
+            background: rgba(255,255,255,0.92); backdrop-filter: blur(8px);
+            border-top: 1px solid var(--color-border);
+            box-shadow: 0 -4px 16px rgba(0,0,0,0.08);
+            transform: translateY(130%);
+            transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+        }
+        .sticky-cta.visible { transform: translateY(0); }
+        .sticky-cta-inner { max-width: 640px; margin: 0 auto; display: flex; align-items: center; gap: 0.85rem; }
+        .sticky-cta-count {
+            font-family: 'Lexend', sans-serif; font-weight: 800; font-size: 0.95rem;
+            color: var(--brand-teal-dark); flex-shrink: 0; min-width: 3.2em; text-align: center;
+        }
+        .sticky-cta-btn {
+            flex: 1; padding: 0.9rem 1rem; border: none; border-radius: 12px;
+            font-family: 'Lexend', sans-serif; font-weight: 700; font-size: 1rem;
+            cursor: pointer; color: var(--brand-teal-dark); background: #e2e8f0;
+            transition: all 0.25s ease;
+            display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+        }
+        .sticky-cta-btn.is-ready {
+            color: #fff; background: linear-gradient(145deg, var(--brand-teal-2), var(--brand-teal-dark));
+            box-shadow: 0 4px 14px rgba(13,148,136,0.35);
+        }
+        .sticky-cta-btn.is-ready:hover { transform: translateY(-2px); }
+        body.has-sticky-cta { padding-bottom: 5.5rem; }
+
+        .result-headline { margin: 0 0 1rem; }
+        .result-headline-text {
+            font-family: 'Lexend', sans-serif; font-size: 1.15rem; font-weight: 600;
+            line-height: 1.5; color: var(--color-text-primary); margin: 0;
+        }
+        .result-headline-text strong { color: var(--brand-teal-dark); font-weight: 800; }
+        .result-headline-sub {
+            display: block; margin-top: 0.4rem;
+            font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 400;
+            color: var(--color-text-dimmed);
+        }
+
+        .result-actions { margin-top: 1.5rem; }
+        .result-action-primary { margin-top: 0; }
+        .result-actions-secondary { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.85rem; justify-content: center; }
+        .btn-result-secondary {
+            flex: 1; min-width: 180px;
+            display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
+            padding: 0.7rem 1rem; border-radius: 12px;
+            background: transparent; border: 1.5px solid var(--color-border); color: var(--color-text-muted);
+            font-family: 'Lexend', sans-serif; font-weight: 600; font-size: 0.9rem;
+            cursor: pointer; transition: all 0.2s ease;
+        }
+        .btn-result-secondary:hover {
+            border-color: var(--brand-teal-2); color: var(--brand-teal-dark); background: rgba(13,148,136,0.05);
+        }
+
+        .explorer-details { margin-bottom: 2rem; }
+        .explorer-summary {
+            cursor: pointer; list-style: none;
+            font-family: 'Lexend', sans-serif; font-weight: 600; font-size: 0.95rem;
+            color: var(--brand-teal); padding: 0.85rem 1.25rem; border-radius: 12px;
+            background: rgba(13,124,114,0.06); border: 1px solid rgba(13,124,114,0.2);
+            display: flex; align-items: center; gap: 0.6rem; transition: background 0.2s;
+        }
+        .explorer-summary::-webkit-details-marker { display: none; }
+        .explorer-summary:hover { background: rgba(13,124,114,0.12); }
+        .explorer-details[open] .explorer-summary { margin-bottom: 1.5rem; }
+
         @media print {
-            .navigation-bar, .footer { display: none !important; }
+            .navigation-bar, .footer, .sticky-cta { display: none !important; }
             body { background: white !important; }
             body::before { display: none !important; }
             .intro-card, .details-panel, .profile-card, .accordion-item,
@@ -1061,8 +1159,8 @@
         </header>
 
         <section id="intro" class="intro-card">
-            <h2>Introduction & Précautions d'usage</h2>
-            <p>Cet outil a pour vocation de fournir un langage commun pour mieux comprendre les différents modes de fonctionnement au travail. L'objectif est de transformer la diversité cognitive, souvent source de friction, en un levier de performance et de collaboration.</p>
+            <h2>Bienvenue — comprenez votre style au travail</h2>
+            <p>Ce petit questionnaire vous offre un <strong>langage commun</strong> pour mieux saisir votre façon de fonctionner au travail, et celle de vos collègues. L'idée : transformer la diversité des approches — souvent source de friction — en atout de collaboration. Il n'y a ni bon ni mauvais profil.</p>
             <div class="warning-box">
                 <h3><i class="fas fa-exclamation-triangle"></i> Avertissement : Des archétypes, pas des boîtes</h3>
                 <p>Ces profils sont des <strong>archétypes</strong>, pas des étiquettes. Un individu est infiniment plus complexe. Utilisez cet outil non pas comme un diagnostic, mais comme un <strong>point de départ pour le dialogue</strong> et une meilleure compréhension mutuelle.</p>
@@ -1103,20 +1201,25 @@
 
         <section id="quiz" class="intro-card">
             <h2><i class="fas fa-compass"></i> Découvrez votre profil</h2>
-            <p style="color: var(--color-text-muted);">16 situations professionnelles, aucune bonne ou mauvaise réponse. Pour chaque situation, indiquez à quel point chaque pôle vous décrit ; les deux échelles sont indépendantes.</p>
+            <p class="quiz-meta"><i class="fas fa-clock" aria-hidden="true"></i> Environ 5 min · 16 situations · aucune bonne ou mauvaise réponse</p>
             <div class="quiz-global-instruction">
-                <i class="fas fa-info-circle"></i> Pour chaque question, évaluez votre affinité avec <strong>chaque pôle indépendamment</strong>. Vous pouvez cocher une intensité forte sur les deux côtés si vous vous reconnaissez dans les deux.
+                <i class="fas fa-info-circle"></i> Pour chaque situation, indiquez à quel point <strong>chaque pôle</strong> vous décrit — les deux échelles sont indépendantes. Vous pouvez vous reconnaître fortement dans les deux.
+            </div>
+            <div id="quiz-progress" class="quiz-progress" role="progressbar" aria-valuemin="0" aria-valuemax="16" aria-valuenow="0" aria-label="Progression du questionnaire">
+                <div class="quiz-progress-track"><div id="quiz-progress-fill" class="quiz-progress-fill"></div></div>
+                <span id="quiz-progress-label" class="quiz-progress-label">0 / 16 situations</span>
             </div>
             <div id="quiz-questions"></div>
-            <button class="btn-quiz-submit" id="quiz-submit" onclick="submitQuiz()">
-                <i class="fas fa-chart-line" aria-hidden="true"></i> Découvrir mon profil
+            <button class="btn-quiz-submit" id="quiz-submit" onclick="submitQuiz()" disabled>
+                <i class="fas fa-star" aria-hidden="true"></i> Découvrir mon profil
             </button>
-            <p id="quiz-submit-hint" style="text-align:center; font-size:0.8rem; color: var(--color-text-dimmed); margin-top:0.5rem;"></p>
+            <p id="quiz-submit-hint" style="text-align:center; font-size:0.85rem; color: var(--color-text-dimmed); margin-top:0.5rem;"></p>
         </section>
 
         <section id="quiz-results" class="intro-card" style="display: none;" aria-live="polite">
             <h2 id="results-heading" tabindex="-1"><i class="fas fa-star" aria-hidden="true"></i> Votre profil cognitif</h2>
 
+            <div id="result-headline" class="result-headline"></div>
             <div id="result-disclaimer" style="margin-bottom: 1.25rem;"></div>
             <div id="context-message"></div>
             <div id="axis-gauges"></div>
@@ -1134,16 +1237,18 @@
                 </div>
             </details>
 
-            <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.5rem;">
-                <button class="btn-quiz-submit" style="flex: 1; min-width: 200px;" onclick="document.querySelector('.main-grid').scrollIntoView({behavior:'smooth'})">
-                    <i class="fas fa-book-open"></i> Explorer tous les profils
+            <div class="result-actions">
+                <button class="btn-quiz-submit result-action-primary" onclick="exportResults()">
+                    <i class="fas fa-download" aria-hidden="true"></i> Exporter / partager mon profil
                 </button>
-                <button class="btn-quiz-submit" style="flex: 1; min-width: 200px; background: linear-gradient(145deg, #2563eb, #1d4ed8);" onclick="exportResults()">
-                    <i class="fas fa-download"></i> Exporter en image
-                </button>
-                <button class="btn-quiz-submit" style="flex: 1; min-width: 200px; background: linear-gradient(145deg, #64748b, #475569);" onclick="resetQuiz()">
-                    <i class="fas fa-redo"></i> Refaire le quiz
-                </button>
+                <div class="result-actions-secondary">
+                    <button class="btn-result-secondary" onclick="openExplorer()">
+                        <i class="fas fa-book-open" aria-hidden="true"></i> Explorer les 8 profils
+                    </button>
+                    <button class="btn-result-secondary" onclick="resetQuiz()">
+                        <i class="fas fa-redo" aria-hidden="true"></i> Refaire le quiz
+                    </button>
+                </div>
             </div>
 
             <div class="science-note" style="margin-top: 1.5rem;">
@@ -1155,23 +1260,35 @@
             </div>
         </section>
 
-        <main class="main-grid">
-            <aside class="sidebar">
-                <h2 class="sidebar-title">Axes</h2>
-                <div id="axes-accordion" class="accordion-container">
-                </div>
-            </aside>
+        <details id="explorer-details" class="explorer-details">
+            <summary class="explorer-summary"><i class="fas fa-compass" aria-hidden="true"></i> Explorer les 8 profils en détail</summary>
+            <main class="main-grid">
+                <aside class="sidebar">
+                    <h2 class="sidebar-title">Axes</h2>
+                    <div id="axes-accordion" class="accordion-container">
+                    </div>
+                </aside>
 
-            <section id="details" class="details-panel">
-                 <div id="details-placeholder" class="details-placeholder">
-                    <span class="icon"><i class="fas fa-compass"></i></span>
-                    <h3>Sélectionnez un axe pour commencer</h3>
-                    <p>Cliquez sur l'un des axes dans le menu pour explorer les profils correspondants.</p>
-                </div>
-                <div id="axis-details-container" class="axis-details-container"></div>
-            </section>
-        </main>
+                <section id="details" class="details-panel">
+                     <div id="details-placeholder" class="details-placeholder">
+                        <span class="icon"><i class="fas fa-compass"></i></span>
+                        <h3>Sélectionnez un axe pour commencer</h3>
+                        <p>Cliquez sur l'un des axes dans le menu pour explorer les profils correspondants.</p>
+                    </div>
+                    <div id="axis-details-container" class="axis-details-container"></div>
+                </section>
+            </main>
+        </details>
 
+    </div>
+
+    <div id="sticky-cta" class="sticky-cta">
+        <div class="sticky-cta-inner">
+            <span id="sticky-count" class="sticky-cta-count">0/16</span>
+            <button id="quiz-submit-sticky" class="sticky-cta-btn" type="button" onclick="stickyCtaClick()" aria-label="Il reste 16 situations à renseigner — aller à la suivante">
+                Il reste 16 situations <i class="fas fa-arrow-down" aria-hidden="true"></i>
+            </button>
+        </div>
     </div>
 
     <footer class="footer">
@@ -1427,9 +1544,11 @@
             { axis: 3, poleA: "L'exploration de l'inconnu", poleB: "La maîtrise de mon domaine", text: "Je tire le plus de satisfaction de...", hint: "Ex : Fin de journée — vous êtes plus fier d'avoir exploré un nouveau domaine ou d'avoir maîtrisé votre sujet ?" }
         ];
         const quizAnswers = Array.from({length: 16}, () => ({ poleA: 0, poleB: 0 }));
-        const MIN_ANSWERS = 4;
+        const TOTAL_QUESTIONS = quizQuestions.length;
+        const answeredQuestions = new Set();
         let userChartInstance = null;
         let currentTopRanked = null; // array of ranked profiles after quiz
+        const stickyState = { quizInView: false, btnInView: false, resultsShown: false };
 
         const axisHeaders = [
             { icon: 'fa-microscope', title: "Traitement de l'Information", color: '#0d9488' },
@@ -1441,18 +1560,66 @@
         const intensityLabels = ['Pas du tout', 'Un peu', 'Modérément', 'Fortement'];
 
         function countAnswered() {
-            return quizAnswers.filter(a => a.poleA > 0 || a.poleB > 0).length;
+            return answeredQuestions.size;
         }
 
         function updateSubmitState() {
+            const n = countAnswered();
+            const remaining = TOTAL_QUESTIONS - n;
+            const complete = remaining <= 0;
+            const plural = remaining > 1 ? 's' : '';
+
+            const fill = document.getElementById('quiz-progress-fill');
+            const progressLabel = document.getElementById('quiz-progress-label');
+            const progress = document.getElementById('quiz-progress');
+            if (fill) fill.style.width = Math.round((n / TOTAL_QUESTIONS) * 100) + '%';
+            if (progressLabel) progressLabel.textContent = `${n} / ${TOTAL_QUESTIONS} situations`;
+            if (progress) progress.setAttribute('aria-valuenow', String(n));
+
             const btn = document.getElementById('quiz-submit');
             const hint = document.getElementById('quiz-submit-hint');
-            if (!btn) return;
-            const n = countAnswered();
-            btn.disabled = n < MIN_ANSWERS;
-            if (hint) hint.textContent = n < MIN_ANSWERS
-                ? `Répondez à au moins ${MIN_ANSWERS} situations pour découvrir votre profil (${n}/${MIN_ANSWERS}).`
-                : '';
+            if (btn) btn.disabled = !complete;
+            if (hint) hint.textContent = complete ? '' : `Encore ${remaining} situation${plural} à renseigner.`;
+
+            const stickyBtn = document.getElementById('quiz-submit-sticky');
+            const stickyCount = document.getElementById('sticky-count');
+            if (stickyCount) stickyCount.textContent = `${n}/${TOTAL_QUESTIONS}`;
+            if (stickyBtn) {
+                stickyBtn.classList.toggle('is-ready', complete);
+                stickyBtn.innerHTML = complete
+                    ? '<i class="fas fa-star" aria-hidden="true"></i> Découvrir mon profil'
+                    : `Il reste ${remaining} situation${plural} <i class="fas fa-arrow-down" aria-hidden="true"></i>`;
+                stickyBtn.setAttribute('aria-label', complete
+                    ? 'Découvrir mon profil'
+                    : `Il reste ${remaining} situation${plural} à renseigner — aller à la suivante`);
+            }
+        }
+
+        function scrollToFirstUnanswered() {
+            for (let i = 0; i < TOTAL_QUESTIONS; i++) {
+                if (!answeredQuestions.has(i)) {
+                    const el = document.getElementById(`quiz-q${i}`);
+                    if (el) {
+                        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        el.classList.add('quiz-question-flash');
+                        setTimeout(() => el.classList.remove('quiz-question-flash'), 1200);
+                    }
+                    return;
+                }
+            }
+        }
+
+        function stickyCtaClick() {
+            if (countAnswered() >= TOTAL_QUESTIONS) submitQuiz();
+            else scrollToFirstUnanswered();
+        }
+
+        function refreshStickyVisibility() {
+            const bar = document.getElementById('sticky-cta');
+            if (!bar) return;
+            const show = stickyState.quizInView && !stickyState.btnInView && !stickyState.resultsShown;
+            bar.classList.toggle('visible', show);
+            document.body.classList.toggle('has-sticky-cta', show);
         }
 
         function hideDecorativeIcons(root = document) {
@@ -1492,12 +1659,12 @@
                 };
                 html += `<fieldset class="quiz-question" id="quiz-q${i}">
                     <legend class="quiz-legend">${i + 1}. ${q.text}</legend>
+                    ${q.hint ? `<p class="quiz-hint"><i class="fas fa-lightbulb" aria-hidden="true"></i> ${q.hint}</p>` : ''}
                     <div class="quiz-dual-container">
                         ${renderPole('poleA', q.poleA, 'pole-a')}
                         <div class="quiz-dual-separator">ET</div>
                         ${renderPole('poleB', q.poleB, 'pole-b')}
                     </div>
-                    ${q.hint ? `<p class="quiz-hint">${q.hint}</p>` : ''}
                 </fieldset>`;
             });
             container.innerHTML = html;
@@ -1516,6 +1683,7 @@
 
         function selectQuizAnswer(questionIndex, pole, value) {
             quizAnswers[questionIndex][pole] = value;
+            answeredQuestions.add(questionIndex);
             // Mark panel as answered
             const fieldset = document.getElementById(`quiz-q${questionIndex}`);
             const panelClass = pole === 'poleA' ? 'pole-a' : 'pole-b';
@@ -1551,7 +1719,7 @@
         }
 
         function submitQuiz() {
-            if (countAnswered() < MIN_ANSWERS) return;
+            if (countAnswered() < TOTAL_QUESTIONS) return;
             const { profileScores, ranked } = computeScores();
             currentTopRanked = ranked;
 
@@ -1573,6 +1741,8 @@
             const resultsEl = document.getElementById('quiz-results');
             resultsEl.style.display = 'block';
             resultsEl.classList.add('fade-in');
+            stickyState.resultsShown = true;
+            refreshStickyVisibility();
 
             // Profil peu différencié : 6+ profils sur 8 au-dessus de 75%
             const highCount = ranked.filter(r => r.concordance >= 75).length;
@@ -1691,6 +1861,7 @@
                 });
             }
 
+            buildHeadline(profileScores);
             buildAxisGauges(profileScores);
 
             hideDecorativeIcons(resultsEl);
@@ -1756,12 +1927,45 @@
 
         function resetQuiz() {
             for (let i = 0; i < 16; i++) { quizAnswers[i] = { poleA: 0, poleB: 0 }; }
+            answeredQuestions.clear();
             currentTopRanked = null;
             if (userChartInstance) { userChartInstance.destroy(); userChartInstance = null; }
             document.getElementById('quiz-results').style.display = 'none';
             document.getElementById('quiz').style.display = 'block';
+            stickyState.resultsShown = false;
+            refreshStickyVisibility();
             renderQuiz();
             document.getElementById('quiz').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function openExplorer() {
+            const det = document.getElementById('explorer-details');
+            if (det) {
+                det.open = true;
+                det.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function buildHeadline(scores) {
+            const marked = profilsData.axes.map((axis, i) => {
+                const [idA, idB] = axis.profiles;
+                const contrast = scores[idA].raw - scores[idB].raw;
+                const poles = axisPoles[axis.id];
+                return { i, contrast, mag: Math.abs(contrast), side: contrast > 0 ? poles.a : poles.b };
+            }).filter(a => a.mag >= 3).sort((a, b) => b.mag - a.mag);
+
+            const el = document.getElementById('result-headline');
+            if (!el) return;
+
+            if (!marked.length) {
+                el.innerHTML = `<p class="result-headline-text">Votre fonctionnement paraît <strong>équilibré</strong> entre les différents pôles — aucune tendance ne se détache nettement. Les axes ci-dessous détaillent vos nuances.</p>`;
+                return;
+            }
+            const lead = marked.slice(0, 2).map(a => a.side.toLowerCase());
+            const phrase = lead.length === 2
+                ? `Vous penchez surtout vers une approche <strong>${lead[0]}</strong> et un fonctionnement plutôt <strong>${lead[1]}</strong>.`
+                : `Vous penchez surtout vers une approche <strong>${lead[0]}</strong>.`;
+            el.innerHTML = `<p class="result-headline-text">${phrase} <span class="result-headline-sub">Voici votre positionnement détaillé sur les 4 axes.</span></p>`;
         }
 
         function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
@@ -1942,6 +2146,19 @@
                 profilesDetails.addEventListener('toggle', () => {
                     if (profilesDetails.open && userChartInstance) userChartInstance.resize();
                 });
+            }
+            // Sticky CTA appears once the quiz is reached, except while the in-flow button is on screen
+            const quizSection = document.getElementById('quiz');
+            const inflowBtn = document.getElementById('quiz-submit');
+            if ('IntersectionObserver' in window && quizSection && inflowBtn) {
+                new IntersectionObserver(entries => {
+                    stickyState.quizInView = entries[0].isIntersecting;
+                    refreshStickyVisibility();
+                }).observe(quizSection);
+                new IntersectionObserver(entries => {
+                    stickyState.btnInView = entries[0].isIntersecting;
+                    refreshStickyVisibility();
+                }).observe(inflowBtn);
             }
             hideDecorativeIcons();
         });
