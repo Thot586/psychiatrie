@@ -793,6 +793,13 @@
             .sidebar-nav, .sidebar-toggle { display: none !important; }
             .main-container { margin-left: 0 !important; }
         }
+
+        /* Contraste mode clair (AA) */
+        body.light-questionnaire { --color-primary-light: #0f766e; } /* teal lisible en texte sur fond clair (titres, tableaux, citations) */
+        #sidebar a { color: #cbd5e1; }                               /* sidebar sombre : liens en texte clair */
+        #sidebar a:hover, #sidebar a.active { color: #ffffff; }
+        #sidebar a i { color: #5eead4; }                             /* icônes teal claires sur fond sombre */
+        .interactive-diagram-button.active { background: linear-gradient(135deg, #0d9488, #115e59); }
     </style>
 </head>
 <body class="light-questionnaire">
