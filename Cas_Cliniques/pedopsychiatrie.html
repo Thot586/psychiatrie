@@ -9,8 +9,8 @@
     <link rel="stylesheet" href="../css/questionnaire-light.css">
     <style>
         :root {
-            --cat-main: #14b8a6;
-            --cat-dark: #0d9488;
+            --cat-main: #0f766e;
+            --cat-dark: #115e59;
             --cat-light: #0f766e;
             --cat-rgb: 20, 184, 166;
             --cat-readable: #0f766e;
@@ -58,10 +58,10 @@
 
         /* Spécificité 0,3,0 pour surcharger questionnaire-light.css */
         body.light-questionnaire .sticky-header .step-btn {
-            color: #475569;
+            color: #cbd5e1;
         }
         body.light-questionnaire .sticky-header .step-btn:hover {
-            color: #475569;
+            color: #ffffff;
         }
 
         .step-btn:hover {
@@ -71,9 +71,10 @@
 
         .step-btn.active {
             background: var(--cat-main);
-            color: #0f172a;
+            color: #ffffff;
             border-color: var(--cat-main);
         }
+        body.light-questionnaire .sticky-header .step-btn.active { color: #ffffff; }
 
         .step-btn .step-number {
             width: 24px;
@@ -318,15 +319,15 @@
         }
 
         .quiz-option.correct {
-            border-color: #10b981;
+            border-color: #047857;
             background: rgba(16, 185, 129, 0.15);
-            color: #10b981;
+            color: #047857;
         }
 
         .quiz-option.incorrect {
-            border-color: #ef4444;
+            border-color: #b91c1c;
             background: rgba(239, 68, 68, 0.15);
-            color: #ef4444;
+            color: #b91c1c;
         }
 
         .quiz-option.disabled {
@@ -349,7 +350,7 @@
         .feedback-box.correct {
             background: rgba(16, 185, 129, 0.1);
             border: 1px solid rgba(16, 185, 129, 0.3);
-            color: #10b981;
+            color: #047857;
         }
 
         .feedback-box.incorrect {
@@ -660,7 +661,7 @@
             background: rgba(255, 255, 255, 0.1);
         }
 
-        .btn-next {
+        body.light-questionnaire .btn-next {
             background: var(--cat-main);
             border: none;
             color: white;
@@ -690,7 +691,7 @@
         }
 
         .alert-sign i {
-            color: #ef4444;
+            color: #b91c1c;
             margin-top: 0.1rem;
         }
 
@@ -980,7 +981,7 @@
                     </button>
                     <div class="accordion-content">
                         <div class="accordion-inner">
-                            <div style="font-style: italic; color: var(--color-text-secondary); padding: 1rem; background: rgba(0,0,0,0.2); border-radius: var(--radius-md);">
+                            <div style="font-style: italic; color: var(--color-text-secondary); padding: 1rem; background: rgba(15,118,110,0.08); border-radius: var(--radius-md);">
                                 <p>« J'ai peur qu'il t'arrive quelque chose comme à mamie. »</p>
                                 <p>« Si je vais à l'école, qui va s'occuper de toi ? »</p>
                                 <p>« J'ai trop mal au ventre, je peux pas y aller. »</p>
@@ -1019,7 +1020,7 @@
 
                 <div class="accordion">
                     <button class="accordion-button">
-                        <span><i class="fas fa-cut" style="margin-right: 0.5rem; color: #ef4444;"></i> Automutilations</span>
+                        <span><i class="fas fa-cut" style="margin-right: 0.5rem; color: #b91c1c;"></i> Automutilations</span>
                         <i class="fas fa-chevron-down"></i>
                     </button>
                     <div class="accordion-content">
@@ -1082,7 +1083,7 @@
                     </button>
                     <div class="accordion-content">
                         <div class="accordion-inner">
-                            <div style="font-style: italic; color: var(--color-text-secondary); padding: 1rem; background: rgba(0,0,0,0.2); border-radius: var(--radius-md);">
+                            <div style="font-style: italic; color: var(--color-text-secondary); padding: 1rem; background: rgba(15,118,110,0.08); border-radius: var(--radius-md);">
                                 <p>« Je me coupe parce que sinon j'explose de l'intérieur. »</p>
                                 <p>« Personne ne voit que je vais mal. »</p>
                                 <p>« Ma sœur est partie, elle aussi m'a oubliée. »</p>
@@ -1177,26 +1178,26 @@
                     </div>
 
                     <div class="decision-result success" id="mirana-result-séparation">
-                        <h4 style="color: #10b981;"><i class="fas fa-check-circle"></i> Trouble anxieux de séparation (F93.0)</h4>
+                        <h4 style="color: #047857;"><i class="fas fa-check-circle"></i> Trouble anxieux de séparation (F93.0)</h4>
                         <p style="color: var(--color-text-secondary);">Le tableau clinique de Mirana est caractéristique : anxiété excessive lors de la séparation, soucis irréalistes concernant les proches, refus scolaire, plaintes somatiques, cauchemars de séparation.</p>
                         <p style="color: var(--color-text-secondary); margin-top: 0.5rem;"><strong>Facteur déclenchant probable :</strong> L'hospitalisation de la grand-mère a réactivé des angoisses de perte, dans un contexte déjà fragilisé par la séparation parentale.</p>
                         <button class="btn-restart" onclick="restartMiranaTree()">Recommencer</button>
                     </div>
 
                     <div class="decision-result warning" id="mirana-result-mixte">
-                        <h4 style="color: #c2410c;"><i class="fas fa-exclamation-circle"></i> Comorbidité possible</h4>
+                        <h4 style="color: #9a3412;"><i class="fas fa-exclamation-circle"></i> Comorbidité possible</h4>
                         <p style="color: var(--color-text-secondary);">Un trouble anxieux de séparation peut coexister avec une phobie sociale ou une anxiété généralisée. L'évaluation doit explorer l'ensemble des domaines anxieux.</p>
                         <button class="btn-restart" onclick="restartMiranaTree()">Recommencer</button>
                     </div>
 
                     <div class="decision-result warning" id="mirana-result-sociale">
-                        <h4 style="color: #c2410c;"><i class="fas fa-info-circle"></i> Phobie sociale à évoquer</h4>
+                        <h4 style="color: #9a3412;"><i class="fas fa-info-circle"></i> Phobie sociale à évoquer</h4>
                         <p style="color: var(--color-text-secondary);">Si l'évitement scolaire est lié à la peur du jugement des autres plutôt qu'à la séparation, envisager une anxiété sociale.</p>
                         <button class="btn-restart" onclick="restartMiranaTree()">Recommencer</button>
                     </div>
 
                     <div class="decision-result warning" id="mirana-result-generalisee">
-                        <h4 style="color: #c2410c;"><i class="fas fa-info-circle"></i> Anxiété généralisée à évoquer</h4>
+                        <h4 style="color: #9a3412;"><i class="fas fa-info-circle"></i> Anxiété généralisée à évoquer</h4>
                         <p style="color: var(--color-text-secondary);">Si les inquiétudes sont multiples et concernent de nombreux domaines (santé, performance, avenir...), évoquer un TAG.</p>
                         <button class="btn-restart" onclick="restartMiranaTree()">Recommencer</button>
                     </div>
@@ -1222,42 +1223,42 @@
                         <tr>
                             <td>1</td>
                             <td>Détresse excessive lors de la séparation</td>
-                            <td style="color: #10b981;">✓ Crises de pleurs au portail</td>
+                            <td style="color: #047857;">✓ Crises de pleurs au portail</td>
                         </tr>
                         <tr>
                             <td>2</td>
                             <td>Soucis excessifs de perdre les figures d'attachement</td>
-                            <td style="color: #10b981;">✓ « Peur qu'il t'arrive quelque chose »</td>
+                            <td style="color: #047857;">✓ « Peur qu'il t'arrive quelque chose »</td>
                         </tr>
                         <tr>
                             <td>3</td>
                             <td>Soucis qu'un événement provoque la séparation</td>
-                            <td style="color: #10b981;">✓ Lien avec l'AVC de la grand-mère</td>
+                            <td style="color: #047857;">✓ Lien avec l'AVC de la grand-mère</td>
                         </tr>
                         <tr>
                             <td>4</td>
                             <td>Refus de quitter la maison / aller à l'école</td>
-                            <td style="color: #10b981;">✓ Refus scolaire depuis 3 semaines</td>
+                            <td style="color: #047857;">✓ Refus scolaire depuis 3 semaines</td>
                         </tr>
                         <tr>
                             <td>5</td>
                             <td>Peur d'être seul</td>
-                            <td style="color: #10b981;">✓ Dort avec sa mère</td>
+                            <td style="color: #047857;">✓ Dort avec sa mère</td>
                         </tr>
                         <tr>
                             <td>6</td>
                             <td>Refus de dormir hors de la maison</td>
-                            <td style="color: #c2410c;">? À explorer</td>
+                            <td style="color: #9a3412;">? À explorer</td>
                         </tr>
                         <tr>
                             <td>7</td>
                             <td>Cauchemars de séparation</td>
-                            <td style="color: #10b981;">✓ « Maman disparaît »</td>
+                            <td style="color: #047857;">✓ « Maman disparaît »</td>
                         </tr>
                         <tr>
                             <td>8</td>
                             <td>Plaintes somatiques lors des séparations</td>
-                            <td style="color: #10b981;">✓ Maux de ventre, nausées</td>
+                            <td style="color: #047857;">✓ Maux de ventre, nausées</td>
                         </tr>
                     </tbody>
                 </table>
@@ -1316,25 +1317,25 @@
                     </div>
 
                     <div class="decision-result danger" id="tahiry-result-urgent">
-                        <h4 style="color: #ef4444;"><i class="fas fa-exclamation-circle"></i> RISQUE SUICIDAIRE ÉLEVÉ</h4>
+                        <h4 style="color: #b91c1c;"><i class="fas fa-exclamation-circle"></i> RISQUE SUICIDAIRE ÉLEVÉ</h4>
                         <p style="color: var(--color-text-secondary);">Hospitalisation en pédopsychiatrie à envisager. Surveillance rapprochée. Retirer l'accès aux moyens létaux. Informer les parents de la gravité.</p>
                         <button class="btn-restart" onclick="restartTahiryTree()">Recommencer</button>
                     </div>
 
                     <div class="decision-result warning" id="tahiry-result-modere">
-                        <h4 style="color: #c2410c;"><i class="fas fa-exclamation-triangle"></i> RISQUE MODÉRÉ - Vigilance renforcée</h4>
+                        <h4 style="color: #9a3412;"><i class="fas fa-exclamation-triangle"></i> RISQUE MODÉRÉ - Vigilance renforcée</h4>
                         <p style="color: var(--color-text-secondary);">Suivi ambulatoire rapproché possible si entourage fiable et engagement de la patiente. Contrat de non-passage à l'acte. Rendez-vous rapide en CMP.</p>
                         <button class="btn-restart" onclick="restartTahiryTree()">Recommencer</button>
                     </div>
 
                     <div class="decision-result success" id="tahiry-result-surveille">
-                        <h4 style="color: #10b981;"><i class="fas fa-shield-alt"></i> RISQUE PRÉSENT - Facteurs protecteurs</h4>
+                        <h4 style="color: #047857;"><i class="fas fa-shield-alt"></i> RISQUE PRÉSENT - Facteurs protecteurs</h4>
                         <p style="color: var(--color-text-secondary);">Tahiry indique ne pas vouloir mourir. Les automutilations sont une stratégie de régulation, non un équivalent suicidaire. Suivi ambulatoire avec surveillance des facteurs de risque.</p>
                         <button class="btn-restart" onclick="restartTahiryTree()">Recommencer</button>
                     </div>
 
                     <div class="decision-result success" id="tahiry-result-regulation">
-                        <h4 style="color: #10b981;"><i class="fas fa-info-circle"></i> Automutilation = régulation émotionnelle</h4>
+                        <h4 style="color: #047857;"><i class="fas fa-info-circle"></i> Automutilation = régulation émotionnelle</h4>
                         <p style="color: var(--color-text-secondary);">Les scarifications de Tahiry semblent avoir une fonction de soulagement émotionnel (« ça soulage »). Ce n'est pas équivalent à une intention suicidaire, mais c'est un signal de souffrance majeure nécessitant une prise en charge.</p>
                         <button class="btn-restart" onclick="restartTahiryTree()">Recommencer</button>
                     </div>
@@ -1360,37 +1361,37 @@
                         <tr>
                             <td>Humeur triste</td>
                             <td>Irritabilité, colères, conflits</td>
-                            <td style="color: #10b981;">✓ Conflits avec les parents</td>
+                            <td style="color: #047857;">✓ Conflits avec les parents</td>
                         </tr>
                         <tr>
                             <td>Anhédonie</td>
                             <td>Ennui, « je m'en fiche »</td>
-                            <td style="color: #10b981;">✓ Abandon des activités</td>
+                            <td style="color: #047857;">✓ Abandon des activités</td>
                         </tr>
                         <tr>
                             <td>Fatigue</td>
                             <td>Hypersomnie, « flemme »</td>
-                            <td style="color: #10b981;">✓ Fatigue + sommeil excessif</td>
+                            <td style="color: #047857;">✓ Fatigue + sommeil excessif</td>
                         </tr>
                         <tr>
                             <td>Dévalorisation</td>
                             <td>« Je suis nul(le) »</td>
-                            <td style="color: #10b981;">✓ « Je ne sers à rien »</td>
+                            <td style="color: #047857;">✓ « Je ne sers à rien »</td>
                         </tr>
                         <tr>
                             <td>Idées suicidaires</td>
                             <td>Conduites à risque, automutilations</td>
-                            <td style="color: #10b981;">✓ Scarifications</td>
+                            <td style="color: #047857;">✓ Scarifications</td>
                         </tr>
                         <tr>
                             <td>Retrait social</td>
                             <td>Isolement, réseaux sociaux excessifs</td>
-                            <td style="color: #10b981;">✓ Plus d'amies, seule en chambre</td>
+                            <td style="color: #047857;">✓ Plus d'amies, seule en chambre</td>
                         </tr>
                         <tr>
                             <td>Troubles cognitifs</td>
                             <td>Chute scolaire, absences</td>
-                            <td style="color: #10b981;">✓ Notes en baisse, absences</td>
+                            <td style="color: #047857;">✓ Notes en baisse, absences</td>
                         </tr>
                     </tbody>
                 </table>
@@ -1491,7 +1492,7 @@
                                 <li><strong>Restructuration cognitive :</strong> « Ma maman sera là quand je rentre »</li>
                                 <li><strong>Résolution de problèmes :</strong> « Que puis-je faire si je me sens mal ? »</li>
                             </ul>
-                            <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: var(--radius-md); margin-top: 1rem;">
+                            <div style="background: rgba(15,118,110,0.08); padding: 1rem; border-radius: var(--radius-md); margin-top: 1rem;">
                                 <strong style="color: var(--color-text-primary);">Exemple de hiérarchie d'exposition pour Mirana :</strong>
                                 <ol style="color: var(--color-text-secondary); margin-top: 0.5rem;">
                                     <li>Rester dans sa chambre 10 min pendant que maman est dans la pièce d'à côté</li>
@@ -1572,7 +1573,7 @@
                                 <li>Ne pas promettre le secret absolu (sécurité prime)</li>
                                 <li>Proposer des alternatives (glace, élastique, dessin rouge...)</li>
                             </ul>
-                            <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: var(--radius-md); margin-top: 1rem;">
+                            <div style="background: rgba(15,118,110,0.08); padding: 1rem; border-radius: var(--radius-md); margin-top: 1rem;">
                                 <strong style="color: var(--color-text-primary);">Exemple de verbalisation :</strong>
                                 <p style="color: var(--color-text-secondary); font-style: italic;">« Je comprends que te couper t'aide à gérer des émotions très intenses. On va chercher ensemble d'autres façons de faire quand ça devient trop difficile. »</p>
                             </div>
@@ -1686,7 +1687,7 @@
 
                 <div class="accordion">
                     <button class="accordion-button">
-                        <span><i class="fas fa-hospital" style="margin-right: 0.5rem; color: #ef4444;"></i> Indications d'hospitalisation</span>
+                        <span><i class="fas fa-hospital" style="margin-right: 0.5rem; color: #b91c1c;"></i> Indications d'hospitalisation</span>
                         <i class="fas fa-chevron-down"></i>
                     </button>
                     <div class="accordion-content">
