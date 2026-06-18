@@ -9,9 +9,9 @@
     <link rel="stylesheet" href="../css/questionnaire-light.css">
   <style>
     :root {
-      --psy: #3b82f6;
-      --pat: #10b981;
-      --ctx: #f59e0b;
+      --psy: #1d4ed8;
+      --pat: #047857;
+      --ctx: #b45309;
     }
     html { scroll-behavior: smooth; }
 
@@ -53,7 +53,7 @@
     }
     .badge-pro {
       background: rgba(16, 185, 129, 0.15);
-      color: #15803d;
+      color: #166534;
       border: 1px solid rgba(16, 185, 129, 0.3);
       padding: 0.5rem 1rem;
       border-radius: var(--radius-lg);
@@ -72,11 +72,18 @@
       padding: 1rem 1.5rem;
     }
     .sticky-header h1 {
-      color: var(--color-text-primary);
+      color: #f1f5f9;
       font-size: var(--font-size-xl);
       font-weight: 800;
       margin: 0;
     }
+    /* Contraste AA : en-tête collant sombre → liens et bouton en texte clair */
+    body.light-questionnaire .sticky-nav a { color: #cbd5e1; }
+    body.light-questionnaire .sticky-nav a:hover { color: #ffffff; }
+    body.light-questionnaire .sticky-header #print-button { color: #cbd5e1; }
+    body.light-questionnaire .sticky-header h1 { color: #f1f5f9; }
+    body.light-questionnaire { --accent-red: #b91c1c; --ctx: #92400e; }
+    body.light-questionnaire details[open] > summary { background: linear-gradient(135deg, #1d4ed8, #1e3a8a) !important; color: #ffffff !important; }
     .sticky-nav {
       display: flex;
       gap: 1.5rem;
@@ -347,7 +354,7 @@
       <button onclick="history.back()" class="btn-back" title="Retour"><i class="fas fa-arrow-left"></i> <span>Retour</span></button>
     </div>
     <span class="nav-title">Urgences Psychiatriques</span>
-    <span class="badge badge-crise">Crise</span>
+    <span class="badge badge-cat-crise">Crise</span>
   </nav>
 
   <!-- Sticky Header -->
