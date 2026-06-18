@@ -18,7 +18,7 @@
         }
         .guide-card h3 { color: var(--color-text-primary); margin-bottom: 0.75rem; }
         .guide-card p, .guide-card li { color: var(--color-text-muted); }
-        .badge-guides { background: rgba(100, 116, 139, 0.15); color: #475569; border: 1px solid rgba(100, 116, 139, 0.3); }
+        .badge-guides { background: #64748b; color: #ffffff; border: none; }
 
         html { scroll-behavior: smooth; }
 
@@ -33,6 +33,9 @@
             padding: 1rem 1.5rem;
             margin: 0 -1.5rem 1.5rem -1.5rem;
         }
+        /* en-tête collant sombre → texte clair lisible */
+        body.light-questionnaire .sticky-header h2 { color: #f1f5f9; }
+        .sticky-header #progressText { color: #cbd5e1 !important; }
 
         /* Progress bar */
         .progress-fill {
@@ -113,8 +116,8 @@
         }
 
         /* Scale legend */
-        .scale-legend {
-            background: var(--surface-overlay);
+        body.light-questionnaire .scale-legend {
+            background: #f1f5f9;
             border-radius: var(--radius-lg);
             padding: 0.75rem;
         }
