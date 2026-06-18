@@ -1006,6 +1006,16 @@
         .explorer-summary::-webkit-details-marker { display: none; }
         .explorer-summary:hover { background: rgba(13,124,114,0.12); }
         .explorer-details[open] .explorer-summary { margin-bottom: 1.5rem; }
+        /* Contraste AA : skip-link, badge nav, et états des résumés dépliables */
+        body.light-questionnaire a.skip-link { color: #ffffff; }
+        .badge-guides { background: #64748b; color: #ffffff; border: none; }
+        body.light-questionnaire .explorer-summary,
+        body.light-questionnaire .explorer-details[open] .explorer-summary,
+        body.light-questionnaire .profiles-details > summary,
+        body.light-questionnaire .profiles-details[open] > summary {
+            color: #0b5d54 !important;
+            background: rgba(13,124,114,0.10) !important;
+        }
 
         @media print {
             .navigation-bar, .footer, .sticky-cta { display: none !important; }
@@ -1551,10 +1561,10 @@
         const stickyState = { quizInView: false, btnInView: false, resultsShown: false };
 
         const axisHeaders = [
-            { icon: 'fa-microscope', title: "Traitement de l'Information", color: '#0d9488' },
+            { icon: 'fa-microscope', title: "Traitement de l'Information", color: '#0f766e' },
             { icon: 'fa-cogs', title: "Processus d'Action", color: '#2563eb' },
             { icon: 'fa-users', title: "Rapport aux Autres", color: '#7c3aed' },
-            { icon: 'fa-seedling', title: "Rapport à la Nouveauté", color: '#ea580c' }
+            { icon: 'fa-seedling', title: "Rapport à la Nouveauté", color: '#c2410c' }
         ];
 
         const intensityLabels = ['Pas du tout', 'Un peu', 'Modérément', 'Fortement'];
