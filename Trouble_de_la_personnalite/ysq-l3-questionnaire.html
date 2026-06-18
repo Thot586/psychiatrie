@@ -16,7 +16,8 @@
             --cat-rgb: 245, 158, 11;
             --cat-readable: #b45309;
         }
-        .question-number { background: linear-gradient(135deg, var(--cat-main), var(--cat-dark)); }
+        body.light-questionnaire { --cat-readable: #92400e; }
+        .question-number { background: linear-gradient(135deg, #b45309, #92400e); }
         .question-card.answered { box-shadow: var(--neo-pressed), 0 0 20px rgba(var(--cat-rgb), 0.15); }
         .option-btn.selected, .answer-btn.selected { color: var(--cat-light); border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 15px rgba(var(--cat-rgb), 0.2); background: var(--neo-bg); }
         .score-circle { border-color: var(--cat-main); box-shadow: var(--neo-pressed), 0 0 30px rgba(var(--cat-rgb), 0.2); }
@@ -546,7 +547,7 @@
                     <!-- Résultats générés par JavaScript -->
                 </div>
                 <div class="modal-footer">
-                    <button id="exportResultsBtn" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: white;">
+                    <button id="exportResultsBtn" style="background: linear-gradient(135deg, #b45309, #92400e); color: white;">
                         <i class="fas fa-download"></i> Exporter (JSON)
                     </button>
                     <button onclick="window.print()" style="background: rgba(100, 116, 139, 0.3); color: var(--color-text-secondary);">
