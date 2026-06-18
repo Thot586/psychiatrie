@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/questionnaire-light.css">
     <style>
-
+        /* Contraste mode clair (AA) : tokens sky/teal lisibles en texte sur fond clair */
+        body.light-questionnaire { --color-primary: #115e59; --color-primary-light: #0369a1; --color-primary-dark: #115e59; --accent-teal: #115e59; }
         .guide-section { margin-bottom: 2rem; }
         .guide-card {
             background: var(--surface-card);
@@ -164,8 +165,10 @@
             display: flex;
             flex-direction: column;
         }
+        body.light-questionnaire .example-card { background: #f8fafc !important; }
         .example-card h5 { color: var(--color-text-primary); margin-bottom: 0.5rem; }
-        .example-card .italic { font-style: italic; color: var(--color-text-muted); margin-bottom: 1rem; }
+        body.light-questionnaire .example-card .italic { font-style: italic; color: #475569 !important; margin-bottom: 1rem; }
+        body.light-questionnaire .example-card .analysis { color: #475569 !important; }
         .example-card .analysis {
             font-size: var(--font-size-xs);
             color: var(--color-text-dimmed);
@@ -380,7 +383,7 @@
                                 <p style="font-size: var(--font-size-sm);">La question doit être sans ambiguïté. Chaque terme doit être défini précisément.</p>
                             </div>
                             <div style="padding: 1rem; background: rgba(14, 165, 233, 0.1); border-radius: var(--radius-md); border: 1px solid rgba(14, 165, 233, 0.3);">
-                                <h4 style="color: #0284c7; margin-bottom: 0.5rem;"><i class="fas fa-crosshairs"></i> Focalisation</h4>
+                                <h4 style="color: #075985; margin-bottom: 0.5rem;"><i class="fas fa-crosshairs"></i> Focalisation</h4>
                                 <p style="font-size: var(--font-size-sm);">Ni trop large (impossible à traiter), ni trop étroite (pas assez de littérature).</p>
                             </div>
                             <div style="padding: 1rem; background: rgba(251, 191, 36, 0.1); border-radius: var(--radius-md); border: 1px solid rgba(251, 191, 36, 0.3);">
@@ -400,7 +403,7 @@
                                 <p style="font-size: var(--font-size-sm);"><strong>Cadres :</strong> PICO, PECO, PICOT</p>
                             </div>
                             <div style="padding: 1rem; background: rgba(168, 85, 247, 0.05); border-radius: var(--radius-md); border-left: 4px solid #a855f7;">
-                                <h4 style="color: #c084fc; margin-bottom: 0.5rem;">Approche Qualitative</h4>
+                                <h4 style="color: #7e22ce; margin-bottom: 0.5rem;">Approche Qualitative</h4>
                                 <p style="font-size: var(--font-size-sm);"><strong>Objectif :</strong> Comprendre une expérience, un processus</p>
                                 <p style="font-size: var(--font-size-sm);"><strong>Données :</strong> Textuelles, thèmes, interprétations</p>
                                 <p style="font-size: var(--font-size-sm);"><strong>Cadres :</strong> SPIDER, SPICE, PICo (JBI)</p>
@@ -575,7 +578,7 @@
                         <div id="spider-accordion" style="margin-bottom: 2rem;">
                             <div style="margin-bottom: 0.5rem;">
                                 <button type="button" class="accordion-button" data-accordion-target="acc-spider-s">
-                                    <span style="color: #c084fc;">S - Sample</span>
+                                    <span style="color: #7e22ce;">S - Sample</span>
                                     <i class="fas fa-chevron-down accordion-arrow"></i>
                                 </button>
                                 <div id="acc-spider-s" class="accordion-content">
@@ -584,7 +587,7 @@
                             </div>
                             <div style="margin-bottom: 0.5rem;">
                                 <button type="button" class="accordion-button" data-accordion-target="acc-spider-pi">
-                                    <span style="color: #c084fc;">PI - Phenomenon of Interest</span>
+                                    <span style="color: #7e22ce;">PI - Phenomenon of Interest</span>
                                     <i class="fas fa-chevron-down accordion-arrow"></i>
                                 </button>
                                 <div id="acc-spider-pi" class="accordion-content">
@@ -593,7 +596,7 @@
                             </div>
                             <div style="margin-bottom: 0.5rem;">
                                 <button type="button" class="accordion-button" data-accordion-target="acc-spider-d">
-                                    <span style="color: #c084fc;">D - Design</span>
+                                    <span style="color: #7e22ce;">D - Design</span>
                                     <i class="fas fa-chevron-down accordion-arrow"></i>
                                 </button>
                                 <div id="acc-spider-d" class="accordion-content">
@@ -602,7 +605,7 @@
                             </div>
                             <div style="margin-bottom: 0.5rem;">
                                 <button type="button" class="accordion-button" data-accordion-target="acc-spider-e">
-                                    <span style="color: #c084fc;">E - Évaluation</span>
+                                    <span style="color: #7e22ce;">E - Évaluation</span>
                                     <i class="fas fa-chevron-down accordion-arrow"></i>
                                 </button>
                                 <div id="acc-spider-e" class="accordion-content">
@@ -611,7 +614,7 @@
                             </div>
                             <div style="margin-bottom: 0.5rem;">
                                 <button type="button" class="accordion-button" data-accordion-target="acc-spider-r">
-                                    <span style="color: #c084fc;">R - Research Type</span>
+                                    <span style="color: #7e22ce;">R - Research Type</span>
                                     <i class="fas fa-chevron-down accordion-arrow"></i>
                                 </button>
                                 <div id="acc-spider-r" class="accordion-content">
@@ -721,7 +724,7 @@
                                 </div>
                             </div>
                             <div class="preview-box" style="border-color: rgba(168, 85, 247, 0.3); background: rgba(168, 85, 247, 0.1);">
-                                <p style="font-size: var(--font-size-sm); font-weight: 600; color: #c084fc; margin-bottom: 0.5rem;">Votre question :</p>
+                                <p style="font-size: var(--font-size-sm); font-weight: 600; color: #7e22ce; margin-bottom: 0.5rem;">Votre question :</p>
                                 <p id="preview-spider" style="font-size: var(--font-size-sm); color: var(--color-text-secondary); font-style: italic; min-height: 40px;">...</p>
                             </div>
                             <div style="margin-top: 1rem;">
