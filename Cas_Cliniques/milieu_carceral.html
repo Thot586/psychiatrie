@@ -72,6 +72,10 @@
             color: #0f172a;
         }
         .step-btn.active .step-number { background: var(--cat-light); color: #0f172a; }
+        body.light-questionnaire .sticky-header .step-btn { color: #475569; }
+        body.light-questionnaire .sticky-header .step-btn.active { background: #9a3412; color: #ffffff; border-color: #9a3412; }
+        body.light-questionnaire .sticky-header .step-btn.active .step-number { background: rgba(255,255,255,0.25); color: #ffffff; }
+        body.light-questionnaire .accordion-content-inner li, body.light-questionnaire .accordion-content-inner p, body.light-questionnaire .action-list li { color: #475569; }
 
         /* Content sections */
         .step-content { display: none; animation: fadeIn 0.5s ease-in-out; }
@@ -107,7 +111,7 @@
         }
         .case-tab.active-red {
             background: rgba(239, 68, 68, 0.1);
-            border-color: #ef4444;
+            border-color: #b91c1c;
             color: var(--accent-red);
         }
         .case-tab h4 { margin: 0 0 0.25rem 0; font-size: 1.1rem; }
@@ -551,7 +555,7 @@
                             </div>
 
                             <button type="button" class="accordion-button" data-target="acc-koto-4">
-                                <span style="color: #ef4444;"><i class="fas fa-skull" style="margin-right: 0.5rem;"></i>Verbalisation d'idées noires</span>
+                                <span style="color: #b91c1c;"><i class="fas fa-skull" style="margin-right: 0.5rem;"></i>Verbalisation d'idées noires</span>
                                 <i class="fas fa-chevron-down accordion-arrow"></i>
                             </button>
                             <div id="acc-koto-4" class="accordion-content">
@@ -714,7 +718,7 @@
                         <div id="node-repli" class="decision-node hidden">
                             <p style="font-weight: 600; font-size: var(--font-size-lg); color: var(--color-text-primary); margin-bottom: 1rem;"><i class="fas fa-question-circle" style="color: #1d4ed8; margin-right: 0.5rem;"></i>Le détenu a-t-il verbalisé des idées de désespoir ou de mort ?</p>
                             <div>
-                                <button onclick="showDecisionResult('result-suicide')" class="decision-option"><i class="fas fa-exclamation-triangle" style="margin-right: 0.5rem; color: #ef4444;"></i>Oui : « tout est fini », « à quoi bon », mention de la mort</button>
+                                <button onclick="showDecisionResult('result-suicide')" class="decision-option"><i class="fas fa-exclamation-triangle" style="margin-right: 0.5rem; color: #b91c1c;"></i>Oui : « tout est fini », « à quoi bon », mention de la mort</button>
                                 <button onclick="showDecisionResult('result-dépression')" class="decision-option"><i class="fas fa-cloud-rain" style="margin-right: 0.5rem; color: #1d4ed8;"></i>Non, mais tristesse profonde et retrait persistant</button>
                             </div>
                         </div>
@@ -722,7 +726,7 @@
                         <div id="node-agitation" class="decision-node hidden">
                             <p style="font-weight: 600; font-size: var(--font-size-lg); color: var(--color-text-primary); margin-bottom: 1rem;"><i class="fas fa-question-circle" style="color: #b91c1c; margin-right: 0.5rem;"></i>Y a-t-il un risque immédiat pour la sécurité (de la personne ou des autres) ?</p>
                             <div>
-                                <button onclick="showDecisionResult('result-urgence')" class="decision-option"><i class="fas fa-exclamation-triangle" style="margin-right: 0.5rem; color: #ef4444;"></i>Oui : crise en cours, menaces, jets d'objets</button>
+                                <button onclick="showDecisionResult('result-urgence')" class="decision-option"><i class="fas fa-exclamation-triangle" style="margin-right: 0.5rem; color: #b91c1c;"></i>Oui : crise en cours, menaces, jets d'objets</button>
                                 <button onclick="showDecisionResult('result-suivi')" class="decision-option"><i class="fas fa-clipboard-list" style="margin-right: 0.5rem; color: #ea580c;"></i>Non : entre les crises, mais le pattern se répète</button>
                             </div>
                         </div>
@@ -919,7 +923,7 @@
                     </div>
 
                     <div style="margin-top: 2rem;">
-                        <h3 style="margin-bottom: 1rem;"><i class="fas fa-tasks" style="color: #15803d; margin-right: 0.5rem;"></i>Checklist d'auto-évaluation</h3>
+                        <h3 style="margin-bottom: 1rem;"><i class="fas fa-tasks" style="color: #166534; margin-right: 0.5rem;"></i>Checklist d'auto-évaluation</h3>
                         <p style="color: var(--color-text-muted); margin-bottom: 1rem;">Cochez les éléments que vous vous sentez capable de faire :</p>
 
                         <div class="checklist-item">
@@ -956,7 +960,7 @@
                         </div>
 
                         <div id="checklist-result" style="margin-top: 1rem; padding: 1rem; background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); display: none;">
-                            <p style="color: #15803d; margin: 0;"><i class="fas fa-check-circle" style="margin-right: 0.5rem;"></i><span id="checklist-count">0</span>/8 compétences validées</p>
+                            <p style="color: #166534; margin: 0;"><i class="fas fa-check-circle" style="margin-right: 0.5rem;"></i><span id="checklist-count">0</span>/8 compétences validées</p>
                         </div>
                     </div>
 
@@ -964,7 +968,7 @@
                         <h3 style="margin-bottom: 1rem;"><i class="fas fa-book-open" style="color: #c2410c; margin-right: 0.5rem;"></i>Pour aller plus loin</h3>
                         <div class="feature-grid">
                             <div class="feature-card">
-                                <h4><i class="fas fa-phone" style="color: #ef4444; margin-right: 0.5rem;"></i>Numéros utiles</h4>
+                                <h4><i class="fas fa-phone" style="color: #b91c1c; margin-right: 0.5rem;"></i>Numéros utiles</h4>
                                 <p>En cas de crise suicidaire : 3114 (numéro national de prévention du suicide)</p>
                             </div>
                             <div class="feature-card">
