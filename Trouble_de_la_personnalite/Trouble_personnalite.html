@@ -72,7 +72,7 @@
         .idea-box {
             background: rgba(234, 179, 8, 0.15);
             border-left: 4px solid #eab308;
-            color: #fde047;
+            color: #854d0e;
         }
         .alert-box h4, .recommendation-box h4, .idea-box h4 {
             font-weight: 700;
@@ -175,8 +175,8 @@
             backdrop-filter: blur(10px);
         }
         .accordion-header {
-            background: rgba(15, 23, 42, 0.7);
-            color: var(--accent-teal);
+            background: rgba(13, 148, 136, 0.08);
+            color: var(--color-text-primary);
             padding: 1rem 1.25rem;
             cursor: pointer;
             border-radius: var(--radius-md) var(--radius-md) 0 0;
@@ -187,7 +187,7 @@
             transition: background-color 0.2s ease;
         }
         .accordion-header:hover {
-            background: rgba(30, 41, 59, 0.9);
+            background: rgba(13, 148, 136, 0.15);
         }
         .accordion-header.open {
             border-bottom: 1px solid var(--color-border);
@@ -197,7 +197,7 @@
             padding: 1.25rem;
             border-top: none;
             border-radius: 0 0 var(--radius-md) var(--radius-md);
-            background: rgba(30, 41, 59, 0.4);
+            background: var(--surface-card);
         }
         .accordion-content.hidden {
             display: none;
@@ -292,6 +292,16 @@
                 display: none;
             }
         }
+
+        /* Contraste mode clair : la sidebar est sombre → texte clair explicite */
+        #sidebar .guide-title { color: #f1f5f9; }
+        #sidebar .nav-link { color: #cbd5e1; }
+        #sidebar .nav-link:hover { color: #ffffff; background-color: rgba(255, 255, 255, 0.12); }
+        #sidebar .nav-link.active { color: #ffffff; }
+        /* le texte des encadrés reprend leur couleur lisible plutôt que le gris générique */
+        .content-section .alert-box p, .content-section .alert-box li,
+        .content-section .recommendation-box p, .content-section .recommendation-box li,
+        .content-section .idea-box p, .content-section .idea-box li { color: inherit; }
     </style>
 </head>
 <body class="light-questionnaire">
