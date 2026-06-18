@@ -72,6 +72,10 @@
             color: #0f172a;
         }
         .step-btn.active .step-number { background: var(--cat-light); color: #0f172a; }
+        body.light-questionnaire .sticky-header .step-btn { color: #475569; }
+        body.light-questionnaire .sticky-header .step-btn.active { background: #0f766e; color: #ffffff; border-color: #0f766e; }
+        body.light-questionnaire .sticky-header .step-btn.active .step-number { background: rgba(255,255,255,0.25); color: #ffffff; }
+        body.light-questionnaire .accordion-content-inner li, body.light-questionnaire .accordion-content-inner p, body.light-questionnaire .action-list li { color: #475569; }
 
         .step-content { display: none; animation: fadeIn 0.5s ease-in-out; }
         .step-content.active { display: block; }
@@ -744,7 +748,7 @@
                         <div id="node-aigu" class="decision-node hidden">
                             <p style="font-weight: 600; font-size: var(--font-size-lg); color: var(--color-text-primary); margin-bottom: 1rem;"><i class="fas fa-question-circle" style="color: #c2410c; margin-right: 0.5rem;"></i>Y a-t-il une inattention marquée et une altération de la conscience ?</p>
                             <div>
-                                <button onclick="showDecisionResult('result-delirium')" class="decision-option"><i class="fas fa-check" style="margin-right: 0.5rem; color: #15803d;"></i>Oui → Délirium probable</button>
+                                <button onclick="showDecisionResult('result-delirium')" class="decision-option"><i class="fas fa-check" style="margin-right: 0.5rem; color: #166534;"></i>Oui → Délirium probable</button>
                                 <button onclick="showDecisionResult('result-autre-aigu')" class="decision-option"><i class="fas fa-times" style="margin-right: 0.5rem; color: #ef4444;"></i>Non → Autre cause aiguë à rechercher</button>
                             </div>
                         </div>
@@ -952,7 +956,7 @@
                     </div>
 
                     <div style="margin-top: 2rem;">
-                        <h3 style="margin-bottom: 1rem;"><i class="fas fa-tasks" style="color: #15803d; margin-right: 0.5rem;"></i>Checklist d'auto-évaluation</h3>
+                        <h3 style="margin-bottom: 1rem;"><i class="fas fa-tasks" style="color: #166534; margin-right: 0.5rem;"></i>Checklist d'auto-évaluation</h3>
                         <div class="checklist-item">
                             <input id="check-1" type="checkbox">
                             <label for="check-1">Je sais reconnaître une dépression masquée chez le sujet âgé</label>
@@ -987,7 +991,7 @@
                         </div>
 
                         <div id="checklist-result" style="margin-top: 1rem; padding: 1rem; background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: var(--radius-md); display: none;">
-                            <p style="color: #15803d; margin: 0;"><i class="fas fa-check-circle" style="margin-right: 0.5rem;"></i><span id="checklist-count">0</span>/8 compétences validées</p>
+                            <p style="color: #166534; margin: 0;"><i class="fas fa-check-circle" style="margin-right: 0.5rem;"></i><span id="checklist-count">0</span>/8 compétences validées</p>
                         </div>
                     </div>
 
