@@ -133,6 +133,14 @@ body.light-questionnaire .navigation-bar button.btn-secondary {
     color: #475569;
 }
 
+/* Pastille de numéro de question (texte blanc) : assombrir la couleur catégorie
+   pour garantir l'AA quelle que soit la catégorie (cyan/vert/teal/ambre/rose trop clairs sinon).
+   Fallback ardoise pour les navigateurs sans color-mix. */
+body.light-questionnaire .question-number {
+    background: #334155 !important;
+    background: color-mix(in srgb, var(--cat-main, #475569) 35%, #1e293b) !important;
+}
+
 /* ========================================
    Glass Card — light version
    ======================================== */
