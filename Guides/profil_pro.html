@@ -47,7 +47,7 @@
         .main-container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 1.5rem;
+            padding: clamp(0.85rem, 3vw, 1.5rem);
             position: relative;
             z-index: 10;
             flex-grow: 1;
@@ -56,19 +56,65 @@
         /* Header section */
         .page-header {
             text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: clamp(1.25rem, 4vw, 2.25rem);
         }
 
         .page-header h1 {
-            font-size: 2.5rem;
+            font-size: clamp(1.6rem, 5.5vw, 2.5rem);
+            line-height: 1.2;
             color: var(--brand-teal);
             margin-bottom: 0.5rem;
         }
 
         .page-header p {
-            font-size: 1.125rem;
+            font-size: clamp(0.95rem, 2.5vw, 1.125rem);
             color: var(--color-text-muted);
         }
+
+        /* Carte de départ : ce qu'il faut savoir avant de commencer, et rien de plus */
+        .start-lead {
+            font-size: clamp(0.95rem, 2.5vw, 1.05rem);
+            color: var(--color-text-muted);
+            margin-bottom: 1.25rem;
+        }
+
+        .start-facts {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem 1.25rem;
+            padding: 0;
+            margin: 0 0 1.25rem;
+        }
+
+        .start-facts li {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            font-size: 0.88rem;
+            font-weight: 500;
+            color: var(--color-text-muted);
+        }
+
+        .start-facts i { color: var(--brand-teal-2); }
+
+        .start-caveat {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6rem;
+            font-size: 0.88rem;
+            line-height: 1.55;
+            color: #7c4a03;
+            background: rgba(245, 158, 11, 0.10);
+            border: 1px solid rgba(245, 158, 11, 0.35);
+            border-radius: var(--radius-lg);
+            padding: 0.8rem 1rem;
+            margin: 0 0 1.25rem;
+        }
+
+        .start-caveat i { margin-top: 0.15rem; flex-shrink: 0; color: #b45309; }
+
+        .start-cta { margin-top: 0; }
 
         /* Introduction card */
         .intro-card {
@@ -334,9 +380,14 @@
         /* Mobile: stack panels vertically + more spacing */
         @media (max-width: 600px) {
             fieldset.quiz-question {
-                margin-bottom: 2.5rem;
-                padding: 1.25rem;
+                margin-bottom: 2rem;
+                padding: 1rem;
             }
+            /* Six échelons par pôle : on resserre les lignes pour limiter le défilement */
+            .quiz-pole-panel { padding: 0.85rem; }
+            .quiz-intensity-label { padding: 0.42rem 0.6rem; font-size: 0.9rem; }
+            .quiz-intensity-option { margin-bottom: 0.2rem; }
+            .quiz-hint { font-size: 0.8rem; }
             .quiz-dual-container {
                 grid-template-columns: 1fr;
             }
@@ -499,12 +550,28 @@
         .sidebar-title {
             font-size: 1.5rem;
             color: var(--brand-teal);
-            margin-bottom: 1.5rem;
+            margin-bottom: 0.5rem;
             text-align: center;
         }
 
+        .sidebar-hint {
+            font-size: 0.85rem;
+            color: var(--color-text-dimmed);
+            margin-bottom: 1.25rem;
+            text-align: center;
+        }
+
+        .accordion-vs {
+            font-size: 0.75em;
+            font-weight: 600;
+            color: var(--color-text-dimmed);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
         @media (min-width: 1024px) {
-            .sidebar-title {
+            .sidebar-title,
+            .sidebar-hint {
                 text-align: left;
             }
         }
@@ -1240,19 +1307,35 @@
             <p>Un outil pour comprendre et valoriser la diversité cognitive au travail.</p>
         </header>
 
-        <section id="intro" class="intro-card">
-            <h2>Bienvenue : comprenez votre style au travail</h2>
-            <p>Ce petit questionnaire vous offre un <strong>langage commun</strong> pour mieux saisir votre façon de fonctionner au travail, et celle de vos collègues. L'idée : transformer la diversité des approches, souvent source de friction, en atout de collaboration. Il n'y a ni bon ni mauvais profil.</p>
-            <div class="warning-box">
-                <h3><i class="fas fa-exclamation-triangle"></i> Avertissement : Des archétypes, pas des boîtes</h3>
-                <p>Ces profils sont des <strong>archétypes</strong>, pas des étiquettes. Un individu est infiniment plus complexe. Utilisez cet outil non pas comme un diagnostic, mais comme un <strong>point de départ pour le dialogue</strong> et une meilleure compréhension mutuelle.</p>
-            </div>
+        <section id="intro" class="intro-card start-card">
+            <h2>Comprendre votre façon de fonctionner au travail</h2>
+            <p class="start-lead">Des situations concrètes, et à l'arrivée un <strong>langage commun</strong> pour parler de vos différences d'approche avec vos collègues. Il n'y a ni bon ni mauvais profil.</p>
+
+            <ul class="start-facts">
+                <li><i class="fas fa-clock" aria-hidden="true"></i> 5 à 8 minutes</li>
+                <li><i class="fas fa-list-ul" aria-hidden="true"></i> 16 situations</li>
+                <li><i class="fas fa-lock" aria-hidden="true"></i> Rien n'est envoyé : vos réponses restent sur votre appareil</li>
+            </ul>
+
+            <p class="start-caveat">
+                <i class="fas fa-circle-info" aria-hidden="true"></i>
+                <span>Ce n'est pas un test validé et le résultat n'a <strong>aucune valeur diagnostique</strong>. C'est un support de discussion, pas une étiquette.</span>
+            </p>
+
+            <button class="btn-quiz-submit start-cta" type="button" onclick="startQuiz()">
+                <i class="fas fa-play" aria-hidden="true"></i> Commencer
+            </button>
 
             <button class="science-toggle-btn" onclick="toggleScience()" aria-expanded="false" aria-controls="science-details" type="button">
-                <i class="fas fa-flask"></i> En savoir plus : notes méthodologiques
+                <i class="fas fa-flask"></i> En savoir plus avant de commencer
                 <span id="science-toggle-icon" class="intro-toggle" aria-hidden="true">+</span>
             </button>
             <div id="science-details" style="display: none;">
+                <div class="warning-box" style="margin-bottom: 1rem;">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Des archétypes, pas des boîtes</h3>
+                    <p>Les profils décrits ici sont des <strong>archétypes</strong>, pas des étiquettes. Une personne est infiniment plus complexe que huit catégories. Utilisez cet outil comme un <strong>point de départ pour le dialogue</strong>, jamais comme un diagnostic ni comme un moyen de classer un·e collègue.</p>
+                </div>
+
                 <div class="science-note">
                     <h3><i class="fas fa-microscope"></i> Note méthodologique : circularité et limites des typologies</h3>
                     <p>Toute typologie fondée sur des traits comporte un risque de <strong>raisonnement circulaire</strong> : un comportement sert à définir un profil, puis ce profil est invoqué pour « expliquer » le même comportement (Cervone, 2005). Par exemple, dire qu'une personne est un « Plongeur·euse Analytique » <em>parce qu'elle</em> analyse les données en détail, puis expliquer qu'elle analyse les données en détail <em>parce qu'elle est</em> un Plongeur·euse Analytique, n'explique rien : c'est la même observation, reformulée. Les profils présentés ici sont des <strong>outils descriptifs</strong>, non des explications du comportement.</p>
@@ -1304,9 +1387,8 @@
         </section>
 
         <section id="quiz" class="intro-card">
-            <h2><i class="fas fa-compass"></i> Découvrez votre profil</h2>
-            <p class="quiz-meta"><i class="fas fa-clock" aria-hidden="true"></i> 5 à 8 min · 16 situations · 2 notes par situation · aucune bonne ou mauvaise réponse</p>
-            <p class="quiz-meta"><i class="fas fa-plus-circle" aria-hidden="true"></i> Quelques situations de plus vous seront proposées à la fin, uniquement sur les axes où vos réponses n'auront pas permis de conclure</p>
+            <h2 id="quiz-heading" tabindex="-1"><i class="fas fa-compass"></i> Découvrez votre profil</h2>
+            <p class="quiz-meta"><i class="fas fa-plus-circle" aria-hidden="true"></i> Quelques situations de plus vous seront proposées à la fin, uniquement là où vos réponses n'auront pas permis de conclure</p>
             <div class="quiz-global-instruction">
                 <i class="fas fa-info-circle"></i> Pour chaque situation, notez <strong>les deux propositions séparément</strong> : elles ne s'opposent pas. Vous pouvez vous reconnaître fortement dans les deux, ou dans aucune. Les deux notes sont attendues pour que la situation soit comptée comme remplie.
             </div>
@@ -1367,7 +1449,7 @@
                 </button>
                 <div class="result-actions-secondary">
                     <button class="btn-result-secondary" onclick="openExplorer()">
-                        <i class="fas fa-book-open" aria-hidden="true"></i> Explorer les 8 profils
+                        <i class="fas fa-book-open" aria-hidden="true"></i> Voir les 8 profils
                     </button>
                     <button class="btn-result-secondary" onclick="resetQuiz()">
                         <i class="fas fa-redo" aria-hidden="true"></i> Refaire le quiz
@@ -1385,10 +1467,11 @@
         </section>
 
         <details id="explorer-details" class="explorer-details">
-            <summary class="explorer-summary"><i class="fas fa-compass" aria-hidden="true"></i> Explorer les 8 profils en détail</summary>
+            <summary class="explorer-summary"><i class="fas fa-users-viewfinder" aria-hidden="true"></i> À quoi ressemblent les autres profils ?</summary>
             <main class="main-grid">
                 <aside class="sidebar">
-                    <h2 class="sidebar-title">Axes</h2>
+                    <h2 class="sidebar-title">Les 8 profils, par paires opposées</h2>
+                    <p class="sidebar-hint">Chaque paire réunit deux façons de faire qui s'opposent. Choisissez-en une pour comparer.</p>
                     <div id="axes-accordion" class="accordion-container">
                     </div>
                 </aside>
@@ -1396,8 +1479,8 @@
                 <section id="details" class="details-panel">
                      <div id="details-placeholder" class="details-placeholder">
                         <span class="icon"><i class="fas fa-compass"></i></span>
-                        <h3>Sélectionnez un axe pour commencer</h3>
-                        <p>Cliquez sur l'un des axes dans le menu pour explorer les profils correspondants.</p>
+                        <h3>Choisissez une paire à comparer</h3>
+                        <p>Sélectionnez l'une des paires proposées pour découvrir les deux profils qui la composent, leurs forces et leurs limites.</p>
                     </div>
                     <div id="axis-details-container" class="axis-details-container"></div>
                 </section>
@@ -1806,6 +1889,13 @@
             }
         }
 
+        function startQuiz() {
+            const section = document.getElementById('quiz');
+            section.scrollIntoView({ behavior: 'smooth' });
+            const heading = document.getElementById('quiz-heading');
+            if (heading) heading.focus({ preventScroll: true });
+        }
+
         function scrollToFirstUnanswered() {
             for (let i = 0; i < TOTAL_QUESTIONS; i++) {
                 if (!answeredQuestions.has(i)) {
@@ -2103,29 +2193,61 @@
             return out;
         }
 
+        // Écart type « regroupé » : la dispersion estimée sur 4 valeurs seulement est
+        // elle-même très imprécise. On la ré-estime donc sur l'ensemble des réponses,
+        // chaque série étant préalablement centrée sur sa propre moyenne pour ne mesurer
+        // que la variabilité interne. C'est le principe de l'estimation regroupée
+        // (même logique que le carré moyen résiduel d'une analyse de variance).
+        function pooledSd(groups) {
+            let ss = 0, df = 0;
+            groups.forEach(xs => {
+                if (xs.length < 2) return;
+                const m = mean(xs);
+                ss += xs.reduce((s, x) => s + (x - m) ** 2, 0);
+                df += xs.length - 1;
+            });
+            return df > 0 ? Math.sqrt(ss / df) : 0;
+        }
+
         function computeScores() {
             const poleMeans = {};   // profil -> note moyenne par item (0 à 5)
             const poleItemCount = {};
+            const poleSe = {};      // erreur-type de chaque score de profil
             const axisStats = [];
+            const diffGroups = [], poleGroups = [];
 
-            profilsData.axes.forEach((axis, axisIndex) => {
+            const raw = profilsData.axes.map((axis, axisIndex) => {
                 const [idA, idB] = axis.profiles;
                 const answers = axisAnswers(axisIndex);
                 const itemsA = answers.map(r => r.poleA);
                 const itemsB = answers.map(r => r.poleB);
                 const diffs = answers.map(r => r.poleA - r.poleB);
+                diffGroups.push(diffs);
+                poleGroups.push(itemsA, itemsB);
+                return { axis, idA, idB, answers, itemsA, itemsB, diffs };
+            });
+
+            const pooledDiffSd = pooledSd(diffGroups);
+            const pooledPoleSd = pooledSd(poleGroups);
+
+            raw.forEach(({ axis, idA, idB, answers, itemsA, itemsB, diffs }) => {
+                const n = answers.length;
                 const mA = mean(itemsA), mB = mean(itemsB);
                 poleMeans[idA] = mA;
                 poleMeans[idB] = mB;
-                poleItemCount[idA] = poleItemCount[idB] = answers.length;
+                poleItemCount[idA] = poleItemCount[idB] = n;
+                // Estimation prudente : on retient la plus grande des deux dispersions,
+                // celle propre à la série et celle regroupée, pour ne jamais sous-estimer
+                // l'incertitude.
+                poleSe[idA] = Math.max(sdSample(itemsA), pooledPoleSd) / Math.sqrt(n);
+                poleSe[idB] = Math.max(sdSample(itemsB), pooledPoleSd) / Math.sqrt(n);
                 const sd = sdSample(diffs);
                 axisStats.push({
-                    axis, idA, idB, meanA: mA, meanB: mB,
-                    n: answers.length,
-                    diff: mean(diffs),               // de +3 (pôle A) à -3 (pôle B)
-                    sd,                              // dispersion des contrastes de l'axe
-                    sem: sd / Math.sqrt(answers.length), // erreur-type de la moyenne des contrastes
-                    resolution: resolutionFor(answers.length)
+                    axis, idA, idB, meanA: mA, meanB: mB, n,
+                    diff: mean(diffs),               // de +5 (pôle A) à -5 (pôle B)
+                    sd,                              // dispersion propre à l'axe, pour repérer l'hétérogénéité
+                    sem: Math.max(sd, pooledDiffSd) / Math.sqrt(n), // erreur-type de la moyenne des contrastes
+                    resolution: resolutionFor(n)
                 });
             });
 
@@ -2159,15 +2281,28 @@
                 lastMean = entry.mean;
             });
 
-            // Les deux premiers sont-ils réellement départageables ? Le seuil est le
-            // plus petit écart mesurable, qui dépend du nombre de situations posées
-            // sur chacun des deux axes concernés.
+            // Les deux premiers sont-ils réellement départageables ? Le seuil n'est pas
+            // la finesse d'affichage mais l'erreur-type de leur différence : deux scores
+            // séparés par moins que cette marge ne sont pas distinguables.
             const topGap = ranked.length > 1 ? ranked[0].mean - ranked[1].mean : 0;
+            const seDiffTop = ranked.length > 1
+                ? Math.sqrt(poleSe[ranked[0].id] ** 2 + poleSe[ranked[1].id] ** 2)
+                : 0;
             const gapThreshold = ranked.length > 1
-                ? Math.max(resolutionFor(poleItemCount[ranked[0].id]), resolutionFor(poleItemCount[ranked[1].id]))
+                ? Math.max(resolutionFor(poleItemCount[ranked[0].id]), seDiffTop)
                 : resolutionFor(4);
 
-            return { poleMeans, ranked, axisStats, elevation, spread, topGap, gapThreshold };
+            // Marge d'erreur moyenne d'un score, qui sert à caler les seuils
+            // d'interprétation sur la précision réellement obtenue.
+            const meanSe = mean(Object.values(poleSe));
+            const devMild = Math.max(DEV_MILD, meanSe);
+            const devStrong = Math.max(DEV_STRONG, 2 * meanSe);
+            // Un profil est dit peu différencié quand la dispersion de ses 8 scores
+            // ne dépasse pas ce que le bruit de mesure produirait à lui seul.
+            const flatThreshold = Math.max(FLAT_SPREAD, meanSe);
+
+            return { poleMeans, poleSe, ranked, axisStats, elevation, spread, topGap,
+                     gapThreshold, meanSe, devMild, devStrong, flatThreshold };
         }
 
         // Un axe est déclaré non conclusif quand l'écart observé entre ses deux pôles
@@ -2184,18 +2319,20 @@
         const fr2 = (x) => x.toFixed(2).replace('.', ',');
 
         // Position d'un profil par rapport à sa propre moyenne, en points de l'échelle.
-        function relativeBand(deviation, spread) {
-            if (spread < FLAT_SPREAD) return { label: 'Profil peu différencié', cls: 'band-eq' };
-            if (deviation >= DEV_STRONG) return { label: 'Nettement au-dessus de votre moyenne', cls: 'band-3' };
-            if (deviation >= DEV_MILD) return { label: 'Au-dessus de votre moyenne', cls: 'band-2' };
-            if (deviation > -DEV_MILD) return { label: 'Proche de votre moyenne', cls: 'band-1' };
+        // Les seuils suivent la précision réellement atteinte : un écart n'est qualifié
+        // que s'il dépasse la marge d'erreur d'un score.
+        function relativeBand(deviation, spread, s) {
+            if (spread < s.flatThreshold) return { label: 'Profil peu différencié', cls: 'band-eq' };
+            if (deviation >= s.devStrong) return { label: 'Nettement au-dessus de votre moyenne', cls: 'band-3' };
+            if (deviation >= s.devMild) return { label: 'Au-dessus de votre moyenne', cls: 'band-2' };
+            if (deviation > -s.devMild) return { label: 'Proche de votre moyenne', cls: 'band-1' };
             return { label: 'En dessous de votre moyenne', cls: 'band-eq' };
         }
 
         function submitQuiz() {
             if (countAnswered() < TOTAL_QUESTIONS) return;
             const scores = computeScores();
-            const { poleMeans, ranked, axisStats, elevation, spread, topGap, gapThreshold } = scores;
+            const { poleMeans, ranked, axisStats, elevation, spread, topGap, gapThreshold, meanSe, flatThreshold } = scores;
             currentScores = scores;
             currentTopRanked = ranked;
 
@@ -2223,7 +2360,7 @@
 
             // Messages contextuels, fondés sur la dispersion réelle des 8 scores
             let contextMessage = '';
-            if (spread < FLAT_SPREAD) {
+            if (spread < flatThreshold) {
                 contextMessage = `<div class="warning-box" style="margin-bottom: 1.25rem; text-align: left;">
                     <h3><i class="fas fa-exclamation-triangle"></i> Profil peu différencié</h3>
                     <p>Vos huit scores sont très resserrés : ils s'écartent en moyenne de ${fr2(spread)} point de votre moyenne, alors que la précision de la mesure est déjà de ${fr2(gapThreshold)} point. <strong>Le classement ci-dessous n'est donc pas interprétable</strong> : l'ordre des profils tient au hasard des réponses autant qu'à une vraie tendance. Les profils affichés le sont à titre indicatif, à égalité entre eux. Vous pouvez refaire le questionnaire en répondant à votre première réaction, plutôt qu'à ce dont vous êtes capable.</p>
@@ -2238,7 +2375,7 @@
                 const sens = elevation >= MAX_ITEM / 2 ? 'haut' : 'bas';
                 contextMessage += `<div class="science-note" style="margin-bottom: 1.25rem;">
                     <h3><i class="fas fa-sliders-h"></i> Votre façon d'utiliser l'échelle</h3>
-                    <p>Vos notes se situent en moyenne à ${fr1(elevation)} sur ${MAX_ITEM} : vous avez coché ${sens} sur presque toutes les propositions. Ce n'est ni un problème ni un résultat en soi, c'est une manière d'utiliser l'échelle.${spread >= FLAT_SPREAD ? ' Le classement ci-dessous en tient compte, puisqu\'il compare vos scores <strong>entre eux</strong> et non à un barème absolu.' : ''}</p>
+                    <p>Vos notes se situent en moyenne à ${fr1(elevation)} sur ${MAX_ITEM} : vous avez coché ${sens} sur presque toutes les propositions. Ce n'est ni un problème ni un résultat en soi, c'est une manière d'utiliser l'échelle.${spread >= flatThreshold ? ' Le classement ci-dessous en tient compte, puisqu\'il compare vos scores <strong>entre eux</strong> et non à un barème absolu.' : ''}</p>
                 </div>`;
             }
 
@@ -2249,7 +2386,7 @@
             top3.forEach((entry) => {
                 const profile = profilsData.profiles[entry.id];
                 const rank = entry.rank;
-                const band = relativeBand(entry.deviation, spread);
+                const band = relativeBand(entry.deviation, spread, scores);
                 const signedDev = (entry.deviation >= 0 ? '+' : '−') + fr2(Math.abs(entry.deviation));
                 topCardsHtml += `
                 <div class="top-profile-card" data-rank="${rank}">
@@ -2344,7 +2481,7 @@
             }
 
             buildHeadline(axisStats);
-            buildAxisGauges(axisStats, elevation, spread);
+            buildAxisGauges(axisStats, elevation, spread, scores);
 
             hideDecorativeIcons(resultsEl);
             resultsEl.scrollIntoView({ behavior: 'smooth' });
@@ -2674,11 +2811,12 @@
             profilsData.axes.forEach(axe => {
                 const accordionItem = document.createElement('div');
                 accordionItem.className = 'accordion-item';
+                const [p1, p2] = axe.profiles.map(id => profilsData.profiles[id]);
                 accordionItem.innerHTML = `
                     <div id="header-${axe.id}" class="accordion-header" role="button" tabindex="0" aria-expanded="false" aria-controls="axis-details-container">
                         <div>
-                            <h3>${axe.title}</h3>
-                            <p>${axe.description}</p>
+                            <h3><span aria-hidden="true">${p1.icon}</span> ${p1.title} <span class="accordion-vs">contre</span> <span aria-hidden="true">${p2.icon}</span> ${p2.title}</h3>
+                            <p>${axe.title} : ${axe.description.toLowerCase()}</p>
                         </div>
                         <span class="icon" aria-hidden="true">+</span>
                     </div>
@@ -2908,7 +3046,7 @@
         // Conversion d'un écart (-3 à +3) en position sur la règle (3% à 97%)
         const diffToPct = (d) => Math.max(3, Math.min(97, 50 - (d / MAX_ITEM) * 47));
 
-        function buildAxisGauges(axisStats, elevation, spread) {
+        function buildAxisGauges(axisStats, elevation, spread, s) {
             const tendances = [];
             let rows = '';
             axisStats.forEach((st, i) => {
@@ -2967,7 +3105,7 @@
             document.getElementById('axis-gauges').innerHTML = `
                 <h3 class="protoB-title">Votre positionnement sur les 4 axes</h3>
                 <p class="protoB-intro">Chaque axe oppose deux façons de faire, notées séparément sur 4 situations. Le curseur se place à l'écart moyen entre les deux, et la zone claire autour de lui indique la marge d'imprécision liée au faible nombre de situations : si elle recouvre le centre, l'écart n'est pas solide.</p>
-                <p class="protoB-intro">Niveau moyen de vos réponses : <strong>${fr1(elevation)} sur ${MAX_ITEM}</strong>. Écart type entre vos 8 scores : <strong>${fr2(spread)} point</strong>${spread < FLAT_SPREAD ? ' (profil peu différencié)' : ''}.</p>
+                <p class="protoB-intro">Niveau moyen de vos réponses : <strong>${fr1(elevation)} sur ${MAX_ITEM}</strong>. Écart type entre vos 8 scores : <strong>${fr2(spread)} point</strong>${spread < s.flatThreshold ? ' (profil peu différencié)' : ''}.</p>
                 ${rows}
                 ${tendanceHtml}`;
         }
@@ -2988,7 +3126,7 @@
                 : `Un autre profil avec lequel composer, une combinaison à explorer.`;
             document.getElementById('binome-head').innerHTML = `
                 <div class="result-icon" aria-hidden="true">${other.icon}</div>
-                <h3 class="result-title" aria-label="Binôme : ${spokenTitle(other.title)}">Binôme : ${other.title}</h3>
+                <h3 class="result-title" aria-label="Profil complémentaire : ${spokenTitle(other.title)}">Profil complémentaire : ${other.title}</h3>
                 <p class="result-summary">"${other.summary}"</p>
                 <p class="result-match">${match}</p>`;
         }
@@ -3016,7 +3154,7 @@
                     <div class="result-tab-content" id="binome-panel" role="tabpanel" aria-labelledby="btab-pourquoi" tabindex="0"></div>
                 </div>
                 <details class="explore-binomes">
-                    <summary>Explorer d'autres binômes avec votre profil principal</summary>
+                    <summary>Comparer avec un autre profil</summary>
                     <div class="binome-chips">${chipsHtml}</div>
                 </details>`;
             document.querySelectorAll('#binome-detail .result-tab').forEach(tab => {
