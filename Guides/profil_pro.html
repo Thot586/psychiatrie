@@ -311,11 +311,13 @@
         .pole-b .quiz-intensity-input:checked + .quiz-intensity-label .quiz-intensity-dot::after {
             background: #c2410c;
         }
-        /* Intensity visual feedback — stronger color for higher values */
-        .pole-a .quiz-intensity-input[value="2"]:checked + .quiz-intensity-label { background: rgba(15, 118, 110, 0.13); }
-        .pole-a .quiz-intensity-input[value="3"]:checked + .quiz-intensity-label { background: rgba(15, 118, 110, 0.2); font-weight: 700; }
-        .pole-b .quiz-intensity-input[value="2"]:checked + .quiz-intensity-label { background: rgba(194, 65, 12, 0.13); }
-        .pole-b .quiz-intensity-input[value="3"]:checked + .quiz-intensity-label { background: rgba(194, 65, 12, 0.2); font-weight: 700; }
+        /* Intensity visual feedback: stronger color for higher values */
+        .pole-a .quiz-intensity-input[value="3"]:checked + .quiz-intensity-label,
+        .pole-a .quiz-intensity-input[value="4"]:checked + .quiz-intensity-label { background: rgba(15, 118, 110, 0.13); }
+        .pole-a .quiz-intensity-input[value="5"]:checked + .quiz-intensity-label { background: rgba(15, 118, 110, 0.2); font-weight: 700; }
+        .pole-b .quiz-intensity-input[value="3"]:checked + .quiz-intensity-label,
+        .pole-b .quiz-intensity-input[value="4"]:checked + .quiz-intensity-label { background: rgba(194, 65, 12, 0.13); }
+        .pole-b .quiz-intensity-input[value="5"]:checked + .quiz-intensity-label { background: rgba(194, 65, 12, 0.2); font-weight: 700; }
         /* Focus visible */
         .quiz-intensity-input:focus-visible + .quiz-intensity-label {
             outline: 2px solid #0369a1; outline-offset: 2px;
@@ -422,8 +424,17 @@
             flex-wrap: wrap;
         }
         .concordance-bar {
+            position: relative;
             flex: 1; height: 10px; background: #e2e8f0; border-radius: 5px;
-            overflow: hidden;
+        }
+        .concordance-fill { overflow: hidden; }
+        /* Repère de la moyenne personnelle sur les 8 profils */
+        .concordance-avg {
+            position: absolute; top: -3px; bottom: -3px; width: 2px;
+            background: #475569; transform: translateX(-50%); border-radius: 1px;
+        }
+        .concordance-note {
+            font-size: 0.78rem; color: var(--color-text-dimmed); margin: 0.3rem 0 0;
         }
         .concordance-fill {
             height: 100%; border-radius: 5px;
@@ -707,7 +718,7 @@
             border-radius: 0 8px 8px 0;
         }
 
-        /* Tabs — Neomorphic buttons for max affordance */
+        /* Tabs: neomorphic buttons for max affordance */
         .tabs-container {
             display: flex;
             flex-wrap: wrap;
@@ -879,7 +890,7 @@
             min-height: 100vh;
         }
 
-        /* Skip link — visible only on focus */
+        /* Skip link: visible only on focus */
         .skip-link {
             position: absolute;
             top: -100%;
@@ -968,6 +979,54 @@
         .sticky-cta-btn.is-ready:hover { transform: translateY(-2px); }
         body.has-sticky-cta { padding-bottom: 5.5rem; }
 
+        /* Halo pulsé sur le bouton de résultats dès que le questionnaire est complet */
+        .btn-quiz-submit.is-ready-pulse { animation: readyPulse 1.6s ease-in-out 3; }
+        @keyframes readyPulse {
+            0%, 100% { box-shadow: 6px 6px 14px rgba(0,0,0,0.12), -4px -4px 10px rgba(255,255,255,0.8); }
+            50% { box-shadow: 0 0 0 8px rgba(13,148,136,0.20), 6px 6px 14px rgba(0,0,0,0.12); }
+        }
+
+        /* Fond et flou hérités de .modal-overlay (styles.css + questionnaire-light.css) */
+        .modal-overlay {
+            display: flex; align-items: center; justify-content: center;
+            padding: 1.25rem;
+        }
+        .modal-overlay[hidden] { display: none; }
+        .modal-card {
+            background: #ffffff; border-radius: 20px; padding: 2rem 1.75rem;
+            width: 100%; max-width: 460px; text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.28);
+            animation: modalPop 0.28s cubic-bezier(0.34, 1.3, 0.64, 1);
+        }
+        @keyframes modalPop {
+            from { opacity: 0; transform: translateY(18px) scale(0.96); }
+            to { opacity: 1; transform: none; }
+        }
+        .modal-icon {
+            width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 1rem;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.75rem; color: #ffffff;
+            background: linear-gradient(145deg, var(--brand-teal-2), var(--brand-teal-dark));
+            box-shadow: 0 6px 16px rgba(13,148,136,0.35);
+        }
+        .modal-card h2 {
+            font-family: 'Lexend', sans-serif; font-size: 1.4rem;
+            color: var(--brand-teal); margin: 0 0 0.5rem;
+        }
+        .modal-card p { color: var(--color-text-muted); font-size: 0.95rem; margin: 0 0 1.5rem; }
+        .modal-actions { display: flex; flex-direction: column; gap: 0.6rem; }
+        .modal-actions .btn-quiz-submit { margin-top: 0; }
+        body.modal-open { overflow: hidden; }
+        @media (prefers-reduced-motion: reduce) {
+            .modal-card { animation: none; }
+            .btn-quiz-submit.is-ready-pulse { animation: none; }
+        }
+
+        #quiz-results h3.results-section-title {
+            font-family: 'Lexend', sans-serif; font-size: 1.15rem;
+            color: var(--brand-teal); margin: 1.75rem 0 0.35rem;
+        }
+
         .result-headline { margin: 0 0 1rem; }
         .result-headline-text {
             font-family: 'Lexend', sans-serif; font-size: 1.15rem; font-weight: 600;
@@ -1018,7 +1077,7 @@
         }
 
         @media print {
-            .navigation-bar, .footer, .sticky-cta { display: none !important; }
+            .navigation-bar, .footer, .sticky-cta, .modal-overlay { display: none !important; }
             body { background: white !important; }
             body::before { display: none !important; }
             .intro-card, .details-panel, .profile-card, .accordion-item,
@@ -1107,6 +1166,10 @@
         .axis-gauge-tag {
             margin-left: auto; font-size: 0.8rem; font-weight: 700; padding: 0.2rem 0.7rem; border-radius: 999px;
         }
+        .axis-gauge-n {
+            font-size: 0.72rem; font-weight: 600; color: #475569;
+            background: rgba(100,116,139,0.12); padding: 0.15rem 0.5rem; border-radius: 999px;
+        }
         .axis-gauge-tag.band-eq { background: rgba(100,116,139,0.15); color: #475569; }
         .axis-gauge-tag.band-1  { background: rgba(13,148,136,0.12); color: var(--brand-teal-deep); }
         .axis-gauge-tag.band-2  { background: rgba(13,148,136,0.2);  color: var(--brand-teal-deep); }
@@ -1121,6 +1184,15 @@
             box-shadow: inset 2px 2px 4px rgba(0,0,0,0.08), inset -2px -2px 4px rgba(255,255,255,0.8);
         }
         .axis-gauge-center { position: absolute; left: 50%; top: -3px; bottom: -3px; width: 2px; background: rgba(0,0,0,0.15); transform: translateX(-50%); }
+        /* Marge d'imprécision : ± une erreur-type autour de la position moyenne */
+        .axis-gauge-band {
+            position: absolute; top: 0; bottom: 0; border-radius: 6px;
+            background: rgba(13, 148, 136, 0.28);
+        }
+        .axis-pole-score {
+            display: block; font-size: 0.72rem; font-weight: 700; opacity: 0.75;
+            font-family: 'Lexend', sans-serif; margin-top: 0.1rem;
+        }
         .axis-gauge-marker {
             position: absolute; top: 50%; width: 20px; height: 20px; border-radius: 50%;
             background: #fff; border: 3px solid var(--brand-teal); transform: translate(-50%,-50%);
@@ -1169,8 +1241,8 @@
         </header>
 
         <section id="intro" class="intro-card">
-            <h2>Bienvenue — comprenez votre style au travail</h2>
-            <p>Ce petit questionnaire vous offre un <strong>langage commun</strong> pour mieux saisir votre façon de fonctionner au travail, et celle de vos collègues. L'idée : transformer la diversité des approches — souvent source de friction — en atout de collaboration. Il n'y a ni bon ni mauvais profil.</p>
+            <h2>Bienvenue : comprenez votre style au travail</h2>
+            <p>Ce petit questionnaire vous offre un <strong>langage commun</strong> pour mieux saisir votre façon de fonctionner au travail, et celle de vos collègues. L'idée : transformer la diversité des approches, souvent source de friction, en atout de collaboration. Il n'y a ni bon ni mauvais profil.</p>
             <div class="warning-box">
                 <h3><i class="fas fa-exclamation-triangle"></i> Avertissement : Des archétypes, pas des boîtes</h3>
                 <p>Ces profils sont des <strong>archétypes</strong>, pas des étiquettes. Un individu est infiniment plus complexe. Utilisez cet outil non pas comme un diagnostic, mais comme un <strong>point de départ pour le dialogue</strong> et une meilleure compréhension mutuelle.</p>
@@ -1182,68 +1254,110 @@
             </button>
             <div id="science-details" style="display: none;">
                 <div class="science-note">
-                    <h3><i class="fas fa-microscope"></i> Note méthodologique — Circularité et limites des typologies</h3>
-                    <p>Toute typologie fondée sur des traits comporte un risque de <strong>raisonnement circulaire</strong> : un comportement sert à définir un profil, puis ce profil est invoqué pour « expliquer » le même comportement (Cervone, 2005). Par exemple, dire qu'une personne est un « Plongeur·euse Analytique » <em>parce qu'elle</em> analyse les données en détail, puis expliquer qu'elle analyse les données en détail <em>parce qu'elle est</em> un Plongeur·euse Analytique, ne constitue pas une explication causale — c'est une description reformulée. Les profils présentés ici sont des <strong>outils descriptifs</strong>, non des explications causales du comportement.</p>
+                    <h3><i class="fas fa-microscope"></i> Note méthodologique : circularité et limites des typologies</h3>
+                    <p>Toute typologie fondée sur des traits comporte un risque de <strong>raisonnement circulaire</strong> : un comportement sert à définir un profil, puis ce profil est invoqué pour « expliquer » le même comportement (Cervone, 2005). Par exemple, dire qu'une personne est un « Plongeur·euse Analytique » <em>parce qu'elle</em> analyse les données en détail, puis expliquer qu'elle analyse les données en détail <em>parce qu'elle est</em> un Plongeur·euse Analytique, n'explique rien : c'est la même observation, reformulée. Les profils présentés ici sont des <strong>outils descriptifs</strong>, non des explications du comportement.</p>
                 </div>
 
                 <div class="science-note">
                     <h3><i class="fas fa-balance-scale"></i> Effet Barnum (Forer, 1949)</h3>
-                    <p>Les descriptions de personnalité formulées de manière suffisamment large peuvent paraître étonnamment « justes » pour presque tout le monde — c'est l'<strong>effet Barnum</strong>. Si vous vous reconnaissez dans plusieurs profils simultanément, c'est normal et attendu : cela reflète à la fois la complexité réelle de votre fonctionnement <em>et</em> la tendance naturelle à projeter du sens dans des descriptions génériques.</p>
-                    <p>Testez votre impression : montrez la description d'un profil à un collègue sans lui dire lequel c'est — s'il s'y reconnaît aussi, l'effet Barnum est probablement à l'œuvre.</p>
+                    <p>Une description de personnalité formulée de façon suffisamment large paraît « juste » à presque tout le monde. C'est l'<strong>effet Barnum</strong>, du nom d'un homme de spectacle américain, mis en évidence par Forer en 1949 : il avait donné à ses étudiants un texte identique présenté comme leur profil personnel, et tous s'y étaient reconnus. Si vous vous retrouvez dans plusieurs profils à la fois, c'est donc attendu : cela reflète à la fois la complexité réelle de votre fonctionnement <em>et</em> cette tendance à projeter du sens dans des descriptions générales.</p>
+                    <p>Testez votre impression : montrez la description d'un profil à un collègue sans lui dire lequel c'est. S'il s'y reconnaît aussi, l'effet Barnum est probablement à l'œuvre.</p>
                 </div>
 
                 <div class="science-note">
                     <h3><i class="fas fa-brain"></i> Neurodiversité et profils cognitifs (Psychiatrie)</h3>
-                    <p>Certaines notions de styles cognitifs au travail recoupent partiellement des concepts étudiés en psychiatrie — par exemple le <strong>systemizing</strong> (Baron-Cohen, 2009) ou la <strong>recherche de nouveauté</strong> (<em>novelty seeking</em>, Barkley, 1997). Ces rapprochements sont <strong>purement conceptuels et généraux</strong> : un mode de fonctionnement au travail n'est <strong>en aucun cas</strong> un indice de trouble, et ces parallèles ne doivent jamais servir à s'auto-diagnostiquer ni à étiqueter un·e collègue. Ils rappellent seulement que la <strong>neurodiversité est un continuum</strong> dont les profils professionnels ne sont qu'une facette lointaine.</p>
+                    <p>Certaines notions de styles cognitifs au travail recoupent en partie des concepts étudiés en psychiatrie : par exemple le <strong>systemizing</strong> (Baron-Cohen, 2009), c'est-à-dire la tendance à analyser et construire des systèmes réglés, ou la <strong>recherche de nouveauté</strong> (<em>novelty seeking</em>, Barkley, 1997), c'est-à-dire l'attrait pour la stimulation et le changement. Ces rapprochements sont <strong>purement conceptuels et généraux</strong> : un mode de fonctionnement au travail n'est <strong>en aucun cas</strong> un indice de trouble, et ces parallèles ne doivent jamais servir à s'auto-diagnostiquer ni à étiqueter un·e collègue. Ils rappellent seulement que la <strong>neurodiversité est un continuum</strong> dont les profils professionnels ne sont qu'une facette lointaine.</p>
                 </div>
 
                 <div class="science-note">
                     <h3><i class="fas fa-users"></i> Construction sociale des profils (Sociologie, Psychologie sociale)</h3>
-                    <p>Les styles cognitifs ne sont pas purement innés : ils sont façonnés par l'<strong>habitus professionnel</strong> (Bourdieu, 1979) — l'ensemble des dispositions acquises au fil de la socialisation, de la formation et de l'expérience. L'identité au travail se construit dans l'interaction avec les pairs et la hiérarchie (Sainsaulieu, 1977). Attribuer un profil à un collègue comporte un risque de <strong>biais de confirmation</strong> et de catégorisation intergroupes (Tajfel & Turner, 1979) : une fois étiquetée, une personne peut être réduite à son archétype. Par ailleurs, la valorisation de certains profils varie selon les cultures : le « Pilote Orienté·e Tâche » est prisé dans les cultures individualistes mais peut être perçu comme autoritaire dans les cultures collectivistes (Hofstede, 2001).</p>
+                    <p>Les styles cognitifs ne sont pas purement innés : ils sont façonnés par ce que Bourdieu (1979) appelle l'<strong>habitus</strong>, c'est-à-dire l'ensemble des manières de faire et de juger acquises au fil de l'éducation, de la formation et du métier exercé. L'identité au travail se construit dans l'interaction avec les pairs et la hiérarchie (Sainsaulieu, 1977). Attribuer un profil à un collègue comporte un risque de <strong>biais de confirmation</strong> et de catégorisation intergroupes (Tajfel & Turner, 1979) : une fois étiquetée, une personne peut être réduite à son archétype. Par ailleurs, la valorisation de certains profils varie selon les cultures : le « Pilote Orienté·e Tâche » est prisé dans les cultures individualistes mais peut être perçu comme autoritaire dans les cultures collectivistes (Hofstede, 2001).</p>
+                </div>
+
+                <div class="science-note">
+                    <h3><i class="fas fa-calculator"></i> Comment les scores sont calculés</h3>
+                    <p>Chaque axe comporte 4 situations. Pour chacune, vous notez <strong>séparément</strong> les deux propositions, sur une échelle à six échelons. Ce choix suit Preston &amp; Colman (2000) : dans leur comparaison d'échelles de 2 à 11 catégories, celles à 2, 3 et 4 catégories obtiennent des indices de fidélité, de validité et de pouvoir discriminant nettement plus faibles, ces indices progressant jusqu'à environ 7 catégories. Le score d'un profil est la <strong>moyenne de ses notes</strong>, sur cette même échelle de 0 à 5. Aucune conversion en pourcentage n'est faite : une moyenne de 4 notes entières ne peut prendre que des valeurs par pas de 0,25, et afficher « 58 % » laisserait croire à une précision qui n'existe pas.</p>
+                    <p><strong>Comparaison à votre propre moyenne.</strong> Certaines personnes cochent haut partout, d'autres bas partout : c'est ce qu'on appelle l'acquiescement, la tendance à approuver indépendamment du contenu. Comparer vos 8 scores à un barème absolu reviendrait donc à mesurer surtout cette habitude. Cronbach &amp; Gleser (1953) proposent de décomposer un profil en trois éléments : son <strong>élévation</strong> (la moyenne des scores), sa <strong>dispersion</strong> (leur écart type) et sa <strong>forme</strong> (les écarts de chacun à la moyenne). C'est la forme qui est interprétée ici, l'élévation étant affichée à part comme une information sur votre façon d'utiliser l'échelle.</p>
+                    <p>Une précision technique : on retire l'élévation, mais on ne divise pas par la dispersion. Standardiser complètement (ce que la littérature appelle l'ipsatisation) effacerait aussi le degré de différenciation de la personne, alors qu'une personne au profil très contrasté et une autre au profil plat ne disent pas la même chose. Les écarts restent donc exprimés en points de l'échelle, et non en unités relatives.</p>
+                    <p><strong>Ce que l'outil refuse de trancher.</strong> Deux profils séparés par moins de 0,25 point sont présentés comme équivalents, car c'est le plus petit écart que la mesure distingue. Si vos 8 scores sont trop resserrés (écart type inférieur à 0,35 point), aucun classement n'est proposé. Sur chaque axe, la zone claire autour du curseur représente <strong>plus ou moins une erreur-type</strong> : la position moyenne est estimée avec une marge, et si cette marge recouvre le centre, l'écart entre les deux pôles n'est pas solide.</p>
+                    <p><strong>Des situations en plus quand c'est nécessaire.</strong> Quatre situations par axe, c'est peu. Plutôt que d'allonger le questionnaire pour tout le monde, l'outil vérifie à la fin de chaque axe si l'écart observé dépasse sa propre marge d'erreur. Si ce n'est pas le cas, il propose <strong>2 situations de plus sur cet axe seulement</strong>, ce qui le porte à 6 et réduit la marge d'environ 18 %. Un profil tranché s'arrête donc à 16 situations, un profil ambigu en fait 18 ou 22, et la précision est gagnée là où elle manquait. Le principe est celui des <em>tests adaptatifs par étapes</em> : un premier bloc commun sert à orienter, puis des blocs ciblés sont administrés selon le résultat, ce qui améliore la précision sans allonger le test pour tout le monde. Le même critère sert ensuite à décider si un côté peut être nommé : un axe qui reste indécis est affiché comme équilibré, sans conclusion forcée.</p>
+                </div>
+
+                <div class="science-note">
+                    <h3><i class="fas fa-not-equal"></i> Deux propriétés utiles, et une réserve</h3>
+                    <p><strong>L'écart entre deux pôles neutralise l'acquiescement.</strong> Sur chaque axe, la position affichée est une différence entre les notes des deux propositions. Or une tendance à cocher haut ajoute la même chose des deux côtés, et disparaît donc dans la soustraction. C'est le principe des échelles dites équilibrées. Les jauges par axe sont ainsi moins sensibles au style de réponse que le classement des profils, qui repose lui sur des moyennes brutes et demande la correction décrite plus haut.</p>
+                    <p><strong>La réserve classique sur les scores de différence ne s'applique pas de la même façon ici.</strong> Depuis Cronbach &amp; Furby (1970), on sait qu'une différence entre deux mesures est en général <em>moins</em> fidèle que chacune des deux, parce que soustraire deux quantités qui varient ensemble supprime de la variance vraie tout en cumulant les erreurs. Ce raisonnement vaut pour des mesures <strong>positivement corrélées</strong>. Ici, les deux propositions d'un axe sont conçues pour s'opposer : si elles sont effectivement corrélées négativement, la soustraction augmente la variance utile au lieu de la réduire, et la différence est alors plus informative que chaque pôle pris isolément. Faute de données de passation, cela reste une propriété attendue par construction, pas un résultat vérifié.</p>
                 </div>
 
                 <div class="science-note">
                     <h3><i class="fas fa-ruler-combined"></i> Limites psychométriques</h3>
-                    <p>Le questionnaire ci-dessous est un <strong>outil exploratoire non validé psychométriquement</strong>. Il n'a pas fait l'objet d'études de fidélité (test-retest, cohérence interne α de Cronbach) ni de validité de construit (analyses factorielles confirmatoires). Conformément aux <em>Standards for Educational and Psychological Testing</em> (APA, AERA, NCME, 2014), tout instrument doit être interprété à la lumière de ses propriétés psychométriques. Les résultats sont <strong>indicatifs et non diagnostiques</strong>.</p>
+                    <p>Ces précautions de calcul ne transforment pas cet outil en instrument validé. Il reste <strong>exploratoire</strong> : il n'a fait l'objet d'aucune étude de fidélité (stabilité des résultats d'une passation à l'autre, cohérence interne mesurée par l'alpha de Cronbach) ni de validité de construit (vérification par analyse factorielle que les items mesurent bien les dimensions annoncées).</p>
+                    <p>Le point faible principal est connu et quantifiable. Avec 4 items par score, et en retenant les corrélations entre items habituellement observées pour ce type de mesure, la formule de Spearman-Brown situe la fidélité attendue autour de 0,55 à 0,75, alors que l'usage demande au moins 0,70 pour interpréter un score individuel. Passer à 6 items sur un axe, ce que fait l'étape complémentaire, fait gagner quelques centièmes. Credé et ses collègues (2012) ont documenté ce que coûtent les mesures très courtes de personnalité : elles augmentent à la fois le risque de conclure à tort et celui de ne rien détecter. C'est la raison pour laquelle cet outil affiche des marges d'erreur plutôt que des chiffres seuls, et refuse de classer quand l'écart ne dépasse pas sa marge.</p>
+                    <p>Conformément aux <em>Standards for Educational and Psychological Testing</em> (APA, AERA, NCME, 2014), tout instrument doit être interprété à la lumière de ses propriétés psychométriques. Celles-ci étant inconnues ici, les résultats sont <strong>indicatifs et non diagnostiques</strong>.</p>
+                </div>
+
+                <div class="science-note">
+                    <h3><i class="fas fa-book"></i> Deux natures de sources</h3>
+                    <p>Les descriptions s'appuient sur deux types de références, qui n'ont pas le même statut. D'un côté des <strong>travaux empiriques</strong> (méta-analyses et études publiées : Barrick &amp; Mount, Salgado, Judge et al., Woolley et al., Carter et al., Kepes &amp; McDaniel, Sisk et al.), dont les résultats sont chiffrés et discutables. De l'autre des <strong>modèles issus de la littérature managériale</strong> (Lencioni, Wiseman, Pink, Grant, Sibony, Dweck), qui proposent des cadres de lecture utiles mais n'ont pas été validés de la même façon. Les seconds sont cités comme grilles de réflexion, jamais comme preuves.</p>
                 </div>
             </div>
         </section>
 
         <section id="quiz" class="intro-card">
             <h2><i class="fas fa-compass"></i> Découvrez votre profil</h2>
-            <p class="quiz-meta"><i class="fas fa-clock" aria-hidden="true"></i> Environ 5 min · 16 situations · aucune bonne ou mauvaise réponse</p>
+            <p class="quiz-meta"><i class="fas fa-clock" aria-hidden="true"></i> 5 à 8 min · 16 situations · 2 notes par situation · aucune bonne ou mauvaise réponse</p>
+            <p class="quiz-meta"><i class="fas fa-plus-circle" aria-hidden="true"></i> Quelques situations de plus vous seront proposées à la fin, uniquement sur les axes où vos réponses n'auront pas permis de conclure</p>
             <div class="quiz-global-instruction">
-                <i class="fas fa-info-circle"></i> Pour chaque situation, indiquez à quel point <strong>chaque pôle</strong> vous décrit — les deux échelles sont indépendantes. Vous pouvez vous reconnaître fortement dans les deux.
+                <i class="fas fa-info-circle"></i> Pour chaque situation, notez <strong>les deux propositions séparément</strong> : elles ne s'opposent pas. Vous pouvez vous reconnaître fortement dans les deux, ou dans aucune. Les deux notes sont attendues pour que la situation soit comptée comme remplie.
             </div>
             <div id="quiz-progress" class="quiz-progress" role="progressbar" aria-valuemin="0" aria-valuemax="16" aria-valuenow="0" aria-label="Progression du questionnaire">
                 <div class="quiz-progress-track"><div id="quiz-progress-fill" class="quiz-progress-fill"></div></div>
-                <span id="quiz-progress-label" class="quiz-progress-label">0 / 16 situations</span>
+                <span id="quiz-progress-label" class="quiz-progress-label">0 / 16 situations complètes</span>
             </div>
             <div id="quiz-questions"></div>
-            <button class="btn-quiz-submit" id="quiz-submit" onclick="submitQuiz()" disabled>
+            <button class="btn-quiz-submit" id="quiz-submit" onclick="goAfterCore()" disabled>
                 <i class="fas fa-star" aria-hidden="true"></i> Découvrir mon profil
             </button>
             <p id="quiz-submit-hint" style="text-align:center; font-size:0.85rem; color: var(--color-text-dimmed); margin-top:0.5rem;"></p>
+        </section>
+
+        <section id="quiz-stage2" class="intro-card" style="display: none;">
+            <h2 id="stage2-heading" tabindex="-1"><i class="fas fa-plus-circle"></i> Quelques situations de plus</h2>
+            <p id="stage2-intro" class="quiz-meta"></p>
+            <div class="quiz-global-instruction">
+                <i class="fas fa-info-circle"></i> Même principe : notez les deux propositions séparément.
+            </div>
+            <div id="stage2-questions"></div>
+            <button class="btn-quiz-submit" id="stage2-submit" onclick="submitStage2()" disabled>
+                <i class="fas fa-star" aria-hidden="true"></i> Voir mes résultats
+            </button>
+            <p id="stage2-hint" style="text-align:center; font-size:0.85rem; color: var(--color-text-dimmed); margin-top:0.5rem;"></p>
+            <button type="button" class="btn-result-secondary" style="margin: 0.85rem auto 0; display: flex;" onclick="skipStage2()">
+                Passer et voir mes résultats tels quels
+            </button>
         </section>
 
         <section id="quiz-results" class="intro-card" style="display: none;" aria-live="polite">
             <h2 id="results-heading" tabindex="-1"><i class="fas fa-star" aria-hidden="true"></i> Votre profil cognitif</h2>
 
             <div id="result-headline" class="result-headline"></div>
-            <div id="result-disclaimer" style="margin-bottom: 1.25rem;"></div>
             <div id="context-message"></div>
-            <div id="axis-gauges"></div>
 
-            <details class="profiles-details">
-                <summary><i class="fas fa-id-badge" aria-hidden="true"></i> Voir les profils illustratifs</summary>
+            <h3 class="results-section-title">Vos profils les plus proches</h3>
+            <p class="profiles-details-intro">Note moyenne par situation, sur une échelle de 0 à 5. Le trait vertical sur chaque barre marque votre moyenne générale, ce qui permet de voir ce qui ressort réellement de votre propre niveau de réponse. Ces archétypes illustrent des tendances, ce ne sont pas des étiquettes et ils n'ont aucune valeur diagnostique.</p>
+            <div id="top-profiles"></div>
+            <div id="complementary-profile" class="profile-result complementary" style="margin-top: 1.25rem;"></div>
+
+            <div id="result-disclaimer" style="margin: 1.25rem 0;"></div>
+
+            <details class="profiles-details" id="details-axes">
+                <summary><i class="fas fa-sliders-h" aria-hidden="true"></i> Voir plus : votre position détaillée sur les 4 axes</summary>
                 <div class="profiles-details-body">
-                    <p class="profiles-details-intro">Ces archétypes illustrent vos tendances ; ce ne sont pas des étiquettes et ils n'ont aucune valeur diagnostique.</p>
-                    <div class="chart-container" style="max-width: 450px; margin: 0 auto 2rem;" role="img" aria-label="Graphique radar de vos affinités avec les 8 profils">
+                    <div id="axis-gauges"></div>
+                    <div class="chart-container" style="max-width: 450px; margin: 2rem auto 0;" role="img" aria-label="Graphique radar de vos affinités avec les 8 profils">
                         <canvas id="userChart" aria-hidden="true"></canvas>
                     </div>
                     <div id="userChart-alt" class="sr-only" aria-live="polite"></div>
-                    <div id="top-profiles"></div>
-                    <div id="complementary-profile" class="profile-result complementary" style="margin-top: 1.25rem;"></div>
                 </div>
             </details>
 
@@ -1263,9 +1377,9 @@
 
             <div class="science-note" style="margin-top: 1.5rem;">
                 <h3><i class="fas fa-compass"></i> Et maintenant ?</h3>
-                <p><strong>1.</strong> Partagez ce résultat avec un collègue et comparez vos profils — la diversité cognitive est une ressource, pas un obstacle (Woolley et al., 2010).</p>
-                <p><strong>2.</strong> Identifiez dans votre équipe qui incarne le profil complémentaire. La performance collective dépend moins du talent individuel que de la complémentarité des approches.</p>
-                <p><strong>3.</strong> Lors de votre prochaine réunion, observez quand vous opérez dans votre mode dominant — et quand la situation appellerait le mode opposé.</p>
+                <p><strong>1.</strong> Partagez ce résultat avec un collègue et comparez vos réponses. L'intérêt n'est pas le classement, mais la conversation qu'il permet d'avoir.</p>
+                <p><strong>2.</strong> Repérez dans votre équipe qui fonctionne autrement que vous. Woolley et al. (2010) ont montré que la réussite d'un groupe ne se déduit pas du niveau individuel de ses membres : la façon dont ils travaillent ensemble compte au moins autant.</p>
+                <p><strong>3.</strong> Lors de votre prochaine réunion, observez à quel moment vous fonctionnez dans votre mode habituel, et à quel moment la situation appellerait plutôt le mode opposé.</p>
                 <p><strong>4.</strong> Rappelez-vous : ce profil est un <strong>point de départ pour le dialogue</strong>, pas une étiquette. Les comportements changent selon le contexte (Fleeson & Jayawickreme, 2015).</p>
             </div>
         </section>
@@ -1292,10 +1406,26 @@
 
     </div>
 
+    <div id="quiz-done-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="quiz-done-title" aria-describedby="quiz-done-text" hidden>
+        <div class="modal-card">
+            <div class="modal-icon" aria-hidden="true"><i class="fas fa-check"></i></div>
+            <h2 id="quiz-done-title">C'est terminé !</h2>
+            <p id="quiz-done-text">Vous avez renseigné les 16 situations. Vos résultats sont prêts.</p>
+            <div class="modal-actions">
+                <button type="button" id="quiz-done-primary" class="btn-quiz-submit" onclick="confirmDoneModal()">
+                    <i class="fas fa-star" aria-hidden="true"></i> Voir mes résultats
+                </button>
+                <button type="button" id="quiz-done-secondary" class="btn-result-secondary" onclick="doneModalSecondary()">
+                    <i class="fas fa-pen" aria-hidden="true"></i> Revoir mes réponses
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div id="sticky-cta" class="sticky-cta">
         <div class="sticky-cta-inner">
             <span id="sticky-count" class="sticky-cta-count">0/16</span>
-            <button id="quiz-submit-sticky" class="sticky-cta-btn" type="button" onclick="stickyCtaClick()" aria-label="Il reste 16 situations à renseigner — aller à la suivante">
+            <button id="quiz-submit-sticky" class="sticky-cta-btn" type="button" onclick="stickyCtaClick()" aria-label="Il reste 16 situations à renseigner, aller à la suivante">
                 Il reste 16 situations <i class="fas fa-arrow-down" aria-hidden="true"></i>
             </button>
         </div>
@@ -1340,8 +1470,10 @@
                 <h4>Méta-analyses et validations</h4>
                 <p>Carter, N. T., Dalal, D. K., Boyce, A. S., O'Connell, M. S., Kung, M.-C., & Delgado, K. M. (2014). Uncovering curvilinear relationships between conscientiousness and job performance: How theoretically appropriate measurement makes an empirical difference. <em>Journal of Applied Psychology</em>, <em>99</em>(4), 564–586. https://doi.org/10.1037/a0034688</p>
                 <p>Cropley, A. (2006). In praise of convergent thinking. <em>Creativity Research Journal</em>, <em>18</em>(3), 391–404. https://doi.org/10.1207/s15326934crj1803_13</p>
+                <p>Judge, T. A., Piccolo, R. F., & Ilies, R. (2004). The forgotten ones? The validity of consideration and initiating structure in leadership research. <em>Journal of Applied Psychology</em>, <em>89</em>(1), 36–51. https://doi.org/10.1037/0021-9010.89.1.36</p>
                 <p>Kepes, S., & McDaniel, M. A. (2015). The validity of conscientiousness is overestimated in the prediction of job performance. <em>PLOS ONE</em>, <em>10</em>(10), e0141468. https://doi.org/10.1371/journal.pone.0141468</p>
                 <p>Salgado, J. F. (1997). The five factor model of personality and job performance in the European Community. <em>Journal of Applied Psychology</em>, <em>82</em>(1), 30–43. https://doi.org/10.1037/0021-9010.82.1.30</p>
+                <p>Sisk, V. F., Burgoyne, A. P., Sun, J., Butler, J. L., & Macnamara, B. N. (2018). To what extent and under which circumstances are growth mind-sets important to academic achievement? Two meta-analyses. <em>Psychological Science</em>, <em>29</em>(4), 549–571. https://doi.org/10.1177/0956797617739704</p>
 
                 <h4>Limites méthodologiques (circularité, effet Barnum)</h4>
                 <p>Cervone, D. (2005). Personality architecture: Within-person structures and processes. <em>Annual Review of Psychology</em>, <em>56</em>, 423–452. https://doi.org/10.1146/annurev.psych.56.091103.070229</p>
@@ -1353,7 +1485,6 @@
                 <p>Baron-Cohen, S. (2009). Autism: The empathizing-systemizing (E-S) theory. <em>Annals of the New York Academy of Sciences</em>, <em>1156</em>, 68–80. https://doi.org/10.1111/j.1749-6632.2009.04467.x</p>
 
                 <h4>Psychologie organisationnelle</h4>
-                <p>Dweck, C. S. (2006). <em>Mindset: The new psychology of success</em>. Random House.</p>
                 <p>Wilmot, M. P., & Ones, D. S. (2019). A century of research on conscientiousness at work. <em>PNAS</em>, <em>116</em>(46), 23004–23010. https://doi.org/10.1073/pnas.1908430116</p>
 
                 <h4>Sociologie, anthropologie et psychologie sociale</h4>
@@ -1362,26 +1493,34 @@
                 <p>Sainsaulieu, R. (1977). <em>L'identité au travail</em>. Presses de Sciences Po.</p>
                 <p>Tajfel, H., & Turner, J. C. (1979). An intégrative theory of intergroup conflict. In W. G. Austin & S. Worchel (Eds.), <em>The social psychology of intergroup relations</em> (pp. 33–47). Brooks/Cole.</p>
 
-                <h4>Psychométrie</h4>
+                <h4>Psychométrie et construction de la mesure</h4>
                 <p>American Educational Research Association, American Psychological Association, & National Council on Measurement in Education. (2014). <em>Standards for educational and psychological testing</em>.</p>
+                <p>Credé, M., Harms, P. D., Niehorster, S., & Gaye-Valentine, A. (2012). An evaluation of the consequences of using short measures of the Big Five personality traits. <em>Journal of Personality and Social Psychology</em>, <em>102</em>(4), 874–888. https://doi.org/10.1037/a0027403</p>
+                <p>Cronbach, L. J., & Furby, L. (1970). How we should measure « change »: Or should we? <em>Psychological Bulletin</em>, <em>74</em>(1), 68–80. https://doi.org/10.1037/h0029382</p>
+                <p>Cronbach, L. J., & Gleser, G. C. (1953). Assessing similarity between profiles. <em>Psychological Bulletin</em>, <em>50</em>(6), 456–473. https://doi.org/10.1037/h0057173</p>
+                <p>Preston, C. C., & Colman, A. M. (2000). Optimal number of response categories in rating scales: Reliability, validity, discriminating power, and respondent preferences. <em>Acta Psychologica</em>, <em>104</em>(1), 1–15. https://doi.org/10.1016/S0001-6918(99)00050-5</p>
+                <p>Soto, C. J., John, O. P., Gosling, S. D., & Potter, J. (2008). The developmental psychometrics of Big Five self-reports: Acquiescence, factor structure, coherence, and differentiation from ages 10 to 20. <em>Journal of Personality and Social Psychology</em>, <em>94</em>(4), 718–737. https://doi.org/10.1037/0022-3514.94.4.718</p>
+                <p>Yan, D., von Davier, A. A., & Lewis, C. (Eds.). (2014). <em>Computerized multistage testing: Theory and applications</em>. CRC Press.</p>
 
-                <h4>Intelligence collective, décision et leadership</h4>
+                <h4>Travaux de recherche : intelligence collective, décision, leadership</h4>
                 <p>Edmondson, A. C. (2019). <em>The Fearless Organization: Creating Psychological Safety in the Workplace</em>. Wiley.</p>
-                <p>Grant, A. (2021). <em>Think Again: The Power of Knowing What You Don't Know</em>. Viking.</p>
                 <p>Klein, G. (1998). <em>Sources of Power: How People Make Decisions</em>. MIT Press.</p>
+                <p>Steiner, I. D. (1972). <em>Group Process and Productivity</em>. Academic Press.</p>
+                <p>Woolley, A. W., Chabris, C. F., Pentland, A., Hashmi, N., & Malone, T. W. (2010). Evidence for a Collective Intelligence Factor in the Performance of Human Groups. <em>Science</em>, <em>330</em>(6004), 686–688. https://doi.org/10.1126/science.1193147</p>
+
+                <h4>Modèles praticiens et ouvrages de synthèse (cadres de réflexion, non validés psychométriquement)</h4>
+                <p>Dweck, C. S. (2006). <em>Mindset: The new psychology of success</em>. Random House.</p>
+                <p>Grant, A. (2021). <em>Think Again: The Power of Knowing What You Don't Know</em>. Viking.</p>
                 <p>Lencioni, P. (2002). <em>The Five Dysfunctions of a Team</em>. Jossey-Bass.</p>
                 <p>Pink, D. (2009). <em>Drive: The Surprising Truth About What Motivates Us</em>. Riverhead.</p>
                 <p>Sibony, O. (2020). <em>Vous allez commettre une terrible erreur ! 9 pièges cognitifs qui menacent vos décisions stratégiques</em>. Flammarion.</p>
                 <p>Sibony, O., Kahneman, D., & Sunstein, C. R. (2021). <em>Noise: A Flaw in Human Judgment</em>. Little, Brown.</p>
-                <p>Steiner, I. D. (1972). <em>Group Process and Productivity</em>. Academic Press.</p>
                 <p>Wiseman, L. (2010). <em>Multipliers: How the Best Leaders Make Everyone Smarter</em>. HarperBusiness.</p>
-                <p>Woolley, A. W., Chabris, C. F., Pentland, A., Hashmi, N., & Malone, T. W. (2010). Evidence for a Collective Intelligence Factor in the Performance of Human Groups. <em>Science</em>, <em>330</em>(6004), 686–688. https://doi.org/10.1126/science.1193147</p>
 
                 <h4>Pour aller plus loin (lectures complémentaires)</h4>
                 <p>Ashton, M. C., & Lee, K. (2007). Empirical, theoretical, and practical advantages of the HEXACO model. <em>Personality and Social Psychology Review</em>, <em>11</em>(2), 150–166. https://doi.org/10.1177/1088868306294907</p>
                 <p>Block, J. (2010). The five-factor framing of personality and beyond: Some ruminations. <em>Psychological Inquiry</em>, <em>21</em>(1), 2–25. https://doi.org/10.1080/10478401003596626</p>
                 <p>Holland, J. L. (1997). <em>Making vocational choices</em> (3rd ed.). Psychological Assessment Resources.</p>
-                <p>Judge, T. A., Piccolo, R. F., & Ilies, R. (2004). The forgotten ones? The validity of consideration and initiating structure in leadership research. <em>Journal of Applied Psychology</em>, <em>89</em>(1), 36–51. https://doi.org/10.1037/0021-9010.89.1.36</p>
                 <p>Meehl, P. E. (1956). Wanted—A good cookbook. <em>American Psychologist</em>, <em>11</em>(6), 263–272. https://doi.org/10.1037/h0044164</p>
             </div>
         </div>
@@ -1392,182 +1531,234 @@
     <script src="complementarity-data.js"></script>
     <script>
         const profilsData = {
+            // Ordre d'affichage : du plus concret au plus abstrait (les identifiants axeN restent
+            // ceux d'origine, seul l'ordre de présentation change).
             axes: [
-                { id: 'axe1', title: "Traitement de l'Information", description: "Recueillir, organiser et utiliser l'info.", profiles: ['plongeur', 'explorateur'] },
-                { id: 'axe2', title: "Processus d'Action", description: "Passer de la réflexion à la décision.", profiles: ['architecte', 'navigateur'] },
-                { id: 'axe3', title: "Rapport aux Autres", description: "Prioriser la tâche ou l'harmonie du groupe.", profiles: ['pilote', 'catalyseur'] },
-                { id: 'axe4', title: "Rapport à la Nouveaute", description: "Réagir face au changement et à la structure.", profiles: ['pionnier', 'stabilisateur'] }
+                { id: 'axe2', title: "Processus d'Action", description: "Planifier ou ajuster en chemin.", profiles: ['architecte', 'navigateur'] },
+                { id: 'axe1', title: "Traitement de l'Information", description: "Recueillir et traiter l'information.", profiles: ['plongeur', 'explorateur'] },
+                { id: 'axe3', title: "Rapport aux Autres", description: "Prioriser la tâche ou le collectif.", profiles: ['pilote', 'catalyseur'] },
+                { id: 'axe4', title: "Rapport à la Nouveauté", description: "Aller vers le changement ou la continuité.", profiles: ['pionnier', 'stabilisateur'] }
             ],
             profiles: {
                 plongeur: {
                     title: "Plongeur·euse Analytique", summary: "Apporte rigueur et précision pour réduire les risques.", icon: '🔬', chartData: [9, 2, 8, 3, 7, 4, 3, 8],
                     exemple: "En réunion, c'est celui qui demande « Quelles sont les données ? » avant de se prononcer.",
                     details: {
-                        fonctionnement: "Aborde les problèmes avec logique, données factuelles et une pensée convergente (Guilford, 1967). Décompose, analyse et évalue de manière critique pour identifier la solution la plus juste.",
-                        forces: "Attention méticuleuse aux détails, capacité à identifier des tendances dans les données, démarche structurée qui apporte clarté et discipline, rôle de 'garde-fou'. Réduit le « bruit » décisionnel (Sibony, Kahneman & Sunstein, 2021).",
-                        limites: "Risque de 'paralyse par l'analyse', peut être perçu comme rigide ou excessivement critiqué, peut négliger les dimensions humaines et émotionnelles. Peut inhiber la sécurité psychologique si sa rigueur critique est perçue comme du jugement (Edmondson, 2019).",
-                        leviers: "Développer la flexibilité cognitive — « repenser » ses hypothèses (Grant, 2021). Cultiver un état d'esprit de croissance (Dweck, 2006). Pour l'équipe : fournir des données claires, fixer des délais et valoriser sa rigueur."
+                        fonctionnement: "Aborde les problèmes par la logique et les données, dans un registre proche de la pensée convergente décrite par Guilford (1967) : décomposer, vérifier, puis retenir la solution la mieux étayée.",
+                        forces: "Attention soutenue aux détails, repérage des régularités dans les données, démarche qui rend explicites les critères de décision. Un cadrage formalisé limite le « bruit » décisionnel, c'est-à-dire la variabilité indésirable des jugements portés sur des dossiers comparables (Sibony, Kahneman & Sunstein, 2021).",
+                        limites: "Risque de paralysie par l'analyse, perception de rigidité ou d'excès de critique, moindre attention aux dimensions relationnelles. Si la critique est reçue comme un jugement sur les personnes, elle peut décourager la prise de parole (Edmondson, 2019).",
+                        leviers: "S'accorder une phase où le jugement critique est suspendu, avant d'évaluer. Fixer à l'avance le niveau d'information jugé suffisant pour décider. Pour l'équipe : fournir des données claires, poser des échéances, et distinguer critique des idées et critique des personnes."
                     },
                     enriched: {
-                        fonctionnement: "<strong>Pensée convergente</strong> (Guilford, 1967) : ce mode cognitif privilégie la vitesse, la précision et la logique pour converger vers la solution optimale. La connaissance factuelle y joue un rôle central — elle est à la fois source d'idées, chemin vers les solutions et critère d'efficacité (Cropley, 2006).<span class='source'>Guilford (1967) ; Cropley (2006)</span>",
-                        forces: "La rigueur analytique est un <strong>garde-fou</strong> essentiel contre les décisions impulsives et les biais cognitifs. Elle réduit le <strong>bruit décisionnel</strong> — cette variabilité indésirable dans les jugements que Sibony, Kahneman et Sunstein (2021) identifient comme un fléau organisationnel silencieux. La pensée convergente excelle dans les environnements où une seule réponse correcte existe. En termes de <strong>pertes de processus</strong> (Steiner, 1972), ce profil minimise les pertes de coordination en clarifiant les critères de décision.<span class='source'>Cropley (2006) ; Sibony et al. (2021) ; Steiner (1972)</span>",
-                        limites: "La <strong>paralysie par l'analyse</strong> survient quand la recherche de la solution parfaite bloque l'action. Risque de <strong>« pensée figée »</strong> (Grant, 2021) : l'incapacité à repenser ses hypothèses face à de nouvelles données. Ce profil peut inhiber la <strong>sécurité psychologique</strong> (Edmondson, 2019) si sa rigueur critique est perçue comme du jugement, décourageant la prise de parole des autres. La pensée convergente seule ne produit pas d'innovation (Cropley, 2006).<span class='source'>Grant (2021) ; Edmondson (2019) ; Cropley (2006)</span>",
-                        leviers: "Intégrer des <strong>cycles divergent→convergent itératifs</strong> : brainstormer d'abord, puis évaluer. Cultiver un <strong>état d'esprit de croissance</strong> (Dweck, 2006) : « je peux aussi être créatif ». Pratiquer le rôle de <strong>multiplicateur</strong> (Wiseman, 2010) : poser des questions au lieu de trancher, pour amplifier l'intelligence collective. Pratiquer la métacognition : « Quelle est l'information minimale viable ? »<span class='source'>Cropley (2006) ; Dweck (2006) ; Wiseman (2010)</span>"
+                        fonctionnement: "Guilford (1967) appelle <strong>pensée convergente</strong> la façon de raisonner qui vise à réduire les possibilités jusqu'à une seule réponse jugée correcte, par opposition à la pensée divergente, qui en produit plusieurs. Ce mode s'appuie sur la connaissance factuelle, laquelle sert à la fois de matière première et de critère d'évaluation (Cropley, 2006).<span class='source'>Guilford (1967) ; Cropley (2006)</span>",
+                        forces: "Rendre explicites les critères d'une décision limite ce que Sibony, Kahneman et Sunstein (2021) appellent le <strong>bruit</strong> : le fait que deux dossiers comparables, ou le même dossier examiné à deux moments, reçoivent des jugements différents sans raison de fond. Ce mode de raisonnement est surtout adapté aux problèmes qui admettent une réponse vérifiable (Cropley, 2006). Sur le plan collectif, clarifier les critères fait gagner du temps de coordination (Steiner, 1972).<span class='source'>Sibony et al. (2021) ; Cropley (2006) ; Steiner (1972)</span>",
+                        limites: "La <strong>paralysie par l'analyse</strong> apparaît lorsque la recherche d'une réponse complète repousse indéfiniment la décision. La pensée convergente seule ne suffit pas à produire des solutions nouvelles : elle sélectionne, elle ne génère pas (Cropley, 2006). Si la rigueur critique est reçue comme un jugement sur les personnes, elle décourage la prise de parole, et donc la remontée des problèmes. Edmondson (2019) désigne par <strong>sécurité psychologique</strong> le fait de pouvoir dire « je ne suis pas d'accord » ou « je me suis trompé » sans risquer de perdre la face.<span class='source'>Cropley (2006) ; Edmondson (2019)</span>",
+                        leviers: "Séparer explicitement les temps : produire des options d'abord, les évaluer ensuite. C'est l'alternance des deux, et non la seule rigueur, qui transforme une idée en solution utilisable (Cropley, 2006). Se demander avant chaque dossier : « quelle est l'information minimale suffisante pour trancher ? ». Poser des questions plutôt que trancher seul, pour faire remonter ce que les autres ont observé (Wiseman, 2010).<span class='source'>Cropley (2006) ; Wiseman (2010)</span>"
                     }
                 },
                 explorateur: {
                     title: "Explorateur·rice Divergent·e", summary: "Génère des options et stimule l'innovation.", icon: '💡', chartData: [2, 9, 3, 8, 4, 6, 8, 2],
                     exemple: "C'est celui qui lance « Et si on faisait complètement autrement ? » quand l'équipe tourne en rond.",
                     details: {
-                        fonctionnement: "Générateur d'idées dont la pensée divergente (Guilford, 1967) produit une grande quantité d'options variées — fluence, flexibilité, originalité. À l'aise avec l'ambiguïté, la nouveauté et les approches non conventionnelles.",
-                        forces: "Moteur de l'innovation et de la créativité. Incarne la flexibilité cognitive — la capacité à « repenser » (Grant, 2021). Sa diversité d'idées augmente l'intelligence collective du groupe (Woolley et al., 2010).",
-                        limites: "Difficulté à se concentrer sur l'exécution. Risque d'éviter la phase d'engagement (Lencioni, 2002) — trop d'options, jamais de décision. Peut créer des pertes de coordination (Steiner, 1972) si les idées ne sont pas canalisées.",
-                        leviers: "Utiliser l'architecture de décision (Sibony, 2020) pour canaliser la divergence : brainstorming structuré avec critères de sélection. Ancrer sa motivation dans la maîtrise (Pink, 2009) — approfondir une idée jusqu'au bout."
+                        fonctionnement: "Produit des options variées plutôt qu'une réponse unique, ce que Guilford (1967) appelle la pensée divergente : beaucoup d'idées, de natures différentes, dont certaines inattendues. À l'aise avec l'ambiguïté et les approches non conventionnelles.",
+                        forces: "Fournit des alternatives là où le groupe converge trop tôt, ce qui limite le risque de pensée de groupe. Particulièrement utile sur les problèmes mal définis, pour lesquels aucune réponse n'est vérifiable à l'avance (Cropley, 2006).",
+                        limites: "Difficulté à rester sur l'exécution. Multiplier les options peut repousser le moment de l'engagement collectif (Lencioni, 2002). Sans phase de tri, l'abondance d'idées augmente les pertes de coordination plutôt que la production du groupe (Steiner, 1972).",
+                        leviers: "Structurer la divergence : produire largement, puis appliquer des critères de sélection définis à l'avance (Sibony, 2020). Se fixer un point d'aboutissement (un prototype, un test, un livrable) avant d'ouvrir une nouvelle piste (Pink, 2009)."
                     },
                     enriched: {
-                        fonctionnement: "<strong>Pensée divergente</strong> (Guilford, 1967) : ce mode cognitif produit de multiples réponses — fluence (quantité), flexibilité (variété), originalité (rareté) et élaboration (détail). C'est le moteur de la <strong>créativité</strong>, mais elle nécessite un environnement psychologiquement sûr pour s'exprimer pleinement (Edmondson, 2019).<span class='source'>Guilford (1967) ; Edmondson (2019)</span>",
-                        forces: "Prévention de la <strong>pensée de groupe</strong> (<em>groupthink</em>) en proposant des alternatives que personne n'a envisagées. Incarne la <strong>flexibilité cognitive</strong> décrite par Grant (2021) : la capacité à repenser, désapprendre et inviter le désaccord productif. La recherche sur l'<strong>intelligence collective</strong> (Woolley et al., 2010) montre que la diversité de perspectives — plus que le QI moyen — prédit la performance de groupe.<span class='source'>Grant (2021) ; Woolley et al. (2010) ; Cropley (2006)</span>",
-                        limites: "La divergence sans convergence produit de la <strong>quasi-créativité</strong> — des idées nouvelles mais inapplicables (Cropley, 2006). Selon le modèle des <strong>5 dysfonctions</strong> de Lencioni (2002), ce profil risque de bloquer la phase d'engagement : trop d'options empêchent la décision. En termes de <strong>pertes de processus</strong> (Steiner, 1972), la multiplication des idées sans structure crée des pertes de coordination.<span class='source'>Cropley (2006) ; Lencioni (2002) ; Steiner (1972)</span>",
-                        leviers: "Utiliser l'<strong>architecture de décision</strong> (Sibony, 2020) pour canaliser la divergence : brainstorming structuré avec critères de sélection explicites. Ancrer sa motivation dans la <strong>maîtrise</strong> (Pink, 2009) — approfondir une idée jusqu'au prototype plutôt que passer à la suivante. S'associer à un profil convergent (Plongeur) pour évaluer et sélectionner.<span class='source'>Sibony (2020) ; Pink (2009) ; Cropley (2006)</span>"
+                        fonctionnement: "<strong>Pensée divergente</strong> (Guilford, 1967) : la production de réponses multiples. Guilford en distingue quatre dimensions : la fluence (le nombre d'idées), la flexibilité (leur variété), l'originalité (leur rareté) et l'élaboration (leur degré de détail). Son expression dépend du contexte : proposer une idée non conventionnelle suppose de pouvoir le faire sans y perdre en crédibilité (Edmondson, 2019).<span class='source'>Guilford (1967) ; Edmondson (2019)</span>",
+                        forces: "Proposer des alternatives que personne n'a formulées est le principal rempart contre la convergence prématurée d'un groupe. Cropley (2006) souligne toutefois que la divergence ne prend sa valeur qu'associée à une phase de sélection : c'est le cycle complet qui produit une solution, pas la production d'idées seule. Grant (2021) décrit la même disposition sous l'angle de la capacité à réviser ses propres hypothèses.<span class='source'>Cropley (2006) ; Grant (2021)</span>",
+                        limites: "La divergence sans convergence produit ce que Cropley (2006) appelle la <strong>quasi-créativité</strong> : des idées nouvelles mais inapplicables. Dans le modèle de Lencioni (2002), rouvrir constamment les options empêche le groupe de s'engager sur une décision. Steiner (1972) a par ailleurs formalisé une idée simple : la production réelle d'un groupe est toujours inférieure à son potentiel, parce qu'une partie de l'énergie passe dans la coordination. Multiplier les idées sans les trier alourdit précisément cette part.<span class='source'>Cropley (2006) ; Lencioni (2002) ; Steiner (1972)</span>",
+                        leviers: "Séparer les deux temps et l'annoncer : phase d'ouverture sans critique, puis tri selon des critères fixés à l'avance (Sibony, 2020). Aller jusqu'au prototype sur une piste avant d'en ouvrir une autre, car la motivation durable tient davantage au sentiment de progresser qu'à la nouveauté (Pink, 2009). S'associer à un profil convergent pour la phase d'évaluation.<span class='source'>Sibony (2020) ; Pink (2009) ; Cropley (2006)</span>"
                     }
                 },
                 architecte: {
                     title: "Architecte Méthodique", summary: "Transforme les stratégies en plans d'action concrets.", icon: '🏗️', chartData: [8, 3, 9, 2, 9, 5, 2, 9],
                     exemple: "C'est celui qui dit « Attendez, il nous faut un rétroplanning avant de commencer. »",
                     details: {
-                        fonctionnement: "Fonctionne selon un registre que la recherche en psychologie de la personnalité associe à une haute Conscienciosité (Costa & McCrae, 1992) — le facteur le plus robuste pour prédire la performance professionnelle (Barrick & Mount, 1991). Son mode opératoire est défini par l'organisation, la fiabilité, la planification et un souci constant du détail.",
-                        forces: "Fiabilité, haute qualité d'exécution, excelle dans l'organisation de projets complexes, persévérance et autodiscipline. Prédicteur le plus robuste de la performance au travail. Maître de l'hygiène décisionnelle — réduit le bruit par les processus (Sibony et al., 2021). Minimise les pertes de coordination (Steiner, 1972).",
-                        limites: "Peut être rigide et résistant au changement, difficulté face à l'ambiguïté, risque de micro-management, stressé par les situations chaotiques. Risque de « pensée congelée » face au changement (Grant, 2021). Un excès de contrôle tue l'autonomie des collaborateurs (Pink, 2009).",
-                        leviers: "Accroître sa flexibilité (ex: planifier l'imprévu), s'entraîner à la délégation. Pour l'équipe : communiquer les changements en amont, l'impliquer dans la création des plans. Planifier l'imprévu comme opportunité d'apprentissage (Dweck, 2006). Pratiquer la discipline « Investisseur » du multiplicateur : déléguer avec confiance (Wiseman, 2010)."
+                        fonctionnement: "Registre que la psychologie de la personnalité associe à une haute Conscienciosité (Costa & McCrae, 1992) : organisation, fiabilité, planification, souci du détail. Parmi les cinq grands facteurs, c'est celui dont le lien avec la performance professionnelle est le plus régulier d'un métier à l'autre (Barrick & Mount, 1991).",
+                        forces: "Fiabilité et qualité d'exécution, conduite de projets comportant beaucoup de dépendances, persévérance. Formaliser les étapes et les critères réduit la variabilité indésirable des décisions (Sibony et al., 2021) ainsi que les pertes de coordination du groupe (Steiner, 1972).",
+                        limites: "Peut devenir rigide face à l'imprévu, tolérer difficilement l'ambiguïté, glisser vers le contrôle tatillon. Le lien entre conscienciosité et performance n'est d'ailleurs pas linéaire : au-delà d'un certain point, il s'infléchit (Carter et al., 2014). Un contrôle serré sur la méthode réduit le sentiment d'autonomie des collaborateurs (Pink, 2009).",
+                        leviers: "Réserver dans le plan des créneaux non affectés, pour absorber l'imprévu sans avoir à tout replanifier. Déléguer sur le résultat attendu plutôt que sur la procédure (Wiseman, 2010). Pour l'équipe : annoncer les changements en amont et l'associer à la construction des plans."
                     },
                     enriched: {
-                        fonctionnement: "Incarnation de la <strong>haute Conscienciosité</strong> (Costa & McCrae, 1992) — le facteur le plus robuste pour prédire la performance professionnelle. Méta-analyse de Wilmot & Ones (2019) sur 1,1 million de participants : la conscienciosité a un effet positif dans 98% des variables étudiées.<span class='source'>Costa & McCrae (1992) ; Wilmot & Ones (2019)</span>",
-                        forces: "<strong>Fiabilité et qualité d'exécution</strong> exceptionnelles. Excelle dans l'organisation de projets complexes. La conscienciosité est le prédicteur le plus constant de la performance dans toutes les catégories d'emploi (Barrick & Mount, 1991). Maître de l'<strong>hygiène décisionnelle</strong> — réduit le bruit par les processus <span class='source'>(Sibony et al., 2021)</span>. Minimise les <strong>pertes de coordination</strong> <span class='source'>(Steiner, 1972)</span>.<span class='source'>Barrick & Mount (1991) ; Wilmot & Ones (2019) ; Sibony et al. (2021) ; Steiner (1972)</span>",
-                        limites: "La relation conscienciosité→performance est <strong>curvilinéaire</strong> : un excès peut réduire la performance par rigidité et micro-management (Carter et al., 2014). La validité prédictive de la conscienciosité serait surestimée d'environ 30% en raison du biais de publication (Kepes & McDaniel, 2015). Risque de <strong>« pensée congelée »</strong> face au changement <span class='source'>(Grant, 2021)</span>. Un excès de contrôle tue l'<strong>autonomie</strong> des collaborateurs <span class='source'>(Pink, 2009)</span>.<span class='source'>Carter et al. (2014) ; Grant (2021) ; Pink (2009)</span>",
-                        leviers: "<strong>Planifier l'imprévu</strong> : réserver des créneaux non structurés. S'entraîner à la délégation avec des objectifs clairs mais sans micro-management. Pour l'équipe : communiquer les changements en amont, l'impliquer dans la création des plans. Planifier l'imprévu comme <strong>opportunité d'apprentissage</strong> <span class='source'>(Dweck, 2006)</span>. Pratiquer la discipline <strong>« Investisseur »</strong> du multiplicateur : déléguer avec confiance <span class='source'>(Wiseman, 2010)</span>.<span class='source'>Wilmot & Ones (2019) ; Dweck (2006) ; Wiseman (2010)</span>"
+                        fonctionnement: "<strong>Haute Conscienciosité</strong>. Dans le modèle dit des « cinq grands facteurs » de personnalité (Costa & McCrae, 1992), la conscienciosité regroupe l'organisation, la fiabilité, la persévérance et le respect des engagements. La synthèse de Wilmot & Ones (2019), qui rassemble plusieurs dizaines de méta-analyses, retrouve un lien positif entre ce facteur et un large éventail de résultats professionnels, chacun de ces liens restant d'ampleur modérée pris isolément.<span class='source'>Costa & McCrae (1992) ; Wilmot & Ones (2019)</span>",
+                        forces: "Barrick & Mount (1991) : la conscienciosité est le seul des cinq grands facteurs dont la valeur prédictive se maintient dans l'ensemble des groupes professionnels étudiés. L'ordre de grandeur reste cependant modeste, avec une corrélation corrigée d'environ .20 à .25. Traduit autrement : ce trait rend compte d'environ 5% des différences de performance entre personnes, et les 95% restants dépendent d'autre chose (compétences, contexte, encadrement, hasard). Un facteur <strong>régulier, mais non déterminant</strong> : il déplace les probabilités, il ne décide pas d'une trajectoire.<span class='source'>Barrick & Mount (1991) ; Sibony et al. (2021) ; Steiner (1972)</span>",
+                        limites: "Le lien entre conscienciosité et performance n'est pas une ligne droite : passé un certain niveau, il cesse de monter et peut même redescendre, la rigueur basculant en rigidité et en contrôle excessif. Carter et ses collègues (2014) parlent d'une relation <strong>curvilinéaire</strong>, en forme de cloche. Deuxième réserve : les études qui ne trouvent rien sont moins souvent publiées que celles qui trouvent un effet, ce qui gonfle mécaniquement les moyennes rapportées. Appliqué à ce facteur, ce biais de publication conduit à considérer sa valeur prédictive comme surestimée (Kepes & McDaniel, 2015). Les chiffres ci-dessus sont donc des <strong>bornes hautes</strong>.<span class='source'>Carter et al. (2014) ; Kepes & McDaniel (2015)</span>",
+                        leviers: "<strong>Planifier l'imprévu</strong> : réserver des créneaux non affectés plutôt que densifier le plan. Déléguer sur le résultat attendu et non sur la procédure, car c'est le contrôle du « comment » qui pèse le plus sur la motivation des collaborateurs <span class='source'>(Pink, 2009)</span>. Distinguer les décisions réversibles, qui peuvent être prises vite et corrigées ensuite, des décisions coûteuses à défaire, qui justifient le temps de planification. Pour l'équipe : annoncer les changements en amont et l'associer à la construction des plans <span class='source'>(Wiseman, 2010)</span>.<span class='source'>Carter et al. (2014) ; Pink (2009) ; Wiseman (2010)</span>"
                     }
                 },
                 navigateur: {
                     title: "Navigateur·rice Intuitif·ive", summary: "Prend des décisions rapides dans l'incertitude.", icon: '🧭', chartData: [3, 7, 2, 9, 5, 8, 7, 3],
                     exemple: "C'est celui qui sent que « quelque chose cloche » dans le projet avant que les indicateurs ne le montrent.",
                     details: {
-                        fonctionnement: "Prend des décisions rapides basées sur des 'pressentiments' (reconnaissance de schémas non-consciente). Ce mode est souvent associé à ce que Kahneman (2011) appelle le Système 1, bien que cette dichotomie soit une simplification heuristique — en réalité, intuition et analyse s'entremêlent constamment. Capte les signaux faibles.",
-                        forces: "Vitesse de décision, excellente gestion de l'ambiguïté, forte intelligence interpersonnelle, capable de synthétiser des informations complexes de manière holistique. Incarne la décision intuitive experte — RPD (Klein, 1998). Forte sensibilité sociale = composante clé de l'intelligence collective (Woolley et al., 2010).",
-                        limites: "Difficulté à justifier ses décisions de manière factuelle, vulnérable aux biais cognitifs, peut être perçu comme impulsif ou irrationnel. Vulnérable au bruit décisionnel — l'humeur et le contexte influencent le jugement (Sibony et al., 2021).",
-                        leviers: "Pratiquer la métacognition (ex: tenir un 'journal de décisions'). Pour l'équipe : faire confiance à son jugement, l'encourager à expliciter les signaux faibles qu'il perçoit. Tenir un journal de décisions pour calibrer l'intuition et détecter le bruit (Sibony et al., 2021). Pratiquer le « repensement » (Grant, 2021)."
+                        fonctionnement: "Décide vite à partir d'une impression d'ensemble, mécanisme que la recherche décrit comme une reconnaissance de configurations déjà rencontrées. Ce mode est souvent rattaché au « Système 1 » de Kahneman (2011), étant entendu que cette opposition entre deux systèmes est une simplification pédagogique : intuition et analyse opèrent conjointement.",
+                        forces: "Vitesse de décision et tolérance à l'ambiguïté. Repère des signaux que l'analyse formelle ne capte pas encore. Klein (1998) a décrit ce fonctionnement chez des professionnels expérimentés : la situation est appariée à des cas antérieurs, sans comparaison explicite d'options.",
+                        limites: "Difficulté à justifier une décision par des éléments communicables. Sensibilité aux biais cognitifs (ancrage, disponibilité, confirmation), inhérente au fonctionnement heuristique. Sensibilité également au bruit : l'humeur, la fatigue ou l'ordre de présentation modifient le jugement sans que l'on s'en aperçoive (Sibony et al., 2021).",
+                        leviers: "Tenir un journal de décisions, c'est-à-dire noter la décision, ce qui la motive et ce qu'on prédit, puis relire quelques mois plus tard. C'est la seule façon de savoir si son intuition voit juste dans un domaine donné, plutôt que de s'en remettre au souvenir des réussites. Expliciter après coup les indices perçus, pour les rendre discutables. Pour l'équipe : accepter le jugement rapide sur les décisions réversibles, demander l'explicitation sur les autres."
                     },
                     enriched: {
-                        fonctionnement: "Mode cognitif associé au <strong>Système 1</strong> de Kahneman (2011) — rapide, automatique, holistique. Cependant, cette dichotomie est une <strong>simplification heuristique</strong> : en réalité, intuition et analyse s'entremêlent constamment. L'intuition experte est une reconnaissance de schémas non-consciente construite par l'expérience.<span class='source'>Kahneman (2011)</span>",
-                        forces: "<strong>Vitesse de décision</strong> dans l'incertitude. Excellente gestion de l'ambiguïté. Forte intelligence interpersonnelle — capte les signaux faibles que l'analyse formelle ne détecte pas. Synthétise des informations complexes de manière holistique. Incarne la <strong>décision intuitive experte</strong> — RPD <span class='source'>(Klein, 1998)</span>. Forte <strong>sensibilité sociale</strong> = composante clé de l'intelligence collective <span class='source'>(Woolley et al., 2010)</span>.<span class='source'>Kahneman (2011) ; Klein (1998) ; Woolley et al. (2010)</span>",
-                        limites: "Vulnérable aux <strong>biais cognitifs</strong> (ancrage, disponibilité, confirmation) précisément parce que le Système 1 fonctionne par heuristiques. Difficulté à justifier ses décisions factuellement. Peut être perçu comme impulsif ou irrationnel par les profils analytiques. Vulnérable au <strong>bruit décisionnel</strong> — l'humeur et le contexte influencent le jugement <span class='source'>(Sibony et al., 2021)</span>.<span class='source'>Kahneman (2011) ; Sibony et al. (2021)</span>",
-                        leviers: "Tenir un <strong>journal de décisions</strong> pour développer la métacognition. Expliciter les signaux faibles perçus pour les rendre communicables. Pour l'équipe : faire confiance à son jugement tout en demandant une justification a posteriori. Tenir un journal de décisions pour <strong>calibrer l'intuition</strong> et détecter le bruit <span class='source'>(Sibony et al., 2021)</span>. Pratiquer le <strong>« repensement »</strong> <span class='source'>(Grant, 2021)</span>.<span class='source'>Kahneman (2011) ; Sibony et al. (2021) ; Grant (2021)</span>"
+                        fonctionnement: "Kahneman (2011) a popularisé une image commode : le <strong>« Système 1 »</strong>, rapide, automatique et sans effort (reconnaître un visage, sentir qu'une réunion tourne mal), et le <strong>« Système 2 »</strong>, lent, volontaire et coûteux (poser une soustraction, comparer deux devis). Ce profil s'appuie surtout sur le premier. Kahneman précise lui-même qu'il s'agit d'une <strong>image pédagogique</strong> et non de deux dispositifs cérébraux distincts : les deux modes fonctionnent en permanence et s'influencent. Ce qu'on appelle intuition experte est une reconnaissance de situations déjà vues, construite par l'expérience répétée.<span class='source'>Kahneman (2011) ; Klein (1998)</span>",
+                        forces: "Klein (1998) a observé ce mécanisme chez des chefs de secours pompiers et des infirmières de réanimation, et l'a nommé <strong>décision par reconnaissance</strong> : face à une situation, le professionnel ne compare pas plusieurs options, il reconnaît un cas déjà rencontré, teste mentalement la première solution qui vient et l'applique si elle tient. Cette fiabilité est <strong>conditionnelle</strong> : elle suppose un métier où les situations se répètent et où l'on apprend vite si l'on s'est trompé. Hors de ces conditions (par exemple prédire un marché ou une carrière), le sentiment de certitude n'est plus un indice de justesse.<span class='source'>Klein (1998) ; Kahneman (2011)</span>",
+                        limites: "Sensibilité aux <strong>biais cognitifs</strong> : se laisser influencer par le premier chiffre entendu (ancrage), par l'exemple qui vient le plus vite à l'esprit (disponibilité), ou ne retenir que ce qui confirme son idée de départ (confirmation). Sensibilité également au <strong>bruit</strong> : le même dossier examiné à deux moments peut recevoir deux jugements différents, sous l'effet de l'humeur, de la fatigue ou de l'ordre d'examen (Sibony et al., 2021). Difficulté enfin à rendre son raisonnement communicable, ce qui pose problème dès qu'une décision doit être justifiée collectivement.<span class='source'>Kahneman (2011) ; Sibony et al. (2021)</span>",
+                        leviers: "Tenir un <strong>journal de décisions</strong> : noter la décision, ce qui la motive, ce qu'on prédit, puis relire quelques mois plus tard. C'est le seul moyen de vérifier si son intuition voit juste dans un domaine donné, plutôt que de s'en remettre au souvenir des réussites, qui est toujours flatteur. Expliciter après coup les indices perçus pour les rendre discutables. Pour l'équipe : accepter la décision rapide sur ce qui est réversible, demander l'explicitation sur ce qui ne l'est pas.<span class='source'>Sibony et al. (2021) ; Grant (2021)</span>"
                     }
                 },
                 pilote: {
                     title: "Pilote Orienté·e Tâche", summary: "Maintient le focus sur les objectifs et les résultats.", icon: '🎯', chartData: [7, 4, 8, 6, 9, 2, 4, 7],
                     exemple: "C'est celui qui recentre : « OK, mais concrètement, qui fait quoi pour vendredi ? »",
                     details: {
-                        fonctionnement: "Principalement focalisé sur l'accomplissement des objectifs, le respect des délais et l'efficacité. Définit clairement les rôles, planifie et suit les résultats.",
-                        forces: "Efficacité redoutable pour faire avancer les projets, apporte de la clarté dans les objectifs, maintient l'équipe concentrée sur les priorités. Pilote la responsabilité et l'attention aux résultats — niveaux 4-5 de la pyramide de Lencioni (2002).",
-                        limites: "Peut négliger le bien-être et les besoins relationnels de l'équipe, ce qui peut éroder la motivation à long terme. Peut être perçu comme froid ou excessivement directif. Un style trop directif érode la sécurité psychologique (Edmondson, 2019). Monopoliser la parole réduit l'intelligence collective (Woolley et al., 2010). Risque d'être un « diminueur » involontaire (Wiseman, 2010).",
-                        leviers: "Développer son intelligence relationnelle (ex: planifier du temps pour des interactions informelles), pratiquer l'écoute active. Pour l'équipe : reconnaître son efficacité. Pratiquer la discipline « Libérateur » (Wiseman, 2010) : inviter, écouter. Donner de l'autonomie (Pink, 2009). Cadrer le travail, inviter l'engagement, répondre productivement (Edmondson, 2019)."
+                        fonctionnement: "Orienté vers l'atteinte des objectifs, le respect des échéances et la clarté des responsabilités. Blake & Mouton (1964) désignent cette orientation comme un style centré sur la tâche, par opposition à un style centré sur les personnes.",
+                        forces: "Fait avancer les dossiers, clarifie qui fait quoi et pour quand, maintient l'attention sur les priorités. La méta-analyse de Judge, Piccolo & Ilies (2004) retrouve un lien positif entre ce style structurant et la performance du groupe.",
+                        limites: "Peut sous-estimer les besoins relationnels de l'équipe, avec un effet différé sur la motivation. Un style directif qui laisse peu de place à la contradiction retarde la remontée des problèmes (Edmondson, 2019). Woolley et al. (2010) observent par ailleurs que les groupes où la parole se répartit inégalement obtiennent de moins bons résultats collectifs.",
+                        leviers: "Réserver du temps pour des échanges qui ne portent pas sur l'avancement. Ouvrir explicitement l'espace au désaccord : poser une question et laisser le silence s'installer suffit souvent (Edmondson, 2019). Fixer le résultat attendu et laisser la méthode ouverte (Pink, 2009). Les deux orientations, tâche et relation, ne sont pas exclusives, elles se cumulent."
                     },
                     enriched: {
-                        fonctionnement: "Leadership <strong>orienté tâche</strong> (Blake & Mouton, 1964) : focalisation sur les objectifs, les délais et l'efficacité. Définit clairement les rôles et suit les résultats. Ce style produit une <strong>efficacité de groupe</strong> et un positivisme élevés parmi les membres.<span class='source'>Blake & Mouton (1964)</span>",
-                        forces: "Efficacité redoutable pour faire avancer les projets. Apporte de la <strong>clarté dans les objectifs</strong>. Les équipes task-oriented montrent +4% de productivité réelle (méta-analyse). Maintient le focus sur les priorités. Pilote la <strong>responsabilité</strong> et l'<strong>attention aux résultats</strong> — niveaux 4-5 de la pyramide de Lencioni <span class='source'>(2002)</span>.<span class='source'>Blake & Mouton (1964) ; Lencioni (2002)</span>",
-                        limites: "Peut négliger le <strong>bien-être relationnel</strong> de l'équipe, érodant la motivation à long terme. Une étude de 2017 montre que le leadership « efficace » focalisé sur la tâche est associé au <strong>burnout</strong>. Peut être perçu comme froid ou directif. Un style trop directif érode la <strong>sécurité psychologique</strong> <span class='source'>(Edmondson, 2019)</span>. Monopoliser la parole réduit l'<strong>intelligence collective</strong> <span class='source'>(Woolley et al., 2010)</span>. Risque d'être un <strong>« diminueur »</strong> involontaire <span class='source'>(Wiseman, 2010)</span>.<span class='source'>Blake & Mouton (1964) ; Edmondson (2019) ; Woolley et al. (2010) ; Wiseman (2010)</span>",
-                        leviers: "Planifier du temps pour des <strong>interactions informelles</strong>. Pratiquer l'écoute active. Intégrer les deux orientations (tâche + relation) pour un leadership optimal. Pour l'équipe : reconnaître son efficacité tout en signalant les besoins relationnels. Pratiquer la discipline <strong>« Libérateur »</strong> <span class='source'>(Wiseman, 2010)</span> : inviter, écouter. Donner de l'<strong>autonomie</strong> <span class='source'>(Pink, 2009)</span>. Cadrer le travail, inviter l'engagement, répondre productivement <span class='source'>(Edmondson, 2019)</span>.<span class='source'>Blake & Mouton (1964) ; Wiseman (2010) ; Pink (2009) ; Edmondson (2019)</span>"
+                        fonctionnement: "Style <strong>centré sur la tâche</strong>, que la recherche sur le leadership appelle « structuration » (Blake & Mouton, 1964) : définir les rôles, les échéances et les critères de réussite. On a longtemps opposé ce style à l'attention portée aux personnes, comme s'il fallait choisir. Les données vont plutôt dans l'autre sens : il s'agit de <strong>deux dimensions indépendantes</strong>, qu'une même personne peut cumuler.<span class='source'>Blake & Mouton (1964) ; Judge et al. (2004)</span>",
+                        forces: "La méta-analyse de Judge, Piccolo & Ilies (2004), qui rassemble plusieurs décennies d'études sur le sujet, a réhabilité cette dimension longtemps jugée dépassée : la structuration reste associée positivement à la performance du groupe. Elle n'est pas pour autant supérieure à l'attention portée aux personnes, davantage liée à la satisfaction et à la motivation des collaborateurs. Les deux styles agissent sur des résultats différents plutôt que l'un contre l'autre.<span class='source'>Judge et al. (2004) ; Blake & Mouton (1964)</span>",
+                        limites: "Le risque principal n'est pas l'exigence, mais le fait de ne pas laisser de place à la contradiction : les problèmes remontent alors tard, et coûtent plus cher à corriger. Edmondson (2019) désigne par <strong>sécurité psychologique</strong> le fait de pouvoir signaler une erreur ou un désaccord sans craindre d'en payer le prix, et montre que ce climat conditionne la remontée d'information. Woolley et al. (2010) observent de leur côté que les groupes où la parole se répartit inégalement obtiennent des résultats collectifs plus faibles, indépendamment du niveau individuel de leurs membres.<span class='source'>Edmondson (2019) ; Woolley et al. (2010)</span>",
+                        leviers: "Ouvrir explicitement l'espace au désaccord plutôt que d'attendre qu'il se manifeste : poser une question ouverte, puis laisser le silence durer. Réserver du temps d'échange qui ne porte pas sur l'avancement. Fixer le résultat attendu en laissant la méthode ouverte, car c'est le contrôle du « comment » qui pèse le plus sur la motivation (Pink, 2009). Rien n'oblige à choisir entre exigence et attention aux personnes : les deux se cumulent.<span class='source'>Edmondson (2019) ; Pink (2009) ; Judge et al. (2004)</span>"
                     }
                 },
                 catalyseur: {
                     title: "Catalyseur·rice Social·e", summary: "Construit la confiance et facilite la communication.", icon: '❤️‍🔥', chartData: [4, 6, 3, 5, 2, 9, 6, 5],
                     exemple: "C'est celui qui remarque que Marie n'a pas parlé depuis 20 minutes et lui donne la parole.",
                     details: {
-                        fonctionnement: "Associé à ce que le modèle des Big Five appelle une haute Agréabilité, bien que ce facteur soit le moins prédictif de la performance professionnelle — il est davantage lié à la satisfaction relationnelle et à la cohésion d'équipe (Salgado, 1997). Attention tournée vers l'harmonie du groupe et le bien-être. Privilégie la collaboration, la coopération et le consensus.",
-                        forces: "Exceptionnel pour créer une forte cohésion d'équipe et un environnement psychologiquement sûr, excellent médiateur, favorise une communication ouverte et durable. Incarne les 3 facteurs de l'intelligence collective : sensibilité sociale, égalité de parole, diversité (Woolley et al., 2010). Créateur naturel de sécurité psychologique (Edmondson, 2019). « Multiplicateur » par excellence (Wiseman, 2010).",
-                        limites: "Réticent à prendre des décisions impopulaires ou à donner un feedback critiqué, peut manquer d'assertivité, risque d'être exploité ou de ne pas défendre ses propres intérêts. Risque d'éviter le conflit productif — niveau 2 de la pyramide de Lencioni (2002). Trop de consensus = pensée de groupe, pas assez de repensement (Grant, 2021).",
-                        leviers: "Apprendre à distinguer 'être gentil' de 'être efficace'. S'entraîner au feedback constructif et à dire 'non'. Pour l'équipe : reconnaître son rôle de 'glue' sociale, le coacher pour développer son assertivité. Distinguer conflit productif (idées) vs destructif (personnes) (Lencioni, 2002). Faciliter des débats structurés plutôt que chercher l'unanimité (Sibony, 2020)."
+                        fonctionnement: "Attention portée à la qualité des relations et à la circulation de la parole. Le modèle des cinq grands facteurs de personnalité rattache ce registre à l'Agréabilité. Contrairement à la conscienciosité, ce facteur ne prédit pas la performance de façon régulière d'un métier à l'autre : son lien est plus net avec la satisfaction et la cohésion qu'avec la performance individuelle (Salgado, 1997).",
+                        forces: "Facilite la circulation de la parole et la régulation des tensions. Deux des trois corrélats du facteur de performance collective identifié par Woolley et al. (2010) relèvent de ce registre : la sensibilité sociale moyenne des membres et l'égalité de la répartition des tours de parole.",
+                        limites: "Réticence à porter une décision impopulaire ou un retour critique, ce qui peut retarder des arbitrages nécessaires. Risque de faire l'économie du désaccord de fond, que Lencioni (2002) considère comme une condition de l'engagement collectif. Un consensus obtenu trop vite ressemble à un accord mais n'en est pas un.",
+                        leviers: "Distinguer « être agréable » et « être utile » : un retour critique formulé sur le travail, et non sur la personne, protège la relation au lieu de l'abîmer. Organiser le désaccord au lieu d'attendre qu'il émerge, par exemple en désignant quelqu'un pour défendre la position inverse (Sibony, 2020). Pour l'équipe : nommer explicitement ce rôle de régulation, souvent invisible dans les bilans."
                     },
                     enriched: {
-                        fonctionnement: "Leadership <strong>orienté relation</strong> — associé à une haute Agréabilité (Costa & McCrae, 1992). Attention tournée vers l'harmonie, la cohésion et le bien-être. L'Agréabilité est le facteur Big Five le <strong>moins prédictif de la performance individuelle</strong>, mais le plus lié à la satisfaction relationnelle et à la cohésion d'équipe (Salgado, 1997).<span class='source'>Costa & McCrae (1992) ; Salgado (1997)</span>",
-                        forces: "Le leadership relationnel génère une <strong>+8% de productivité réelle</strong> (vs +4% pour le task-oriented) grâce à une plus grande cohésion d'équipe et un meilleur apprentissage collectif (méta-analyse). Crée un environnement psychologiquement sûr propice à l'innovation. Incarne les <strong>3 facteurs de l'intelligence collective</strong> : sensibilité sociale, égalité de parole, diversité <span class='source'>(Woolley et al., 2010)</span>. Créateur naturel de <strong>sécurité psychologique</strong> <span class='source'>(Edmondson, 2019)</span>. <strong>« Multiplicateur »</strong> par excellence <span class='source'>(Wiseman, 2010)</span>.<span class='source'>Salgado (1997) ; Woolley et al. (2010) ; Edmondson (2019) ; Wiseman (2010)</span>",
-                        limites: "Si poussé trop loin, la <strong>chimie d'équipe</strong> peut détourner des objectifs concrets. Réticence à prendre des décisions impopulaires ou à donner un feedback critiqué. Risque d'être exploité par des profils plus assertifs. Risque d'éviter le <strong>conflit productif</strong> — niveau 2 de la pyramide de Lencioni <span class='source'>(2002)</span>. Trop de consensus = <strong>pensée de groupe</strong>, pas assez de repensement <span class='source'>(Grant, 2021)</span>.<span class='source'>Salgado (1997) ; Lencioni (2002) ; Grant (2021)</span>",
-                        leviers: "Apprendre à distinguer <strong>« être gentil » de « être efficace »</strong>. S'entraîner au feedback constructif (méthode SBI : Situation-Behavior-Impact). Intégrer les deux orientations (tâche + relation). Pour l'équipe : valoriser son rôle de « glue sociale ». Distinguer <strong>conflit productif</strong> (idées) vs destructif (personnes) <span class='source'>(Lencioni, 2002)</span>. Faciliter des <strong>débats structurés</strong> plutôt que chercher l'unanimité <span class='source'>(Sibony, 2020)</span>.<span class='source'>Salgado (1997) ; Blake & Mouton (1964) ; Lencioni (2002) ; Sibony (2020)</span>"
+                        fonctionnement: "Style <strong>centré sur les personnes</strong> (Blake & Mouton, 1964), que le modèle des cinq grands facteurs rattache à l'Agréabilité (Costa & McCrae, 1992). Salgado (1997), qui a rassemblé les études européennes sur le sujet, constate que ce facteur ne prédit pas la performance de façon régulière selon les métiers et les critères, contrairement à la conscienciosité et à la stabilité émotionnelle. Son apport se situe davantage du côté de la satisfaction et du fonctionnement du collectif que de la performance individuelle.<span class='source'>Costa & McCrae (1992) ; Salgado (1997)</span>",
+                        forces: "Woolley et al. (2010) ont fait passer des séries d'épreuves à des groupes et constaté que certains réussissent mieux que d'autres de façon constante, quelle que soit la tâche. Ce niveau de réussite collective n'est prédit ni par l'intelligence moyenne des membres, ni par celle du membre le plus doué. Il est en revanche lié à trois éléments : la <strong>sensibilité sociale</strong> moyenne (la capacité à lire l'état d'esprit des autres), l'<strong>égalité de la répartition des tours de parole</strong>, et la proportion de femmes dans le groupe, ce troisième lien s'expliquant en fait par le premier. Réguler la parole et percevoir les signaux relationnels agit directement sur les deux premiers.<span class='source'>Woolley et al. (2010) ; Edmondson (2019)</span>",
+                        limites: "Réticence à porter une décision impopulaire ou un retour critique, ce qui peut retarder des arbitrages. Lencioni (2002) situe l'évitement du désaccord de fond en amont de l'absence d'engagement : un consensus obtenu sans confrontation réelle ressemble à un accord, sans en avoir les effets. À l'échelle du groupe, une trop grande recherche d'harmonie favorise la <strong>pensée de groupe</strong>, cette situation où l'accord apparent tient lieu de vérification et où personne ne formule le doute que plusieurs ont.<span class='source'>Lencioni (2002) ; Grant (2021)</span>",
+                        leviers: "Distinguer <strong>« être agréable » et « être utile »</strong> : un retour formulé sur le travail observable, et non sur la personne, protège la relation au lieu de l'abîmer. <strong>Organiser</strong> le désaccord au lieu de l'attendre : désigner explicitement quelqu'un pour défendre la position inverse enlève à l'objection son coût social, puisqu'elle devient un rôle et non une prise de position personnelle (Sibony, 2020). Pour l'équipe : nommer ce travail de régulation, qui reste habituellement invisible dans les bilans d'activité.<span class='source'>Lencioni (2002) ; Sibony (2020)</span>"
                     }
                 },
                 pionnier: {
                     title: "Pionnier·ère Adaptatif·ive", summary: "Agit comme un agent du changement et explore de nouvelles opportunités.", icon: '🚀', chartData: [3, 8, 4, 7, 5, 6, 9, 2],
                     exemple: "C'est celui qui propose de tester un nouvel outil alors que l'ancien n'est pas encore maîtrisé.",
                     details: {
-                        fonctionnement: "Associé à une haute Ouverture à l'Expérience (Costa & McCrae, 1992). Curieux, imaginatif, attiré par la nouveauté. Perçoit le changement comme une opportunité stimulante. La valorisation de ce profil varie selon les contextes culturels (Hofstede, 2001).",
-                        forces: "Capacité d'adaptation exceptionnelle, moteur pour l'innovation, apprend et se développe continuellement tout au long de sa carrière. Incarne la flexibilité cognitive et la capacité de repensement (Grant, 2021). Motivé par l'autonomie et le sens (Pink, 2009). État d'esprit de croissance naturel (Dweck, 2006).",
-                        limites: "Aversion pour la routine, peut manquer de discipline pour les tâches répétitives, peut être perçu comme manquant de pragmatisme, son appétit pour le changement peut être déstabilisant. Difficulté avec l'engagement durable — trop d'options, pas de suivi (Lencioni, 2002). Peut créer des pertes de motivation chez ceux qui préfèrent la stabilité (Steiner, 1972).",
-                        leviers: "Apprendre à valoriser aussi les phases d'exécution. S'associer à des profils plus structurés. Pour l'équipe : le positionner comme agent du changement, lui donner des objectifs clairs. Ancrer l'innovation dans la maîtrise — approfondir avant de passer à autre chose (Pink, 2009). Discipline « Investisseur » : développer les autres, pas juste lancer des idées (Wiseman, 2010)."
+                        fonctionnement: "Registre associé à une haute Ouverture à l'Expérience, l'un des cinq grands facteurs de personnalité (Costa & McCrae, 1992) : curiosité, attrait pour la nouveauté, aisance dans les situations peu balisées. La lecture de ce style dépend beaucoup du contexte, puisque le même comportement peut être interprété comme une prise d'initiative ou comme de l'instabilité selon le milieu (Hofstede, 2001).",
+                        forces: "Adaptation rapide aux situations nouvelles, appétence pour l'apprentissage continu, disposition à réviser ses hypothèses quand les faits changent (Grant, 2021). Fonctionne mieux lorsque l'autonomie sur la méthode est réelle (Pink, 2009).",
+                        limites: "Difficulté avec les tâches répétitives et les phases longues d'exécution. L'engagement peut s'interrompre avant l'aboutissement, ce qui reporte la charge de finition sur d'autres (Lencioni, 2002). Un rythme de changement soutenu peut démobiliser les personnes qui ont besoin de stabilité pour travailler (Steiner, 1972).",
+                        leviers: "Définir un critère d'aboutissement avant de lancer une nouvelle piste. S'associer à des profils structurés pour la phase d'exécution. Pour l'équipe : donner un mandat explicite d'exploration, avec des objectifs et un point d'arrêt. C'est le cadre, et non la bride, qui rend ce fonctionnement productif."
                     },
                     enriched: {
-                        fonctionnement: "Haute <strong>Ouverture à l'Expérience</strong> (Costa & McCrae, 1992) — curieux, imaginatif, attiré par la nouveauté. La valorisation de ce style varie fortement selon les cultures (Hofstede, 2001) — prisé dans les cultures individualistes, il peut être perçu comme déstabilisant dans les cultures collectivistes.<span class='source'>Costa & McCrae (1992) ; Hofstede (2001)</span>",
-                        forces: "Capacité d'<strong>adaptation exceptionnelle</strong> au changement. Moteur de l'innovation. Apprend et se développe continuellement. L'Ouverture est associée au succès dans les métiers créatifs et les environnements incertains. Incarne la <strong>flexibilité cognitive</strong> et la capacité de repensement <span class='source'>(Grant, 2021)</span>. Motivé par l'<strong>autonomie</strong> et le <strong>sens</strong> <span class='source'>(Pink, 2009)</span>. <strong>État d'esprit de croissance</strong> naturel <span class='source'>(Dweck, 2006)</span>.<span class='source'>Costa & McCrae (1992) ; Grant (2021) ; Pink (2009) ; Dweck (2006)</span>",
-                        limites: "L'Ouverture à l'Expérience (Intellect) est le facteur Big Five le <strong>moins répliqué d'une langue à l'autre</strong> — il apparaît de façon moins cohérente que les autres dans les études translinguistiques (De Raad & Peabody, 2005). Aversion pour la routine, difficulté avec les tâches répétitives, peut être perçu comme manquant de pragmatisme. Difficulté avec l'<strong>engagement durable</strong> — trop d'options, pas de suivi <span class='source'>(Lencioni, 2002)</span>. Peut créer des <strong>pertes de motivation</strong> chez ceux qui préfèrent la stabilité <span class='source'>(Steiner, 1972)</span>.<span class='source'>De Raad & Peabody (2005) ; Lencioni (2002) ; Steiner (1972)</span>",
-                        leviers: "S'associer à des <strong>profils structurés</strong> (Architecte, Stabilisateur) pour l'exécution. Valoriser les phases d'exécution comme des opportunités d'apprentissage. Pour l'équipe : le positionner comme agent du changement avec des objectifs clairs et mesurables. Ancrer l'innovation dans la <strong>maîtrise</strong> — approfondir avant de passer à autre chose <span class='source'>(Pink, 2009)</span>. Discipline <strong>« Investisseur »</strong> : développer les autres, pas juste lancer des idées <span class='source'>(Wiseman, 2010)</span>.<span class='source'>Kirton (2003) ; Pink (2009) ; Wiseman (2010)</span>"
+                        fonctionnement: "Haute <strong>Ouverture à l'Expérience</strong> (Costa & McCrae, 1992). Kirton (2003) propose ici une distinction utile : certains améliorent le système existant, d'autres cherchent à le reconfigurer. Ce sont deux façons d'être créatif, d'égale valeur, mais qui ne se comprennent pas spontanément. La façon dont ce profil est reçu dépend enfin du milieu (Hofstede, 2001) : la même initiative se lit comme de l'audace ici, comme de l'instabilité ailleurs.<span class='source'>Costa & McCrae (1992) ; Kirton (2003) ; Hofstede (2001)</span>",
+                        forces: "Adaptation rapide aux situations nouvelles et disposition à réviser ses hypothèses lorsque les faits changent, ce que Grant (2021) appelle la capacité à « repenser ». Ce fonctionnement suppose une autonomie réelle sur la méthode pour donner sa mesure (Pink, 2009).<span class='source'>Grant (2021) ; Pink (2009)</span>",
+                        limites: "Deux réserves, l'une méthodologique, l'autre pratique. Méthodologique : quand on reconstruit les cinq grands facteurs à partir du vocabulaire de langues différentes, l'Ouverture est celui qui <strong>réapparaît le moins nettement</strong> (De Raad & Peabody, 2005). Sa définition même est donc moins stable que celle des autres facteurs, ce qui impose de la prudence dans son interprétation. Pratique : difficulté avec les tâches répétitives, engagement parfois interrompu avant l'aboutissement (Lencioni, 2002), et démobilisation possible des personnes qui ont besoin de continuité pour travailler (Steiner, 1972).<span class='source'>De Raad & Peabody (2005) ; Lencioni (2002) ; Steiner (1972)</span>",
+                        leviers: "Se fixer un critère d'aboutissement avant d'ouvrir une nouvelle piste. S'associer à des profils structurés pour la phase d'exécution. Une précision utile : l'idée d'<strong>« état d'esprit de croissance »</strong> (Dweck, 2006), très répandue, est souvent mobilisée à cet endroit. Les méta-analyses disponibles n'en retrouvent toutefois que des effets faibles et inconstants (Sisk et al., 2018). Mieux vaut donc viser un engagement mesurable qu'un changement d'état d'esprit.<span class='source'>Dweck (2006) ; Sisk et al. (2018) ; Pink (2009)</span>"
                     }
                 },
                 stabilisateur: {
                     title: "Stabilisateur·rice Prudent·e", summary: "Assure la qualité, la fiabilité et la continuité.", icon: '⚓', chartData: [7, 2, 7, 3, 6, 4, 2, 9],
                     exemple: "C'est celui qui rappelle : « La dernière fois qu'on a changé de méthode, on a perdu 3 semaines. »",
                     details: {
-                        fonctionnement: "Fonctionne dans un registre que la littérature associe à une Ouverture à l'Expérience modérée — ce qui, loin d'être un déficit, est associé à la fiabilité, la constance et l'ancrage pragmatique (Kirton, 2003). Préférence pour les routines, les traditions et les méthodes éprouvées. Se sent en sécurité dans des environnements prévisibles.",
-                        forces: "Fiabilité et constance dans l'exécution, garantit la continuité et la qualité, excellent pour optimiser les systèmes, apporte un point de vue pragmatique qui sert de contrepoids. Réduit les pertes de motivation en maintenant la continuité (Steiner, 1972). Contribue à la confiance — niveau 1 de la pyramide de Lencioni (2002) — par sa prévisibilité.",
-                        limites: "Potentielle résistance au changement, peut paraître rigide ou fermé, risque de désengagement si les changements sont trop rapides ou mal expliqués. Risque de « pensée congelée » et de résistance au changement nécessaire (Grant, 2021). Peut basculer vers un état d'esprit fixe (Dweck, 2006).",
-                        leviers: "Travailler sa perception du changement, se concentrer sur les bénéfices concrets. Pour l'équipe : communiquer le 'pourquoi' du changement, l'impliquer dans l'amélioration des processus. Pratiquer le « repensement » en se concentrant sur les bénéfices mesurables du changement (Grant, 2021). Participer aux audits de bruit pour voir où les processus actuels échouent (Sibony et al., 2021)."
+                        fonctionnement: "Améliore le système existant plutôt que de le reconfigurer, ce que Kirton (2003) appelle un style adaptatif. Il ne s'agit pas d'un manque d'idées : la production créative est réelle, mais orientée vers le perfectionnement du cadre en place. Préférence pour les méthodes éprouvées et les environnements prévisibles.",
+                        forces: "Fiabilité et constance dans l'exécution, continuité de la qualité, aptitude à optimiser des systèmes existants. Apporte un point de vue pragmatique qui sert de contrepoids aux profils tournés vers la nouveauté. La prévisibilité de son travail alimente la confiance du groupe (Lencioni, 2002) et limite les pertes de motivation liées aux changements de cap (Steiner, 1972).",
+                        limites: "Résistance possible au changement, y compris quand il est justifié, et perception de rigidité. Risque de désengagement si les changements sont rapides ou mal expliqués. La difficulté à réviser une méthode maîtrisée est d'autant plus forte que l'identité professionnelle s'est construite autour de cette maîtrise (Sainsaulieu, 1977).",
+                        leviers: "Demander à ce que le changement soit formulé en bénéfices vérifiables, et proposer de les mesurer : c'est une exigence légitime, pas une résistance. Pour l'équipe : expliquer le « pourquoi » avant le « comment », et l'associer à l'amélioration continue plutôt qu'à la rupture. Documenter là où les processus actuels échouent réellement fournit une base de discussion factuelle (Sibony et al., 2021)."
                     },
                     enriched: {
-                        fonctionnement: "Ouverture à l'Expérience <strong>modérée</strong> — ce qui, loin d'être un déficit, est associé à la fiabilité, la constance et l'ancrage pragmatique (Kirton, 2003). Préférence pour les routines, les traditions et les méthodes éprouvées. Se sent en sécurité dans des environnements prévisibles. L'habitus professionnel (Bourdieu, 1979) façonne cette préférence pour la stabilité.<span class='source'>Kirton (2003) ; Bourdieu (1979)</span>",
-                        forces: "<strong>Fiabilité et constance</strong> dans l'exécution. Garantit la continuité et la qualité des processus. Excellent pour optimiser les systèmes existants. Apporte un point de vue <strong>pragmatique</strong> qui sert de contrepoids essentiel aux profils innovateurs. Réduit les <strong>pertes de motivation</strong> en maintenant la continuité <span class='source'>(Steiner, 1972)</span>. Contribue à la <strong>confiance</strong> — niveau 1 de la pyramide de Lencioni <span class='source'>(2002)</span> — par sa prévisibilité.<span class='source'>Kirton (2003) ; Steiner (1972) ; Lencioni (2002)</span>",
-                        limites: "Potentielle <strong>résistance au changement</strong> — peut paraître rigide ou fermé. Risque de désengagement si les changements sont trop rapides ou mal communiqués. Cette résistance peut être renforcée par l'identité au travail construite autour de la maîtrise (Sainsaulieu, 1977). Risque de <strong>« pensée congelée »</strong> et de résistance au changement nécessaire <span class='source'>(Grant, 2021)</span>. Peut basculer vers un <strong>état d'esprit fixe</strong> <span class='source'>(Dweck, 2006)</span>.<span class='source'>Sainsaulieu (1977) ; Grant (2021) ; Dweck (2006)</span>",
-                        leviers: "Travailler la perception du changement en se concentrant sur les <strong>bénéfices concrets</strong> et mesurables. Pour l'équipe : communiquer le « pourquoi » du changement, l'impliquer dans l'<strong>amélioration continue</strong> des processus existants plutôt que dans la rupture. Pratiquer le <strong>« repensement »</strong> en se concentrant sur les bénéfices mesurables du changement <span class='source'>(Grant, 2021)</span>. Participer aux <strong>audits de bruit</strong> pour voir où les processus actuels échouent <span class='source'>(Sibony et al., 2021)</span>.<span class='source'>Kirton (2003) ; Sainsaulieu (1977) ; Grant (2021) ; Sibony et al. (2021)</span>"
+                        fonctionnement: "Kirton (2003) distingue deux façons d'être créatif : améliorer le système existant (style <strong>adaptatif</strong>) ou le reconfigurer (style <strong>innovateur</strong>). Ce profil relève du premier, ce qui n'est pas une créativité moindre mais une créativité orientée vers le perfectionnement du cadre en place. Bourdieu (1979) ajoute une lecture sociale de ces préférences : elles se forment aussi par la formation reçue et le milieu professionnel fréquenté, elles ne sont pas seulement innées.<span class='source'>Kirton (2003) ; Bourdieu (1979)</span>",
+                        forces: "Fiabilité et constance dans l'exécution, continuité de la qualité, aptitude à optimiser des systèmes existants. Steiner (1972) a formalisé une idée simple : la production réelle d'un groupe est toujours inférieure à son potentiel, du fait de ce qu'il appelle les <strong>pertes de processus</strong> (temps passé à se coordonner, démobilisation, redites). Maintenir la continuité limite l'une de ces pertes. La régularité du travail fourni alimente par ailleurs la confiance interne au groupe (Lencioni, 2002).<span class='source'>Kirton (2003) ; Steiner (1972) ; Lencioni (2002)</span>",
+                        limites: "Résistance possible au changement, y compris lorsqu'il est justifié, et perception de rigidité. Sainsaulieu (1977) éclaire ce point : l'identité professionnelle se construit dans la maîtrise d'un métier et dans le regard des collègues, si bien que remettre en cause une méthode revient à toucher à quelque chose de plus personnel qu'une procédure. Risque de désengagement si les changements sont rapides ou mal expliqués.<span class='source'>Sainsaulieu (1977) ; Grant (2021)</span>",
+                        leviers: "Demander que le changement soit formulé en bénéfices vérifiables, et proposer de les mesurer : c'est une exigence légitime, pas une résistance. Pour l'équipe : expliquer le « pourquoi » avant le « comment », et l'associer à l'amélioration continue plutôt qu'à la rupture. Documenter les points où les processus actuels échouent réellement donne une base de discussion factuelle, dans les deux sens (Sibony et al., 2021).<span class='source'>Kirton (2003) ; Sainsaulieu (1977) ; Sibony et al. (2021)</span>"
                     }
                 },
             }
         };
 
-        // ===== Quiz d'auto-positionnement =====
+        // ===== Banque d'items =====
+        // Règles d'écriture appliquées à chaque situation :
+        //  - une scène concrète plutôt qu'une auto-description abstraite ;
+        //  - deux propositions également défendables, pour ne pas orienter vers la
+        //    réponse « qui fait bien » (désirabilité sociale) ;
+        //  - deux propositions qu'on peut réellement cocher haut toutes les deux,
+        //    puisqu'elles sont notées séparément (donc pas de contraires stricts) ;
+        //  - des contextes variés, pas uniquement la réunion de bureau.
         const quizQuestions = [
-            // Axe 0 — Traitement de l'Information (poleA=analytique, poleB=exploratoire)
-            { axis: 0, poleA: "Analyser en détail", poleB: "Explorer largement", text: "Face à un nouveau projet, je préfère...", hint: "Ex : On vous confie un nouveau dossier — vous étudiez chaque détail ou vous explorez d'abord les grandes lignes ?" },
-            { axis: 0, poleA: "Une seule bonne solution", poleB: "Plusieurs options ouvertes", text: "Je suis plus à l'aise quand je cherche...", hint: "Ex : En réunion de brainstorming, préférez-vous converger vers LA solution ou multiplier les pistes ?" },
-            { axis: 0, poleA: "Approfondir un sujet", poleB: "Connecter des domaines différents", text: "Mon énergie intellectuelle va naturellement vers...", hint: "Ex : Quand vous lisez un article, vous creusez le sujet ou vous faites des liens avec d'autres domaines ?" },
-            { axis: 0, poleA: "Des données vérifiées", poleB: "Des idées nouvelles même incertaines", text: "Je fais davantage confiance à...", hint: "Ex : Pour prendre une décision, vous attendez les chiffres ou vous suivez une intuition prometteuse ?" },
-            // Axe 1 — Processus d'Action (poleA=planificateur, poleB=agile)
-            { axis: 1, poleA: "Planifier avant d'agir", poleB: "Ajuster en cours de route", text: "Ma façon de travailler naturelle est de...", hint: "Ex : Avant de commencer une tâche, vous faites un plan ou vous démarrez et ajustez en chemin ?" },
-            { axis: 1, poleA: "Un plan détaillé", poleB: "Mon intuition et mon expérience", text: "Pour prendre une décision, je m'appuie sur...", hint: "Ex : Face à un choix important, vous construisez un tableau comparatif ou vous consultez votre expérience vécue ?" },
-            { axis: 1, poleA: "Anticiper les risques", poleB: "Saisir les opportunités", text: "Ma priorité face à l'incertitude est de...", hint: "Ex : Un projet démarre avec beaucoup d'inconnues — vous listez les risques ou vous foncez pour voir ?" },
-            { axis: 1, poleA: "Respecter le processus", poleB: "Improviser selon le contexte", text: "En réunion, je suis plutôt celui/celle qui veut...", hint: "Ex : La réunion dérive — vous proposez de suivre l'ordre du jour ou vous laissez la discussion évoluer ?" },
-            // Axe 2 — Rapport aux Autres (poleA=tâche, poleB=relation)
-            { axis: 2, poleA: "Les résultats d'abord", poleB: "Les relations d'abord", text: "Dans un projet d'équipe, je privilégie...", hint: "Ex : Un collègue a besoin d'aide mais la deadline approche — vous terminez votre tâche ou vous l'aidez d'abord ?" },
-            { axis: 2, poleA: "Être direct et efficace", poleB: "Être diplomate et inclusif", text: "Ma communication tend à...", hint: "Ex : Vous devez donner un retour négatif — vous allez droit au but ou vous enrobez le message ?" },
-            { axis: 2, poleA: "La clarté des objectifs", poleB: "La cohésion du groupe", text: "Ce qui m'importe le plus dans une équipe, c'est...", hint: "Ex : Vous évaluez une équipe — vous regardez d'abord les résultats ou l'ambiance de travail ?" },
-            { axis: 2, poleA: "Trancher rapidement", poleB: "Chercher le consensus", text: "Face à un désaccord en équipe, je préfère...", hint: "Ex : Deux collègues ne sont pas d'accord — vous tranchez rapidement ou vous cherchez un compromis ?" },
-            // Axe 3 — Rapport à la Nouveauté (poleA=changement, poleB=stabilité)
-            { axis: 3, poleA: "Changer et innover", poleB: "Optimiser l'existant", text: "Mon réflexe face à un processus établi est de...", hint: "Ex : Un outil que vous utilisez depuis 2 ans fonctionne bien — vous cherchez quand même mieux ou vous l'optimisez ?" },
-            { axis: 3, poleA: "M'adapter rapidement", poleB: "Prendre du recul d'abord", text: "Face au changement, ma première réaction est de...", hint: "Ex : On annonce une réorganisation — vous vous adaptez vite ou vous prenez du temps pour digérer ?" },
-            { axis: 3, poleA: "Les possibilités futures", poleB: "Les acquis concrets", text: "Ce qui me motive le plus, ce sont...", hint: "Ex : Qu'est-ce qui vous fait lever le matin — les projets à venir ou la satisfaction du travail bien fait ?" },
-            { axis: 3, poleA: "L'exploration de l'inconnu", poleB: "La maîtrise de mon domaine", text: "Je tire le plus de satisfaction de...", hint: "Ex : Fin de journée — vous êtes plus fier d'avoir exploré un nouveau domaine ou d'avoir maîtrisé votre sujet ?" }
+            // Axe 0 : Processus d'Action (poleA=planificateur, poleB=intuitif)
+            { axis: 0, poleA: "Poser un plan d'abord", poleB: "Démarrer et ajuster", text: "Quand je commence quelque chose de nouveau, je préfère...", hint: "Ex : vous devez organiser un événement pour une trentaine de personnes. Vous établissez le déroulé à l'avance, ou vous avancez étape par étape en ajustant ?" },
+            { axis: 0, poleA: "Une comparaison écrite", poleB: "Ce que me dit l'expérience", text: "Pour un choix qui engage, je m'appuie plutôt sur...", hint: "Ex : vous hésitez entre deux options coûteuses. Vous les mettez côte à côte sur le papier, ou vous vous fiez à ce que chacune vous inspire ?" },
+            { axis: 0, poleA: "Repérer ce qui peut coincer", poleB: "Tester une première étape", text: "Devant une situation où beaucoup de choses sont encore floues, mon réflexe est de...", hint: "Ex : on vous confie quelque chose dont les contours ne sont pas fixés. Vous listez d'abord les points à sécuriser, ou vous lancez un essai pour voir ce que ça donne ?" },
+            { axis: 0, poleA: "Reprendre le plan calmement", poleB: "Improviser sur le moment", text: "Quand ce qui était prévu est contrarié en cours de route, je préfère...", hint: "Ex : à mi-parcours, un imprévu rend la suite impossible telle qu'elle était prévue. Vous vous arrêtez pour refaire le point, ou vous continuez en vous adaptant ?" },
+            // Axe 1 : Traitement de l'Information (poleA=analytique, poleB=exploratoire)
+            { axis: 1, poleA: "Lire en détail", poleB: "Survoler l'ensemble", text: "Devant un document long, je commence par...", hint: "Ex : on vous transmet une trentaine de pages à connaître. Vous les lisez ligne à ligne, ou vous les parcourez d'abord pour voir comment c'est construit ?" },
+            { axis: 1, poleA: "Arriver à une réponse solide", poleB: "Ouvrir plusieurs pistes", text: "Face à une question difficile, je cherche surtout à...", hint: "Ex : un problème est posé au groupe. Vous cherchez la solution qui tient, ou vous préférez d'abord élargir les possibilités ?" },
+            { axis: 1, poleA: "Creuser ce sujet précis", poleB: "Le relier à autre chose", text: "Quand un sujet m'intéresse, j'ai tendance à...", hint: "Ex : une lecture vous accroche. Vous cherchez à en savoir plus sur ce point, ou elle vous fait penser à un domaine sans rapport ?" },
+            { axis: 1, poleA: "Reprendre dans l'ordre", poleB: "Partir d'une image", text: "Quand j'explique quelque chose de compliqué à quelqu'un, je...", hint: "Ex : vous devez faire comprendre un fonctionnement à quelqu'un qui n'y connaît rien. Vous déroulez les étapes une par une, ou vous cherchez une comparaison parlante ?" },
+            // Axe 2 : Rapport aux Autres (poleA=tâche, poleB=relation)
+            { axis: 2, poleA: "Ce qui doit être produit", poleB: "Comment chacun se sent", text: "Quand je travaille avec d'autres, mon attention va d'abord à...", hint: "Ex : vous sortez d'une réunion de travail. Vous en repartez avec quoi en tête ? La liste de ce qui reste à faire, ou l'état d'esprit des personnes présentes ?" },
+            { axis: 2, poleA: "Dire les choses directement", poleB: "Amener les choses progressivement", text: "Quand j'ai un retour difficile à faire, je préfère...", hint: "Ex : le travail rendu n'est pas au niveau attendu. Vous le dites franchement dès le début, ou vous préparez le terrain avant ?" },
+            { axis: 2, poleA: "Le flou sur qui fait quoi", poleB: "Les tensions non dites", text: "Ce qui abîme le plus un collectif, à mon avis, c'est...", hint: "Ex : une équipe fonctionne mal. Vous soupçonnez d'abord une organisation confuse, ou des relations abîmées ?" },
+            { axis: 2, poleA: "Ramener à la décision à prendre", poleB: "Faire parler ceux qui se taisent", text: "Quand un désaccord s'installe dans un groupe, je me sens utile en...", hint: "Ex : la discussion tourne en rond depuis vingt minutes. Vous recentrez sur ce qu'il faut décider, ou vous allez chercher les avis qui ne se sont pas exprimés ?" },
+            // Axe 3 : Rapport à la Nouveauté (poleA=changement, poleB=stabilité)
+            { axis: 3, poleA: "Voir s'il existe mieux", poleB: "L'affiner encore", text: "Face à une méthode qui fonctionne correctement, mon réflexe est de...", hint: "Ex : un outil que vous utilisez depuis deux ans fait le travail, sans plus. Vous en cherchez un autre, ou vous le réglez mieux ?" },
+            { axis: 3, poleA: "Regarder ce que ça ouvre", poleB: "Regarder ce que ça coûte", text: "Quand un changement est annoncé, ma première réaction est de...", hint: "Ex : une réorganisation est annoncée pour le mois prochain. Vous pensez d'abord aux possibilités, ou à ce que ça va demander ?" },
+            { axis: 3, poleA: "Finit par peser", poleB: "Rend plus sûr", text: "La répétition dans le travail, pour moi...", hint: "Ex : la même tâche revient chaque semaine depuis des mois. C'est ce qui vous use, ou ce qui vous permet de bien la faire ?" },
+            { axis: 3, poleA: "Appris quelque chose de neuf", poleB: "Bien fait ce que je sais faire", text: "En fin de journée, je suis plus satisfait d'avoir...", hint: "Ex : deux journées possibles, l'une passée à découvrir, l'autre passée à produire du travail soigné." }
         ];
-        const quizAnswers = Array.from({length: 16}, () => ({ poleA: 0, poleB: 0 }));
-        const TOTAL_QUESTIONS = quizQuestions.length;
-        const answeredQuestions = new Set();
-        let userChartInstance = null;
-        let currentTopRanked = null; // array of ranked profiles after quiz
-        const stickyState = { quizInView: false, btnInView: false, resultsShown: false };
 
+        // Situations de réserve, posées seulement sur les axes où le tronc commun
+        // ne permet pas de conclure. Elles visent la même chose que les items du
+        // tronc commun, sur des scènes différentes.
+        const reserveQuestions = [
+            // Axe 0 : Processus d'Action
+            { axis: 0, poleA: "Savoir ce qui m'attend", poleB: "Garder de la marge", text: "Pour être à l'aise dans mon travail, j'ai besoin de...", hint: "Ex : votre semaine est soit entièrement calée à l'avance, soit ouverte avec des plages libres. Laquelle vous met le plus à l'aise ?" },
+            { axis: 0, poleA: "Prendre le temps de vérifier", poleB: "Décider et corriger ensuite", text: "Quand une décision doit être prise vite, je préfère...", hint: "Ex : il faut répondre dans l'heure. Vous demandez un délai pour vérifier, ou vous tranchez quitte à ajuster après ?" },
+            // Axe 1 : Traitement de l'Information
+            { axis: 1, poleA: "Les faits vérifiables", poleB: "L'impression d'ensemble", text: "Quand je dois me faire une opinion, je m'appuie d'abord sur...", hint: "Ex : deux personnes vous racontent la même histoire différemment. Vous cherchez à recouper les faits, ou vous vous fiez à ce qui se dégage ?" },
+            { axis: 1, poleA: "Une imprécision", poleB: "Une vision trop étroite", text: "Dans un raisonnement, ce qui me gêne le plus, c'est...", hint: "Ex : un argument vous met mal à l'aise. Est-ce parce qu'un détail est faux, ou parce qu'il passe à côté du tableau d'ensemble ?" },
+            // Axe 2 : Rapport aux Autres
+            { axis: 2, poleA: "Fixer un moment plus tard", poleB: "M'interrompre sur le moment", text: "Quand quelqu'un me sollicite alors que je suis en plein travail, je préfère...", hint: "Ex : vous êtes concentré et on vient vous voir pour autre chose. Vous proposez de reprendre plus tard, ou vous vous rendez disponible tout de suite ?" },
+            { axis: 2, poleA: "On a décidé quelque chose", poleB: "Chacun a pu s'exprimer", text: "Une réunion réussie, pour moi, c'est une réunion où...", hint: "Ex : à la sortie, qu'est-ce qui vous ferait dire que ce temps a été utile ?" },
+            // Axe 3 : Rapport à la Nouveauté
+            { axis: 3, poleA: "Chercher à la faire changer", poleB: "Composer avec elle", text: "Quand une règle me paraît inadaptée, je préfère...", hint: "Ex : une procédure vous semble mal calibrée. Vous engagez la discussion pour la modifier, ou vous faites au mieux dans le cadre existant ?" },
+            { axis: 3, poleA: "« Essayons »", poleB: "« Attendons de voir »", text: "Devant une nouveauté présentée comme prometteuse, je pense d'abord...", hint: "Ex : un nouvel outil est proposé, encore peu utilisé ailleurs. Vous êtes volontaire pour le tester, ou vous préférez laisser d'autres essuyer les plâtres ?" }
+        ];
+        // null = pas encore répondu. Un 0 est une réponse à part entière (« pas du tout »),
+        // il ne doit donc jamais être confondu avec une absence de réponse.
+        const quizAnswers = Array.from({length: quizQuestions.length}, () => ({ poleA: null, poleB: null }));
+        const reserveAnswers = Array.from({length: reserveQuestions.length}, () => ({ poleA: null, poleB: null }));
+        const TOTAL_QUESTIONS = quizQuestions.length;
+        // Une situation n'est complète que si SES DEUX propositions sont notées.
+        const answeredQuestions = new Set();
+        // Axes pour lesquels l'étape complémentaire a été proposée
+        let pendingAxes = [];
+
+        // ===== Paramètres de calcul =====
+        // Tous les seuils sont exprimés en points de l'échelle de réponse, et calés
+        // sur des fractions simples de son étendue.
+        const MAX_ITEM = 5;                 // échelle 0 à 5
+        const resolutionFor = (n) => 1 / n; // plus petit écart mesurable sur une moyenne de n items
+        const FLAT_SPREAD = 0.6;            // en deçà, les 8 scores sont trop resserrés pour être classés
+        const HETERO_SD = 2.5;              // dispersion des contrastes au-delà de laquelle un axe est dit hétérogène
+        const DEV_STRONG = 1.5;             // écart à sa propre moyenne jugé net
+        const DEV_MILD = 0.75;              // écart à sa propre moyenne jugé notable
+        let userChartInstance = null;
+        let currentTopRanked = null; // profils classés après passation
+        let currentScores = null;    // résultat complet de computeScores()
+        const stickyState = { quizInView: false, btnInView: false, resultsShown: false };
+        let doneModalShown = false;
+        let doneModalLastFocus = null;
+
+        // Même ordre que profilsData.axes
         const axisHeaders = [
-            { icon: 'fa-microscope', title: "Traitement de l'Information", color: '#0f766e' },
             { icon: 'fa-cogs', title: "Processus d'Action", color: '#2563eb' },
+            { icon: 'fa-microscope', title: "Traitement de l'Information", color: '#0f766e' },
             { icon: 'fa-users', title: "Rapport aux Autres", color: '#7c3aed' },
             { icon: 'fa-seedling', title: "Rapport à la Nouveauté", color: '#c2410c' }
         ];
 
-        const intensityLabels = ['Pas du tout', 'Un peu', 'Modérément', 'Fortement'];
+        // Échelle à 6 échelons. Preston & Colman (2000) montrent que les échelles à
+        // 2, 3 ou 4 catégories obtiennent des indices de fidélité et de pouvoir
+        // discriminant nettement plus faibles, et que ces indices progressent
+        // jusqu'à environ 7 catégories. Six est le compromis retenu entre cette
+        // exigence et la charge de lecture, puisque chaque situation demande deux notes.
+        const intensityLabels = ['Pas du tout', 'Très peu', 'Un peu', 'Moyennement', 'Beaucoup', 'Tout à fait'];
 
         function countAnswered() {
             return answeredQuestions.size;
@@ -1583,13 +1774,16 @@
             const progressLabel = document.getElementById('quiz-progress-label');
             const progress = document.getElementById('quiz-progress');
             if (fill) fill.style.width = Math.round((n / TOTAL_QUESTIONS) * 100) + '%';
-            if (progressLabel) progressLabel.textContent = `${n} / ${TOTAL_QUESTIONS} situations`;
+            if (progressLabel) progressLabel.textContent = `${n} / ${TOTAL_QUESTIONS} situations complètes`;
             if (progress) progress.setAttribute('aria-valuenow', String(n));
 
             const btn = document.getElementById('quiz-submit');
             const hint = document.getElementById('quiz-submit-hint');
-            if (btn) btn.disabled = !complete;
-            if (hint) hint.textContent = complete ? '' : `Encore ${remaining} situation${plural} à renseigner.`;
+            if (btn) {
+                btn.disabled = !complete;
+                btn.classList.toggle('is-ready-pulse', complete);
+            }
+            if (hint) hint.textContent = complete ? '' : `Encore ${remaining} situation${plural} à compléter (les deux propositions doivent être notées).`;
 
             const stickyBtn = document.getElementById('quiz-submit-sticky');
             const stickyCount = document.getElementById('sticky-count');
@@ -1601,7 +1795,14 @@
                     : `Il reste ${remaining} situation${plural} <i class="fas fa-arrow-down" aria-hidden="true"></i>`;
                 stickyBtn.setAttribute('aria-label', complete
                     ? 'Découvrir mon profil'
-                    : `Il reste ${remaining} situation${plural} à renseigner — aller à la suivante`);
+                    : `Il reste ${remaining} situation${plural} à renseigner, aller à la suivante`);
+            }
+
+            refreshStickyVisibility();
+
+            if (complete && !doneModalShown && !stickyState.resultsShown) {
+                doneModalShown = true;
+                setTimeout(openDoneModal, 350);
             }
         }
 
@@ -1620,16 +1821,92 @@
         }
 
         function stickyCtaClick() {
-            if (countAnswered() >= TOTAL_QUESTIONS) submitQuiz();
+            if (countAnswered() >= TOTAL_QUESTIONS) goAfterCore();
             else scrollToFirstUnanswered();
         }
 
         function refreshStickyVisibility() {
             const bar = document.getElementById('sticky-cta');
             if (!bar) return;
-            const show = stickyState.quizInView && !stickyState.btnInView && !stickyState.resultsShown;
+            // Une fois le questionnaire complet, la barre reste affichée même si le bouton en flux est visible
+            const complete = countAnswered() >= TOTAL_QUESTIONS;
+            const show = stickyState.quizInView && !stickyState.resultsShown && (complete || !stickyState.btnInView);
             bar.classList.toggle('visible', show);
             document.body.classList.toggle('has-sticky-cta', show);
+        }
+
+        function openDoneModal() {
+            const modal = document.getElementById('quiz-done-modal');
+            if (!modal || !modal.hidden || stickyState.resultsShown) return;
+
+            // Les axes non conclusifs sont repérés avant d'annoncer les résultats,
+            // pour ne pas promettre un résultat qu'on va devoir nuancer ensuite.
+            pendingAxes = inconclusiveAxes(computeScores().axisStats);
+            const nQ = pendingAxes.length * 2;
+            const plurAxe = pendingAxes.length > 1 ? 's' : '';
+
+            const title = document.getElementById('quiz-done-title');
+            const text = document.getElementById('quiz-done-text');
+            const primary = document.getElementById('quiz-done-primary');
+            const secondary = document.getElementById('quiz-done-secondary');
+
+            if (pendingAxes.length) {
+                const noms = pendingAxes.map(i => `« ${profilsData.axes[i].title} »`).join(' et ');
+                title.textContent = 'Presque terminé';
+                text.innerHTML = `Sur ${pendingAxes.length} axe${plurAxe} (${noms}), vos réponses ne penchent pour l'instant ni d'un côté ni de l'autre. <strong>${nQ} situations de plus</strong> permettraient de trancher.`;
+                primary.innerHTML = `<i class="fas fa-plus-circle" aria-hidden="true"></i> Répondre à ${nQ} situations de plus`;
+                secondary.innerHTML = '<i class="fas fa-forward" aria-hidden="true"></i> Voir mes résultats tels quels';
+            } else {
+                title.textContent = "C'est terminé !";
+                text.textContent = 'Vous avez renseigné les 16 situations, et chaque axe permet de conclure. Vos résultats sont prêts.';
+                primary.innerHTML = '<i class="fas fa-star" aria-hidden="true"></i> Voir mes résultats';
+                secondary.innerHTML = '<i class="fas fa-pen" aria-hidden="true"></i> Revoir mes réponses';
+            }
+
+            doneModalLastFocus = document.activeElement;
+            modal.hidden = false;
+            document.body.classList.add('modal-open');
+            primary.focus();
+            document.addEventListener('keydown', doneModalKeydown);
+        }
+
+        // Bouton secondaire : revoir ses réponses, ou sauter l'étape complémentaire
+        function doneModalSecondary() {
+            const skip = pendingAxes.length > 0;
+            closeDoneModal();
+            if (skip) submitQuiz();
+        }
+
+        function closeDoneModal() {
+            const modal = document.getElementById('quiz-done-modal');
+            if (!modal || modal.hidden) return;
+            modal.hidden = true;
+            document.body.classList.remove('modal-open');
+            document.removeEventListener('keydown', doneModalKeydown);
+            if (doneModalLastFocus && document.contains(doneModalLastFocus)) doneModalLastFocus.focus();
+        }
+
+        function confirmDoneModal() {
+            closeDoneModal();
+            goAfterCore();
+        }
+
+        // Aiguillage après le tronc commun : étape complémentaire si nécessaire,
+        // résultats sinon.
+        function goAfterCore() {
+            if (countAnswered() < TOTAL_QUESTIONS) return;
+            if (!pendingAxes.length) pendingAxes = inconclusiveAxes(computeScores().axisStats);
+            if (pendingAxes.length) showStage2();
+            else submitQuiz();
+        }
+
+        function doneModalKeydown(e) {
+            if (e.key === 'Escape') { e.preventDefault(); closeDoneModal(); return; }
+            if (e.key !== 'Tab') return;
+            const focusables = document.querySelectorAll('#quiz-done-modal button');
+            const first = focusables[0], last = focusables[focusables.length - 1];
+            if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+            else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
         }
 
         function hideDecorativeIcons(root = document) {
@@ -1641,6 +1918,40 @@
             return t.replace(/·[A-Za-zÀ-ÿ]+/g, '').replace(/\s{2,}/g, ' ').trim();
         }
 
+        // Fabrique une situation. `prefix` distingue le tronc commun (q) de la réserve (r),
+        // pour que les deux jeux de boutons radio ne se mélangent pas.
+        function buildQuestionHtml(prefix, idx, q, numberLabel, fieldsetId) {
+            const renderPole = (pole, label, poleClass) => `
+                <div class="quiz-pole-panel ${poleClass}" role="radiogroup" aria-label="${label}">
+                    <div class="quiz-pole-title">${label}</div>
+                    ${intensityLabels.map((lbl, v) => `
+                        <div class="quiz-intensity-option">
+                            <input type="radio" name="${prefix}${idx}_${pole}" value="${v}" id="${prefix}${idx}_${pole}_v${v}" class="quiz-intensity-input" />
+                            <label class="quiz-intensity-label" for="${prefix}${idx}_${pole}_v${v}">
+                                <span class="quiz-intensity-dot"></span>
+                                ${lbl}
+                            </label>
+                        </div>
+                    `).join('')}
+                </div>`;
+            return `<fieldset class="quiz-question" id="${fieldsetId}">
+                <legend class="quiz-legend">${numberLabel} ${q.text}</legend>
+                ${q.hint ? `<p class="quiz-hint"><i class="fas fa-lightbulb" aria-hidden="true"></i> ${q.hint}</p>` : ''}
+                <div class="quiz-dual-container">
+                    ${renderPole('poleA', q.poleA, 'pole-a')}
+                    <div class="quiz-dual-separator">ET</div>
+                    ${renderPole('poleB', q.poleB, 'pole-b')}
+                </div>
+            </fieldset>`;
+        }
+
+        function axisHeaderHtml(axisIndex) {
+            const ah = axisHeaders[axisIndex];
+            return `<div class="quiz-axis-header" style="color: ${ah.color}; border-color: ${ah.color};">
+                <i class="fas ${ah.icon}"></i> Axe ${axisIndex + 1} sur 4 : ${ah.title}
+            </div>`;
+        }
+
         function renderQuiz() {
             const container = document.getElementById('quiz-questions');
             let html = '';
@@ -1648,97 +1959,253 @@
             quizQuestions.forEach((q, i) => {
                 if (q.axis !== currentAxis) {
                     currentAxis = q.axis;
-                    const ah = axisHeaders[currentAxis];
-                    html += `<div class="quiz-axis-header" style="color: ${ah.color}; border-color: ${ah.color};">
-                        <i class="fas ${ah.icon}"></i> Axe ${currentAxis + 1} — ${ah.title}
-                    </div>`;
+                    html += axisHeaderHtml(currentAxis);
                 }
-                const renderPole = (pole, label, poleClass) => {
-                    return `<div class="quiz-pole-panel ${poleClass}" role="radiogroup" aria-label="${label}">
-                        <div class="quiz-pole-title">${label}</div>
-                        ${intensityLabels.map((lbl, v) => `
-                            <div class="quiz-intensity-option">
-                                <input type="radio" name="q${i}_${pole}" value="${v}" id="q${i}_${pole}_v${v}" class="quiz-intensity-input" />
-                                <label class="quiz-intensity-label" for="q${i}_${pole}_v${v}">
-                                    <span class="quiz-intensity-dot"></span>
-                                    ${lbl}
-                                </label>
-                            </div>
-                        `).join('')}
-                    </div>`;
-                };
-                html += `<fieldset class="quiz-question" id="quiz-q${i}">
-                    <legend class="quiz-legend">${i + 1}. ${q.text}</legend>
-                    ${q.hint ? `<p class="quiz-hint"><i class="fas fa-lightbulb" aria-hidden="true"></i> ${q.hint}</p>` : ''}
-                    <div class="quiz-dual-container">
-                        ${renderPole('poleA', q.poleA, 'pole-a')}
-                        <div class="quiz-dual-separator">ET</div>
-                        ${renderPole('poleB', q.poleB, 'pole-b')}
-                    </div>
-                </fieldset>`;
+                html += buildQuestionHtml('q', i, q, `${i + 1}.`, `quiz-q${i}`);
             });
             container.innerHTML = html;
-            // Attach change listeners
             container.querySelectorAll('.quiz-intensity-input').forEach(input => {
                 input.addEventListener('change', (e) => {
                     const parts = e.target.name.split('_'); // q0_poleA
-                    const qIndex = parseInt(parts[0].replace('q', ''));
-                    const pole = parts[1];
-                    selectQuizAnswer(qIndex, pole, parseInt(e.target.value));
+                    const qIndex = parseInt(parts[0].slice(1));
+                    selectQuizAnswer(qIndex, parts[1], parseInt(e.target.value));
                 });
             });
             updateSubmitState();
             hideDecorativeIcons(container);
         }
 
+        // ===== Étape complémentaire =====
+        function stage2Indexes() {
+            return reserveQuestions
+                .map((q, i) => ({ q, i }))
+                .filter(({ q }) => pendingAxes.includes(q.axis))
+                .map(({ i }) => i);
+        }
+
+        function showStage2() {
+            const indexes = stage2Indexes();
+            const container = document.getElementById('stage2-questions');
+            let html = '';
+            let currentAxis = -1;
+            let n = 0;
+            indexes.forEach(i => {
+                const q = reserveQuestions[i];
+                if (q.axis !== currentAxis) {
+                    currentAxis = q.axis;
+                    html += axisHeaderHtml(currentAxis);
+                }
+                n += 1;
+                html += buildQuestionHtml('r', i, q, `${n}.`, `stage2-q${i}`);
+            });
+            container.innerHTML = html;
+            container.querySelectorAll('.quiz-intensity-input').forEach(input => {
+                input.addEventListener('change', (e) => {
+                    const parts = e.target.name.split('_'); // r3_poleA
+                    const rIndex = parseInt(parts[0].slice(1));
+                    selectReserveAnswer(rIndex, parts[1], parseInt(e.target.value));
+                });
+            });
+
+            const plurAxe = pendingAxes.length > 1 ? 's' : '';
+            const noms = pendingAxes.map(i => `« ${profilsData.axes[i].title} »`).join(' et ');
+            document.getElementById('stage2-intro').innerHTML =
+                `<i class="fas fa-info-circle" aria-hidden="true"></i> ${indexes.length} situations, environ 1 minute. Sur ${pendingAxes.length} axe${plurAxe} (${noms}), vos réponses ne penchent pour l'instant ni d'un côté ni de l'autre : ces situations supplémentaires servent à savoir s'il s'agit d'un réel équilibre ou d'un manque de précision de la mesure.`;
+
+            document.getElementById('quiz').style.display = 'none';
+            const el = document.getElementById('quiz-stage2');
+            el.style.display = 'block';
+            el.classList.add('fade-in');
+            stickyState.resultsShown = true;   // masque la barre collante du tronc commun
+            refreshStickyVisibility();
+            updateStage2State();
+            hideDecorativeIcons(el);
+            el.scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('stage2-heading').focus({ preventScroll: true });
+        }
+
+        function selectReserveAnswer(index, pole, value) {
+            reserveAnswers[index][pole] = value;
+            const complete = reserveAnswers[index].poleA !== null && reserveAnswers[index].poleB !== null;
+            const fieldset = document.getElementById(`stage2-q${index}`);
+            const panel = fieldset.querySelector(pole === 'poleA' ? '.pole-a' : '.pole-b');
+            if (panel) panel.classList.add('pole-answered');
+            fieldset.classList.toggle('answered', complete);
+            updateStage2State();
+        }
+
+        function updateStage2State() {
+            const indexes = stage2Indexes();
+            const done = indexes.filter(i => reserveAnswers[i].poleA !== null && reserveAnswers[i].poleB !== null).length;
+            const remaining = indexes.length - done;
+            const btn = document.getElementById('stage2-submit');
+            const hint = document.getElementById('stage2-hint');
+            if (btn) btn.disabled = remaining > 0;
+            if (hint) hint.textContent = remaining > 0
+                ? `Encore ${remaining} situation${remaining > 1 ? 's' : ''} à compléter.`
+                : '';
+        }
+
+        function submitStage2() {
+            if (document.getElementById('stage2-submit').disabled) return;
+            document.getElementById('quiz-stage2').style.display = 'none';
+            submitQuiz();
+        }
+
+        function skipStage2() {
+            // Les réponses partielles de l'étape complémentaire sont écartées :
+            // on ne mélange pas des axes mesurés sur 5 situations et d'autres sur 6.
+            stage2Indexes().forEach(i => { reserveAnswers[i] = { poleA: null, poleB: null }; });
+            document.getElementById('quiz-stage2').style.display = 'none';
+            submitQuiz();
+        }
+
         function selectQuizAnswer(questionIndex, pole, value) {
             quizAnswers[questionIndex][pole] = value;
-            answeredQuestions.add(questionIndex);
-            // Mark panel as answered
+            const complete = quizAnswers[questionIndex].poleA !== null && quizAnswers[questionIndex].poleB !== null;
+            if (complete) answeredQuestions.add(questionIndex);
+
             const fieldset = document.getElementById(`quiz-q${questionIndex}`);
             const panelClass = pole === 'poleA' ? 'pole-a' : 'pole-b';
             const panel = fieldset.querySelector(`.${panelClass}`);
             if (panel) panel.classList.add('pole-answered');
-            // Mark question as visually modified
-            fieldset.classList.add('answered');
+            // Le liseré vert ne s'allume que lorsque les deux propositions sont notées
+            fieldset.classList.toggle('answered', complete);
             updateSubmitState();
         }
 
+        const mean = (xs) => xs.reduce((s, x) => s + x, 0) / xs.length;
+        // Écart-type de population : les 8 scores décrivent le profil complet d'une personne,
+        // ce n'est pas un échantillon tiré d'un ensemble plus grand.
+        const sdPop = (xs) => { const m = mean(xs); return Math.sqrt(mean(xs.map(x => (x - m) ** 2))); };
+        // Écart-type d'échantillon (n-1) : les 4 items d'un axe sont, eux, un échantillon
+        // des situations possibles ; c'est cette version qui sert à estimer l'erreur-type.
+        const sdSample = (xs) => {
+            if (xs.length < 2) return 0;
+            const m = mean(xs);
+            return Math.sqrt(xs.reduce((s, x) => s + (x - m) ** 2, 0) / (xs.length - 1));
+        };
+
+        // Réponses complètes disponibles pour un axe : tronc commun, plus les
+        // situations de réserve auxquelles la personne a effectivement répondu.
+        function axisAnswers(axisIndex) {
+            const out = [];
+            quizQuestions.forEach((q, i) => {
+                if (q.axis === axisIndex && quizAnswers[i].poleA !== null && quizAnswers[i].poleB !== null) {
+                    out.push(quizAnswers[i]);
+                }
+            });
+            reserveQuestions.forEach((q, i) => {
+                if (q.axis === axisIndex && reserveAnswers[i].poleA !== null && reserveAnswers[i].poleB !== null) {
+                    out.push(reserveAnswers[i]);
+                }
+            });
+            return out;
+        }
+
         function computeScores() {
-            const maxPerProfile = 4 * 3; // 4 questions × max intensity 3 = 12
-            const profileScores = {};
+            const poleMeans = {};   // profil -> note moyenne par item (0 à 5)
+            const poleItemCount = {};
+            const axisStats = [];
 
             profilsData.axes.forEach((axis, axisIndex) => {
-                const [profileA, profileB] = axis.profiles;
-                let sumA = 0, sumB = 0;
-                quizQuestions.forEach((q, qIndex) => {
-                    if (q.axis === axisIndex) {
-                        sumA += quizAnswers[qIndex].poleA || 0;
-                        sumB += quizAnswers[qIndex].poleB || 0;
-                    }
+                const [idA, idB] = axis.profiles;
+                const answers = axisAnswers(axisIndex);
+                const itemsA = answers.map(r => r.poleA);
+                const itemsB = answers.map(r => r.poleB);
+                const diffs = answers.map(r => r.poleA - r.poleB);
+                const mA = mean(itemsA), mB = mean(itemsB);
+                poleMeans[idA] = mA;
+                poleMeans[idB] = mB;
+                poleItemCount[idA] = poleItemCount[idB] = answers.length;
+                const sd = sdSample(diffs);
+                axisStats.push({
+                    axis, idA, idB, meanA: mA, meanB: mB,
+                    n: answers.length,
+                    diff: mean(diffs),               // de +3 (pôle A) à -3 (pôle B)
+                    sd,                              // dispersion des contrastes de l'axe
+                    sem: sd / Math.sqrt(answers.length), // erreur-type de la moyenne des contrastes
+                    resolution: resolutionFor(answers.length)
                 });
-                profileScores[profileA] = { raw: sumA, concordance: Math.round((sumA / maxPerProfile) * 100) };
-                profileScores[profileB] = { raw: sumB, concordance: Math.round((sumB / maxPerProfile) * 100) };
             });
 
-            const ranked = Object.entries(profileScores)
-                .sort((a, b) => b[1].concordance - a[1].concordance || b[1].raw - a[1].raw || a[0].localeCompare(b[0]))
-                .map(([id, data], rank) => ({ id, ...data, rank: rank + 1 }));
+            // Décomposition du profil telle que proposée par Cronbach & Gleser (1953) :
+            // l'élévation (la moyenne des scores), la dispersion (leur écart type) et
+            // la forme (les écarts de chacun à la moyenne).
+            // On retire l'élévation, qui reflète surtout la tendance à cocher haut ou bas,
+            // mais on ne divise PAS par la dispersion : standardiser effacerait aussi le
+            // degré de différenciation de la personne, qui est une information réelle.
+            const means = Object.values(poleMeans);
+            const elevation = mean(means);
+            const spread = sdPop(means);
 
-            return { profileScores, ranked };
+            const ranked = Object.entries(poleMeans)
+                .map(([id, m]) => ({
+                    id,
+                    mean: m,                  // 0 à 5
+                    deviation: m - elevation  // écart à sa propre moyenne, en points
+                }))
+                .sort((a, b) => b.mean - a.mean || a.id.localeCompare(b.id));
+
+            // Rangs ex aequo en cas d'égalité stricte
+            let lastMean = null, lastRank = 0;
+            ranked.forEach((entry, i) => {
+                if (lastMean !== null && Math.abs(entry.mean - lastMean) < 1e-9) {
+                    entry.rank = lastRank;
+                } else {
+                    entry.rank = i + 1;
+                    lastRank = entry.rank;
+                }
+                lastMean = entry.mean;
+            });
+
+            // Les deux premiers sont-ils réellement départageables ? Le seuil est le
+            // plus petit écart mesurable, qui dépend du nombre de situations posées
+            // sur chacun des deux axes concernés.
+            const topGap = ranked.length > 1 ? ranked[0].mean - ranked[1].mean : 0;
+            const gapThreshold = ranked.length > 1
+                ? Math.max(resolutionFor(poleItemCount[ranked[0].id]), resolutionFor(poleItemCount[ranked[1].id]))
+                : resolutionFor(4);
+
+            return { poleMeans, ranked, axisStats, elevation, spread, topGap, gapThreshold };
+        }
+
+        // Un axe est déclaré non conclusif quand l'écart observé entre ses deux pôles
+        // est plus petit que sa propre erreur-type (le signe de l'écart n'est alors pas
+        // fiable), ou plus petit que ce que la mesure sait distinguer.
+        function inconclusiveAxes(axisStats) {
+            return axisStats
+                .map((st, i) => ({ st, i }))
+                .filter(({ st }) => Math.abs(st.diff) < Math.max(st.sem, st.resolution))
+                .map(({ i }) => i);
+        }
+
+        const fr1 = (x) => x.toFixed(1).replace('.', ',');
+        const fr2 = (x) => x.toFixed(2).replace('.', ',');
+
+        // Position d'un profil par rapport à sa propre moyenne, en points de l'échelle.
+        function relativeBand(deviation, spread) {
+            if (spread < FLAT_SPREAD) return { label: 'Profil peu différencié', cls: 'band-eq' };
+            if (deviation >= DEV_STRONG) return { label: 'Nettement au-dessus de votre moyenne', cls: 'band-3' };
+            if (deviation >= DEV_MILD) return { label: 'Au-dessus de votre moyenne', cls: 'band-2' };
+            if (deviation > -DEV_MILD) return { label: 'Proche de votre moyenne', cls: 'band-1' };
+            return { label: 'En dessous de votre moyenne', cls: 'band-eq' };
         }
 
         function submitQuiz() {
             if (countAnswered() < TOTAL_QUESTIONS) return;
-            const { profileScores, ranked } = computeScores();
+            const scores = computeScores();
+            const { poleMeans, ranked, axisStats, elevation, spread, topGap, gapThreshold } = scores;
+            currentScores = scores;
             currentTopRanked = ranked;
 
-            // Build radar data from concordances
-            // chartLabels order maps to: plongeur, explorateur, architecte, navigateur, pilote, catalyseur, pionnier, stabilisateur
             const profileOrder = ['plongeur', 'explorateur', 'architecte', 'navigateur', 'pilote', 'catalyseur', 'pionnier', 'stabilisateur'];
-            const userData = profileOrder.map(id => profileScores[id].concordance / 10); // 0-100% → 0-10
+            const userData = profileOrder.map(id => poleMeans[id]); // notes moyennes, 0 à 5
 
-            const top3 = ranked.slice(0, 3);
+            // On affiche les 3 premiers, mais sans couper un groupe d'ex aequo en deux :
+            // tous les profils qui partagent le rang du 3e sont montrés (5 au maximum).
+            const cutoffRank = ranked[Math.min(2, ranked.length - 1)].rank;
+            const top3 = ranked.filter(r => r.rank <= cutoffRank).slice(0, 5);
             const topProfile = profilsData.profiles[top3[0].id];
 
             // Complementary: opposite pole on same axis as #1
@@ -1754,41 +2221,36 @@
             stickyState.resultsShown = true;
             refreshStickyVisibility();
 
-            // Profil peu différencié : 6+ profils sur 8 au-dessus de 75%
-            const highCount = ranked.filter(r => r.concordance >= 75).length;
-            const allSameHigh = highCount >= 6;
-
-            // Contextual messages
+            // Messages contextuels, fondés sur la dispersion réelle des 8 scores
             let contextMessage = '';
-            if (allSameHigh) {
+            if (spread < FLAT_SPREAD) {
                 contextMessage = `<div class="warning-box" style="margin-bottom: 1.25rem; text-align: left;">
                     <h3><i class="fas fa-exclamation-triangle"></i> Profil peu différencié</h3>
-                    <p>Vous avez indiqué une forte affinité avec la plupart des pôles (${highCount} profils au-dessus de 75%). Ce résultat est <strong>peu discriminant</strong> — il ne permet pas de dégager un profil caractéristique. Essayez de répondre en pensant à votre <em>première réaction naturelle</em> plutôt qu'à ce que vous êtes capable de faire.</p>
+                    <p>Vos huit scores sont très resserrés : ils s'écartent en moyenne de ${fr2(spread)} point de votre moyenne, alors que la précision de la mesure est déjà de ${fr2(gapThreshold)} point. <strong>Le classement ci-dessous n'est donc pas interprétable</strong> : l'ordre des profils tient au hasard des réponses autant qu'à une vraie tendance. Les profils affichés le sont à titre indicatif, à égalité entre eux. Vous pouvez refaire le questionnaire en répondant à votre première réaction, plutôt qu'à ce dont vous êtes capable.</p>
                 </div>`;
-            } else if (top3[0].concordance < 40) {
+            } else if (topGap < gapThreshold) {
                 contextMessage = `<div class="warning-box" style="margin-bottom: 1.25rem; text-align: left;">
-                    <h3><i class="fas fa-exclamation-triangle"></i> Profil mixte — pas de dominante claire</h3>
-                    <p>Aucun profil ne ressort nettement (concordance max : ${top3[0].concordance}%). Cela peut indiquer un <strong>fonctionnement équilibré</strong> entre plusieurs modes. Les résultats ci-dessous sont indicatifs.</p>
+                    <h3><i class="fas fa-balance-scale"></i> Deux profils à égalité</h3>
+                    <p>Vos deux premiers profils sont séparés par ${fr2(topGap)} point, soit moins que ce que ce questionnaire peut distinguer (${fr2(gapThreshold)} point). <strong>Lisez-les comme équivalents</strong> plutôt que comme un premier et un second.</p>
                 </div>`;
-            } else if (top3[0].concordance - top3[2].concordance < 10) {
-                contextMessage = `<div class="warning-box" style="margin-bottom: 1.25rem; text-align: left;">
-                    <h3><i class="fas fa-balance-scale"></i> Profil versatile</h3>
-                    <p>Vos trois profils principaux sont très proches. Cela suggère un <strong>fonctionnement polyvalent</strong> — vous mobilisez plusieurs modes selon le contexte.</p>
+            }
+            if (elevation >= MAX_ITEM * 0.84 || elevation <= MAX_ITEM * 0.16) {
+                const sens = elevation >= MAX_ITEM / 2 ? 'haut' : 'bas';
+                contextMessage += `<div class="science-note" style="margin-bottom: 1.25rem;">
+                    <h3><i class="fas fa-sliders-h"></i> Votre façon d'utiliser l'échelle</h3>
+                    <p>Vos notes se situent en moyenne à ${fr1(elevation)} sur ${MAX_ITEM} : vous avez coché ${sens} sur presque toutes les propositions. Ce n'est ni un problème ni un résultat en soi, c'est une manière d'utiliser l'échelle.${spread >= FLAT_SPREAD ? ' Le classement ci-dessous en tient compte, puisqu\'il compare vos scores <strong>entre eux</strong> et non à un barème absolu.' : ''}</p>
                 </div>`;
             }
 
             // Render top 3 cards
             document.getElementById('context-message').innerHTML = contextMessage;
             let topCardsHtml = '<div class="top-profiles-container">';
-            function concordanceLabel(pct) {
-                if (pct >= 75) return 'Très forte affinité';
-                if (pct >= 50) return 'Forte affinité';
-                if (pct >= 25) return 'Affinité modérée';
-                return 'Faible affinité';
-            }
-            top3.forEach((entry, idx) => {
+            const avgPct = (elevation / MAX_ITEM) * 100;
+            top3.forEach((entry) => {
                 const profile = profilsData.profiles[entry.id];
-                const rank = idx + 1;
+                const rank = entry.rank;
+                const band = relativeBand(entry.deviation, spread);
+                const signedDev = (entry.deviation >= 0 ? '+' : '−') + fr2(Math.abs(entry.deviation));
                 topCardsHtml += `
                 <div class="top-profile-card" data-rank="${rank}">
                     <div class="top-profile-header">
@@ -1797,9 +2259,13 @@
                         <div class="top-profile-info">
                             <h3 class="top-profile-title" aria-label="${spokenTitle(profile.title)}">${profile.title}</h3>
                             <div class="concordance-row">
-                                <div class="concordance-bar"><div class="concordance-fill" style="width: 0%;" data-target="${entry.concordance}"></div></div>
-                                <span class="concordance-pct concordance-pct-band">${concordanceLabel(entry.concordance)}</span>
+                                <div class="concordance-bar">
+                                    <div class="concordance-fill" style="width: 0%;" data-target="${(entry.mean / MAX_ITEM) * 100}"></div>
+                                    <span class="concordance-avg" style="left: ${avgPct}%;" title="Votre moyenne sur les 8 profils"></span>
+                                </div>
+                                <span class="concordance-pct concordance-pct-band">${fr1(entry.mean)} / ${MAX_ITEM}</span>
                             </div>
+                            <p class="concordance-note">${band.label} (${signedDev} point)</p>
                         </div>
                     </div>
                     <p class="top-profile-summary">"${profile.summary}"</p>
@@ -1833,14 +2299,15 @@
 
             // Disclaimer
             document.getElementById('result-disclaimer').innerHTML = `
-                <p style="font-size: 0.8rem; color: var(--color-text-dimmed); font-style: italic;">Rappel : ce résultat est exploratoire. Il reflète vos réponses à un instant donné, pas un trait stable. Les profils sont des archétypes simplificateurs — votre fonctionnement réel est plus nuancé et dépend du contexte (Fleeson & Jayawickreme, 2015). Les scores reflètent aussi votre style de réponse (tendance à cocher fort ou faible), pas seulement le contenu de vos choix.</p>
+                <p style="font-size: 0.8rem; color: var(--color-text-dimmed); font-style: italic;">Rappel : ce résultat est exploratoire. Il reflète vos réponses à un instant donné, pas un trait stable. Les profils sont des archétypes simplificateurs, votre fonctionnement réel est plus nuancé et dépend du contexte (Fleeson & Jayawickreme, 2015). Chaque score repose sur 4 situations seulement : c'est peu, et deux passations à quelques semaines d'intervalle donneraient des chiffres un peu différents.</p>
             `;
 
             binomeSelf = top3[0].id;
             renderBinomeShell(complementaryId);
 
-            const altParts = profileLabels.map((label, i) => `${label}: ${Math.round(userData[i] * 10) / 10}/10`);
-            document.getElementById('userChart-alt').textContent = `Vos affinités — ${altParts.join(', ')}. Profil le plus proche : ${topProfile.title}.`;
+            const altParts = profileLabels.map((label, i) => `${label} : ${fr1(userData[i])} sur ${MAX_ITEM}`);
+            document.getElementById('userChart-alt').textContent =
+                `Vos notes moyennes : ${altParts.join(', ')}. Votre moyenne générale : ${fr1(elevation)} sur ${MAX_ITEM}. Score le plus élevé : ${spokenTitle(topProfile.title)}.`;
 
             if (typeof Chart !== 'undefined') {
                 const ctx = document.getElementById('userChart').getContext('2d');
@@ -1850,9 +2317,14 @@
                     data: {
                         labels: profileLabels,
                         datasets: [
-                            { label: 'Vos affinités', data: userData.map(v => Math.round(v * 10) / 10),
+                            { label: `Vos notes (0 à ${MAX_ITEM})`, data: userData.map(v => Math.round(v * 100) / 100),
                               backgroundColor: 'rgba(20, 184, 166, 0.25)', borderColor: 'rgba(20, 184, 166, 1)',
-                              pointBackgroundColor: 'rgba(20, 184, 166, 1)', pointBorderColor: '#fff', borderWidth: 2 }
+                              pointBackgroundColor: 'rgba(20, 184, 166, 1)', pointBorderColor: '#fff', borderWidth: 2 },
+                            // Cercle de référence : la moyenne de la personne sur les 8 profils.
+                            // Ce qui dépasse ce cercle est au-dessus de son propre niveau habituel.
+                            { label: 'Votre moyenne', data: new Array(8).fill(Math.round(elevation * 100) / 100),
+                              backgroundColor: 'rgba(100, 116, 139, 0.06)', borderColor: 'rgba(100, 116, 139, 0.7)',
+                              borderDash: [5, 4], borderWidth: 1.5, pointRadius: 0, fill: false }
                         ]
                     },
                     options: {
@@ -1861,8 +2333,8 @@
                             angleLines: { color: 'rgba(0, 0, 0, 0.1)' },
                             grid: { color: 'rgba(0, 0, 0, 0.1)' },
                             pointLabels: { font: { size: 11, weight: 600, family: 'Inter' }, color: '#334155' },
-                            ticks: { backdropColor: 'rgba(255, 255, 255, 0.85)', color: '#64748b', stepSize: 2 },
-                            suggestedMin: 0, suggestedMax: 10
+                            ticks: { backdropColor: 'rgba(255, 255, 255, 0.85)', color: '#64748b', stepSize: 1 },
+                            suggestedMin: 0, suggestedMax: MAX_ITEM
                         }},
                         plugins: {
                             legend: { position: 'top', labels: { font: { family: 'Inter' }, color: '#334155' } }
@@ -1871,8 +2343,8 @@
                 });
             }
 
-            buildHeadline(profileScores);
-            buildAxisGauges(profileScores);
+            buildHeadline(axisStats);
+            buildAxisGauges(axisStats, elevation, spread);
 
             hideDecorativeIcons(resultsEl);
             resultsEl.scrollIntoView({ behavior: 'smooth' });
@@ -1936,11 +2408,16 @@
         }
 
         function resetQuiz() {
-            for (let i = 0; i < 16; i++) { quizAnswers[i] = { poleA: 0, poleB: 0 }; }
+            for (let i = 0; i < TOTAL_QUESTIONS; i++) { quizAnswers[i] = { poleA: null, poleB: null }; }
+            for (let i = 0; i < reserveAnswers.length; i++) { reserveAnswers[i] = { poleA: null, poleB: null }; }
             answeredQuestions.clear();
+            pendingAxes = [];
             currentTopRanked = null;
+            currentScores = null;
+            doneModalShown = false;
             if (userChartInstance) { userChartInstance.destroy(); userChartInstance = null; }
             document.getElementById('quiz-results').style.display = 'none';
+            document.getElementById('quiz-stage2').style.display = 'none';
             document.getElementById('quiz').style.display = 'block';
             stickyState.resultsShown = false;
             refreshStickyVisibility();
@@ -1956,26 +2433,30 @@
             }
         }
 
-        function buildHeadline(scores) {
-            const marked = profilsData.axes.map((axis, i) => {
-                const [idA, idB] = axis.profiles;
-                const contrast = scores[idA].raw - scores[idB].raw;
-                const poles = axisPoles[axis.id];
-                return { i, contrast, mag: Math.abs(contrast), side: contrast > 0 ? poles.a : poles.b };
-            }).filter(a => a.mag >= 3).sort((a, b) => b.mag - a.mag);
+        function buildHeadline(axisStats) {
+            // On ne retient un axe que si l'écart entre ses deux pôles dépasse 1,5 point
+            // sur 5, et que cet écart dépasse sa propre marge d'erreur.
+            const marked = axisStats.map(st => {
+                const poles = axisPoles[st.axis.id];
+                return {
+                    mag: Math.abs(st.diff),
+                    conclusive: Math.abs(st.diff) >= Math.max(st.sem, st.resolution),
+                    side: st.diff > 0 ? poles.a : poles.b
+                };
+            }).filter(a => a.mag >= 1.5 && a.conclusive).sort((a, b) => b.mag - a.mag);
 
             const el = document.getElementById('result-headline');
             if (!el) return;
 
             if (!marked.length) {
-                el.innerHTML = `<p class="result-headline-text">Votre fonctionnement paraît <strong>équilibré</strong> entre les différents pôles — aucune tendance ne se détache nettement. Les axes ci-dessous détaillent vos nuances.</p>`;
+                el.innerHTML = `<p class="result-headline-text">Aucune tendance ne se détache nettement : sur les quatre axes, vos réponses se répartissent des deux côtés. <span class="result-headline-sub">Le détail par axe est disponible plus bas.</span></p>`;
                 return;
             }
             const lead = marked.slice(0, 2).map(a => a.side.toLowerCase());
             const phrase = lead.length === 2
-                ? `Vous penchez surtout vers une approche <strong>${lead[0]}</strong> et un fonctionnement plutôt <strong>${lead[1]}</strong>.`
-                : `Vous penchez surtout vers une approche <strong>${lead[0]}</strong>.`;
-            el.innerHTML = `<p class="result-headline-text">${phrase} <span class="result-headline-sub">Voici votre positionnement détaillé sur les 4 axes.</span></p>`;
+                ? `Vos réponses penchent surtout du côté <strong>${lead[0]}</strong>, puis du côté <strong>${lead[1]}</strong>.`
+                : `Vos réponses penchent surtout du côté <strong>${lead[0]}</strong>.`;
+            el.innerHTML = `<p class="result-headline-text">${phrase} <span class="result-headline-sub">Voici les profils dont vos réponses se rapprochent le plus.</span></p>`;
         }
 
         function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
@@ -1997,8 +2478,8 @@
 
         function exportResults() {
             if (!currentTopRanked || !userChartInstance) return;
-            const profilesDetails = document.querySelector('.profiles-details');
-            if (profilesDetails && !profilesDetails.open) { profilesDetails.open = true; userChartInstance.resize(); }
+            const axesDetails = document.getElementById('details-axes');
+            if (axesDetails && !axesDetails.open) { axesDetails.open = true; userChartInstance.resize(); }
             const top3 = currentTopRanked.slice(0, 3);
             const topProfile = profilsData.profiles[top3[0].id];
             const topAxis = profilsData.axes.find(a => a.profiles.includes(top3[0].id));
@@ -2037,36 +2518,44 @@
             ctx.textAlign = 'center';
             ctx.fillStyle = '#0d7c72';
             ctx.font = 'bold 18px sans-serif';
-            ctx.fillText('Vos affinités principales', 400, nextY);
-            nextY += 30;
+            ctx.fillText('Vos scores les plus élevés', 400, nextY);
+            nextY += 20;
+            ctx.fillStyle = '#64748b';
+            ctx.font = 'italic 12px sans-serif';
+            ctx.fillText('Note moyenne par situation, échelle de 0 à 5. Le trait vertical marque votre moyenne générale.', 400, nextY);
+            nextY += 24;
 
             const rankColors = ['#0d9488', '#14b8a6', '#94a3b8'];
+            const elevation = currentScores ? currentScores.elevation : 0;
             top3.forEach((entry, idx) => {
                 const profile = profilsData.profiles[entry.id];
                 const y = nextY;
 
-                // Rank badge
+                // Rang
                 ctx.fillStyle = rankColors[idx];
                 ctx.font = 'bold 16px sans-serif';
                 ctx.textAlign = 'left';
-                ctx.fillText(`#${idx + 1}`, 100, y);
+                ctx.fillText(`#${entry.rank}`, 100, y);
 
-                // Icon + Title
+                // Icône et titre
                 ctx.fillStyle = '#1e293b';
                 ctx.font = 'bold 16px sans-serif';
                 ctx.fillText(profile.icon + '  ' + profile.title, 140, y);
 
-                // Concordance bar
-                const barX = 480;
+                // Barre de score, sur l'échelle native 0 à 5
+                const barX = 480, barW = 150;
                 ctx.fillStyle = '#e2e8f0';
-                ctx.fillRect(barX, y - 10, 150, 14);
+                ctx.fillRect(barX, y - 10, barW, 14);
                 ctx.fillStyle = rankColors[idx];
-                ctx.fillRect(barX, y - 10, entry.concordance * 1.5, 14);
+                ctx.fillRect(barX, y - 10, (entry.mean / MAX_ITEM) * barW, 14);
+                // Repère de la moyenne personnelle
+                ctx.fillStyle = '#475569';
+                ctx.fillRect(barX + (elevation / MAX_ITEM) * barW - 1, y - 13, 2, 20);
 
-                // Percentage
+                // Score
                 ctx.fillStyle = '#1e293b';
                 ctx.font = 'bold 14px sans-serif';
-                ctx.fillText(entry.concordance + '%', barX + 158, y);
+                ctx.fillText(fr1(entry.mean) + '/' + MAX_ITEM, barX + barW + 8, y);
 
                 // Summary
                 ctx.fillStyle = '#64748b';
@@ -2101,10 +2590,10 @@
                 ctx.fillStyle = '#e2e8f0';
                 ctx.fillRect(barX, y - 10, 100, 12);
                 ctx.fillStyle = '#0d9488';
-                ctx.fillRect(barX, y - 10, userData[i] * 10, 12);
+                ctx.fillRect(barX, y - 10, (userData[i] / MAX_ITEM) * 100, 12);
                 ctx.fillStyle = '#1e293b';
                 ctx.font = 'bold 13px sans-serif';
-                ctx.fillText(Math.round(userData[i] * 10) / 10 + '', barX + 108, y);
+                ctx.fillText(fr1(userData[i]), barX + 108, y);
                 ctx.font = '13px sans-serif';
             }
             nextY += 4 * 24 + 15;
@@ -2123,9 +2612,9 @@
             // Footer
             ctx.fillStyle = '#94a3b8';
             ctx.font = '11px sans-serif';
-            ctx.fillText('Outil exploratoire non validé psychométriquement — Résultat indicatif, non diagnostique', 400, nextY);
+            ctx.fillText('Outil exploratoire non validé psychométriquement. Résultat indicatif, non diagnostique.', 400, nextY);
             nextY += 16;
-            ctx.fillText('Explorateur des Profils Professionnels — Dr FENOHASINA T.J. Félicien', 400, nextY);
+            ctx.fillText('Explorateur des Profils Professionnels · Dr FENOHASINA T.J. Félicien', 400, nextY);
 
             // Télécharger
             const link = document.createElement('a');
@@ -2151,10 +2640,16 @@
         document.addEventListener('DOMContentLoaded', () => {
             renderAccordion();
             renderQuiz();
-            const profilesDetails = document.querySelector('.profiles-details');
-            if (profilesDetails) {
-                profilesDetails.addEventListener('toggle', () => {
-                    if (profilesDetails.open && userChartInstance) userChartInstance.resize();
+            const axesDetails = document.getElementById('details-axes');
+            if (axesDetails) {
+                axesDetails.addEventListener('toggle', () => {
+                    if (axesDetails.open && userChartInstance) userChartInstance.resize();
+                });
+            }
+            const doneModal = document.getElementById('quiz-done-modal');
+            if (doneModal) {
+                doneModal.addEventListener('click', (e) => {
+                    if (e.target === doneModal) closeDoneModal();
                 });
             }
             // Sticky CTA appears once the quiz is reached, except while the in-flow button is on screen
@@ -2244,7 +2739,7 @@
                 <div class="chart-container" role="img" aria-label="Comparaison radar entre ${profile1.title} et ${profile2.title}">
                     <canvas id="profileChart" aria-hidden="true"></canvas>
                 </div>
-                <div class="sr-only">${profile1.title} — ${chartAlt1}. ${profile2.title} — ${chartAlt2}.</div>
+                <div class="sr-only">${profile1.title} : ${chartAlt1}. ${profile2.title} : ${chartAlt2}.</div>
                 <div class="profiles-grid">
                     ${createProfileCard(profile1, profile1Id)}
                     ${createProfileCard(profile2, profile2Id)}
@@ -2399,52 +2894,67 @@
             axe4: { a: 'Innovation', b: 'Stabilité' }
         };
 
-        function axisBand(contrast) {
-            const m = Math.abs(contrast);
-            if (m <= 2) return { label: 'Équilibré', cls: 'band-eq' };
-            if (m <= 6) return { label: 'Léger penchant', cls: 'band-1' };
-            if (m <= 9) return { label: 'Penchant marqué', cls: 'band-2' };
+        // Écart entre les deux pôles d'un axe, exprimé en points sur l'échelle 0 à 5.
+        // Les seuils sont des fractions simples de l'étendue : 0,75 point (un sixième
+        // de l'échelle), 1,5 point (un tiers) et 3 points (les deux tiers).
+        function axisBand(diff) {
+            const m = Math.abs(diff);
+            if (m < 0.75) return { label: 'Équilibré', cls: 'band-eq' };
+            if (m < 1.5) return { label: 'Léger penchant', cls: 'band-1' };
+            if (m < 3) return { label: 'Penchant marqué', cls: 'band-2' };
             return { label: 'Très marqué', cls: 'band-3' };
         }
 
-        function buildAxisGauges(scores) {
+        // Conversion d'un écart (-3 à +3) en position sur la règle (3% à 97%)
+        const diffToPct = (d) => Math.max(3, Math.min(97, 50 - (d / MAX_ITEM) * 47));
+
+        function buildAxisGauges(axisStats, elevation, spread) {
             const tendances = [];
             let rows = '';
-            profilsData.axes.forEach((axis, i) => {
-                const [idA, idB] = axis.profiles;
-                const sumA = scores[idA].raw, sumB = scores[idB].raw;
-                const contrast = sumA - sumB;
-                const poles = axisPoles[axis.id];
-                const band = axisBand(contrast);
-                const sideName = contrast > 0 ? poles.a : poles.b;
-                const tag = band.cls === 'band-eq' ? band.label : `${band.label} : ${sideName.toLowerCase()}`;
-                const markerLeft = Math.max(3, Math.min(97, 50 - (contrast / 12) * 50));
+            axisStats.forEach((st, i) => {
+                const poles = axisPoles[st.axis.id];
+                const band = axisBand(st.diff);
+                const sideName = st.diff > 0 ? poles.a : poles.b;
+                const heterogene = st.sd >= HETERO_SD;
+                // Même règle que celle qui déclenche les situations supplémentaires :
+                // on ne nomme un côté que si l'écart dépasse sa propre marge d'erreur.
+                const conclusive = Math.abs(st.diff) >= Math.max(st.sem, st.resolution);
+                const nameSide = conclusive && band.cls !== 'band-eq';
+                const nLabel = st.n > 4 ? `<span class="axis-gauge-n">${st.n} situations</span>` : '';
+                const tag = nameSide ? `${band.label} : ${sideName.toLowerCase()}` : band.label;
+                const markerLeft = diffToPct(st.diff);
+                // Bande d'incertitude à ± une erreur-type autour de la moyenne des situations
+                const loPct = diffToPct(st.diff + st.sem), hiPct = diffToPct(st.diff - st.sem);
 
                 let note = '';
-                if (sumA >= 7 && sumB >= 7) {
-                    note = `<div class="axis-gauge-note note-ambi"><i class="fas fa-exchange-alt" aria-hidden="true"></i> Vous vous reconnaissez fortement dans les deux pôles — polyvalence ou ambivalence sur cet axe.</div>`;
-                } else if (sumA <= 3 && sumB <= 3) {
-                    note = `<div class="axis-gauge-note note-low"><i class="fas fa-circle-info" aria-hidden="true"></i> Peu d'éléments retenus sur cet axe — résultat peu informatif ici.</div>`;
+                if (heterogene) {
+                    note = `<div class="axis-gauge-note note-ambi"><i class="fas fa-exchange-alt" aria-hidden="true"></i> Vos ${st.n} réponses sur cet axe ne vont pas dans le même sens : selon la situation, vous penchez d'un côté ou de l'autre. La position moyenne ci-dessus résume donc mal votre fonctionnement.</div>`;
+                } else if (st.meanA >= 3.5 && st.meanB >= 3.5) {
+                    note = `<div class="axis-gauge-note note-ambi"><i class="fas fa-circle-info" aria-hidden="true"></i> Vous vous reconnaissez fortement dans les deux propositions (${fr1(st.meanA)} et ${fr1(st.meanB)} sur ${MAX_ITEM}) : les deux modes vous sont accessibles.</div>`;
+                } else if (st.meanA <= 1.25 && st.meanB <= 1.25) {
+                    note = `<div class="axis-gauge-note note-low"><i class="fas fa-circle-info" aria-hidden="true"></i> Vous avez peu retenu les deux propositions de cet axe (${fr1(st.meanA)} et ${fr1(st.meanB)} sur ${MAX_ITEM}) : il vous parle sans doute peu.</div>`;
                 }
 
-                if (Math.abs(contrast) >= 3) {
-                    tendances.push(profilsData.profiles[contrast > 0 ? idA : idB].title);
+                if (nameSide) {
+                    tendances.push(profilsData.profiles[st.diff > 0 ? st.idA : st.idB].title);
                 }
 
                 rows += `
                 <div class="axis-gauge-row">
                     <div class="axis-gauge-head">
                         <span class="axis-gauge-num">${i + 1}</span>
-                        <span class="axis-gauge-title">${axis.title}</span>
+                        <span class="axis-gauge-title">${st.axis.title}</span>
+                        ${nLabel}
                         <span class="axis-gauge-tag ${band.cls}">${tag}</span>
                     </div>
                     <div class="axis-gauge-scale">
-                        <span class="axis-pole axis-pole-a">${poles.a}</span>
+                        <span class="axis-pole axis-pole-a">${poles.a}<span class="axis-pole-score">${fr1(st.meanA)}/${MAX_ITEM}</span></span>
                         <div class="axis-gauge-track">
                             <div class="axis-gauge-center"></div>
+                            <div class="axis-gauge-band" style="left:${loPct}%; width:${Math.max(1, hiPct - loPct)}%;"></div>
                             <div class="axis-gauge-marker" style="left:${markerLeft}%;"></div>
                         </div>
-                        <span class="axis-pole axis-pole-b">${poles.b}</span>
+                        <span class="axis-pole axis-pole-b">${poles.b}<span class="axis-pole-score">${fr1(st.meanB)}/${MAX_ITEM}</span></span>
                     </div>
                     ${note}
                 </div>`;
@@ -2452,11 +2962,12 @@
 
             const tendanceHtml = tendances.length
                 ? `<div class="protoB-tendances"><strong>Tendances qui se dégagent :</strong> ${tendances.join(', ')}. <em>Ce sont des illustrations, pas des étiquettes.</em></div>`
-                : `<div class="protoB-tendances">Aucune tendance nette ne se dégage — votre fonctionnement paraît équilibré entre les pôles.</div>`;
+                : `<div class="protoB-tendances">Aucune tendance nette ne se dégage : sur les quatre axes, l'écart entre les deux pôles reste dans la marge d'imprécision de la mesure.</div>`;
 
             document.getElementById('axis-gauges').innerHTML = `
                 <h3 class="protoB-title">Votre positionnement sur les 4 axes</h3>
-                <p class="protoB-intro">Sur chaque axe, le curseur indique vers quel pôle vous penchez ; plus il est proche du centre, plus vous êtes équilibré·e.</p>
+                <p class="protoB-intro">Chaque axe oppose deux façons de faire, notées séparément sur 4 situations. Le curseur se place à l'écart moyen entre les deux, et la zone claire autour de lui indique la marge d'imprécision liée au faible nombre de situations : si elle recouvre le centre, l'écart n'est pas solide.</p>
+                <p class="protoB-intro">Niveau moyen de vos réponses : <strong>${fr1(elevation)} sur ${MAX_ITEM}</strong>. Écart type entre vos 8 scores : <strong>${fr2(spread)} point</strong>${spread < FLAT_SPREAD ? ' (profil peu différencié)' : ''}.</p>
                 ${rows}
                 ${tendanceHtml}`;
         }
@@ -2473,8 +2984,8 @@
             const other = profilsData.profiles[binomeOther];
             const axis = profilsData.axes.find(a => a.profiles.includes(binomeSelf) && a.profiles.includes(binomeOther));
             const match = axis
-                ? `Le profil opposé à votre profil principal sur l'axe « ${axis.title} » — un contrepoint naturel.`
-                : `Un autre profil avec lequel composer — une combinaison à explorer.`;
+                ? `Le profil opposé au vôtre sur l'axe « ${axis.title} », donc un contrepoint direct.`
+                : `Un autre profil avec lequel composer, une combinaison à explorer.`;
             document.getElementById('binome-head').innerHTML = `
                 <div class="result-icon" aria-hidden="true">${other.icon}</div>
                 <h3 class="result-title" aria-label="Binôme : ${spokenTitle(other.title)}">Binôme : ${other.title}</h3>
